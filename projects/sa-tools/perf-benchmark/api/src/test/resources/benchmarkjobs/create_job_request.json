@@ -1,0 +1,4 @@
+{
+  "benchmark_yaml": "AEROSPIKE some yaml",
+  "type": "AEROSPIKE"
+}

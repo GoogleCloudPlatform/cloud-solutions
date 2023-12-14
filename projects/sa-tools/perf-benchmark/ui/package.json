@@ -1,0 +1,40 @@
+{
+  "dependencies": {
+    "@emotion/react": "11.10.6",
+    "@emotion/styled": "11.10.5",
+    "@mui/icons-material": "5.11.11",
+    "@mui/material": "5.11.8",
+    "@mui/styles": "5.11.13",
+    "axios": "1.3.5",
+    "jose": "4.14.4",
+    "json-loader": "0.5.7",
+    "lodash": "4.17.21",
+    "prop-types": "15.8.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "6.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.20.12",
+    "@emotion/babel-plugin": "11.10.5",
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10",
+    "@vitejs/plugin-react": "3.1.0",
+    "@vitest/coverage-c8": "0.29.7",
+    "sass": "1.62.1",
+    "vite": "4.1.4",
+    "vitest": "0.29.7"
+  },
+  "license": "Apache-2.0",
+  "name": "perfkit-ui",
+  "private": true,
+  "scripts": {
+    "build": "yarn vite build",
+    "coverage": "yarn vitest run --coverage",
+    "dev": "yarn vite",
+    "preview": "yarn vite preview",
+    "test": "yarn vitest run"
+  },
+  "type": "module",
+  "version": "0.0.1"
+}

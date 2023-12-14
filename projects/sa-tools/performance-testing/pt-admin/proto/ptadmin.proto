@@ -1,0 +1,191 @@
+
+// Copyright 2023 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+syntax = "proto3";
+
+
+import "google/protobuf/timestamp.proto";
+
+option go_package="/api";
+
+// Task type
+enum PtTaskType {
+    // Unknown task type
+    UNKNOWN_TASK_TYPE = 0;
+
+    // Local task type
+    LOCAL = 1;
+
+    // Distribution task type
+    DISTRIBUTION = 2;
+
+}
+
+// Task status
+enum PtLaunchedTaskStatus {
+
+    // Unknown task status
+    UNKNOWN_TASK_STATUS = 0;
+
+    // Task is pending
+    PENDING = 1;
+
+    // Task is running
+    RUNNING = 2;
+
+    // Task is finished
+    FINISHED = 3;
+
+    // Task is failed
+    FAILED = 4;
+
+    // Task is caneling /British English: CANCELLING / American English: CANCELING
+    CANCELLING = 5;
+
+    // Task is canceled /British English: CANCELLED / American English: CANCELED
+    CANCELLED = 6;
+
+}
+
+// Status of provisioning workflow
+enum WorkflowStatus {
+    // Unknown workflow status
+    UNKNOWN_WORKFLOW_STATUS = 0;
+
+    // Workflow is provisioning
+    PROVISIONING = 1;
+
+    // Workflow is provisioning finished
+    PROVISIONING_FINISHED = 2;
+
+    // Workflow is provisioning failed
+    PROVISIONING_FAILED = 3;
+
+}
+
+enum ScriptType {
+    // Unknown script type
+    UNKNOWN_SCRIPT_TYPE = 0;
+
+    // Script type: file
+    FILE = 1;
+
+    // Script type: zip
+    ZIP = 2;
+
+    // Script type: gz
+    GZ = 3;
+
+    // Script type: tar
+    TAR = 4;
+
+    // Script type: tgz
+    TGZ = 5;
+
+}
+
+// Traffic for the task
+message PtTaskRequestTraffic {
+    // Region for the traffic
+    string region = 1;
+
+    // Percent for the traffic => Number of workers in this region
+    int32 percent = 2;
+}
+
+// Request to upload scripts for the task
+message PtTaskScriptRequest {
+    // Script name
+    string name = 1;
+
+    // Script type: file, zip, gz, tar, tgz, etc; "file is default, plain text file"
+    ScriptType type = 2;
+
+    // Script content
+    bytes data = 3;
+}
+
+// Response to upload scripts for the task
+message PtTaskScriptResponse {
+    // Task Id
+    string correlation_id = 1;
+}
+
+// Task for performance test
+message PtTaskRequest {
+    // Total users to be stimulated in test
+    int32 total_users = 1;
+
+    // Duration for test
+    int32 duration = 2;
+
+    // Ramp up time for test
+    int32 ramp_up = 3;
+
+    // The url of target site
+    string target_url = 4;
+
+    // Task type for perforamnce test: Local, or Distribution
+    PtTaskType type = 6;
+
+    // Customized Worker number for the task: if not set, use "total_users" to calculate worker number
+    int32 worker_number = 7;
+
+    // Traffics arragement
+    repeated PtTaskRequestTraffic traffics = 10;
+
+    //Task id, which is used to identify the task
+    string correlation_id = 30;
+}
+
+// Launched Task for performance test with status and links
+message PtLaunchedTask {
+    // Task id
+    string correlation_id = 1;
+
+    // Task
+    PtTaskRequest task = 2;
+
+    // Task status
+    PtLaunchedTaskStatus task_status = 3;
+
+    // Status of provisioning workflow 
+    WorkflowStatus provision_status = 4;
+
+    // Created time
+    google.protobuf.Timestamp created = 6;
+
+    // Finished time
+    google.protobuf.Timestamp finished = 7;
+
+    // last updated time
+    google.protobuf.Timestamp last_updated = 8;
+
+    // Link to metrics dashboard
+    string metrics_link = 10;
+    // Link to logs
+    string logs_link = 11;
+    // Link to download the test results
+    string download_link = 12;
+}
+
+// Task list for performance test
+message PtLaunchedTaskList {
+    // Task to be created
+    repeated PtLaunchedTask launched_tasks = 1;
+}
+
+

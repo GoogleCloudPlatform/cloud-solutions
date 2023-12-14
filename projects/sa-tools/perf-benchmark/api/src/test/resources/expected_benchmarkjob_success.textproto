@@ -1,0 +1,51 @@
+# proto-file: google/cloud/solutions/satools/perfbenchmark/benchmark.proto
+# proto-message: BenchmarkJob
+
+id: 2
+principal {
+  creator_email: "user1@example.com"
+}
+log_uri: "test-build-log-url"
+run_information {
+  timestamp {
+    seconds: 1675700467
+    nanos: 365000000
+  }
+  status: CREATED
+}
+run_information {
+  timestamp {
+    seconds: 1675700467
+    nanos: 365000000
+  }
+  status: FINISHED
+}
+result {
+  metrics {
+    timestamp {
+      seconds: 1678104788
+    }
+    metric: "total_ops"
+    value: 44420.933333333334
+    labels: "client_threads:8"
+    labels: "clients_/dev/sda:53687091200"
+    labels: "workers_tcp_congestion_control:cubic"
+    labels: "workers_threads_per_core:1"
+    labels: "workers_vm_count:1"
+    labels: "workers_zone:us-central1-b"
+  }
+  metrics {
+    timestamp {
+      seconds: 1678104849
+    }
+    metric: "total_ops"
+    value: 43200.78333333333
+    labels: "client_threads:16"
+    labels: "workers_zone:us-central1-b"
+  }
+}
+job_information {
+  type: AEROSPIKE
+  benchmark_yaml: "AEROSPIKE some yaml"
+}
+

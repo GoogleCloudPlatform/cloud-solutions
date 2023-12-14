@@ -1,0 +1,219 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Provision resources for PtTask
+main:
+    params: [msg]
+    steps:
+    - Init:
+        assign:
+            - input: $${json.decode(base64.decode(msg.data.message.data))}
+    - PrintOutInput:
+        call: sys.log
+        args:
+            text: $${input}
+    - RecordExecution:
+        call: http.patch
+        args:
+            url: $${input.url + "/v1/workflow/" +sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID") +"/" + sys.get_env("GOOGLE_CLOUD_WORKFLOW_EXECUTION_ID")}
+            auth:
+                type: OIDC
+            body: $${input}
+        result: recordStatus
+    - BuildImages:
+        call: http.post
+        args:
+            url: $${input.url + "/v1/build"}
+            auth:
+                type: OIDC
+            body: $${input.taskRequest}
+        result: buildReturn
+    - CreateVPC:
+        steps:
+        - ArgsMap:
+            call: sys.log
+            args:
+                data: $${input}
+        - Call4VPC:
+            call: http.post
+            args:
+                url: $${input.url + "/v1/vpc"}
+                auth:
+                    type: OIDC
+                body: $${input.vpc}
+            result: vpc
+    - CreateServiceAccount:
+        steps:
+        - Call4ServiceAccount:
+            call: http.post
+            args:
+                url: $${input.url + "/v1/sa"}
+                auth:
+                    type: OIDC
+                body: $${input.serviceAccount}
+            result: sa
+
+
+    - CreateAPCluster:
+        steps:
+        - Call4APCluster:
+            call: http.post
+            args:
+                url: $${input.url + "/v1/gkeap"}
+                auth:
+                    type: OIDC
+                body: $${input.gkes}
+            result: apCluster
+        - ReturnCall4APCluster:
+            call: sys.log
+            args:
+                data: $${apCluster}
+        - CheckAPCluster:
+            call: http.post
+            args:
+                url: $${input.url + "/v1/gkeap/status"}
+                auth:
+                    type: OIDC
+                body: $${apCluster.body}
+            result: apClusterStatus
+        - CheckIfDone:
+            switch:
+                - condition: $${apClusterStatus.body.status == "DONE"}
+                  next: ConfigureCluster
+        - Wait:
+            call: sys.sleep
+            args:
+                seconds: 10
+            next: CheckAPCluster
+
+    - ConfigureCluster:
+        steps:
+        - CallBindingSA:
+            call: http.post
+            args:
+                url: $${input.url + "/v1/gkeap/bindingsa"}
+                auth:
+                    type: OIDC
+                body: $${input.serviceAccount}
+            result: bindingSA
+        - Call4ClusterInfo:
+            call: http.post
+            args:
+                url: $${input.url + "/v1/gkeap/info"}
+                auth:
+                    type: OIDC
+                body: $${input.gkes}
+            result: clusterInfo
+        - ReturnClusterInfo:
+            call: sys.log
+            args:
+                data: $${clusterInfo.body}
+
+        - ApplyStorageClassinAP:
+            for:
+                value: gke
+                in: $${clusterInfo.body}
+                steps:
+                - VerifyIfMaster:
+                    switch:
+                    - condition: $${gke.isMaster != "true"}
+                      next: continue
+                - ApplyManifest4SC:
+                    call: http.post
+                    args:
+                        url: $${input.url + "/v1/gkeap/manifest/sc.yaml"}
+                        auth:
+                            type: OIDC
+                        body: $${gke}
+                    result: appliedSC
+                - WaitSC2Ready:
+                    call: sys.sleep
+                    args:
+                        seconds: 10
+                - ApplyManifest4PVC:
+                    call: http.post
+                    args:
+                        url: $${input.url + "/v1/gkeap/manifest/pvc.yaml"}
+                        auth:
+                            type: OIDC
+                        body: $${gke}
+                    result: appliedPVC
+                - CheckPVC:
+                    call: http.post
+                    args:
+                        url: $${input.url + "/v1/gkeap/pvc"}
+                        auth:
+                            type: OIDC
+                        body: $${gke}
+                    result: pvcStatus
+                - CheckPVCIfDone:
+                    switch:
+                        - condition: $${pvcStatus.body.status == "DONE"}
+                          next: ApplyManifest4PtOperator
+                - WaitPVC:
+                    call: sys.sleep
+                    args:
+                        seconds: 10
+                    next: CheckPVC
+                - ApplyManifest4PtOperator:
+                    call: http.post
+                    args:
+                        url: $${input.url + "/v1/gkeap/manifest/pt-operator.yaml"}
+                        auth:
+                            type: OIDC
+                        body: $${gke}
+                    result: appliedPtOperator
+                - CheckPtOperator:
+                    call: http.post
+                    args:
+                        url: $${input.url + "/v1/gkeap/ptoperator"}
+                        auth:
+                            type: OIDC
+                        body: $${gke}
+                    result: ptStatus
+                - CheckPtOperatorIfDone:
+                    switch:
+                        - condition: $${ptStatus.body.status == "DONE"}
+                          next: ApplyaPtTask
+                - WaitPtOperator:
+                    call: sys.sleep
+                    args:
+                        seconds: 10
+                    next: CheckPtOperator
+                - ApplyaPtTask:
+                    call: http.post
+                    args:
+                        url: $${input.url + "/v1/apply/pttask/" + sys.get_env("GOOGLE_CLOUD_WORKFLOW_EXECUTION_ID")}
+                        auth:
+                            type: OIDC
+                        body: $${input}
+                    result: ptTaskStatus
+    - CreateDashboard:
+        call: http.post
+        args:
+            url: $${input.url + "/v1/dashboard/pttask/" + sys.get_env("GOOGLE_CLOUD_PROJECT_ID") + "/"+ input.correlationId}
+            auth:
+                type: OIDC
+            body: $${input}
+        result: dashboardUrl
+    - UpdateWorkflowStatus:
+        call: http.patch
+        args:
+            url: $${input.url + "/v1/workflow/status/" + input.correlationId}
+            auth:
+                type: OIDC
+            body: $${input}
+        result: workflowStatus
+    - AllDone:
+        return: $${input}

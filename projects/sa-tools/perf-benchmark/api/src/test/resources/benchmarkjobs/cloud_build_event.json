@@ -1,0 +1,9 @@
+{
+  "message": {
+    "messageId": "7055743286809085",
+    "message_id": "7055743286809085",
+    "publishTime": "2023-03-02T16:26:42.348Z",
+    "publish_time": "2023-03-02T16:26:42.348Z"
+  },
+  "subscription": "projects/some-gcp-project-id/subscriptions/subscription-for-perfkit-benchmark-api"
+}

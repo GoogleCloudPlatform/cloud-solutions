@@ -1,0 +1,3 @@
+test_timestamp,metric,unit,value,labels
+1678104788.000,total_ops,ops,44420.933333333334,"|client_threads:8|,|clients_/dev/sda:53687091200|,|workers_tcp_congestion_control:cubic|,|workers_threads_per_core:1|,|workers_vm_count:1|,|workers_zone:us-central1-b|"
+1678104849.000,total_ops,ops,43200.783333333333,"|client_threads:16|,|workers_zone:us-central1-b|"

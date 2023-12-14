@@ -1,0 +1,83 @@
+[
+  {
+    "correlationId": 123,
+    "task": {
+      "totalUsers": 400,
+      "duration": 3600,
+      "rampUp": 300,
+      "targetUrl": "http://google.com",
+      "type": 2,
+      "traffics": [
+        { "region" : "us-central1", "percent": 90 },
+        { "region" : "us-east1", "percent": 80 }
+      ],
+      "scripts": {
+        "name": "scriptname1",
+        "type": "zip",
+        "data": "data sample"
+      }
+    },
+    "taskStatus": "PENDING",
+    "provisionStatus": 1,
+    "created": "04-12-2023 09:00 AM",
+    "finished": "12-04-2023 10:00 AM",
+    "lastUpdated": "12-04-2023 09:00 AM",
+    "metricsLink": "https://console.cloud.google.com/monitoring/dashboards?project=reflected-agent-374403&pageState=(%22dashboards%22:(%22t%22:%22All%22))",
+    "logsLink": "https://console.cloud.google.com/logs/query?referrer=search&project=reflected-agent-374403",
+    "downloadLink": "https://console.cloud.google.com/storage/browser?referrer=search&project=reflected-agent-374403&prefix="
+  },
+  {
+    "correlationId": 125,
+    "task": {
+      "totalUsers": 300,
+      "duration": 3000,
+      "rampUp": 100,
+      "targetUrl": "http://google.com",
+      "type": 1,
+      "traffics": [
+        { "region" : "us-central1", "percent": 90 },
+        { "region" : "us-central1", "percent": 90 }
+      ],
+      "scripts": {
+        "name": "scriptname1",
+        "type": "zip",
+        "data": "data sample"
+      }
+    },
+    "taskStatus": "PENDING",
+    "provisionStatus": 1,
+    "created": "04-11-2023 08:00 AM",
+    "finished": "12-04-2023 10:00 AM",
+    "lastUpdated": "12-04-2023 09:00 AM",
+    "metricsLink": "https://console.cloud.google.com/monitoring/dashboards?project=reflected-agent-374403&pageState=(%22dashboards%22:(%22t%22:%22All%22))",
+    "logsLink": "https://console.cloud.google.com/logs/query?referrer=search&project=reflected-agent-374403",
+    "downloadLink": "https://console.cloud.google.com/storage/browser?referrer=search&project=reflected-agent-374403&prefix="
+  },
+  {
+    "correlationId": 210,
+    "task": {
+      "totalUsers": 111,
+      "duration": 15000,
+      "rampUp": 10,
+      "targetUrl": "http://google.com",
+      "type": 1,
+      "traffics": [
+        { "region" : "us-central1", "percent": 99 },
+        { "region" : "us-central1", "percent": 80 }
+      ],
+      "scripts": {
+        "name": "scriptname1",
+        "type": "zip",
+        "data": "data sample"
+      }
+    },
+    "taskStatus": "PENDING",
+    "provisionStatus": 2,
+    "created": "04-11-2023 08:00 AM",
+    "finished": "12-04-2023 10:00 AM",
+    "lastUpdated": "12-04-2023 09:00 AM",
+    "metricsLink": "https://console.cloud.google.com/monitoring/dashboards?project=reflected-agent-374403&pageState=(%22dashboards%22:(%22t%22:%22All%22))",
+    "logsLink": "https://console.cloud.google.com/logs/query?referrer=search&project=reflected-agent-374403",
+    "downloadLink": "https://console.cloud.google.com/storage/browser?referrer=search&project=reflected-agent-374403&prefix="
+  }
+]

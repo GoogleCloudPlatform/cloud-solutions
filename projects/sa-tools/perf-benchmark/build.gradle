@@ -1,0 +1,145 @@
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
+plugins {
+    id "groovy-gradle-plugin"
+    id "base"
+    id 'com.diffplug.spotless' version '6.19.0'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+subprojects {
+    apply plugin: "com.diffplug.spotless"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    group "com.google.cloud.solutions.perfkit"
+
+    ext {
+        protoVersion = "3.22.3"
+        floggerVersion = "0.7.4"
+        springBootVersion = "3.0.6"
+        junitJupiterVersion = "5.9.2"
+    }
+
+    tasks.withType(Test) {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed", "standardOut", "standardError"
+            showStandardStreams = true
+            exceptionFormat = TestExceptionFormat.FULL
+        }
+    }
+}
+
+def licenseLines = List.of("Copyright 2023 Google LLC" ,
+        "" ,
+        "Licensed under the Apache License, Version 2.0 (the \"License\");" ,
+        "you may not use this file except in compliance with the License." ,
+        "You may obtain a copy of the License at" ,
+        "" ,
+        "    https://www.apache.org/licenses/LICENSE-2.0" ,
+        "" ,
+        "Unless required by applicable law or agreed to in writing, software" ,
+        "distributed under the License is distributed on an \"AS IS\" BASIS," ,
+        "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied." ,
+        "See the License for the specific language governing permissions and" ,
+        "limitations under the License.")
+
+def licenseJava = "/*\n" + licenseLines.collect(ln -> " *" + (ln.matches("^.+")? " " : "") + ln).join("\n") + "\n */\n\n"
+def licenseWithHash = "#\n" + licenseLines.collect(ln -> "#" + (ln.matches("^.+")? " " : "") + ln).join("\n") + "\n#\n\n"
+def excludedFolderPatterns = ["**/build/**", "**/dist/**", "**/node_modules/**", "**/third_party/**"]
+
+project.ext.licenseJava = licenseJava
+project.ext.licenseWithHash = licenseWithHash
+project.ext.excludedFolderPatterns = excludedFolderPatterns
+
+spotless {
+    format 'dockerfile', {
+        target "**/*.dockerfile", "**/Dockerfile"
+        targetExclude(excludedFolderPatterns)
+        licenseHeader(licenseWithHash, "FROM")
+        endWithNewline()
+    }
+    format "gradle", {
+        target "**/*.gradle"
+        targetExclude(excludedFolderPatterns)
+        licenseHeader(licenseJava, "(plugins|root|import)")
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    java {
+        target "**/*.java"
+        targetExclude(excludedFolderPatterns)
+        googleJavaFormat("1.18.1")
+        removeUnusedImports()
+        importOrder()
+        trimTrailingWhitespace()
+        endWithNewline()
+        licenseHeader licenseJava
+    }
+    kotlin {
+        target "**/*.kt"
+        targetExclude(excludedFolderPatterns)
+        ktlint()
+        licenseHeader licenseJava
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+    freshmark {
+        target "**/*.md"
+        targetExclude(excludedFolderPatterns)
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    yaml {
+        target "**/*.yaml", "**/*.yml"
+        targetExclude(excludedFolderPatterns)
+        jackson()
+                .version("2.15.0")
+                .feature("ORDER_MAP_ENTRIES_BY_KEYS", true)
+                .feature("INDENT_OUTPUT", true)
+        licenseHeader licenseWithHash, "---"
+    }
+    json {
+        target '**/*.json'
+        targetExclude(excludedFolderPatterns)
+        gson()
+                .version('2.8.1')
+                .indentWithSpaces(2)
+                .sortByKeys()
+                .escapeHtml()
+    }
+    format "shellScript", {
+        target "**/*.sh"
+        targetExclude(excludedFolderPatterns)
+        licenseHeader (licenseWithHash, "## Description\\:.+").skipLinesMatching("^#!.+?\$")
+    }
+}

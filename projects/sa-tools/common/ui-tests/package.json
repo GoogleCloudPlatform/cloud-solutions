@@ -1,0 +1,26 @@
+{
+  "name": "common-ui-test",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "yarn vite",
+    "build": "yarn vite build",
+    "preview": "yarn vite preview",
+    "test": "TZ=UTC yarn vitest run",
+    "coverage": "TZ=UTC yarn vitest run --coverage",
+    "pretty": "yarn prettier --write \"src/**/*.{js,jsx,css,json}\"",
+    "style-check": "yarn prettier --check \"src/**/*.{js,jsx,css,json}\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vitest/coverage-c8": "0.29.7",
+    "jsdom": "22.0.0",
+    "prettier": "2.8.7",
+    "sass": "1.62.1",
+    "vite": "4.1.4",
+    "vitest": "0.29.7",
+    "webdriverio": "8.9.0"
+  }
+}
