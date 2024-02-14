@@ -1,0 +1,333 @@
+diff --git a/perfkitbenchmarker/data/cassandra/cassandra-env.sh.j2 b/perfkitbenchmarker/data/cassandra/cassandra-env.sh.j2
+index 6d638270..8f9be922 100644
+--- a/perfkitbenchmarker/data/cassandra/cassandra-env.sh.j2
++++ b/perfkitbenchmarker/data/cassandra/cassandra-env.sh.j2
+@@ -157,7 +157,7 @@ JMX_PORT="7199"
+ if [ "$JVM_VENDOR" != "OpenJDK" -o "$JVM_VERSION" \> "1.6.0" ] \
+       || [ "$JVM_VERSION" = "1.6.0" -a "$JVM_PATCH_VERSION" -ge 23 ]
+ then
+-    JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.3.0.jar"
++    JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.3.2.jar"
+ fi
+ 
+ # enable thread priorities, primarily so we can give periodic tasks
+diff --git a/perfkitbenchmarker/data/cassandra/cassandra.yaml.j2 b/perfkitbenchmarker/data/cassandra/cassandra.yaml.j2
+index 585aa86d..6d61678b 100644
+--- a/perfkitbenchmarker/data/cassandra/cassandra.yaml.j2
++++ b/perfkitbenchmarker/data/cassandra/cassandra.yaml.j2
+@@ -44,12 +44,12 @@ ssl_storage_port: 7001
+ listen_address: {{ ip_address }}
+ start_native_transport: true
+ native_transport_port: 9042
+-start_rpc: true
++#start_rpc: true
+ rpc_address: {{ ip_address }}
+-rpc_port: 9160
++#rpc_port: 9160
+ rpc_keepalive: true
+-rpc_server_type: sync
+-thrift_framed_transport_size_in_mb: 15
++#rpc_server_type: sync
++#thrift_framed_transport_size_in_mb: 15
+ incremental_backups: false
+ snapshot_before_compaction: false
+ auto_snapshot: true
+@@ -68,7 +68,7 @@ endpoint_snitch: SimpleSnitch
+ dynamic_snitch_update_interval_in_ms: 100
+ dynamic_snitch_reset_interval_in_ms: 600000
+ dynamic_snitch_badness_threshold: 0.1
+-request_scheduler: org.apache.cassandra.scheduler.NoScheduler
++#request_scheduler: org.apache.cassandra.scheduler.NoScheduler
+ server_encryption_options:
+     internode_encryption: none
+     keystore: conf/.keystore
+@@ -81,4 +81,3 @@ client_encryption_options:
+     keystore_password: cassandra
+ internode_compression: all
+ inter_dc_tcp_nodelay: false
+-
+diff --git a/perfkitbenchmarker/data/container/kubernetes_nginx/kubernetes_nginx.yaml.j2 b/perfkitbenchmarker/data/container/kubernetes_nginx/kubernetes_nginx.yaml.j2
+index 6ab01c41..fddcf846 100644
+--- a/perfkitbenchmarker/data/container/kubernetes_nginx/kubernetes_nginx.yaml.j2
++++ b/perfkitbenchmarker/data/container/kubernetes_nginx/kubernetes_nginx.yaml.j2
+@@ -69,6 +69,8 @@ apiVersion: v1
+ kind: Service
+ metadata:
+   name: nginx-cluster
++  annotations:
++    networking.gke.io/load-balancer-type: "Internal"
+ spec:
+   ports:
+   - name: nginx-port
+@@ -78,4 +80,5 @@ spec:
+   selector:
+     app: nginx
+     appCluster: nginx-cluster
+-  type: ClusterIP
++  type: LoadBalancer
++  externalTrafficPolicy: Cluster
+diff --git a/perfkitbenchmarker/linux_benchmarks/cassandra_stress_benchmark.py b/perfkitbenchmarker/linux_benchmarks/cassandra_stress_benchmark.py
+index 2a578c6d..6debef9b 100644
+--- a/perfkitbenchmarker/linux_benchmarks/cassandra_stress_benchmark.py
++++ b/perfkitbenchmarker/linux_benchmarks/cassandra_stress_benchmark.py
+@@ -218,21 +218,21 @@ TEMP_PROFILE_PATH = posixpath.join(vm_util.VM_TMP_DIR, 'profile.yaml')
+ # Results documentation:
+ # http://docs.datastax.com/en/cassandra/2.1/cassandra/tools/toolsCStressOutput_c.html
+ RESULTS_METRICS = (
+-    'op rate',  # Number of operations per second performed during the run.
+-    'partition rate',  # Number of partition operations per second performed
+-    # during the run.
+-    'row rate',  # Number of row operations per second performed during the run.
+-    'latency mean',  # Average latency in milliseconds for each operation during
+-    # that run.
+-    'latency median',  # Median latency in milliseconds for each operation
+-    # during that run.
+-    'latency 95th percentile',  # 95% of the time the latency was less than
+-    # the number displayed in the column.
+-    'latency 99th percentile',  # 99% of the time the latency was less than
+-    # the number displayed in the column.
+-    'latency 99.9th percentile',  # 99.9% of the time the latency was less than
+-    # the number displayed in the column.
+-    'latency max',  # Maximum latency in milliseconds.
++    'Op rate',  # Number of operations per second performed during the run.
++    'Partition rate',  # Number of partition operations per second performed
++                       # during the run.
++    'Row rate',  # Number of row operations per second performed during the run.
++    'Latency mean',  # Average latency in milliseconds for each operation during
++                     # that run.
++    'Latency median',  # Median latency in milliseconds for each operation
++                       # during that run.
++    'Latency 95th percentile',  # 95% of the time the latency was less than
++                                # the number displayed in the column.
++    'Latency 99th percentile',  # 99% of the time the latency was less than
++                                # the number displayed in the column.
++    'Latency 99.9th percentile',  # 99.9% of the time the latency was less than
++                                  # the number displayed in the column.
++    'Latency max',  # Maximum latency in milliseconds.
+     'Total partitions',  # Number of partitions.
+     'Total errors',  # Number of errors.
+     'Total operation time',
+@@ -240,14 +240,14 @@ RESULTS_METRICS = (
+ 
+ # Metrics are aggregated between client vms.
+ AGGREGATED_METRICS = frozenset({
+-    'op rate',
+-    'partition rate',
+-    'row rate',
++    'Op rate',
++    'Partition rate',
++    'Row rate',
+     'Total partitions',
+     'Total errors',
+ })
+ # Maximum value will be choisen between client vms.
+-MAXIMUM_METRICS = {'latency max'}
++MAXIMUM_METRICS = {'Latency max'}
+ 
+ 
+ def GetConfig(user_config):
+@@ -317,6 +317,7 @@ def GenerateMetadataFromFlags(benchmark_spec):
+       'population_size': FLAGS.cassandra_stress_population_size or max(
+           metadata['num_keys'], metadata['num_preload_keys']
+       ),
++      #'population_size': 16000000,
+       'population_dist': FLAGS.cassandra_stress_population_distribution,
+       'population_parameters': ','.join(
+           FLAGS.cassandra_stress_population_parameters
+@@ -511,7 +512,7 @@ def RunCassandraStressTest(
+   data_node_ips = [vm.internal_ip for vm in cassandra_vms]
+   population_size = population_size or num_operations
+   operations_per_vm = int(math.ceil(float(num_operations) / num_loaders))
+-  population_per_vm = population_size / num_loaders
++  population_per_vm = int(population_size / num_loaders)
+   if num_operations % num_loaders:
+     logging.warn(
+         'Total number of operations rounded to %s '
+@@ -551,15 +552,16 @@ def CollectResultFile(vm, results):
+   result_path = _ResultFilePath(vm)
+   vm.PullFile(vm_util.GetTempDir(), result_path)
+   resp, _ = vm.RemoteCommand('tail -n 20 ' + result_path)
++  logging.info(resp)
+   for metric in RESULTS_METRICS:
+-    value = regex_util.ExtractGroup(r'%s[\t ]+: ([\d\.:]+)' % metric, resp)
+-    if metric == RESULTS_METRICS[-1]:  # Total operation time
+-      value = value.split(':')
+-      results[metric].append(
+-          int(value[0]) * 3600 + int(value[1]) * 60 + int(value[2])
+-      )
+-    else:
+-      results[metric].append(float(value))
++   value = regex_util.ExtractGroup(r'%s[\t ]+: ([ \d\.:,]+)' % metric, resp)
++   value = value.replace(',', '')
++   if metric == RESULTS_METRICS[-1]:  # Total operation time
++     value = value.split(':')
++     results[metric].append(
++         int(value[0]) * 3600 + int(value[1]) * 60 + int(value[2])
++   )else:
++     results[metric].append(float(value))
+ 
+ 
+ def CollectResults(benchmark_spec, metadata):
+@@ -581,19 +583,19 @@ def CollectResults(benchmark_spec, metadata):
+   background_tasks.RunThreaded(CollectResultFile, args)
+   results = []
+   for metric in RESULTS_METRICS:
+-    if metric in MAXIMUM_METRICS:
+-      value = max(raw_results[metric])
+-    else:
+-      value = math.fsum(raw_results[metric])
+-      if metric not in AGGREGATED_METRICS:
+-        value = value / len(loader_vms)
+-    if metric.startswith('latency'):
+-      unit = 'ms'
+-    elif metric.endswith('rate'):
+-      unit = 'operations per second'
+-    elif metric == 'Total operation time':
+-      unit = 'seconds'
+-    results.append(sample.Sample(metric, value, unit, metadata))
++   if metric in MAXIMUM_METRICS:
++     value = max(raw_results[metric])
++   else:
++     value = math.fsum(raw_results[metric])
++     if metric not in AGGREGATED_METRICS:
++       value = value / len(loader_vms)
++   if metric.startswith('latency'):
++     unit = 'ms'
++   elif metric.endswith('rate'):
++     unit = 'operations per second'
++   elif metric == 'Total operation time':
++     unit = 'seconds'
++   results.append(sample.Sample(metric, value, unit, metadata))
+   logging.info('Cassandra results:\n%s', results)
+   return results
+ 
+diff --git a/perfkitbenchmarker/linux_packages/aerospike_client.py b/perfkitbenchmarker/linux_packages/aerospike_client.py
+index e751708f..55201e1d 100644
+--- a/perfkitbenchmarker/linux_packages/aerospike_client.py
++++ b/perfkitbenchmarker/linux_packages/aerospike_client.py
+@@ -28,10 +28,10 @@ from perfkitbenchmarker import sample
+ from perfkitbenchmarker import vm_util
+ 
+ FLAGS = flags.FLAGS
+-PATH = 'aerospike-tools-7.0.5-ubuntu20.04'
++PATH = 'aerospike-tools_8.0.2_ubuntu20.04_x86_64'
+ TAR_FILE = f'{PATH}.tgz'
+ DOWNLOAD_URL = (
+-    f'https://download.aerospike.com/artifacts/aerospike-tools/7.0.5/{TAR_FILE}'
++    f'https://download.aerospike.com/artifacts/aerospike-tools/8.0.2/{TAR_FILE}'
+ )
+ STDOUT_START = 'Stage 1: default config'
+ SUM = lambda x, y: x + y
+diff --git a/perfkitbenchmarker/linux_packages/ant.py b/perfkitbenchmarker/linux_packages/ant.py
+index 27f5d373..04452cfc 100644
+--- a/perfkitbenchmarker/linux_packages/ant.py
++++ b/perfkitbenchmarker/linux_packages/ant.py
+@@ -19,7 +19,7 @@ import posixpath
+ 
+ from perfkitbenchmarker import linux_packages
+ 
+-ANT_TAR = 'apache-ant-1.9.6-bin.tar.gz'
++ANT_TAR = 'apache-ant-1.10.0-bin.tar.gz'
+ ANT_TAR_URL = 'https://archive.apache.org/dist/ant/binaries/' + ANT_TAR
+ 
+ PACKAGE_NAME = 'ant'
+@@ -37,8 +37,8 @@ def _Install(vm):
+       PACKAGE_NAME, PREPROVISIONED_DATA.keys(), linux_packages.INSTALL_DIR
+   )
+   vm.RemoteCommand(
+-      'cd {0}  && tar -zxf apache-ant-1.9.6-bin.tar.gz && '
+-      'ln -s {0}/apache-ant-1.9.6/ {1}'.format(
++      'cd {0}  && tar -zxf apache-ant-1.10.0-bin.tar.gz && '
++      'ln -s {0}/apache-ant-1.10.0/ {1}'.format(
+           linux_packages.INSTALL_DIR, ANT_HOME_DIR
+       )
+   )
+diff --git a/perfkitbenchmarker/linux_packages/cassandra.py b/perfkitbenchmarker/linux_packages/cassandra.py
+index 7c01c9e0..022c4d02 100644
+--- a/perfkitbenchmarker/linux_packages/cassandra.py
++++ b/perfkitbenchmarker/linux_packages/cassandra.py
+@@ -36,10 +36,10 @@ from six.moves import range
+ 
+ JNA_JAR_URL = (
+     'https://maven.java.net/content/repositories/releases/'
+-    'net/java/dev/jna/jna/4.1.0/jna-4.1.0.jar'
++    'net/java/dev/jna/jna/4.2.2/jna-4.2.2.jar'
+ )
+ CASSANDRA_GIT_REPRO = 'https://github.com/apache/cassandra.git'
+-CASSANDRA_VERSION = 'cassandra-2.1'
++CASSANDRA_VERSION = 'cassandra-4.1'
+ CASSANDRA_YAML_TEMPLATE = 'cassandra/cassandra.yaml.j2'
+ CASSANDRA_ENV_TEMPLATE = 'cassandra/cassandra-env.sh.j2'
+ CASSANDRA_DIR = posixpath.join(linux_packages.INSTALL_DIR, 'cassandra')
+diff --git a/perfkitbenchmarker/linux_packages/openjdk.py b/perfkitbenchmarker/linux_packages/openjdk.py
+index 59bdc5d9..883572e9 100644
+--- a/perfkitbenchmarker/linux_packages/openjdk.py
++++ b/perfkitbenchmarker/linux_packages/openjdk.py
+@@ -33,9 +33,9 @@ OPENJDK_VERSION = flags.DEFINE_integer(
+ 
+ # Earlier elements of list are preferred.
+ # These are the 3 LTS versions of Java.
+-# The default 11 is a compromise between the older most popular, but maintenance
++# 11 is a compromise between the older most popular, but maintenance
+ # mode Java 8 and the newest Java 17.
+-KNOWN_JAVA_VERSIONS = [11, 17, 8]
++KNOWN_JAVA_VERSIONS = [8, 11, 17]
+ 
+ 
+ def _Install(vm, get_package_name_for_version: Callable[[int], str]):
+diff --git a/perfkitbenchmarker/linux_packages/redis_server.py b/perfkitbenchmarker/linux_packages/redis_server.py
+index 5c27f607..001c8cc2 100644
+--- a/perfkitbenchmarker/linux_packages/redis_server.py
++++ b/perfkitbenchmarker/linux_packages/redis_server.py
+@@ -33,7 +33,7 @@ class RedisEvictionPolicy:
+ 
+ 
+ _VERSION = flags.DEFINE_string(
+-    'redis_server_version', '6.2.1', 'Version of redis server to use.'
++    'redis_server_version', '7.0.3', 'Version of redis server to use.'
+ )
+ _IO_THREADS = flags.DEFINE_integer(
+     'redis_server_io_threads',
+diff --git a/perfkitbenchmarker/linux_packages/tomcat.py b/perfkitbenchmarker/linux_packages/tomcat.py
+index 59581dd1..a296f1a5 100644
+--- a/perfkitbenchmarker/linux_packages/tomcat.py
++++ b/perfkitbenchmarker/linux_packages/tomcat.py
+@@ -28,8 +28,8 @@ from perfkitbenchmarker import linux_packages
+ 
+ 
+ TOMCAT_URL = (
+-    'https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.28/bin/'
+-    'apache-tomcat-8.0.28.tar.gz'
++    'https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.67/bin/'
++    'apache-tomcat-9.0.67.tar.gz'
+ )
+ TOMCAT_DIR = posixpath.join(linux_packages.INSTALL_DIR, 'tomcat')
+ TOMCAT_HTTP_PORT = 8080
+diff --git a/perfkitbenchmarker/linux_packages/wrk.py b/perfkitbenchmarker/linux_packages/wrk.py
+index 0d61c2bf..123702c6 100644
+--- a/perfkitbenchmarker/linux_packages/wrk.py
++++ b/perfkitbenchmarker/linux_packages/wrk.py
+@@ -35,7 +35,7 @@ _LUA_SCRIPT_NAME = 'wrk_latency.lua'
+ _LUA_SCRIPT_PATH = posixpath.join(WRK_DIR, _LUA_SCRIPT_NAME)
+ 
+ # Default socket / request timeout.
+-_TIMEOUT = '10s'
++_TIMEOUT = '30s'
+ # WRK always outputs a free text report. _LUA_SCRIPT_NAME (above)
+ # writes this prefix before the CSV output begins.
+ _CSV_PREFIX = '==CSV==\n'
+diff --git a/perfkitbenchmarker/providers/gcp/gcp_relational_db.py b/perfkitbenchmarker/providers/gcp/gcp_relational_db.py
+index 28cbb54c..5d83004a 100644
+--- a/perfkitbenchmarker/providers/gcp/gcp_relational_db.py
++++ b/perfkitbenchmarker/providers/gcp/gcp_relational_db.py
+@@ -73,8 +73,8 @@ GCP_DATABASE_VERSION_MAPPING = {
+ }
+ 
+ 
+-DEFAULT_MYSQL_VERSION = '5.7'
+-DEFAULT_POSTGRES_VERSION = '9.6'
++DEFAULT_MYSQL_VERSION = '8.0'
++DEFAULT_POSTGRES_VERSION = '12'
+ DEFAULT_SQL_SERVER_VERSION = '2017_Standard'
+ 
+ DEFAULT_ENGINE_VERSIONS = {
