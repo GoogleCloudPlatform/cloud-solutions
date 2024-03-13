@@ -11,7 +11,7 @@ require (
 	github.com/rs/cors v1.8.3
 	golang.org/x/oauth2 v0.7.0
 	google.golang.org/api v0.114.0
-	google.golang.org/protobuf v1.30.0
+	google.golang.org/protobuf v1.33.0
 	k8s.io/api v0.26.1
 	k8s.io/apimachinery v0.26.1
 	k8s.io/client-go v0.26.1
