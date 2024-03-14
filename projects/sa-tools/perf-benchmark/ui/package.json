@@ -6,7 +6,7 @@
     "@mui/material": "5.11.8",
     "@mui/styles": "5.11.13",
     "axios": "1.6.0",
-    "jose": "4.14.4",
+    "jose": "4.15.5",
     "json-loader": "0.5.7",
     "lodash": "4.17.21",
     "prop-types": "15.8.1",

@@ -16,7 +16,7 @@
     "@mui/icons-material": "5.11.11",
     "@mui/material": "5.11.6",
     "axios": "1.6.0",
-    "jose": "4.14.1",
+    "jose": "4.15.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "8.0.6",
