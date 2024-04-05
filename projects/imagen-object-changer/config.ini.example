@@ -1,0 +1,9 @@
+[parameters]
+input = 
+label = 
+prompt = 
+mask = mask.png
+invert_mask = False
+output_json = output.json
+credentials = ./credentials.json
+project_id = 
