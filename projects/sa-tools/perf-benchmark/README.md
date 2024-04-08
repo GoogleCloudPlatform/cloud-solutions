@@ -9,7 +9,7 @@ Consists of 3 modules:
 2. Benchmark Runner:
    Templated launch scripts on fork of Google's Perfkit benchmark maintained by @prakhargautam at
    https://github.com/prakhag2/PerfKitBenchmarker
-   The runner, executes a parameterized Cloud Build jobs with job specific parameters passed as input and writes the
+   The runner executes a parameterized Cloud Build jobs with job specific parameters passed as input and writes the
     results to Google BigQuery table.
 
 3. Daily Perfkit benchmarks runner

@@ -21,13 +21,12 @@
 
 site_name: Cloud Solutions
 site_url: https://googlecloudplatform.github.io/cloud-solutions/
-docs_dir: .workspace/docs
+docs_dir: build/docs
   
 theme:
   name: material
   custom_dir: overrides
   features:
-    - navigation.tabs
     - content.code.copy
     - content.code.annotate
     - navigation.expand
@@ -67,6 +66,10 @@ markdown_extensions:
   - pymdownx.details
 
 nav:
-  - 'Overview': 'common/index.md'
-  - 'Projects':
-     - 'VIAI Edge': 'projects/solutions-viai-edge-provisioning-configuration/development.md'
+  - 'Overview': 'index.md'
+  - 'Examples':
+    - 'BigQuery CDC': 'projects/dataflow-bigquery-change-data-capture/index.md'
+    - 'Imagen Voice Captioning': 'projects/imagen-voice-captioning/index.md'
+  - 'Tools':
+    - 'Binpacker': 'projects/sa-tools/binpacker.md'
+    - 'PerfKit Benchmark': 'projects/sa-tools/perf-benchmark.md'
