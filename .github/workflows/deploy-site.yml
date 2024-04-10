@@ -57,7 +57,7 @@ jobs:
           python-version: 3.x
         
       - name: Build site
-        working-directory: tools
+        working-directory: docs
         run: ./mkdocs.sh build --site-dir build/public
           
       - name: Set up Pages
