@@ -71,6 +71,7 @@ nav:
   - 'Examples':
       - 'BigQuery CDC': 'projects/dataflow-bigquery-change-data-capture/index.md'
       - 'Imagen Voice Captioning': 'projects/imagen-voice-captioning/index.md'
+      - 'Serverless event processing': 'projects/serverless-event-processing/index.md'
   - 'Tools':
       - 'Dataproc Trino Autoscaler':
           - 'Overview': 'projects/dataproc-trino-autoscaler/index.md'

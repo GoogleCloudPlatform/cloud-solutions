@@ -1,8 +1,8 @@
 # Overview
 
-Browse tools and examples that help you build solutions using Google Cloud.
+Browse tools and reference architectures that help you build solutions using Google Cloud.
 
-## Examples
+## Reference architectures
 
 ### BigQuery change data capture
 
@@ -11,9 +11,15 @@ Use the BigqueryIO change data capture (CDC) functionality to capture data strea
 
 ### Imagen Voice Captioning
 
-Use Vertex AI Generative AI Vision and Text-to-Speech AI 
-to generate a voice description for an image. 
+Use Vertex AI Generative AI Vision and Text-to-Speech AI
+to generate a voice description for an image.
 [More details »](projects/imagen-voice-captioning/index.md)
+
+### Serverless event processing
+
+Implement an event-driven data processing pipeline without having to manage the
+underlying infrastructure.
+[More details »](projects/serverless-event-processing)
 
 ## Tools
 
