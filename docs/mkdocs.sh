@@ -46,8 +46,8 @@ VENV_DIR=$BUILD_DIR/python-venv
 #
 # Make sure pip is installed.
 #
-if ! pip --version &>/dev/null; then
-  >&2 echo "pip not found. Make sure pip is installed and available in PATH."
+if ! command python3 --version &>/dev/null; then
+  >&2 echo "python3 not found. Make sure python3 is installed and available in PATH."
   exit
 fi
 
