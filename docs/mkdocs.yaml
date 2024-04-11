@@ -22,7 +22,6 @@
 site_name: Cloud Solutions
 site_url: https://googlecloudplatform.github.io/cloud-solutions/
 docs_dir: build/docs
-
 theme:
   name: material
   custom_dir: overrides
@@ -41,17 +40,16 @@ extra:
   analytics:
     provider: google
     property: G-TX7HG7NJWJ
-
 repo_name: cloud-solutions
 repo_url: https://github.com/GoogleCloudPlatform/cloud-solutions
 copyright: |
-    The projects contained in this repository are maintained by the Google Cloud Solutions Architects team.<br>
-    Copyright &copy; 2019-2024 Google LLC<br>
-    <a href='https://cloud.google.com/'><img src='/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
-
+  The projects contained in this repository are maintained by the Google Cloud Solutions Architects team.<br>
+  Copyright &copy; 2019-2024 Google LLC<br>
+  <a href='https://cloud.google.com/'><img src='/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
 markdown_extensions:
   - admonition
   - attr_list
+  - fenced_code
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.emoji:
@@ -60,17 +58,23 @@ markdown_extensions:
   - def_list
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.snippets
   - pymdownx.details
   - pymdownx.highlight:
-        pygments_lang_class: true
+      pygments_lang_class: true
+      line_spans: __span
+      anchor_linenums: true
   - pymdownx.superfences
   - pymdownx.inlinehilite
-
 nav:
   - 'Overview': 'index.md'
   - 'Examples':
-    - 'BigQuery CDC': 'projects/dataflow-bigquery-change-data-capture/index.md'
-    - 'Imagen Voice Captioning': 'projects/imagen-voice-captioning/index.md'
+      - 'BigQuery CDC': 'projects/dataflow-bigquery-change-data-capture/index.md'
+      - 'Imagen Voice Captioning': 'projects/imagen-voice-captioning/index.md'
   - 'Tools':
-    - 'Binpacker': 'projects/sa-tools/binpacker.md'
-    - 'PerfKit Benchmark': 'projects/sa-tools/perf-benchmark.md'
+      - 'Dataproc Trino Autoscaler':
+          - 'Overview': 'projects/dataproc-trino-autoscaler/index.md'
+          - 'Deployment': 'projects/dataproc-trino-autoscaler/deployment.md'
+          - 'Demo': 'projects/dataproc-trino-autoscaler/demo.md'
+      - 'Binpacker': 'projects/sa-tools/binpacker.md'
+      - 'PerfKit Benchmark': 'projects/sa-tools/perf-benchmark.md'
