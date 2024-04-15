@@ -64,7 +64,7 @@ if [[ ! -d "$BUILD_DIR" ]]; then
   python3 -m venv "$VENV_DIR"
   source "$VENV_DIR/bin/activate"
   
-  pip install mkdocs-material
+  pip install --quiet --exists-action i -r "${SCRIPT_DIR}/requirements.txt" --require-hashes
 
   #
   # Create symlinks.
