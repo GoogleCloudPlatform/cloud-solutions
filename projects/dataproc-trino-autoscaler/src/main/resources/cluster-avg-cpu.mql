@@ -1,0 +1,7 @@
+fetch gce_instance :: compute.googleapis.com/instance/cpu/utilization
+| filter metadata.user.c'goog-dataproc-location'='%1$s'
+| filter metadata.user.c'goog-dataproc-cluster-name'='%2$s'
+| filter metadata.name != '%2$s-m'
+| align next_older(1m)
+| every 1m
+| within -5m

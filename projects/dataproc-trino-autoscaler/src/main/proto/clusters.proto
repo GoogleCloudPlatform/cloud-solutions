@@ -1,0 +1,98 @@
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package com.google.cloud.solutions.trinoscaler.proto;
+
+import "google/protobuf/duration.proto";
+
+// A request to repair a cluster.
+message RepairClusterRequest {
+  // Intended action to take on specified cluster resources.
+  enum RepairAction {
+    // No action will be taken by default.
+    REPAIR_ACTION_UNSPECIFIED = 0;
+    // delete the specified list of nodes.
+    DELETE = 1;
+  }
+
+  enum NodePoolType {
+    NODE_POOL_TYPE_UNSPECIFIED = 0;
+    PRIMARY_WORKER_POOL = 1;
+    SECONDARY_WORKER_POOL = 2;
+  }
+
+  // indicating a list of workers of same type
+  message NodePool {
+    // A unique id of the node pool.
+    // Primary and Secondary workers can be specified using special reserved
+    // ids PRIMARY_WORKER_POOL and SECONDARY_WORKER_POOL respectively.
+    // Aux node pools can be referenced using corresponding pool id.
+    NodePoolType id = 1;
+    // Name of instances to be repaired. These instances must belong to
+    // specified node pool.
+    repeated string instance_names = 2;
+    // Repair action to take on specified resources of the node pool.
+    RepairAction repair_action = 3;
+  }
+
+  // The ID of the Google Cloud Platform project the
+  // cluster belongs to.
+  string project_id = 1;
+
+  // The Dataproc region in which to handle the request.
+  string region = 2;
+
+  // The cluster name.
+  // (-- api-linter: core::0122::name-suffix=disabled
+  //     aip.dev/not-precedent: Consistency with other api methods. --)
+  string cluster_name = 3;
+
+  //  Specifying the `cluster_uuid` means the RPC will fail
+  // (with error NOT_FOUND) if a cluster with the specified UUID does not exist.
+  string cluster_uuid = 4;
+
+  // A unique ID used to identify the request. If the server
+  // receives two RepairClusterRequests
+  // with the same ID, the second request is ignored, and the
+  // first [] created and stored in the
+  // backend is returned.
+  //
+  // Recommendation: Set this value to a
+  // (https://en.wikipedia.org/wiki/Universally_unique_identifier).
+  //
+  // The ID must contain only letters (a-z, A-Z), numbers (0-9),
+  // underscores (_), and hyphens (-). The maximum length is 40 characters.
+  string request_id = 5;
+
+  // Node pools and corresponding repair action to be taken.
+  // All node pools should be unique in this request.
+  // i.e. Multiple entries for the same node pool id are not allowed.
+  repeated NodePool node_pools = 6;
+
+  // Timeout for graceful YARN decommissioning. Graceful
+  // decommissioning facilitates the removal of cluster nodes without
+  // interrupting jobs in progress. The timeout specifies the amount
+  // of time to wait for jobs finish before forcefully removing nodes.
+  // The default timeout is 0 for forceful decommissioning, and the maximum
+  // timeout period is 1 day. (see
+  // (https://developers.google.com/protocol-buffers/docs/proto3#json)).
+  //
+  // `graceful_decommission_timeout` is supported
+  // in Dataproc image versions 1.2+.
+  .google.protobuf.Duration graceful_decommission_timeout = 7;
+}

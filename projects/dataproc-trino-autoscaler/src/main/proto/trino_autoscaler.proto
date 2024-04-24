@@ -1,0 +1,116 @@
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto2";
+
+package com.google.cloud.solutions.trinoscaler.proto;
+
+
+// Autoscaling configuration for a Dataproc cluster on GCE
+message ClusterScalingSpec {
+
+  // Required. Describes limits for workers in the secondary pool workers
+  optional InstanceGroupScalingConfig secondary_pool = 2;
+
+  required WorkerScalingLogic cluster_expand_logic = 10;
+
+  required WorkerScalingLogic cluster_shrink_logic = 11;
+
+  // CPU Utilization upper threshold for the cluster
+  // The cluster will expand by 1-step if the avg. CPU utilization of workers
+  // is more than this threshold
+  // limits [0 - 1] default: 0.7
+  optional double cpu_threshold_high = 15 [default = 0.7];
+
+  // CPU Utilization lower threshold for the cluster
+  // The cluster will shrink by 1-step if the avg. CPU utilization of workers
+  // is less than this threshold
+  // limits [0 - 1] default: 0.1
+  optional double cpu_threshold_low = 16 [default = 0.1];
+
+  required TimingConfiguration timing_configuration = 20;
+}
+
+message TimingConfiguration {
+  // Periods of no resize Cooldown period
+  // expressed as duration string
+  // expressed as java duration string
+  // Refer: https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-
+  // example: PT1M for 1 minute, PT10H for 10 hours
+  // limits [15m, 1d] default: PT15M
+  optional string cooldown_duration = 1 [default = "PT15M"];
+
+  // The interval to inspect cluster CPU and making scaling decision
+  // The same duration is used for terminating worker GCE instances after suspending them
+  // The Cool-down period can delay the inspection
+  // expressed as java duration string
+  // Refer: https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-
+  // example: PT1M for 1 minute, PT10H for 10 hours
+  // limits [10m, 60m] default: PT15M
+  optional string polling_duration = 2 [default = "PT15M"];
+
+  // The Graceful shutdown duration set for the trino cluster
+  // This is configured as per https://trino.io/docs/376/admin/graceful-shutdown.html
+  // The time is in duration string format
+  // Refer: https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-
+  // example: PT1M for 1 minute, PT10H for 10 hours
+  // limits [2m, 60m] default: PT2M
+  optional string trino_graceful_shutdown_duration = 3 [default = "PT2M"];
+}
+
+// Specifies the min and max instance limits and worker weight for the instance group
+// use the same number for min_instances and max_instances to disable scaling for the
+// instance group
+message InstanceGroupScalingConfig {
+
+  required int32 min_instances = 1;
+
+  required int32 max_instances = 2;
+
+  // Optional. Weight for the instance group, which is used to determine the
+  // fraction of total workers in the cluster from this instance group.
+  // For example, if primary workers have weight 2, and secondary workers have
+  // weight 1, the cluster will have approximately 2 primary workers for each
+  // secondary worker.
+  //
+  // The cluster may not reach the specified balance if constrained
+  // by min/max bounds or other autoscaling settings. For example, if
+  // `max_instances` for secondary workers is 0, then only primary workers will
+  // be added. The cluster can also be out of balance when created.
+  //
+  // If weight is not set on any instance group, the cluster will default to
+  // equal weight for all groups: the cluster will attempt to maintain an equal
+  // number of workers in each group within the configured size bounds for each
+  // group. If weight is set for one group only, the cluster will default to
+  // zero weight on the unset group. For example if weight is set only on
+  // primary workers, the cluster will use primary workers only and no
+  // secondary workers.
+  optional int32 weight = 3 [default = 1];
+}
+
+// The Scaling Logic to use for deciding the number of workers to add or remove
+message WorkerScalingLogic {
+
+  optional ScalingAlgorithm algo = 1 [default = WORKER_UNITS];
+
+  optional double value = 2 [default = 5];
+}
+
+enum ScalingAlgorithm {
+  UNKNOWN_ALGO = 0;
+  WORKER_UNITS = 1;
+  WORKER_PERCENT = 2;
+}

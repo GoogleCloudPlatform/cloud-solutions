@@ -1,0 +1,117 @@
+{
+    "displayName": "Demo Trino Cluster Autoscaler",
+    "gridLayout": {
+        "columns": "3",
+        "widgets": [
+            {
+                "title": "Worker CPU",
+                "xyChart": {
+                    "chartOptions": {
+                        "mode": "COLOR"
+                    },
+                    "dataSets": [
+                        {
+                            "plotType": "LINE",
+                            "targetAxis": "Y1",
+                            "timeSeriesQuery": {
+                                "timeSeriesQueryLanguage": "fetch gce_instance :: compute.googleapis.com/instance/cpu/utilization\n| filter metadata.user.c\u0027goog-dataproc-location\u0027\u003d\u0027{{cluster_region}}\u0027\n| filter metadata.user.c\u0027goog-dataproc-cluster-name\u0027\u003d\u0027{{cluster_name}}\u0027\n| filter metadata.name !\u003d \u0027{{cluster_name}}-m\u0027\n| align next_older(15s)\n| every 15s"
+                            }
+                        }
+                    ],
+                    "yAxis": {
+                        "scale": "LINEAR"
+                    }
+                }
+            },
+            {
+                "title": "Cluster avg CPU",
+                "xyChart": {
+                    "chartOptions": {
+                        "mode": "COLOR"
+                    },
+                    "dataSets": [
+                        {
+                            "plotType": "LINE",
+                            "targetAxis": "Y1",
+                            "timeSeriesQuery": {
+                                "timeSeriesQueryLanguage": "fetch gce_instance::compute.googleapis.com/instance/cpu/utilization\n| filter metadata.user_labels.c\u0027goog-dataproc-location\u0027 \u003d \u0027{{cluster_region}}\u0027\n| filter metadata.user_labels.c\u0027goog-dataproc-cluster-name\u0027 \u003d \u0027{{cluster_name}}\u0027\n| filter metadata.system_labels.name !\u003d \u0027{{cluster_name}}-m\u0027\n| align next_older(15s)\n| every 15s\n| group_by [], mean(value.utilization)"
+                            }
+                        }
+                    ],
+                    "yAxis": {
+                        "scale": "LINEAR"
+                    }
+                }
+            },
+            {
+                "title": "Workers Marked for shutdown",
+                "xyChart": {
+                    "chartOptions": {
+                        "mode": "COLOR"
+                    },
+                    "dataSets": [
+                        {
+                            "plotType": "LINE",
+                            "targetAxis": "Y1",
+                            "timeSeriesQuery": {
+                                "timeSeriesQueryLanguage": "fetch gce_instance :: compute.googleapis.com/instance/uptime\n| filter metadata.user.c\u0027goog-dataproc-location\u0027\u003d\u0027{{cluster_region}}\u0027\n| filter metadata.user.c\u0027goog-dataproc-cluster-name\u0027\u003d\u0027{{cluster_name}}\u0027\n| filter metadata.user.c\u0027trino-autoscaler-shuttingdown\u0027\u003d\u0027true\u0027\n| align next_older(1m)\n| every 1m\n| within -15m\n| group_by [], count(1)"
+                            }
+                        }
+                    ],
+                    "yAxis": {
+                        "scale": "LINEAR"
+                    }
+                }
+            },
+            {
+                "title": "Total Workers",
+                "xyChart": {
+                    "chartOptions": {
+                        "mode": "COLOR"
+                    },
+                    "dataSets": [
+                        {
+                            "minAlignmentPeriod": "60s",
+                            "plotType": "LINE",
+                            "targetAxis": "Y1",
+                            "timeSeriesQuery": {
+                                "timeSeriesFilter": {
+                                    "aggregation": {
+                                        "alignmentPeriod": "60s",
+                                        "crossSeriesReducer": "REDUCE_COUNT",
+                                        "perSeriesAligner": "ALIGN_RATE"
+                                    },
+                                    "filter": "metric.type\u003d\"compute.googleapis.com/instance/uptime\" resource.type\u003d\"gce_instance\" metric.label.\"instance_name\"!\u003d\"{{cluster_name}}-m\" metadata.user_labels.\"goog-dataproc-cluster-name\"\u003d\"{{cluster_name}}\""
+                                }
+                            }
+                        }
+                    ],
+                    "timeshiftDuration": "0s",
+                    "yAxis": {
+                        "scale": "LINEAR"
+                    }
+                }
+            },
+            {
+                "title": "Secondary Workers",
+                "xyChart": {
+                    "chartOptions": {
+                        "mode": "COLOR"
+                    },
+                    "dataSets": [
+                        {
+                            "plotType": "LINE",
+                            "targetAxis": "Y1",
+                            "timeSeriesQuery": {
+                                "timeSeriesQueryLanguage": "fetch gce_instance :: compute.googleapis.com/instance/uptime\n| filter metadata.user.c\u0027goog-dataproc-location\u0027\u003d\u0027{{cluster_region}}\u0027\n| filter metadata.user.c\u0027goog-dataproc-cluster-name\u0027\u003d\u0027{{cluster_name}}\u0027\n| filter metadata.name \u003d~ \u0027{{cluster_name}}-sw-.*\u0027\n| align next_older(1m)\n| every 1m\n| within -15m\n| group_by [], count(1)"
+                            }
+                        }
+                    ],
+                    "yAxis": {
+                        "scale": "LINEAR"
+                    }
+                }
+            }
+        ]
+    }
+}

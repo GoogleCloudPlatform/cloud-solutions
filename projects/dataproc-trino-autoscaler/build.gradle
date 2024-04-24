@@ -1,0 +1,176 @@
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    id "java"
+    id "com.google.protobuf" version "0.9.4"
+    id "com.diffplug.spotless" version "6.23.2"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "idea"
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+def autoValueVersion = "1.10.4"
+def floggerVersion = "0.8"
+def protoVersion = "3.25.1"
+
+
+dependencies {
+    // Google Protobuf
+    implementation "com.google.protobuf:protobuf-java:${protoVersion}"
+
+    // Commons
+    implementation "com.squareup.okhttp3:okhttp:4.11.0"
+    compileOnly "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
+    annotationProcessor "com.google.auto.value:auto-value:${autoValueVersion}"
+    implementation "com.google.api.grpc:proto-google-common-protos:2.28.0"
+    implementation "org.apache.commons:commons-lang3:3.13.0"
+    implementation "com.google.guava:guava:32.1.2-jre"
+
+    // Logging framework
+    implementation "com.google.flogger:flogger:${floggerVersion}"
+    implementation "com.google.flogger:google-extensions:${floggerVersion}"
+    runtimeOnly "com.google.flogger:flogger-system-backend:${floggerVersion}"
+
+    // GCP Services
+    implementation "com.google.cloud:google-cloud-monitoring:3.31.0"
+    implementation "com.google.cloud:google-cloud-dataproc:4.27.0"
+    implementation "com.google.cloud:google-cloud-compute:1.40.0"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.google.cloud.solutions.trinoscaler.TrinoAutoscalerApp'
+    }
+}
+
+shadowJar{
+    mergeServiceFiles()
+}
+
+protobuf {
+
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protoVersion}"
+    }
+
+    clean {
+        delete protobuf.generatedFilesBaseDir
+    }
+}
+
+def licenseLines = List.of("Copyright 2023 Google LLC" ,
+        "" ,
+        "Licensed under the Apache License, Version 2.0 (the \"License\");" ,
+        "you may not use this file except in compliance with the License." ,
+        "You may obtain a copy of the License at" ,
+        "" ,
+        "    https://www.apache.org/licenses/LICENSE-2.0" ,
+        "" ,
+        "Unless required by applicable law or agreed to in writing, software" ,
+        "distributed under the License is distributed on an \"AS IS\" BASIS," ,
+        "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied." ,
+        "See the License for the specific language governing permissions and" ,
+        "limitations under the License.")
+def licenseJava = "/*\n" + licenseLines.collect(ln -> " *" + (ln.matches("^.+")? " " : "") + ln).join("\n") + "\n */\n\n"
+def licenseWithHash = "#\n" + licenseLines.collect(ln -> "#" + (ln.matches("^.+")? " " : "") + ln).join("\n") + "\n#\n\n"
+def excludedFolderPatterns = ["**/build/**", "**/dist/**", "**/node_modules/**", "**/third_party/**"]
+
+spotless {
+    format 'dockerfile', {
+        target "**/*.dockerfile", "**/Dockerfile"
+        targetExclude(excludedFolderPatterns)
+        licenseHeader(licenseWithHash, "FROM")
+        endWithNewline()
+    }
+
+    format "gradle", {
+        target "**/*.gradle"
+        targetExclude(excludedFolderPatterns)
+        licenseHeader(licenseJava, "(plugins|root|import)")
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    java {
+        target "**/*.java"
+        targetExclude(excludedFolderPatterns)
+        googleJavaFormat("1.18.1")
+        removeUnusedImports()
+        importOrder()
+        trimTrailingWhitespace()
+        endWithNewline()
+        licenseHeader licenseJava
+    }
+
+    kotlin {
+        target "**/*.kt"
+        targetExclude(excludedFolderPatterns)
+        ktlint()
+        licenseHeader licenseJava
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+
+    freshmark {
+        target "**/*.md"
+        targetExclude(excludedFolderPatterns)
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    format "proto", {
+        target "**/*.proto"
+        targetExclude(excludedFolderPatterns)
+        licenseHeader(licenseJava, "syntax")
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    yaml {
+        target "**/*.yaml", "**/*.yml"
+        targetExclude(excludedFolderPatterns)
+        jackson()
+                .version("2.15.0")
+                .feature("ORDER_MAP_ENTRIES_BY_KEYS", true)
+                .feature("INDENT_OUTPUT", true)
+        licenseHeader licenseWithHash, "---"
+    }
+
+    json {
+        target '**/*.json'
+        targetExclude(excludedFolderPatterns)
+        gson()
+                .version('2.8.1')
+                .indentWithSpaces(4)
+                .sortByKeys()
+                .escapeHtml()
+    }
+
+    format "shellScript", {
+        target "**/*.sh"
+        targetExclude(excludedFolderPatterns)
+        licenseHeader (licenseWithHash, "## Description\\:.+").skipLinesMatching("^#!.+?\$")
+    }
+}

@@ -1,0 +1,30 @@
+# proto-file: src/main/proto/trino_autoscaler.proto
+# proto-message: ClusterScalingSpec
+
+secondary_pool<
+  max_instances: 10
+  min_instances: 0
+>
+
+cluster_expand_logic<
+  algo: WORKER_UNITS
+  value: 5
+>
+
+cluster_shrink_logic<
+  algo: WORKER_UNITS
+  value: 2
+>
+
+cpu_threshold_high: 0.4
+
+cpu_threshold_low: 0.2
+
+timing_configuration<
+  cooldown_duration: "PT5M"
+
+  polling_duration: "PT2M"
+
+  trino_graceful_shutdown_duration: "PT2M"
+>
+
