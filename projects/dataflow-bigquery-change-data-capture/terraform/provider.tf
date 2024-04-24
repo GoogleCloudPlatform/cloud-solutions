@@ -11,12 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-provider "google" {
-  project = var.project_id
-  region  = var.region
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.17.0"
+    }
+  }
 
   provider_meta "google" {
     module_name = "cloud-solutions/dataflow-bigquery-change-data-capture-blog-v1.0"
   }
+}
+
+provider "google" {
+  project = var.project_id
+  region  = var.region
 }

@@ -1,18 +1,18 @@
 # Streaming Spanner changes to BigQuery using Change Data Capture (CDC) semantics
 
 This repo contains sample code to demonstrate how BigqueryIO's CDC functionality
-can be used to process data capture streams from different databased. Spanner
+can be used to process data capture streams from different databases. Spanner
 Change Streams are used as the source of the data.
 
 We are using a single table replication as an example. The source and
 destination table, orders, has three columns - id, status and description.
 
-# Setup
+## Setup
 
 Environment for this demo is set up using Terraform. You would need to
 authenticate to the Terraform using credentials with sufficient privileges to
 enable several services and create required artifacts - Spanner database,
-BigQuery dataset and Google Clould Storage bucket used by Dataflow.
+BigQuery dataset and Google Cloud Storage bucket used by Dataflow.
 
 To tell Terraform where create these artifacts
 create `terraform/terraform.tfvars` file. At a minimum, it should define the id
@@ -34,10 +34,10 @@ source setup-env.sh
 
 This will create all the artifacts and set up several environment variables. You
 can run this script multiple times without causing any side effects, e.g., if
-you Cloud Shell session disconnects and you would like to try the following
+you Cloud Shell session disconnects, and you would like to try the following
 steps.
 
-# Compile the code and run the unit tests
+## Compile the code and run the unit tests
 Make sure to use Java SDK version earlier than 21 because Dataflow doesn't yet
 support it. This pipeline was tested with version 11.
 
@@ -45,7 +45,7 @@ support it. This pipeline was tested with version 11.
 ./gradlew build
 ```
 
-# Run a pipeline
+## Run a pipeline
 
 ```shell
 ./run-pipeline.sh
@@ -54,7 +54,7 @@ support it. This pipeline was tested with version 11.
 You can check on the status of the pipeline by following the link which is
 printed to the console by this script.
 
-# Verify that the pipeline works
+## Verify that the pipeline works
 
 Once the pipeline is started and running, go to
 the [Spanner console](https://console.cloud.google.com/spanner/instances/main/databases/fulfillment/details/query).
@@ -82,11 +82,11 @@ the pipeline will only accept these values.
 ## Deleting orders
 
 ```sql
-DELETE orders 
+DELETE orders
     WHERE order_id = 10000;
 ```
 
-Verify that your changes replicated into BigQuery by running the following query in 
+Verify that your changes replicated into BigQuery by running the following query in
 the [BigQuery SQL Studio](https://console.cloud.google.com/bigquery):
 
 ```sql
@@ -97,7 +97,7 @@ SELECT *
 
 It might take several seconds for the changes to appear in BigQuery
 
-# Clean up
+## Clean up
 
 ## Shut down the pipeline
 

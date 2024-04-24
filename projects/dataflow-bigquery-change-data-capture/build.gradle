@@ -20,7 +20,6 @@ plugins {
     id 'eclipse'
     id 'idea'
     id "com.diffplug.spotless" version "6.25.0"
-    id 'checkstyle'
 }
 
 repositories {
@@ -29,7 +28,7 @@ repositories {
 }
 
 
-def dataflowBeamVersion = '2.54.0'
+def dataflowBeamVersion = '2.55.1'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -84,16 +83,5 @@ spotless {
         removeUnusedImports()
         importOrder()
         googleJavaFormat()
-    }
-}
-
-checkstyle {
-    configFile = file("../../config/lint/java_google_checks.xml")
-    toolVersion = "10.13.0"
-}
-
-configurations.checkstyle {
-    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
-        select("com.google.guava:guava:0")
     }
 }
