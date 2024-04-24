@@ -21,26 +21,26 @@ variable "project_id" {
 }
 
 variable "region" {
-  type = string
+  type    = string
   default = "us-central1"
 }
 
 variable "zone" {
-  type = string
+  type    = string
   default = "us-central1-a"
 }
 
 variable "dataproc_staging_gcs_bucket_name" {
-  type = string
+  type    = string
   default = null
 }
 
 variable "dataproc_cluster_name" {
-  type = string
+  type    = string
   default = "trino-dataproc-cluster"
 }
 
 variable "autoscaler_folder" {
   default = "trino-autoscaler"
-  type = string
+  type    = string
 }

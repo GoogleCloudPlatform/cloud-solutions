@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 plugins {
     id "java"
     id "com.google.protobuf" version "0.9.4"
-    id "com.diffplug.spotless" version "6.23.2"
+    id "com.diffplug.spotless" version "6.25.0"
     id "com.github.johnrengelman.shadow" version "8.1.1"
     id "idea"
 }
@@ -27,22 +27,17 @@ repositories {
     gradlePluginPortal()
 }
 
-def autoValueVersion = "1.10.4"
-def floggerVersion = "0.8"
-def protoVersion = "3.25.1"
-
-
 dependencies {
     // Google Protobuf
     implementation "com.google.protobuf:protobuf-java:${protoVersion}"
 
     // Commons
-    implementation "com.squareup.okhttp3:okhttp:4.11.0"
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
     compileOnly "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
     annotationProcessor "com.google.auto.value:auto-value:${autoValueVersion}"
-    implementation "com.google.api.grpc:proto-google-common-protos:2.28.0"
-    implementation "org.apache.commons:commons-lang3:3.13.0"
-    implementation "com.google.guava:guava:32.1.2-jre"
+    implementation "com.google.api.grpc:proto-google-common-protos:2.32.0"
+    implementation "org.apache.commons:commons-lang3:3.14.0"
+    implementation "com.google.guava:guava:33.0.0-jre"
 
     // Logging framework
     implementation "com.google.flogger:flogger:${floggerVersion}"
@@ -50,9 +45,9 @@ dependencies {
     runtimeOnly "com.google.flogger:flogger-system-backend:${floggerVersion}"
 
     // GCP Services
-    implementation "com.google.cloud:google-cloud-monitoring:3.31.0"
-    implementation "com.google.cloud:google-cloud-dataproc:4.27.0"
-    implementation "com.google.cloud:google-cloud-compute:1.40.0"
+    implementation "com.google.cloud:google-cloud-monitoring:3.35.0"
+    implementation "com.google.cloud:google-cloud-dataproc:4.31.0"
+    implementation "com.google.cloud:google-cloud-compute:1.44.0"
 }
 
 jar {

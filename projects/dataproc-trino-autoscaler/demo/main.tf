@@ -43,8 +43,8 @@ provider "google" {
 ###################################
 
 resource "google_storage_bucket" "dataproc_staging_bucket" {
-  location = var.region
-  name     = coalesce(var.dataproc_staging_gcs_bucket_name, "trino-staging-bucket-${var.project_id}")
+  location      = var.region
+  name          = coalesce(var.dataproc_staging_gcs_bucket_name, "trino-staging-bucket-${var.project_id}")
   force_destroy = true
 }
 
@@ -62,8 +62,8 @@ resource "null_resource" "build_application_jar" {
   depends_on = [google_storage_bucket.dataproc_staging_bucket]
 
   triggers = {
-    project_id      = var.project_id
-    region          = var.region
+    project_id     = var.project_id
+    region         = var.region
     jar_folder_url = "${google_storage_bucket.dataproc_staging_bucket.url}/${var.autoscaler_folder}/${random_id.build_version.hex}"
   }
 
@@ -99,16 +99,16 @@ locals {
     replace(
       file("${path.root}/trino-autoscaler-init.sh"),
       "readonly CONFIG_JAR_FILE_GCS_URI=\"\";",
-      "readonly CONFIG_JAR_FILE_GCS_URI=\"${null_resource.build_application_jar.triggers.jar_folder_url}/trino-autoscaler-on-dataproc-all.jar\""),
+    "readonly CONFIG_JAR_FILE_GCS_URI=\"${null_resource.build_application_jar.triggers.jar_folder_url}/dataproc-trino-autoscaler-all.jar\""),
     "readonly CONFIG_PROTO_FILE_GCS_URI=\"\";",
     "readonly CONFIG_PROTO_FILE_GCS_URI=\"${google_storage_bucket.dataproc_staging_bucket.url}/${google_storage_bucket_object.sample_config.output_name}\";"
-    )
+  )
 }
 
 
 resource "google_storage_bucket_object" "init_script" {
-  bucket = google_storage_bucket.dataproc_staging_bucket.name
-  name   = "${var.autoscaler_folder}/init-script/trino-autoscaler-init.sh"
+  bucket  = google_storage_bucket.dataproc_staging_bucket.name
+  name    = "${var.autoscaler_folder}/init-script/trino-autoscaler-init.sh"
   content = local.dataproc_init_script_content
 }
 
@@ -149,7 +149,7 @@ resource "google_dataproc_cluster" "trino_dataproc_cluster" {
 
     worker_config {
       num_instances = 0
-      machine_type = "n2-standard-2"
+      machine_type  = "n2-standard-2"
     }
 
     preemptible_worker_config {
@@ -158,7 +158,7 @@ resource "google_dataproc_cluster" "trino_dataproc_cluster" {
     }
 
     software_config {
-      image_version       = "2.1-debian11"
+      image_version = "2.1-debian11"
       optional_components = [
         "TRINO"
       ]
@@ -168,14 +168,14 @@ resource "google_dataproc_cluster" "trino_dataproc_cluster" {
     }
 
     gce_cluster_config {
-      zone = var.zone
-      service_account = google_service_account.dataproc_service_account.email
+      zone                   = var.zone
+      service_account        = google_service_account.dataproc_service_account.email
       service_account_scopes = ["cloud-platform"]
     }
 
     # Configure custom init action
     initialization_action {
-      script = "${google_storage_bucket.dataproc_staging_bucket.url}/${google_storage_bucket_object.init_script.output_name}"
+      script      = "${google_storage_bucket.dataproc_staging_bucket.url}/${google_storage_bucket_object.init_script.output_name}"
       timeout_sec = 500
     }
 
@@ -185,14 +185,14 @@ resource "google_dataproc_cluster" "trino_dataproc_cluster" {
 
 ## Create monitoring dashboard
 resource "google_monitoring_dashboard" "dashboard" {
-  depends_on = [google_dataproc_cluster.trino_dataproc_cluster]
+  depends_on     = [google_dataproc_cluster.trino_dataproc_cluster]
   dashboard_json = replace(replace(file("${path.root}/monitoring-dashboard.json"), "{{cluster_name}}", google_dataproc_cluster.trino_dataproc_cluster.name), "{{cluster_region}}", google_dataproc_cluster.trino_dataproc_cluster.region)
 }
 
 output "dashboard_url" {
-  value = join("",[
+  value = join("", [
     "https://console.cloud.google.com/monitoring/dashboards/builder/",
-    regex("([^/]+)$",google_monitoring_dashboard.dashboard.id)[0],
+    regex("([^/]+)$", google_monitoring_dashboard.dashboard.id)[0],
     ";duration=PT30M?project=",
     var.project_id
   ])

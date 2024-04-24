@@ -13,17 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 steps:
-- name: "gradle:8.5-jdk11"
-  args:
-  - "gradle"
-  - "clean"
-  - "build"
-  - "shadowJar"
+  - name: "gradle:8.5-jdk11"
+    args:
+      - "gradle"
+      - "clean"
+      - "build"
+      - "shadowJar"
 artifacts:
   objects:
     location: "${_JAR_LOCATION}"
     paths:
-    - "build/libs/trino-autoscaler-on-dataproc-all.jar"
+      - "build/libs/dataproc-trino-autoscaler-all.jar"
