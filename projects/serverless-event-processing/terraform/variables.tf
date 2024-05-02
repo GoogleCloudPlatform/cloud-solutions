@@ -24,6 +24,12 @@ variable "project_id" {
   type        = string
 }
 
+variable "provision_event_processing_dead_letter_topic" {
+  default     = false
+  description = "If set to true, provision a Cloud Pub/Sub topic that you can configure as a dead-letter topic for the Eventarc trigger that routes events. For more information, see https://cloud.google.com/eventarc/docs/retry-events"
+  type        = bool
+}
+
 variable "region" {
   default     = "europe-west1"
   description = "The default region to provision resources in"

@@ -21,3 +21,8 @@ output "event_processor_cloud_run_service_name" {
   description = "Name of the event processing Cloud Run service"
   value       = google_cloud_run_v2_service.event_processor.name
 }
+
+output "event_processing_dead_letter_topic_name" {
+  description = "Name of the dead-letter Cloud Pub/Sub topic"
+  value       = google_pubsub_topic.event_processing_dead_letter_topic.name
+}
