@@ -1,4 +1,4 @@
-# Streaming Spanner changes to BigQuery 
+# Streaming Spanner changes to BigQuery
 
 This project demonstrates how you can use the BigqueryIO change data capture (CDC)
 functionality to capture data streams from databases such as Spanner.

@@ -8,6 +8,10 @@ babel==2.14.0 \
     --hash=sha256:6919867db036398ba21eb5c7a0f6b28ab8cbc3ae7a73a44ebe34ae74a4e7d363 \
     --hash=sha256:efb1a25b7118e67ce3a259bed20545c29cb68be8ad2c784c83689981b7a57287
     # via mkdocs-material
+bracex==2.4 \
+    --hash=sha256:a27eaf1df42cf561fed58b7a8f3fdf129d1ea16a81e1fadd1d17989bc6384beb \
+    --hash=sha256:efdc71eff95eaff5e0f8cfebe7d01adf2c8637c8c92edaf63ef348c241a82418
+    # via wcmatch
 certifi==2024.2.2 \
     --hash=sha256:0569859f95fc761b18b45ef421b1290a0f65f147e92a1e5eb3e635f9a5e4e66f \
     --hash=sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
@@ -219,12 +223,17 @@ mkdocs==1.5.3 \
     --hash=sha256:eb7c99214dcb945313ba30426c2451b735992c73c2e10838f76d09e39ff4d0e2
     # via
     #   mkdocs-autorefs
+    #   mkdocs-awesome-pages-plugin
     #   mkdocs-material
     #   mkdocstrings
 mkdocs-autorefs==1.0.1 \
     --hash=sha256:aacdfae1ab197780fb7a2dac92ad8a3d8f7ca8049a9cbe56a4218cd52e8da570 \
     --hash=sha256:f684edf847eced40b570b57846b15f0bf57fb93ac2c510450775dcf16accb971
     # via mkdocstrings
+mkdocs-awesome-pages-plugin==2.9.2 \
+    --hash=sha256:9c795587695bd1ee85a8b7e43293005418df5a8b9ef296a3e628be427b693b4d \
+    --hash=sha256:c3f7d366ecfe99b64524c49a84d8e13c576c19a918ea2e6f59bb486a259313af
+    # via -r requirements.in
 mkdocs-material==9.5.18 \
     --hash=sha256:1e0e27fc9fe239f9064318acf548771a4629d5fd5dfd45444fd80a953fe21eb4 \
     --hash=sha256:a43f470947053fa2405c33995f282d24992c752a50114f23f30da9d8d0c57e62
@@ -243,6 +252,10 @@ mkdocstrings-python==1.9.2 \
     --hash=sha256:8546a103c9b22e1778c72c887696acc39a6635fedde3c912ce00f967518a8847 \
     --hash=sha256:96d82f6424e08db6245e4a15ca95619f4ecd0ddd254c0aa590d4181814e16ee5
     # via mkdocstrings
+natsort==8.4.0 \
+    --hash=sha256:45312c4a0e5507593da193dedd04abb1469253b601ecaf63445ad80f0a1ea581 \
+    --hash=sha256:4732914fb471f56b5cce04d7bae6f164a592c7712e1c85f9ef585e197299521c
+    # via mkdocs-awesome-pages-plugin
 packaging==24.0 \
     --hash=sha256:2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5 \
     --hash=sha256:eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9
@@ -475,3 +488,7 @@ watchdog==4.0.0 \
     --hash=sha256:f970663fa4f7e80401a7b0cbeec00fa801bf0287d93d48368fc3e6fa32716245 \
     --hash=sha256:f9b2fdca47dc855516b2d66eef3c39f2672cbf7e7a42e7e67ad2cbfcd6ba107d
     # via mkdocs
+wcmatch==8.5.1 \
+    --hash=sha256:24c19cedc92bc9c9e27f39db4e1824d72f95bd2cea32b254a47a45b1a1b227ed \
+    --hash=sha256:c0088c7f6426cf6bf27e530e2b7b734031905f7e490475fd83c7c5008ab581b3
+    # via mkdocs-awesome-pages-plugin

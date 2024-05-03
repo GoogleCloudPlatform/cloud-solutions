@@ -1,0 +1,6 @@
+title: Dataproc Trino Autoscaler
+nav:
+  - 'Overview': 'index.md'
+  - deployment.md
+  - demo.md
+  - '...'

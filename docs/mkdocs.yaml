@@ -46,6 +46,12 @@ copyright: |
   The projects contained in this repository are maintained by the Google Cloud Solutions Architects team.<br>
   Copyright &copy; 2019-2024 Google LLC<br>
   <a href='https://cloud.google.com/'><img src='/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
+plugins:
+  - search
+  - awesome-pages:
+      filename: .pages
+      collapse_single_pages: true
+  - mkdocstrings
 markdown_extensions:
   - admonition
   - attr_list
@@ -68,14 +74,4 @@ markdown_extensions:
   - pymdownx.inlinehilite
 nav:
   - 'Overview': 'index.md'
-  - 'Examples':
-      - 'BigQuery CDC': 'projects/dataflow-bigquery-change-data-capture/index.md'
-      - 'Imagen Voice Captioning': 'projects/imagen-voice-captioning/index.md'
-      - 'Serverless event processing': 'projects/serverless-event-processing/index.md'
-  - 'Tools':
-      - 'Dataproc Trino Autoscaler':
-          - 'Overview': 'projects/dataproc-trino-autoscaler/index.md'
-          - 'Deployment': 'projects/dataproc-trino-autoscaler/deployment.md'
-          - 'Demo': 'projects/dataproc-trino-autoscaler/demo.md'
-      - 'Binpacker': 'projects/sa-tools/binpacker.md'
-      - 'PerfKit Benchmark': 'projects/sa-tools/perf-benchmark.md'
+  - '...'
