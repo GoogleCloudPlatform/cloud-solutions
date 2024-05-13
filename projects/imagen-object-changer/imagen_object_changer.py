@@ -19,14 +19,12 @@ import base64
 import configparser
 import io
 import json
-import os
 import subprocess
 
 import cv2
-from google.cloud import vision
 import numpy as np
 import requests
-
+from google.cloud import vision
 
 CONFIG_FILE = "config.ini"
 
@@ -49,10 +47,9 @@ def parse_config_args(config_file):
   # Create a config parser object
   config = configparser.ConfigParser()
   config["DEFAULT"] = {"mask": "mask.png",
-                       "invert_mask": "False",
-                       "output_json": "output.json",
-                       "credentials": "credentials.json"
-                       }
+                        "invert_mask": "False",
+                        "output_json": "output.json"
+                      }
   config["parameters"] = {}
 
   # Create an argument parser
@@ -72,9 +69,6 @@ def parse_config_args(config_file):
     parser.add_argument("--output_json",
                         default=config["DEFAULT"]["output_json"], type=str,
                         help="Output JSON file name for GenAI response")
-    parser.add_argument("--credentials",
-                        default=config["DEFAULT"]["credentials"], type=str,
-                        help="Service account key. Default: credentials.json")
     parser.add_argument("--input", required=True, type=str,
                         help="Original image file")
     parser.add_argument("--label", required=True, type=str,
@@ -102,9 +96,6 @@ def parse_config_args(config_file):
     parser.add_argument("--output_json",
                         default=config["parameters"]["output_json"], type=str,
                         help="Output JSON file name for GenAI response")
-    parser.add_argument("--credentials",
-                        default=config["parameters"]["credentials"], type=str,
-                        help="Service account key. Default: credentials.json")
 
   # Parse the arguments
   args = parser.parse_args()
@@ -151,8 +142,8 @@ def query_vision_api(input_img):
 def draw_mask_image(input_file, objects, mask_file, label, invert):
   """Draws mask image based on selected objects' coordinates.
 
-  Draws a mask image for Imagen. Iterates through the objects 
-  found by Vision API, and draws a mask for each object's coordinates, 
+  Draws a mask image for Imagen. Iterates through the objects
+  found by Vision API, and draws a mask for each object's coordinates,
   if the object label matches the desired one.
 
   Args:
@@ -205,7 +196,7 @@ def draw_mask_image(input_file, objects, mask_file, label, invert):
 def query_imagen(prompt, input_img, mask_img, output_json, token, project_id):
   """Queries GenAI Imagen API for mask-based image editing.
 
-  Uses Imagen to replace parts of the original image. The image mask 
+  Uses Imagen to replace parts of the original image. The image mask
   restricts the image generation work area.
 
   Args:
@@ -293,7 +284,7 @@ def get_gcloud_auth_token():
     None
 
   Returns:
-    String, containing the authentication token 
+    String, containing the authentication token
 
   Raises:
     None
@@ -306,7 +297,7 @@ def get_gcloud_auth_token():
 def write_images(output_json):
   """Parses Imagen response JSON and writes images to files.
 
-  Parses the output.json response from Imagen, and for each 
+  Parses the output.json response from Imagen, and for each
   payload within, decodes them, and writes as image files on disk.
 
   Args:
@@ -324,7 +315,7 @@ def write_images(output_json):
   for prediction in data["predictions"]:
     image_data = base64.b64decode(prediction["bytesBase64Encoded"])
     filename = "image" + str(i) + ".png"
-    with open(filename, mode="wb", encoding="utf-8") as outfile:
+    with open(filename, mode="wb") as outfile:
       outfile.write(image_data)
     i += 1
   return i
@@ -347,11 +338,6 @@ def main():
 
   print("Target label:", label, "source image:",
         input_file, "project_id:", project_id)
-
-  # Set env GOOGLE_APPLICATION_CREDENTIALS to the path service account key
-  os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = config["parameters"][
-      "credentials"
-  ]
 
   # Read the image file into memory.
   with io.open(input_file, mode="rb") as f:
