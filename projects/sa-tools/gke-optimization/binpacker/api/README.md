@@ -19,19 +19,21 @@ Provides 2 key capabilities:
 
 ## Folder structure
 
+```text
 - cmd/binpacker/
-  - Entry point
+  Entry point
 - pkg/
   - domain/
-    - Domain models
+    Domain models
   - infrastructure/repository/
-    - Actual implementations
+    Actual implementations
   - interface/handler/
-    - API handle functions called in entrypoint
+    API handle functions called in entrypoint
   - usecase/
-    - Usecases called by handlers
+    Usecases called by handlers
 - proto/
-  - proto files for APIs
+  proto files for APIs
+```
 
 ## Setup procedure
 

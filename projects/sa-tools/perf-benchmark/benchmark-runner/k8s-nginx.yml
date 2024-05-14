@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 kubernetes_nginx:
   description: "Benchmarks Nginx server performance."
   container_specs:
@@ -28,7 +26,7 @@ kubernetes_nginx:
     vm_spec:
       GCP:
         machine_type:
-        - "machine_type"
+          - "machine_type"
         zone: "us-central1-b"
     nodepools:
       nginx:
@@ -36,7 +34,7 @@ kubernetes_nginx:
         vm_spec:
           GCP:
             machine_type:
-            - "machine_type"
+              - "machine_type"
           AWS:
             machine_type: "m6i.xlarge"
           Azure:
@@ -46,7 +44,7 @@ kubernetes_nginx:
         vm_spec:
           GCP:
             machine_type:
-            - "machine_type"
+              - "machine_type"
             zone: "us-central1-b"
           AWS:
             machine_type: "m6i.xlarge"
@@ -57,7 +55,7 @@ kubernetes_nginx:
       vm_spec:
         GCP:
           machine_type:
-          - "machine_type"
+            - "machine_type"
           zone: "us-central1-b"
           image: "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220927"
       vm_count: 1

@@ -13,14 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 steps:
-- name: "gcr.io/cloud-builders/docker"
-  args:
-  - "build"
-  - "./benchmark-runner"
-  - "-f"
-  - "./benchmark-runner/BenchmarkRunnerBase.dockerfile"
-  - "-t"
-  - "${_CONTAINER_IMAGE_TAG}"
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "./benchmark-runner"
+      - "-f"
+      - "./benchmark-runner/BenchmarkRunnerBase.dockerfile"
+      - "-t"
+      - "${_CONTAINER_IMAGE_TAG}"

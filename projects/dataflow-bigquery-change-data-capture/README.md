@@ -38,6 +38,7 @@ you Cloud Shell session disconnects, and you would like to try the following
 steps.
 
 ## Compile the code and run the unit tests
+
 Make sure to use Java SDK version earlier than 21 because Dataflow doesn't yet
 support it. This pipeline was tested with version 11.
 

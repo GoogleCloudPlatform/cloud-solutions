@@ -75,8 +75,8 @@ function ObjectField({
       onBlur={(event) => {
         if (event.target.value === '') {
           /** Change Optional Section becomes .required = true
-           *  When any of the children's value is ''
-           */
+          *  When any of the children's value is ''
+          */
           attributeData.attribute.required = true;
         } else {
           attributeData.validate();

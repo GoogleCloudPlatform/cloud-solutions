@@ -31,7 +31,7 @@ const satoolsDateTestSuite = () => {
     }
   });
 
-  it(`Given N number of substracted hours should return new Date object of 
+  it(`Given N number of substracted hours should return new Date object of
     N hours ago`, () => {
     const today = new Date();
     const dateUtil = new SaToolsDate(today);
@@ -45,7 +45,7 @@ const satoolsDateTestSuite = () => {
         .toBe('1 hour(s) ago');
   });
 
-  it(`Given compared date string 24 hour from now should return 
+  it(`Given compared date string 24 hour from now should return
     Yesterday`, () => {
     const dateUtil = new SaToolsDate();
     const diff = dateUtil.subtractHours(24); // 24 hours
@@ -59,7 +59,7 @@ const satoolsDateTestSuite = () => {
     expect(dateUtil.formattedDateDiff(diff)).toBe('Yesterday');
   });
 
-  it(`Given compared date string 3 days ago from 2023-02-10 
+  it(`Given compared date string 3 days ago from 2023-02-10
     should return 7 Feb 2023`, () => {
     const dateUtil = new SaToolsDate(new Date('2023-02-10'));
     const diff = dateUtil.subtractHours(72); // 3 days ago
@@ -67,7 +67,7 @@ const satoolsDateTestSuite = () => {
         .toBe('Feb 7, 2023, 12:00 AM');
   });
 
-  it(`Given compared date string 15 minutes from now should 
+  it(`Given compared date string 15 minutes from now should
     return 15 minute(s) ago`, () => {
     const dateUtil = new SaToolsDate();
     const diff = dateUtil.subtractMinutes(15); // 15 minutes
@@ -75,7 +75,7 @@ const satoolsDateTestSuite = () => {
         .toBe('15 minute(s) ago');
   });
 
-  it(`Given compared date string 50 minutes from now should 
+  it(`Given compared date string 50 minutes from now should
     return 50 minute(s) ago`, () => {
     const dateUtil = new SaToolsDate();
     const diff = dateUtil.subtractMinutes(50); // 50 minutes
@@ -83,21 +83,21 @@ const satoolsDateTestSuite = () => {
         .toBe('50 minute(s) ago');
   });
 
-  it(`Given a date in Date type should return new medium date 
+  it(`Given a date in Date type should return new medium date
     format`, () => {
     const dateUtil = new SaToolsDate();
     const diff = dateUtil.mediumDateFormat(new Date('2023-02-11 02:15'));
     expect(diff).toBe('Feb 11, 2023, 2:15 AM');
   });
 
-  it(`Given a date in string type should return new medium or 
+  it(`Given a date in string type should return new medium or
     long date format`, () => {
     const dateUtil = new SaToolsDate();
     const diff = dateUtil.formattedDateDiffStr(new Date('2023-02-11 02:15'));
     expect(diff).toBe('Feb 11, 2023, 2:15 AM');
   });
 
-  it(`Given datetime today should return today's datetime in 
+  it(`Given datetime today should return today's datetime in
     medium format`, () => {
     const dateUtil = new SaToolsDate();
     const today = new Date();

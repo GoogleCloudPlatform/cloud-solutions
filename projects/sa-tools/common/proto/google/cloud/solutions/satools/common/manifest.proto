@@ -18,7 +18,8 @@ package com.google.cloud.solutions.satools.common;
 
 
 // Metadata information for individual tools in the sa-tools marketplace
-// The manifest allows sa-tools core to get users' consent to deploy the specific tool by showing permissions and cost
+// The manifest allows sa-tools core to get users' consent to deploy the specific tool
+// by showing permissions and cost
 // information for using this tool.
 message ToolManifest {
 
@@ -39,6 +40,7 @@ message ToolManifest {
   repeated Role roles = 10;
 
   // List of GCP resources that will be created to run the tool's main application
+  // protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED
   repeated Resource resources_created = 15;
 
   // List of GCP resources that the tool may create on demand and destroy
@@ -142,8 +144,8 @@ message Deployment {
   string script_container_hash = 2;
 
   // List of attributes to be passed to the image's entrypoint
-  // Gtool will pass these attributes when running the deployment script and request the attributes' values from
-  // the deploying user.
+  // Gtool will pass these attributes when running the deployment script
+  // and request the attributes' values from the deploying user.
   //
   // All tools' deploy-script are required to accept at-least following attributes:
   // 1. `projectId` = The GCP Project in which to deploy the service
@@ -169,7 +171,8 @@ message DeploymentAttribute {
   string default_value = 10;
 }
 
-// The GCP resource or service that will be created for the tool's main application or by the tool on-demand.
+// The GCP resource or service that will be created for the tool's main
+// application or by the tool on-demand.
 message Resource {
 
   // The resource id

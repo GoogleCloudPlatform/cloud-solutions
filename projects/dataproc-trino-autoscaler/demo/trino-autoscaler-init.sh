@@ -18,12 +18,18 @@
 ## Description: Template for Dataproc initialization script to install Autoscaler application as a daemon.
 
 # Update with your configuration for the uri
-readonly CONFIG_JAR_FILE_GCS_URI="";
-readonly CONFIG_PROTO_FILE_GCS_URI="";
+CONFIG_JAR_FILE_GCS_URI=""
+CONFIG_PROTO_FILE_GCS_URI=""
 
-readonly ROLE=$(/usr/share/google/get_metadata_value attributes/dataproc-role)
-readonly TRINO_AUTO_SCALER_SERVICE="/usr/lib/systemd/system/trino_autoscaler.service"
-readonly TRINO_AUTOSCALE_FOLDER="/opt/trino_autoscaler"
+ROLE=$(/usr/share/google/get_metadata_value attributes/dataproc-role)
+TRINO_AUTO_SCALER_SERVICE="/usr/lib/systemd/system/trino_autoscaler.service"
+TRINO_AUTOSCALE_FOLDER="/opt/trino_autoscaler"
+
+readonly CONFIG_JAR_FILE_GCS_URI
+readonly CONFIG_PROTO_FILE_GCS_URI
+readonly ROLE
+readonly TRINO_AUTO_SCALER_SERVICE
+readonly TRINO_AUTOSCALE_FOLDER
 
 function setup_trino_autoscaler {
 
@@ -59,7 +65,6 @@ WantedBy=multi-user.target
 EOF
   chmod a+rx ${TRINO_AUTO_SCALER_SERVICE}
 }
-
 
 if [[ "${ROLE}" == 'Master' ]]; then
   # Run only on Master

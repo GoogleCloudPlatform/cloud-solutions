@@ -13,10 +13,10 @@
 # limitations under the License.
 
 resource "google_storage_bucket" "dataflow_temp" {
-  name = "${var.project_id}-dataflow-spanner-bq-temp"
+  name                        = "${var.project_id}-dataflow-spanner-bq-temp"
   uniform_bucket_level_access = true
-  location = var.region
-  force_destroy = true
+  location                    = var.region
+  force_destroy               = true
 }
 
 resource "google_storage_bucket_iam_member" "dataflow_sa_editor" {

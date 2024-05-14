@@ -9,7 +9,7 @@ index 6d638270..8f9be922 100644
 -    JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.3.0.jar"
 +    JVM_OPTS="$JVM_OPTS -javaagent:$CASSANDRA_HOME/lib/jamm-0.3.2.jar"
  fi
- 
+
  # enable thread priorities, primarily so we can give periodic tasks
 diff --git a/perfkitbenchmarker/data/cassandra/cassandra.yaml.j2 b/perfkitbenchmarker/data/cassandra/cassandra.yaml.j2
 index 585aa86d..6d61678b 100644
@@ -108,7 +108,7 @@ index 2a578c6d..6debef9b 100644
      'Total errors',  # Number of errors.
      'Total operation time',
 @@ -240,14 +240,14 @@ RESULTS_METRICS = (
- 
+
  # Metrics are aggregated between client vms.
  AGGREGATED_METRICS = frozenset({
 -    'op rate',
@@ -123,8 +123,8 @@ index 2a578c6d..6debef9b 100644
  # Maximum value will be choisen between client vms.
 -MAXIMUM_METRICS = {'latency max'}
 +MAXIMUM_METRICS = {'Latency max'}
- 
- 
+
+
  def GetConfig(user_config):
 @@ -317,6 +317,7 @@ def GenerateMetadataFromFlags(benchmark_spec):
        'population_size': FLAGS.cassandra_stress_population_size or max(
@@ -165,8 +165,8 @@ index 2a578c6d..6debef9b 100644
 +         int(value[0]) * 3600 + int(value[1]) * 60 + int(value[2])
 +   )else:
 +     results[metric].append(float(value))
- 
- 
+
+
  def CollectResults(benchmark_spec, metadata):
 @@ -581,19 +583,19 @@ def CollectResults(benchmark_spec, metadata):
    background_tasks.RunThreaded(CollectResultFile, args)
@@ -200,14 +200,14 @@ index 2a578c6d..6debef9b 100644
 +   results.append(sample.Sample(metric, value, unit, metadata))
    logging.info('Cassandra results:\n%s', results)
    return results
- 
+
 diff --git a/perfkitbenchmarker/linux_packages/aerospike_client.py b/perfkitbenchmarker/linux_packages/aerospike_client.py
 index e751708f..55201e1d 100644
 --- a/perfkitbenchmarker/linux_packages/aerospike_client.py
 +++ b/perfkitbenchmarker/linux_packages/aerospike_client.py
 @@ -28,10 +28,10 @@ from perfkitbenchmarker import sample
  from perfkitbenchmarker import vm_util
- 
+
  FLAGS = flags.FLAGS
 -PATH = 'aerospike-tools-7.0.5-ubuntu20.04'
 +PATH = 'aerospike-tools_8.0.2_ubuntu20.04_x86_64'
@@ -223,13 +223,13 @@ index 27f5d373..04452cfc 100644
 --- a/perfkitbenchmarker/linux_packages/ant.py
 +++ b/perfkitbenchmarker/linux_packages/ant.py
 @@ -19,7 +19,7 @@ import posixpath
- 
+
  from perfkitbenchmarker import linux_packages
- 
+
 -ANT_TAR = 'apache-ant-1.9.6-bin.tar.gz'
 +ANT_TAR = 'apache-ant-1.10.0-bin.tar.gz'
  ANT_TAR_URL = 'https://archive.apache.org/dist/ant/binaries/' + ANT_TAR
- 
+
  PACKAGE_NAME = 'ant'
 @@ -37,8 +37,8 @@ def _Install(vm):
        PACKAGE_NAME, PREPROVISIONED_DATA.keys(), linux_packages.INSTALL_DIR
@@ -247,7 +247,7 @@ index 7c01c9e0..022c4d02 100644
 --- a/perfkitbenchmarker/linux_packages/cassandra.py
 +++ b/perfkitbenchmarker/linux_packages/cassandra.py
 @@ -36,10 +36,10 @@ from six.moves import range
- 
+
  JNA_JAR_URL = (
      'https://maven.java.net/content/repositories/releases/'
 -    'net/java/dev/jna/jna/4.1.0/jna-4.1.0.jar'
@@ -264,7 +264,7 @@ index 59bdc5d9..883572e9 100644
 --- a/perfkitbenchmarker/linux_packages/openjdk.py
 +++ b/perfkitbenchmarker/linux_packages/openjdk.py
 @@ -33,9 +33,9 @@ OPENJDK_VERSION = flags.DEFINE_integer(
- 
+
  # Earlier elements of list are preferred.
  # These are the 3 LTS versions of Java.
 -# The default 11 is a compromise between the older most popular, but maintenance
@@ -272,16 +272,16 @@ index 59bdc5d9..883572e9 100644
  # mode Java 8 and the newest Java 17.
 -KNOWN_JAVA_VERSIONS = [11, 17, 8]
 +KNOWN_JAVA_VERSIONS = [8, 11, 17]
- 
- 
+
+
  def _Install(vm, get_package_name_for_version: Callable[[int], str]):
 diff --git a/perfkitbenchmarker/linux_packages/redis_server.py b/perfkitbenchmarker/linux_packages/redis_server.py
 index 5c27f607..001c8cc2 100644
 --- a/perfkitbenchmarker/linux_packages/redis_server.py
 +++ b/perfkitbenchmarker/linux_packages/redis_server.py
 @@ -33,7 +33,7 @@ class RedisEvictionPolicy:
- 
- 
+
+
  _VERSION = flags.DEFINE_string(
 -    'redis_server_version', '6.2.1', 'Version of redis server to use.'
 +    'redis_server_version', '7.0.3', 'Version of redis server to use.'
@@ -293,8 +293,8 @@ index 59581dd1..a296f1a5 100644
 --- a/perfkitbenchmarker/linux_packages/tomcat.py
 +++ b/perfkitbenchmarker/linux_packages/tomcat.py
 @@ -28,8 +28,8 @@ from perfkitbenchmarker import linux_packages
- 
- 
+
+
  TOMCAT_URL = (
 -    'https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.28/bin/'
 -    'apache-tomcat-8.0.28.tar.gz'
@@ -309,7 +309,7 @@ index 0d61c2bf..123702c6 100644
 +++ b/perfkitbenchmarker/linux_packages/wrk.py
 @@ -35,7 +35,7 @@ _LUA_SCRIPT_NAME = 'wrk_latency.lua'
  _LUA_SCRIPT_PATH = posixpath.join(WRK_DIR, _LUA_SCRIPT_NAME)
- 
+
  # Default socket / request timeout.
 -_TIMEOUT = '10s'
 +_TIMEOUT = '30s'
@@ -322,12 +322,12 @@ index 28cbb54c..5d83004a 100644
 +++ b/perfkitbenchmarker/providers/gcp/gcp_relational_db.py
 @@ -73,8 +73,8 @@ GCP_DATABASE_VERSION_MAPPING = {
  }
- 
- 
+
+
 -DEFAULT_MYSQL_VERSION = '5.7'
 -DEFAULT_POSTGRES_VERSION = '9.6'
 +DEFAULT_MYSQL_VERSION = '8.0'
 +DEFAULT_POSTGRES_VERSION = '12'
  DEFAULT_SQL_SERVER_VERSION = '2017_Standard'
- 
+
  DEFAULT_ENGINE_VERSIONS = {

@@ -13,17 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 redis_memtier:
-  description: "Run memtier_benchmark against Redis. Specify the number of client\
-    \ VMs with --redis_clients.\n"
+  description: "Run memtier_benchmark against Redis. Specify the number of client VMs with --redis_clients.\n"
   vm_groups:
     servers:
       vm_spec:
         GCP:
           machine_type:
-          - "machine_type"
+            - "machine_type"
           zone: "us-central1-b"
           image: "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220927"
       vm_count: 1
@@ -35,7 +32,7 @@ redis_memtier:
       vm_spec:
         GCP:
           machine_type:
-          - "machine_type"
+            - "machine_type"
           zone: "us-central1-b"
           image: "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220927"
       vm_count: 1

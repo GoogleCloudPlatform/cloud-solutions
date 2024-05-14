@@ -14,20 +14,20 @@
 
 variable "project_id" {
   description = "Default project id"
-  type = string
+  type        = string
 }
 variable "region" {
   description = "Region to create artifacts in. Default - us-central1"
-  type = string
-  default = "us-central1"
+  type        = string
+  default     = "us-central1"
 }
 variable "bigquery_dataset_location" {
   description = "BigQuery dataset location. Default - us-central1"
-  type = string
-  default = "us-central1"
+  type        = string
+  default     = "us-central1"
 }
 variable "spanner_location" {
   description = "Spanner location. Default - us-central1"
-  type = string
-  default = "us-central1"
+  type        = string
+  default     = "us-central1"
 }

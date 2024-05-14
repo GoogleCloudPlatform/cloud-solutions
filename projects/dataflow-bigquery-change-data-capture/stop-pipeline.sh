@@ -19,13 +19,13 @@
 set -e
 set -u
 
-
 JOB_NAME_PATTERN="spanner-to-bigquery-cdc-ingestion"
 
 JOB_IDS=$(gcloud dataflow jobs list --region "$REGION" --filter="NAME:${JOB_NAME_PATTERN} AND STATE:Running" --format="get(JOB_ID)")
 
 IFS=$'\n'
+# shellcheck disable=SC2206
 id_array=($JOB_IDS)
-for (( i=0; i<${#id_array[@]}; i++ )) ; do
-    gcloud dataflow jobs drain --region "$REGION" "${id_array[$i]}"
+for ((i = 0; i < ${#id_array[@]}; i++)); do
+  gcloud dataflow jobs drain --region "$REGION" "${id_array[$i]}"
 done

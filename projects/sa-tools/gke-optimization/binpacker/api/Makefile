@@ -45,7 +45,7 @@ test:
 	$(GO_TEST) $(GO_PKGROOT)
 
 clean:
-	rm -rf $(TARGETS) ./vendor 
+	rm -rf $(TARGETS) ./vendor
 
 static_analysis: lint vet
 

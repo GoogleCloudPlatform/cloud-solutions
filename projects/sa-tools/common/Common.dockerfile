@@ -6,6 +6,7 @@ RUN gradle clean test build
 FROM node:18 AS node-builder
 COPY . /sa-tools-src
 WORKDIR /sa-tools-src/common/ui-tests
-RUN yarn install
-RUN yarn style-check
-RUN yarn test
+RUN yarn install \
+    && yarn cache clean \
+    && yarn style-check \
+    && yarn test

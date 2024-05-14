@@ -13,11 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 kubernetes_redis_memtier:
-  description: "Run memtier_benchmark against a K8s cluster. Specify the number of\
-    \ client VMs with --redis_clients.\n"
+  description: "Run memtier_benchmark against a K8s cluster. Specify the number of client VMs with --redis_clients.\n"
   container_cluster:
     cloud: "GCP"
     type: "Kubernetes"
@@ -25,7 +22,7 @@ kubernetes_redis_memtier:
     vm_spec:
       GCP:
         machine_type:
-        - "machine_type"
+          - "machine_type"
         zone: "us-central1-b"
         image: "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220927"
     nodepools:
@@ -33,7 +30,7 @@ kubernetes_redis_memtier:
         vm_spec:
           GCP:
             machine_type:
-            - "machine_type"
+              - "machine_type"
             zone: "us-central1-b"
             image: "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220927"
         vm_count: 3
@@ -41,7 +38,7 @@ kubernetes_redis_memtier:
         vm_spec:
           GCP:
             machine_type:
-            - "machine_type"
+              - "machine_type"
             zone: "us-central1-b"
           AWS:
             machine_type: "m6i.xlarge"
@@ -53,7 +50,7 @@ kubernetes_redis_memtier:
       vm_spec:
         GCP:
           machine_type:
-          - "machine_type"
+            - "machine_type"
           zone: "us-central1-b"
           image: "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220927"
       vm_count: 1

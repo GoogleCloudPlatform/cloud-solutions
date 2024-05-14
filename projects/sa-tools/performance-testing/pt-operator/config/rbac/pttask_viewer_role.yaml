@@ -25,17 +25,17 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: pttask-viewer-role
 rules:
-- apiGroups:
-  - perftest.com.google.cloud.solutions.satools
-  resources:
-  - pttasks
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - perftest.com.google.cloud.solutions.satools
-  resources:
-  - pttasks/status
-  verbs:
-  - get
+  - apiGroups:
+      - perftest.com.google.cloud.solutions.satools
+    resources:
+      - pttasks
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - perftest.com.google.cloud.solutions.satools
+    resources:
+      - pttasks/status
+    verbs:
+      - get

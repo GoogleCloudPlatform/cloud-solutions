@@ -15,8 +15,4 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'docker'
-    args: [ 'build',
-            '-f=all-language-builder-base.dockerfile',
-            '-t=${_CONTAINER_IMAGE_TAG}',
-            '.'
-    ]
+    args: ['build', '-f=all-language-builder-base.dockerfile', '-t=${_CONTAINER_IMAGE_TAG}', '.']

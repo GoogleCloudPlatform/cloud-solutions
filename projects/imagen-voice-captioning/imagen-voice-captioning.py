@@ -49,8 +49,7 @@ def parse_config_args(config_file):
   """
   # Create a config parser object
   config = configparser.ConfigParser()
-  config["DEFAULT"] = {"input": 0,
-                       "credentials": "credentials.json"}
+  config["DEFAULT"] = {"input": 0, "credentials": "credentials.json"}
   config["parameters"] = {}
 
   # Create an argument parser
@@ -61,35 +60,49 @@ def parse_config_args(config_file):
   if not read_config:
     print("{} not found. Using command line args only".format(config_file))
     # Add arguments for each configuration value using hardcoded defaults
-    parser.add_argument("--input",
-                        default=config["DEFAULT"]["input"],
-                        type=str,
-                        help="Camera device number")
-    parser.add_argument("--credentials",
-                        default=config["DEFAULT"]["credentials"],
-                        type=str,
-                        help=("Google Cloud Service account JSON key. "
-                              "Default: ./credentials.json"))
-    parser.add_argument("--project_id",
-                        required=True,
-                        type=str,
-                        help="Google Cloud Project ID string")
+    parser.add_argument(
+        "--input",
+        default=config["DEFAULT"]["input"],
+        type=str,
+        help="Camera device number",
+    )
+    parser.add_argument(
+        "--credentials",
+        default=config["DEFAULT"]["credentials"],
+        type=str,
+        help=(
+            "Google Cloud Service account JSON key. Default: ./credentials.json"
+        ),
+    )
+    parser.add_argument(
+        "--project_id",
+        required=True,
+        type=str,
+        help="Google Cloud Project ID string",
+    )
   else:
     # Add arguments for each configuration value using read file
     # for fallback defaults
-    parser.add_argument("--input",
-                        default=config["parameters"]["input"],
-                        type=str,
-                        help="Camera device number")
-    parser.add_argument("--credentials",
-                        default=config["parameters"]["credentials"],
-                        type=str,
-                        help=("Google Cloud Service account JSON key. "
-                              "Default: ./credentials.json"))
-    parser.add_argument("--project_id",
-                        default=config["parameters"]["project_id"],
-                        type=str,
-                        help="Google Cloud Project ID string")
+    parser.add_argument(
+        "--input",
+        default=config["parameters"]["input"],
+        type=str,
+        help="Camera device number",
+    )
+    parser.add_argument(
+        "--credentials",
+        default=config["parameters"]["credentials"],
+        type=str,
+        help=(
+            "Google Cloud Service account JSON key. Default: ./credentials.json"
+        ),
+    )
+    parser.add_argument(
+        "--project_id",
+        default=config["parameters"]["project_id"],
+        type=str,
+        help="Google Cloud Project ID string",
+    )
 
   # Parse the arguments
   args = parser.parse_args()
@@ -143,11 +156,10 @@ def get_gcloud_auth_token():
   The token is used for authenticating the HTTP POST request to Imagen.
   The function uses subprocess to execute gcloud from the shell.
 
-  Args:
-    None
+  Args: None
 
   Returns:
-    String, containing the authentication token 
+    String, containing the authentication token
 
   Raises:
     None
@@ -193,10 +205,10 @@ def tts_captions(captions, tts_client):
 
   if not response:
     print("Not OK")
-    return(None)
+    return None
   else:
     print("OK")
-    return(response.audio_content)
+    return response.audio_content
 
 
 def convert_image(opencv_image, byte_io):
@@ -227,9 +239,9 @@ def main():
 
   # Set the environment variable GOOGLE_APPLICATION_CREDENTIALS to
   # the path of your Google Cloud service account key file.
-  os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-      config["parameters"]["credentials"]
-  )
+  os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = config["parameters"][
+      "credentials"
+  ]
 
   # Instantiates a TTS client
   tts_client = texttospeech.TextToSpeechClient()

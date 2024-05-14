@@ -31,17 +31,17 @@ spec:
       containerConcurrency: 10
       timeoutSeconds: 3000
       containers:
-      - image: asia-docker.pkg.dev/play-api-service/test-images/pt-admin
-        ports:
-        - name: http1
-          containerPort: 9080
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 2Gi
-        startupProbe:
-          timeoutSeconds: 240
-          periodSeconds: 240
-          failureThreshold: 1
-          tcpSocket:
-            port: 9080
+        - image: asia-docker.pkg.dev/play-api-service/test-images/pt-admin
+          ports:
+            - name: http1
+              containerPort: 9080
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          startupProbe:
+            timeoutSeconds: 240
+            periodSeconds: 240
+            failureThreshold: 1
+            tcpSocket:
+              port: 9080

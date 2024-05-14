@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 pgbench:
   description: "pgbench benchmark for managed PostgreSQL databases"
   relational_db:
@@ -22,7 +20,7 @@ pgbench:
     db_spec:
       GCP:
         machine_type:
-        - "machine_type"
+          - "machine_type"
         zone: "us-central1-b"
       AWS:
         machine_type: "db.m4.4xlarge"

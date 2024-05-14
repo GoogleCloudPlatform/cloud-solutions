@@ -48,6 +48,7 @@ message TimingConfiguration {
   // Periods of no resize Cooldown period
   // expressed as duration string
   // expressed as java duration string
+  // protolint:disable:next MAX_LINE_LENGTH
   // Refer: https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-
   // example: PT1M for 1 minute, PT10H for 10 hours
   // limits [15m, 1d] default: PT15M
@@ -57,6 +58,7 @@ message TimingConfiguration {
   // The same duration is used for terminating worker GCE instances after suspending them
   // The Cool-down period can delay the inspection
   // expressed as java duration string
+  // protolint:disable:next MAX_LINE_LENGTH
   // Refer: https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-
   // example: PT1M for 1 minute, PT10H for 10 hours
   // limits [10m, 60m] default: PT15M
@@ -65,6 +67,7 @@ message TimingConfiguration {
   // The Graceful shutdown duration set for the trino cluster
   // This is configured as per https://trino.io/docs/376/admin/graceful-shutdown.html
   // The time is in duration string format
+  // protolint:disable:next MAX_LINE_LENGTH
   // Refer: https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-
   // example: PT1M for 1 minute, PT10H for 10 hours
   // limits [2m, 60m] default: PT2M
@@ -110,7 +113,11 @@ message WorkerScalingLogic {
 }
 
 enum ScalingAlgorithm {
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  // protolint:disable:next ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
   UNKNOWN_ALGO = 0;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   WORKER_UNITS = 1;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   WORKER_PERCENT = 2;
 }

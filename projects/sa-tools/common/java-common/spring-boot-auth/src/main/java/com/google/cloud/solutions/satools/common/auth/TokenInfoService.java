@@ -22,8 +22,8 @@ import com.google.auth.oauth2.AccessToken;
 public interface TokenInfoService {
 
   /**
-   * Returns the Token information for the given {@code accessToken}
-   * by retrieving it from OAuth server.
+   * Returns the Token information for the given {@code accessToken} by retrieving it from OAuth
+   * server.
    */
   TokenInfo retrieve(AccessToken accessToken);
 }

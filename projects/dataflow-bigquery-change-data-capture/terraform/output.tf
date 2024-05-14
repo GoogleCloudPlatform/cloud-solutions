@@ -14,43 +14,43 @@
 
 output "region" {
   description = "Region where the resources are defined"
-  value = var.region
+  value       = var.region
 }
 
 output "bq-project-id" {
   description = "Project id containing the BigQuery dataset"
-  value = google_bigquery_dataset.spanner_bigquery.project
+  value       = google_bigquery_dataset.spanner_bigquery.project
 }
 output "bq-dataset" {
   description = "BigQuery dataset name"
-  value = google_bigquery_dataset.spanner_bigquery.dataset_id
+  value       = google_bigquery_dataset.spanner_bigquery.dataset_id
 }
 output "dataflow-temp-bucket" {
   description = "Temporary bucket for Dataflow staging files"
-  value = google_storage_bucket.dataflow_temp.id
+  value       = google_storage_bucket.dataflow_temp.id
 }
 output "orders_change_stream" {
   description = "Spanner change stream"
-  value = local.orders_change_stream
+  value       = local.orders_change_stream
 }
 
 output "spanner-project-id" {
   description = "Spanner project id"
-  value = google_spanner_instance.main.project
+  value       = google_spanner_instance.main.project
 }
 output "spanner-database" {
   description = "Spanner database"
-  value = google_spanner_database.fulfillment.name
+  value       = google_spanner_database.fulfillment.name
 }
 output "spanner-instance" {
   description = "Spanner instance"
-  value = google_spanner_instance.main.name
+  value       = google_spanner_instance.main.name
 }
 output "dataflow-sa" {
   description = "Service Account to run Dataflow pipelines"
-  value = google_service_account.dataflow_sa.email
+  value       = google_service_account.dataflow_sa.email
 }
 output "dataflow-project-id" {
   description = "Project ID where to launch Dataflow jobs"
-  value = var.project_id
+  value       = var.project_id
 }

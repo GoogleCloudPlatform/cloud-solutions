@@ -38,9 +38,9 @@ function PerfkitApp() {
   const [accessToken, setAccessToken] = useState(null);
 
   /**
-   * Helper function to show error message.
-   * @param {any} errorMessage
-   */
+  * Helper function to show error message.
+  * @param {any} errorMessage
+  */
   function showSnackbar(errorMessage) {
     setErrorContent(errorMessage);
     setShowError(true);

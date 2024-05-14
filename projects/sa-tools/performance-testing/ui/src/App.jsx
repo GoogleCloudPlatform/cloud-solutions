@@ -36,9 +36,9 @@ function App() {
   const [showError, setShowError] = useState(false);
 
   /**
-   * Helper function to display Snackbar control with given error message.
-   * @param {any} errorMessage
-   */
+  * Helper function to display Snackbar control with given error message.
+  * @param {any} errorMessage
+  */
   function showSnackbar(errorMessage) {
     setErrorContent(errorMessage);
     setShowError(true);

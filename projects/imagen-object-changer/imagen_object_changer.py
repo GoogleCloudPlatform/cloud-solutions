@@ -22,9 +22,9 @@ import json
 import subprocess
 
 import cv2
+from google.cloud import vision
 import numpy as np
 import requests
-from google.cloud import vision
 
 CONFIG_FILE = "config.ini"
 
@@ -46,10 +46,11 @@ def parse_config_args(config_file):
   """
   # Create a config parser object
   config = configparser.ConfigParser()
-  config["DEFAULT"] = {"mask": "mask.png",
-                        "invert_mask": "False",
-                        "output_json": "output.json"
-                      }
+  config["DEFAULT"] = {
+      "mask": "mask.png",
+      "invert_mask": "False",
+      "output_json": "output.json",
+  }
   config["parameters"] = {}
 
   # Create an argument parser
@@ -61,41 +62,89 @@ def parse_config_args(config_file):
   if not read_config:
     print("{} not found. Using command line args only".format(config_file))
     # Add arguments for each configuration value using hardcoded defaults
-    parser.add_argument("--mask", default=config["DEFAULT"]["mask"], type=str,
-                        help="Output mask file")
-    parser.add_argument("--invert_mask",
-                        default=config["DEFAULT"]["invert_mask"], type=str,
-                        help="Invert mask; replace the background")
-    parser.add_argument("--output_json",
-                        default=config["DEFAULT"]["output_json"], type=str,
-                        help="Output JSON file name for GenAI response")
-    parser.add_argument("--input", required=True, type=str,
-                        help="Original image file")
-    parser.add_argument("--label", required=True, type=str,
-                        help="Object to detect e.g car | cat | tree")
-    parser.add_argument("--prompt", required=True, type=str,
-                        help="Imagen prompt for image generation")
-    parser.add_argument("--project_id", required=True, type=str,
-                        help="Google Cloud Project ID string")
+    parser.add_argument(
+        "--mask",
+        default=config["DEFAULT"]["mask"],
+        type=str,
+        help="Output mask file",
+    )
+    parser.add_argument(
+        "--invert_mask",
+        default=config["DEFAULT"]["invert_mask"],
+        type=str,
+        help="Invert mask; replace the background",
+    )
+    parser.add_argument(
+        "--output_json",
+        default=config["DEFAULT"]["output_json"],
+        type=str,
+        help="Output JSON file name for GenAI response",
+    )
+    parser.add_argument(
+        "--input", required=True, type=str, help="Original image file"
+    )
+    parser.add_argument(
+        "--label",
+        required=True,
+        type=str,
+        help="Object to detect e.g car | cat | tree",
+    )
+    parser.add_argument(
+        "--prompt",
+        required=True,
+        type=str,
+        help="Imagen prompt for image generation",
+    )
+    parser.add_argument(
+        "--project_id",
+        required=True,
+        type=str,
+        help="Google Cloud Project ID string",
+    )
   else:
     # Add arguments for each cfg value using read file for fallback defaults
-    parser.add_argument("--input", default=config["parameters"]["input"],
-                        type=str, help="Original image file")
-    parser.add_argument("--label", default=config["parameters"]["label"],
-                        type=str, help="Object to detect e.g car | cat")
-    parser.add_argument("--prompt", default=config["parameters"]["prompt"],
-                        type=str, help="Imagen prompt for image generation")
-    parser.add_argument("--project_id",
-                        default=config["parameters"]["project_id"], type=str,
-                        help="Google Cloud Project ID string")
-    parser.add_argument("--mask", default=config["parameters"]["mask"],
-                        type=str, help="Output mask file")
-    parser.add_argument("--invert_mask",
-                        default=config["parameters"]["invert_mask"],
-                        type=str, help="Invert mask; replace the background")
-    parser.add_argument("--output_json",
-                        default=config["parameters"]["output_json"], type=str,
-                        help="Output JSON file name for GenAI response")
+    parser.add_argument(
+        "--input",
+        default=config["parameters"]["input"],
+        type=str,
+        help="Original image file",
+    )
+    parser.add_argument(
+        "--label",
+        default=config["parameters"]["label"],
+        type=str,
+        help="Object to detect e.g car | cat",
+    )
+    parser.add_argument(
+        "--prompt",
+        default=config["parameters"]["prompt"],
+        type=str,
+        help="Imagen prompt for image generation",
+    )
+    parser.add_argument(
+        "--project_id",
+        default=config["parameters"]["project_id"],
+        type=str,
+        help="Google Cloud Project ID string",
+    )
+    parser.add_argument(
+        "--mask",
+        default=config["parameters"]["mask"],
+        type=str,
+        help="Output mask file",
+    )
+    parser.add_argument(
+        "--invert_mask",
+        default=config["parameters"]["invert_mask"],
+        type=str,
+        help="Invert mask; replace the background",
+    )
+    parser.add_argument(
+        "--output_json",
+        default=config["parameters"]["output_json"],
+        type=str,
+        help="Output JSON file name for GenAI response",
+    )
 
   # Parse the arguments
   args = parser.parse_args()
@@ -134,8 +183,7 @@ def query_vision_api(input_img):
   image = vision.Image(content=input_img)
 
   # Perform object detection on the image.
-  objects = client.object_localization(
-      image=image).localized_object_annotations
+  objects = client.object_localization(image=image).localized_object_annotations
   return objects
 
 
@@ -219,23 +267,12 @@ def query_imagen(prompt, input_img, mask_img, output_json, token, project_id):
 
   # Create the JSON request body
   data = {
-      "instances": [
-          {
-              "prompt": prompt,
-              "image": {
-                  "bytesBase64Encoded": img.decode("utf-8")
-              },
-              "mask": {
-                  "image": {
-                      "bytesBase64Encoded": mask_img.decode("utf-8")
-                  }
-              }
-          }
-      ],
-      "parameters": {
-          "sampleCount": 4,
-          "sampleImageSize": "1024"
-      }
+      "instances": [{
+          "prompt": prompt,
+          "image": {"bytesBase64Encoded": img.decode("utf-8")},
+          "mask": {"image": {"bytesBase64Encoded": mask_img.decode("utf-8")}},
+      }],
+      "parameters": {"sampleCount": 4, "sampleImageSize": "1024"},
   }
 
   # Make the API request
@@ -244,13 +281,14 @@ def query_imagen(prompt, input_img, mask_img, output_json, token, project_id):
       "Content-Type": "application/json",
       "User-Agent": "Mozilla/5.0",
       "Accept-Encoding": "identity",
-      "Accept": "*/*"}
+      "Accept": "*/*",
+  }
 
   url = (
-      "https://us-central1-aiplatform.googleapis.com/v1/projects/" +
-      project_id +
-      "/locations/us-central1/publishers/google/models/" +
-      "imagegeneration@002:predict"
+      "https://us-central1-aiplatform.googleapis.com/v1/projects/"
+      + project_id
+      + "/locations/us-central1/publishers/google/models/"
+      + "imagegeneration@002:predict"
   )
 
   print("Querying Imagen...")
@@ -259,7 +297,7 @@ def query_imagen(prompt, input_img, mask_img, output_json, token, project_id):
       headers=headers,
       data=json.dumps(data, sort_keys=False, indent=2, separators=(",", ": ")),
       verify=True,
-      timeout=None
+      timeout=None,
   )
 
   imagen_success = True
@@ -280,8 +318,7 @@ def get_gcloud_auth_token():
   The token is used for authenticating the HTTP POST request to Imagen.
   The function uses subprocess to execute gcloud from the shell.
 
-  Args:
-    None
+  Args: None
 
   Returns:
     String, containing the authentication token
@@ -336,8 +373,14 @@ def main():
   else:
     invert = False
 
-  print("Target label:", label, "source image:",
-        input_file, "project_id:", project_id)
+  print(
+      "Target label:",
+      label,
+      "source image:",
+      input_file,
+      "project_id:",
+      project_id,
+  )
 
   # Read the image file into memory.
   with io.open(input_file, mode="rb") as f:

@@ -70,8 +70,8 @@ function FormModal({
   };
 
   /** If any of the children's componentData valid=false, then
-   *  also trigger .validate() for all children
-   */
+  *  also trigger .validate() for all children
+  */
   const handleValidate = () => {
     if (componentData.attributeData) {
       componentData.valid = validateComponent(componentData);

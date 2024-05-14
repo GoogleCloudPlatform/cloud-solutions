@@ -25,12 +25,12 @@ FROM
 WHERE
     owner = 'cloud-build-success-id'
   AND metric NOT IN ('lscpu',
-                     'gcc_version',
-                     'glibc_version',
-                     'proccpu_mapping',
-                     'proccpu',
-                     'cpu_vuln',
-                     'Write_Min_Latency_time_series',
-                     'Write_Max_Latency_time_series',
-                     'Read_Max_Latency_time_series',
-                     'Read_Min_Latency_time_series')
+                   'gcc_version',
+                   'glibc_version',
+                   'proccpu_mapping',
+                   'proccpu',
+                   'cpu_vuln',
+                   'Write_Min_Latency_time_series',
+                   'Write_Max_Latency_time_series',
+                   'Read_Max_Latency_time_series',
+                   'Read_Min_Latency_time_series')

@@ -6,11 +6,11 @@ Consists of 2 modules:
 
 - UI
 
-  The UI is implemented in pure HTML/ES6 and connects to the API endpoint. The UI is delivered as static files from the /static directory of the API server.
+   The UI is implemented in pure HTML/ES6 and connects to the API endpoint. The UI is delivered as static files from the /static directory of the API server.
 
 - API
 
-  The API is a Golang web application that connects to GKE standard clusters and scrapes workload information. The API also exposes endpoints to calculate binpacking recommendations.
+   The API is a Golang web application that connects to GKE standard clusters and scrapes workload information. The API also exposes endpoints to calculate binpacking recommendations.
 
 ## Prerequisite
 
@@ -40,34 +40,36 @@ Please test your workloads thoroughly with the new config before deploying in pr
 
 - GET /
 
-  Web UI of the tool
+   Web UI of the tool
 
 - POST /api/metrics
 
-  Scrape GKE standard clusters, node pools and pods using google cloud SDK, kube API and return metrics
+   Scrape GKE standard clusters, node pools and pods using google cloud SDK, kube API and return metrics
 
 - POST /api/binpacker
 
-  Calculate and provide binpacking recommendation includes the spec per node(vCPUs, Memory) and the number of nodes
+   Calculate and provide binpacking recommendation includes the spec per node(vCPUs, Memory) and the number of nodes
 
 ## Folder structure
 
+```text
 - api/
   - cmd/binpacker/
-    - Entry point
+    Entry point
   - pkg/
     - domain/
-      - Domain models
+    Domain models
     - infrastructure/repository/
-      - Actual implementations
+    Actual implementations
     - interface/handler/
-      - API handle functions called in entrypoint
+      API handle functions called in entrypoint
     - usecase/
-      - Usecases called by handlers
+      Usecases called by handlers
 - proto/
-  - Proto files for APIs/UI
+  Proto files for APIs/UI
 - ui/src
-  - UI related files written in React and TypeScript
+  UI related files written in React and TypeScript
+```
 
 ## Set up
 
@@ -75,11 +77,11 @@ The tool is designed to use the user's credentials to connect to Google Cloud an
 
 - Cloud Shell (Recommended)
 
-  The credential is automatically provided when running the tool. You do not need to explicitly prepare it.
+   The credential is automatically provided when running the tool. You do not need to explicitly prepare it.
 
 - Local environments (Laptop, etc.)
 
-  You need to prepare a credential and provide it as Application Default Credentials (ADC).
+   You need to prepare a credential and provide it as Application Default Credentials (ADC).
 
 ### On Cloud Shell
 
@@ -157,9 +159,9 @@ The tool is designed to use the user's credentials to connect to Google Cloud an
 
    ```bash
    docker run -d -p 8080:8080 \
-     -v PATH_OF_ADC_FILE:/.config/gcloud/application_default_credentials.json \
-     --name binpacker \
-     binpacker
+      -v PATH_OF_ADC_FILE:/.config/gcloud/application_default_credentials.json \
+      --name binpacker \
+      binpacker
    ```
 
 1. Access to the application:
@@ -187,8 +189,8 @@ The tool is designed to use the user's credentials to connect to Google Cloud an
 ### Errors during discovering workloads
 
 - Failed to discover clusters, node pools and pods
-  failed to list machine type: googleapi: Error 404: The resource 'projects/xxxxxxxx' was not found
+   failed to list machine type: googleapi: Error 404: The resource 'projects/xxxxxxxx' was not found
   - Confirm the Project ID is correct and it exists.
 - Failed to discover clusters, node pools and pods
-  failed to fetch pods from xxxxx(yyyyy): Get "https://xxx.xxx.xxx.xxx/api/v1/pods": dial tcp xxx.xxx.xxx.xxx:443: i/o timeout
+   failed to fetch pods from xxxxx(yyyyy): Get "<https://xxx.xxx.xxx.xxx/api/v1/pods>": dial tcp xxx.xxx.xxx.xxx:443: i/o timeout
   - One of the standard clusters are not reachable from your environment. Confirm master authorized networks configuration if one of GKE clusters is private.

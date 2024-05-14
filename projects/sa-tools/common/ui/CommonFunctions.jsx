@@ -29,10 +29,10 @@ function initValueInMap({ dataMap, key, defaultValue }) {
 
 class AttributeData {
   /**
-   * @param {!Object} attribute
-   * @param {AttributeValue} [value={}] the attribute's value
-   * @param {boolean} [valid=true] the validity check result.
-   */
+  * @param {!Object} attribute
+  * @param {AttributeValue} [value={}] the attribute's value
+  * @param {boolean} [valid=true] the validity check result.
+  */
   constructor(attribute, value = new AttributeValue(), valid = true) {
     this.attribute = attribute;
     this.value = value;
@@ -40,14 +40,14 @@ class AttributeData {
   }
 
   /**
-   * Checks if the attribute is valid
-   *
-   * The function will check if the attribute is valid
-   * by recursively drilling down the attribute tree.
-   * It will also change the state of `valid` flag based on the result.
-   *
-   * @return {boolean} the attribute's validity
-   */
+  * Checks if the attribute is valid
+  *
+  * The function will check if the attribute is valid
+  * by recursively drilling down the attribute tree.
+  * It will also change the state of `valid` flag based on the result.
+  *
+  * @return {boolean} the attribute's validity
+  */
   validate() {
     this.valid = (() => {
       if (this.attribute.repeated) {
@@ -68,9 +68,9 @@ class AttributeData {
 
         case 'OBJECT':
           /** The only way to change .required is within .value sub fields
-           *  Hence, we need to skip validation when it is still optional
-           *  .required could change if any of required child fields is entered.
-           */
+          *  Hence, we need to skip validation when it is still optional
+          *  .required could change if any of required child fields is entered.
+          */
           if (!this.attribute.required) {
             return true;
           }
@@ -103,11 +103,11 @@ class AttributeData {
 
 class AttributeValue {
   /**
-   *
-   * @param {?string} simpleValue
-   * @param {?Array<AttributeValue>} repeatedValues
-   * @param {?Object<string, AttributeData>} nestedValues
-   */
+  *
+  * @param {?string} simpleValue
+  * @param {?Array<AttributeValue>} repeatedValues
+  * @param {?Object<string, AttributeData>} nestedValues
+  */
   constructor(simpleValue, repeatedValues, nestedValues) {
     this.simpleValue = simpleValue;
     this.repeatedValues = repeatedValues;
@@ -117,9 +117,9 @@ class AttributeValue {
 
 class ComponentValidation {
   /**
-   *
-   * @param {!ComponentData} componentData
-   */
+  *
+  * @param {!ComponentData} componentData
+  */
   constructor(componentData) {
     this.componentData = componentData;
   }
@@ -139,13 +139,13 @@ function validateComponent(componentData) {
 
 class ComponentData {
   /**
-   *
-   * @param {!Object} component
-   * @param {Object<string,AttributeData>} attributeData
-   * @param {Object} selectedAlternative
-   * @param {boolean} [skipped=false]
-   * @param {boolean} [valid
-   */
+  *
+  * @param {!Object} component
+  * @param {Object<string,AttributeData>} attributeData
+  * @param {Object} selectedAlternative
+  * @param {boolean} [skipped=false]
+  * @param {boolean} [valid
+  */
   constructor(
     component,
     attributeData = {},

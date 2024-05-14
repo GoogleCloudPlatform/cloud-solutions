@@ -15,146 +15,156 @@
 syntax = "proto3";
 package binpacker;
 
+// protolint:disable:next MAX_LINE_LENGTH
 option go_package = "github.com/GoogleCloudPlatform/cloud-solutions/projects/sa-tools/gke_optimization/binpacker/api/proto";
 
 // The schema of API request to fetch all metrics.
 message MetricFetchAllRequest {
-    // The project ID of the Google Cloud project to fetch all metrics.
-    string project_id = 1;
+  // The project ID of the Google Cloud project to fetch all metrics.
+  string project_id = 1;
 }
 
 // The schema of API response to fetch all metrics.
 message MetricFetchAllResponse {
-    // A repeated field of Pod messages.
-    repeated Pod pods = 1;
+  // A repeated field of Pod messages.
+  repeated Pod pods = 1;
 
-    // A repeated field of Nodepool messages.
-    repeated Nodepool nodepools = 2;
+  // A repeated field of Nodepool messages.
+  repeated Nodepool nodepools = 2;
 
-    // A repeated field of Cluster messages.
-    repeated Cluster clusters = 3;
+  // A repeated field of Cluster messages.
+  repeated Cluster clusters = 3;
 }
 
 // The schema of an API error response that indicates an error occurred while fetching metrics.
 message MetricFetchAllErrorResponse {
-    // The error message.
-    // A brief description of the error.
-    string message = 1;
+  // The error message.
+  // A brief description of the error.
+  string message = 1;
 
-    // The error details.
-    // More detailed information about the error, such as the stack trace.
-    string details = 2;
+  // The error details.
+  // More detailed information about the error, such as the stack trace.
+  string details = 2;
 }
 
 // The schema of pod in metrics.
 message Pod {
-    // The name of the pod.
-    string name = 1;
+  // The name of the pod.
+  string name = 1;
 
-    // The cluster that the pod is running on.
-    string cluster = 2;
+  // The cluster that the pod is running on.
+  string cluster = 2;
 
-    // The location of the cluster.
-    string cluster_location = 3;
+  // The location of the cluster.
+  string cluster_location = 3;
 
-    // The namespace that the pod is in.
-    string namespace = 5;
+  // The namespace that the pod is in.
+  string namespace = 5;
 
-    // The nodepool that the pod is running on.
-    string nodepool = 6;
+  // The nodepool that the pod is running on.
+  string nodepool = 6;
 
-    // The status of the pod.
-    string status = 10;
+  // The status of the pod.
+  string status = 10;
 
-    // The parent of the pod.
-    string parent = 11;
+  // The parent of the pod.
+  string parent = 11;
 
-    // The type of the parent.
-    ParentType parent_type = 12;
+  // The type of the parent.
+  ParentType parent_type = 12;
 
-    // The CPU request of the pod.
-    double cpu_request = 15;
+  // The CPU request of the pod.
+  double cpu_request = 15;
 
-    // The CPU limit of the pod.
-    double cpu_limit = 16;
+  // The CPU limit of the pod.
+  double cpu_limit = 16;
 
-    // The memory request of the pod.
-    int64 memory_request = 20;
+  // The memory request of the pod.
+  int64 memory_request = 20;
 
-    // The memory limit of the pod.
-    int64 memory_limit = 21;
+  // The memory limit of the pod.
+  int64 memory_limit = 21;
 }
 
 // The schema of cluster in metrics.
 message Cluster {
-    // The name of the cluster.
-    string name = 1;
+  // The name of the cluster.
+  string name = 1;
 
-    // The location of the cluster.
-    string location = 2;
+  // The location of the cluster.
+  string location = 2;
 
-    // The number of nodes in the cluster.
-    int32 number_of_nodes = 3;
+  // The number of nodes in the cluster.
+  int32 number_of_nodes = 3;
 
-    // The total CPU of the cluster.
-    int32 total_cpu = 10;
+  // The total CPU of the cluster.
+  int32 total_cpu = 10;
 
-    // The total memory of the cluster, in gibibytes.
-    double total_memory_in_gib = 11;
+  // The total memory of the cluster, in gibibytes.
+  double total_memory_in_gib = 11;
 }
 
 // The schema of nodepool in metrics.
 message Nodepool {
-    // The name of the nodepool.
-    string name = 1;
+  // The name of the nodepool.
+  string name = 1;
 
-    // The cluster that the nodepool is in. 
-    string cluster = 2;
+  // The cluster that the nodepool is in.
+  string cluster = 2;
 
-    // The location of the cluster.
-    string cluster_location = 3;
+  // The location of the cluster.
+  string cluster_location = 3;
 
-    // The machine type of the nodes in the nodepool.
-    string machine_type = 5;
+  // The machine type of the nodes in the nodepool.
+  string machine_type = 5;
 
-    // The number of nodes in the nodepool.
-    int32 number_of_nodes = 6;
+  // The number of nodes in the nodepool.
+  int32 number_of_nodes = 6;
 
-    // The CPU of each node in the nodepool.
-    int32 cpu = 10;
+  // The CPU of each node in the nodepool.
+  int32 cpu = 10;
 
-    // The memory of each node in the nodepool, in gibibytes.
-    double memory_in_gib = 11;
+  // The memory of each node in the nodepool, in gibibytes.
+  double memory_in_gib = 11;
 
-    // The total CPU of the nodepool.
-    int32 total_cpu = 12;
+  // The total CPU of the nodepool.
+  int32 total_cpu = 12;
 
-    // The total memory of the nodepool, in gibibytes.
-    double total_memory_in_gib = 13;
+  // The total memory of the nodepool, in gibibytes.
+  double total_memory_in_gib = 13;
 }
 
 enum ParentType {
-    // The parent of the pod is unknown.
-    UNKNOWN = 0;
+  // The parent of the pod is unknown.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  // protolint:disable:next ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
+  UNKNOWN = 0;
 
-    // The parent of the pod is a deployment.
-    DEPLOYMENT = 1;
+  // The parent of the pod is a deployment.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  DEPLOYMENT = 1;
 
-    // The parent of the pod is a replica set.
-    REPLICASET = 2;
+  // The parent of the pod is a replica set.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  REPLICASET = 2;
 
-    // The parent of the pod is a daemon set.
-    DAEMONSET = 3;
+  // The parent of the pod is a daemon set.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  DAEMONSET = 3;
 
-    // The parent of the pod is a stateful set.
-    STATEFULSET = 4;
+  // The parent of the pod is a stateful set.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  STATEFULSET = 4;
 
-    // The parent of the pod is a job.
-    JOB = 5;
+  // The parent of the pod is a job.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  JOB = 5;
 
-    // The parent of the pod is a cron job.
-    CRONJOB = 6;
+  // The parent of the pod is a cron job.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  CRONJOB = 6;
 
-    // The parent of the pod is a node.
-    NODE = 7;
+  // The parent of the pod is a node.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  NODE = 7;
 }

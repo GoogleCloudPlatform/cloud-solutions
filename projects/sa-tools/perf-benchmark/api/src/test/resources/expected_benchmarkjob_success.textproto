@@ -48,4 +48,3 @@ job_information {
   type: AEROSPIKE
   benchmark_yaml: "AEROSPIKE some yaml"
 }
-

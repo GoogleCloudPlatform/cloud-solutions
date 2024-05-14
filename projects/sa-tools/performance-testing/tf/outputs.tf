@@ -30,4 +30,3 @@ output "pt_provison_wokflow_name" {
 output "pt_destroy_workflow_name" {
   value = google_workflows_workflow.pt_destroy_wf.name
 }
-  

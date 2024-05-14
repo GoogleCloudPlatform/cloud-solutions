@@ -24,7 +24,7 @@ metadata:
   namespace: pt-system
 spec:
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   storageClassName: bzt-filestore-sc
   resources:
     requests:

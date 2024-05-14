@@ -13,23 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 indexes:
-- kind: "BenchmarkJobEntity"
-  ancestor: false
-  properties:
-  - name: "creatorEmail"
-  - name: "latestStatus"
-  - name: "latestStatusTimestamp"
-- kind: "BenchmarkJobEntity"
-  ancestor: false
-  properties:
-  - name: "creatorEmail"
-  - name: "latestStatus"
-- kind: "BenchmarkJobEntity"
-  ancestor: false
-  properties:
-  - name: "latestStatus"
-  - name: "latestStatusTimestamp"
-    direction: "asc"
+  - kind: "BenchmarkJobEntity"
+    ancestor: false
+    properties:
+      - name: "creatorEmail"
+      - name: "latestStatus"
+      - name: "latestStatusTimestamp"
+  - kind: "BenchmarkJobEntity"
+    ancestor: false
+    properties:
+      - name: "creatorEmail"
+      - name: "latestStatus"
+  - kind: "BenchmarkJobEntity"
+    ancestor: false
+    properties:
+      - name: "latestStatus"
+      - name: "latestStatusTimestamp"
+        direction: "asc"

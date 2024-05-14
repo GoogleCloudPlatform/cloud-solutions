@@ -28,8 +28,8 @@ metadata:
   namespace: system
 spec:
   endpoints:
-  - port: metrics
-    interval: 15s
+    - port: metrics
+      interval: 15s
   selector:
     matchLabels:
       control-plane: controller-manager

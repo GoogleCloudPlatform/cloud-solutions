@@ -165,9 +165,9 @@ const attributeGroups = [
         type: 'NUMBER',
         defaultVisible: true,
         exampleInputText: '1',
-        helpText: `The number of worker to run the test, eg: 10. 
-          In distribution mode that is calculated by 
-          virtualUsers x precentageOfTraffic, but in local mode, 
+        helpText: `The number of worker to run the test, eg: 10.
+          In distribution mode that is calculated by
+          virtualUsers x precentageOfTraffic, but in local mode,
           the number could be define by user`,
       },
     ],
@@ -327,9 +327,9 @@ function CreateOrViewLoadTestingJob({ createMode, correlationId, onClose }) {
   };
 
   /**
-   * UI helper function to bind Load Test job to its UI controls
-   * @param {any} job
-   */
+  * UI helper function to bind Load Test job to its UI controls
+  * @param {any} job
+  */
   function populateDataToComponents(job) {
     /** first part of the model (non-dropdown subcomponents) */
     loadTestingJobAttributeData.nestedAttributes.forEach((attr) => {
@@ -351,11 +351,11 @@ function CreateOrViewLoadTestingJob({ createMode, correlationId, onClose }) {
   }
 
   /**
-   * UI helper function to handle repeated values binding to its ui control.
-   * @param {any} taskType
-   * @param {any} job
-   * @return {any}
-   */
+  * UI helper function to handle repeated values binding to its ui control.
+  * @param {any} taskType
+  * @param {any} job
+  * @return {any}
+  */
   function populateRepeatedValues(taskType, job) {
     const _selectedAttrGroup = attributeGroups.filter(
         (group) => group.id === taskType,
@@ -386,10 +386,10 @@ function CreateOrViewLoadTestingJob({ createMode, correlationId, onClose }) {
   }
 
   /**
-   * Upload file to API backend from Form Data
-   * @param {any} file
-   * @return {any}
-   */
+  * Upload file to API backend from Form Data
+  * @param {any} file
+  * @return {any}
+  */
   function uploadFile(file) {
     if (!file) return null;
     /* eslint-disable no-undef */
@@ -490,8 +490,8 @@ function CreateOrViewLoadTestingJob({ createMode, correlationId, onClose }) {
                 displayName: 'Task Type',
                 id: 'taskType',
                 options: ['LOCAL', 'LOAD DISTRIBUTION'],
-                helpText: `Local/Distribution, Local - run the test on 
-                  same GKE cluster, Distribution - run the test on 
+                helpText: `Local/Distribution, Local - run the test on
+                  same GKE cluster, Distribution - run the test on
                   different GKE cluster, which are in different region`,
                 defaultValue: selectedTaskType,
               }}

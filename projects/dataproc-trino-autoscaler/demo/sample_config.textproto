@@ -27,4 +27,3 @@ timing_configuration<
 
   trino_graceful_shutdown_duration: "PT2M"
 >
-

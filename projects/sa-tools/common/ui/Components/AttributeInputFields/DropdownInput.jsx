@@ -50,7 +50,7 @@ function DropdownInput({
 
   const [selectedItem, setSelectedItem] = useState(
     /* Priority given to attributeData.value (whether it has value populated already)
-     Then if not check whether defaultValue exist for the attribute and use it
+    Then if not check whether defaultValue exist for the attribute and use it
   */
     attributeData?.value?.simpleValue ??
       attribute.defaultValue?.simpleValue ??

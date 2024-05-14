@@ -12,25 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Desctroy curtain resources, which were created for PtTask
 main:
-    params: [msg]
-    steps:
+  params: [msg]
+  steps:
     - Init:
         assign:
-            - input: $${json.decode(base64.decode(msg.data.message.data))}
+          - input: $${json.decode(base64.decode(msg.data.message.data))}
     - PrintOutInput:
         call: sys.log
         args:
-            text: $${input}
+          text: $${input}
     - DestroyResource:
         call: http.post
         args:
-            url: $${input.url + "/v1/workflow/destroy/" + input.projectId + "/" + input.correlationId }
-            auth:
-                type: OIDC
-            body: $${input}
+          url: $${input.url + "/v1/workflow/destroy/" + input.projectId + "/" + input.correlationId }
+          auth:
+            type: OIDC
+          body: $${input}
         result: status
     - ReturnOutput:
         return: $${status}

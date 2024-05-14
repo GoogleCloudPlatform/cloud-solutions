@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #
 # Copyright 2024 Google LLC
 #
@@ -24,18 +25,18 @@ EXPERIMENTS=enable_recommendations,use_runner_v2
 
 set -x
 ./gradlew run --args="--jobName=${JOB_NAME} \
- --region=${REGION} \
- --maxNumWorkers=2 \
- --runner=DataflowRunner \
- --spannerProjectId=${SPANNER_PROJECT_ID} \
- --spannerInstanceId=${SPANNER_INSTANCE} \
- --spannerDatabaseId=${SPANNER_DATABASE} \
- --spannerOrdersStreamId=${ORDERS_CHANGE_STREAM} \
- --bigQueryProjectId=${BQ_PROJECT_ID} \
- --bigQueryDataset=${BQ_DATASET} \
- --experiments=${EXPERIMENTS} \
- --enableStreamingEngine \
- --serviceAccount=${DATAFLOW_SA} \
- --project='${DATAFLOW_PROJECT_ID}' \
- --tempLocation=${DATAFLOW_TEMP_BUCKET}/temp \
- --diskSizeGb=30"
+  --region=${REGION} \
+  --maxNumWorkers=2 \
+  --runner=DataflowRunner \
+  --spannerProjectId=${SPANNER_PROJECT_ID} \
+  --spannerInstanceId=${SPANNER_INSTANCE} \
+  --spannerDatabaseId=${SPANNER_DATABASE} \
+  --spannerOrdersStreamId=${ORDERS_CHANGE_STREAM} \
+  --bigQueryProjectId=${BQ_PROJECT_ID} \
+  --bigQueryDataset=${BQ_DATASET} \
+  --experiments=${EXPERIMENTS} \
+  --enableStreamingEngine \
+  --serviceAccount=${DATAFLOW_SA} \
+  --project='${DATAFLOW_PROJECT_ID}' \
+  --tempLocation=${DATAFLOW_TEMP_BUCKET}/temp \
+  --diskSizeGb=30"

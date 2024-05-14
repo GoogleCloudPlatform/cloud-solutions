@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 nginx:
   description: "Benchmarks Nginx server performance."
   vm_groups:
@@ -22,7 +20,7 @@ nginx:
       vm_spec:
         GCP:
           machine_type:
-          - "machine_type"
+            - "machine_type"
           zone: "us-central1-b"
           image: "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220927"
       vm_count: 1
@@ -30,7 +28,7 @@ nginx:
       vm_spec:
         GCP:
           machine_type:
-          - "machine_type"
+            - "machine_type"
           zone: "us-central1-b"
           image: "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220927"
       vm_count: 1

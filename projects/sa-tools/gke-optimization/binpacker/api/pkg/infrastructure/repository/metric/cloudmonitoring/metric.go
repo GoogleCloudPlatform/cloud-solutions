@@ -39,15 +39,15 @@ const QueryCurrentWorkload = `fetch k8s_container
 | metric 'kubernetes.io/container/uptime'
 | filter namespace_name != 'kube-system'
 | group_by [cluster_name, namespace_name,
-            metadata.system_labels.top_level_controller_name, pod_name]
+	metadata.system_labels.top_level_controller_name, pod_name]
 `
 
 const QueryCPURequest = `fetch k8s_container
 | metric 'kubernetes.io/container/cpu/request_cores'
 | filter namespace_name != 'kube-system'
 | group_by [cluster_name, namespace_name,
-            metadata.system_labels.top_level_controller_name, pod_name],
-           [value_request_cores_aggregate: aggregate(value.request_cores)]
+	metadata.system_labels.top_level_controller_name, pod_name],
+	[value_request_cores_aggregate: aggregate(value.request_cores)]
 | group_by 1h, mean(val())
 `
 
@@ -55,8 +55,8 @@ const QueryCPULimit = `fetch k8s_container
 | metric 'kubernetes.io/container/cpu/limit_cores'
 | filter namespace_name != 'kube-system'
 | group_by [cluster_name, namespace_name,
-            metadata.system_labels.top_level_controller_name, pod_name],
-           [value_limit_cores_aggregate: aggregate(value.limit_cores)]
+	metadata.system_labels.top_level_controller_name, pod_name],
+	[value_limit_cores_aggregate: aggregate(value.limit_cores)]
 | group_by 1h, mean(val())
 `
 
@@ -64,8 +64,8 @@ const QueryMemoryRequest = `fetch k8s_container
 | metric 'kubernetes.io/container/memory/request_bytes'
 | filter namespace_name != 'kube-system'
 | group_by [cluster_name, namespace_name,
-            metadata.system_labels.top_level_controller_name, pod_name],
-           [value_request_memory_aggregate: aggregate(request_bytes)]
+	metadata.system_labels.top_level_controller_name, pod_name],
+	[value_request_memory_aggregate: aggregate(request_bytes)]
 | group_by 1h, mean(val())
 `
 
@@ -73,8 +73,8 @@ const QueryMemoryLimit = `fetch k8s_container
 | metric 'kubernetes.io/container/memory/limit_bytes'
 | filter namespace_name != 'kube-system'
 | group_by [cluster_name, namespace_name,
-            metadata.system_labels.top_level_controller_name, pod_name],
-           [value_limit_memory_aggregate: aggregate(limit_bytes)]
+	metadata.system_labels.top_level_controller_name, pod_name],
+	[value_limit_memory_aggregate: aggregate(limit_bytes)]
 | group_by 1h, mean(val())
 `
 

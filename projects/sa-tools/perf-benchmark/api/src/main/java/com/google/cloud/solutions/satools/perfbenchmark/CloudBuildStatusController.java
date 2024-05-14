@@ -82,38 +82,46 @@ public class CloudBuildStatusController {
   private record JobStatusCreator(Build buildInfo) {
     private BenchmarkJobStatus getUpdatedStatus(BenchmarkJobEntity jobEntity) {
       return switch (buildInfo.getStatus()) {
-        case QUEUED -> new BenchmarkJobStatus(
-            jobEntity,
-            Benchmark.BenchmarkJobStatus.QUEUED,
-            Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getStartTime())));
-        case WORKING -> new BenchmarkJobStatus(
-            jobEntity,
-            Benchmark.BenchmarkJobStatus.RUNNING,
-            Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getStartTime())));
-        case SUCCESS -> new BenchmarkJobStatus(
-            jobEntity,
-            Benchmark.BenchmarkJobStatus.FINISHED,
-            Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
-        case FAILURE -> new BenchmarkJobStatus(
-            jobEntity,
-            Benchmark.BenchmarkJobStatus.FAILED,
-            Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
-        case INTERNAL_ERROR -> new BenchmarkJobStatus(
-            jobEntity,
-            Benchmark.BenchmarkJobStatus.INTERNAL_ERROR,
-            Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
-        case TIMEOUT -> new BenchmarkJobStatus(
-            jobEntity,
-            Benchmark.BenchmarkJobStatus.TIMEOUT,
-            Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
-        case CANCELLED -> new BenchmarkJobStatus(
-            jobEntity,
-            Benchmark.BenchmarkJobStatus.CANCELLED,
-            Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
-        case EXPIRED -> new BenchmarkJobStatus(
-            jobEntity,
-            Benchmark.BenchmarkJobStatus.EXPIRED,
-            Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
+        case QUEUED ->
+            new BenchmarkJobStatus(
+                jobEntity,
+                Benchmark.BenchmarkJobStatus.QUEUED,
+                Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getStartTime())));
+        case WORKING ->
+            new BenchmarkJobStatus(
+                jobEntity,
+                Benchmark.BenchmarkJobStatus.RUNNING,
+                Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getStartTime())));
+        case SUCCESS ->
+            new BenchmarkJobStatus(
+                jobEntity,
+                Benchmark.BenchmarkJobStatus.FINISHED,
+                Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
+        case FAILURE ->
+            new BenchmarkJobStatus(
+                jobEntity,
+                Benchmark.BenchmarkJobStatus.FAILED,
+                Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
+        case INTERNAL_ERROR ->
+            new BenchmarkJobStatus(
+                jobEntity,
+                Benchmark.BenchmarkJobStatus.INTERNAL_ERROR,
+                Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
+        case TIMEOUT ->
+            new BenchmarkJobStatus(
+                jobEntity,
+                Benchmark.BenchmarkJobStatus.TIMEOUT,
+                Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
+        case CANCELLED ->
+            new BenchmarkJobStatus(
+                jobEntity,
+                Benchmark.BenchmarkJobStatus.CANCELLED,
+                Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
+        case EXPIRED ->
+            new BenchmarkJobStatus(
+                jobEntity,
+                Benchmark.BenchmarkJobStatus.EXPIRED,
+                Instant.ofEpochMilli(Timestamps.toMillis(buildInfo.getFinishTime())));
 
         default -> null;
       };

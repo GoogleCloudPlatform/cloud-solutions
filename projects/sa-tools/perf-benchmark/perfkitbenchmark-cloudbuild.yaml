@@ -13,14 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
----
 steps:
-- name: "gradle:8-jdk17"
-  entrypoint: "gradle"
-  args:
-  - "-p"
-  - "perf-benchmark"
-  - ":api:build"
-  - ":api:jib"
-  - "-Djib.to.image=${_CONTAINER_IMAGE_TAG}"
+  - name: "gradle:8-jdk17"
+    entrypoint: "gradle"
+    args:
+      - "-p"
+      - "perf-benchmark"
+      - ":api:build"
+      - ":api:jib"
+      - "-Djib.to.image=${_CONTAINER_IMAGE_TAG}"

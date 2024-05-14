@@ -17,8 +17,9 @@
 package com.google.cloud.solutions.satools.common.auth;
 
 /**
- * Model for represting Google Token Information object as described in
- * <a href="https://developers.google.com/identity/protocols/oauth2/openid-connect#obtainuserinfo">Obtain User Info</a>.
+ * Model for represting Google Token Information object as described in <a
+ * href="https://developers.google.com/identity/protocols/oauth2/openid-connect#obtainuserinfo">Obtain
+ * User Info</a>.
  */
 public record TokenInfo(
     String aud,

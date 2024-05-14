@@ -27,12 +27,15 @@ message RepairClusterRequest {
     // No action will be taken by default.
     REPAIR_ACTION_UNSPECIFIED = 0;
     // delete the specified list of nodes.
+    // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
     DELETE = 1;
   }
 
   enum NodePoolType {
     NODE_POOL_TYPE_UNSPECIFIED = 0;
+    // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
     PRIMARY_WORKER_POOL = 1;
+    // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
     SECONDARY_WORKER_POOL = 2;
   }
 

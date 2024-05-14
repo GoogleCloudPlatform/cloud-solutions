@@ -15,4 +15,3 @@
  */
 
 rootProject.name = 'dataflow-bigquery-change-data-capture'
-

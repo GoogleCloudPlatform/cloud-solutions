@@ -15,8 +15,8 @@ syntax = "proto3";
 
 package com.google.solutions.satools.perfbenchmark.proto;
 
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 
 message ClientInformation {
   string client_id = 1;
@@ -38,6 +38,7 @@ message BenchmarkJob {
   int64 max_log_offset = 4;
 
   // ReadOnly
+  // protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED
   repeated BenchmarkJobRunInformation run_information = 5;
 
   // ReadOnly
@@ -85,55 +86,89 @@ message ListBenchmarkJobs {
 
 
 enum BenchmarkJobStatus {
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  // protolint:disable:next ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
   UNKNOWN_JOB_STATUS = 0;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   CREATED = 1;
 
   // Build or step is queued; work has not yet begun.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   QUEUED = 2;
 
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   RUNNING = 5;
 
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   CANCELLING = 7;
 
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   FINISHED = 10;
 
   // Build or step failed to complete successfully.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   FAILED = 11;
 
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   CANCELLED = 12;
 
   // Build or step failed due to an internal cause.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   INTERNAL_ERROR = 15;
 
   // Build or step took longer than was allowed.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   TIMEOUT = 16;
 
   // Build was enqueued for longer than the value of `queue_ttl`.
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   EXPIRED = 17;
 }
 
 enum BenchmarkType {
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  // protolint:disable:next ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
   UNKNOWN_BENCHMARK = 0;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   AEROSPIKE  =  1;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   APACHEBENCH =  2;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   CASSANDRA_STRESS =  3;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   CLUSTER_BOOT =  4;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   COREMARK =  5;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   FIO =  6;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   IPERF =  7;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   KUBERNETES_NGINX =  8;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   KUBERNETES_REDIS_MEMTIER =  9;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   MONGODB_YCSB =  10;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   MULTICHASE =  11;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   NGINX =  12;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   PGBENCH =  13;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   REDIS_MEMTIER =  14;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   SYSBENCH =  15;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   TOMCAT_WRK = 16;
 }
 
 enum CloudProviderType {
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
+  // protolint:disable:next ENUM_FIELD_NAMES_ZERO_VALUE_END_WITH
   UNKNOWN_PROVIDER = 0;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   GOOGLE_CLOUD = 1;
+  // protolint:disable:next ENUM_FIELD_NAMES_PREFIX
   AMAZON_WEB_SERVICES = 2;
 }

@@ -68,7 +68,7 @@ docker-buildx: test ## Build and push docker image for the manager for cross-pla
 ##@ Deployment
 
 ifndef ignore-not-found
-  ignore-not-found = false
+	ignore-not-found = false
 endif
 
 .PHONY: deploy

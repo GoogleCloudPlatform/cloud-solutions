@@ -25,21 +25,21 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: pttask-editor-role
 rules:
-- apiGroups:
-  - perftest.com.google.cloud.solutions.satools
-  resources:
-  - pttasks
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - perftest.com.google.cloud.solutions.satools
-  resources:
-  - pttasks/status
-  verbs:
-  - get
+  - apiGroups:
+      - perftest.com.google.cloud.solutions.satools
+    resources:
+      - pttasks
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - perftest.com.google.cloud.solutions.satools
+    resources:
+      - pttasks/status
+    verbs:
+      - get

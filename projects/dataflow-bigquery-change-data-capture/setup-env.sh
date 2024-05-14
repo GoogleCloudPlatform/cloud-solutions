@@ -17,7 +17,12 @@
 
 set -u
 
-cd terraform
+CURRENT_DIR="$(pwd)"
+SCRIPT="$(readlink -f "${0}")"
+SCRIPT_DIR="$(dirname "${SCRIPT}")"
+
+cd "${SCRIPT_DIR}/terraform" || exit 1
+
 terraform init && terraform apply
 
 BQ_PROJECT_ID=$(terraform output -raw bq-project-id)
@@ -50,4 +55,4 @@ export DATAFLOW_PROJECT_ID
 REGION=$(terraform output -raw region)
 export REGION
 
-cd ..
+cd "${CURRENT_DIR}" || exit 1

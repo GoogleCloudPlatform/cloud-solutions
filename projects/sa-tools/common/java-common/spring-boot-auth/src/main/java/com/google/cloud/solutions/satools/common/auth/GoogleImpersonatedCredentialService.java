@@ -24,8 +24,8 @@ import java.util.List;
 /**
  * Service that validates that the user can Impersonate the given Service Account.
  *
- * <p>Checks if the user as identified through the access token has
- * permissions to impersonate the given Service Account.
+ * <p>Checks if the user as identified through the access token has permissions to impersonate the
+ * given Service Account.
  */
 public class GoogleImpersonatedCredentialService implements ImpersonatedCredentialService {
   private final AccessTokenCredentialService accessTokenCredentialService;
@@ -41,10 +41,10 @@ public class GoogleImpersonatedCredentialService implements ImpersonatedCredenti
   @Override
   public GoogleCredentials getImpersonatedCredentials() {
     return ImpersonatedCredentials.create(
-        /*sourceCredential=*/ accessTokenCredentialService.getCredentials(),
-        /*targetPrincipal=*/ metadataService.getServiceAccountEmail(),
-        /*delegates=*/ null,
-        /*scopes=*/ List.of("https://www.googleapis.com/auth/cloud-platform"),
+        /* sourceCredential= */ accessTokenCredentialService.getCredentials(),
+        /* targetPrincipal= */ metadataService.getServiceAccountEmail(),
+        /* delegates= */ null,
+        /* scopes= */ List.of("https://www.googleapis.com/auth/cloud-platform"),
         /*lifetime*/ (int) Duration.ofMinutes(2).toSeconds());
   }
 }

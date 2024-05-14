@@ -19,7 +19,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 plugins {
     id "groovy-gradle-plugin"
     id "base"
-    id 'com.diffplug.spotless' version '6.19.0'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 repositories {
@@ -96,7 +96,7 @@ spotless {
     java {
         target "**/*.java"
         targetExclude(excludedFolderPatterns)
-        googleJavaFormat("1.18.1")
+        googleJavaFormat("1.22.0")
         removeUnusedImports()
         importOrder()
         trimTrailingWhitespace()
@@ -118,15 +118,6 @@ spotless {
         indentWithSpaces(2)
         trimTrailingWhitespace()
         endWithNewline()
-    }
-    yaml {
-        target "**/*.yaml", "**/*.yml"
-        targetExclude(excludedFolderPatterns)
-        jackson()
-                .version("2.15.0")
-                .feature("ORDER_MAP_ENTRIES_BY_KEYS", true)
-                .feature("INDENT_OUTPUT", true)
-        licenseHeader licenseWithHash, "---"
     }
     json {
         target '**/*.json'

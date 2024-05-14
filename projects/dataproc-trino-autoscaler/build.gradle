@@ -108,7 +108,7 @@ spotless {
     java {
         target "**/*.java"
         targetExclude(excludedFolderPatterns)
-        googleJavaFormat("1.18.1")
+        googleJavaFormat("1.22.0")
         removeUnusedImports()
         importOrder()
         trimTrailingWhitespace()

@@ -121,16 +121,16 @@ function StyledDropzone(props) {
   );
 
   /**
-   * Handles help button click
-   * @param {!Event} event
-   */
+  * Handles help button click
+  * @param {!Event} event
+  */
   function handleHelpClick(event) {
     setAnchorEl(event.currentTarget);
   }
 
   /**
-   * Handles Help's close button click
-   */
+  * Handles Help's close button click
+  */
   function handleHelpClose() {
     setAnchorEl(null);
   }

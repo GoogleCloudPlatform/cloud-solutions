@@ -1,3 +1,5 @@
+# Benchmark Runner
+
 benchmark.sh is expected to be run a cronjob (once a week or fortnightly?) to run synthetic benchmarks on different "standard" shaped vms.
 The pre-requisite to running the benchmark is to create a "perfkit.results" (dataset.table) in BQ. Result of all successful runs is exported into this table.
 From sa-tools, the synthetic benchmark section under Periscope will fetch results from the cron runs.

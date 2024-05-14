@@ -13,5 +13,5 @@
 # limitations under the License.
 
 output "perfkit_app_uri" {
-  value      = google_cloud_run_v2_service.perfkit_benchmark_app.uri
+  value = google_cloud_run_v2_service.perfkit_benchmark_app.uri
 }

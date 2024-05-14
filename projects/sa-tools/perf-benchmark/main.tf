@@ -26,7 +26,7 @@ data "google_project" "gcp_project_info" {
 resource "google_project_service" "enable_required_services" {
   project            = var.project_id
   disable_on_destroy = false
-  for_each           = toset([
+  for_each = toset([
     "artifactregistry.googleapis.com",
     "compute.googleapis.com",
     "bigquery.googleapis.com",
@@ -68,7 +68,7 @@ resource "google_project_iam_member" "assign_sa_roles" {
     "roles/storage.objectViewer",
   ])
   role    = each.key
-  member = "serviceAccount:${google_service_account.runner_sa.email}"
+  member  = "serviceAccount:${google_service_account.runner_sa.email}"
   project = var.project_id
 }
 
@@ -116,7 +116,7 @@ locals {
 
 resource "random_id" "images_tag" {
   byte_length = 8
-  keepers     = {
+  keepers = {
     project_id   = var.project_id
     region       = var.region
     service_name = var.cloud_run_service_name
@@ -126,9 +126,9 @@ resource "random_id" "images_tag" {
 
 ## Provide Cloud Build Service Account GCS Access
 resource "google_project_iam_member" "set_cloud_build_sa_permissions" {
-  member   = "serviceAccount:${data.google_project.gcp_project_info.number}@cloudbuild.gserviceaccount.com"
-  project  = var.project_id
-  role     = each.key
+  member  = "serviceAccount:${data.google_project.gcp_project_info.number}@cloudbuild.gserviceaccount.com"
+  project = var.project_id
+  role    = each.key
   for_each = toset([
     "roles/artifactregistry.writer"
   ])
@@ -269,7 +269,7 @@ resource "google_cloud_run_v2_service" "perfkit_benchmark_app" {
 
 data "google_iam_policy" "noauth_policy" {
   binding {
-    role    = "roles/run.invoker"
+    role = "roles/run.invoker"
     members = [
       "allUsers",
     ]
@@ -286,9 +286,9 @@ resource "google_cloud_run_v2_service_iam_policy" "noauth_policy_for_app" {
 ### Create PubSub Topic for receiving build event on App
 
 resource "google_pubsub_topic" "cloud_builds_events" {
-  depends_on = [ google_project_service.enable_required_services ]
-  project = var.project_id
-  name    = "cloud-builds"
+  depends_on = [google_project_service.enable_required_services]
+  project    = var.project_id
+  name       = "cloud-builds"
 }
 
 resource "google_pubsub_subscription" "build_events_subscription_for_perfkit_app" {

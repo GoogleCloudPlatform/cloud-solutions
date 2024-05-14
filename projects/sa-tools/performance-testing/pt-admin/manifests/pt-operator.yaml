@@ -41,193 +41,185 @@ spec:
     singular: pttask
   scope: Namespaced
   versions:
-  - name: v1
-    schema:
-      openAPIV3Schema:
-        description: PtTask is the Schema for the pttasks API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: PtTaskSpec defines the desired state of PtTask
-            properties:
-              execution:
-                description: Execution for different scenarios
-                items:
-                  description: PtTaskExecution defines the execution of a scenario
-                  properties:
-                    concurrency:
-                      description: The number of target concurrent virtual users
-                      type: integer
-                    executor:
-                      default: locust
-                      description: 'Executor type: locust, jmeter, etc from https://gettaurus.org/docs/Executors/'
-                      enum:
-                      - locust
-                      - jmeter
-                      type: string
-                    hold-for:
-                      description: Time to hold target concurrency
-                      type: string
-                    iterations:
-                      description: Limit scenario iterations number
-                      type: integer
-                    master:
-                      default: true
-                      description: Is master or not
-                      enum:
-                      - true
-                      - false
-                      type: boolean
-                    ramp-up:
-                      description: Ramp-up time to reach target concurrency
-                      type: string
-                    scenario:
-                      description: The name of scenario that described in scenarios
-                        part
-                      type: string
-                    workers:
-                      description: Numbers of workers, calculated if not specified
-                      minimum: 1
-                      type: integer
-                  required:
-                  - concurrency
-                  - executor
-                  - hold-for
-                  - ramp-up
-                  - scenario
-                  type: object
-                type: array
-              images:
-                additionalProperties:
-                  description: PtTaskImages defines the images for a scenario
-                  properties:
-                    masterImage:
-                      description: The image for master node
-                      type: string
-                    workerImage:
-                      description: The image for worker node
-                      type: string
-                  required:
-                  - masterImage
-                  - workerImage
-                  type: object
-                description: 'Container images for the scenario: (scenario name) ->
-                  (PtTaskImages)'
-                type: object
-              scenarios:
-                additionalProperties:
-                  description: PtTaskScenario defines the scenario
-                  properties:
-                    default-address:
-                      type: string
-                    script:
-                      type: string
-                  required:
-                  - default-address
-                  - script
-                  type: object
-                description: (scenario name) -> (PtTaskScenario)
-                type: object
-              testingOutput:
-                description: Testing output
-                properties:
-                  bucket:
-                    description: Archiving GCS bucket
-                    type: string
-                  jtl:
-                    description: 'Testing logs for JMeter: jmeter.jtl'
-                    type: string
-                  ldjson:
-                    description: 'Testing logs for Locust: locust-workers.ldjson'
-                    type: string
-                  logDir:
-                    description: Where to store testing logs
-                    type: string
-                required:
-                - bucket
-                - logDir
-                type: object
-              traffics:
-                additionalProperties:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          description: PtTask is the Schema for the pttasks API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: PtTaskSpec defines the desired state of PtTask
+              properties:
+                execution:
+                  description: Execution for different scenarios
                   items:
-                    description: PtTaskTraffic defines the traffic for a scenario
+                    description: PtTaskExecution defines the execution of a scenario
                     properties:
-                      gkeCA64:
-                        description: Base64 CA acertificate
-                        type: string
-                      gkeEndpoint:
-                        description: External endpoint for GKE
-                        type: string
-                      percent:
-                        description: 'The percentage for traffic: currency * precent/100'
+                      concurrency:
+                        description: The number of target concurrent virtual users
                         type: integer
-                      region:
-                        description: The region where GKE cluster is provisioned
+                      executor:
+                        default: locust
+                        description: 'Executor type: locust, jmeter, etc from https://gettaurus.org/docs/Executors/'
+                        enum:
+                          - locust
+                          - jmeter
                         type: string
-                      saKey64:
-                        description: Base64 key for service account
+                      hold-for:
+                        description: Time to hold target concurrency
                         type: string
+                      iterations:
+                        description: Limit scenario iterations number
+                        type: integer
+                      master:
+                        default: true
+                        description: Is master or not
+                        enum:
+                          - true
+                          - false
+                        type: boolean
+                      ramp-up:
+                        description: Ramp-up time to reach target concurrency
+                        type: string
+                      scenario:
+                        description: The name of scenario that described in scenarios part
+                        type: string
+                      workers:
+                        description: Numbers of workers, calculated if not specified
+                        minimum: 1
+                        type: integer
                     required:
-                    - region
+                      - concurrency
+                      - executor
+                      - hold-for
+                      - ramp-up
+                      - scenario
                     type: object
                   type: array
-                description: 'Traffics definition: (scenario name) -> (PtTaskTraffic)'
-                type: object
-              type:
-                default: Local
-                description: Task type
-                enum:
-                - Local
-                - Distribution
-                type: string
-            required:
-            - execution
-            - images
-            - scenarios
-            - testingOutput
-            - type
-            type: object
-          status:
-            description: PtTaskStatus defines the observed state of PtTask
-            properties:
-              archives:
-                additionalProperties:
+                images:
+                  additionalProperties:
+                    description: PtTaskImages defines the images for a scenario
+                    properties:
+                      masterImage:
+                        description: The image for master node
+                        type: string
+                      workerImage:
+                        description: The image for worker node
+                        type: string
+                    required:
+                      - masterImage
+                      - workerImage
+                    type: object
+                  description: 'Container images for the scenario: (scenario name) -> (PtTaskImages)'
+                  type: object
+                scenarios:
+                  additionalProperties:
+                    description: PtTaskScenario defines the scenario
+                    properties:
+                      default-address:
+                        type: string
+                      script:
+                        type: string
+                    required:
+                      - default-address
+                      - script
+                    type: object
+                  description: (scenario name) -> (PtTaskScenario)
+                  type: object
+                testingOutput:
+                  description: Testing output
+                  properties:
+                    bucket:
+                      description: Archiving GCS bucket
+                      type: string
+                    jtl:
+                      description: 'Testing logs for JMeter: jmeter.jtl'
+                      type: string
+                    ldjson:
+                      description: 'Testing logs for Locust: locust-workers.ldjson'
+                      type: string
+                    logDir:
+                      description: Where to store testing logs
+                      type: string
+                  required:
+                    - bucket
+                    - logDir
+                  type: object
+                traffics:
+                  additionalProperties:
+                    items:
+                      description: PtTaskTraffic defines the traffic for a scenario
+                      properties:
+                        gkeCA64:
+                          description: Base64 CA acertificate
+                          type: string
+                        gkeEndpoint:
+                          description: External endpoint for GKE
+                          type: string
+                        percent:
+                          description: 'The percentage for traffic: currency * precent/100'
+                          type: integer
+                        region:
+                          description: The region where GKE cluster is provisioned
+                          type: string
+                        saKey64:
+                          description: Base64 key for service account
+                          type: string
+                      required:
+                        - region
+                      type: object
+                    type: array
+                  description: 'Traffics definition: (scenario name) -> (PtTaskTraffic)'
+                  type: object
+                type:
+                  default: Local
+                  description: Task type
+                  enum:
+                    - Local
+                    - Distribution
                   type: string
-                description: 'Archive for each scenario: (scenario name) -> (archived
-                  timestamp)'
-                type: object
-              id:
-                description: Each PtTask has an unique Id
-                type: string
-              phase:
-                additionalProperties:
+              required:
+                - execution
+                - images
+                - scenarios
+                - testingOutput
+                - type
+              type: object
+            status:
+              description: PtTaskStatus defines the observed state of PtTask
+              properties:
+                archives:
+                  additionalProperties:
+                    type: string
+                  description: 'Archive for each scenario: (scenario name) -> (archived timestamp)'
+                  type: object
+                id:
+                  description: Each PtTask has an unique Id
                   type: string
-                description: 'Phases included status per testing scenario: (scenario
-                  name) -> (PT_STATUS_*)'
-                type: object
-              ptStatus:
-                description: 'The status of the pttask:: PT_STATUS_*'
-                type: string
-            required:
-            - id
-            - ptStatus
-            type: object
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                phase:
+                  additionalProperties:
+                    type: string
+                  description: 'Phases included status per testing scenario: (scenario name) -> (PT_STATUS_*)'
+                  type: object
+                ptStatus:
+                  description: 'The status of the pttask:: PT_STATUS_*'
+                  type: string
+              required:
+                - id
+                - ptStatus
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -257,37 +249,37 @@ metadata:
   name: pt-operator-leader-election-role
   namespace: pt-system
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - patch
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-  - patch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -295,56 +287,56 @@ metadata:
   creationTimestamp: null
   name: pt-operator-manager-role
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - services
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - perftest.com.google.cloud.solutions.satools
-  resources:
-  - pttasks
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - perftest.com.google.cloud.solutions.satools
-  resources:
-  - pttasks/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - perftest.com.google.cloud.solutions.satools
-  resources:
-  - pttasks/status
-  verbs:
-  - get
-  - patch
-  - update
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - perftest.com.google.cloud.solutions.satools
+    resources:
+      - pttasks
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - perftest.com.google.cloud.solutions.satools
+    resources:
+      - pttasks/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - perftest.com.google.cloud.solutions.satools
+    resources:
+      - pttasks/status
+    verbs:
+      - get
+      - patch
+      - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -363,9 +355,9 @@ roleRef:
   kind: Role
   name: pt-operator-leader-election-role
 subjects:
-- kind: ServiceAccount
-  name: pt-operator-controller-manager
-  namespace: pt-system
+  - kind: ServiceAccount
+    name: pt-operator-controller-manager
+    namespace: pt-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -383,9 +375,9 @@ roleRef:
   kind: ClusterRole
   name: pt-operator-manager-role
 subjects:
-- kind: ServiceAccount
-  name: pt-operator-controller-manager
-  namespace: pt-system
+  - kind: ServiceAccount
+    name: pt-operator-controller-manager
+    namespace: pt-system
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -413,50 +405,50 @@ spec:
         control-plane: controller-manager
     spec:
       containers:
-      - args:
-        - --leader-elect
-        command:
-        - /manager
-        image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/performance-testing/pt-operator:latest
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8081
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        name: manager
-        ports:
-        - containerPort: 8080
-          name: metrics
-        readinessProbe:
-          httpGet:
-            path: /readyz
-            port: 8081
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 10m
-            memory: 64Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-        volumeMounts:
-        - mountPath: /taurus-logs
-          name: bzt-pvc
+        - args:
+            - --leader-elect
+          command:
+            - /manager
+          image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/performance-testing/pt-operator:latest
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          name: manager
+          ports:
+            - containerPort: 8080
+              name: metrics
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - mountPath: /taurus-logs
+              name: bzt-pvc
       securityContext:
         runAsNonRoot: true
       serviceAccountName: pt-operator-controller-manager
       terminationGracePeriodSeconds: 10
       volumes:
-      - name: bzt-pvc
-        persistentVolumeClaim:
-          claimName: bzt-filestore-pvc
+        - name: bzt-pvc
+          persistentVolumeClaim:
+            claimName: bzt-filestore-pvc
 ---
 apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
@@ -473,8 +465,8 @@ metadata:
   namespace: pt-system
 spec:
   endpoints:
-  - interval: 15s
-    port: metrics
+    - interval: 15s
+      port: metrics
   selector:
     matchLabels:
       control-plane: controller-manager
