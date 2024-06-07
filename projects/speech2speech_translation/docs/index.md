@@ -1,4 +1,4 @@
-# Speech-to-Speech Translation Batch
+# Batch translate audio languages
 
 This document shows how to use the Speech-to-Speech Translation Batch solution,  designed to translate speech audio from one language to another.
 
@@ -14,19 +14,37 @@ The Speech-to-Speech Translation solution leverages Google Cloud services, inclu
 
 !["Architecture diagram"](images/architecture.png "Architecture diagram")
 
+## Costs
+
+This solution uses billable components of Google Cloud, including the following:
+
+- [Cloud Speech-to-Text](https://cloud.google.com/speech-to-text/pricing)
+- [Cloud Translation](https://cloud.google.com/translation/pricing)
+- [Cloud Text-to-Speech API](https://cloud.google.com/text-to-speech/pricing)
+
+Use the [pricing calculator](https://cloud.google.com/products/calculator) to generate a cost estimate based on your projected usage.
+
 ## Installation
 
 1. Prerequisites:
     - Python 3.7 or higher
     - Google Cloud SDK installed and configured
-    - Google Cloud project with enabled APIs (click the links to visit the API Library and enable each)
-        - [Cloud Speech-to-Text API](https://console.cloud.google.com/apis/library/speech.googleapis.com)
-        - [Cloud Translation API](https://console.cloud.google.com/apis/library/translate.googleapis.com)
-        - [Cloud Text-to-Speech API](https://console.cloud.google.com/apis/library/texttospeech.googleapis.com)
+    - Google Cloud project with billing enabled
+
+1. Following Google Cloud services enabled:
+
+   Use link [Enable API](https://console.cloud.google.com/flows/enableapi?apiid=speech.googleapis.com,translate.googleapis.com,texttospeech.googleapis.com) or the command below:
+
+   ```bash
+   gcloud services enable \
+   speech.googleapis.com \
+   translate.googleapis.com \
+   texttospeech.googleapis.com
+   ```
 
 1. Clone the repository and change to its directory
 
-    ```shell
+    ```bash
     cd projects/speech-to-speech_translation
     ```
 
