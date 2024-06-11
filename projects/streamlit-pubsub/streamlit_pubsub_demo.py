@@ -22,22 +22,11 @@ import argparse
 import asyncio
 import datetime
 import json
-import logging
-import os
-import sys
 
 import streamlit as st
 
 from streamlit_pubsub import get_publisher
 from streamlit_pubsub import get_subscriber
-
-
-# This aligns with streamlit's style of logging.
-FORMAT = "%(asctime)s %(levelname)s %(name)s %(message)s"
-LEVEL = logging.INFO
-if os.getenv("STREAMLIT_APP_DEBUG"):
-  LEVEL = logging.DEBUG
-logging.basicConfig(format=FORMAT, stream=sys.stdout, level=LEVEL)
 
 
 def get_args():
@@ -50,9 +39,6 @@ def get_args():
   parser.add_argument("project_id",
                       type=str,
                       help="Project ID for subscription")
-  parser.add_argument("subscription_id",
-                      type=str,
-                      help="Subscription ID")
   parser.add_argument("topic_id",
                       type=str,
                       help="Publish Topic ID")
@@ -149,7 +135,7 @@ async def read_continuously():
     return
 
   sub = get_subscriber(args.project_id,
-                       args.subscription_id,
+                       args.topic_id,
                        max_messages=BUFFER_SIZE)
 
   while True:

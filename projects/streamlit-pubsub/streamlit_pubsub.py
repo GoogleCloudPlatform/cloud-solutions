@@ -19,19 +19,21 @@ central cache per-Subscription of received messages and allows multiple
 Streamlit dashboards to share the same subscription data.
 """
 
-
 import asyncio
-import logging
+import atexit
+import datetime
 import threading
+import uuid
 
-
+from google import pubsub_v1
 from google.api_core.gapic_v1.client_info import ClientInfo
 from google.cloud import pubsub
+from google.protobuf import duration_pb2
 from google.protobuf import timestamp_pb2
 import streamlit as st
 
 
-logger = logging.getLogger(__name__)
+logger = st.logger.get_logger(__name__)
 
 
 class Buffer:
@@ -178,26 +180,57 @@ def get_subscriber_client():
   )
 
 
-@st.cache_resource(show_spinner=False)
+@st.cache_resource(show_spinner=True)
 def get_subscriber(
-    project_id: str, subscription: str,
+    project_id: str,
+    topic: str,
     max_messages: int,
-    seek_to_now: bool = True,
+    message_retention: datetime.timedelta = datetime.timedelta(minutes=10),
+    subscription_ttl: datetime.timedelta = datetime.timedelta(days=1),
 ) -> BufferedAsyncData:
-  """Create a new Streamlit buffer for a subscription."""
+  """Create a new Streamlit buffer for a subscription.
+
+  Args:
+    project_id: Project ID for the topic and auto-created subscription
+    topic: Topic for creating a subscription for
+    max_messages: Maximum messages to buffer in streamlit that is
+      shared between consumers.
+    message_retention: Retention period in Pub/Sub for
+      subscribers. It is recommended to set this at a minimum, i.e., 10
+      minutes.
+    subscription_ttl: TTL for inactive subscription. Normally,
+      the subscription should be automatically deleted at exit but the TTL
+      can help cleanup unused subscriptions. It is recommended to set this
+      to the minimum, i.e., 1 day.
+
+  Returns:
+    BufferedAsyncdata: Thread-safe shared buffer that Streamlit sessions can
+      pull data from.
+  """
 
   # Create the subscription client and path
   sub = get_subscriber_client()
 
   # Create subscription ID
+  subscription = f"{topic}-{str(uuid.uuid1())}"
   subscription_id = sub.subscription_path(project_id, subscription)
 
-  # Seek to now if requested
-  if seek_to_now:
-    sub.seek(
-        request=pubsub.types.SeekRequest(
-            subscription=subscription_id, time=START_TIMESTAMP)
-    )
+  # Initialize the durations
+  subscription_ttl_dur = duration_pb2.Duration()
+  subscription_ttl_dur.FromTimedelta(subscription_ttl)
+  message_retention_dur = duration_pb2.Duration()
+  message_retention_dur.FromTimedelta(message_retention)
+
+  # Create the subscription
+  logger.info("Creating subscription %s, topic %s", subscription_id, topic)
+  sub.create_subscription(request=pubsub_v1.Subscription(
+      name=subscription_id,
+      topic=sub.topic_path(project_id, topic),
+      message_retention_duration=message_retention_dur,
+      expiration_policy=pubsub_v1.ExpirationPolicy(
+          ttl=subscription_ttl_dur,
+      ),
+  ))
 
   # Create the AsyncData container and callback
   md = BufferedAsyncData(max_messages=max_messages)
@@ -208,7 +241,23 @@ def get_subscriber(
 
   # Subscribe into the callback
   logger.info("Subscribing %s", subscription_id)
-  _ = sub.subscribe(subscription_id, callback)
+  fut = sub.subscribe(subscription_id, callback)
+
+  # Shutdown of subscription at process termination
+  def shutdown():
+
+    # Cancel the subscription
+    logger.info("Stopping subscription %s", subscription_id)
+    fut.cancel()
+
+    # Delete the subscription
+    logger.info("Deleting subscription %s", subscription_id)
+    sub.delete_subscription(pubsub_v1.DeleteSubscriptionRequest(
+        subscription=subscription_id
+    ))
+    logger.info("Deleted subscription %s", subscription_id)
+
+  atexit.register(shutdown)
 
   return md
 
@@ -236,5 +285,3 @@ def get_publisher(project_id: str, topic: str):
     client.publish(topic=full_topic_id, data=data)
 
   return publisher
-
-
