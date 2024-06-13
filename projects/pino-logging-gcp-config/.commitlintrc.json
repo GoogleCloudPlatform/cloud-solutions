@@ -1,0 +1,12 @@
+{
+  "comment": "Disable some rules to match the config of conventional-commit-GCF app",
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "body-case": [0],
+    "body-max-line-length": [0],
+    "footer-max-line-length": [0],
+    "header-max-length": [0],
+    "subject-case": [0],
+    "subject-full-stop": [0]
+  }
+}
