@@ -90,6 +90,10 @@ Follow the instructions for [deployment](deployment.md)
 
 You can run a demo of the tool using the [demo deployment](demo.md) instructions.
 
+Please follow the YouTube video for a demo and explaination:
+
+[![Dataproc Autoscaler for Trino](https://img.youtube.com/vi/MXzr7avTD5g/0.jpg)](https://www.youtube.com/watch?v=MXzr7avTD5g "Dataproc Autoscaler for Trino")
+
 ## What's next
 
 - Learn more about [Dataproc](https://cloud.google.com/dataproc)
