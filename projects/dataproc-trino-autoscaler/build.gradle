@@ -71,7 +71,7 @@ protobuf {
     }
 }
 
-def licenseLines = List.of("Copyright 2023 Google LLC" ,
+def licenseLines = List.of("Copyright \$YEAR Google LLC" ,
         "" ,
         "Licensed under the Apache License, Version 2.0 (the \"License\");" ,
         "you may not use this file except in compliance with the License." ,
@@ -141,16 +141,6 @@ spotless {
         indentWithSpaces(2)
         trimTrailingWhitespace()
         endWithNewline()
-    }
-
-    yaml {
-        target "**/*.yaml", "**/*.yml"
-        targetExclude(excludedFolderPatterns)
-        jackson()
-                .version("2.15.0")
-                .feature("ORDER_MAP_ENTRIES_BY_KEYS", true)
-                .feature("INDENT_OUTPUT", true)
-        licenseHeader licenseWithHash, "---"
     }
 
     json {

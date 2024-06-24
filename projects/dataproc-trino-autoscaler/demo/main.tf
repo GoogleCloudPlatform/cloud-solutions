@@ -94,17 +94,15 @@ resource "google_storage_bucket_object" "sample_config" {
 
 ## Generate init action script in GCS
 locals {
-  config_value = "readonly CONFIG_PROTO_FILE_GCS_URI=\"${google_storage_bucket_object.sample_config.output_name}\";"
   dataproc_init_script_content = replace(
     replace(
       file("${path.root}/trino-autoscaler-init.sh"),
-      "readonly CONFIG_JAR_FILE_GCS_URI=\"\";",
-    "readonly CONFIG_JAR_FILE_GCS_URI=\"${null_resource.build_application_jar.triggers.jar_folder_url}/dataproc-trino-autoscaler-all.jar\""),
-    "readonly CONFIG_PROTO_FILE_GCS_URI=\"\";",
-    "readonly CONFIG_PROTO_FILE_GCS_URI=\"${google_storage_bucket.dataproc_staging_bucket.url}/${google_storage_bucket_object.sample_config.output_name}\";"
+      "CONFIG_JAR_FILE_GCS_URI=\"\"",
+    "CONFIG_JAR_FILE_GCS_URI=\"${null_resource.build_application_jar.triggers.jar_folder_url}/dataproc-trino-autoscaler-all.jar\""),
+    "CONFIG_PROTO_FILE_GCS_URI=\"\"",
+    "CONFIG_PROTO_FILE_GCS_URI=\"${google_storage_bucket.dataproc_staging_bucket.url}/${google_storage_bucket_object.sample_config.output_name}\""
   )
 }
-
 
 resource "google_storage_bucket_object" "init_script" {
   bucket  = google_storage_bucket.dataproc_staging_bucket.name
