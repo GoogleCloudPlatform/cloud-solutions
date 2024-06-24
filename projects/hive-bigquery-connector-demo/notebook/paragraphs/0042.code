@@ -1,0 +1,8 @@
+from google.cloud import bigquery
+bq_client = bigquery.Client()
+events_table = bq_client.get_table("ecommerce.events")
+print(f"Events is an {events_table.table_type} table. The schema is:")
+for c in events_table.schema:
+    print(f" - {c.name} - {c.field_type}")
+print(f"The GCS path, including the partition column: {events_table.external_data_configuration.source_uris[0]}")
+print(f"The GCS path not-including the partition column: {events_table.external_data_configuration.hive_partitioning.source_uri_prefix}")

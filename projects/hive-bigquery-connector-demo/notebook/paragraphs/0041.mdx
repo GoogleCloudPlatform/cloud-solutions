@@ -1,0 +1,21 @@
+## Hive partitioned data in GCS, as external table in BigQuery
+
+Yes - I know, that heading is alot, but let's break it down.
+In Hadoop environments, you are used to created partitioned tables on top of HDFS, using a HDFS directory structure with the template: `/path/to/data/partition_column=partition_value/data_files.parquet`.
+If you wanted to mount that directory structure directly in hive, the DDL statement, would be familiar and well-documented in the [Hive documentation](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL#LanguageManualDDL-ManagedandExternalTables)
+In order to mount a similar table in BigQuery, the syntax is slightly different:
+
+```sql
+CREATE OR REPLACE EXTERNAL TABLE `ecommerce.events` (
+COL1 COL_TYPE1 [, ...])
+WITH PARTITION COLUMNS
+WITH CONNECTION `<CONNECTION_LOCATION>.<CONNECTION_ID>`
+OPTIONS (
+    format = 'PARQUET',
+    uris = ['<GCS_PATH>/<PARTITION_COLUMN>=*'],
+    hive_partition_uri_prefix = '<GCS_PATH>',
+    require_hive_partition_filter = [true|false]);
+```
+
+You have already executed this query for you to mount the data in the warehouse gcs bucket. You can review more of the [BigQuery documentation](https://cloud.google.com/bigquery/docs/external-data-cloud-storage#create-external-table-partitioned) on external tables.
+Let's review the table you have created already in BigQuery:

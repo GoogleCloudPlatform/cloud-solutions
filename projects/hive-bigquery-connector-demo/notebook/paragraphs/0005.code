@@ -1,0 +1,8 @@
+from pyhive import hive as pyhive_hive
+import pandas
+from sqlalchemy import create_engine
+import warnings
+from sqlalchemy.exc import SAWarning
+hive_engine = create_engine('hive://localhost:10000/default')
+hive = pyhive_hive.connect('localhost').cursor()
+warnings.simplefilter("ignore", category=SAWarning)

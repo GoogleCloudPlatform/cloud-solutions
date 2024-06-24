@@ -1,0 +1,15 @@
+hive.execute('DROP TABLE IF EXISTS products')
+hive.execute(f"""
+    CREATE EXTERNAL TABLE products (
+        id BIGINT,
+        cost DOUBLE,
+        category STRING,
+        name STRING,
+        brand STRING,
+        retail_price DOUBLE,
+        department STRING,
+        sku STRING,
+        distribution_center_id BIGINT
+    ) STORED AS PARQUET
+    LOCATION '{staging_bucket}/data/products'
+""")

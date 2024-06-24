@@ -1,0 +1,2 @@
+sh==2.0.6 --hash=sha256:ced8f2e081a858b66a46ace3703dec243779abbd5a1887ba7e3c34f34da70cd2
+sasl==0.3.1 --hash=sha256:0695030b23faa65aab2b462ce6f067d61caeb406de22d1ca7f9253fd9ebe127e

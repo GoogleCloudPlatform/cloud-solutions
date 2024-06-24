@@ -1,0 +1,5 @@
+%%sql
+SELECT order_id, status, sale_price
+FROM order_items
+WHERE sale_price > 100
+LIMIT 10

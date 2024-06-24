@@ -1,0 +1,5 @@
+%%bigquery
+SELECT
+    table_name,
+    table_type FROM
+    ecommerce.INFORMATION_SCHEMA.TABLES;

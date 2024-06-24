@@ -1,0 +1,22 @@
+hive.execute("DROP TABLE IF EXISTS events")
+hive.execute(f"""
+    CREATE EXTERNAL TABLE events (
+         id INT,
+         user_id INT,
+         sequence_number INT,
+         session_id STRING,
+         created_at TIMESTAMP,
+         ip_address STRING,
+         city STRING,
+         state STRING,
+         postal_code STRING,
+         browser STRING,
+         traffic_source STRING,
+         uri STRING,
+         event_type STRING,
+         created_date DATE
+    ) STORED BY 'com.google.cloud.hive.bigquery.connector.BigQueryStorageHandler'
+    TBLPROPERTIES (
+        'bq.table'='{project}.{dataset}.events'
+    )
+""")

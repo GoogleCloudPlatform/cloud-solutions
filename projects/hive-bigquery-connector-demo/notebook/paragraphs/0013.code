@@ -1,0 +1,7 @@
+from google.cloud import bigquery
+client = bigquery.Client()
+table_ref = client.dataset(dataset).table("users")
+table = client.get_table(table_ref)
+print('`users` table:')
+for schema_field in table.schema:
+    print(f" - {schema_field.name}: {schema_field.field_type}")

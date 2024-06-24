@@ -1,0 +1,1 @@
+!gsutil ls gs://<STAGING_BUCKET>/data/products/*

@@ -1,0 +1,7 @@
+Let's go over the tables:
+
+- `users` - a standard BigQuery native table.
+- `order_items` - an EXTERNAL table with data in `PARQUET` format on the `warehouse` GCS bucket.
+- `inventory_items` - another standard BigQuery native table.
+- `orders` - is a partitioned BigQuery native table, partitioned on the `created_at` column.
+- `events` - is an EXTERNAL table, also in `PARQUET` format, on the same bucket, but the data is also partitioned, with the HIVE path format. You will take a closer look later.

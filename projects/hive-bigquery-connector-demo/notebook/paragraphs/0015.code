@@ -1,0 +1,23 @@
+hive.execute('DROP TABLE IF EXISTS users')
+hive.execute(f"""
+    CREATE EXTERNAL TABLE users (
+        id BIGINT,
+        first_name STRING,
+        last_name STRING,
+        email STRING,
+        age BIGINT,
+        gender STRING,
+        state STRING,
+        street_address STRING,
+        postal_code STRING,
+        city STRING,
+        country STRING,
+        latitude DOUBLE,
+        longitude DOUBLE,
+        traffic_source STRING,
+        created_at TIMESTAMP
+    ) STORED BY 'com.google.cloud.hive.bigquery.connector.BigQueryStorageHandler'
+    TBLPROPERTIES (
+        'bq.table'='{project}.{dataset}.users'
+    )
+""")

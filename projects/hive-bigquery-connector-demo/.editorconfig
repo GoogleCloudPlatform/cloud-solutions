@@ -1,0 +1,53 @@
+# EditorConfig: http://EditorConfig.org
+root = true
+
+[*]
+# Unix-style newlines at the bottom of every file
+end_of_line = lf
+charset = utf-8
+
+# Sets the natural language that should be used for spell checking.
+# Only one language can be specified
+# Ref: https://spec.editorconfig.org/#supported-pairs
+spelling_language = en-US
+
+# Make sure every file has a blank line at the end
+insert_final_newline = true
+
+# Remove any whitespace characters preceding newline characters
+trim_trailing_whitespace = true
+
+# Match the Google Shell Style Guide: https://google.github.io/styleguide/shellguide.html
+[*.sh]
+indent_size = 2
+indent_style = space
+
+[*.py]
+indent_size = 2
+indent_style = space
+max_line_length = 80
+
+# Files here are shell scripts but don't have a sh extension
+# This is a non-standard editorconfig feature that shfmt supports
+# Ref: https://github.com/mvdan/sh/blob/master/cmd/shfmt/shfmt.1.scd#examples
+[[shell]]
+indent_size = 2
+indent_style = space
+
+# Defined by markdownlint
+[*.md]
+indent_size = unset
+indent_style = unset
+
+# Windows uses CR+LF for line endings
+[*.bat]
+end_of_line = crlf
+
+[{Makefile,go.mod,go.sum,*.go,.gitmodules}]
+indent_style = tab
+indent_size = 4
+
+[LICENSE]
+# Don't try forcing a style to the LICENSE file because it's a rendered template
+indent_size = unset
+indent_style = unset

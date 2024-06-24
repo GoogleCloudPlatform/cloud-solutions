@@ -1,0 +1,2 @@
+%%bigquery
+SELECT * FROM ecommerce.distribution_centers LIMIT 10

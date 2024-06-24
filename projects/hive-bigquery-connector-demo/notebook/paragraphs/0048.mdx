@@ -1,0 +1,3 @@
+Notice in the last query, that we used the `created_date` column in the where clause, which is also the partition column in bigquery.
+This is a good chance to remind you that the Hive-BigQuery-Connector supports predicate pushdowns, column pruning and more in the interaction with BigQuery. Which saves you unecassary reads and scans on the underlaying BigQuery Storage API calls.
+For more information review the [Hive-BigQuery-Connector](https://github.com/GoogleCloudDataproc/hive-bigquery-connector#column-pruning)
