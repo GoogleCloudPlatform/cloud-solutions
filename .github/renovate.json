@@ -3,5 +3,6 @@
   "extends": [
     "config:recommended",
     ":semanticCommits"
-  ]
+  ],
+  "dependencyDashboardApproval": true
 }
