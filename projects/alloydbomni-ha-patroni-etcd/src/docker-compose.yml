@@ -1,0 +1,14 @@
+services:
+  alloydbomni-patroni:
+    build:
+      context: .
+    container_name: alloydbomni-patroni
+    volumes:
+      - alloydb-data:/home/postgres
+      - ./config:/home/postgres/config
+    ports:
+      - "5432:5432"
+      - "8008:8008"
+      - "2379:2379"
+volumes:
+  alloydb-data:

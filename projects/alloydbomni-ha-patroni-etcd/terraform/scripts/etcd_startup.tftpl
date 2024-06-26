@@ -1,0 +1,26 @@
+#!/bin/bash
+
+instance_index="0"
+etcd_current_node_ip=""
+ip_addr=""
+
+sudo apt-get update
+sudo apt-get install -y etcd=3.3.25+dfsg-7ubuntu0.22.04.1
+
+cat <<EOF >/etc/default/etcd
+ETCD_NAME="etcd${instance_index}"
+ETCD_DATA_DIR="/var/lib/etcd/mycluster"
+ETCD_LISTEN_PEER_URLS="http://${etcd_current_node_ip}:2380"
+ETCD_LISTEN_CLIENT_URLS="http://${etcd_current_node_ip}:2379,http://localhost:2379"
+ETCD_ADVERTISE_CLIENT_URLS="http://${etcd_current_node_ip}:2379"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="http://${etcd_current_node_ip}:2380"
+ETCD_INITIAL_CLUSTER="%{ for idx, ip_addr in etcd_nodes_ip_list ~} etcd${idx+ 1}=http://${ip_addr}:2380%{ if idx != length(etcd_nodes_ip_list) - 1 ~},%{ endif ~}%{ endfor ~}"
+ETCD_INITIAL_CLUSTER_STATE="new"
+ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
+ETCD_ADVERTISE_CLIENT_URLS="http://${etcd_current_node_ip}:2379"
+ETCD_LOG_OUTPUTS="/var/lib/etcd/mycluster.log"
+EOF
+
+systemctl daemon-reload
+systemctl enable etcd
+systemctl restart etcd
