@@ -4,5 +4,68 @@
     "config:recommended",
     ":semanticCommits"
   ],
-  "dependencyDashboardApproval": true
+  "dependencyDashboardApproval": true,
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "matchFileNames": [
+        "projects/dataflow-bigquery-change-data-capture/**"
+      ],
+      "groupName": "dataflow-bigquery-change-data-capture"
+    },
+    {
+      "matchFileNames": [
+        "projects/dataproc-trino-autoscaler/**"
+      ],
+      "groupName": "dataproc-trino-autoscaler"
+    },
+    {
+      "matchFileNames": [
+        "projects/bulk-delete-gcs-files-fn/**"
+      ],
+      "groupName": "bulk-delete-gcs-files-fn"
+    },
+    {
+      "matchFileNames": [
+        "projects/hive-bigquery-connector-demo/**"
+      ],
+      "groupName": "hive-bigquery-connector-demo"
+    },
+    {
+      "matchFileNames": [
+        "projects/sa-tools/**"
+      ],
+      "groupName": "sa-tools"
+    },
+    {
+      "matchFileNames": [
+        "projects/imagen-object-changer/**"
+      ],
+      "groupName": "imagen-object-changer"
+    },
+    {
+      "matchFileNames": [
+        "projects/imagen-voice-captioning/**"
+      ],
+      "groupName": "imagen-voice-captioning"
+    },
+    {
+      "matchFileNames": [
+        "projects/serverless-event-processing/**"
+      ],
+      "groupName": "serverless-event-processing"
+    },
+    {
+      "matchFileNames": [
+        "projects/speech2speech_translation/**"
+      ],
+      "groupName": "speech2speech_translation"
+    },
+    {
+      "matchFileNames": [
+        "projects/streamlit-pubsub/**"
+      ],
+      "groupName": "streamlit-pubsub"
+    }
+  ]
 }
