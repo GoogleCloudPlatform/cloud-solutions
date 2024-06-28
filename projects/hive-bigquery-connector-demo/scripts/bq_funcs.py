@@ -14,7 +14,7 @@
 
 """Functions for interacting with BigQuery."""
 
-import functools
+import asyncio
 import logging
 import multiprocessing
 import time
@@ -51,6 +51,14 @@ def delete_partition_worker(queue: multiprocessing.Queue, worker_name: str,
     blob.delete()
     count += 1
   logger.info("%s deleted %s blobs", worker_name, count)
+
+
+def logging_callback(partition: str, short_table_name: str):
+  def future_log(_: asyncio.Future):
+    logger.info("extracted partition %s from table %s", partition,
+                short_table_name)
+
+  return future_log
 
 
 def export_partitioned_table(table_name: str, bucket_name: str):
@@ -103,8 +111,7 @@ def export_partitioned_table(table_name: str, bucket_name: str):
         job_config=bigquery.ExtractJobConfig(
             destination_format="PARQUET",
         ))
-    extract_job.add_done_callback(
-        functools.partial(logger.info, partition, short_table_name))
+    extract_job.add_done_callback(logging_callback(partition, short_table_name))
     all_jobs.append(extract_job)
   logger.info("Waiting for all jobs to finish")
   while not all(map(lambda job: job.done(), all_jobs)):
@@ -156,9 +163,11 @@ def mount_partitioned_table(table_name: str, extracted_path: str,
                             partition_col: str, table_cols: [str],
                             connection_location: str, connection_id: str):
   """Mount a partitioned table to BigQuery."""
+  full_table_name = (
+      f"{ScriptState.dataset().project}"
+      f".{ScriptState.dataset().dataset_id}.{table_name}")
   query = f"""
-    CREATE OR REPLACE EXTERNAL TABLE `{ScriptState.dataset().project}.
-    {ScriptState.dataset().dataset_id}.{table_name}`
+    CREATE OR REPLACE EXTERNAL TABLE `{full_table_name}`
     (
     {", ".join(table_cols)}
     )
