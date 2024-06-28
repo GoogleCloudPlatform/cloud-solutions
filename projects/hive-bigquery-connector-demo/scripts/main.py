@@ -31,54 +31,61 @@ logger = logging.getLogger("main")
 
 
 def get_parser():
-  """Get the command line parser."""
-  parser = argparse.ArgumentParser(
-      prog="HiveBQConnectorDemoPrep",
-      description="Script to prepare data for the Hive-BigQuery-Connector demo")
-  parser.add_argument(
-      "--skip-tables-prep",
-      action=argparse.BooleanOptionalAction,
-      dest="skip_tables",
-      help=
-      "Skip (or not) the BigQuery tables preparation step (takes a long "
-      "time)")
-  parser.set_defaults(skip_tables=False)
-  return parser
+    """Get the command line parser."""
+    parser = argparse.ArgumentParser(
+        prog="HiveBQConnectorDemoPrep",
+        description=(
+            "Script to prepare data for the Hive-BigQuery-Connector demo"
+        ),
+    )
+    parser.add_argument(
+        "--skip-tables-prep",
+        action=argparse.BooleanOptionalAction,
+        dest="skip_tables",
+        help="Skip (or not) the BigQuery tables preparation step (takes a long "
+        "time)",
+    )
+    parser.set_defaults(skip_tables=False)
+    return parser
 
 
 def run():
-  """Main entry point for the script."""
-  setup_logging()
-  parser = get_parser()
-  args = parser.parse_args(sys.argv[1:])
+    """Main entry point for the script."""
+    setup_logging()
+    parser = get_parser()
+    args = parser.parse_args(sys.argv[1:])
 
-  notebook_full_path = notebook_funcs.compile_notebook()
-  notebook_funcs.update_notebook(
-      notebook_full_path,
-      ScriptState.tf_state().staging_bucket)
+    notebook_full_path = notebook_funcs.compile_notebook()
+    notebook_funcs.update_notebook(
+        notebook_full_path, ScriptState.tf_state().staging_bucket
+    )
 
-  if not args.skip_tables:
-    logger.info("Preparing BQ tables - grab a coffee, this will take a while")
+    if not args.skip_tables:
+        logger.info(
+            "Preparing BQ tables - grab a coffee, this will take a while"
+        )
 
-    existing_tables = ScriptState.bq_client().list_tables(ScriptState.dataset())
-    for tbl in existing_tables:
-      table = ScriptState.bq_client().get_table(tbl)
-      ScriptState.bq_client().delete_table(table)
+        existing_tables = ScriptState.bq_client().list_tables(
+            ScriptState.dataset()
+        )
+        for tbl in existing_tables:
+            table = ScriptState.bq_client().get_table(tbl)
+            ScriptState.bq_client().delete_table(table)
 
-    bq_funcs.handle_distribution_center()
-    bq_funcs.handle_events()
-    bq_funcs.handle_inventory_items()
-    bq_funcs.handle_order_items()
-    bq_funcs.handle_orders()
-    bq_funcs.handle_products()
-    bq_funcs.handle_users()
+        bq_funcs.handle_distribution_center()
+        bq_funcs.handle_events()
+        bq_funcs.handle_inventory_items()
+        bq_funcs.handle_order_items()
+        bq_funcs.handle_orders()
+        bq_funcs.handle_products()
+        bq_funcs.handle_users()
 
-  logger.info(
-      "Finished! Open %snotebooks/GCS/notebook.ipynb in your browser to "
-      "continue.",
-      ScriptState.tf_state().jupyter_url
-  )
+    logger.info(
+        "Finished! Open %snotebooks/GCS/notebook.ipynb in your browser to "
+        "continue.",
+        ScriptState.tf_state().jupyter_url,
+    )
 
 
 if __name__ == "__main__":
-  run()
+    run()

@@ -23,18 +23,18 @@ import pathlib
 
 
 def setup_logging():
-  """Set up logging."""
-  config_file = pathlib.Path("logging.config.json")
-  with open(config_file, encoding="utf-8") as f_in:
-    config = json.load(f_in)
+    """Set up logging."""
+    config_file = pathlib.Path("logging.config.json")
+    with open(config_file, encoding="utf-8") as f_in:
+        config = json.load(f_in)
 
-  logging.config.dictConfig(config)
+    logging.config.dictConfig(config)
 
-  # In 3.12, logging.getHandlerByName is a thing, but for <=3.11 read the
-  # dict from the json file
-  # queue_handler = logging.getHandlerByName("queue_handler")
+    # In 3.12, logging.getHandlerByName is a thing, but for <=3.11 read the
+    # dict from the json file
+    # queue_handler = logging.getHandlerByName("queue_handler")
 
-  queue_handler = config["handlers"].get("queue_handler")
-  if queue_handler is not None:
-    queue_handler.listener.start()
-    atexit.register(queue_handler.listener.stop)
+    queue_handler = config["handlers"].get("queue_handler")
+    if queue_handler is not None:
+        queue_handler.listener.start()
+        atexit.register(queue_handler.listener.stop)

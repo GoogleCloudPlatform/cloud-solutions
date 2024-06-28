@@ -34,61 +34,68 @@ from google.cloud import storage
 
 @dataclasses.dataclass(frozen=True)
 class TFState:
-  project_id: str
-  staging_bucket: str
-  warehouse_bucket: str
-  dataproc_region: str
-  jupyterlab_url: str
-  jupyter_url: str
-  dataproc_name: str
-  bq_connection_location: str
-  bq_connection_id: str
+    project_id: str
+    staging_bucket: str
+    warehouse_bucket: str
+    dataproc_region: str
+    jupyterlab_url: str
+    jupyter_url: str
+    dataproc_name: str
+    bq_connection_location: str
+    bq_connection_id: str
 
 
 class ScriptState:
-  """Class to read the terraform state, parse and store it.
+    """Class to read the terraform state, parse and store it.
 
-  The class provides getter class methods to expose the state to other parts
-  of the application.
-  """
-  __tf_state__: typing.Optional[TFState] = None
-  __processes__: typing.Optional[int] = None
-  __bq_client__: typing.Optional[bigquery.Client] = None
-  __gcs_client__: typing.Optional[storage.Client] = None
-  __dataset__: typing.Optional[bigquery.Dataset] = None
+    The class provides getter class methods to expose the state to other parts
+    of the application.
+    """
 
-  @classmethod
-  def tf_state(cls) -> TFState:
-    if cls.__tf_state__ is None:
-      state_file = "../terraform/terraform.tfstate"
-      with open(state_file, "r", encoding="utf-8") as fp:
-        full_tf_state = json.load(fp)
-      full_tf_state = {
-          k: v["value"] for k, v in full_tf_state["outputs"].items()}
-      cls.__tf_state__ = TFState(**full_tf_state)
-    return cls.__tf_state__
+    __tf_state__: typing.Optional[TFState] = None
+    __processes__: typing.Optional[int] = None
+    __bq_client__: typing.Optional[bigquery.Client] = None
+    __gcs_client__: typing.Optional[storage.Client] = None
+    __dataset__: typing.Optional[bigquery.Dataset] = None
 
-  @classmethod
-  def bq_client(cls) -> bigquery.Client:
-    if cls.__bq_client__ is None:
-      cls.__bq_client__ = bigquery.Client(project=cls.tf_state().project_id)
-    return cls.__bq_client__
+    @classmethod
+    def tf_state(cls) -> TFState:
+        if cls.__tf_state__ is None:
+            state_file = "../terraform/terraform.tfstate"
+            with open(state_file, "r", encoding="utf-8") as fp:
+                full_tf_state = json.load(fp)
+            full_tf_state = {
+                k: v["value"] for k, v in full_tf_state["outputs"].items()
+            }
+            cls.__tf_state__ = TFState(**full_tf_state)
+        return cls.__tf_state__
 
-  @classmethod
-  def dataset(cls) -> bigquery.Dataset:
-    if cls.__dataset__ is None:
-      cls.__dataset__ = cls.bq_client().get_dataset(
-          f"{cls.tf_state().project_id}.ecommerce")
-    return cls.__dataset__
+    @classmethod
+    def bq_client(cls) -> bigquery.Client:
+        if cls.__bq_client__ is None:
+            cls.__bq_client__ = bigquery.Client(
+                project=cls.tf_state().project_id
+            )
+        return cls.__bq_client__
 
-  @classmethod
-  def gcs_client(cls) -> storage.Client:
-    if cls.__gcs_client__ is None:
-      cls.__gcs_client__ = storage.Client(project=cls.tf_state().project_id)
-    return cls.__gcs_client__
+    @classmethod
+    def dataset(cls) -> bigquery.Dataset:
+        if cls.__dataset__ is None:
+            cls.__dataset__ = cls.bq_client().get_dataset(
+                f"{cls.tf_state().project_id}.ecommerce"
+            )
+        return cls.__dataset__
 
-  @classmethod
-  def processes(cls) -> int:
-    if cls.__processes__ is None:
-      cls.__processes__ = multiprocessing.cpu_count() - 1
-    return cls.__processes__
+    @classmethod
+    def gcs_client(cls) -> storage.Client:
+        if cls.__gcs_client__ is None:
+            cls.__gcs_client__ = storage.Client(
+                project=cls.tf_state().project_id
+            )
+        return cls.__gcs_client__
+
+    @classmethod
+    def processes(cls) -> int:
+        if cls.__processes__ is None:
+            cls.__processes__ = multiprocessing.cpu_count() - 1
+        return cls.__processes__
