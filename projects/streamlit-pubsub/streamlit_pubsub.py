@@ -174,7 +174,7 @@ def get_subscriber_client():
         # User Agent allows us to track and prioritise
         # supporting this integration
         client_info=ClientInfo(
-            user_agent="cloud-solutions/streamlit-pubsub",
+            user_agent="cloud-solutions/streamlit-pubsub-v1",
         )
     )
 
