@@ -29,3 +29,11 @@ mkdocs-get-deps == 0.2.0
 mkdocs-material == 9.5.27
 mkdocstrings [python] == 0.25.1
 mkdocs-awesome-pages-plugin == 2.9.2
+
+# dependencies needed for kokoro run
+typing_extensions == 4.12.2
+importlib_metadata == 8.0.0
+astunparse == 1.6.3
+pytz == 2024.1
+
+

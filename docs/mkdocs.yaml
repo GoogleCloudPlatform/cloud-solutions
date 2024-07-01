@@ -75,3 +75,13 @@ markdown_extensions:
 nav:
   - 'Overview': 'index.md'
   - '...'
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+  nav:
+    # the '/...' in nav config raises an absolute_links warning
+    # so downgrade to info
+    absolute_links: info
+
