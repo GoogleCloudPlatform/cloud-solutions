@@ -19,7 +19,7 @@ to generate a voice description for an image.
 
 Implement an event-driven data processing pipeline without having to manage the
 underlying infrastructure.
-[More details »](serverless-event-processing)
+[More details »](serverless-event-processing/index.md)
 
 ## Tools
 
