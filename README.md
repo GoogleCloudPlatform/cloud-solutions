@@ -1,42 +1,26 @@
-# Cloud Solutions Monorepo (the-repo)
+# Google Cloud Solutions Architects repository
 
-This repository consolidates a number of open source projects in the form of solutions, tutorials, articles, or proof of concepts.
+This repository hosts open source projects produced by Google Cloud Solutions Architects.
 
-> Note: It is not recommended to run the tools or solutions inside this repository in production environment. Proceed with caution.
+The content of this repository is provided for sample purposes, and not intended for production environments.
+Proceed with caution.
 
-## Getting Started
+The projects in this repository are not official Google products.
 
-To get started, clone this repository and install the dependencies:
+For more information, see the
+[Google Cloud Solutions Architects repository documentation](https://googlecloudplatform.github.io/cloud-solutions/)
 
-Use code with caution. Learn more
+## Repository structure
 
-```shell
-git clone https://cloud-solutions.googlesource.com/the-repo
-cd the-repo
-```
-
-All different solutions, PoC, or tools will be hosted under each respective folders under `projects/` folder
-
-```shell
-cd projects
-```
-
-### Adding New Projects
-
-For now, only the owners and approved contributors allowed to add new projects through PR process.
-
-## Deployment
-
-To deploy the each projects in this repository, you will need to go to each projects' subfolder and follow its README.md file for installation/deployment guide. Each tools or solutions exists indenpendently in isolation under each subfolder under the `projects/` folder and can be configured to run the necessary build and deployment steps for each project.
+- `.github`: public-facing repository management.
+- `docs`: documentation tooling and source.
+- `projects`: reference architectures, proofs of concept, tools, examples. For more information, see the project-specific `README`s.
 
 ## Contributing
 
-We welcome contributions to this repository. If you have an idea for a new project, or if you would like to improve an existing project, please check `CONTRIBUTING.md` first.
+We welcome contributions to this repository. If you have an idea for a new project, or if you would like to contribute to an existing project,
+see [CONTRIBUTING](CONTRIBUTING.md).
 
-## Questions & Feedback
+## Questions and feedback
 
-Do you have trouble installing or setting up a project. Please email the owners (check `OWNERS` file). Your feedback is important for us.
-
-## Disclaimer
-
-The projects in this repository are not official Google products.
+In case you have issues when setting up a project, or to provide feedback, open a new issue in this repository.
