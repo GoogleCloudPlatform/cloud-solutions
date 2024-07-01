@@ -9,6 +9,13 @@
   "packageRules": [
     {
       "matchFileNames": [
+        ".github/**",
+        "docs/**"
+      ],
+      "groupName": "repository-management"
+    },
+    {
+      "matchFileNames": [
         "projects/dataflow-bigquery-change-data-capture/**"
       ],
       "groupName": "dataflow-bigquery-change-data-capture"
