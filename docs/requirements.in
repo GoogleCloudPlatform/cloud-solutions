@@ -20,10 +20,12 @@
 #
 
 ## Markdown Extensions
-pymdown-extensions == 10.8
-Pygments == 2.17.2
+pymdown-extensions == 10.8.1
+Pygments == 2.18.0
 
 ## Mkdocs Plugins
-mkdocs-material == 9.5.18
-mkdocstrings [python] == 0.24.3
+mkdocs == 1.6.0
+mkdocs-get-deps == 0.2.0
+mkdocs-material == 9.5.27
+mkdocstrings [python] == 0.25.1
 mkdocs-awesome-pages-plugin == 2.9.2
