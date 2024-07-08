@@ -73,6 +73,12 @@
         "projects/streamlit-pubsub/**"
       ],
       "groupName": "streamlit-pubsub"
+    },
+    {
+      "matchFileNames": [
+        "projects/pino-logging-gcp-config/**"
+      ],
+      "groupName": "pino-logging-gcp-config"
     }
   ]
 }
