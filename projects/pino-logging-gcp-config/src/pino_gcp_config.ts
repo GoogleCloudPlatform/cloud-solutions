@@ -165,7 +165,11 @@ class GcpLoggingPino {
   static getGcpLoggingTimestamp() {
     const seconds = Date.now() / 1000;
     const secondsRounded = Math.floor(seconds);
-    const millis = Math.floor((seconds - secondsRounded) * 1000);
+    // The following line is 2x as fast as seconds % 1000
+    // Uses Math.round, not Math.floor due to JS floating point...
+    // eg for a Date.now()=1713024754120
+    // (seconds-secondsRounded)*1000 => 119.99988555908203
+    const millis = Math.round((seconds - secondsRounded) * 1000);
     return `,"timestamp":{"seconds":${secondsRounded},"nanos":${millis}000000}`;
   }
 

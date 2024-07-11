@@ -71,7 +71,7 @@ describe('Pino config', () => {
   describe('log formatter', () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
     const formatLogObject = config.formatters?.log!;
-    const TEST_DATE = new Date('2024-04-13T16:12:34.123');
+    const TEST_DATE = new Date('2024-04-13T16:12:34.123Z');
 
     beforeEach(() => {
       jasmine.clock().install();
@@ -148,7 +148,7 @@ describe('Pino config', () => {
       const timestampGenerator = config.timestamp as () => string;
 
       expect(timestampGenerator()).toEqual(
-        ',"timestamp":{"seconds":1713017554,"nanos":122000000}'
+        ',"timestamp":{"seconds":1713024754,"nanos":123000000}'
       );
     });
   });
