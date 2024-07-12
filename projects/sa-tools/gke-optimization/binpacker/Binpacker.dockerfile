@@ -1,4 +1,7 @@
-### Note: Use this Dockerfile from the repo root and not from the gke-optimization/binpacker folder
+# syntax=docker/dockerfile:1
+
+# Note: Use this Dockerfile from the /projects/sa-tools/ and not
+# from the gke-optimization/binpacker folder.
 
 ### Use node image as a builder for UI
 FROM node:18-alpine as ui-builder
