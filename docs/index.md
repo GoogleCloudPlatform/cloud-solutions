@@ -1,6 +1,6 @@
 # Overview
 
-Browse tools and reference architectures that help you build solutions using Google Cloud.
+Browse tools and reference architectures that can help you build solutions using Google Cloud.
 
 ## Reference architectures
 
