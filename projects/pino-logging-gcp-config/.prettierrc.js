@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// eslint-disable-next-line no-undef
 module.exports = {
+  // eslint-disable-next-line no-undef
   ...require('../../config/lint/.prettierrc.json'),
 };
