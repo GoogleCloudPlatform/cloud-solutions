@@ -8,10 +8,7 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
-      "matchFileNames": [
-        ".github/**",
-        "docs/**"
-      ],
+      "matchFileNames": ["!projects/**"],
       "groupName": "repository-management"
     },
     {
@@ -39,8 +36,28 @@
       "groupName": "hive-bigquery-connector-demo"
     },
     {
+      "matchFileNames": ["projects/sa-tools/common/**"],
+      "groupName": "sa-tools-common"
+    },
+    {
+      "matchFileNames": ["projects/sa-tools/gke-optimization/**"],
+      "groupName": "sa-tools-gke-optimization"
+    },
+    {
+      "matchFileNames": ["projects/sa-tools/perf-benchmark/**"],
+      "groupName": "sa-tools-perf-benchmark"
+    },
+    {
+      "matchFileNames": ["projects/sa-tools/performance-testing/**"],
+      "groupName": "sa-tools-performance-testing"
+    },
+    {
       "matchFileNames": [
-        "projects/sa-tools/**"
+        "projects/sa-tools/**",
+        "!projects/sa-tools/performance-testing/**",
+        "!projects/sa-tools/perf-benchmark/**",
+        "!projects/sa-tools/gke-optimization/**",
+        "!projects/sa-tools/common"
       ],
       "groupName": "sa-tools"
     },
