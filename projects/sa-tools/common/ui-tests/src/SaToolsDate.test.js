@@ -106,12 +106,12 @@ const satoolsDateTestSuite = () => {
   });
 
   it(`Given a datetime in 50 mins ago should return 50 minute(s) ago`,
-      () => {
-        const testDate = new SaToolsDate(new Date('2022-12-01 10:10:00'));
-        expect(testDate.formattedDateDiffFrom(
-            new Date('2022-12-01 11:00:00')),
-        ).toBe('50 minute(s) ago');
-      });
+    () => {
+      const testDate = new SaToolsDate(new Date('2022-12-01 10:10:00'));
+      expect(testDate.formattedDateDiffFrom(
+        new Date('2022-12-01 11:00:00'))
+      ).toBe('50 minute(s) ago');
+    });
 
   it('fromUnixSeconds valid', () => {
     const testDate = SaToolsDate.fromUnixSeconds(1683186224);
