@@ -51,9 +51,10 @@ function CheckboxField({ attribute, attributeData, parentValid }) {
           margin: '5px',
           height: 150,
           overflowY: 'scroll',
-        }}>
+        }}
+      >
         <FormGroup>
-          <FormLabel component='legend'>
+          <FormLabel component="legend">
             <b style={{ color: 'black' }}>
               {attribute.displayName ? attribute.displayName : attribute.id}
             </b>

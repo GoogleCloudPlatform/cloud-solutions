@@ -23,7 +23,8 @@ function AttributeGroup({ attributeGroup, attributeData, parentValid = true }) {
       {attributeGroup.attributes.map((attribute) => (
         <div
           style={{ marginTop: 15 }}
-          key={`${Math.random().toString(32).substring(5)}-${attribute.id}`}>
+          key={`${Math.random().toString(32).substring(5)}-${attribute.id}`}
+        >
           <AttributeField
             attribute={attribute}
             attributeData={initValueInMap({

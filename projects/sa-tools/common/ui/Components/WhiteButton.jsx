@@ -20,7 +20,7 @@ function WhiteButton({ onClick, children }) {
   return (
     <Button
       onClick={onClick}
-      variant='contained'
+      variant="contained"
       sx={{
         marginTop: '10px',
         marginBottom: '10px',
@@ -31,7 +31,8 @@ function WhiteButton({ onClick, children }) {
           backgroundColor: 'white',
           color: '#1a73e8',
         },
-      }}>
+      }}
+    >
       {children}
     </Button>
   );

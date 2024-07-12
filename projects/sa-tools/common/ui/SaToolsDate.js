@@ -15,30 +15,30 @@
  */
 
 /**
-  * Helper class on date formatting.
-  * @param {Date=} dateObj
-  */
+ * Helper class on date formatting.
+ * @param {Date=} dateObj
+ */
 class SaToolsDate {
   /**
-  * @param {Date=} dateObj
-  */
+   * @param {Date=} dateObj
+   */
   constructor(dateObj = new Date()) {
     this.date = dateObj;
   }
 
   /**
-  * Creates an instance from unix seconds
-  *
-  * @param {!number} utcUnixSeconds
-  * @return {!SaToolsDate}
-  */
+   * Creates an instance from unix seconds
+   *
+   * @param {!number} utcUnixSeconds
+   * @return {!SaToolsDate}
+   */
   static fromUnixSeconds(utcUnixSeconds) {
     return new SaToolsDate(new Date(utcUnixSeconds * 1000));
   }
 
   /**
-  * @return {!string} the formatted Date
-  */
+   * @return {!string} the formatted Date
+   */
   formattedDate() {
     /* eslint-disable no-undef */
     return this.date.toLocaleString(navigator.language, {
@@ -53,11 +53,11 @@ class SaToolsDate {
   }
 
   /**
-  * For usage it is advisable to argument passed is older
-  * time than the date created from new SaToolsDate(newerDate)
-  * @param {!Date} compareToDate
-  * @return {!string} formatted Date diff
-  */
+   * For usage it is advisable to argument passed is older
+   * time than the date created from new SaToolsDate(newerDate)
+   * @param {!Date} compareToDate
+   * @return {!string} formatted Date diff
+   */
   formattedDateDiff(compareToDate = new Date()) {
     const timeDiff = this.date - compareToDate;
 
@@ -73,30 +73,30 @@ class SaToolsDate {
   }
 
   /**
-  * Format date for a given date object into friendly
-  * format like '12 minutes(s) ago' string.
-  * @param {Date=} date the date from which to calculate diff.
-  * @return {!string} formatted date after the diff logic.
-  */
+   * Format date for a given date object into friendly
+   * format like '12 minutes(s) ago' string.
+   * @param {Date=} date the date from which to calculate diff.
+   * @return {!string} formatted date after the diff logic.
+   */
   formattedDateDiffFrom(date = new Date()) {
     return new SaToolsDate(date).formattedDateDiff(this.date);
   }
 
   /**
-  * Format date for a given date-string into friendly
-  * format like '12 minutes(s) ago' string.
-  * @param {any} compareToDateStr
-  * @return {!string}
-  */
+   * Format date for a given date-string into friendly
+   * format like '12 minutes(s) ago' string.
+   * @param {any} compareToDateStr
+   * @return {!string}
+   */
   formattedDateDiffStr(compareToDateStr) {
     const date = new Date(compareToDateStr);
     return this.formattedDateDiff(date);
   }
 
   /**
-  * @param {!Date} dt
-  * @return {!string}
-  */
+   * @param {!Date} dt
+   * @return {!string}
+   */
   mediumDateFormat(dt) {
     /* eslint-disable no-undef */
     return dt.toLocaleString(navigator.language, {
@@ -106,17 +106,17 @@ class SaToolsDate {
     /* eslint-enable */
   }
   /**
-  * @param {!number} hours
-  * @return {!Date}
-  */
+   * @param {!number} hours
+   * @return {!Date}
+   */
   subtractHours(hours) {
     return new Date(this.date - hours * 3_600_000);
   }
 
   /**
-  * @param {!number} minutes
-  * @return {!Date}
-  */
+   * @param {!number} minutes
+   * @return {!Date}
+   */
   subtractMinutes(minutes) {
     return new Date(this.date - minutes * 60_000);
   }

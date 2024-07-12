@@ -41,8 +41,9 @@ const satoolsDateTestSuite = () => {
   it(`Given compared date string one hour from now should return 1 hour(s)
     ago`, () => {
     const testDate = new SaToolsDate(new Date('2022-12-01 11:00:00'));
-    expect(testDate.formattedDateDiff(new Date('2022-12-01 10:00:00')))
-        .toBe('1 hour(s) ago');
+    expect(testDate.formattedDateDiff(new Date('2022-12-01 10:00:00'))).toBe(
+      '1 hour(s) ago'
+    );
   });
 
   it(`Given compared date string 24 hour from now should return
@@ -63,24 +64,21 @@ const satoolsDateTestSuite = () => {
     should return 7 Feb 2023`, () => {
     const dateUtil = new SaToolsDate(new Date('2023-02-10'));
     const diff = dateUtil.subtractHours(72); // 3 days ago
-    expect(dateUtil.formattedDateDiff(diff))
-        .toBe('Feb 7, 2023, 12:00 AM');
+    expect(dateUtil.formattedDateDiff(diff)).toBe('Feb 7, 2023, 12:00 AM');
   });
 
   it(`Given compared date string 15 minutes from now should
     return 15 minute(s) ago`, () => {
     const dateUtil = new SaToolsDate();
     const diff = dateUtil.subtractMinutes(15); // 15 minutes
-    expect(dateUtil.formattedDateDiff(diff))
-        .toBe('15 minute(s) ago');
+    expect(dateUtil.formattedDateDiff(diff)).toBe('15 minute(s) ago');
   });
 
   it(`Given compared date string 50 minutes from now should
     return 50 minute(s) ago`, () => {
     const dateUtil = new SaToolsDate();
     const diff = dateUtil.subtractMinutes(50); // 50 minutes
-    expect(dateUtil.formattedDateDiff(diff))
-        .toBe('50 minute(s) ago');
+    expect(dateUtil.formattedDateDiff(diff)).toBe('50 minute(s) ago');
   });
 
   it(`Given a date in Date type should return new medium date
@@ -105,13 +103,12 @@ const satoolsDateTestSuite = () => {
     expect(diff).toBe('0 minute(s) ago');
   });
 
-  it(`Given a datetime in 50 mins ago should return 50 minute(s) ago`,
-    () => {
-      const testDate = new SaToolsDate(new Date('2022-12-01 10:10:00'));
-      expect(testDate.formattedDateDiffFrom(
-        new Date('2022-12-01 11:00:00'))
-      ).toBe('50 minute(s) ago');
-    });
+  it(`Given a datetime in 50 mins ago should return 50 minute(s) ago`, () => {
+    const testDate = new SaToolsDate(new Date('2022-12-01 10:10:00'));
+    expect(
+      testDate.formattedDateDiffFrom(new Date('2022-12-01 11:00:00'))
+    ).toBe('50 minute(s) ago');
+  });
 
   it('fromUnixSeconds valid', () => {
     const testDate = SaToolsDate.fromUnixSeconds(1683186224);

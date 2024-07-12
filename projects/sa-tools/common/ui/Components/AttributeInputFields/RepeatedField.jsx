@@ -65,7 +65,8 @@ function RepeatedField({
           flexDirection: 'row',
           alignItems: 'center',
           marginTop: '20px',
-        }}>
+        }}
+      >
         {!hideTitle && (
           <span>
             <b>
@@ -84,7 +85,8 @@ function RepeatedField({
               flexDirection: 'row',
               marginTop: '0px',
               marginBottom: '0px',
-            }}>
+            }}
+          >
             <AttributeField
               attribute={nonRepeatedAttribute}
               attributeData={itemData}
@@ -95,7 +97,8 @@ function RepeatedField({
             <span
               onClick={() => removeElement(itemIndex)}
               style={{ cursor: 'pointer', marginLeft: 5, marginTop: '1rem' }}
-              className='google-symbols'>
+              className="google-symbols"
+            >
               delete
             </span>
           </span>
@@ -105,7 +108,8 @@ function RepeatedField({
         <WhiteButton onClick={addElement}>
           <span
             style={{ cursor: 'pointer', marginRight: '5px' }}
-            className='google-symbols'>
+            className="google-symbols"
+          >
             add
           </span>
           Add

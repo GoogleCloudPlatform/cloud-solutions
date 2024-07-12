@@ -70,8 +70,8 @@ function FormModal({
   };
 
   /** If any of the children's componentData valid=false, then
-  *  also trigger .validate() for all children
-  */
+   *  also trigger .validate() for all children
+   */
   const handleValidate = () => {
     if (componentData.attributeData) {
       componentData.valid = validateComponent(componentData);
@@ -124,23 +124,26 @@ function FormModal({
           width: '520px',
           marginBottom: '4rem',
         }}
-        id='component-form-modal-box'>
+        id="component-form-modal-box"
+      >
         <Typography
-          id='modal-modal-title'
-          variant='h6'
-          component='h2'
+          id="modal-modal-title"
+          variant="h6"
+          component="h2"
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             marginBottom: '15px',
-          }}>
+          }}
+        >
           {`Details for ${component.componentType} ${
             component.displayName ? '(' + component.displayName + ')' : ''
           }`}
           <span
             onClick={handleClose}
             style={{ cursor: 'pointer' }}
-            className='google-symbols'>
+            className="google-symbols"
+          >
             close
           </span>
         </Typography>
@@ -154,12 +157,13 @@ function FormModal({
             {/* Start of rendering code for Grouped Attributes */}
             {
               <Tabs
-                variant='scrollable'
-                scrollButtons='auto'
+                variant="scrollable"
+                scrollButtons="auto"
                 value={selectedTab}
                 onChange={(event, newValue) => {
                   setSelectedTab(newValue);
-                }}>
+                }}
+              >
                 {attributeGroups.groups.map((attributeGroup, groupIndex) => (
                   <Tab
                     key={`attribute-group-tab-${groupIndex}`}
@@ -174,11 +178,12 @@ function FormModal({
             {attributeGroups.groups.map((attributeGroup, groupIndex) => (
               <div
                 key={`attribute-group-tabpanel-${groupIndex}`}
-                role='tabpanel'
+                role="tabpanel"
                 onChange={(event) => event.stopPropagation()}
                 id={`tabpanel-${component.componentId}-${attributeGroup.id}`}
                 hidden={selectedTab !== groupIndex}
-                aria-labelledby={`tab-${component.componentId}-${attributeGroup.id}`}>
+                aria-labelledby={`tab-${component.componentId}-${attributeGroup.id}`}
+              >
                 <AttributeGroup
                   attributeGroup={attributeGroup}
                   attributeData={initValueInMap({
@@ -203,19 +208,22 @@ function FormModal({
           backgroundColor: 'white',
           opacity: '1',
           zIndex: '10',
-        }}>
+        }}
+      >
         <Button
-          variant='contained'
+          variant="contained"
           style={{ marginLeft: '1rem' }}
-          color='success'
-          onClick={handleValidate}>
+          color="success"
+          onClick={handleValidate}
+        >
           VALIDATE
         </Button>
         <Button
-          variant='outlined'
+          variant="outlined"
           onClick={handleSkip}
           style={{ margin: '1rem' }}
-          color='warning'>
+          color="warning"
+        >
           SKIP COMPONENT
         </Button>
       </div>

@@ -1,3 +1,8 @@
+# syntax=docker/dockerfile:1
+
+# Note: Use this Dockerfile from the project folder (/projects/sa-tools/) and
+# not from the common (/projects/sa-tools/common/) folder.
+
 FROM gradle:8-jdk17-jammy AS java-builder
 COPY ./common/java-common /java-common-src
 WORKDIR /java-common-src

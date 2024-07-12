@@ -64,7 +64,8 @@ function DropdownInput({
 
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+      style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+    >
       <Autocomplete
         disabled={readOnly}
         disablePortal

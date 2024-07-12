@@ -70,11 +70,11 @@ function TextInput({
           setForceRefresh({});
         }}
         sx={{ width: '100%', marginTop: '5px' }}
-        size='small'
+        size="small"
         InputProps={{
           endAdornment: <HelpTooltip attribute={attribute} />,
         }}
-        variant='outlined'
+        variant="outlined"
       />
       <ExampleInput attribute={attribute}></ExampleInput>
     </span>

@@ -47,17 +47,18 @@ function ResponsiveAppBar({
 
   return (
     <AppBar
-      position='static'
+      position="static"
       style={{
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-      }}>
+      }}
+    >
       <Typography
-        variant='h5'
+        variant="h5"
         noWrap
-        component='a'
-        href='/'
+        component="a"
+        href="/"
         sx={{
           mr: 2,
           ml: 2,
@@ -69,7 +70,8 @@ function ResponsiveAppBar({
           color: 'inherit',
           textDecoration: 'none',
           alignItems: 'center',
-        }}>
+        }}
+      >
         SA Tools {toolName}
       </Typography>
       <span
@@ -78,13 +80,15 @@ function ResponsiveAppBar({
           flexDirection: 'row',
           padding: '0.5rem 2rem',
           alignItems: 'center',
-        }}>
-        <Tooltip title='Please create an issue in the Github repository.'>
+        }}
+      >
+        <Tooltip title="Please create an issue in the Github repository.">
           <div
             style={{
               display: 'flex',
               flexDirection: 'row',
-            }}>
+            }}
+          >
             <HelpOutline style={{ color: 'white', paddingRight: '1rem' }} />
           </div>
         </Tooltip>

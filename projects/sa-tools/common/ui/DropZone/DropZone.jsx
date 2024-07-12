@@ -100,7 +100,7 @@ function StyledDropzone(props) {
       <HelpOutlineIcon
         style={{ fontSize: '2rem', color: '#3390da' }}
         aria-describedby={id}
-        variant='contained'
+        variant="contained"
         onClick={handleHelpClick}
         sx={{ mt: 2, cursor: 'pointer' }}
       />
@@ -112,25 +112,27 @@ function StyledDropzone(props) {
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
-        }}>
+        }}
+      >
         <Typography
           sx={{ p: 2, width: '350px' }}
-          dangerouslySetInnerHTML={{ __html: props.instruction }}></Typography>
+          dangerouslySetInnerHTML={{ __html: props.instruction }}
+        ></Typography>
       </Popover>
     </div>
   );
 
   /**
-  * Handles help button click
-  * @param {!Event} event
-  */
+   * Handles help button click
+   * @param {!Event} event
+   */
   function handleHelpClick(event) {
     setAnchorEl(event.currentTarget);
   }
 
   /**
-  * Handles Help's close button click
-  */
+   * Handles Help's close button click
+   */
   function handleHelpClose() {
     setAnchorEl(null);
   }
@@ -143,17 +145,15 @@ function StyledDropzone(props) {
         backgroundColor: 'white',
         fontFamily: 'Roboto!important',
         height: '280px',
-      }}>
+      }}
+    >
       <div {...getRootProps({ style })}>
-        <input
-          ref={props.fileUploadId}
-          {...getInputProps()}
-        />
+        <input ref={props.fileUploadId} {...getInputProps()} />
         <p>{props.description}</p>
         <FileUpload sx={{ fontSize: '3.5rem', color: '#3390da' }} />
         <p>
           or&nbsp;&nbsp;
-          <Button variant='outlined'>click</Button>&nbsp;to select file-
+          <Button variant="outlined">click</Button>&nbsp;to select file-
         </p>
       </div>
       <aside>
@@ -163,7 +163,8 @@ function StyledDropzone(props) {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-          }}>
+          }}
+        >
           {/* {fileHeader} */}
           <ul>{filesJsx}</ul>
           {props.instruction ? hint : ''}

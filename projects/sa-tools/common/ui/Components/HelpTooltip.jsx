@@ -30,7 +30,8 @@ function HelpTooltip({ attribute }) {
         ref={helpIconRef}
         onClick={() => setPopOver(true)}
         style={{ cursor: 'pointer', marginLeft: '5px' }}
-        className='google-symbols google-symbols-filled'>
+        className="google-symbols google-symbols-filled"
+      >
         help
       </span>
       <Popover
@@ -44,7 +45,8 @@ function HelpTooltip({ attribute }) {
         transformOrigin={{
           vertical: 'top',
           horizontal: 'center',
-        }}>
+        }}
+      >
         <Typography style={{ padding: 5 }}>
           <ReactMarkdown>{attribute.helpText ?? attribute.id}</ReactMarkdown>
         </Typography>

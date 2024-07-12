@@ -75,8 +75,8 @@ function ObjectField({
       onBlur={(event) => {
         if (event.target.value === '') {
           /** Change Optional Section becomes .required = true
-          *  When any of the children's value is ''
-          */
+           *  When any of the children's value is ''
+           */
           attributeData.attribute.required = true;
         } else {
           attributeData.validate();
@@ -84,14 +84,16 @@ function ObjectField({
             setForceRefresh({});
           }, 1000);
         }
-      }}>
+      }}
+    >
       <AccordionSummary
         sx={{ marginBottom: 0 }}
         expandIcon={
-          <span className='material-symbols-outlined'>expand_more</span>
+          <span className="material-symbols-outlined">expand_more</span>
         }
-        aria-controls='panel1a-content'
-        id='panel1a-header'>
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
         <Typography>
           {
             <span style={{ display: 'flex', alignItems: 'center' }}>
@@ -102,7 +104,7 @@ function ObjectField({
         </Typography>
       </AccordionSummary>
       <AccordionDetails sx={{ paddingTop: '-10px!important' }}>
-        <Box className='repeated-input-group'>{nestedAttributes}</Box>
+        <Box className="repeated-input-group">{nestedAttributes}</Box>
       </AccordionDetails>
     </Accordion>
   );

@@ -29,13 +29,15 @@ function CustomSnackbar({ message, type = 'error' }) {
         setOpen(false);
       }}
       autoHideDuration={6000}
-      key={'top' + 'left'}>
+      key={'top' + 'left'}
+    >
       <Alert
         onClose={() => {
           setOpen(false);
         }}
         severity={type}
-        sx={{ width: '100%' }}>
+        sx={{ width: '100%' }}
+      >
         {message}
       </Alert>
     </Snackbar>

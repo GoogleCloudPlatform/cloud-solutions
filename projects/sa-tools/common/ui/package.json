@@ -1,0 +1,21 @@
+{
+  "name": "common-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "pretty": "yarn prettier --write \"./**/*.{js,jsx,css,json}\"",
+    "style-check": "yarn prettier --check \"./**/*.{js,jsx,css,json}\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vitest/coverage-c8": "0.29.7",
+    "jsdom": "22.0.0",
+    "prettier": "2.8.7",
+    "sass": "1.62.1",
+    "vite": "4.5.3",
+    "vitest": "0.29.7",
+    "webdriverio": "8.9.0"
+  }
+}

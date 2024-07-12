@@ -29,29 +29,29 @@ function isInvalidArray(values) {
  */
 class StringSet {
   /**
-  * StringSet constructor.
-  *
-  * @param {any} initSet
-  */
+   * StringSet constructor.
+   *
+   * @param {any} initSet
+   */
   constructor(initSet) {
     this.set = new Set(initSet);
   }
 
   /**
-  * Returns the elements in the Set as string array.
-  *
-  * @return {string[]}
-  */
+   * Returns the elements in the Set as string array.
+   *
+   * @return {string[]}
+   */
   toArray() {
     return Array.from(this.set);
   }
 
   /**
-  * Add a string to the set
-  *
-  * @param {?string} value
-  * @return {StringSet}
-  */
+   * Add a string to the set
+   *
+   * @param {?string} value
+   * @return {StringSet}
+   */
   add(value) {
     if (!value) {
       return this;
@@ -62,11 +62,11 @@ class StringSet {
   }
 
   /**
-  * Add all values of the array to the set.
-  *
-  * @param {any} values
-  * @return {StringSet}
-  */
+   * Add all values of the array to the set.
+   *
+   * @param {any} values
+   * @return {StringSet}
+   */
   addAll(values) {
     if (isInvalidArray(values)) {
       return this;
@@ -77,11 +77,11 @@ class StringSet {
   }
 
   /**
-  * remove a value from set
-  *
-  * @param {?string} value
-  * @return {StringSet}
-  */
+   * remove a value from set
+   *
+   * @param {?string} value
+   * @return {StringSet}
+   */
   remove(value) {
     if (!value) {
       return this;
@@ -92,21 +92,21 @@ class StringSet {
   }
 
   /**
-  * Same as `remove`
-  *
-  * @param {?string} value
-  * @return {StringSet}
-  */
+   * Same as `remove`
+   *
+   * @param {?string} value
+   * @return {StringSet}
+   */
   delete(value) {
     return this.remove(value);
   }
 
   /**
-  * Remove all elements of the array from the set.
-  *
-  * @param {any} values
-  * @return {any}
-  */
+   * Remove all elements of the array from the set.
+   *
+   * @param {any} values
+   * @return {any}
+   */
   removeAll(values) {
     if (isInvalidArray(values)) {
       return this;

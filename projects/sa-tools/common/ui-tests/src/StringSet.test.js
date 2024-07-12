@@ -31,10 +31,10 @@ const stringSetTest = () => {
 
   it('init array', () => assertEquals(new StringSet(['a', 'b']), ['a', 'b']));
 
-  it('doesn\'t add duplicate single value', () =>
+  it(`doesn't add duplicate single value`, () =>
     assertEquals(new StringSet(['a', 'b']).add('a'), ['a', 'b']));
 
-  it('doesn\'t addAll duplicates', () =>
+  it(`doesn't addAll duplicates`, () =>
     assertEquals(new StringSet(['a', 'b']).addAll(['a', 'b', 'c']), [
       'a',
       'b',

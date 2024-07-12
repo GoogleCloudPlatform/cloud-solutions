@@ -25,7 +25,7 @@
   line-height: 24px;
   font-weight: 400;
   color: #ffffffde;
-  background-color:#efefef;
+  background-color: #efefef;
   font-synthesis: none;
   text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
@@ -34,17 +34,18 @@
 }
 
 .home-card {
-  box-shadow: 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%), 0 1px 18px 0 rgb(0 0 0 / 12%)!important;
+  box-shadow: 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%),
+    0 1px 18px 0 rgb(0 0 0 / 12%) !important;
 
   :hover {
-    .home-card-title{
+    .home-card-title {
       text-decoration: underline;
     }
   }
 
   * {
     font-family: Roboto, Verdana, Geneva, Tahoma, sans-serif;
-    color:#5f5f5f;
+    color: #5f5f5f;
   }
 }
 
