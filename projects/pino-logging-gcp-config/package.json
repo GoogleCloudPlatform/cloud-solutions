@@ -31,21 +31,21 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jasmine": "^5.1.4",
-    "@types/node": "^20.14.9",
+    "@types/node": "^20.14.11",
     "gts": "^5.3.1",
     "jasmine": "^5.1.0",
     "jasmine-console-reporter": "^3.1.0",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
   "dependencies": {
     "@google-cloud/logging": "^11.1.0",
     "eventid": "^2.0.1",
-    "google-gax": "^4.3.7",
-    "pino": "^9.2.0"
+    "google-gax": "^4.3.8",
+    "pino": "^9.3.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18"
   }
 }

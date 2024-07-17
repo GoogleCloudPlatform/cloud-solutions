@@ -17,7 +17,7 @@
 
 ## Description: Run unit tests in this directory isolated in a docker container.
 
-FROM node:22-slim
+FROM node:22.4.1-slim
 
 ENTRYPOINT [ "/bin/sh", "-e", "-x", "-c" ]
 
