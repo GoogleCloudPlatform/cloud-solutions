@@ -29,44 +29,47 @@ authenticate with an account that has the `owner` role on that project.
 In order to deploy this reference architecture, do the following from
 [Cloud Shell](https://cloud.google.com/shell/docs):
 
-1. Clone this repository.
-1. Change the working directory to the directory where you cloned this repository.
-1. Change the working directory to the `projects/serverless-event-processing/terraform` directory:
+1.  Clone this repository.
+1.  Change the working directory to the directory where you cloned this
+    repository.
+1.  Change the working directory to the
+    `projects/serverless-event-processing/terraform` directory:
 
     ```sh
     cd projects/serverless-event-processing/terraform
     ```
 
-1. Initialize the Terraform environment:
+1.  Initialize the Terraform environment:
 
     ```sh
     terraform init
     ```
 
-1. Run the provisioning process with Terraform:
+1.  Run the provisioning process with Terraform:
 
     ```sh
     terraform apply
     ```
 
-  Confirm and authorize Terraform when asked.
+    Confirm and authorize Terraform when asked.
 
-  When you run the provisioning process for the first time, Terraform asks for
-  inputs, such as the Google Cloud project ID where you want to provision
-  resources in. Terraform then stores the inputs you provided in a variables
-  file that it automatically generates from a template.
+    When you run the provisioning process for the first time, Terraform asks for
+    inputs, such as the Google Cloud project ID where you want to provision
+    resources in. Terraform then stores the inputs you provided in a variables
+    file that it automatically generates from a template.
 
-  Also, during this first run of the provisioning process, Terraform stores the
-  backend locally because there's no remote backend available yet.
+    Also, during this first run of the provisioning process, Terraform stores
+    the backend locally because there's no remote backend available yet.
 
-1. Re-run the provisioning process to migrate the local Terraform backend to a
-  remote backend on Cloud Storage:
+1.  Re-run the provisioning process to migrate the local Terraform backend to a
+    remote backend on Cloud Storage:
 
     ```sh
     terraform init -migrate-state
     ```
 
-  If Terraform asks for confirmation to migrate the backend, answer affirmatively.
+    If Terraform asks for confirmation to migrate the backend, answer
+    affirmatively.
 
 ## Create example events and outputs
 
@@ -74,25 +77,25 @@ As an example, you can create objects in the Cloud Storage bucket we use as an
 event source. In order to deploy this reference architecture, do the following
 from Cloud Shell:
 
-1. Get the name of the source Cloud Storage bucket:
+1.  Get the name of the source Cloud Storage bucket:
 
     ```sh
     SOURCE_CLOUD_STORAGE_BUCKET_NAME="$(terraform output -raw source_cloud_storage_bucket_name)"
     ```
 
-1. Create an example file:
+1.  Create an example file:
 
     ```sh
     echo "Hello World" > random.txt
     ```
 
-1. Upload the example file in the Cloud Storage bucket:
+1.  Upload the example file in the Cloud Storage bucket:
 
     ```sh
     gsutil cp random.txt "gs://${SOURCE_CLOUD_STORAGE_BUCKET_NAME}/random.txt"
     ```
 
-1. View the log entries related to the event processing service:
+1.  View the log entries related to the event processing service:
 
     ```sh
     gcloud logging read "resource.type=cloud_run_revision \
@@ -102,39 +105,41 @@ from Cloud Shell:
 
 ## Clean up
 
-In order to delete the resources that this reference architecture provisions,
-do the following:
+In order to delete the resources that this reference architecture provisions, do
+the following:
 
-1. Delete the remote backend configuration:
+1.  Delete the remote backend configuration:
 
     ```sh
     rm backend.tf
     ```
 
-1. Initialize a local backend with and migrate the state stored in the remote
-  backend to the local backend:
+1.  Initialize a local backend with and migrate the state stored in the remote
+    backend to the local backend:
 
     ```sh
     terraform init -migrate-state
     ```
 
-    If Terraform asks for confirmation to migrate the backend, answer affirmatively.
+    If Terraform asks for confirmation to migrate the backend, answer
+    affirmatively.
 
     Migrating back from a remote backend to a local backend is necessary because
     the resource deletion process deletes the remote backend storage.
 
-1. Delete resources:
+1.  Delete resources:
 
     ```sh
     terraform destroy
     ```
 
-  If Terraform asks for confirmation to migrate the backend, answer affirmatively.
+    If Terraform asks for confirmation to migrate the backend, answer
+    affirmatively.
 
 ## Troubleshooting
 
-- When running `terraform apply`, you may get an error about the Eventarc
-  Service Agent not being ready, similar to the following:
+-   When running `terraform apply`, you may get an error about the Eventarc
+    Service Agent not being ready, similar to the following:
 
     ```text
     Error: Error creating Trigger: googleapi: Error 400: Invalid resource state for "":
@@ -144,4 +149,4 @@ do the following:
     has Eventarc Service Agent role.
     ```
 
-  If that happens, try running `terraform apply` again.
+    If that happens, try running `terraform apply` again.

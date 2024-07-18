@@ -2,39 +2,41 @@
 
 UI to interact with APIs to archive following capabilities
 
-- Scrape running GKE standard clusters, node pools and pods in a Google Project
-- Provide binpacking recommendations(custom machine size, number of nodes) for selected workloads
+-   Scrape running GKE standard clusters, node pools and pods in a Google
+    Project
+-   Provide binpacking recommendations(custom machine size, number of nodes) for
+    selected workloads
 
 ## Prerequisite
 
-- Node.js and Yarn(1.x) is installed
+-   Node.js and Yarn(1.x) is installed
 
 ## Tech stack
 
-- React
-- Typescript
-- Vite
+-   React
+-   Typescript
+-   Vite
 
 ## Setup procedure
 
-1. Install required packages
+1.  Install required packages
 
-   ```bash
-   yarn
-   ```
+    ```bash
+    yarn
+    ```
 
-1. Generate code from proto file
+1.  Generate code from proto file
 
-   ```bash
-   yarn genproto
-   ```
+    ```bash
+    yarn genproto
+    ```
 
-1. Run in development mode
+1.  Run in development mode
 
-   ```bash
-   yarn dev
-   ```
+    ```bash
+    yarn dev
+    ```
 
-1. Access the UI
+1.  Access the UI
 
-   Access `http://localhost:5173/`
+    Access `http://localhost:5173/`

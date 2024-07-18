@@ -14,17 +14,16 @@ authenticate to the Terraform using credentials with sufficient privileges to
 enable several services and create required artifacts - Spanner database,
 BigQuery dataset and Google Cloud Storage bucket used by Dataflow.
 
-To tell Terraform where create these artifacts
-create `terraform/terraform.tfvars` file. At a minimum, it should define the id
-of the
+To tell Terraform where create these artifacts create
+`terraform/terraform.tfvars` file. At a minimum, it should define the id of the
 project to be used:
 
 ```terraform
 project_id = "<your-project-id>"
 ```
 
-[terraform/variables.tf](terraform/variables.tf) lists additional variables
-you can override in that file.
+[terraform/variables.tf](terraform/variables.tf) lists additional variables you
+can override in that file.
 
 Create the environment:
 
@@ -57,8 +56,8 @@ printed to the console by this script.
 
 ## Verify that the pipeline works
 
-Once the pipeline is started and running, go to
-the [Spanner console](https://console.cloud.google.com/spanner/instances/main/databases/fulfillment/details/query).
+Once the pipeline is started and running, go to the
+[Spanner console](https://console.cloud.google.com/spanner/instances/main/databases/fulfillment/details/query).
 
 Create and modify several orders using these SQL statements as example:
 
@@ -87,8 +86,8 @@ DELETE orders
     WHERE order_id = 10000;
 ```
 
-Verify that your changes replicated into BigQuery by running the following query in
-the [BigQuery SQL Studio](https://console.cloud.google.com/bigquery):
+Verify that your changes replicated into BigQuery by running the following query
+in the [BigQuery SQL Studio](https://console.cloud.google.com/bigquery):
 
 ```sql
 SELECT *
