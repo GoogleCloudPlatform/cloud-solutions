@@ -18,4 +18,4 @@
 
 FROM gradle:8-jdk21
 
-CMD gradle build -i
+CMD ["gradle", "build", "-i"]

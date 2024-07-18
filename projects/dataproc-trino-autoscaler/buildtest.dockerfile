@@ -18,4 +18,4 @@
 
 FROM gradle:8-jdk17
 
-CMD gradle test -i
+CMD ["gradle", "test", "-i"]
