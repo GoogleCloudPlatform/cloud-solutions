@@ -11,28 +11,28 @@
     "genproto": "protoc -I ../ --plugin=node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=fileSuffix=.pb --ts_proto_out=. ../proto/*.proto"
   },
   "dependencies": {
-    "@emotion/react": "11.10.6",
-    "@emotion/styled": "11.10.6",
-    "@mui/icons-material": "5.11.16",
-    "@mui/material": "5.11.16",
-    "axios": "1.6.0",
+    "@emotion/react": "11.13.0",
+    "@emotion/styled": "11.13.0",
+    "@mui/icons-material": "5.16.5",
+    "@mui/material": "5.16.5",
+    "axios": "1.7.2",
     "mui-datatables": "4.3.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-loading-overlay-ts": "2.0.1",
-    "react-router-dom": "6.10.0",
-    "react-toastify": "9.1.2",
-    "ts-proto": "1.146.0"
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-loading-overlay-ts": "2.0.2",
+    "react-router-dom": "6.25.1",
+    "react-toastify": "10.0.3",
+    "ts-proto": "1.181.1"
   },
   "devDependencies": {
-    "@types/mui-datatables": "4.3.4",
-    "@types/react": "18.0.28",
-    "@types/react-dom": "18.0.11",
-    "@vitejs/plugin-react": "3.1.0",
-    "prettier": "2.8.8",
-    "typescript": "4.9.3",
-    "vite": "4.5.3",
-    "vitest": "0.30.1"
+    "@types/mui-datatables": "4.3.12",
+    "@types/react": "17.0.80",
+    "@types/react-dom": "17.0.25",
+    "@vitejs/plugin-react": "4.3.1",
+    "prettier": "3.3.3",
+    "typescript": "5.5.4",
+    "vite": "5.3.5",
+    "vitest": "2.0.4"
   },
   "volta": {
     "node": "18.15.0",

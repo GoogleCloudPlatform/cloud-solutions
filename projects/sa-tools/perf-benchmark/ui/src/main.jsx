@@ -15,9 +15,14 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import { PerfkitApp } from './PerfkitApp';
 import './index.css';
 
 /* eslint-disable no-undef */
-ReactDOM.createRoot(document.getElementById('root')).render(<PerfkitApp />);
+ReactDOM.render(
+  <React.StrictMode>
+    <PerfkitApp />
+  </React.StrictMode>,
+  document.getElementById('root'),
+);

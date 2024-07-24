@@ -25,5 +25,6 @@ ENTRYPOINT [ "/bin/sh", "-e", "-x", "-c" ]
 CMD [ " \
     cd ../ui && yarn install && cd - && \
     yarn install && \
+    yarn audit && \
     yarn test \
   " ]

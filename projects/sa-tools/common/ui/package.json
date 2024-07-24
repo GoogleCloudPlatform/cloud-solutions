@@ -12,19 +12,20 @@
     "@mui/icons-material": "5.11.11",
     "@mui/material": "5.11.8",
     "@mui/styles": "5.11.13",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-markdown": "8.0.6",
     "@emotion/react": "11.13.0",
-    "jose": "4.15.5"
+    "jose": "5.6.3"
   },
   "devDependencies": {
-    "@vitest/coverage-c8": "0.29.7",
-    "jsdom": "22.0.0",
-    "prettier": "2.8.7",
-    "sass": "1.62.1",
-    "vite": "4.5.3",
-    "vitest": "0.29.7",
-    "webdriverio": "8.9.0"
+    "@types/react": "17.0.80",
+    "@vitest/coverage-v8": "2.0.4",
+    "jsdom": "24.1.1",
+    "prettier": "3.3.3",
+    "sass": "1.77.8",
+    "vite": "5.3.5",
+    "vitest": "2.0.4",
+    "webdriverio": "8.39.1"
   }
 }

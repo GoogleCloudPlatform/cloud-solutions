@@ -20,5 +20,11 @@ export default defineConfig({
   plugins: [],
   test: {
     environment: 'jsdom',
+    include: ['./src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/cypress/**',
+    ],
   },
 });

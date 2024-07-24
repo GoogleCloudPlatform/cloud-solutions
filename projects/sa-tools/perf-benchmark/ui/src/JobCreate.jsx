@@ -16,7 +16,7 @@
 
 /* eslint-disable react/prop-types, quote-props */
 import React, { useContext, useRef, useState } from 'react';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
