@@ -29,7 +29,7 @@ dependencies {
     // Google Cloud Deps
     implementation "com.google.cloud:google-cloud-build:3.13.0"
     implementation "com.google.cloud:google-cloud-storage:2.18.0"
-    implementation "com.google.cloud:google-cloud-bigquery:2.23.1"
+    implementation "com.google.cloud:google-cloud-bigquery:2.41.0"
 
     // Logging framework
     implementation "com.google.flogger:flogger:${floggerVersion}"

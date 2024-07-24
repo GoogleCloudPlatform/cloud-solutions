@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-FROM gradle:8-jdk17-jammy AS build-api-server
+FROM gradle:8-jdk21 AS build-api-server
 ### Copy Source Code
 COPY . /sa-tools-src
 

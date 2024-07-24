@@ -18,11 +18,9 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
     id "base"
-    id "com.diffplug.spotless" version "6.25.0"
 }
 
 subprojects {
-    apply plugin: "com.diffplug.spotless"
 
     repositories {
         mavenCentral()
@@ -30,97 +28,12 @@ subprojects {
 
     group "com.google.cloud.solutions.satools.common"
 
-    ext {
-        protoVersion = "3.22.3"
-        floggerVersion = "0.7.4"
-        springBootVersion = "3.0.6"
-        junitJupiterVersion = "5.9.2"
-    }
-
     tasks.withType(Test) {
         useJUnitPlatform()
         testLogging {
             events "passed", "skipped", "failed", "standardOut", "standardError"
             showStandardStreams = true
             exceptionFormat = TestExceptionFormat.FULL
-        }
-    }
-
-    spotless {
-        java {
-            target "**/*.java"
-            targetExclude "third_party/**"
-            googleJavaFormat("1.22.0")
-            removeUnusedImports()
-            importOrder()
-            trimTrailingWhitespace()
-            endWithNewline()
-            licenseHeader "/*\n" +
-                    " * Copyright \$YEAR Google LLC\n" +
-                    " *\n" +
-                    " * Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
-                    " * you may not use this file except in compliance with the License.\n" +
-                    " * You may obtain a copy of the License at\n" +
-                    " *\n" +
-                    " *     https://www.apache.org/licenses/LICENSE-2.0\n" +
-                    " *\n" +
-                    " * Unless required by applicable law or agreed to in writing, software\n" +
-                    " * distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
-                    " * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
-                    " * See the License for the specific language governing permissions and\n" +
-                    " * limitations under the License.\n" +
-                    " */\n" +
-                    "\n"
-        }
-
-        kotlin {
-            target "**/*.kt"
-            ktlint()
-            trimTrailingWhitespace()
-            indentWithSpaces(2)
-            endWithNewline()
-        }
-
-        freshmark {
-            target '*.md'
-            indentWithSpaces(2)
-            trimTrailingWhitespace()
-            endWithNewline()
-        }
-
-        format "proto", {
-            target "**/*.proto"
-            licenseHeader("// Copyright \$YEAR Google LLC\n" +
-                    "//\n" +
-                    "// Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
-                    "// you may not use this file except in compliance with the License.\n" +
-                    "// You may obtain a copy of the License at\n" +
-                    "//\n" +
-                    "//     http://www.apache.org/licenses/LICENSE-2.0\n" +
-                    "//\n" +
-                    "// Unless required by applicable law or agreed to in writing, software\n" +
-                    "// distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
-                    "// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
-                    "// See the License for the specific language governing permissions and\n" +
-                    "// limitations under the License.", "syntax")
-            indentWithSpaces(2)
-            trimTrailingWhitespace()
-            endWithNewline()
-        }
-
-
-        format "gradle", {
-            target "**/*.gradle"
-            indentWithSpaces(2)
-            trimTrailingWhitespace()
-            endWithNewline()
-        }
-
-        format "misc", {
-            target "**/.gitignore", "*.xml", "src/**/*.xml"
-            indentWithSpaces(2)
-            trimTrailingWhitespace()
-            endWithNewline()
         }
     }
 }

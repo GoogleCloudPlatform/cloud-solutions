@@ -8,7 +8,7 @@
     "build": "yarn tsc && yarn vite build",
     "preview": "yarn vite preview",
     "test": "yarn vitest run",
-    "genproto": "protoc -I ../ --plugin=../../../node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=fileSuffix=.pb --ts_proto_out=. ../proto/*.proto"
+    "genproto": "protoc -I ../ --plugin=node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=fileSuffix=.pb --ts_proto_out=. ../proto/*.proto"
   },
   "dependencies": {
     "@emotion/react": "11.10.6",

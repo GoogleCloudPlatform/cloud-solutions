@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 #
 # Copyright 2024 Google LLC
 #
@@ -17,8 +16,21 @@
 
 ## Description: Run unit tests in this directory isolated in a docker container.
 
-FROM gradle:8-jdk17
+FROM gradle:8-jdk21
+
+# Install node, npm and yarn
+COPY --from=node:18-slim /opt /opt/
+COPY --from=node:18-slim /usr/local/bin /usr/local/bin/
+COPY --from=node:18-slim /usr/local/include/node /usr/local/include/node/
+COPY --from=node:18-slim /usr/local/lib/node_modules /usr/local/lib/node_modules/
+ENV PATH=${PATH}:/usr/local/bin
+
 ARG PROJECT_SUBDIRECTORY
-WORKDIR "${PROJECT_SUBDIRECTORY}"
-ENV GRADLE_USER_HOME=/tmp
-CMD ["gradle", "clean", "test", "-i"]
+WORKDIR "${PROJECT_SUBDIRECTORY}/.."
+
+ENV GRADLE_USER_HOME=/tmp/gradle
+ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
+CMD [ " \
+    cd common/ui && yarn install && cd - && \
+    gradle -p perf-benchmark :api:test -i \
+  " ]

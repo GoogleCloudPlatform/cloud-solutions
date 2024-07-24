@@ -15,12 +15,13 @@
  */
 
 plugins {
+    id "base"
     id "com.github.node-gradle.node" version "4.0.0"
 }
 
 
 tasks.register("yarn_dist_clean") {
-    def distFolder = project.file("dist");
+    def distFolder = project.file("dist")
     if (distFolder.exists()) {
         distFolder.deleteDir()
     }
@@ -28,11 +29,11 @@ tasks.register("yarn_dist_clean") {
 
 tasks {
     "yarn_build" {
-        dependsOn("yarn_install")
+        dependsOn("yarn_install", "yarn_audit")
     }
 
     "yarn_test" {
-        dependsOn("yarn_install")
+        dependsOn("yarn_build")
     }
 
     "clean" {

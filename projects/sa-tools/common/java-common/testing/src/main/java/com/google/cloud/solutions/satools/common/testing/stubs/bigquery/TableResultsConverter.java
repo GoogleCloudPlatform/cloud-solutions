@@ -42,12 +42,16 @@ public class TableResultsConverter<T> implements Function<Collection<T>, TableRe
   public TableResult apply(Collection<T> source) {
 
     if (source == null) {
-      return new TableResult(null, 0, new FieldValueListPage(List.of()));
+      // schema, totalRows, Page<FieldValueList>
+      return TableResult.newBuilder().setPageNoSchema(new FieldValueListPage(List.of())).build();
     }
 
     var valueList = source.stream().map(valueConverterFn).toList();
 
-    return new TableResult(null, valueList.size(), new FieldValueListPage(valueList));
+    return TableResult.newBuilder()
+        .setTotalRows((long) valueList.size())
+        .setPageNoSchema(new FieldValueListPage(valueList))
+        .build();
   }
 
   /**

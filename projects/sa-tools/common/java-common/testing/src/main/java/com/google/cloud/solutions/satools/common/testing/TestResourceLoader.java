@@ -24,12 +24,10 @@ import com.google.gson.Gson;
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import com.google.protobuf.TextFormat.ParseException;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,7 +35,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 /**
@@ -56,11 +53,8 @@ public interface TestResourceLoader {
   /** Returns the loaded resource as text string using UTF_8 Character set. */
   default String loadResourceAsString(String resourcePath) throws IOException {
 
-    try (var reader =
-        new BufferedReader(
-            new InputStreamReader(
-                loadResource(resourcePath).openStream(), StandardCharsets.UTF_8))) {
-      return reader.lines().collect(Collectors.joining("\n"));
+    try (var inputStream = loadResource(resourcePath).openStream()) {
+      return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
     }
   }
 

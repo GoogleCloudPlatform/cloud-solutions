@@ -18,28 +18,23 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
     id "java"
-    id "com.google.protobuf" version "0.8.18"
     id "com.google.cloud.tools.jib" version "3.3.1"
-    id 'org.springframework.boot' version '3.0.6'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id "com.google.protobuf" version "0.8.18"
     id "idea"
 }
 
-group "com.google.cloud.solutions.perfkit"
 version "0.1"
 
-def protoVersion = "3.22.3"
-def floggerVersion = "0.7.4"
-def springBootVersion = "3.0.6"
-def junitJupiterVersion = "5.9.2"
-
-
 dependencies {
-    // Protobuf deps
+    // Proto
     compileOnly "com.google.api.grpc:proto-google-common-protos:2.13.0"
-    implementation 'com.google.api.grpc:grpc-google-cloud-pubsub-v1:1.105.2'
+    implementation "com.google.api.grpc:grpc-google-cloud-pubsub-v1:1.113.0"
     implementation "com.google.protobuf:protobuf-java:${protoVersion}"
     implementation "com.google.protobuf:protobuf-java-util:${protoVersion}"
 
+    // Proto definitions
+    protobuf files("../proto")
 
     // SA-Tools Commons
     implementation "com.google.cloud.solutions.satools.common:utils"
@@ -47,7 +42,7 @@ dependencies {
 
     // Commons library deps
     implementation "com.google.code.gson:gson:2.10.1"
-    implementation "com.google.guava:guava:31.1-jre"
+    implementation "com.google.guava:guava:${guavaVersion}"
     implementation "org.apache.commons:commons-lang3:3.12.0"
     implementation "org.apache.commons:commons-text:1.10.0"
 
@@ -57,7 +52,7 @@ dependencies {
     // Google Cloud
     implementation "com.google.cloud:google-cloud-build:3.14.0"
     implementation "com.google.cloud:google-cloud-storage:2.19.0"
-    implementation "com.google.cloud:google-cloud-bigquery:2.23.1"
+    implementation "com.google.cloud:google-cloud-bigquery:2.41.0"
 
 
     // Logging framework
@@ -118,8 +113,8 @@ protobuf {
     }
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_21
 
 jib {
     from {

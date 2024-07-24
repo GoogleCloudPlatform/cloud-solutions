@@ -10,7 +10,7 @@ RUN yarn install \
     && yarn run build
 
 ## Build pt-admin binary
-FROM golang:1.19 as build-pt-admin
+FROM golang:1.20 as build-pt-admin
 COPY . /sa-tools-src
 
 ## Set the Current Working Directory inside the container

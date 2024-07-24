@@ -8,7 +8,16 @@
     "pretty": "yarn prettier --write \"./**/*.{js,jsx,css,json}\"",
     "style-check": "yarn prettier --check \"./**/*.{js,jsx,css,json}\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "@mui/icons-material": "5.11.11",
+    "@mui/material": "5.11.8",
+    "@mui/styles": "5.11.13",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-markdown": "8.0.6",
+    "@emotion/react": "11.13.0",
+    "jose": "4.15.5"
+  },
   "devDependencies": {
     "@vitest/coverage-c8": "0.29.7",
     "jsdom": "22.0.0",
