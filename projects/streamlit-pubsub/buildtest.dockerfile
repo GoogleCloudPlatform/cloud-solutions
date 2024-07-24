@@ -18,6 +18,9 @@
 
 FROM python:3-slim
 
+ARG PROJECT_SUBDIRECTORY
+WORKDIR "${PROJECT_SUBDIRECTORY}"
+
 ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
 
 CMD [ " \

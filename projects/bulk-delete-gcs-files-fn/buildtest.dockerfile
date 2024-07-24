@@ -17,5 +17,7 @@
 ## Description: Run unit tests in this directory isolated in a docker container.
 
 FROM gradle:8-jdk21
-
+ARG PROJECT_SUBDIRECTORY
+WORKDIR "${PROJECT_SUBDIRECTORY}"
+ENV GRADLE_USER_HOME=/tmp
 CMD ["gradle", "build", "-i"]
