@@ -13,9 +13,9 @@ RUN apk update && apk add --no-cache protobuf-dev
 
 ENTRYPOINT [ "/bin/sh", "-e", "-x", "-c" ]
 CMD [ " \
-    cd ../../../common/ui && yarn install --cache-folder=/tmp/npm && cd - && \
-    yarn install --cache-folder=/tmp/npm && \
+    cd ../../../common/ui && yarn install && cd - && \
+    yarn install && \
     yarn genproto && \
-    yarn audit --cache-folder=/tmp/npm && \
+    yarn audit && \
     yarn test \
   " ]

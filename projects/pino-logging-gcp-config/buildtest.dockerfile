@@ -23,7 +23,7 @@ WORKDIR "${PROJECT_SUBDIRECTORY}"
 ENTRYPOINT [ "/bin/sh", "-e", "-x", "-c" ]
 
 CMD [ " \
-    npm ci --cache=/tmp/npm    && \
-    npm audit --cache=/tmp/npm && \
-    npm test                      \
+    npm ci && \
+    npm audit && \
+    npm test \
   " ]

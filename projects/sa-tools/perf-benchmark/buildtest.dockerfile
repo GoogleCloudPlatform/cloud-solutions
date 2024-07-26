@@ -28,7 +28,6 @@ ENV PATH=${PATH}:/usr/local/bin
 ARG PROJECT_SUBDIRECTORY
 WORKDIR "${PROJECT_SUBDIRECTORY}/.."
 
-ENV GRADLE_USER_HOME=/tmp/gradle
 ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
 CMD [ " \
     cd common/ui && yarn install && cd - && \

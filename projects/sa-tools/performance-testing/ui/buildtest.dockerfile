@@ -14,8 +14,8 @@ WORKDIR "${PROJECT_SUBDIRECTORY}"
 
 ENTRYPOINT [ "/bin/sh", "-e", "-x", "-c" ]
 CMD [ " \
-    cd ../../common/ui && yarn install --cache-folder=/tmp/npm && cd - && \
-    yarn install --cache-folder=/tmp/npm && \
-    yarn audit --cache-folder=/tmp/npm && \
+    cd ../../common/ui && yarn install && cd - && \
+    yarn install && \
+    yarn audit && \
     yarn build \
   " ]
