@@ -226,3 +226,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Super-linter output
+super-linter.log
+super-linter.log.html
+super-linter-output/
