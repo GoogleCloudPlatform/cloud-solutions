@@ -72,7 +72,7 @@
         "!projects/sa-tools/performance-testing/**",
         "!projects/sa-tools/perf-benchmark/**",
         "!projects/sa-tools/gke-optimization/**",
-        "!projects/sa-tools/common"
+        "!projects/sa-tools/common/**"
       ],
       "groupName": "sa-tools"
     },
