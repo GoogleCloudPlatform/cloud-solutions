@@ -1,5 +1,5 @@
 ### Note: Use this Dockerfile from the repo root and not from the diagrams2terraform folder
-FROM node:18 AS build-ui-server
+FROM node:20.16.0 AS build-ui-server
 COPY . /sa-tools-src
 
 ### Build React UI Artifacts

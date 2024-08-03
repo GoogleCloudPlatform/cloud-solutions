@@ -14,17 +14,17 @@
     "@mui/styles": "5.11.13",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-markdown": "8.0.6",
+    "react-markdown": "9.0.1",
     "@emotion/react": "11.13.0",
-    "jose": "4.15.5"
+    "jose": "5.6.3"
   },
   "devDependencies": {
     "@vitest/coverage-c8": "0.29.7",
-    "jsdom": "22.0.0",
-    "prettier": "2.8.7",
+    "jsdom": "24.1.1",
+    "prettier": "3.3.3",
     "sass": "1.62.1",
-    "vite": "4.5.3",
-    "vitest": "0.29.7",
+    "vite": "5.3.5",
+    "vitest": "2.0.5",
     "webdriverio": "8.9.0"
   }
 }

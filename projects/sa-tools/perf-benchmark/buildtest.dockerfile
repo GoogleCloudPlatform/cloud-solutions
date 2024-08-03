@@ -19,10 +19,10 @@
 FROM gradle:8-jdk21
 
 # Install node, npm and yarn
-COPY --from=node:18-slim /opt /opt/
-COPY --from=node:18-slim /usr/local/bin /usr/local/bin/
-COPY --from=node:18-slim /usr/local/include/node /usr/local/include/node/
-COPY --from=node:18-slim /usr/local/lib/node_modules /usr/local/lib/node_modules/
+COPY --from=node:20.16.0-slim /opt /opt/
+COPY --from=node:20.16.0-slim /usr/local/bin /usr/local/bin/
+COPY --from=node:20.16.0-slim /usr/local/include/node /usr/local/include/node/
+COPY --from=node:20.16.0-slim /usr/local/lib/node_modules /usr/local/lib/node_modules/
 ENV PATH=${PATH}:/usr/local/bin
 
 ARG PROJECT_SUBDIRECTORY

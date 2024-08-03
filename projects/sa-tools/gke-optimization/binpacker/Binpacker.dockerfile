@@ -4,7 +4,7 @@
 # from the gke-optimization/binpacker folder.
 
 ### Use node image as a builder for UI
-FROM node:18-alpine as ui-builder
+FROM node:20.16.0-alpine as ui-builder
 COPY . /sa-tools-src
 WORKDIR /sa-tools-src/gke-optimization/binpacker/ui
 

@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-FROM google/cloud-sdk:476.0.0 AS executor
+FROM google/cloud-sdk:486.0.0 AS executor
 RUN apt-get install --no-install-recommends -y python-is-python3
 RUN mkdir /PerfKitBenchmarker \
     # Clone forked PerfkitBenchmarker repo
