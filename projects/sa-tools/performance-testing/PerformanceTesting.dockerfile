@@ -1,5 +1,5 @@
 ### Note: Use this Dockerfile from the repo root and not from the diagrams2terraform folder
-FROM node:18 AS build-ui-server
+FROM node:18.20.4 AS build-ui-server
 COPY . /sa-tools-src
 
 ### Build React UI Artifacts
@@ -10,7 +10,7 @@ RUN yarn install \
     && yarn run build
 
 ## Build pt-admin binary
-FROM golang:1.20 as build-pt-admin
+FROM golang:1.22 as build-pt-admin
 COPY . /sa-tools-src
 
 ## Set the Current Working Directory inside the container

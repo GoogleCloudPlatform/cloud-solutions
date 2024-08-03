@@ -14,5 +14,5 @@
 # limitations under the License.
 #
 steps:
-  - name: gradle:8.7-jdk21-alpine
+  - name: gradle:8.9-jdk21-alpine
     args: ['gradle', 'clean', 'build', 'jib', '-Djib.to.image=${_CONTAINER_IMAGE_NAME}']

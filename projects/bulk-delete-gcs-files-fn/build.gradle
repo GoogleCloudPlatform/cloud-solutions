@@ -19,9 +19,9 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 plugins {
     id "java"
     id "com.diffplug.spotless" version "6.25.0"
-    id "org.springframework.boot" version "3.2.2"
+    id "org.springframework.boot" version "3.3.2"
     id "jacoco"
-    id "com.google.cloud.tools.jib" version "3.4.0"
+    id "com.google.cloud.tools.jib" version "3.4.3"
     id "idea"
 }
 
@@ -52,8 +52,8 @@ java {
 dependencies {
 
     // Commons library deps
-    implementation "com.google.guava:guava:33.0.0-jre"
-    implementation "org.apache.commons:commons-lang3:3.13.0"
+    implementation "com.google.guava:guava:33.2.1-jre"
+    implementation "org.apache.commons:commons-lang3:3.15.0"
 
     // Logging framework
     implementation "com.google.flogger:flogger:${floggerVersion}"
@@ -87,7 +87,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 jacoco {
-    toolVersion = "0.8.9"
+    toolVersion = "0.8.12"
 }
 
 test {

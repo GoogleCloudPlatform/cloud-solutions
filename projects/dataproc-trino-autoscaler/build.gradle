@@ -35,9 +35,9 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:4.12.0"
     compileOnly "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
     annotationProcessor "com.google.auto.value:auto-value:${autoValueVersion}"
-    implementation "com.google.api.grpc:proto-google-common-protos:2.32.0"
-    implementation "org.apache.commons:commons-lang3:3.14.0"
-    implementation "com.google.guava:guava:33.0.0-jre"
+    implementation "com.google.api.grpc:proto-google-common-protos:2.42.0"
+    implementation "org.apache.commons:commons-lang3:3.15.0"
+    implementation "com.google.guava:guava:33.2.1-jre"
 
     // Logging framework
     implementation "com.google.flogger:flogger:${floggerVersion}"
@@ -45,9 +45,9 @@ dependencies {
     runtimeOnly "com.google.flogger:flogger-system-backend:${floggerVersion}"
 
     // GCP Services
-    implementation "com.google.cloud:google-cloud-monitoring:3.35.0"
-    implementation "com.google.cloud:google-cloud-dataproc:4.31.0"
-    implementation "com.google.cloud:google-cloud-compute:1.44.0"
+    implementation "com.google.cloud:google-cloud-monitoring:3.48.0"
+    implementation "com.google.cloud:google-cloud-dataproc:4.44.0"
+    implementation "com.google.cloud:google-cloud-compute:1.57.0"
 }
 
 jar {

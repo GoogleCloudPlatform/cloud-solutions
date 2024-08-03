@@ -4,7 +4,7 @@
 # from the gke-optimization/binpacker folder.
 
 ### Use node image as a builder for UI
-FROM golang:1.20-alpine
+FROM golang:1.22-alpine
 ARG PROJECT_SUBDIRECTORY
 WORKDIR "${PROJECT_SUBDIRECTORY}"
 

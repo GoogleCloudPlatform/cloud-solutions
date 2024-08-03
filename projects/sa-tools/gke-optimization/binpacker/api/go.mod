@@ -1,20 +1,20 @@
 module github.com/GoogleCloudPlatform/cloud-solutions/projects/sa-tools/gke_optimization/binpacker/api
 
-go 1.19
+go 1.22.5
 
 require (
-	cloud.google.com/go/compute v1.19.1
-	cloud.google.com/go/container v1.15.0
-	cloud.google.com/go/monitoring v1.13.0
-	github.com/golang/glog v1.1.0
+	cloud.google.com/go/compute v1.27.4
+	cloud.google.com/go/container v1.38.0
+	cloud.google.com/go/monitoring v1.20.3
+	github.com/golang/glog v1.2.2
 	github.com/julienschmidt/httprouter v1.3.0
-	github.com/rs/cors v1.8.3
-	golang.org/x/oauth2 v0.7.0
-	google.golang.org/api v0.114.0
-	google.golang.org/protobuf v1.33.0
-	k8s.io/api v0.26.1
-	k8s.io/apimachinery v0.26.1
-	k8s.io/client-go v0.26.1
+	github.com/rs/cors v1.11.0
+	golang.org/x/oauth2 v0.21.0
+	google.golang.org/api v0.190.0
+	google.golang.org/protobuf v1.34.2
+	k8s.io/api v0.30.3
+	k8s.io/apimachinery v0.30.3
+	k8s.io/client-go v0.30.3
 )
 
 require (

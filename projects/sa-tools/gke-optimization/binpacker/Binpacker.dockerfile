@@ -4,7 +4,7 @@
 # from the gke-optimization/binpacker folder.
 
 ### Use node image as a builder for UI
-FROM node:18-alpine as ui-builder
+FROM node:18.20.4-alpine as ui-builder
 COPY . /sa-tools-src
 WORKDIR /sa-tools-src/gke-optimization/binpacker/ui
 
@@ -18,7 +18,7 @@ RUN yarn install \
     && yarn build
 
 ### Use golang image as a builder for backend APIs
-FROM golang:1.20-alpine AS api-builder
+FROM golang:1.22-alpine AS api-builder
 COPY . /sa-tools-src
 WORKDIR /sa-tools-src/gke-optimization/binpacker/api
 
@@ -35,7 +35,7 @@ RUN apk update \
       go build -v -o binpacker github.com/GoogleCloudPlatform/cloud-solutions/projects/sa-tools/gke_optimization/binpacker/api/cmd/binpacker
 
 ### Use alpine image as a base image
-FROM alpine:3.18
+FROM alpine:3.20
 
 # Install required packages
 RUN apk add --no-cache ca-certificates

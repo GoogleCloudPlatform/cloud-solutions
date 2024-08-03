@@ -9,22 +9,22 @@
     "style-check": "yarn prettier --check \"./**/*.{js,jsx,css,json}\""
   },
   "dependencies": {
-    "@mui/icons-material": "5.11.11",
-    "@mui/material": "5.11.8",
-    "@mui/styles": "5.11.13",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-markdown": "8.0.6",
+    "@mui/icons-material": "5.16.6",
+    "@mui/material": "5.16.6",
+    "@mui/styles": "5.16.6",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-markdown": "8.0.7",
     "@emotion/react": "11.13.0",
-    "jose": "4.15.5"
+    "jose": "4.15.9"
   },
   "devDependencies": {
-    "@vitest/coverage-c8": "0.29.7",
-    "jsdom": "22.0.0",
-    "prettier": "2.8.7",
-    "sass": "1.62.1",
+    "@vitest/coverage-c8": "0.33.0",
+    "jsdom": "22.1.0",
+    "prettier": "2.8.8",
+    "sass": "1.77.8",
     "vite": "4.5.3",
-    "vitest": "0.29.7",
-    "webdriverio": "8.9.0"
+    "vitest": "0.34.6",
+    "webdriverio": "8.39.1"
   }
 }

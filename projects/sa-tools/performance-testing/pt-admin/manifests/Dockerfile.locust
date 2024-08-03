@@ -1,4 +1,4 @@
-FROM locustio/locust:2.14.1
+FROM locustio/locust:2.29.1
 
 # Copy any locust file and nested folder into /bzt-configs
 # How to structure your test code: https://docs.locust.io/en/stable/writing-a-locustfile.html#how-to-structure-your-test-code

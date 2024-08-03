@@ -1,4 +1,4 @@
-FROM blazemeter/taurus@sha256:24a709d114f7480517fd1552485a4b6e89c6268f0d8b62fb0f3dbf61e69caf57
+FROM blazemeter/taurus@sha256:5d4a8724a976ffc7b421ae7c4c476a451e7ed56ba0944d9c3f3432bdb7f55557
 
 
 # Install Locust

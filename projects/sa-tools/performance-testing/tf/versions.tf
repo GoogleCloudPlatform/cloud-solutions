@@ -16,16 +16,16 @@
 
 
 terraform {
-  required_version = ">=0.13"
+  required_version = ">= 0.15.5"
 
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 4.36.0, < 5.0"
+      version = ">= 4.85.0, < 5.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.10"
+      version = "~> 2.31"
     }
   }
   provider_meta "google" {

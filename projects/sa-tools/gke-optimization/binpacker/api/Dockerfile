@@ -1,6 +1,6 @@
 # 1st builder for backend
 # Use golang image as a builder for backend
-FROM golang:1.19-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 # Create and set workdir
 WORKDIR /app
@@ -19,7 +19,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o binpacker github.com/GoogleCloudPlatform/cloud-solutions/projects/sa-tools/gke_optimization/binpacker/api/cmd/binpacker
 
 ## Image to run the backend and the frontend
-FROM alpine:3.18
+FROM alpine:3.20
 RUN apk add --no-cache ca-certificates
 
 COPY --from=builder /app/binpacker /

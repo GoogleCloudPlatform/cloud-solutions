@@ -4,7 +4,7 @@
 # from the gke-optimization/binpacker folder.
 
 ### Use node image as a builder for UI
-FROM node:18-alpine
+FROM node:18.20.4-alpine
 ARG PROJECT_SUBDIRECTORY
 WORKDIR "${PROJECT_SUBDIRECTORY}"
 

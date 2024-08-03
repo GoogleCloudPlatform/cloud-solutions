@@ -20,12 +20,12 @@ plugins {
 
 dependencies {
     // Objectify
-    api ("com.googlecode.objectify:objectify:6.0.9") {
+    api ("com.googlecode.objectify:objectify:6.1.2") {
         exclude group: "com.fasterxml.jackson.core", module: "jackson-core"
     }
-    api ("com.google.cloud:google-cloud-datastore:2.13.3") {
+    api ("com.google.cloud:google-cloud-datastore:2.20.2") {
         exclude group: "com.fasterxml.jackson.core", module: "jackson-core"
     }
 
-    implementation "jakarta.servlet:jakarta.servlet-api:6.0.0"
+    implementation "jakarta.servlet:jakarta.servlet-api:6.1.0"
 }

@@ -20,7 +20,7 @@ plugins {
 
 dependencies {
 
-    implementation "com.google.code.gson:gson:2.10.1"
+    implementation "com.google.code.gson:gson:2.11.0"
     implementation ("org.springframework.boot:spring-boot-starter-web:${springBootVersion}" ){
         exclude group: "org.yaml", module: "snakeyaml"
         exclude group: "com.fasterxml.jackson.core", module: "jackson-annotations"
@@ -31,9 +31,9 @@ dependencies {
         exclude group: "com.fasterxml.jackson.module", module: "jackson-module-parameter-names"
     }
 
-    api ("com.google.auth:google-auth-library-oauth2-http:1.15.0") {
+    api ("com.google.auth:google-auth-library-oauth2-http:1.24.0") {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    implementation "commons-codec:commons-codec:1.14"
-    implementation "org.apache.commons:commons-lang3:3.12.0"
+    implementation "commons-codec:commons-codec:1.17.1"
+    implementation "org.apache.commons:commons-lang3:3.15.0"
 }

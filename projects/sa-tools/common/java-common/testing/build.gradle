@@ -24,12 +24,12 @@ dependencies {
     implementation "com.google.protobuf:protobuf-java-util:${protoVersion}"
     implementation project(":utils")
 
-    implementation "commons-io:commons-io:2.7"
+    implementation "commons-io:commons-io:2.16.1"
 
     // Google Cloud Deps
-    implementation "com.google.cloud:google-cloud-build:3.13.0"
-    implementation "com.google.cloud:google-cloud-storage:2.18.0"
-    implementation "com.google.cloud:google-cloud-bigquery:2.41.0"
+    implementation "com.google.cloud:google-cloud-build:3.49.0"
+    implementation "com.google.cloud:google-cloud-storage:2.41.0"
+    implementation "com.google.cloud:google-cloud-bigquery:2.42.0"
 
     // Logging framework
     implementation "com.google.flogger:flogger:${floggerVersion}"
@@ -37,7 +37,7 @@ dependencies {
     runtimeOnly "com.google.flogger:flogger-system-backend:${floggerVersion}"
 
     // Testing Framework
-    implementation "com.google.truth:truth:1.1.3"
-    implementation "com.google.truth.extensions:truth-proto-extension:1.1.3"
-    implementation "com.google.truth.extensions:truth-java8-extension:1.1.3"
+    implementation "com.google.truth:truth:1.4.4"
+    implementation "com.google.truth.extensions:truth-proto-extension:1.4.4"
+    implementation "com.google.truth.extensions:truth-java8-extension:1.4.4"
 }

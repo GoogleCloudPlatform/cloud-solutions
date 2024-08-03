@@ -15,12 +15,12 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@vitest/coverage-c8": "0.29.7",
-    "jsdom": "22.0.0",
-    "prettier": "2.8.7",
-    "sass": "1.62.1",
+    "@vitest/coverage-c8": "0.33.0",
+    "jsdom": "22.1.0",
+    "prettier": "2.8.8",
+    "sass": "1.77.8",
     "vite": "4.5.3",
-    "vitest": "0.29.7",
-    "webdriverio": "8.9.0"
+    "vitest": "0.34.6",
+    "webdriverio": "8.39.1"
   }
 }

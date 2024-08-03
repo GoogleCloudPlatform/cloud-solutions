@@ -18,9 +18,9 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
     id "java"
-    id "com.google.cloud.tools.jib" version "3.3.1"
+    id "com.google.cloud.tools.jib" version "3.4.3"
     id 'org.springframework.boot' version "${springBootVersion}"
-    id "com.google.protobuf" version "0.8.18"
+    id "com.google.protobuf" version "0.9.4"
     id "idea"
 }
 
@@ -28,8 +28,8 @@ version "0.1"
 
 dependencies {
     // Proto
-    compileOnly "com.google.api.grpc:proto-google-common-protos:2.13.0"
-    implementation "com.google.api.grpc:grpc-google-cloud-pubsub-v1:1.113.0"
+    compileOnly "com.google.api.grpc:proto-google-common-protos:2.42.0"
+    implementation "com.google.api.grpc:grpc-google-cloud-pubsub-v1:1.114.0"
     implementation "com.google.protobuf:protobuf-java:${protoVersion}"
     implementation "com.google.protobuf:protobuf-java-util:${protoVersion}"
 
@@ -41,18 +41,18 @@ dependencies {
     implementation "com.google.cloud.solutions.satools.common:spring-boot-auth"
 
     // Commons library deps
-    implementation "com.google.code.gson:gson:2.10.1"
+    implementation "com.google.code.gson:gson:2.11.0"
     implementation "com.google.guava:guava:${guavaVersion}"
-    implementation "org.apache.commons:commons-lang3:3.12.0"
-    implementation "org.apache.commons:commons-text:1.10.0"
+    implementation "org.apache.commons:commons-lang3:3.15.0"
+    implementation "org.apache.commons:commons-text:1.12.0"
 
     // Objectify
     implementation "com.google.cloud.solutions.satools.common:objectify-util"
 
     // Google Cloud
-    implementation "com.google.cloud:google-cloud-build:3.14.0"
-    implementation "com.google.cloud:google-cloud-storage:2.19.0"
-    implementation "com.google.cloud:google-cloud-bigquery:2.41.0"
+    implementation "com.google.cloud:google-cloud-build:3.49.0"
+    implementation "com.google.cloud:google-cloud-storage:2.41.0"
+    implementation "com.google.cloud:google-cloud-bigquery:2.42.0"
 
 
     // Logging framework
@@ -75,11 +75,11 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
 
     testImplementation ("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
-    testImplementation "com.google.truth:truth:1.1.3"
-    testImplementation "com.google.truth.extensions:truth-java8-extension:1.1.3"
-    testImplementation "com.google.truth.extensions:truth-proto-extension:1.1.3"
-    testImplementation "commons-io:commons-io:2.11.0"
-    testImplementation "org.apache.commons:commons-csv:1.10.0"
+    testImplementation "com.google.truth:truth:1.4.4"
+    testImplementation "com.google.truth.extensions:truth-java8-extension:1.4.4"
+    testImplementation "com.google.truth.extensions:truth-proto-extension:1.4.4"
+    testImplementation "commons-io:commons-io:2.16.1"
+    testImplementation "org.apache.commons:commons-csv:1.11.0"
 }
 
 tasks.withType(JavaCompile) {
