@@ -51,6 +51,10 @@
       "groupName": "hive-bigquery-connector-demo"
     },
     {
+      "matchFileNames": ["projects/sa-tools/**"],
+      "groupName": "sa-tools"
+    },
+    {
       "matchFileNames": ["projects/sa-tools/common/**"],
       "groupName": "sa-tools-common"
     },
@@ -65,16 +69,6 @@
     {
       "matchFileNames": ["projects/sa-tools/performance-testing/**"],
       "groupName": "sa-tools-performance-testing"
-    },
-    {
-      "matchFileNames": [
-        "projects/sa-tools/**",
-        "!projects/sa-tools/performance-testing/**",
-        "!projects/sa-tools/perf-benchmark/**",
-        "!projects/sa-tools/gke-optimization/**",
-        "!projects/sa-tools/common/**"
-      ],
-      "groupName": "sa-tools"
     },
     {
       "matchFileNames": [
