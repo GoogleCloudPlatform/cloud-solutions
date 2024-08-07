@@ -9,6 +9,7 @@ stdout, for example Cloud Run and Cloud Functions.
 
 ## Features
 
+-   uses "message" not "msg" for log message field.
 -   Converts Pino log levels to Google Cloud Logging log levels.
 -   Adds an
     [insertId](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#FIELDS.insert_id)
