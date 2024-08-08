@@ -1,7 +1,7 @@
 {
   "packages": {
-    "projects/pino_logging_gcp_config": {
-      "changelog-path": "projects/pino_logging_gcp_config/CHANGELOG.md",
+    "projects/pino-logging-gcp-config": {
+      "changelog-path": "projects/pino-logging-gcp-config/CHANGELOG.md",
       "release-type": "node",
       "bump-minor-pre-major": false,
       "bump-patch-for-minor-pre-major": false,
@@ -9,7 +9,7 @@
       "prerelease": false,
       "include-component-in-tag": false,
       "extra-files": [
-        "projects/pino_logging_gcp_config/src/pino_gcp_config.ts"
+        "projects/pino-logging-gcp-config/src/pino_gcp_config.ts"
       ]
     }
   },
