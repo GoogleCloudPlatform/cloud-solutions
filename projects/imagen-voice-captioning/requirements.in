@@ -1,6 +1,0 @@
-google-cloud-texttospeech==2.14.1
-google-cloud-aiplatform==1.33.1
-opencv-python==4.7.0.72
-Pillow==10.3.0
-pydub==0.25.1
-requests==2.31.0
