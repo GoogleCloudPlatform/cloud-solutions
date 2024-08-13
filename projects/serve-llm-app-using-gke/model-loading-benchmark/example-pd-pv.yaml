@@ -1,0 +1,58 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: models-disk-1024gb-zone-a
+  labels:
+    pv-usage: model-cache
+    pv-spec: ssd-1024G
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 1024Gi
+  accessModes:
+  - ReadOnlyMany
+  csi:
+    driver: pd.csi.storage.gke.io
+    volumeHandle: projects/_PROJECT_ID_/zones/_DISK_ZONE_/disks/_DISK_NAME_
+    fsType: ext4
+    readOnly: true
+  mountOptions:
+  - read_ahead_kb=4096
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: topology.gke.io/zone
+          operator: In
+          values:
+          - _DISK_ZONE_
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-model-weight-disk-1024gb-a-ro
+spec:
+  storageClassName: ""
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 1024Gi
+  selector:
+    matchLabels:
+      pv-usage: model-cache
+      pv-spec: ssd-1024G

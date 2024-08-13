@@ -1,0 +1,82 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-openai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm-openai
+  template:
+    metadata:
+      labels:
+        app: vllm-openai
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: inference-server
+        image: vllm/vllm-openai:v0.5.3
+        resources:
+          requests:
+            cpu: "2"
+            memory: "25Gi"
+            ephemeral-storage: "25Gi"
+            nvidia.com/gpu: "2"
+          limits:
+            cpu: "2"
+            memory: "25Gi"
+            ephemeral-storage: "25Gi"
+            nvidia.com/gpu: "2"
+        args:
+        - --model=$(MODEL)
+        - --tensor-parallel-size=2
+        env:
+        - name: MODEL
+          value: /model-data/_MODEL_NAME_
+        - name: VLLM_ATTENTION_BACKEND
+          value: FLASHINFER
+        volumeMounts:
+        - mountPath: /dev/shm
+          name: dshm
+        - name: model-disk
+          mountPath: /model-data
+          readOnly: true
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      - name: model-disk
+        persistentVolumeClaim:
+          claimName: _YOUR_MODEL_PVC_
+          readOnly: true
+      nodeSelector:
+        cloud.google.com/gke-accelerator: nvidia-l4
+        topology.gke.io/zone: _YOUR_ZONE_
+        cloud.google.com/gke-nodepool: _YOUR_NODE_POOL_
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-openai
+spec:
+  selector:
+    app: vllm-openai
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
