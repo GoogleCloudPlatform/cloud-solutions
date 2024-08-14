@@ -24,5 +24,5 @@ output "event_processor_cloud_run_service_name" {
 
 output "event_processing_dead_letter_topic_name" {
   description = "Name of the dead-letter Cloud Pub/Sub topic"
-  value       = google_pubsub_topic.event_processing_dead_letter_topic.name
+  value       = google_pubsub_topic.event_processing_dead_letter_topic[0].name
 }
