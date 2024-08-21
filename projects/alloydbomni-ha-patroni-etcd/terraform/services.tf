@@ -15,9 +15,8 @@
 #
 
 module "project-services" {
-  source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "14.4.0"
-
+  source                      = "terraform-google-modules/project-factory/google//modules/project_services"
+  version                     = "14.4.0"
   project_id                  = data.google_project.project.project_id
   disable_services_on_destroy = false
   activate_apis = [
@@ -25,5 +24,4 @@ module "project-services" {
     "iam.googleapis.com",
     "storage.googleapis.com"
   ]
-
 }
