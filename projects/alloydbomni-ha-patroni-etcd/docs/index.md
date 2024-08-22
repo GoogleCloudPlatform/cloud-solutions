@@ -66,7 +66,7 @@ The configuration after a zone outage and a failover:
 
 ![view of a HA configuration after a zone outage with two working AlloyDB Omni
 nodes out of three, a HAProxy instance in front and two working out of three
-etcd nodes](AlloyDBOmniPatroni-1-Failover.svg "HA configuration after a zone
+etcd nodes](AlloyDBOmniPatroni-1-Failover.jpg "HA configuration after a zone
 outage with two working AlloyDB Omni nodes out of three, a HAProxy instance in
 front and two working etcd nodes out of three.")
 
@@ -97,9 +97,9 @@ command.
 1.  In Cloud Shell, clone the source repository and go to the directory for this
     tutorial:
 
-```bash
-git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git
-```
+    ```bash
+    git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git
+    ```
 
 In this tutorial, we use [psql](https://www.postgresql.org/docs/current/app-psql.html)
 to interact with the database cluster. The psql client is already installed
@@ -114,8 +114,16 @@ which simplifies the process of managing PostgreSQL databases.
 In Cloud Shell, go to the terraform directory of this tutorial:
 
 ```bash
-cd cloud-solutions/projects/alloydbomni-ha-patroni-etcd-creation/terraform
+cd cloud-solutions/projects/alloydbomni-ha-patroni-etcd-creation/terraform && \
+terraform init
 ```
+
+Run the Terraform script to create all resources:
+The Terraform script creates and configures:
+
+-   three nodes for your etcd cluster
+-   three nodes for your Patroni cluster
+-   one node for HAProxy
 
 You can set values for your project_id, region, zones, and some settings for
 your Patroni cluster such as cluster name, Postgres superuser, replication
@@ -126,21 +134,10 @@ variables.tf file or add the variable values in the terraform command line by
 using the -var option for each variable:
 
 ```bash
-terraform apply -var='region=us-central1' -var='zones=["us-central1-a",
-"us-central1-b", "us-central1-c"]'
+terraform apply \
+-var='region=us-central1' \
+-var='zones=["us-central1-a","us-central1-b", "us-central1-c"]'
 ```
-
-Run the Terraform script to create all resources:
-
-```bash
-terraform init && terraform apply
-```
-
-The Terraform script creates and configures:
-
--   three nodes for your etcd cluster
--   three nodes for your Patroni cluster
--   one node for HAProxy
 
 ### (Optional) Connection Pooling with PGBouncer
 
