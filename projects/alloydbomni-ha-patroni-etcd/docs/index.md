@@ -346,7 +346,6 @@ alloydb-patroni1 is the leader of the cluster:
 }
 ```
 
-> [!NOTE]
 > Note: You might need to install the jq tool by running:
 > `sudo apt-get install jq -y`
 
