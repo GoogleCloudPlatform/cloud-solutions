@@ -1,0 +1,103 @@
+{
+  "name": "GCS to AlloyDB",
+  "description": "An Apache Beam batch pipeline that reads content from Google Cloud Storage and writes the results into an AlloyDB database table.",
+  "streaming": false,
+  "parameters": [
+    {
+      "name": "input_file_format",
+      "label": "Format of the input files",
+      "helpText": "File format for the input files. Supported: avro and csv.",
+      "isOptional": false
+    },
+    {
+      "name": "input_file_pattern",
+      "label": "Input File Pattern",
+      "helpText": "File path or pattern to the file(s). Example: e.g. gs://bucket/path/*.csv",
+      "isOptional": false
+    },
+    {
+      "name": "input_schema",
+      "label": "dtypes JSON schema list",
+      "helpText": "The input schema using dtype strings. The format for each field is `field_name:dtype`. The fields must follow the order of the file when in `csv` format. Each field must be separated with `;`. Example: `name:string;phone:number`.",
+      "isOptional": false
+    },
+    {
+      "name": "input_csv_file_delimiter",
+      "label": "CSV Delimiter",
+      "helpText": "The column delimiter for the input CSV file. Only used for CSV files. Example: \";\". Default: \",\"",
+      "isOptional": true
+    },
+    {
+      "name": "input_file_contains_headers",
+      "label": "CSV Contains Headers",
+      "helpText": "Whether the input CSV files contain a header record. Use 1 for true and 0 for false. Only used for CSV files. Default: 1 (true).",
+      "isOptional": true
+    },
+    {
+      "name": "alloydb_ip",
+      "label": "AlloyDB instance IP",
+      "helpText": "IP of the AlloyDB instance. Example: 10.3.125.7",
+      "isOptional": false
+    },
+    {
+      "name": "alloydb_port",
+      "label": "AlloyDB instace port",
+      "helpText": "Port of the AlloyDB instance. Default: 5432.",
+      "isOptional": true
+    },
+    {
+      "name": "alloydb_database",
+      "label": "AlloyDB database name",
+      "helpText": "Name of the AlloyDB database. Default: postgres.",
+      "isOptional": true
+    },
+    {
+      "name": "alloydb_user",
+      "label": "AlloyDB user",
+      "helpText": "User to login to Postgres database on AlloyDB. Default: postgres.",
+      "isOptional": true
+    },
+    {
+      "name": "alloydb_password",
+      "label": "AlloyDB password",
+      "helpText": "Password to login to Postgres database on AlloyDB.",
+      "isOptional": false
+    },
+    {
+      "name": "alloydb_table",
+      "label": "AlloyDB table name",
+      "helpText": "Name of the table within the Postgres database on AlloyDB.",
+      "isOptional": false
+    },
+    {
+      "name": "job_name",
+      "label": "Dataflow job name",
+      "helpText": "Name of the Dataflow job name.",
+      "isOptional": false
+    },
+    {
+      "name": "region",
+      "label": "Google Cloud region",
+      "helpText": "The region where you want to deploy the Dataflow job. Example: asia-southeast-1.",
+      "isOptional": false
+    },
+    {
+      "name": "project",
+      "label": "Google Cloud project id",
+      "helpText": "The project id where you want to deploy the Dataflow job.",
+      "isOptional": false
+    },
+    {
+      "name": "temp_location",
+      "label": "GCS temp location file path",
+      "helpText": "Cloud Storage path for Dataflow to stage temporary job files created during the execution of the pipeline. Example: gs://bucket/path/dataflow/temp/",
+      "isOptional": false
+    },
+    {
+      "name": "staging_location",
+      "label": "GCS staging location file path",
+      "helpText": "Cloud Storage path for Dataflow to stage staging job files created during the execution of the pipeline. Example: gs://bucket/path/dataflow/staging/",
+      "isOptional": false
+    }
+  ]
+}

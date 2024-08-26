@@ -1,0 +1,17 @@
+[
+  {"integer_field": "int32"},
+  {"bigint_field": "int64"},
+  {"boolean_field": "boolean"},
+  {"char_field": "string"},
+  {"varchar_field": "string"},
+  {"date_field": "string"},
+  {"double_field": "float64"},
+  {"json_field": "string"},
+  {"macaddr_field": "string"},
+  {"numeric_field": "float64"},
+  {"point_field": "string"},
+  {"real_field": "float32"},
+  {"smallint_field": "int16"},
+  {"text_field": "string"},
+  {"timestamp_field": "string"}
+]

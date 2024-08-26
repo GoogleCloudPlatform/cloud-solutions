@@ -1,0 +1,8 @@
+[
+  {"id": "int64"},
+  {"first_name": "string"},
+  {"last_name": "string"},
+  {"department": "string"},
+  {"salary": "float"},
+  {"hire_date": "string"}
+]

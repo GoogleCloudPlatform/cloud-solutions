@@ -1,0 +1,10 @@
+# Custom.
+__*
+
+# Keys.
+key.json
+aes_key.bin
+
+# Python
+__pycache__
+.venv*
