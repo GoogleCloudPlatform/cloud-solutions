@@ -15,7 +15,7 @@
 
 # buildtest.dockerfile is only used for ci.
 
-FROM python:3.9
+FROM python:3.12
 
 ENV JAVA_HOME=/opt/java/openjdk
 COPY --from=eclipse-temurin:17-jdk $JAVA_HOME $JAVA_HOME

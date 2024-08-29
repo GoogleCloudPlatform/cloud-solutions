@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.9 as test_container
+FROM python:3.12-slim as test_container
 
 ENV JAVA_HOME=/opt/java/openjdk
 COPY --from=eclipse-temurin:17-jdk $JAVA_HOME $JAVA_HOME

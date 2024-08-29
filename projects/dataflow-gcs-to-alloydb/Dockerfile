@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM gcr.io/dataflow-templates-base/python3-template-launcher-base:20240506-rc00 as dataflow_template_container
+FROM gcr.io/dataflow-templates-base/python312-template-launcher-base:20240812-rc01 as dataflow_template_container
 
 ENV JAVA_HOME=/opt/java/openjdk
 COPY --from=eclipse-temurin:17-jdk $JAVA_HOME $JAVA_HOME
