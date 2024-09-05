@@ -65,6 +65,7 @@ echo "Initializing docs folder at: ${RUN_DOCS_BASE}"
 mkdir -p "${RUN_DOCS_BASE}"
 
 ln -sf "${DOCS_DIR}/index.md" "${RUN_DOCS_BASE}/index.md"
+ln -sf "${DOCS_DIR}/google13f96ebf51862cf4.html" "${RUN_DOCS_BASE}/google13f96ebf51862cf4.html"
 ln -sf "${DOCS_DIR}/common" "${RUN_DOCS_BASE}/common"
 
 RUN_SOLUTIONS_FOLDER="$(realpath "${RUN_DOCS_BASE}")"
