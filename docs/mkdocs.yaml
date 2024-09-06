@@ -28,7 +28,6 @@ theme:
   features:
     - content.code.copy
     - content.code.annotate
-    - navigation.expand
   palette:
     primary: #006CBE
   icon:
