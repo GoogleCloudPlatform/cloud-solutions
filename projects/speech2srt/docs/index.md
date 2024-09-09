@@ -1,10 +1,8 @@
-# Generage translated subtitles for videos
+# Generate translated subtitles for videos
 
 This tutorial shows you how to use the Google Cloud AI services
 [Speech-to-Text API](https://cloud.google.com/speech-to-text/) and [Translation API](https://cloud.google.com/translation/)
 to add subtitles to videos and to provide localized subtitles in other languages.
-
-## Summary
 
 The solution performs the following steps:
 
@@ -16,7 +14,7 @@ The solution performs the following steps:
 
 ## Architecture diagram
 
-!["Architecture diagram"](images/architecture.svg "Architecture diagram")
+!["Architecture diagram"](images/architecture.png "Architecture diagram")
 
 ## Costs
 
@@ -47,15 +45,15 @@ This tutorial assumes that you already have a
 1.  Give the project a name and click **Create**.
 1.  Click the project selector again and select your new project.
 
-## Prerequisites
+## Installation
 
 1.  On your local development machine, install the following tools:
     -   [Google Cloud SDK](https://cloud.google.com/sdk/install)
-    -   git
-    -   python3
-    -   pip
-    -   ffmpeg
-    -   ffprobe
+    -   [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+    -   [python3](https://www.python.org/downloads/)
+    -   [pip](https://pip.pypa.io/en/stable/installation/)
+    -   [ffmpeg](https://ffmpeg.org/download.html)
+    -   [ffprobe](https://ffmpeg.org/download.html)
 
 1.  Configure `gcloud` to use your new Google Cloud project:
 
@@ -81,7 +79,8 @@ This tutorial assumes that you already have a
 1.  Clone the repository and change to its directory
 
     ```bash
-    cd projects/speech2srt
+    git clone https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/speech2srt \
+    && cd projects/speech2srt
     ```
 
     Note: it is recommended to use
@@ -156,29 +155,30 @@ audio input can greatly affect the quality of the transcribed output.
     ffprobe video.mp4
     ```
 
-The command output will contain information on the audio tracks, their
-encoding, bitrate, number of channels and so on. For example:
+    The command output will contain information on the audio tracks, their
+    encoding, bitrate, number of channels and so on. For example:
 
-```text
-  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s (default)
-    Metadata:
-      creation_time   : 2024-06-26T05:56:30.000000Z
-      handler_name    : ETI ISO Audio Media Handler
-      vendor_id       : [0][0][0][0]
-```
-
-To get the best results, we should extract the dialog audio tracks in a format
-suitable for the Speech to Text API.
-
-1.  Use the `ffmpeg` command to extract the desired audio track and transcode it
-to LINEAR16 mono at 24KHz, and save it as the output file `audio.wav`:
-
-    ```bash
-    ffmpeg -i video.mp4 -ac 1 -ar 24000 -acodec pcm_s16le audio.wav
+    ```text
+    Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s (default)
+        Metadata:
+        creation_time   : 2024-06-26T05:56:30.000000Z
+        handler_name    : ETI ISO Audio Media Handler
+        vendor_id       : [0][0][0][0]
     ```
 
-Note: this tutorial includes a pre-created audio file `example.wav`, which the
-next steps use for demonstration.
+    To get the best results, we should extract the dialog audio tracks in a format
+    suitable for the Speech to Text API.
+
+    1.  Use the `ffmpeg` command to extract the desired audio track and
+    transcode it to LINEAR16 mono at 24KHz, and save it as the output
+    file `audio.wav`:
+
+        ```bash
+        ffmpeg -i video.mp4 -ac 1 -ar 24000 -acodec pcm_s16le audio.wav
+        ```
+
+    Note: this tutorial includes a pre-created audio file `example.wav`, which the
+    next steps use for demonstration.
 
 ## Transcribe dialog to plain text and SRT subtitles
 
@@ -193,14 +193,14 @@ To transcribe the audio file, do the following:
 1.  Optionally, prepare a PhraseSets text file which contains words that the
 Speech to Text API should focus on. Here's an example PhraseSets file:
 
-```text
-GCP
-Google Cloud
-AI
-ML
-artificial intelligence
-machine learning
-```
+    ```text
+    GCP
+    Google Cloud
+    AI
+    ML
+    artificial intelligence
+    machine learning
+    ```
 
 1.  View the command line options for the transcribing utility:
 
@@ -214,11 +214,15 @@ machine learning
     python3 speech2srt.py --storage_uri gs://$BUCKET_IN/example.wav --sample_rate_hertz 24000 --out_file "en"
     ```
 
-    1.  Optionally, include a PhraseSets file with:
+    Optionally, include a PhraseSets file with:
 
-        ```bash
-        python3 speech2srt.py --storage_uri gs://$BUCKET_IN/example.wav --sample_rate_hertz 24000 --out_file "en" --phrasesets phraseset.txt
-        ```
+    ```bash
+    python3 speech2srt.py \
+    --storage_uri gs://$BUCKET_IN/example.wav \
+    --sample_rate_hertz 24000 \
+    --out_file "en" \
+    --phrasesets phraseset.txt
+    ```
 
     If successful, the command should output the following:
 
