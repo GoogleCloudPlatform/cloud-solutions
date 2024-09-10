@@ -27,4 +27,4 @@ Cloud Storage to AlloyDB or PostgreSQL server in Cloud SQL.
 ## Quickstart
 
 1.  [Configure](./configuration.md) the pipeline parameters.
-2.  [Build and run](./build_and_run_pipeline.md) the Dataflow Flex pipeline.
+1.  [Build and run](./build_and_run_pipeline.md) the Dataflow Flex pipeline.

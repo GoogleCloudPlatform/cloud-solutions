@@ -5,13 +5,13 @@ Consists of 3 modules:
 1.  API Server: Java SpringBoot based server providing RESTful API for creating,
     monitoring and cancelling BenchmarkJobs using the Benchmark Runner.
 
-2.  Benchmark Runner: Templated launch scripts on fork of Google's Perfkit
+1.  Benchmark Runner: Templated launch scripts on fork of Google's Perfkit
     benchmark maintained by @prakhargautam at
     <https://github.com/prakhag2/PerfKitBenchmarker> The runner executes a
     parameterized Cloud Build jobs with job specific parameters passed as input
     and writes the results to Google BigQuery table.
 
-3.  Daily Perfkit benchmarks runner cron-based runner for standard shapes.
+1.  Daily Perfkit benchmarks runner cron-based runner for standard shapes.
 
 ## Prerequisites
 
@@ -130,25 +130,25 @@ generated and open it in the browser:
     gcloud firestore databases create --type=datastore-mode --project "${PROJECT_ID}" --location "nam5"
     ```
 
-2.  If facing this error: "Unable to Sign-In using Google Sign-In. An Error has
+1.  If facing this error: "Unable to Sign-In using Google Sign-In. An Error has
     occured. Only accounts from the organization can access this site." Make
     sure the Authorized Domains section under OAuth Screen
     <https://console.cloud.google.com/apis/credentials/consent/edit?project=><replace_with_PROJECT_ID>
     having domain name of user's Identiy Platform, ex: example.com Which means
     <johndoe@example.com> login will be allowed.
 
-3.  If facing this error: "Storage object. Permission 'storage.objects.get'
+1.  If facing this error: "Storage object. Permission 'storage.objects.get'
     denied on resource (or it may not exist)., forbidden" or "denied: Permission
     "artifactregistry.repositories.uploadArtifacts" denied on resource" Make
     sure that <project_number>@cloudbuild.gserviceaccount.com exist, and having
     Artifact Registry Writer and Storage Object Creator permissions.
 
-4.  If facing this error: "message":"Failed to open popup
+1.  If facing this error: "message":"Failed to open popup
     window","stack":"Error: Failed to open popup window\n at new ..." Make sure
     the allow pop-up from the Cloud Run's URL domain is allowed from Browser's
     address bar.
 
-5.  Error: Members belonging to the external domain cannot be added as domain
+1.  Error: Members belonging to the external domain cannot be added as domain
     restricted sharing is enforced by the organization policy Depending on
     organization policy being used, some organization will have
     constraints/iam.allowedPolicyMemberDomains to be restricted to be on the
@@ -165,13 +165,13 @@ generated and open it in the browser:
     gcloud beta emulators datastore start --no-store-on-disk &
     ```
 
-2.  Set Environment variables
+1.  Set Environment variables
 
     ```shell
     $(gcloud beta emulators datastore env-init)
     ```
 
-3.  Run Local server
+1.  Run Local server
 
     ```shell
     cd api/

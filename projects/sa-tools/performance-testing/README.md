@@ -42,7 +42,7 @@ The deployment approach is by deploying two copies of pt-admin component:
 
 1.  To the target GCP Project. Create a new GCP Project, or use an existing GCP
     Project where the deployer user having permissions as Owner or Editor.
-2.  To run pt-admin container locally (hosting the UI and part of the backend)
+1.  To run pt-admin container locally (hosting the UI and part of the backend)
 
 The less pre-requisite dependencies to run this setup is by doing it from the
 Cloud Shell. Make sure there's enough disk space to run the commands below.

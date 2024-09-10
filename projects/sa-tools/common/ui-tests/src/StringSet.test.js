@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'vitest';
-import { StringSet } from './Common/StringSet';
+import {describe, expect, it} from 'vitest';
+import {StringSet} from './Common/StringSet';
 
 /**
  * Assert StringSet equality to an array.

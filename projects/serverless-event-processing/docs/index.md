@@ -241,11 +241,11 @@ processing results, you might encounter an issue that causes the event
 processing pipeline to be stuck in an endless loop. For example:
 
 1.  You create an object in the Cloud Storage bucket.
-2.  Eventarc sends an event about the newly created object.
-3.  The pipeline receives the event, processes the object, and saves the result
+1.  Eventarc sends an event about the newly created object.
+1.  The pipeline receives the event, processes the object, and saves the result
     in the same bucket.
-4.  Eventarc sends an event about the newly created object.
-5.  The pipeline receives the event, processes the object, and saves the result
+1.  Eventarc sends an event about the newly created object.
+1.  The pipeline receives the event, processes the object, and saves the result
     in the same bucket.
 
 And so on.
@@ -426,7 +426,7 @@ To migrate this reference architecture from AWS to Google Cloud, we recommend
 that you:
 
 1.  Design a migration strategy that takes into account the whole architecture.
-2.  Refine the migration strategy to consider each component of the architecture.
+1.  Refine the migration strategy to consider each component of the architecture.
 
 ### Design the overall migration strategy
 
@@ -511,7 +511,7 @@ By starting with migrating result data, you:
 
     1.  Refactor the AWS Lambda workload to store the results both in Amazon
         DynamoDB, Firestore, and Cloud Storage.
-    2.  Once the migration proceeds, refactor the event-processing workload to
+    1.  Once the migration proceeds, refactor the event-processing workload to
         store the results in Firestore and Cloud Storage only, along with other
         modifications that you need to migrate the event processing workload from
         AWS Lambda to Cloud Run.
@@ -542,11 +542,11 @@ By starting with migrating the event-processing workload, you:
     1.  Refactor the AWS Lambda workload to migrate the event-processing workload
         to Cloud Run, but keep using Amazon S3 and Amazon SQS as sources, and
         Amazon DynamoDB to store results.
-    2.  As the migration proceeds, refactor the event-processing workload to get
+    1.  As the migration proceeds, refactor the event-processing workload to get
         source data from Cloud Storage and Eventarc, and Amazon S3 and Amazon SQS,
         and store the results in both Amazon DynamoDB, Firestore and Cloud
         Storage.
-    3.  Once you approach the cutover from your AWS environment, refactor the
+    1.  Once you approach the cutover from your AWS environment, refactor the
         event-processing workload to get source data from Cloud Storage and
         Eventarc only, and store the results in Firestore and Cloud Storage only.
 
@@ -587,8 +587,8 @@ To migrate from Amazon DynamoDB to Firestore, you can design and implement an
 automated process as follows:
 
 1.  Export data from Amazon DynamoDB to Amazon S3.
-2.  Migrate the exported data from Amazon S3 to Cloud Storage.
-3.  Implement a Dataflow batch job to
+1.  Migrate the exported data from Amazon S3 to Cloud Storage.
+1.  Implement a Dataflow batch job to
     [load results from Cloud Storage to Firestore](https://cloud.google.com/dataflow/docs/guides/templates/provided/cloud-storage-to-firestore).
 
 When you design this process, we recommend that you design it as a gradual

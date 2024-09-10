@@ -17,7 +17,7 @@ This folder contains reusable Java components:
     includeBuild("path/to/common/java-common")
     ```
 
-2.  Use appropriate module in your `build.gradle`: Example to use utils and
+1.  Use appropriate module in your `build.gradle`: Example to use utils and
     testing module:
 
     ```groovy

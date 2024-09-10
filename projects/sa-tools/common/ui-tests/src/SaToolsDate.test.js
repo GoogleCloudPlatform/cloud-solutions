@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'vitest';
-import { SaToolsDate } from './Common/SaToolsDate';
+import {describe, expect, it} from 'vitest';
+import {SaToolsDate} from './Common/SaToolsDate';
 
 const satoolsDateTestSuite = () => {
   it(`Given N number of substracted minutes should return new Date object of
@@ -42,7 +42,7 @@ const satoolsDateTestSuite = () => {
     ago`, () => {
     const testDate = new SaToolsDate(new Date('2022-12-01 11:00:00'));
     expect(testDate.formattedDateDiff(new Date('2022-12-01 10:00:00'))).toBe(
-      '1 hour(s) ago'
+        '1 hour(s) ago',
     );
   });
 
@@ -106,7 +106,7 @@ const satoolsDateTestSuite = () => {
   it(`Given a datetime in 50 mins ago should return 50 minute(s) ago`, () => {
     const testDate = new SaToolsDate(new Date('2022-12-01 10:10:00'));
     expect(
-      testDate.formattedDateDiffFrom(new Date('2022-12-01 11:00:00'))
+        testDate.formattedDateDiffFrom(new Date('2022-12-01 11:00:00')),
     ).toBe('50 minute(s) ago');
   });
 

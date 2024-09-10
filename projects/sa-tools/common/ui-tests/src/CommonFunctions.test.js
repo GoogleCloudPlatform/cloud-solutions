@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'vitest';
+import {describe, expect, it} from 'vitest';
 import * as common from './Common/CommonFunctions';
 
 const commonFunctionsTestSuite = () => {

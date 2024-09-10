@@ -15,12 +15,12 @@ The solution works as follows:
 1.  The user provides an object label such as ‘car’, the source image file, and
     a GenAI Imagen prompt such as ‘red plastic toy car’. In this case, to
     replace cars with toy cars
-2.  Query Vision API with the source image and object label
-3.  Present list of found labels
-4.  If the user’s label was found in the list of detected labels, generate a
+1.  Query Vision API with the source image and object label
+1.  Present list of found labels
+1.  If the user’s label was found in the list of detected labels, generate a
     mask image based on the bounding boxes for the objects
-5.  Query Imagen with the original image, mask image, and GenAI prompt
-6.  Save the resulting generated images
+1.  Query Imagen with the original image, mask image, and GenAI prompt
+1.  Save the resulting generated images
 
 ## Example
 
@@ -63,9 +63,9 @@ replace the background instead:
 1.  With your browser, navigate to the
     [Google Cloud Console](https://console.cloud.google.com/home/dashboard) and
     select the right Project
-2.  Use the Console to Enable the
+1.  Use the Console to Enable the
     [Cloud Vision API in the API Library](https://console.cloud.google.com/apis/library/vision.googleapis.com)
-3.  Check that you can access
+1.  Check that you can access
     [Generative AI Studio Vision](https://console.cloud.google.com/vertex-ai/generative/vision)
 
 ### Installing the Application
@@ -82,20 +82,20 @@ replace the background instead:
     isolated environment for this application and its imported modules. Please
     refer to the links in this step for more information on virtual environment
 
-2.  Open a terminal on your computer, and execute the following gcloud command
+1.  Open a terminal on your computer, and execute the following gcloud command
     to authenticate the application for Google Cloud Platform:
 
     ```shell
     gcloud auth application-default login
     ```
 
-3.  Install the Python dependencies with:
+1.  Install the Python dependencies with:
 
     ```shell
     pip3 install -r requirements.txt --require-hashes
     ```
 
-4.  Test that the application can start without errors, by executing the
+1.  Test that the application can start without errors, by executing the
     following:
 
     ```shell

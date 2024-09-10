@@ -117,4 +117,4 @@ class StringSet {
   }
 }
 
-export { StringSet };
+export {StringSet};

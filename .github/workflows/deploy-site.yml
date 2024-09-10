@@ -20,7 +20,7 @@
 #
 
 name: Deploy documentation to GitHub Pages
-on:
+on: # yamllint disable-line rule:truthy
   push:
     branches: ["main"]
   #
@@ -59,7 +59,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         if: github.ref == 'refs/heads/main'
         with:
-          path: 'docs/build/public'
+          path: "docs/build/public"
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
         uses: actions/deploy-pages@v4

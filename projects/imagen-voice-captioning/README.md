@@ -10,13 +10,13 @@ and [Text-to-Speech AI](https://cloud.google.com/text-to-speech).
 The solution works as follows:
 
 1.  The user runs the application and selects a connected camera as the input
-2.  The applications shows a live view of the camera
-3.  The user triggers captioning
-4.  The camera’s image is sent to Imagen image captioning, which returns a
+1.  The applications shows a live view of the camera
+1.  The user triggers captioning
+1.  The camera’s image is sent to Imagen image captioning, which returns a
     textual description of the scene
-5.  The text is sent to Text-to-Speech AI, which returns an audio file
+1.  The text is sent to Text-to-Speech AI, which returns an audio file
     containing the caption synthesized as speech
-6.  The application plays back the audio, describing the scene verbally
+1.  The application plays back the audio, describing the scene verbally
 
 ## Example
 
@@ -46,11 +46,11 @@ in a grassy field behind a fence_”
 1.  With your browser, navigate to the
     [Google Cloud Console](https://console.cloud.google.com/home/dashboard) and
     select the right Project
-2.  Use the Console to Enable the
+1.  Use the Console to Enable the
     [Cloud Vision Text to Speech API](https://console.cloud.google.com/apis/library/texttospeech.googleapis.com)
-3.  Use the Console to Enable the
+1.  Use the Console to Enable the
     [Cloud Vision API in the API Library](https://console.cloud.google.com/apis/library/vision.googleapis.com)
-4.  Check that you can access
+1.  Check that you can access
     [Generative AI Studio Vision](https://console.cloud.google.com/vertex-ai/generative/vision)
 
 ### Creating the Service Account and Key
@@ -59,8 +59,8 @@ in a grassy field behind a fence_”
     to:
 
     1.  create a new service account in your GCP Project
-    2.  create and download a JSON key for it
-    3.  Bind the Cloud Storage object viewer role to it
+    1.  create and download a JSON key for it
+    1.  Bind the Cloud Storage object viewer role to it
 
     This service account will be used to access Cloud Vision API. Execute the
     following, replacing `[your-gcp-project]` with your project ID:
@@ -81,7 +81,7 @@ in a grassy field behind a fence_”
     gcloud services enable vision.googleapis.com
     ```
 
-2.  The service account key was downloaded as a file called `credentials.json`
+1.  The service account key was downloaded as a file called `credentials.json`
     in your current working directory. Note the location of the file, as you
     will need it later.
 
@@ -101,20 +101,20 @@ in a grassy field behind a fence_”
     isolated environment for this application and its imported modules. Please
     refer to the links in this step for more information on virtual environment
 
-2.  Install the Python dependencies with:
+1.  Install the Python dependencies with:
 
     ```shell
     pip3 install -r requirements.txt
     ```
 
-3.  Copy the service account key credentials.json that you downloaded earlier to
+1.  Copy the service account key credentials.json that you downloaded earlier to
     this same directory with e.g:
 
     ```shell
     cp ~/credentials.json .
     ```
 
-4.  Test that the application can start without errors, by executing the
+1.  Test that the application can start without errors, by executing the
     following:
 
     ```shell
@@ -139,13 +139,13 @@ in a grassy field behind a fence_”
 
 1.  Connect a camera such as a USB webcam to your computer. Test that the camera
     works on your computer
-2.  Start the application and provide the following parameter values:
+1.  Start the application and provide the following parameter values:
 
     1.  `--input`: &lt;the device number of the connected cameras>. Start with 0
         and increase the number until you see the correct camera’s output on the
         screen
-    2.  `--credentials`: &lt;path to the credentials.json you prepared earlier>
-    3.  `--project_id`: &lt;your GCP project ID>
+    1.  `--credentials`: &lt;path to the credentials.json you prepared earlier>
+    1.  `--project_id`: &lt;your GCP project ID>
 
     Example command:
 
@@ -153,7 +153,7 @@ in a grassy field behind a fence_”
     python3 imagen-voice-captioning.py --input 1 --credentials credentials.json --project_id myproject
     ```
 
-3.  If successful, the application will output the following on the console:
+1.  If successful, the application will output the following on the console:
 
     ```text
     {'input': '1', 'credentials': 'credentials.json', 'project_id': 'myproject''}
@@ -164,10 +164,10 @@ in a grassy field behind a fence_”
 
     And open a window where it displays the camera’s live view on your desktop.
 
-4.  To caption the camera view, select the camera display window and press
+1.  To caption the camera view, select the camera display window and press
     &lt;SPACE>
 
-5.  If successful, the application will output:
+1.  If successful, the application will output:
 
     ```text
     Querying Imagen captioning...OK

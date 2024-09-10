@@ -122,4 +122,4 @@ class SaToolsDate {
   }
 }
 
-export { SaToolsDate };
+export {SaToolsDate};
