@@ -16,6 +16,6 @@
 
 rootProject.name = 'perf-benchmark'
 
-includeBuild("../common/java-common")
+includeBuild("../../common/java")
 include "api"
 include "ui"
