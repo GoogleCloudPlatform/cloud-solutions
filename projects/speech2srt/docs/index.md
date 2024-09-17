@@ -79,7 +79,7 @@ This tutorial assumes that you already have a
 1.  Clone the repository and change to its directory
 
     ```bash
-    git clone https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/speech2srt \
+    git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git \
     && cd projects/speech2srt
     ```
 
