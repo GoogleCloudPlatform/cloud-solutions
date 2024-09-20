@@ -1,0 +1,176 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mosquitto
+  namespace: vision-ai-edge
+spec:
+  clusterIP: None
+  ports:
+  - name: tcp-port
+    port: 1883
+    protocol: TCP
+    targetPort: 1883
+  selector:
+    app: mosquitto
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto-conf
+  namespace: vision-ai-edge
+data:
+  mosquitto.conf: |
+    password_file /mosquitto/secret/password_file
+    # Disable anonymous access in production
+    # allow_anonymous false
+    allow_anonymous true
+    listener 1883 0.0.0.0
+    persistence true
+    persistence_location /mosquitto/data/
+    log_type subscribe
+    log_type unsubscribe
+    log_type websockets
+    log_type error
+    log_type warning
+    log_type notice
+    log_type information
+    log_dest file /mosquitto/log/mosquitto.log
+    log_dest stdout
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mosquitto-password
+  namespace: vision-ai-edge
+stringData:
+  password_file: |
+    aici:<<PLEASE_CHANGE_ME>>
+type: Opaque
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    checkov.io/skip1: CKV2_K8S_6=Network policy need to be configured first
+    checkov.io/skip2: CKV_K8S_40=mosquitto need to be run as UID 1883 (< 10000)
+  name: mosquitto
+  namespace: vision-ai-edge
+spec:
+  selector:
+    matchLabels:
+      app: mosquitto
+  serviceName: mosquitto
+  replicas: 1
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Delete
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+    spec:
+      automountServiceAccountToken: false
+      restartPolicy: Always
+      containers:
+      - image: eclipse-mosquitto:2.0.18-openssl@sha256:2f1c61fc5af49d0b589978e146dcfc60248d93d88292ff9373c4e6d083a63c72
+        imagePullPolicy: Always
+        livenessProbe:
+          initialDelaySeconds: 5
+          failureThreshold: 3
+          periodSeconds: 10
+          tcpSocket:
+            port: 1883
+        name: mosquitto
+        ports:
+        - containerPort: 1883
+        readinessProbe:
+          initialDelaySeconds: 5
+          failureThreshold: 3
+          periodSeconds: 10
+          tcpSocket:
+            port: 1883
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 250m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsUser: 1883
+        volumeMounts:
+        - mountPath: /mosquitto/config
+          name: mosquitto-conf
+        - mountPath: /mosquitto/secret
+          name: mosquitto-secret
+        - mountPath: /mosquitto/data
+          name: mosquitto-data
+      initContainers:
+      - args:
+        - '-c'
+        - cp /password/password_file /secret/password_file && chown 1883:1883 /secret/password_file && chmod 700 /secret/password_file
+        command: ["bin/sh"]
+        image: busybox:stable@sha256:9ae97d36d26566ff84e8893c64a6dc4fe8ca6d1144bf5b87b2b85a32def253c7
+        imagePullPolicy: Always
+        name: init-config
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 250m
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /secret
+          name: mosquitto-secret
+        - mountPath: /password
+          name: mosquitto-password
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - name: mosquitto-conf
+        configMap:
+          name: mosquitto-conf
+      - name: mosquitto-password
+        secret:
+          secretName: mosquitto-password
+  volumeClaimTemplates:
+  - metadata:
+      name: mosquitto-secret
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: standard-rwo
+  - metadata:
+      name: mosquitto-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: standard-rwo
