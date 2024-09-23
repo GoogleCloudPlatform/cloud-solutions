@@ -29,8 +29,3 @@ underlying infrastructure.
 Optimize Google Kubernetes Engine (GKE) utilization by analyzing existing
 workloads and creating binpacking recommendations.
 [More details »](sa-tools/binpacker.md)
-
-### PerfKit Benchmarks
-
-Simplify the management of your Perfkit benchmark jobs.
-[More details »](sa-tools/perf-benchmark.md)
