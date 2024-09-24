@@ -13,7 +13,6 @@ RUN apk update && apk add --no-cache protobuf-dev
 
 ENTRYPOINT [ "/bin/sh", "-e", "-x", "-c" ]
 CMD [ " \
-    cd ../../../common/ui && yarn install && cd - && \
     yarn install && \
     yarn genproto && \
     yarn audit && \
