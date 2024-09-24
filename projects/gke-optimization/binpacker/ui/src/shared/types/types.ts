@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Pod } from '../../../proto/metric.pb';
+import {Pod} from '../../../proto/metric.pb';
 
 export type Workload = {
   name: string;
