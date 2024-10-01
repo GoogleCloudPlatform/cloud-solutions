@@ -77,6 +77,10 @@ for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
   fi
 done
 
+# Ensure user-guide is top of the nav list
+[[ -e "${RUN_SOLUTIONS_FOLDER}/user-guide" ]] &&
+  mv "${RUN_SOLUTIONS_FOLDER}/user-guide" "${RUN_SOLUTIONS_FOLDER}/aaa-user-guide"
+
 # Create Python venv if not present
 if [[ ! -d "${VENV_DIR}" ]]; then
   # Create Python venv.
