@@ -1398,9 +1398,9 @@ You can observe the payloads by monitoring:
     `pubsub_bigquery_inference_results`
 -   [BigQuery table][BQ_URL]: `viai_edge.inference_results`
 
-[PUBSUB_URL]: https://pantheon.corp.google.com/cloudpubsub/
-[FUNCTIONS_URL]: https://pantheon.corp.google.com/functions
-[BQ_URL]: https://pantheon.corp.google.com/bigquery
+[PUBSUB_URL]: https://console.cloud.google.com/cloudpubsub/
+[FUNCTIONS_URL]: https://console.cloud.google.com/functions
+[BQ_URL]: https://console.cloud.google.com/bigquery
 
 ### Camera connection health checks
 
