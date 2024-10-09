@@ -32,12 +32,12 @@ underlying pipeline logic and use cases.
     cd cloud-solutions/projects/dataflow-gcs-to-alloydb/
     ```
 
-1.  Install the `requirements_dev.txt`. (Optional) Consider using a virtual
+1.  Install the `requirements-dev.txt`. (Optional) Consider using a virtual
     environment.
 
     ```bash
     python3 -m pip install --upgrade pip && \
-    python3 -m pip install --require-hashes -r ./requirements_dev.txt
+    python3 -m pip install --require-hashes -r ./requirements-dev.txt
     ```
 
 1.  Run the unit tests.

@@ -20,9 +20,9 @@ COPY --from=eclipse-temurin:17-jdk $JAVA_HOME $JAVA_HOME
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 ARG WORKDIR=/template
-COPY ./requirements_dev.txt ${WORKDIR}/
+COPY ./requirements-dev.txt ${WORKDIR}/
 RUN python3 -m pip install \
-    --no-cache-dir --no-deps --require-hashes -r ${WORKDIR}/requirements_dev.txt
+    --no-cache-dir --no-deps --require-hashes -r ${WORKDIR}/requirements-dev.txt
 
 COPY ./src/ ${WORKDIR}/
 WORKDIR ${WORKDIR}

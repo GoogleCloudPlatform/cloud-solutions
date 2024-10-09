@@ -29,7 +29,7 @@ CMD [ " \
   [[ \"$(id -u)\" != 0 ]] && { echo 'This test needs to run as root'; exit 1; }; \
   python3 -m venv .venv && \
   . .venv/bin/activate && \
-  python3 -m pip  install --no-deps --require-hashes -r requirements_dev.txt && \
+  python3 -m pip  install --no-deps --require-hashes -r requirements-dev.txt && \
   cd ./src && \
   python3 dataflow_gcs_to_alloydb_test.py \
   " ]
