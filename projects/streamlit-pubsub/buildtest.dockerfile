@@ -16,7 +16,7 @@
 
 ## Description: Run unit tests in this directory isolated in a docker container.
 
-FROM python:3-slim
+FROM python:3.12-slim
 
 ARG PROJECT_SUBDIRECTORY
 WORKDIR "${PROJECT_SUBDIRECTORY}"
