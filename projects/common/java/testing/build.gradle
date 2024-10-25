@@ -24,7 +24,7 @@ dependencies {
     implementation "com.google.protobuf:protobuf-java-util:${protoVersion}"
     implementation project(":utils")
 
-    implementation "commons-io:commons-io:2.7"
+    implementation "commons-io:commons-io:2.17.0"
 
     // Google Cloud Deps
     implementation "com.google.cloud:google-cloud-build:3.13.0"

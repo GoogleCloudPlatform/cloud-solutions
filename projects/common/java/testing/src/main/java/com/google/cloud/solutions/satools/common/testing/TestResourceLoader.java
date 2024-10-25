@@ -82,8 +82,8 @@ public interface TestResourceLoader {
 
           @Override
           public List<String> loadResourcesLike(String baseDir, String resourcePattern) {
-            var files =
-                new File(baseDir).listFiles((FileFilter) new WildcardFileFilter(resourcePattern));
+            var filter = WildcardFileFilter.builder().setWildcards(resourcePattern).get();
+            var files = new File(baseDir).listFiles((FileFilter) filter);
 
             if (files != null && files.length > 0) {
               return Arrays.stream(files).map(File::toString).toList();

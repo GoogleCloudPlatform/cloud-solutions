@@ -28,7 +28,7 @@ subprojects {
 
     group "com.google.cloud.solutions.satools.common"
 
-    tasks.withType(Test) {
+    tasks.withType(Test).configureEach {
         useJUnitPlatform()
         testLogging {
             events "passed", "skipped", "failed", "standardOut", "standardError"

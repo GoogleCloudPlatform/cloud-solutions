@@ -17,7 +17,7 @@
 
 ## Description: Run unit tests in this directory isolated in a docker container.
 
-FROM gradle:8-jdk17
+FROM gradle:8-jdk17-alpine
 ARG PROJECT_SUBDIRECTORY
 WORKDIR "${PROJECT_SUBDIRECTORY}"
 CMD ["gradle", "clean", "test", "-i"]
