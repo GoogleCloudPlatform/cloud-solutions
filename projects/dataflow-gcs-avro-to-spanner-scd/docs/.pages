@@ -1,0 +1,5 @@
+title: Avro to Cloud Spanner with Slowly Changing Dimensions (SCD) using Dataflow Flex template
+nav:
+  - 'Overview': 'index.md'
+  - 'Build and Run Template': 'deployment.md'
+  - 'Development': 'development.md'

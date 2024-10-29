@@ -1,0 +1,131 @@
+{
+  "name": "GCS Avro to Cloud Spanner using SCD",
+  "description": "Batch pipeline to insert data in Avro format into Spanner using the requested Slowly Changing Dimension (SCD) Type.",
+  "streaming": false,
+  "parameters": [
+    {
+      "name": "inputFilePattern",
+      "label": "Cloud storage file pattern",
+      "helpText": "The Cloud Storage file pattern where the Avro files are imported from.",
+      "isOptional": false,
+      "paramType": "TEXT",
+      "groupName": "Source"
+    },
+    {
+      "name": "spannerProjectId",
+      "label": "Cloud Spanner project ID",
+      "helpText": "The Google Cloud Project ID of the Cloud Spanner instance. If not set, the default Google Cloud project is used.",
+      "isOptional": true,
+      "paramType": "TEXT",
+      "groupName": "Target"
+    },
+
+    {
+      "name": "instanceId",
+      "label": "Cloud Spanner instance ID",
+      "helpText": "The instance ID of the Cloud Spanner database.",
+      "isOptional": false,
+      "regexes": ["^[a-z0-9\\-]+$"],
+      "paramType": "TEXT",
+      "groupName": "Target"
+    },
+    {
+      "name": "databaseId",
+      "label": "Cloud Spanner database ID",
+      "helpText": "The database ID of the Cloud Spanner database.",
+      "isOptional": false,
+      "regex": ["^[a-z_0-9\\-]+$"],
+      "paramType": "TEXT",
+      "groupName": "Target"
+    },
+    {
+      "name": "tableName",
+      "label": "Cloud Spanner table name",
+      "helpText": "Name of the Cloud Spanner table to upsert data.",
+      "isOptional": false,
+      "paramType": "TEXT",
+      "groupName": "Target"
+    },
+    {
+      "name": "spannerPriority",
+      "label": "Priority for Cloud Spanner RPC invocations",
+      "helpText": "The request priority for Cloud Spanner calls. Possible values are `HIGH`, `MEDIUM`, and `LOW`. The default value is `MEDIUM`.",
+      "isOptional": true,
+      "paramType": "ENUM",
+      "enumOptions": [
+        { "value": "LOW", "label": "Low" },
+        { "value": "MEDIUM", "label": "Medium" },
+        { "value": "HIGH", "label": "High" }
+      ],
+      "groupName": "Target",
+      "defaultValue": "MEDIUM"
+    },
+    {
+      "name": "spannerBatchSize",
+      "label": "Cloud Spanner batch size",
+      "helpText": "Number of rows to process in each batch. The default value is 100.",
+      "isOptional": true,
+      "paramType": "NUMBER",
+      "groupName": "Target",
+      "defaultValue": "100"
+    },
+    {
+      "name": "scdType",
+      "label": "Slowly Changing Dimension (SCD) type",
+      "helpText": "Type of SCD which will be applied when writing to Cloud Spanner. The default value is SCD Type 1.",
+      "isOptional": true,
+      "paramType": "ENUM",
+      "enumOptions": [
+        { "value": "TYPE_1", "label": "SCD Type 1" },
+        { "value": "TYPE_2", "label": "SCD Type 2" }
+      ],
+      "groupName": "Schema",
+      "defaultValue": "TYPE_1"
+    },
+    {
+      "name": "primaryKeyColumnNames",
+      "label": "Primary key column name(s)",
+      "helpText": "Name of column(s) for the primary key(s). If more than one, enter as CSV with no spaces (e.g. column1,column2). Required for SCD Type 2.",
+      "isOptional": false,
+      "paramType": "TEXT",
+      "groupName": "Schema"
+    },
+    {
+      "name": "orderByColumnName",
+      "label": "Order by column name",
+      "helpText": "Name of column that will be used to order when there are multiple updates for the same primary key within the same file. If not set, and there are multiple updates to the same primary keys, the update order may be random.",
+      "isOptional": true,
+      "paramType": "TEXT",
+      "groupName": "Schema"
+    },
+    {
+      "name": "sortOrder",
+      "label": "Order in Ascending (ASC) or Descending (DESC) order",
+      "helpText": "Whether to use ASC or DESC when sorting the records by order by column name. Default value: Ascending (ASC).",
+      "isOptional": true,
+      "paramType": "ENUM",
+      "enumOptions": [
+        { "value": "ASC", "label": "Ascending (ASC)" },
+        { "value": "DESC", "label": "Descending (DESC)" }
+      ],
+      "groupName": "Schema",
+      "defaultValue": "ASC"
+    },
+    {
+      "name": "startDateColumnName",
+      "label": "Start date column name",
+      "helpText": "Name of column name for the start date (TIMESTAMP). Only used for SCD Type 2.",
+      "isOptional": true,
+      "paramType": "TEXT",
+      "groupName": "Schema"
+    },
+    {
+      "name": "endDateColumnName",
+      "label": "End date column name",
+      "helpText": "Name of column name for the end date (TIMESTAMP). Required for SCD Type 2.",
+      "isOptional": true,
+      "paramType": "TEXT",
+      "groupName": "Schema"
+    }
+  ]
+}
