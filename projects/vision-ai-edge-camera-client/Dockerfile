@@ -16,17 +16,15 @@ RUN apt-get update \
     protobuf-compiler \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --upgrade --no-cache-dir \
-    pip==24.2 \
-    setuptools==72.1.0 \
-    wheel==0.43.0
-
 ENV WORKDIR_PATH=/opt/app
 RUN mkdir -p "${WORKDIR_PATH}"
 WORKDIR "${WORKDIR_PATH}"
 
+COPY base-tooling-requirements.txt base-tooling-requirements.txt
+RUN python3 -m pip install --upgrade --no-deps --no-cache-dir -r base-tooling-requirements.txt
+
 COPY requirements.txt requirements.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
+RUN python3 -m pip install --require-hashes --no-deps --no-cache-dir -r requirements.txt
 
 COPY cameras.proto "${WORKDIR_PATH}"/
 RUN protoc -I="${WORKDIR_PATH}" --python_out="${WORKDIR_PATH}" "${WORKDIR_PATH}"/cameras.proto
@@ -34,7 +32,7 @@ RUN protoc -I="${WORKDIR_PATH}" --python_out="${WORKDIR_PATH}" "${WORKDIR_PATH}"
 FROM base as camera-integration-test
 
 COPY tests/requirements-dev.txt tests/requirements-dev.txt
-RUN python3 -m pip install --no-cache-dir -r tests/requirements-dev.txt
+RUN python3 -m pip install --require-hashes --no-deps --no-cache-dir -r tests/requirements-dev.txt
 
 COPY . "${WORKDIR_PATH}"/
 RUN python3 -m pytest tests/

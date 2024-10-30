@@ -23,36 +23,20 @@ ARG PROJECT_SUBDIRECTORY
 ENV PROJECT_SUBDIRECTORY=$PROJECT_SUBDIRECTORY
 WORKDIR ${PROJECT_SUBDIRECTORY}
 
+ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
+
 RUN apt-get update \
-    && apt-get --assume-yes --no-install-recommends install \
-    apt-transport-https \
-    curl \
-    git \
-    gnupg \
-    libusb-1.0-0 \
-    lsb-release \
-    make \
-    openssh-client \
+    && apt-get --assume-yes --no-install-recommends install protobuf-compiler \
     libopencv-dev python3-opencv \
-    protobuf-compiler \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --upgrade --no-cache-dir \
-    pip==24.2 \
-    setuptools==72.1.0 \
-    wheel==0.43.0
-
-COPY requirements.txt requirements.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
-
-COPY cameras.proto "${PROJECT_SUBDIRECTORY}"/
-RUN protoc -I="${PROJECT_SUBDIRECTORY}" --python_out="${PROJECT_SUBDIRECTORY}" "${PROJECT_SUBDIRECTORY}"/cameras.proto
-
-FROM base as camera-integration-test
-
-COPY tests/requirements-dev.txt tests/requirements-dev.txt
-RUN python3 -m pip install --no-cache-dir -r tests/requirements-dev.txt
-
-COPY . "${PROJECT_SUBDIRECTORY}"/
-RUN python3 -m pytest tests/
-CMD ["/usr/bin/echo", "Unit tests run as part of the container image build"]
+# Integration Tests
+CMD [ " \
+python3 -m venv .venv && \
+. .venv/bin/activate && \
+python -m pip install --require-hashes -r base-tooling-requirements.txt && \
+python -m pip install --require-hashes --no-deps --no-cache-dir -r requirements.txt && \
+python -m pip install --require-hashes --no-deps --no-cache-dir -r tests/requirements-dev.txt  && \
+protoc -I=. --python_out=. ./cameras.proto && \
+python -m pytest tests/ \
+" ]
