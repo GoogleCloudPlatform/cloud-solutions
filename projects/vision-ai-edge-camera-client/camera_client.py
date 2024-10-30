@@ -37,21 +37,26 @@ import json
 import logging
 import os
 import time
+import warnings
 
 import construct
-import edge_camera
-from google.cloud import pubsub_v1
 import numpy as np
 import paho.mqtt.client as mqtt
 import puremagic
 import requests
+from google.api_core.gapic_v1 import client_info
+from google.cloud import pubsub_v1
 from rfc3339 import rfc3339
-import warnings
+
+import edge_camera
+
+_SOLUTION_USER_AGENT = "cloud-solutions/vision-ai-edge-camera-client-v1"
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 mqtt_msg = None
 mqtt_topic = None
+
 
 def transmit_mqtt(printout, logger, mqtt_client, results, topic):
     """Transmits ML result to local MQTT topic.
@@ -405,11 +410,7 @@ def parse_args():
         choices=["genicam", "onvif", "rtsp", "usb", "file"],
         help="Camera or image source connectivity method",
     )
-    parser.add_argument(
-        "--device_id",
-        help="Camera ID string",
-        default="1"
-    )
+    parser.add_argument("--device_id", help="Camera ID string", default="1")
     parser.add_argument(
         "--address",
         default=None,
@@ -687,28 +688,31 @@ def main():
 
     if args.client_cfg_file:
         if printout:
-            logger.info("Loading client config from: %s",
-                        args.client_cfg_file)
+            logger.info("Loading client config from: %s", args.client_cfg_file)
         client_config = load_client_config(args.client_cfg_file)
         logger.debug("Client config: %s", client_config)
 
     if args.ml:
         try:
             url_template = client_config["ML_MODEL"].get("url")
-            request_body_template = (
-                client_config["ML_MODEL"].get("request_body"))
+            request_body_template = client_config["ML_MODEL"].get(
+                "request_body"
+            )
         except KeyError:
             if printout:
-                logger.error("ML_MODEL section missing in cfg: %s. Exiting.",
-                             args.client_cfg_file)
+                logger.error(
+                    "ML_MODEL section missing in cfg: %s. Exiting.",
+                    args.client_cfg_file,
+                )
                 exit(1)
         if not url_template or not request_body_template:
             if printout:
-                logger.error("ML_MODEL missing in cfg file: %s. Exiting.",
-                             args.client_cfg_file)
+                logger.error(
+                    "ML_MODEL missing in cfg file: %s. Exiting.",
+                    args.client_cfg_file,
+                )
                 exit(1)
-        ml_url = url_template.format(hostname=args.ml_host,
-                                        port=args.ml_port)
+        ml_url = url_template.format(hostname=args.ml_host, port=args.ml_port)
         if printout:
             logger.info("ML URL: %s", ml_url)
             logger.info("ML payload template: %s", request_body_template)
@@ -816,15 +820,15 @@ def main():
         logger.info("Passing camera images to the ML model container")
         if args.ml_write:
             logger.info(
-                "Writing inference result JSON files to: %s",
-                args.ml_write_path
+                "Writing inference result JSON files to: %s", args.ml_write_path
             )
 
     if args.mqtt:
         if printout:
             logger.info(
                 "Starting MQTT client. Publishing results to: %s",
-                args.mqtt_topic_results)
+                args.mqtt_topic_results,
+            )
         mqtt_client = mqtt.Client(userdata=args.mqtt_topic_commands)
         mqtt_client.on_connect = mqtt_on_connect
         mqtt_client.on_message = mqtt_on_message
@@ -833,7 +837,9 @@ def main():
 
     if "none" not in args.pubsub:
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = args.credentials
-        publisher = pubsub_v1.PublisherClient()
+        publisher = pubsub_v1.PublisherClient(
+            client_info=client_info.ClientInfo(user_agent=_SOLUTION_USER_AGENT)
+        )
         publisher.topic_path(args.project_id, args.topic_id)
         if printout:
             logger.info("Created Pub/Sub client")
@@ -870,8 +876,10 @@ def main():
         total_count = len(batch_files)
         logger.debug("Batch input file list: %s: %s", total_count, batch_files)
 
-    my_mqtt_topics = [args.mqtt_topic_commands,
-                      f"{args.mqtt_topic_commands}/{args.device_id}"]
+    my_mqtt_topics = [
+        args.mqtt_topic_commands,
+        f"{args.mqtt_topic_commands}/{args.device_id}",
+    ]
     if printout:
         logger.info("Listening to commands on MQTT topics: %s", my_mqtt_topics)
 
@@ -898,20 +906,22 @@ def main():
                     if printout:
                         logger.debug("Ignoring unknown topic: %s", mqtt_topic)
                     continue
-                elif mqtt_msg  == "quit" or mqtt_msg == "exit":
+                elif mqtt_msg == "quit" or mqtt_msg == "exit":
                     if printout:
                         logger.info("Quit command received via MQTT..")
                     exit_gracefully(cam, mqtt_client)
                 elif mqtt_msg.startswith("get_frame"):
                     if printout:
-                        logger.info("MQTT command: %s: %s", mqtt_topic,
-                                    mqtt_msg)
+                        logger.info(
+                            "MQTT command: %s: %s", mqtt_topic, mqtt_msg
+                        )
                     if mqtt_msg.startswith("get_frame,file://"):
                         if args.protocol == "file":
-                            new_file_path = mqtt_msg[len("get_frame,file://"):]
+                            new_file_path = mqtt_msg[len("get_frame,file://") :]
                             cam.set_address(new_file_path)
-                            logger.info("Image file address set to: %s",
-                                        new_file_path)
+                            logger.info(
+                                "Image file address set to: %s", new_file_path
+                            )
                         else:
                             logger.error(
                                 "Setting address in MQTT get_frame command is "
@@ -1021,7 +1031,7 @@ def main():
                             logger,
                             byte_io.read(),
                             ml_url,
-                            request_body_template
+                            request_body_template,
                         )
                         byte_io.seek(0)
 
@@ -1055,8 +1065,13 @@ def main():
                         )
 
                     if args.mqtt and args.ml:
-                        transmit_mqtt(printout, logger, mqtt_client,
-                        results, args.mqtt_topic_results)
+                        transmit_mqtt(
+                            printout,
+                            logger,
+                            mqtt_client,
+                            results,
+                            args.mqtt_topic_results,
+                        )
 
             time.sleep(args.sleep)
             if buffer:
