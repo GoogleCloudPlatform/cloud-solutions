@@ -21,7 +21,8 @@ RUN mkdir -p "${WORKDIR_PATH}"
 WORKDIR "${WORKDIR_PATH}"
 
 COPY base-tooling-requirements.txt base-tooling-requirements.txt
-RUN python3 -m pip install --upgrade --no-deps --no-cache-dir -r base-tooling-requirements.txt
+RUN python3 -m pip install --no-deps --require-hashes \
+    --no-cache-dir -r base-tooling-requirements.txt
 
 COPY requirements.txt requirements.txt
 RUN python3 -m pip install --require-hashes --no-deps --no-cache-dir -r requirements.txt
