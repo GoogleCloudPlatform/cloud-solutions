@@ -28,8 +28,9 @@ import {
   detectServiceContext,
 } from '@google-cloud/logging';
 import {
-  setInstrumentationStatus,
   createDiagnosticEntry,
+  DIAGNOSTIC_INFO_KEY,
+  populateInstrumentationInfo,
 } from '@google-cloud/logging/build/src/utils/instrumentation';
 import * as gax from 'google-gax';
 
@@ -41,8 +42,8 @@ const eventId = new EventId();
  * See
  * https://github.com/googleapis/release-please/blob/main/docs/customizing.md#updating-arbitrary-files
  */
-const NODEJS_GCP_PINO_LIBRARY_VERSION = '1.0.0'; // {x-release-please-version}
-const NODEJS_GCP_PINO_LIBRARY_NAME = 'nodejs-gcp-pino';
+const NODEJS_GCP_PINO_LIBRARY_VERSION = '1.0.1'; // {x-release-please-version}
+const NODEJS_GCP_PINO_LIBRARY_NAME = 'nodejs-gcppino';
 
 const PINO_TO_GCP_LOG_LEVELS = Object.freeze(
   Object.fromEntries([
@@ -129,14 +130,17 @@ class GcpLoggingPino {
    * with a line of the form cloud-solutions/pino-logging-gcp-config-v1.0.0
    */
   outputDiagnosticEntry() {
-    const alreadyWritten = setInstrumentationStatus(true);
-    if (alreadyWritten) {
-      return;
-    }
-    const instrumentationEntry = createDiagnosticEntry(
+    const diagEntry = createDiagnosticEntry(
       NODEJS_GCP_PINO_LIBRARY_NAME,
       NODEJS_GCP_PINO_LIBRARY_VERSION
     );
+    diagEntry.data[DIAGNOSTIC_INFO_KEY].runtime = process.version;
+
+    const [entries, isInfoAdded] = populateInstrumentationInfo(diagEntry);
+    if (!isInfoAdded || entries.length === 0) {
+      return;
+    }
+    pino.version;
     // Create a temp pino logger instance just to log this diagnostic entry.
     pino
       .pino({
@@ -144,7 +148,7 @@ class GcpLoggingPino {
         ...this.getPinoLoggerOptions(),
       })
       .info({
-        ...instrumentationEntry.data,
+        ...diagEntry.data,
       });
   }
 
