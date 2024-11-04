@@ -89,8 +89,8 @@ export interface GCPLoggingPinoOptions {
 class GcpLoggingPino {
   serviceContext: ServiceContext | null = null;
 
-  constructor(options: GCPLoggingPinoOptions) {
-    if (options.serviceContext) {
+  constructor(options?: GCPLoggingPinoOptions) {
+    if (options?.serviceContext) {
       if (
         typeof options.serviceContext?.service !== 'string' ||
         !options.serviceContext?.service?.length
@@ -105,7 +105,7 @@ class GcpLoggingPino {
       //
       // This requires initialising a Cloud Logger, then using
       // detectServiceContext to asynchronously return the ServiceContext
-      const cloudLog = new Logging({auth: options.auth}).logSync(
+      const cloudLog = new Logging({auth: options?.auth}).logSync(
         NODEJS_GCP_PINO_LIBRARY_NAME
       );
 
@@ -284,7 +284,7 @@ class GcpLoggingPino {
  * JSON records compatible with
  * {@link https://cloud.google.com/logging/docs/structured-logging|Google Cloud structured Logging}.
  *
- * @param pinoLoggerOptions Optional pino Logger settings that will be added to
+ * @param pinoLoggerOptions Additional Pino Logger settings that will be added to
  * the returned value.
  *
  * @example
@@ -307,7 +307,7 @@ class GcpLoggingPino {
  *      logger.error(err, 'failure: ' + err);
  */
 export function createGcpLoggingPinoConfig(
-  options: GCPLoggingPinoOptions,
+  options?: GCPLoggingPinoOptions,
   pinoLoggerOptions?: pino.LoggerOptions
 ): pino.LoggerOptions {
   return new GcpLoggingPino(options).getPinoLoggerOptions(pinoLoggerOptions);
