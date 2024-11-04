@@ -1,6 +1,6 @@
 {
   "name": "pino-logging-gcp-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Module to create a basic Pino LoggerConfig to support Google Cloud structured logging",
   "main": "build/src/pino_gcp_config.js",
   "scripts": {
@@ -27,19 +27,19 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jasmine": "^5.1.4",
-    "@types/node": "^20.16.5",
-    "jasmine": "^5.3.0",
+    "@types/node": "^22.8.7",
+    "jasmine": "^5.4.0",
     "jasmine-console-reporter": "^3.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "@google-cloud/logging": "^11.2.0",
     "eventid": "^2.0.1",
     "google-gax": "^4.4.1",
-    "pino": "^9.4.0"
+    "pino": "^9.5.0"
   },
   "engines": {
-    "node": ">=18.20.4"
+    "node": ">=16"
   }
 }
