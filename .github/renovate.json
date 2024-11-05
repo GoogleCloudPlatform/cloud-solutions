@@ -1,6 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":semanticCommits"],
+  "extends": [
+    "config:recommended",
+    ":semanticCommits"
+  ],
   "dependencyDashboardApproval": true,
   "rangeStrategy": "bump",
   "customManagers": [
@@ -20,222 +23,268 @@
   ],
   "packageRules": [
     {
-      "matchFileNames": ["!projects/**"],
-      "groupName": "repository-management",
+      "matchFileNames": [
+        "!projects/**"
+      ],
+      "groupName": "00-repository-management",
       "commitMessagePrefix": "chore(deps): [repository-management]"
     },
     {
-      "matchFileNames": ["projects/**"],
-      "groupName": "ungrouped-projects",
+      "matchFileNames": [
+        "projects/**"
+      ],
+      "groupName": "00-ungrouped-projects",
       "commitMessagePrefix": "chore(deps): [ungrouped-projects]"
     },
     {
-      "matchFileNames": ["projects/advanced-ticketing/**"],
+      "matchFileNames": [
+        "projects/advanced-ticketing/**"
+      ],
       "groupName": "advanced-ticketing",
       "commitMessagePrefix": "chore(deps): [advanced-ticketing]"
     },
-
     {
-      "matchFileNames": ["projects/alloydbomni-ha-patroni-etcd/**"],
+      "matchFileNames": [
+        "projects/alloydbomni-ha-patroni-etcd/**"
+      ],
       "groupName": "alloydbomni-ha-patroni-etcd",
       "commitMessagePrefix": "chore(deps): [alloydbomni-ha-patroni-etcd]"
     },
-
     {
-      "matchFileNames": ["projects/bulk-delete-gcs-files-fn/**"],
+      "matchFileNames": [
+        "projects/bulk-delete-gcs-files-fn/**"
+      ],
       "groupName": "bulk-delete-gcs-files-fn",
       "commitMessagePrefix": "chore(deps): [bulk-delete-gcs-files-fn]"
     },
-
     {
-      "matchFileNames": ["projects/common/**"],
+      "matchFileNames": [
+        "projects/common/**"
+      ],
       "groupName": "common",
       "commitMessagePrefix": "chore(deps): [common]"
     },
-
     {
-      "matchFileNames": ["projects/data-migration-validation-tool/**"],
+      "matchFileNames": [
+        "projects/data-migration-validation-tool/**"
+      ],
       "groupName": "data-migration-validation-tool",
       "commitMessagePrefix": "chore(deps): [data-migration-validation-tool]"
     },
-
     {
-      "matchFileNames": ["projects/database-archival/**"],
+      "matchFileNames": [
+        "projects/database-archival/**"
+      ],
       "groupName": "database-archival",
       "commitMessagePrefix": "chore(deps): [database-archival]"
     },
-
     {
-      "matchFileNames": ["projects/dataflow-bigquery-change-data-capture/**"],
+      "matchFileNames": [
+        "projects/dataflow-bigquery-change-data-capture/**"
+      ],
       "groupName": "dataflow-bigquery-change-data-capture",
       "commitMessagePrefix": "chore(deps): [dataflow-bigquery-change-data-capture]"
     },
-
     {
-      "matchFileNames": ["projects/dataflow-bigquery-to-jdbc/**"],
+      "matchFileNames": [
+        "projects/dataflow-bigquery-to-jdbc/**"
+      ],
       "groupName": "dataflow-bigquery-to-jdbc",
       "commitMessagePrefix": "chore(deps): [dataflow-bigquery-to-jdbc]"
     },
-
     {
-      "matchFileNames": ["projects/dataflow-gcs-to-alloydb/**"],
+      "matchFileNames": [
+        "projects/dataflow-gcs-to-alloydb/**"
+      ],
       "groupName": "dataflow-gcs-to-alloydb",
       "commitMessagePrefix": "chore(deps): [dataflow-gcs-to-alloydb]"
     },
-
     {
-      "matchFileNames": ["projects/dataproc-trino-autoscaler/**"],
+      "matchFileNames": [
+        "projects/dataproc-trino-autoscaler/**"
+      ],
       "groupName": "dataproc-trino-autoscaler",
       "commitMessagePrefix": "chore(deps): [dataproc-trino-autoscaler]"
     },
-
     {
-      "matchFileNames": ["projects/gke-optimization/**"],
-      "groupName": "gke-optimization",
-      "commitMessagePrefix": "chore(deps): [gke-optimization]"
-    },
-
-
-    {
-      "matchFileNames": ["projects/genai-for-wsm/**"],
+      "matchFileNames": [
+        "projects/genai-for-wsm/**"
+      ],
       "groupName": "genai-for-wsm",
       "commitMessagePrefix": "chore(deps): [genai-for-wsm]"
     },
-
     {
-      "matchFileNames": ["projects/hive-bigquery-connector-demo/**"],
+      "matchFileNames": [
+        "projects/gke-optimization/**"
+      ],
+      "groupName": "gke-optimization",
+      "commitMessagePrefix": "chore(deps): [gke-optimization]"
+    },
+    {
+      "matchFileNames": [
+        "projects/hive-bigquery-connector-demo/**"
+      ],
       "groupName": "hive-bigquery-connector-demo",
       "commitMessagePrefix": "chore(deps): [hive-bigquery-connector-demo]"
     },
-
     {
-      "matchFileNames": ["projects/howto-work-with-mono-repo/**"],
+      "matchFileNames": [
+        "projects/howto-work-with-mono-repo/**"
+      ],
       "groupName": "howto-work-with-mono-repo",
       "commitMessagePrefix": "chore(deps): [howto-work-with-mono-repo]"
     },
-
     {
-      "matchFileNames": ["projects/hpa-recommender/**"],
+      "matchFileNames": [
+        "projects/hpa-recommender/**"
+      ],
       "groupName": "hpa-recommender",
       "commitMessagePrefix": "chore(deps): [hpa-recommender]"
     },
-
     {
-      "matchFileNames": ["projects/imagen-object-changer/**"],
+      "matchFileNames": [
+        "projects/imagen-object-changer/**"
+      ],
       "groupName": "imagen-object-changer",
       "commitMessagePrefix": "chore(deps): [imagen-object-changer]"
     },
-
     {
-      "matchFileNames": ["projects/imagen-voice-captioning/**"],
+      "matchFileNames": [
+        "projects/imagen-voice-captioning/**"
+      ],
       "groupName": "imagen-voice-captioning",
       "commitMessagePrefix": "chore(deps): [imagen-voice-captioning]"
     },
-
     {
-      "matchFileNames": ["projects/kubeflow-on-gcp/**"],
+      "matchFileNames": [
+        "projects/kubeflow-on-gcp/**"
+      ],
       "groupName": "kubeflow-on-gcp",
       "commitMessagePrefix": "chore(deps): [kubeflow-on-gcp]"
     },
     {
-      "matchFileNames": ["projects/pino-logging-gcp-config/**"],
+      "matchFileNames": [
+        "projects/pino-logging-gcp-config/**"
+      ],
       "groupName": "pino-logging-gcp-config",
       "commitMessagePrefix": "chore(deps): [pino-logging-gcp-config]"
     },
-
     {
-      "matchFileNames": ["projects/ray-gke-embedding/**"],
+      "matchFileNames": [
+        "projects/ray-gke-embedding/**"
+      ],
       "groupName": "ray-gke-embedding",
       "commitMessagePrefix": "chore(deps): [ray-gke-embedding]"
     },
-
     {
-      "matchFileNames": ["projects/sa-tools/**"],
+      "matchFileNames": [
+        "projects/sa-tools/**"
+      ],
       "groupName": "sa-tools",
       "commitMessagePrefix": "chore(deps): [sa-tools]"
     },
     {
-      "matchFileNames": ["projects/sa-tools/common/**"],
+      "matchFileNames": [
+        "projects/sa-tools/common/**"
+      ],
       "groupName": "sa-tools-common",
       "commitMessagePrefix": "chore(deps): [sa-tools-common]"
     },
     {
-      "matchFileNames": ["projects/sa-tools/gke-optimization/**"],
+      "matchFileNames": [
+        "projects/sa-tools/gke-optimization/**"
+      ],
       "groupName": "sa-tools-gke-optimization",
       "commitMessagePrefix": "chore(deps): [sa-tools-gke-optimization]"
     },
     {
-      "matchFileNames": ["projects/sa-tools/perf-benchmark/**"],
+      "matchFileNames": [
+        "projects/sa-tools/perf-benchmark/**"
+      ],
       "groupName": "sa-tools-perf-benchmark",
       "commitMessagePrefix": "chore(deps): [sa-tools-perf-benchmark]"
     },
     {
-      "matchFileNames": ["projects/sa-tools/performance-testing/**"],
+      "matchFileNames": [
+        "projects/sa-tools/performance-testing/**"
+      ],
       "groupName": "sa-tools-performance-testing",
       "commitMessagePrefix": "chore(deps): [sa-tools-performance-testing]"
     },
     {
-      "matchFileNames": ["projects/serve-llm-app-using-gke/**"],
+      "matchFileNames": [
+        "projects/serve-llm-app-using-gke/**"
+      ],
       "groupName": "serve-llm-app-using-gke",
       "commitMessagePrefix": "chore(deps): [serve-llm-app-using-gke]"
     },
-
     {
-      "matchFileNames": ["projects/serverless-event-processing/**"],
+      "matchFileNames": [
+        "projects/serverless-event-processing/**"
+      ],
       "groupName": "serverless-event-processing",
       "commitMessagePrefix": "chore(deps): [serverless-event-processing]"
     },
-
     {
-      "matchFileNames": ["projects/smart-npc/**"],
+      "matchFileNames": [
+        "projects/smart-npc/**"
+      ],
       "groupName": "smart-npc",
       "commitMessagePrefix": "chore(deps): [smart-npc]"
     },
-
     {
-      "matchFileNames": ["projects/snowflake-vertexai/**"],
+      "matchFileNames": [
+        "projects/snowflake-vertexai/**"
+      ],
       "groupName": "snowflake-vertexai",
       "commitMessagePrefix": "chore(deps): [snowflake-vertexai]"
     },
-
     {
-      "matchFileNames": ["projects/speech2speech_translation/**"],
+      "matchFileNames": [
+        "projects/speech2speech_translation/**"
+      ],
       "groupName": "speech2speech_translation",
       "commitMessagePrefix": "chore(deps): [speech2speech_translation]"
     },
-
     {
-      "matchFileNames": ["projects/speech2srt/**"],
+      "matchFileNames": [
+        "projects/speech2srt/**"
+      ],
       "groupName": "speech2srt",
       "commitMessagePrefix": "chore(deps): [speech2srt]"
     },
-
     {
-      "matchFileNames": ["projects/streamlit-pubsub/**"],
+      "matchFileNames": [
+        "projects/streamlit-pubsub/**"
+      ],
       "groupName": "streamlit-pubsub",
       "commitMessagePrefix": "chore(deps): [streamlit-pubsub]"
     },
-
     {
-      "matchFileNames": ["projects/twos-sim/**"],
+      "matchFileNames": [
+        "projects/twos-sim/**"
+      ],
       "groupName": "twos-sim",
       "commitMessagePrefix": "chore(deps): [twos-sim]"
     },
-
     {
-      "matchFileNames": ["projects/user-guide/**"],
+      "matchFileNames": [
+        "projects/user-guide/**"
+      ],
       "groupName": "user-guide",
       "commitMessagePrefix": "chore(deps): [user-guide]"
     },
-
     {
-      "matchFileNames": ["projects/vision-ai-edge-camera-client/**"],
+      "matchFileNames": [
+        "projects/vision-ai-edge-camera-client/**"
+      ],
       "groupName": "vision-ai-edge-camera-client",
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-camera-client]"
     },
-
     {
-      "matchFileNames": ["projects/vision-ai-edge-platform/**"],
+      "matchFileNames": [
+        "projects/vision-ai-edge-platform/**"
+      ],
       "groupName": "vision-ai-edge-platform",
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]"
     }
