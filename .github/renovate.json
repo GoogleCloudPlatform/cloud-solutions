@@ -25,29 +25,9 @@
       "commitMessagePrefix": "chore(deps): [repository-management]"
     },
     {
-      "matchFileNames": ["projects/sa-tools/**"],
-      "groupName": "sa-tools",
-      "commitMessagePrefix": "chore(deps): [sa-tools]"
-    },
-    {
-      "matchFileNames": ["projects/sa-tools/common/**"],
-      "groupName": "sa-tools-common",
-      "commitMessagePrefix": "chore(deps): [sa-tools-common]"
-    },
-    {
-      "matchFileNames": ["projects/sa-tools/gke-optimization/**"],
-      "groupName": "sa-tools-gke-optimization",
-      "commitMessagePrefix": "chore(deps): [sa-tools-gke-optimization]"
-    },
-    {
-      "matchFileNames": ["projects/sa-tools/perf-benchmark/**"],
-      "groupName": "sa-tools-perf-benchmark",
-      "commitMessagePrefix": "chore(deps): [sa-tools-perf-benchmark]"
-    },
-    {
-      "matchFileNames": ["projects/sa-tools/performance-testing/**"],
-      "groupName": "sa-tools-performance-testing",
-      "commitMessagePrefix": "chore(deps): [sa-tools-performance-testing]"
+      "matchFileNames": ["projects/**"],
+      "groupName": "ungrouped-projects",
+      "commitMessagePrefix": "chore(deps): [ungrouped-projects]"
     },
     {
       "matchFileNames": ["projects/advanced-ticketing/**"],
@@ -110,6 +90,13 @@
     },
 
     {
+      "matchFileNames": ["projects/gke-optimization/**"],
+      "groupName": "gke-optimization",
+      "commitMessagePrefix": "chore(deps): [gke-optimization]"
+    },
+
+
+    {
       "matchFileNames": ["projects/genai-for-wsm/**"],
       "groupName": "genai-for-wsm",
       "commitMessagePrefix": "chore(deps): [genai-for-wsm]"
@@ -162,6 +149,31 @@
       "commitMessagePrefix": "chore(deps): [ray-gke-embedding]"
     },
 
+    {
+      "matchFileNames": ["projects/sa-tools/**"],
+      "groupName": "sa-tools",
+      "commitMessagePrefix": "chore(deps): [sa-tools]"
+    },
+    {
+      "matchFileNames": ["projects/sa-tools/common/**"],
+      "groupName": "sa-tools-common",
+      "commitMessagePrefix": "chore(deps): [sa-tools-common]"
+    },
+    {
+      "matchFileNames": ["projects/sa-tools/gke-optimization/**"],
+      "groupName": "sa-tools-gke-optimization",
+      "commitMessagePrefix": "chore(deps): [sa-tools-gke-optimization]"
+    },
+    {
+      "matchFileNames": ["projects/sa-tools/perf-benchmark/**"],
+      "groupName": "sa-tools-perf-benchmark",
+      "commitMessagePrefix": "chore(deps): [sa-tools-perf-benchmark]"
+    },
+    {
+      "matchFileNames": ["projects/sa-tools/performance-testing/**"],
+      "groupName": "sa-tools-performance-testing",
+      "commitMessagePrefix": "chore(deps): [sa-tools-performance-testing]"
+    },
     {
       "matchFileNames": ["projects/serve-llm-app-using-gke/**"],
       "groupName": "serve-llm-app-using-gke",
