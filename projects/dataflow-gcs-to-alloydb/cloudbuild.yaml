@@ -1,0 +1,59 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build_test_container'
+    script: |
+      docker build -f Dockerfile.dev . -t test_container
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'run_tests'
+    script: |
+      docker run --net host -v /var/run/docker.sock:/var/run/docker.sock test_container
+    waitFor:
+      - build_test_container
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'build_custom_image'
+    args:
+      - 'gcloud'
+      - 'builds'
+      - 'submit'
+      - '--ignore-file'
+      - '.gitignore'
+      - '--tag'
+      - '$_IMAGE_NAME'
+      - '.'
+    waitFor:
+      - run_tests
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'build_custom_template_from_image'
+    args:
+      - 'gcloud'
+      - 'dataflow'
+      - 'flex-template'
+      - 'build'
+      - 'gs://$_BUCKET_NAME/dataflow-template/dataflow_gcs_to_alloydb_template.json'
+      - '--image'
+      - '$_IMAGE_NAME'
+      - '--sdk-language'
+      - 'PYTHON'
+      - '--metadata-file'
+      - './metadata.json'
+    waitFor:
+      - build_custom_image
+
+substitutions:
+  _BUCKET_NAME: required  # Required. Value must be provided.
+  _IMAGE_NAME: required  # Required. Value must be provided.

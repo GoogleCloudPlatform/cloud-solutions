@@ -1,0 +1,5 @@
+id,first_name,last_name,department,salary,hire_date
+1,John,Doe,Sales,75000.00,2023-01-15
+2,Jane,Smith,Marketing,80000.00,2022-05-20
+3,Michael,Johnson,Engineering,92000.00,2021-09-10
+4,Emily,Williams,HR,68000.00,2024-03-05

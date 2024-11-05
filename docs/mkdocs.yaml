@@ -28,7 +28,6 @@ theme:
   features:
     - content.code.copy
     - content.code.annotate
-    - navigation.expand
   palette:
     primary: #006CBE
   icon:
@@ -45,7 +44,7 @@ repo_url: https://github.com/GoogleCloudPlatform/cloud-solutions
 copyright: |
   The projects contained in this repository are maintained by the Google Cloud Solutions Architects team.<br>
   Copyright &copy; 2019-2024 Google LLC<br>
-  <a href='https://cloud.google.com/'><img src='/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
+  <a href='https://cloud.google.com/'><img src='https://googlecloudplatform.github.io/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
 plugins:
   - search
   - awesome-pages:
@@ -72,9 +71,8 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.superfences
   - pymdownx.inlinehilite
-nav:
-  - 'Overview': 'index.md'
-  - '...'
+not_in_nav: |
+  /google13f96ebf51862cf4.html
 validation:
   omitted_files: warn
   absolute_links: warn

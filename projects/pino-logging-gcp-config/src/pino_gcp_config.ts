@@ -124,6 +124,9 @@ class GcpLoggingPino {
   /**
    * Outputs a single log line once per process containing the diagnostic info
    * for this logger.
+   *
+   * Note that it is not possible for this package to perform API level logging
+   * with a line of the form cloud-solutions/pino-logging-gcp-config-v1.0.0
    */
   outputDiagnosticEntry() {
     const alreadyWritten = setInstrumentationStatus(true);

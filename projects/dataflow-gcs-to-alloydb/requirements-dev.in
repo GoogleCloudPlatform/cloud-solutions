@@ -1,0 +1,6 @@
+apache-beam[gcp]==2.59.0
+absl-py
+pandas
+pg8000
+SQLAlchemy
+testcontainers==4.8.0

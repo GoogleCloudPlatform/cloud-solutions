@@ -1,0 +1,6 @@
+integer_field,bigint_field,boolean_field,char_field,varchar_field,date_field,double_field,macaddr_field,numeric_field,point_field,real_field,smallint_field,text_field,timestamp_field
+1,9223372036854775807,false,abcdefghij,vwxyz12345,2023-11-28,3.14159,"08:00:2b:01:02:03",123,"(1,2)",2.71828,32767,This is some sample text,2024-06-10 12:17:00
+2,-9223372036854775808,FALSE,klmnopqrst,54321zyxwv,2024-01-01,2.71828,"09:aa:2a:10:fb:03",99,"(3.5,7.8)",1.61803,-32768,More sample text here,2023-05-15 08:30:00
+3,1234567890,true,char_10_ex,varchar_10,1999-12-31,-1.41421,"08-00-2b-01-02-03",-2,"(0,0)",3.14159,1000,Text field example,2022-02-22 14:45:00
+4,9876543210,false,a,short_text,2025-06-10,1000000,"08002b010203",9,"(-1,-1)",-0.61803,0,Another text field,2021-09-01 10:10:10
+5,1,true,abcdefghij,!@#$,2000-01-01,0.00001,"0802b:010203",0,"(10.5,-5.2)",0.5,5555,Final sample text,2020-12-25 00:00:00

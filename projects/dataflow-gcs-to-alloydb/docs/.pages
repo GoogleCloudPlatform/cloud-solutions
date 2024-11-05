@@ -1,0 +1,6 @@
+title: Dataflow Flex Template Google Cloud Storage to AlloyDB
+nav:
+  - 'Overview': 'index.md'
+  - 'Configuration': 'configuration.md'
+  - 'Build and Run Template': 'build_and_run_pipeline.md'
+  - 'Development Documentation': 'development.md'

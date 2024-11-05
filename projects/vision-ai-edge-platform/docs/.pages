@@ -1,0 +1,7 @@
+title: Vision AI Edge Platform
+
+nav:
+- 'Overview': 'index.md'
+- 'Deployment': 'deployment.md'
+- 'Training': 'training.md'
+- 'Terminology': 'terminology.md'

@@ -65,6 +65,7 @@ echo "Initializing docs folder at: ${RUN_DOCS_BASE}"
 mkdir -p "${RUN_DOCS_BASE}"
 
 ln -sf "${DOCS_DIR}/index.md" "${RUN_DOCS_BASE}/index.md"
+ln -sf "${DOCS_DIR}/google13f96ebf51862cf4.html" "${RUN_DOCS_BASE}/google13f96ebf51862cf4.html"
 ln -sf "${DOCS_DIR}/common" "${RUN_DOCS_BASE}/common"
 
 RUN_SOLUTIONS_FOLDER="$(realpath "${RUN_DOCS_BASE}")"
@@ -75,6 +76,10 @@ for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
     ln -s "${CURRENT_PROJECT_DIR}/docs" "${RUN_SOLUTIONS_FOLDER}/$(basename "$CURRENT_PROJECT_DIR")"
   fi
 done
+
+# Ensure user-guide is top of the nav list
+[[ -e "${RUN_SOLUTIONS_FOLDER}/user-guide" ]] &&
+  mv "${RUN_SOLUTIONS_FOLDER}/user-guide" "${RUN_SOLUTIONS_FOLDER}/aaa-user-guide"
 
 # Create Python venv if not present
 if [[ ! -d "${VENV_DIR}" ]]; then

@@ -1,22 +1,12 @@
-# Google Cloud Solutions Architects repository
+# Google Cloud solutions
 
-This repository hosts open source projects produced by Google Cloud Solutions
-Architects.
+This repository contains open source projects that combine multiple Google Cloud
+services to solve common technical challenges in areas such as
+application modernization, data analytics, and security.
 
-The content of this repository is provided for sample purposes, and not intended
-for production environments. Proceed with caution.
+[![Explore solutions](docs/common/images/explore.png)](https://googlecloudplatform.github.io/cloud-solutions/)
 
-The projects in this repository are not official Google products.
-
-For more information, see the
-[Google Cloud Solutions Architects repository documentation](https://googlecloudplatform.github.io/cloud-solutions/)
-
-## Repository structure
-
--   `.github`: public-facing repository management.
--   `docs`: documentation tooling and source.
--   `projects`: reference architectures, proofs of concept, tools, examples. For
-    more information, see the project-specific `README`s.
+The projects are maintained by the Google Cloud Solutions Architects team.
 
 ## Contributing
 
@@ -24,7 +14,9 @@ We welcome contributions to this repository. If you have an idea for a new
 project, or if you would like to contribute to an existing project, see
 [CONTRIBUTING](CONTRIBUTING.md).
 
-## Questions and feedback
+---
 
-In case you have issues when setting up a project, or to provide feedback, open
-a new issue in this repository.
+_The projects in this repository are not an officially supported Google products._
+
+_All files in this repository are under the
+[Apache License, Version 2.0](LICENSE) unless noted otherwise._
