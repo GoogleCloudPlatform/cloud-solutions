@@ -1,6 +1,6 @@
 {
   "name": "pino-logging-gcp-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Module to create a basic Pino LoggerConfig to support Google Cloud structured logging",
   "main": "build/src/pino_gcp_config.js",
   "scripts": {
