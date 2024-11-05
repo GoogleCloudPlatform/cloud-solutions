@@ -25,11 +25,6 @@
       "commitMessagePrefix": "chore(deps): [repository-management]"
     },
     {
-      "matchFileNames": ["projects/**"],
-      "groupName": "ungrouped-projects",
-      "commitMessagePrefix": "chore(deps): [ungrouped-projects]"
-    },
-    {
       "matchFileNames": ["projects/sa-tools/**"],
       "groupName": "sa-tools",
       "commitMessagePrefix": "chore(deps): [sa-tools]"

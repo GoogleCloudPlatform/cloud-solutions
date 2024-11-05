@@ -1,0 +1,12 @@
+{
+  "separate-pull-requests": true,
+  "bootstrap-sha": "b2d3dc56bd7b1f0bf518c86563a07b70261594fd",
+  "last-release-sha": "b2d3dc56bd7b1f0bf518c86563a07b70261594fd",
+  "packages": {
+    "projects/pino-logging-gcp-config": {
+      "release-type": "node",
+      "extra-files": ["src/pino_gcp_config.ts"]
+    }
+  },
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
+}
