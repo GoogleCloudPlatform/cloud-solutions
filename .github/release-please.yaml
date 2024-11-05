@@ -19,7 +19,7 @@
 # under the License.
 #
 
-# Configuration for release-please Github app.
+# Configuration for release-please Github app
 #
 handleGHRelease: true
 manifest: true
