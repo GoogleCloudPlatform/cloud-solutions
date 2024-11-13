@@ -1,0 +1,35 @@
+[
+  {
+    "topic": "it-test-topic",
+    "timestamp": "2024-11-10T01:59:00Z",
+    "unknown_field_ids": [
+      15,
+      20,
+      25
+    ],
+    "raw_key": "MS0w",
+    "raw_message": "CQAAQJ46ydlBEgZtaWxsaXMdjT3lRSIOCgJBMRXm1YhEHWb+gUUqDgoCQjEVOy2BRR0GxgZFRczEZEJNYmQoQ3oQMTIzNDU2Ni0zNDIzNDIzNKEBnRSo9atHykDKAQMBAgM="
+  },
+  {
+    "topic": "it-test-topic",
+    "timestamp": "2024-11-10T01:59:00Z",
+    "unknown_field_ids": [
+      15,
+      20,
+      25
+    ],
+    "raw_key": "MS0x",
+    "raw_message": "CQAAQJ46ydlBEgZtaWxsaXMdjT3lRSIOCgJBMRXm1YhEHWb+gUUqDgoCQjEVOy2BRR0GxgZFRczEZEJNYmQoQ3oQMTIzNDU2Ni0zNDIzNDIzNKEBnRSo9atHykDKAQMBAgM="
+  },
+  {
+    "topic": "it-test-topic",
+    "timestamp": "2024-11-10T01:59:00Z",
+    "unknown_field_ids": [
+      15,
+      20,
+      25
+    ],
+    "raw_key": "MS0y",
+    "raw_message": "CQAAQJ46ydlBEgZtaWxsaXMdjT3lRSIOCgJBMRXm1YhEHWb+gUUqDgoCQjEVOy2BRR0GxgZFRczEZEJNYmQoQ3oQMTIzNDU2Ni0zNDIzNDIzNKEBnRSo9atHykDKAQMBAgM="
+  }
+]

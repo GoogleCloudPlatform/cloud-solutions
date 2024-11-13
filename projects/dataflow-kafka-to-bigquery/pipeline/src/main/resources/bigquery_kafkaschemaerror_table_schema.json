@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "name": "topic",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "timestamp",
+      "type": "TIMESTAMP",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "unknown_field_ids",
+      "type": "INTEGER",
+      "mode": "REPEATED"
+    },
+    {
+      "name": "raw_key",
+      "type": "BYTES",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "raw_message",
+      "type": "BYTES",
+      "mode": "NULLABLE"
+    }
+  ]
+}

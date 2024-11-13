@@ -1,0 +1,20 @@
+{
+  "tstamp" : 1.730472569E9,
+  "tType" : "millis",
+  "amount" : 7335.694,
+  "original" : {
+    "nameOriginal" : "A1",
+    "oldBalanceOriginal" : 1094.6843,
+    "newBalanceOriginal" : 4159.8
+  },
+  "destination" : {
+    "nameDestination" : "B1",
+    "oldBalanceDestination" : 4133.654,
+    "newBalanceDestination" : 2156.3765
+  },
+  "geoLat" : 57.192184,
+  "geoLong" : 168.39212,
+  "newStringField1" : "1234566-34234234",
+  "newDouble1" : 13455.3434343434,
+  "evolvedArrayInts" : [ 1, 2, 3 ]
+}
