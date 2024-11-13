@@ -1,6 +1,6 @@
-apache-beam[gcp]==2.59.0
+apache-beam[gcp]==2.60.0
 absl-py
 pandas
 pg8000
 SQLAlchemy
-testcontainers==4.8.0
+testcontainers==4.8.2
