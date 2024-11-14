@@ -119,4 +119,28 @@ public final class ParseKafkaMessageTransformTest {
 
     testPipeline.run();
   }
+
+  @Test
+  public void expand_invalidSchemaProto_outputErrorStreamOnly() throws ClassNotFoundException {
+
+    // Arrange
+    var randomBytes = new byte[] {1, 2, 4, 5, 6};
+
+    // Act
+    var pct =
+        testPipeline.apply(Create.of(KV.of(new byte[] {2, 3}, randomBytes))).apply(parseXForm);
+
+    // Assert
+    PAssert.that(pct.get(parseXForm.getOutputTag())).empty();
+    PAssert.that(pct.get(parseXForm.getSchemaErrorTag()))
+        .containsInAnyOrder(
+            KafkaSchemaError.builder()
+                .topic("sometopic")
+                .timestamp("2024-11-10T02:00:00.000Z")
+                .rawKey(new byte[] {2, 3})
+                .rawMessage(randomBytes)
+                .build());
+
+    testPipeline.run();
+  }
 }

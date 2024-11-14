@@ -22,13 +22,13 @@ import com.google.api.services.bigquery.model.TableRow;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.solutions.dataflow.serde.ProtobufSerDe.ProtoDeserializer;
 import com.google.common.flogger.GoogleLogger;
+import com.google.common.flogger.StackSize;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.Map.Entry;
+import java.util.List;
 import org.apache.beam.sdk.coders.SerializableCoder;
 import org.apache.beam.sdk.io.gcp.bigquery.TableRowJsonCoder;
 import org.apache.beam.sdk.transforms.DoFn;
@@ -96,7 +96,7 @@ public abstract class ParseKafkaMessageTransform
         input.apply(
             "ReadKafkaRecord",
             ParDo.of(
-                    new ParseKakaProtoMessageFn(
+                    new ParseKafkaProtoMessageFn(
                         topic(), protoClassName(), protoJarPath(), clockFactory(), schemaErrorTag))
                 .withOutputTags(outputTag, TupleTagList.of(schemaErrorTag)));
 
@@ -108,7 +108,7 @@ public abstract class ParseKafkaMessageTransform
     return messageAndSchemaTuple;
   }
 
-  private static final class ParseKakaProtoMessageFn extends DoFn<KV<byte[], byte[]>, TableRow> {
+  private static final class ParseKafkaProtoMessageFn extends DoFn<KV<byte[], byte[]>, TableRow> {
 
     private static final GoogleLogger logger = GoogleLogger.forEnclosingClass();
 
@@ -126,7 +126,7 @@ public abstract class ParseKafkaMessageTransform
     private transient ProtoDeserializer protoDeserializer;
     private transient Gson gson;
 
-    public ParseKakaProtoMessageFn(
+    public ParseKafkaProtoMessageFn(
         String topic,
         String protoClassName,
         String protoJarPath,
@@ -167,36 +167,64 @@ public abstract class ParseKafkaMessageTransform
 
     @ProcessElement
     public void convertMessage(
-        @Element KV<byte[], byte[]> kafkaRecord, ProcessContext processContext)
-        throws InvalidProtocolBufferException {
+        @Element KV<byte[], byte[]> kafkaRecord, ProcessContext processContext) {
+      new ProcessKafkaElement(kafkaRecord, processContext).processElement();
+    }
 
-      var rawMessage = kafkaRecord.getValue();
-      var parsedMessage = protoDeserializer.deserialize(topic, rawMessage);
+    /** Process given proto bytes, inner class to improve structure. */
+    private final class ProcessKafkaElement {
 
-      var messageJson =
-          JsonFormat.printer()
-              .includingDefaultValueFields()
-              .preservingProtoFieldNames()
-              .print(parsedMessage);
+      private final KV<byte[], byte[]> kafkaRecord;
+      private final ProcessContext processContext;
 
-      var tableRow = gson.fromJson(messageJson, TableRow.class);
+      public ProcessKafkaElement(KV<byte[], byte[]> kafkaRecord, ProcessContext processContext) {
+        this.kafkaRecord = kafkaRecord;
+        this.processContext = processContext;
+      }
 
-      processContext.output(tableRow);
+      private void sendSchemaError() {
+        sendSchemaError(/* unknownFields= */ null);
+      }
 
-      var unknownFields =
-          parsedMessage.getUnknownFields().asMap().entrySet().stream().map(Entry::getKey).toList();
-      if (!unknownFields.isEmpty()) {
-
-        // Emit Schema Error
-        processContext.output(
-            schemaErrorTupleTag,
+      private void sendSchemaError(List<Integer> unknownFields) {
+        var schemaErrorBuilder =
             KafkaSchemaError.builder()
                 .topic(topic)
                 .timestamp(DateTimeFormatter.ISO_INSTANT.format(clockFactory.getClock().instant()))
-                .unknownFieldIds(unknownFields)
                 .rawKey(kafkaRecord.getKey())
-                .rawMessage(rawMessage)
-                .build());
+                .rawMessage(kafkaRecord.getValue());
+
+        if (unknownFields != null && !unknownFields.isEmpty()) {
+          schemaErrorBuilder.unknownFieldIds(unknownFields);
+        }
+
+        processContext.output(schemaErrorTupleTag, schemaErrorBuilder.build());
+      }
+
+      private void processElement() {
+        try {
+          var rawMessage = kafkaRecord.getValue();
+          var parsedMessage = protoDeserializer.deserialize(topic, rawMessage);
+
+          var messageJson =
+              JsonFormat.printer()
+                  .includingDefaultValueFields()
+                  .preservingProtoFieldNames()
+                  .print(parsedMessage);
+
+          var tableRow = gson.fromJson(messageJson, TableRow.class);
+
+          processContext.output(tableRow);
+
+          var unknownFields = parsedMessage.getUnknownFields().asMap().keySet().stream().toList();
+          if (!unknownFields.isEmpty()) {
+            sendSchemaError(unknownFields);
+          }
+        } catch (Exception exp) {
+          logger.atSevere().withStackTrace(StackSize.NONE).withCause(exp).log(
+              "Error processing proto message");
+          sendSchemaError();
+        }
       }
     }
   }
