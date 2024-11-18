@@ -1,6 +1,13 @@
 # Changelog
 <!-- markdownlint-disable -->
 
+## [1.0.2](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.1...pino-logging-gcp-config-v1.0.2) (2024-11-18)
+
+
+### Bug Fixes
+
+* **deps:** update cross-spawn to address CVE ([261be11](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/261be1157445d188e5eb48ae30b0196bde180757))
+
 ## [1.0.1](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.0...pino-logging-gcp-config-v1.0.1) (2024-11-06)
 
 
