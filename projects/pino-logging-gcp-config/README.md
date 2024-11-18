@@ -14,9 +14,12 @@ errors with stack traces to
 ## Features
 
 -   Converts Pino log levels to Google Cloud Logging log levels.
+-   Uses `message` instead of `msg` for the message key.
 -   Adds a millisecond-granularity timestamp in a
-    [format recognised by Google Cloud Logging](https://cloud.google.com/logging/docs/agent/logging/configuration#timestamp-processing).
--   Adds an
+    [format recognised by Google Cloud Logging](https://cloud.google.com/logging/docs/agent/logging/configuration#timestamp-processing),
+    eg:\
+    `"timestamp":{"seconds":1445470140,"nanos":123000000}`.
+-   Adds a sequential
     [insertId](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#FIELDS.insert_id)
     to ensure log messages with identical timestamps are ordered correctly.
 -   Logs including an Error object have the
