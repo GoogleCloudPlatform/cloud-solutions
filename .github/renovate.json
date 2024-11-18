@@ -45,6 +45,20 @@
     },
     {
       "matchFileNames": [
+        "projects/alloydb-autoscaler/**"
+      ],
+      "groupName": "alloydb-autoscaler",
+      "commitMessagePrefix": "chore(deps): [alloydb-autoscaler]"
+    },
+    {
+      "matchFileNames": [
+        "projects/alloydb-rag-example/**"
+      ],
+      "groupName": "alloydb-rag-example",
+      "commitMessagePrefix": "chore(deps): [alloydb-rag-example]"
+    },
+    {
+      "matchFileNames": [
         "projects/alloydbomni-ha-patroni-etcd/**"
       ],
       "groupName": "alloydbomni-ha-patroni-etcd",
@@ -94,10 +108,24 @@
     },
     {
       "matchFileNames": [
+        "projects/dataflow-gcs-avro-to-spanner-scd/**"
+      ],
+      "groupName": "dataflow-gcs-avro-to-spanner-scd",
+      "commitMessagePrefix": "chore(deps): [dataflow-gcs-avro-to-spanner-scd]"
+    },
+    {
+      "matchFileNames": [
         "projects/dataflow-gcs-to-alloydb/**"
       ],
       "groupName": "dataflow-gcs-to-alloydb",
       "commitMessagePrefix": "chore(deps): [dataflow-gcs-to-alloydb]"
+    },
+    {
+      "matchFileNames": [
+        "projects/dataflow-kafka-to-bigquery/**"
+      ],
+      "groupName": "dataflow-kafka-to-bigquery",
+      "commitMessagePrefix": "chore(deps): [dataflow-kafka-to-bigquery]"
     },
     {
       "matchFileNames": [
