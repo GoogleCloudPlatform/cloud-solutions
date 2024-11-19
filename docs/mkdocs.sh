@@ -51,52 +51,44 @@ if ! command python3 --version &>/dev/null; then
   exit
 fi
 
-# ReInitialize build folder if it exists
-if [[ -d "${BUILD_DIR}" ]]; then
+# Build docs directory by copying or linking files/folders from projects
+# directories
 
-  rm -rf "${BUILD_DIR}/docs"
-  mkdir -p "${BUILD_DIR}/docs"
-fi
+echo "Initializing docs build folder at: ${BUILD_DIR}/docs"
+rm -rf "${BUILD_DIR}"
+mkdir -p "${BUILD_DIR}/docs"
 
-# Create symlinks.
-## Setup common config and folders
-RUN_DOCS_BASE="${BUILD_DIR}/docs"
-echo "Initializing docs folder at: ${RUN_DOCS_BASE}"
-mkdir -p "${RUN_DOCS_BASE}"
-
-ln -sf "${DOCS_DIR}/index.md" "${RUN_DOCS_BASE}/index.md"
-ln -sf "${DOCS_DIR}/google13f96ebf51862cf4.html" "${RUN_DOCS_BASE}/google13f96ebf51862cf4.html"
-ln -sf "${DOCS_DIR}/common" "${RUN_DOCS_BASE}/common"
-
-RUN_SOLUTIONS_FOLDER="$(realpath "${RUN_DOCS_BASE}")"
-mkdir -p "${RUN_SOLUTIONS_FOLDER}"
+## Setup common files and folders
+ln -sf "${DOCS_DIR}/index.md" "${BUILD_DIR}/docs/index.md"
+ln -sf "${DOCS_DIR}/google13f96ebf51862cf4.html" "${BUILD_DIR}/docs/google13f96ebf51862cf4.html"
+ln -sf "${DOCS_DIR}/common" "${BUILD_DIR}/docs/common"
 
 for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
+  PROJECT_DIRNAME="$(basename "$CURRENT_PROJECT_DIR")"
   if [[ -d "${CURRENT_PROJECT_DIR}/docs" ]]; then
-    ln -s "${CURRENT_PROJECT_DIR}/docs" "${RUN_SOLUTIONS_FOLDER}/$(basename "$CURRENT_PROJECT_DIR")"
+    ln -s "${CURRENT_PROJECT_DIR}/docs" "${BUILD_DIR}/docs/${PROJECT_DIRNAME}"
   fi
 done
 
-# Ensure user-guide is top of the nav list
-[[ -e "${RUN_SOLUTIONS_FOLDER}/user-guide" ]] &&
-  mv "${RUN_SOLUTIONS_FOLDER}/user-guide" "${RUN_SOLUTIONS_FOLDER}/aaa-user-guide"
+cd "${DOCS_DIR}"
 
-# Create Python venv if not present
-if [[ ! -d "${VENV_DIR}" ]]; then
-  # Create Python venv.
-  echo "Initialize Python venv at: ${VENV_DIR}"
-  python3 -m venv "${VENV_DIR}"
-fi
+# Ensure user-guide is top of the nav list
+[[ -e "${BUILD_DIR}/docs/user-guide" ]] &&
+  mv "${BUILD_DIR}/docs/user-guide" "${BUILD_DIR}/docs/aaa-user-guide"
+
+# Create Python venv.
+echo "Initialize Python venv at: ${VENV_DIR}"
+python3 -m venv "${VENV_DIR}"
 
 ## Activate python virtual environment to install and launch mkdocs
 # shellcheck source=/dev/null
 source "${VENV_DIR}/bin/activate"
-
 echo "Installing python requirements: ${VENV_DIR}"
-pip install \
+pip3 install \
   --quiet \
   --exists-action i \
   --require-hashes \
+  --require-virtualenv \
   -r "${SCRIPT_DIR}/requirements.txt"
 
 # Run mkdocs.
