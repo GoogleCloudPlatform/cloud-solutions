@@ -84,7 +84,7 @@ To set up the demo, please follow the steps mentioned below:
 1.  Install the runtime dependencies
 
     ```bash
-    pip install -r requirements.txt
+    pip install --require-hashes -r requirements.txt
     ```
 
 1.  Run the python script - this will again, take some time. To read more about
