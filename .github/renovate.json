@@ -2,10 +2,22 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":semanticCommits"
+    ":semanticCommits",
+    ":docker",
+    ":enableVulnerabilityAlertsWithLabel(SECURITY)",
+    ":disableHost(gcr.io)"
   ],
   "dependencyDashboardApproval": true,
   "rangeStrategy": "bump",
+  "npm": {
+    "minimumReleaseAge": "3 days"
+  },
+  "pip_requirements": {
+    "fileMatch": [ "^requirements\\.in$" ]
+  },
+   "docker-compose": {
+    "enabled": true
+  },
   "customManagers": [
     {
       "customType": "regex",
@@ -13,7 +25,7 @@
       "fileMatch": [
         "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
         "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$",
-        "(^|/)*.sh",
+        "(^|/).*\\.sh",
         "ci-tasks/.*$"
       ],
       "matchStrings": [
