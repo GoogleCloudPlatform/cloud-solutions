@@ -67,6 +67,25 @@ for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
   PROJECT_DIRNAME="$(basename "$CURRENT_PROJECT_DIR")"
   if [[ -d "${CURRENT_PROJECT_DIR}/docs" ]]; then
     ln -s "${CURRENT_PROJECT_DIR}/docs" "${BUILD_DIR}/docs/${PROJECT_DIRNAME}"
+  elif [[ -f "${CURRENT_PROJECT_DIR}/README.md" ]]; then
+    echo "Using README.md for ${PROJECT_DIRNAME}"
+    cd "${PROJECTS_DIR}"
+
+    # We need the README and any referenced markdown or image files, including
+    # their paths, copied to the docs directory
+    # mkdocs will use either READNE.md or index.md as index page
+    #
+    # Use find with included and excluded file and dir patterns, dirs and
+    # pass to cp --parent to copy with paths.
+    INCLUDED_FILES_ARGS=(-name "*.md" -o -name "*.png" -o -name "*.jpg" -o -name "*.svg")
+    EXCLUDED_FILES_ARGS=(-iname "CHANGELOG*" -o -iname "LICENCE*" -o -iname "CONTRIBUTING*")
+    EXCLUDED_DIRS_ARGS=(-path "*/node_modules/*" -o -path "*/build/*" -o -path "*/venv/*")
+    find "${PROJECT_DIRNAME}" \
+      \( "${INCLUDED_FILES_ARGS[@]}" \) \
+      -a -not \( "${EXCLUDED_FILES_ARGS[@]}" \) \
+      -a -not \( "${EXCLUDED_DIRS_ARGS[@]}" -prune \) \
+      -print0 |
+      xargs -0 -I '{}' cp --parent '{}' "${BUILD_DIR}/docs"
   fi
 done
 
