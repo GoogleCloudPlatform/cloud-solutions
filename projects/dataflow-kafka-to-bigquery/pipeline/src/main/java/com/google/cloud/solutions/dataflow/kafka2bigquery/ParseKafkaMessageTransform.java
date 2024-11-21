@@ -16,8 +16,6 @@
 
 package com.google.cloud.solutions.dataflow.kafka2bigquery;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.solutions.dataflow.serde.ProtobufSerDe.ProtoDeserializer;
@@ -92,6 +90,9 @@ public abstract class ParseKafkaMessageTransform
   @NonNull
   public PCollectionTuple expand(@NonNull PCollection<KV<byte[], byte[]>> input) {
 
+    // Verify the class is valid during pipeline setup process.
+    DynamicClassLoader.from(protoJarPath()).loadClass(protoClassName(), Message.class);
+
     var messageAndSchemaTuple =
         input.apply(
             "ReadKafkaRecord",
@@ -116,7 +117,7 @@ public abstract class ParseKafkaMessageTransform
 
     private final String protoClassName;
 
-    private final String protoJarPath;
+    private final DynamicClassLoader dynamicClassLoader;
 
     private final ClockFactory clockFactory;
 
@@ -134,28 +135,16 @@ public abstract class ParseKafkaMessageTransform
         TupleTag<KafkaSchemaError> schemaErrorTupleTag) {
       this.topic = topic;
       this.protoClassName = protoClassName;
-      this.protoJarPath = protoJarPath;
+      this.dynamicClassLoader = DynamicClassLoader.from(protoJarPath);
       this.clockFactory = clockFactory;
       this.schemaErrorTupleTag = schemaErrorTupleTag;
     }
 
     @Setup
     public void createDeserializers() {
-      try {
-        var classLoader = DynamicClassLoader.getNewClassLoader(protoJarPath);
-        var protoClass = classLoader.loadClass(protoClassName);
-        checkArgument(
-            Message.class.isAssignableFrom(protoClass),
-            "Provided class is not a proto class: %s",
-            protoClass);
-        messageClass = (Class<Message>) Class.forName(protoClassName);
-
-        protoDeserializer = new ProtoDeserializer(messageClass);
-        gson = new GsonBuilder().setLenient().create();
-      } catch (ClassNotFoundException e) {
-        logger.atSevere().withCause(e).log(
-            "class %s, not found in %s", protoClassName, protoJarPath);
-      }
+      var messageClass = dynamicClassLoader.loadClass(protoClassName, Message.class);
+      protoDeserializer = new ProtoDeserializer(messageClass);
+      gson = new GsonBuilder().setLenient().create();
     }
 
     @Teardown
