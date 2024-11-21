@@ -38,7 +38,7 @@ dependencies {
     testAnnotationProcessor(libs.auto.value)
 
     runtimeOnly(libs.bundles.logger.runtime)
-
+    runtimeOnly(libs.beam.runners.google.cloud.dataflow.java)
     runtimeOnly("org.slf4j:slf4j-jdk14:2.0.16")
 
     testImplementation(libs.bundles.test.bundle)
