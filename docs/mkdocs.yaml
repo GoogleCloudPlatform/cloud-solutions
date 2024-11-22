@@ -71,6 +71,9 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.superfences
   - pymdownx.inlinehilite
+  - toc:
+      permalink: true
+
 not_in_nav: |
   /google13f96ebf51862cf4.html
 validation:
