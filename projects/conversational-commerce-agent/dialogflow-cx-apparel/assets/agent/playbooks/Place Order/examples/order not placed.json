@@ -1,0 +1,59 @@
+{
+  "name": "57fd71f4-7b8e-4435-b99e-2ba417a36059",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/8db09d00-b9d9-444b-af03-72c667f1b3c4",
+      "action": "place_order",
+      "inputActionParameters": {
+        "requestBody": {
+          "cart": {
+            "products": [ {
+              "delivery_date": "April 10, 2024",
+              "earliest_delivery_date": "April 08, 2024",
+              "id": "9SZhmscDOs3kVCvzV9c0hA",
+              "quantity": 1,
+              "size": "",
+              "title": "Mahek Saree Striped Fashion Cotton Sari"
+            } ]
+          }
+        }
+      },
+      "outputActionParameters": {
+        "default": {
+          "order_status": "not_placed",
+          "reason": "Internal Server Error!"
+        }
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer has confirmed the delivery dates for the shopping cart items and user details.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "delivery_date": "April 10, 2024",
+        "earliest_delivery_date": "April 08, 2024",
+        "id": "9SZhmscDOs3kVCvzV9c0hA",
+        "quantity": 1,
+        "size": null,
+        "title": "Mahek Saree Striped Fashion Cotton Sari"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The system is facing technical difficulties. The customer can try again after some time.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "delivery_date": "April 10, 2024",
+        "earliest_delivery_date": "April 08, 2024",
+        "id": "9SZhmscDOs3kVCvzV9c0hA",
+        "quantity": 1,
+        "size": null,
+        "title": "Mahek Saree Striped Fashion Cotton Sari"
+      } ]
+    }
+  },
+  "displayName": "order not placed",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

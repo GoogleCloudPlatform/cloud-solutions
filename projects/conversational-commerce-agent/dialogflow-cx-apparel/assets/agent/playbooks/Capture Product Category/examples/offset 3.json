@@ -1,0 +1,22 @@
+{
+  "name": "4a216c63-85b7-4155-b46e-a83365eb64b4",
+  "playbookInput": {
+    "precedingConversationSummary": "the customer wants to see previous items",
+    "actionParameters": {
+      "offset": 4,
+      "previous_search": "heels"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the customer wants to see heels",
+    "state": "OK",
+    "actionParameters": {
+      "offset": 2,
+      "search": "heels"
+    }
+  },
+  "displayName": "offset 3",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

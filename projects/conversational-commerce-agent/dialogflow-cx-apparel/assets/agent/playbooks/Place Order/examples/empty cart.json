@@ -1,0 +1,25 @@
+{
+  "name": "1e098ca0-35af-4b80-be6f-2e53e1f5618c",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Looks like your shopping cart is empty."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to place an order.",
+    "actionParameters": {
+      "shopping_cart": [ ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The order cannot be placed due to an empty shopping cart. Follow-up question: Offer to add items to the cart before placing an order.",
+    "state": "OK",
+    "actionParameters": {
+      "shopping_cart": [ ]
+    }
+  },
+  "displayName": "empty cart",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

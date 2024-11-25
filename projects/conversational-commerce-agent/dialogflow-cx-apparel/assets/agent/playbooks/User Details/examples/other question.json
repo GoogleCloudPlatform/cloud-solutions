@@ -1,0 +1,79 @@
+{
+  "name": "f220fa2d-9462-4ad6-96bc-457262e860d0",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/1266fb2d-e96d-4449-9a02-776e324dfc79",
+      "action": "getUserInfo",
+      "inputActionParameters": {
+        "requestBody": ""
+      },
+      "outputActionParameters": {
+        "default": {
+          "contact_number": "416-555-6704",
+          "delivery_address": "3320 Keystone Avenue, Los Angeles, CA 90034",
+          "email": "poetry_reader456@gmail.com",
+          "payment_info": "************4111"
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Now, let's review your profile details to ensure everything is up-to-date:\n\nDelivery Address: 3320 Keystone Avenue, Los Angeles, CA 90034\nPayment Info: Visa ending in 4111\nContact Number: 416-555-6704\nEmail: poetry_reader456@gmail.com\nPlease review these details. If everything is correct, simply confirm. If you need to make any changes, let me know."
+    }
+  }, {
+    "userUtterance": {
+      "text": "I need to update my credit card number."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Sure. What is your new credit card number?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "umm.. 4545 5656 7777 8888"
+    }
+  }, {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/2fea8611-eefd-400a-8c92-cc7d61a9ab1e",
+      "action": "updateUserInfo",
+      "inputActionParameters": {
+        "requestBody": {
+          "contact_number": "416-555-6704",
+          "delivery_address": "3320 Keystone Avenue, Los Angeles, CA 90034",
+          "email": "poetry_reader456@gmail.com",
+          "payment_info": "4545 5656 7777 8888"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "message": "User information updated successfully.",
+          "user_info": {
+            "contact_number": "416-555-6704",
+            "delivery_address": "3320 Keystone Avenue, Los Angeles, CA 90034",
+            "email": "poetry_reader456@gmail.com",
+            "payment_info": "************8888"
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Your credit card number ending in 8888 has been successfully updated. Is there anything else you'd like to modify?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "I want to order 1 more t-shirt."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer has confirmed delivery dates for all the shopping cart products."
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to order 1 more t-shirt.",
+    "state": "OK"
+  },
+  "displayName": "other question",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

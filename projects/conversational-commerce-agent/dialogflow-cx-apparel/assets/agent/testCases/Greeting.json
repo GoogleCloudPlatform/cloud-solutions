@@ -1,0 +1,28 @@
+{
+  "name": "86ea1ba0-a882-421a-b378-61d1dda4be09",
+  "displayName": "Greeting",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "hi"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Hi there! Welcome to Cymbal Apparel. How can I assist you today?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1711559624,
+    "nanos": 535783000
+  },
+  "testConfig": {
+    "useCaseDescription": "Greet the user"
+  },
+  "languageCode": "en"
+}

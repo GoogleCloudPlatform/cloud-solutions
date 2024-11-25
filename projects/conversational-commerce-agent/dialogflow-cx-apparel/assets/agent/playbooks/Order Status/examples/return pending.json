@@ -1,0 +1,68 @@
+{
+  "name": "6e02bc7d-ed09-4b87-9734-b661d7f71fe9",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Could you please provide your order id to look up your order?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "where can I find it?"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "It should be in your order confirmation email."
+    }
+  }, {
+    "userUtterance": {
+      "text": "ok. I got it. it's 01318331."
+    }
+  }, {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/907cd4eb-3c90-4b09-a4a0-30b94ef6a02d",
+      "action": "orderStatus",
+      "inputActionParameters": {
+        "requestBody": {
+          "order_id": "01318331"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "message": "Your return is currently pending. Please follow the return instructions provided to complete the process.",
+          "order_details": {
+            "order_created_on": "2024-04-11T19:14:57.314726Z",
+            "order_id": "01318331",
+            "order_status": "return_pending",
+            "products": [ {
+              "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+              "quantity": 1,
+              "size": "small",
+              "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+            } ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Your return request for one small KRAZY KATZ Solid Men's Round Neck T-Shirt is currently pending. Please follow the return instructions provided in your email to complete the process. \nMay I help you with anything else?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "I want to buy a pair of jeans"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to know their order status",
+    "actionParameters": {
+      "order_id": ""
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the customer wants to buy a pair of jeans.",
+    "state": "OK"
+  },
+  "displayName": "return pending",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

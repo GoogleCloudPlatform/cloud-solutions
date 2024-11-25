@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+    title: apparel-search-cloud-function
+    description: Fetch products reviews
+    version: 1.0.0
+servers:
+    - url: _CF_URL_PLACEHOLDER_
+paths:
+    /get_reviews:
+        post:
+            summary: Fetch product reviews
+            operationId: get_reviews
+            requestBody:
+                description: shown product's data (id and title)
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ReviewQuery'
+            responses:
+                '200':
+                    description: product reviews in custom payload format to display in UI
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ReviewResp'
+
+components:
+    schemas:
+        ReviewQuery:
+            type: object
+            required:
+                - shown_products
+            properties:
+                shown_products:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: string
+                            title:
+                                type: string
+
+        ReviewResp:
+            type: object
+            properties:
+                payload:
+                    type: object
+                    properties:
+                        richContent:
+                            type: array
+                            items:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        type:
+                                            type: string
+                                        name:
+                                            type: string
+                                        payload:
+                                            type: object
+                                            properties:
+                                                items:
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            product_id:
+                                                                type: string
+                                                            user:
+                                                                type: string
+                                                            rating:
+                                                                type: number
+                                                            desc:
+                                                                type: string
+                                                            title:
+                                                                type: string

@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+    title: apparel-search-cloud-function
+    description: Get best-matched products based on a search query
+    version: 1.0.0
+servers:
+    - url: _CF_URL_PLACEHOLDER_
+paths:
+    /search:
+        post:
+            summary: Get best-matched products based on a search query
+            operationId: search
+            requestBody:
+                description: search query with offset(start index) value
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ProductQuery'
+            responses:
+                '200':
+                    description: top N best-matched products extracted from the start(offset) index. N is 2 by default, defined in cloud function.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ProductResp'
+
+components:
+    schemas:
+        ProductQuery:
+            type: object
+            required:
+                - search
+            properties:
+                search:
+                    type: string
+                offset:
+                    type: number
+
+        ProductResp:
+            type: object
+            properties:
+                payload:
+                    type: object
+                    properties:
+                        richContent:
+                            type: array
+                            items:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        type:
+                                            type: string
+                                        name:
+                                            type: string
+                                        payload:
+                                            type: object
+                                            properties:
+                                                items:
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            product:
+                                                                type: object
+                                                                properties:
+                                                                    id:
+                                                                        type: string
+                                                                    title:
+                                                                        type: string
+                                                                    name:
+                                                                        type: string
+                                                                    priceInfo:
+                                                                        type: object
+                                                                        properties:
+                                                                            price:
+                                                                                type: number
+                                                                    images:
+                                                                        type: array
+                                                                        items:
+                                                                            type: object
+                                                                            properties:
+                                                                                uri:
+                                                                                    type: string
+                                                                                height:
+                                                                                    type: number
+                                                                                width:
+                                                                                    type: number
+                                                                    description:
+                                                                        type: string

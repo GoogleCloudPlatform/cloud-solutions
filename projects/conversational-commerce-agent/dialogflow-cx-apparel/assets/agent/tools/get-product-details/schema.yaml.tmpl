@@ -1,0 +1,77 @@
+openapi: 3.0.0
+info:
+  title: apparel-search-cloud-function
+  description: Get products details from Retail API
+  version: 1.0.0
+servers:
+  - url: _CF_URL_PLACEHOLDER_
+paths:
+  /get_product_details:
+    post:
+      summary: Get product details
+      operationId: get_product_details
+      requestBody:
+        description: includes product ids
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductQuery'
+      responses:
+        '200':
+          description: product details for each product ids provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResp'
+
+components:
+  schemas:
+    ProductQuery:
+      type: object
+      required:
+        - product_ids
+      properties:
+        product_ids:
+          type: array
+          items:
+            type: string
+
+    ProductResp:
+      type: object
+      required:
+        - products
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  name:
+                    type: string
+                  priceInfo:
+                    type: object
+                    properties:
+                      price:
+                        type: number
+                      currencyCode:
+                        type: string
+                  description:
+                    type: string
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uri:
+                          type: string
+                        width:
+                          type: number
+                        height:
+                          type: number

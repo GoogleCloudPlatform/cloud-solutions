@@ -1,0 +1,27 @@
+{
+  "name": "3338e921-d6dc-4e0f-9809-caa8412ef975",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to add the maroon t-shirt to the cart with a medium size.",
+    "actionParameters": {
+      "id": "TSHEJQ22W8XPPGGH",
+      "quantity": 1,
+      "shopping_cart": [ ],
+      "size": "Medium",
+      "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the ARISE Self Design, Printed Men's Henley Maroon T-Shirt has been added to the cart.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "id": "TSHEJQ22W8XPPGGH",
+        "quantity": 1,
+        "size": "small",
+        "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+      } ]
+    }
+  },
+  "displayName": "add to cart",
+  "retrievalStrategy": "STATIC",
+  "languageCode": "undetected"
+}

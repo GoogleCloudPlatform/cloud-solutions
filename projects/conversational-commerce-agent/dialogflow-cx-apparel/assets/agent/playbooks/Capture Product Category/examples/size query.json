@@ -1,0 +1,20 @@
+{
+  "name": "afaa0d8f-6db2-4fe6-b137-4a0121e50e4a",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer is looking for a medium sized t-shirt.",
+    "actionParameters": {
+      "previous_search": ""
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the agent cannot filter out products by product sizes.",
+    "state": "OK",
+    "actionParameters": {
+      "search": "t-shirt"
+    }
+  },
+  "displayName": "size query",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

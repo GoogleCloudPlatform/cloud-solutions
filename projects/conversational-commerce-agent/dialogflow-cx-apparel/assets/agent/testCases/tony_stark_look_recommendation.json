@@ -1,0 +1,171 @@
+{
+  "name": "6a8cd1a6-634a-44c4-ba9f-bd31b23c633e",
+  "displayName": "tony_stark_look_recommendation",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "hi"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Feel free to select from the options above, or just type in what you're looking for and I'll assist you." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "I don't know I am open for all posibilities"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Whether you're seeking a casual beach look, a sophisticated evening ensemble, or something in between, I'm here to help! Let's start by narrowing down your options. Are you looking for something for a special occasion or everyday wear?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "I don't have any occasion. I am just shopping for fun"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Shopping for fun is always a great idea! Let's explore some exciting options. How about we start with something casual and versatile? Would you prefer \"Jeans\" or \"T-shirts\"?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "I always want to look cool as Tony stark"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Tony Stark, the iconic Iron Man, is known for his impeccable style. To emulate his cool and sophisticated look, I suggest exploring our collection of \"Suits\" and \"Blazers.\" These options exude confidence and elegance, just like Tony Stark himself. Would you like to see our selection of \"Suits\" or \"Blazers\"?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "ok I'll go with blazers"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these products catch your interest, or are you after different options?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "i'll take men's blazer"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Absolutely! What size would you like to go with the Romano Solid Single Breasted Formal Men's Blazer? We have sizes ranging from small to extra-large." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "medium"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! The Romano Solid Single Breasted Formal Men's Blazer in size medium has been added to your cart with quantity 1." ]
+      }, {
+        "text": [ "Would you like to purchase anything else?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712688970,
+    "nanos": 809605000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "blazer"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of Romano Solid Single Breasted Formal Men's Blazer Fabric: Cotton Color: Grey Sleeve: Full Sleeve,Romano Solid Single Breasted Formal Men's Blazer Price: Rs. 3,600 Cotton Blend Regular Fit Made in India,Specifications of Romano Solid Single Breasted Formal Men's Blazer General Details Ideal For Men's Occasion Formal Pattern Solid Blazer Details Type Single Breasted Fabric Cotton Sleeve Full Sleeve Number of Contents in Sales Package Pack of 1 Fabric Care Wash Dark Colours Seperately Additional Details Style Code WC196 In the Box Blazer",
+                      "id": "d3ykAZiOjL7RfieseJXpZg",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/blazer/a/w/a/wc196-romano-3xl-1000x1000-imaehk2uccu78yh5.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/d3ykAZiOjL7RfieseJXpZg",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 108
+                      },
+                      "title": "Romano Solid Single Breasted Formal Men's Blazer"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Specifications of Oxolloxo Solid Single Breasted Casual Women's Blazer General Details Pattern Solid Ideal For Women's Occasion Casual Blazer Details Sleeve Sleeveless Number of Contents in Sales Package Pack of 1 Fabric Linen Type Single Breasted Color Orange Fabric Care Machine wash, do not bleach, do not tumble dry, warm iron, dry cleanable. Additional Details Style Code S16184WBZ006",
+                      "id": "MNSO0eFl95J5z3Y3xavbrQ",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/blazer/4/y/t/s16184wbz006-oxolloxo-xl-original-imaejgxp2rxesbvh.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/MNSO0eFl95J5z3Y3xavbrQ",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 50
+                      },
+                      "title": "Oxolloxo Solid Single Breasted Casual Women's Blazer"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

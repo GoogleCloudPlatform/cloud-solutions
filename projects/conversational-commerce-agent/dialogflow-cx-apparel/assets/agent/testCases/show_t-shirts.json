@@ -1,0 +1,79 @@
+{
+  "name": "51881fbf-da18-45ff-ae60-83776a3044bc",
+  "displayName": "show_t-shirts",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "show me t-shirts"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these look good to you, or are you looking for something else?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712688607,
+    "nanos": 765053000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "t-shirt"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of YK Printed Boy's Round Neck Dark Blue T-Shirt Fit: Regular Suitable For: Western Wear Sleeve: Half Sleeve Fabric: Polyester Cotton Blend Color:Dark Blue Number Of Contents in Package:1,YK Printed Boy's Round Neck Dark Blue T-Shirt Price: Rs. 439 Navy T-shirt with slub effect, has a round neck, short sleeves, and Finding Dory print detail on the front. Your little one will definitely love wearing this funky T-shirt with his favourite pair of shorts and casual shoes when you take him out on a play date.,Specifications of YK Printed Boy's Round Neck Dark Blue T-Shirt T-shirt Details Sleeve Half Sleeve Number of Contents in Sales Package Pack of 1 Fabric Polyester Cotton Blend Type Round Neck Fit Regular General Details Pattern Printed Ideal For Boy's Occasion Casual Fabric Care Machine-wash warm Additional Details Style Code 1338252",
+                      "id": "rgT5wMHTJFAGr2sj3Jz00w",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/t-shirt/y/a/y/1338252-yk-6-7-years-original-imaejj98aznapfaq.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/rgT5wMHTJFAGr2sj3Jz00w",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 16
+                      },
+                      "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Specifications of KRAZY KATZ Solid Men's Round Neck T-Shirt (Pack of 6) T-shirt Details Sleeve Half Sleeve Number of Contents in Sales Package Pack of 6 Fabric Polyster Type Round Neck Fit Slim General Details Pattern Solid Ideal For Men's Occasion Sports Fabric Care Wash with Similar Colors, Use Detergent for Colors Additional Details Style Code AZT_DR_8_4_5_6_3_10 In the Box 6 T Shirts",
+                      "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/t-shirt/s/7/b/azr-dr-8-10-5-6-3-1-krazy-katz-40-original-imaeh2djah6kfyph.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/S5tJwu7uDnhnbfQpEOv2vQ",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 59
+                      },
+                      "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

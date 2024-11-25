@@ -1,0 +1,20 @@
+{
+  "name": "834f826f-6124-41ce-a876-3387c726d099",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to see cotton shirts.",
+    "actionParameters": {
+      "previous_search": "men shirt"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The agent cannot filter out products by fabric type.",
+    "state": "OK",
+    "actionParameters": {
+      "search": "men shirt"
+    }
+  },
+  "displayName": "fabric query",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

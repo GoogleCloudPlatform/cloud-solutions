@@ -1,0 +1,71 @@
+{
+  "name": "9ed62ac1-c503-4fef-aaf1-51eebe4278bf",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/1266fb2d-e96d-4449-9a02-776e324dfc79",
+      "action": "getUserInfo",
+      "inputActionParameters": {
+        "requestBody": ""
+      },
+      "outputActionParameters": {
+        "default": {
+          "contact_number": "416-555-6704",
+          "delivery_address": "638 Maple Street, Apt 11, Cupertino, CA 95014",
+          "email": "poetry_reader456@gmail.com",
+          "payment_info": "************4111"
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Now, let's review your profile details to ensure everything is up-to-date:\n\nDelivery Address: 638 Maple Street, Apt 11, Cupertino, CA 95014\nPayment Info: Visa ending in 4111\nContact Number: 416-555-6704\nEmail: poetry_reader456@gmail.com\nPlease review these details. If everything is correct, simply confirm. If you need to make any changes, let me know."
+    }
+  }, {
+    "userUtterance": {
+      "text": "I need to update my delivery address. It's now 3320 Keystone Avenue, Los Angeles, CA 90034"
+    }
+  }, {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/2fea8611-eefd-400a-8c92-cc7d61a9ab1e",
+      "action": "updateUserInfo",
+      "inputActionParameters": {
+        "requestBody": {
+          "contact_number": "416-555-6704",
+          "delivery_address": "3320 Keystone Avenue, Los Angeles, CA 90034",
+          "email": "poetry_reader456@gmail.com",
+          "payment_info": "************4111"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "message": "User information updated successfully.",
+          "user_info": {
+            "contact_number": "416-555-6704",
+            "delivery_address": "3320 Keystone Avenue, Los Angeles, CA 90034",
+            "email": "poetry_reader456@gmail.com",
+            "payment_info": "************4111"
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Your delivery address has been successfully updated to 3320 Keystone Avenue, Los Angeles, CA 90034. Is there anything else you'd like to modify?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "No, that's all."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer has confirmed delivery dates for all the shopping cart products."
+  },
+  "playbookOutput": {
+    "executionSummary": "User's profile details are confirmed.",
+    "state": "OK"
+  },
+  "displayName": "user information",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

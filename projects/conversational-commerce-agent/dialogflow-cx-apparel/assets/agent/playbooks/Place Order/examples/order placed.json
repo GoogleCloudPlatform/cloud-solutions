@@ -1,0 +1,65 @@
+{
+  "name": "f9898f32-4ef2-4888-b5f0-735b7bc029b5",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/8db09d00-b9d9-444b-af03-72c667f1b3c4",
+      "action": "place_order",
+      "inputActionParameters": {
+        "requestBody": {
+          "cart": {
+            "products": [ {
+              "delivery_date": "April 06, 2024",
+              "earliest_delivery_date": "April 06, 2024",
+              "id": "1o14yPSoqno1MiUAjPIHRg",
+              "quantity": 1,
+              "size": "10",
+              "title": "Caratcents White Gold 14 K Ring"
+            } ]
+          }
+        }
+      },
+      "outputActionParameters": {
+        "default": {
+          "order_created_on": "2024-04-02T17:37:25.239786Z",
+          "order_id": "72346673",
+          "order_status": "confrimed",
+          "products": [ {
+            "delivery_date": "April 06, 2024",
+            "earliest_delivery_date": "April 06, 2024",
+            "id": "1o14yPSoqno1MiUAjPIHRg",
+            "quantity": 1,
+            "size": "10",
+            "title": "Caratcents White Gold 14 K Ring"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Your order for the Caratcents White Gold 14 K Ring has been successfully placed with the order ID 72346673. It's scheduled for delivery on April 6, 2024. "
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer has confirmed the delivery dates for the shopping cart items and user details.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "delivery_date": "April 06, 2024",
+        "earliest_delivery_date": "April 06, 2024",
+        "id": "1o14yPSoqno1MiUAjPIHRg",
+        "quantity": 1,
+        "size": 10,
+        "title": "Caratcents White Gold 14 K Ring"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The order is placed and acknowledged to the customer. Next step is to ask follow-up question, if the customer needs any other help.",
+    "actionParameters": {
+      "shopping_cart": [ ]
+    }
+  },
+  "displayName": "order placed",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

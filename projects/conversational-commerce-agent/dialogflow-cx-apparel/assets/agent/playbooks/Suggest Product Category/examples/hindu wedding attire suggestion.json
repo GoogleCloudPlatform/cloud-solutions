@@ -1,0 +1,37 @@
+{
+  "name": "d4f6ea0e-6558-4b3a-81a6-dc01731ba920",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "That sounds wonderful! Is it a formal wedding, a casual beach wedding, or something else? Knowing the style will help me pick out the perfect outfit for you. What's the ambiance like?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "It's a traditional Hindu wedding"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "How exciting! Traditional Hindu weddings are rich in culture and color. For such an auspicious event, gentlemen often opt for timeless classics like \"Kurta\" or \"Sherwani,\" while ladies might prefer the elegance of \"Saree\" or \"Lehenga.\" What's your preference?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Do you have any more recommendations for men?"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Certainly! In addition to \"Kurta\" and \"Sherwani,\" consider exploring options like \"Pathani\" and \"Suit\" to elevate your style for the occasion. Are you interested in any of these styles?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "hmm. lets see some Hindu sarees"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer is looking to wear something for the wedding."
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to see Hindu sarees."
+  },
+  "displayName": "hindu wedding attire suggestion",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "en"
+}

@@ -1,0 +1,61 @@
+{
+  "name": "fbbbe27f-3263-4bf9-9502-47c25200ffb9",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/11c17021-f695-4969-842e-f7fe9f664274",
+      "action": "get_product_details",
+      "inputActionParameters": {
+        "requestBody": {
+          "product_ids": [ "LCHEGYYBWP4ECBZJ", "LCHEGGYP5SGJMZUC" ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "products": [ {
+            "product": {
+              "description": "",
+              "id": "",
+              "images": [ {
+                "height": 0,
+                "uri": "",
+                "width": 0
+              } ],
+              "name": "",
+              "priceInfo": {
+                "currencyCode": "",
+                "price": 0
+              },
+              "title": ""
+            }
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Khodal Fashion's Embroidered Women's Lehenga, Choli, and Dupatta Set features georgette and brocade fabric, vibrant multicolor options, intricate embroidery. It comes as a complete set including lehenga, choli, and dupatta, ideal for women, with a disclaimer of minor color variation. Would you like to add it to your cart?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Looks great. Add it to the cart."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to know more information about \"khodal fashion Embroidered Women's Lehenga\".",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "LCHEGYYBWP4ECBZJ",
+        "title": "Sohardhastshilp Self Design Women's Lehenga, Choli and Dupatta Set"
+      }, {
+        "id": "LCHEGGYP5SGJMZUC",
+        "title": "khodal fashion Embroidered Women's Lehenga, Choli and Dupatta Set"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to add the product \"khodal fashion Embroidered women's Lehenga\" to the cart."
+  },
+  "displayName": "lehenga details",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "en"
+}

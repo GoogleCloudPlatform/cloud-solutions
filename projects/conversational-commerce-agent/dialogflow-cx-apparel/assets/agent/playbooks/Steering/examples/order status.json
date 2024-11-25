@@ -1,0 +1,25 @@
+{
+  "name": "a8cfddd6-494f-4e14-a2e8-1adce5916950",
+  "actions": [ {
+    "userUtterance": {
+      "text": "What is my order status?"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/dde3d292-2f8e-4728-bfa1-47804906ac57",
+      "playbookInput": {
+        "precedingConversationSummary": "The user wants to learn their order status"
+      },
+      "playbookOutput": {
+
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  } ],
+  "playbookOutput": {
+    "executionSummary": "Routing customer to 'Order Status' playbook to learn their order status."
+  },
+  "displayName": "order status",
+  "retrievalStrategy": "STATIC",
+  "languageCode": "undetected"
+}

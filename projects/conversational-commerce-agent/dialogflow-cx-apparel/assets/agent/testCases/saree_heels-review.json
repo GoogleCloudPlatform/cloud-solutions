@@ -1,0 +1,289 @@
+{
+  "name": "88e88195-9163-4815-99b9-49bddbefecf6",
+  "displayName": "saree_heels-review",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "hey I am looking for a traditional saree"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these look good to you, or are you looking for something else?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "the 2nd one is looking too good"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "The Royal Amethyst Silk Saree is a beautiful choice! What size would you like to add to your cart? We have sizes ranging from small to extra-large." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "add the regular size"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! The Royal Amethyst Silk Saree in regular size has been added to your cart with quantity 1." ]
+      }, {
+        "text": [ "Would you like to purchase any other item?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "do you have matching heels with it?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these look good to you, or are you looking for something else?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "both looks stunning. add whichever has the best reviews."
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "The Glitzy Galz Women Heels has better reviews compared to the Flat n Heels Women Heels." ]
+      }, {
+        "text": [ "What size would you like for the Glitzy Galz Women Heels? We have sizes ranging from 5 to 11." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "7"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! The Glitzy Galz Women Heels in size 7 has been added to your cart with quantity 1." ]
+      }, {
+        "text": [ "Is there anything else you'd like to add to your purchase?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712689325,
+    "nanos": 463991000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "traditional saree"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of Indianbeauty Self Design, Printed Fashion Georgette Sari Export Quality Georgette Fabric Digital Color Dyeing Printing Rich Look Designer Heacy Blouse Fancy Designer Lace,Indianbeauty Self Design, Printed Fashion Georgette Sari Price: Rs. 999 Indianbeauty Self Design Printed Georgette Desinger Saree \u0026 Designer Blouse,With HD Color Dying And Printing, Designer Lace on Saree,Real Cut and Size as Described in Features of SAREE, We look forward to Finding our another products online in search box by typing Indianbeauty,The greatest compliment you could offer us is a review on our Products. Each review is both read and appreciated by us and Flipkart customers to judge or know about the products. If you are willing to do so, it is quite easy.(So much of our business depends on Positive and 100 % Genuine Product Selling),Specifications of Indianbeauty Self Design, Printed Fashion Georgette Sari In The Box Sari General Details Pattern Self Design, Printed Occasion Festive, Party, Wedding Sari Details Fabric Georgette Type Fashion Blouse Piece Yes Ideal For Women's Fabric Care Hand Wash Only, Use Soft Detergent only Additional Details Product Colour May Slightly Vary Due To Photographic Lighting Sources Or Your Monitor Settings.",
+                      "id": "kzx0HTcs3sKksdNB3Vah9A",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/sari/c/n/h/1-1-ib-dr5308-indianbeauty-original-imae9q7zyrnzvwuz.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/kzx0HTcs3sKksdNB3Vah9A",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 150
+                      },
+                      "title": "Indianbeauty Self Design, Printed Fashion Georgette Sari"
+                    }
+                  }, {
+                    "product": {
+                      "description": "**Product Description**\n\nThe Royal Amethyst Saree is a stunning piece of Indian clothing that is perfect for any special occasion. The deep amethyst color is rich and luxurious, and the intricate bronze zari embroidery adds a touch of elegance. The saree is made from high-quality chiffon, which is soft and flowing. It comes with a matching blouse piece, which is also embellished with zari embroidery.\n\nThe Royal Amethyst Saree is perfect for weddings, parties, and other special events. It is sure to make you stand out from the crowd and feel like a million bucks.\n\n**Product Details**\n\n* Saree fabric: Chiffon\n* Blouse fabric: Silk\n* Saree length: 5.5 meters\n* Blouse length: 0.8 meters\n* Embroidery: Zari\n* Color: Amethyst\n* Occasion: Wedding, party, special event, Hindu\n\n**Styling Tips**\n\nThe Royal Amethyst Saree can be styled in many different ways. Here are a few tips:\n\n* For a classic look, pair the saree with a simple blouse and heels.\n* For a more glamorous look, add a statement necklace and earrings.\n* For a modern twist, wear the saree with a crop top and jeans.\n\nNo matter how you style it, the Royal Amethyst Saree is sure to make you look and feel your best.\n\n**Care Instructions**\n\nThe Royal Amethyst Saree is a delicate garment, so it is important to care for it properly. Hand wash the saree in cold water with a mild detergent. Do not bleach. Dry the saree in the shade. Iron the saree on low heat.",
+                      "id": "3vcHpuB5dwlCgiHeXFWb6w",
+                      "images": [ {
+                        "uri": "https://gcp-retail-demo.storage.googleapis.com/workflow/create/royal-amethyst-saree.png"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/3vcHpuB5dwlCgiHeXFWb6w",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 189.99000000000001
+                      },
+                      "title": "Royal Amethyst Silk Saree"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "heels"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Specifications of Flat n Heels Women Heels General Ideal For Women Occasion Casual Sandal Details Sole Material RESIN SHEET Type Heels Heel Height 4 inch Outer Material Synthetic Color Black",
+                      "id": "jzlRZF30YgPbFcWfeZdyGg",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/sandal/m/n/p/black-fnh-w3927-b10-flat-n-heels-41-original-imaehymmyzvstryn.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/jzlRZF30YgPbFcWfeZdyGg",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 143
+                      },
+                      "title": "Flat n Heels Women Heels"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Key Features of Glitzy Galz Women Heels NA,Glitzy Galz Women Heels Price: Rs. 899 Each pair of shoes produced by Glitzy Galz reflects the artisans meticulous attention to detail and craftsmanship. The brands vision is to satisfy the most discerning and demanding client , seeking top quality shoes, which offer a distinctive interpretation of each seasons trends.,Specifications of Glitzy Galz Women Heels General Occasion Casual Ideal For Women Warranty Month Sandal Details Closure Sandal Sole Material Resin Number of Contents in Sales Package Pack of 1 Weight 200 g (per single Sandal) - Weight of the product may vary depending on size. Type Heels Heel Height 3 inch Inner Material Synthetic Removable Insole No Insole Material Synthetic Outer Material Synthetic Leather Color Peach Additional Details Other Details High fashion Heel Peeptoes with padded insole for comfort Care Instructions Allow Your Pair Of Shoes To Air And De-Odorize At Regular Basis; Use Shoe Bags To Prevent Any Stains Or Mildew; Dust Any Dry Dirt From The Surface Using A Clean Cloth; Do Not Use Polish Or Shiner",
+                      "id": "7jZ2kNU7Xft0pmN9eoBkSA",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/sandal/p/f/y/peach-n-1660-glitzy-galz-39-original-imaejchzxuamxge3.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/7jZ2kNU7Xft0pmN9eoBkSA",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 44
+                      },
+                      "title": "Glitzy Galz Women Heels"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+        "action": "get_reviews",
+        "inputActionParameters": {
+          "requestBody": {
+            "shown_products": [ {
+              "id": "jzlRZF30YgPbFcWfeZdyGg",
+              "title": "Flat n Heels Women Heels"
+            }, {
+              "id": "7jZ2kNU7Xft0pmN9eoBkSA",
+              "title": "Glitzy Galz Women Heels"
+            } ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "review-template",
+                "payload": {
+                  "items": [ {
+                    "desc": "the Flat n Heels Women Heels fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+                    "product_id": "jzlRZF30YgPbFcWfeZdyGg",
+                    "rating": 3,
+                    "title": "Flat n Heels Women Heels",
+                    "user": "Briene Sanje"
+                  }, {
+                    "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the Flat n Heels Women Heels, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+                    "product_id": "jzlRZF30YgPbFcWfeZdyGg",
+                    "rating": 5,
+                    "title": "Flat n Heels Women Heels",
+                    "user": "Jenny Rahme"
+                  }, {
+                    "desc": "I recently had the pleasure of wearing the most enchanting Glitzy Galz Women Heels               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+                    "product_id": "7jZ2kNU7Xft0pmN9eoBkSA",
+                    "rating": 4,
+                    "title": "Glitzy Galz Women Heels",
+                    "user": "Nadine Bhakta"
+                  }, {
+                    "desc": "I recently purchased the Glitzy Galz Women Heels from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+                    "product_id": "7jZ2kNU7Xft0pmN9eoBkSA",
+                    "rating": 5,
+                    "title": "Glitzy Galz Women Heels",
+                    "user": "Anjali Gupta"
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            },
+            "reviews": [ {
+              "desc": "the Flat n Heels Women Heels fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+              "product_id": "jzlRZF30YgPbFcWfeZdyGg",
+              "rating": 3,
+              "title": "Flat n Heels Women Heels",
+              "user": "Briene Sanje"
+            }, {
+              "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the Flat n Heels Women Heels, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+              "product_id": "jzlRZF30YgPbFcWfeZdyGg",
+              "rating": 5,
+              "title": "Flat n Heels Women Heels",
+              "user": "Jenny Rahme"
+            }, {
+              "desc": "I recently had the pleasure of wearing the most enchanting Glitzy Galz Women Heels               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+              "product_id": "7jZ2kNU7Xft0pmN9eoBkSA",
+              "rating": 4,
+              "title": "Glitzy Galz Women Heels",
+              "user": "Nadine Bhakta"
+            }, {
+              "desc": "I recently purchased the Glitzy Galz Women Heels from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+              "product_id": "7jZ2kNU7Xft0pmN9eoBkSA",
+              "rating": 5,
+              "title": "Glitzy Galz Women Heels",
+              "user": "Anjali Gupta"
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

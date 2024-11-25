@@ -1,0 +1,297 @@
+{
+  "name": "24d02667-8f58-4b16-b95d-5f9bae11ca24",
+  "displayName": " men's jeans-review-size(fallback)",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "Hi I need a jeans to match my white shirt"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these products catch your interest, or are you after different options?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "please show me only men's jeans"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these products catch your interest, or are you after different options?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "okay the 1st one looks good. please check customer reviews and let me know if it is a good piece."
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Sure! Customers who purchased the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans had mixed reviews. Some found them comfortable at first but uncomfortable after a few hours, while others praised their comfort. The average rating for these jeans is 4 out of 5 stars. Is there anything else you'd like to know about these jeans?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "looks like good reviews to me. add it to the cart"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "What size would you like to go with the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans? We have sizes ranging from small to extra-large." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "isn't it coming with waist size?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Yes, you are right! The DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans comes in waist sizes. Which waist size would you like to go with?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "what sizes do you have available?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "We have waist sizes ranging from 28 to 40." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "ok. add 32"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! The DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans in waist size 32 has been added to your cart with quantity 1." ]
+      }, {
+        "text": [ "Would you like to purchase anything else?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712688475,
+    "nanos": 594891000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "jeans"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Specifications of DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans Jeans Details Brand Color Blue, Dark Blue Number of Contents in Sales Package Pack of 2 Brand Fit Slim Fabric Cotton General Details Ideal For Men's Additional Details Style Code DC-2CM-JEN-NW-7-13-1",
+                      "id": "RrLrbKJEnb5woYOSj5oF1Q",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/jean/s/f/u/dc-2cm-jen-nw-7-13-1-denim-cafe-32-1000x1000-imaejy5yzub85yxd.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/RrLrbKJEnb5woYOSj5oF1Q",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 74
+                      },
+                      "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans"
+                    }
+                  }, {
+                    "product": {
+                      "description": "D-ROCK Jeans Girl's  Combo Price: Rs. 649 D-ROCK Cotton Blend Slim Fit Denim Jeans with watch for Women,Specifications of D-ROCK Jeans Girl's  Combo Apparel Combo Details Primary Product Size 32 Ideal For Girl's Additional Details Style Code GIRL-DBMLW-RAKHIBLACK",
+                      "id": "CBpBaXCy4QIdstPxVbKpxg",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/apparels-combo/6/7/v/girl-dbmlw-rakhiblack-d-rock-original-imaejkdxfjxgwxcg.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/CBpBaXCy4QIdstPxVbKpxg",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 44
+                      },
+                      "title": "D-ROCK Jeans Girl's  Combo"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "men jeans"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Specifications of DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans Jeans Details Brand Color Blue, Dark Blue Number of Contents in Sales Package Pack of 2 Brand Fit Slim Fabric Cotton General Details Ideal For Men's Additional Details Style Code DC-2CM-JEN-NW-7-13-1",
+                      "id": "RrLrbKJEnb5woYOSj5oF1Q",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/jean/s/f/u/dc-2cm-jen-nw-7-13-1-denim-cafe-32-1000x1000-imaejy5yzub85yxd.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/RrLrbKJEnb5woYOSj5oF1Q",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 74
+                      },
+                      "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Key Features of Wajbee Solid Men's Black Track Pants Black 100% Cotton,Wajbee Solid Men's Black Track Pants Price: Rs. 596 Wajbee is the brand name of New Designs, High Quality Fabric and Trend Setting apparels. Wajbee assure you to walk in the fashion street like nobody else. Wajbee Tack Pants made from 100% cotton fabric with perfect fit and finishing. These track pants makes this summer cool and frendly for you. Wajbee Sleepwears definetly increases your attraction and gives you maximum comfortable. Disclaimer: - Pattern \u0026 Design may differ on the basis of availability. There could be a little difference from the image shown.,Specifications of Wajbee Solid Men's Black Track Pants Track Pant Details Number of Contents in Sales Package Pack of 1 Fabric 100% Cotton General Details Pattern Solid Ideal For Men's Fabric Care Gentle Machine Wash in Lukewarm Water, Do Not Bleach Additional Details Style Code STY-TMTPA1-07 In the Box 1 Track Pants",
+                      "id": "FlMQpNHSK6aE9K6EvuKiRw",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/track-pant/h/a/n/sty-vmtpa1-07-wajbee-l-original-imaegfwhaztfzayb.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/FlMQpNHSK6aE9K6EvuKiRw",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 44
+                      },
+                      "title": "Wajbee Solid Men's Black Track Pants"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+        "action": "get_reviews",
+        "inputActionParameters": {
+          "requestBody": {
+            "shown_products": [ {
+              "id": "RrLrbKJEnb5woYOSj5oF1Q",
+              "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans"
+            } ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "review-template",
+                "payload": {
+                  "items": [ {
+                    "desc": "the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+                    "product_id": "RrLrbKJEnb5woYOSj5oF1Q",
+                    "rating": 3,
+                    "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans",
+                    "user": "Briene Sanje"
+                  }, {
+                    "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+                    "product_id": "RrLrbKJEnb5woYOSj5oF1Q",
+                    "rating": 5,
+                    "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans",
+                    "user": "Jenny Rahme"
+                  }, {
+                    "desc": "I recently had the pleasure of wearing the most enchanting DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+                    "product_id": "RrLrbKJEnb5woYOSj5oF1Q",
+                    "rating": 4,
+                    "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans",
+                    "user": "Nadine Bhakta"
+                  }, {
+                    "desc": "I recently purchased the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+                    "product_id": "RrLrbKJEnb5woYOSj5oF1Q",
+                    "rating": 5,
+                    "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans",
+                    "user": "Anjali Gupta"
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            },
+            "reviews": [ {
+              "desc": "the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+              "product_id": "RrLrbKJEnb5woYOSj5oF1Q",
+              "rating": 3,
+              "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans",
+              "user": "Briene Sanje"
+            }, {
+              "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+              "product_id": "RrLrbKJEnb5woYOSj5oF1Q",
+              "rating": 5,
+              "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans",
+              "user": "Jenny Rahme"
+            }, {
+              "desc": "I recently had the pleasure of wearing the most enchanting DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+              "product_id": "RrLrbKJEnb5woYOSj5oF1Q",
+              "rating": 4,
+              "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans",
+              "user": "Nadine Bhakta"
+            }, {
+              "desc": "I recently purchased the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+              "product_id": "RrLrbKJEnb5woYOSj5oF1Q",
+              "rating": 5,
+              "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans",
+              "user": "Anjali Gupta"
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

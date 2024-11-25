@@ -1,0 +1,21 @@
+{
+  "name": "5acbb988-0482-4d62-b420-4bc8491e96dc",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Certainly, could you please provide your order number to begin the return process?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Umm. hold it for a moment. First help me find out tracking backpacks for my next trip."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The user wants to return their order"
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to explore tracking backpacks for their next trip."
+  },
+  "displayName": "another request",
+  "retrievalStrategy": "STATIC",
+  "languageCode": "en"
+}

@@ -1,0 +1,16 @@
+{
+  "name": "5912b66b-5c40-45fa-8779-24b7e19fb3bb",
+  "displayName": "similar-products",
+  "description": "Get similar products.",
+  "openApiSpec": {
+
+  },
+  "sharedSchemas": [ {
+    "name": "ProductQuery",
+    "schema": "{\n  \"required\" : [ \"product_id\" ],\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"product_id\" : {\n      \"type\" : \"string\"\n    }\n  }\n}"
+  }, {
+    "name": "ProductResp",
+    "schema": "{\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"payload\" : {\n      \"type\" : \"object\",\n      \"properties\" : {\n        \"richContent\" : {\n          \"type\" : \"array\",\n          \"items\" : {\n            \"type\" : \"array\",\n            \"items\" : {\n              \"type\" : \"object\",\n              \"properties\" : {\n                \"type\" : {\n                  \"type\" : \"string\"\n                },\n                \"name\" : {\n                  \"type\" : \"string\"\n                },\n                \"payload\" : {\n                  \"type\" : \"object\",\n                  \"properties\" : {\n                    \"items\" : {\n                      \"type\" : \"array\",\n                      \"items\" : {\n                        \"type\" : \"object\",\n                        \"properties\" : {\n                          \"product\" : {\n                            \"type\" : \"object\",\n                            \"properties\" : {\n                              \"id\" : {\n                                \"type\" : \"string\"\n                              },\n                              \"title\" : {\n                                \"type\" : \"string\"\n                              },\n                              \"name\" : {\n                                \"type\" : \"string\"\n                              },\n                              \"priceInfo\" : {\n                                \"type\" : \"object\",\n                                \"properties\" : {\n                                  \"price\" : {\n                                    \"type\" : \"number\"\n                                  }\n                                }\n                              },\n                              \"images\" : {\n                                \"type\" : \"object\",\n                                \"properties\" : {\n                                  \"uri\" : {\n                                    \"type\" : \"string\"\n                                  },\n                                  \"height\" : {\n                                    \"type\" : \"number\"\n                                  },\n                                  \"width\" : {\n                                    \"type\" : \"number\"\n                                  }\n                                }\n                              },\n                              \"description\" : {\n                                \"type\" : \"string\"\n                              }\n                            }\n                          }\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}"
+  } ],
+  "toolType": "CUSTOMIZED_TOOL"
+}

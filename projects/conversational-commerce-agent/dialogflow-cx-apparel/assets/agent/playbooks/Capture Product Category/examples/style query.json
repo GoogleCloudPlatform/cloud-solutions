@@ -1,0 +1,18 @@
+{
+  "name": "20dfb8f0-e611-41f3-afac-36aeb82bfe94",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to see straight cut jeans.",
+    "actionParameters": {
+      "previous_search": "blue jeans"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The agent cannot filter out products by style.",
+    "actionParameters": {
+      "search": "blue jeans"
+    }
+  },
+  "displayName": "style query",
+  "retrievalStrategy": "STATIC",
+  "languageCode": "undetected"
+}

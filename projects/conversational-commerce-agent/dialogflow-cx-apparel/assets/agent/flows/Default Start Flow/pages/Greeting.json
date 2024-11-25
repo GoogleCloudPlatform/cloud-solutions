@@ -1,0 +1,44 @@
+{
+  "name": "8fca9b44-5a55-490d-9b72-2c2a450eee7f",
+  "displayName": "Greeting",
+  "form": {
+
+  },
+  "entryFulfillment": {
+    "messages": [ {
+      "payload": {
+        "richContent": [ [ {
+          "accessibilityText": "Image description for screen readers",
+          "rawUrl": "https://example.com/image.png",
+          "type": "image"
+        }, {
+          "actionLink": "https://example.com",
+          "image": {
+            "src": {
+              "rawUrl": "https://example.com/thumbnail.png"
+            }
+          },
+          "subtitle": "Explore our extensive selection of clothes, shoes, jeans, and more!",
+          "title": "Welcome to Cymbal Apparel",
+          "type": "info"
+        }, {
+          "event": {
+            "languageCode": "",
+            "name": "",
+            "parameters": {
+
+            }
+          },
+          "icon": {
+            "color": "#FF9800",
+            "type": "chevron_right"
+          },
+          "link": "https://example.com/shop",
+          "text": "Start Shopping",
+          "type": "button"
+        } ] ]
+      },
+      "languageCode": "en"
+    } ]
+  }
+}

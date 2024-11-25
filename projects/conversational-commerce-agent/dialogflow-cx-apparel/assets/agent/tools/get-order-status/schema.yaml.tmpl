@@ -1,0 +1,39 @@
+openapi: 3.0.0
+info:
+  title:  Order Status
+  version: 1.0.0
+servers:
+  - url: 'https://integrations.googleapis.com'
+paths:
+  /v2/projects/customermod-genai-sa/locations/us-central1/integrations/apparel-search-prod:execute?triggerId=api_trigger/track:
+    post:
+      summary: Retrieve order status infos
+      operationId: orderStatus
+      requestBody:
+        description: order id for which order status and delivery information needs to be pulled
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+      responses:
+        '200':
+          description: latest order details with a message and tracking info for shipped orders.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  order_details:
+                    type: object
+                    additionalProperties: true
+                  trackingInfo:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true

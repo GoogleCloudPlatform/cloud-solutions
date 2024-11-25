@@ -1,0 +1,62 @@
+openapi: 3.0.0
+info:
+  title: User Information Update API
+  description: update user's personal information.
+  version: "1.0.0"
+servers:
+  - url: _CF_URL_PLACEHOLDER_
+paths:
+  /update_user_info:
+    post:
+      summary: Update user's personal information
+      operationId: updateUserInfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                delivery_address:
+                  type: string
+                payment_info:
+                  type: string
+                  example: "1234-5678-9012-3456"
+                contact_number:
+                  type: string
+                  example: "437-888-9999"
+                email:
+                  type: string
+              required:
+                - delivery_address
+                - payment_info
+                - contact_number
+                - email
+      responses:
+        '200':
+          description: Updated User's personal information with message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User information updated successfully."
+                  user_info:
+                    type: object
+                    properties:
+                      delivery_address:
+                        type: string
+                      payment_info:
+                        type: string
+                        example: "************3456"
+                      contact_number:
+                        type: string
+                        example: "437-888-9999"
+                      email:
+                        type: string
+        '400':
+          description: Bad request if the user info could not be updated
+        '500':
+          description: Internal server error

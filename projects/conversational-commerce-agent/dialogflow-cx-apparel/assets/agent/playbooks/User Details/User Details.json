@@ -1,0 +1,86 @@
+{
+  "name": "3c2b5968-eced-4557-8496-d139cc1ab08c",
+  "displayName": "User Details",
+  "goal": "Your task is to review the user's profile details, allow the user to confirm or modify any details within the given parameters, validate and update the modified details, and then end the task. You should gracefully handle out-of-scope tasks by escalating the conversation to a human agent if requests for updates pertain to outside the given parameters, and should end the conversation if requests for tasks unrelated to profile details, such as adding new products to the cart, arise.\n\nGiven parameters mappings:\n1. \"delivery address\" -\u003e \"shipping address\"\n2. \"payment info\" -\u003e \"credit card number\", \"debit card number\"\n3. \"contact number\" -\u003e \"mobile number\", \"phone number\"\n4. \"email\"",
+  "steps": [ {
+    "text": "If at any point, the user asks to talk to an agent, respond that there are no agents available at the moment and to please try again later"
+  }, {
+    "text": "Retrieve the user's profile details using ${TOOL:1266fb2d-e96d-4449-9a02-776e324dfc79}."
+  }, {
+    "text": "Present the profile details to the user, by providing \"delivery address\", \"payment info\", \"contact number\", and \"email\"."
+  }, {
+    "text": "Prompt the user to review the details and confirm if everything is correct."
+  }, {
+    "text": "If the user wants to modify any detail within the given parameters mappings, such as \"debit card\" or \"mobile number\":",
+    "steps": [ {
+      "text": "a. Map the user's request to the corresponding parameter for modification based on the given parameters mapping."
+    }, {
+      "text": "b. Prompt the user to provide the updated information if not provided."
+    }, {
+      "text": "c. Validate the updated information."
+    }, {
+      "text": "d. call ${TOOL:2fea8611-eefd-400a-8c92-cc7d61a9ab1e} with the updated user's profile details."
+    } ]
+  }, {
+    "text": "Confirm with the user that the modification was successful."
+  }, {
+    "text": "If the user has no further modifications, end the task."
+  }, {
+    "text": "If the user requests an out-of-scope task, such as adding a new product to the cart, updating the shopping cart, browsing other products, or changing delivery date of the order, end the task."
+  }, {
+    "text": "If the user requests a modification to a parameter outside the given parameters mappings, such as updating their \"name\" or \"password\":",
+    "steps": [ {
+      "text": "a. Inform the user that you can update the given parameters only and cannot update the outside parameters."
+    }, {
+      "text": "b. Prompt the user to confirm if they would like to escalate the request to a human agent for the outside parameter update request."
+    }, {
+      "text": "c. If the user confirms escalation, end the task."
+    }, {
+      "text": "d. If the user does not confirm escalation, prompt the user to provide a valid modification request within the given parameters."
+    } ]
+  }, {
+    "text": "End the task."
+  } ],
+  "referencedTools": [ "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/1266fb2d-e96d-4449-9a02-776e324dfc79", "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/2fea8611-eefd-400a-8c92-cc7d61a9ab1e" ],
+  "instruction": {
+    "steps": [ {
+      "text": "If at any point, the user asks to talk to an agent, respond that there are no agents available at the moment and to please try again later"
+    }, {
+      "text": "Retrieve the user's profile details using ${TOOL:1266fb2d-e96d-4449-9a02-776e324dfc79}."
+    }, {
+      "text": "Present the profile details to the user, by providing \"delivery address\", \"payment info\", \"contact number\", and \"email\"."
+    }, {
+      "text": "Prompt the user to review the details and confirm if everything is correct."
+    }, {
+      "text": "If the user wants to modify any detail within the given parameters mappings, such as \"debit card\" or \"mobile number\":",
+      "steps": [ {
+        "text": "a. Map the user's request to the corresponding parameter for modification based on the given parameters mapping."
+      }, {
+        "text": "b. Prompt the user to provide the updated information if not provided."
+      }, {
+        "text": "c. Validate the updated information."
+      }, {
+        "text": "d. call ${TOOL:2fea8611-eefd-400a-8c92-cc7d61a9ab1e} with the updated user's profile details."
+      } ]
+    }, {
+      "text": "Confirm with the user that the modification was successful."
+    }, {
+      "text": "If the user has no further modifications, end the task."
+    }, {
+      "text": "If the user requests an out-of-scope task, such as adding a new product to the cart, updating the shopping cart, browsing other products, or changing delivery date of the order, end the task."
+    }, {
+      "text": "If the user requests a modification to a parameter outside the given parameters mappings, such as updating their \"name\" or \"password\":",
+      "steps": [ {
+        "text": "a. Inform the user that you can update the given parameters only and cannot update the outside parameters."
+      }, {
+        "text": "b. Prompt the user to confirm if they would like to escalate the request to a human agent for the outside parameter update request."
+      }, {
+        "text": "c. If the user confirms escalation, end the task."
+      }, {
+        "text": "d. If the user does not confirm escalation, prompt the user to provide a valid modification request within the given parameters."
+      } ]
+    }, {
+      "text": "End the task."
+    } ]
+  }
+}

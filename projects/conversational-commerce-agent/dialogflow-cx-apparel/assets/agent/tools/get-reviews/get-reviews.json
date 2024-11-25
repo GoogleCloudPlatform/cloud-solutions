@@ -1,0 +1,16 @@
+{
+  "name": "93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+  "displayName": "get-reviews",
+  "description": "Fetch products reviews.",
+  "openApiSpec": {
+
+  },
+  "sharedSchemas": [ {
+    "name": "ReviewQuery",
+    "schema": "{\n  \"required\" : [ \"shown_products\" ],\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"shown_products\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"type\" : \"object\",\n        \"properties\" : {\n          \"id\" : {\n            \"type\" : \"string\"\n          },\n          \"title\" : {\n            \"type\" : \"string\"\n          }\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "name": "ReviewResp",
+    "schema": "{\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"payload\" : {\n      \"type\" : \"object\",\n      \"properties\" : {\n        \"richContent\" : {\n          \"type\" : \"array\",\n          \"items\" : {\n            \"type\" : \"array\",\n            \"items\" : {\n              \"type\" : \"object\",\n              \"properties\" : {\n                \"type\" : {\n                  \"type\" : \"string\"\n                },\n                \"name\" : {\n                  \"type\" : \"string\"\n                },\n                \"payload\" : {\n                  \"type\" : \"object\",\n                  \"properties\" : {\n                    \"items\" : {\n                      \"type\" : \"array\",\n                      \"items\" : {\n                        \"type\" : \"object\",\n                        \"properties\" : {\n                          \"product_id\" : {\n                            \"type\" : \"string\"\n                          },\n                          \"user\" : {\n                            \"type\" : \"string\"\n                          },\n                          \"rating\" : {\n                            \"type\" : \"number\"\n                          },\n                          \"desc\" : {\n                            \"type\" : \"string\"\n                          },\n                          \"title\" : {\n                            \"type\" : \"string\"\n                          }\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}"
+  } ],
+  "toolType": "CUSTOMIZED_TOOL"
+}

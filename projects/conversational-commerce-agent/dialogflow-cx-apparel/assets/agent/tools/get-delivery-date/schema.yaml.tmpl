@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: apparel-search-cloud-function
+  description: Get delivery date for the shopping cart items
+  version: 1.0.0
+servers:
+  - url: _CF_URL_PLACEHOLDER_
+paths:
+  /get_delivery_date:
+    post:
+      summary: Get delivery date
+      operationId: get_delivery_date
+      requestBody:
+        description: shopping cart data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryQuery'
+      responses:
+        '200':
+          description: updated shopping cart data with estimated delivery dates.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryResp'
+
+components:
+  schemas:
+    DeliveryQuery:
+        type: object
+        required:
+            - shopping_cart
+        properties:
+            shopping_cart:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        title:
+                            type: string
+                        size:
+                            type: string
+                        quantity:
+                            type: number
+
+
+    DeliveryResp:
+        type: object
+        properties:
+            shopping_cart:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        title:
+                            type: string
+                        size:
+                            type: string
+                        quantity:
+                            type: number
+                        delivery_date:
+                            type: string
+                        earliest_delivery_date:
+                            type: string

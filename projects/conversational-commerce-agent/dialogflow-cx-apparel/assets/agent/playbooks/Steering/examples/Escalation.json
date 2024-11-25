@@ -1,0 +1,16 @@
+{
+  "name": "534e9c98-6d35-4d65-9c61-d627d52358cc",
+  "actions": [ {
+    "userUtterance": {
+      "text": "Transfer me to someone"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "I'm sorry, there are no agents available at the moment. Please try again later."
+    }
+  } ],
+  "displayName": "Escalation",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

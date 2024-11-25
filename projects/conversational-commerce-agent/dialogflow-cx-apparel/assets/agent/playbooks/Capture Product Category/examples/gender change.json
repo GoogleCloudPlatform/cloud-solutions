@@ -1,0 +1,20 @@
+{
+  "name": "e6a3831c-df70-4413-a756-40350e45ad51",
+  "playbookInput": {
+    "precedingConversationSummary": "the customer is looking for only men's jeans.",
+    "actionParameters": {
+      "previous_search": "red jeans"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer is looking for men's red jeans.",
+    "state": "OK",
+    "actionParameters": {
+      "search": "men red jeans"
+    }
+  },
+  "displayName": "gender change",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

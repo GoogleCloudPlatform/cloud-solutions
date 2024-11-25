@@ -1,0 +1,77 @@
+{
+  "name": "1753275b-5aa8-463b-a347-9e72141d0d35",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/11c17021-f695-4969-842e-f7fe9f664274",
+      "action": "get_product_details",
+      "inputActionParameters": {
+        "requestBody": {
+          "product_ids": [ "rgT5wMHTJFAGr2sj3Jz00w", "S5tJwu7uDnhnbfQpEOv2vQ" ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "products": [ {
+            "product": {
+              "description": "Specifications of KRAZY KATZ Solid Men's Round Neck T-Shirt (Pack of 6) T-shirt Details Sleeve Half Sleeve Number of Contents in Sales Package Pack of 6 Fabric Polyster Type Round Neck Fit Slim General Details Pattern Solid Ideal For Men's Occasion Sports Fabric Care Wash with Similar Colors, Use Detergent for Colors Additional Details Style Code AZT_DR_8_4_5_6_3_10 In the Box 6 T Shirts",
+              "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+              "images": [ {
+                "uri": "https://storage.googleapis.com/gcp-retail-demo/image/t-shirt/s/7/b/azr-dr-8-10-5-6-3-1-krazy-katz-40-original-imaeh2djah6kfyph.jpeg"
+              } ],
+              "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/S5tJwu7uDnhnbfQpEOv2vQ",
+              "priceInfo": {
+                "currencyCode": "USD",
+                "originalPrice": 59,
+                "price": 59,
+                "priceRange": {
+
+                }
+              },
+              "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+            }
+          }, {
+            "product": {
+              "description": "Key Features of YK Printed Boy's Round Neck Dark Blue T-Shirt Fit: Regular Suitable For: Western Wear Sleeve: Half Sleeve Fabric: Polyester Cotton Blend Color:Dark Blue Number Of Contents in Package:1,YK Printed Boy's Round Neck Dark Blue T-Shirt Price: Rs. 439 Navy T-shirt with slub effect, has a round neck, short sleeves, and Finding Dory print detail on the front. Your little one will definitely love wearing this funky T-shirt with his favourite pair of shorts and casual shoes when you take him out on a play date.,Specifications of YK Printed Boy's Round Neck Dark Blue T-Shirt T-shirt Details Sleeve Half Sleeve Number of Contents in Sales Package Pack of 1 Fabric Polyester Cotton Blend Type Round Neck Fit Regular General Details Pattern Printed Ideal For Boy's Occasion Casual Fabric Care Machine-wash warm Additional Details Style Code 1338252",
+              "id": "rgT5wMHTJFAGr2sj3Jz00w",
+              "images": [ {
+                "uri": "https://storage.googleapis.com/gcp-retail-demo/image/t-shirt/y/a/y/1338252-yk-6-7-years-original-imaejj98aznapfaq.jpeg"
+              } ],
+              "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/rgT5wMHTJFAGr2sj3Jz00w",
+              "priceInfo": {
+                "currencyCode": "USD",
+                "originalPrice": 16,
+                "price": 16,
+                "priceRange": {
+
+                }
+              },
+              "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+            }
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "The more expensive product among the displayed ones is the KRAZY KATZ Solid Men's Round Neck T-Shirt, priced at $59."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to add the more expensive product to the cart.",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "rgT5wMHTJFAGr2sj3Jz00w",
+        "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+      }, {
+        "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+        "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to add the product \"KRAZY KATZ Solid Men's Round Neck T-Shirt\" to the cart."
+  },
+  "displayName": "more expensive",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "en"
+}

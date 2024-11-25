@@ -1,0 +1,68 @@
+{
+  "name": "79dbe319-f1be-4802-b942-60ba605c46b9",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+      "action": "get_reviews",
+      "inputActionParameters": {
+        "requestBody": {
+          "shown_products": [ {
+            "id": "TSHEJQ22W8XPPGGH",
+            "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+          } ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "review-template",
+              "payload": {
+                "items": [ {
+                  "desc": "the ARISE Self Design, Printed Men's Henley Maroon T-Shirt fit real well at first, I suppose. However after a few hours into the night I started to wish I had gone up a size or two. Every couple minutes I had to re-adjust. It wasn't a cute look on the dance floor haha. Wish I had size up, otherwise I've no other regrets.",
+                  "product_id": "TSHEJQ22W8XPPGGH",
+                  "rating": 3,
+                  "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt",
+                  "user": "Briene Sanje"
+                }, {
+                  "desc": "As a first-time buyer, I must say, I am head over heels in love with my purchase! The moment I delicately wear the ARISE Self Design, Printed Men's Henley Maroon T-Shirt, I felt an instant connection, as if it was meant to be. What impressed me the most was the comfort it provded throughout the day.",
+                  "product_id": "TSHEJQ22W8XPPGGH",
+                  "rating": 5,
+                  "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt",
+                  "user": "Jenny Rahme"
+                } ]
+              },
+              "type": "custom-template"
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Sure! The ARISE Self Design, Printed Men's Henley Maroon T-Shirt has received mixed reviews. Some customers found it comfortable at first but uncomfortable after a few hours, while others praised its comfort. Overall, it has an average rating of 4 out of 5 stars. Would you like me to add it to your cart, or is there anything else you'd like to discuss?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "what material is it made of?"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to know the reviews of the maroon t-shirt.",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "TSHEJQ22W8XPPGGH",
+        "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+      }, {
+        "id": "TSHEJQ2FHCZZMUZB",
+        "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to know about the material of the ARISE Self Design, Printed Men's Henley Maroon T-Shirt."
+  },
+  "displayName": "specific product review",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

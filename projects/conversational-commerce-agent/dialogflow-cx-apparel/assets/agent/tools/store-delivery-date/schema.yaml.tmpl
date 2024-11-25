@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: apparel-search-cloud-function
+  description: store customer's preferred delivery date for the shopping cart items
+  version: 1.0.0
+servers:
+  - url: _CF_URL_PLACEHOLDER_
+paths:
+  /store_delivery_date:
+    post:
+      summary: Store delivery date
+      operationId: store_delivery_date
+      requestBody:
+        description: preferred delivery date for the shopping cart items with shopping cart data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDatesQuery'
+      responses:
+        '200':
+          description: status of preferred delivery date for the shopping cart items with updated shopping cart data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryDatesResp'
+
+components:
+  schemas:
+    DeliveryDatesQuery:
+        type: object
+        required:
+            - shopping_cart
+        properties:
+            shopping_cart:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        title:
+                            type: string
+                        size:
+                            type: string
+                        quantity:
+                            type: number
+                        delivery_date:
+                            type: string
+                        earliest_delivery_date:
+                            type: string
+            preferred_delivery_date:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        preferred_delivery_date:
+                            type: string
+
+    DeliveryDatesResp:
+        type: object
+        properties:
+            preferred_delivery_date:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        preferred_delivery_date:
+                            type: string
+                        status:
+                            type: string
+                        reason:
+                            type: string
+            shopping_cart:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        title:
+                            type: string
+                        size:
+                            type: string
+                        quantity:
+                            type: number
+                        delivery_date:
+                            type: string
+                        earliest_delivery_date:
+                            type: string

@@ -1,0 +1,57 @@
+{
+  "name": "92104c4c-b40f-4b02-870d-c33094d52743",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/bc35ec86-053c-4f53-8121-7b4b5202414a",
+      "action": "get_delivery_date",
+      "inputActionParameters": {
+        "requestBody": {
+          "shopping_cart": [ {
+            "id": "RrLrbKJEnb5woYOSj5oF1Q",
+            "quantity": 1,
+            "size": "Medium",
+            "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans"
+          } ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "shopping_cart": [ {
+            "delivery_date": "April 6, 2024",
+            "earliest_delivery_date": "April 6, 2024",
+            "id": "RrLrbKJEnb5woYOSj5oF1Q",
+            "quantity": 1,
+            "size": "Medium",
+            "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "April 6, 2024, is the earliest we can get the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans to you. Does this delivery date work for you?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Can you add one more pair of it to the cart?"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer has added the product to the shopping cart.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "id": "RrLrbKJEnb5woYOSj5oF1Q",
+        "quantity": 1,
+        "size": "Medium",
+        "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to add one more pair of the DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans."
+  },
+  "displayName": "add another item to the cart ",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_CANCELLED",
+  "languageCode": "undetected"
+}

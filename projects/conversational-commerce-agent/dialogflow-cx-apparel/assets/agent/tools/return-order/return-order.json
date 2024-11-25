@@ -1,0 +1,13 @@
+{
+  "name": "4b3efa6f-637e-428b-84f0-e9ef631d3d7a",
+  "displayName": "return-order",
+  "description": "change the order status for returned orders to initiate return order process.",
+  "openApiSpec": {
+    "authentication": {
+      "serviceAgentAuthConfig": {
+        "serviceAgentAuth": "ACCESS_TOKEN"
+      }
+    }
+  },
+  "toolType": "CUSTOMIZED_TOOL"
+}

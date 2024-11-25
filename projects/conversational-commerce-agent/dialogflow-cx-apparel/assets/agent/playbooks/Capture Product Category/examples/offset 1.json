@@ -1,0 +1,22 @@
+{
+  "name": "6d83eeae-d015-40b4-aee8-5166815af9a7",
+  "playbookInput": {
+    "precedingConversationSummary": "the customer wants to see more t-shirts",
+    "actionParameters": {
+      "offset": 0,
+      "previous_search": "t-shirt"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the customer wants to see t-shirts",
+    "state": "OK",
+    "actionParameters": {
+      "offset": 2,
+      "search": "t-shirt"
+    }
+  },
+  "displayName": "offset 1",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

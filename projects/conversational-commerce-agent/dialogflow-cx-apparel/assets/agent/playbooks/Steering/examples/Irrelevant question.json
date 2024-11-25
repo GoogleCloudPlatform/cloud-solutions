@@ -1,0 +1,16 @@
+{
+  "name": "f5f836e4-4fae-4849-ad4b-c0d643e11b3a",
+  "actions": [ {
+    "userUtterance": {
+      "text": "Who created you?"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "I'm sorry, I do not have enough information to answer this. I can help you find the perfect outfit for any occasion. Is there anything else I can help you with?"
+    }
+  } ],
+  "displayName": "Irrelevant question",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

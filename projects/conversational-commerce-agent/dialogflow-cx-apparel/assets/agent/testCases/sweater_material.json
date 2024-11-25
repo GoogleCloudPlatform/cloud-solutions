@@ -1,0 +1,177 @@
+{
+  "name": "ec347c98-368e-4abe-bdf6-0b0a89d05460",
+  "displayName": "sweater_material",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "do you have sweaters?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these look good to you, or are you looking for something else?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "1st one looks good, what material is it made of?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "The Nineteen Solid Round Neck Casual Women's Sweater is made of cotton. Would you like to know anything else about this product?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "nope. add it to the cart"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "What size would you like to go with the Nineteen Solid Round Neck Casual Women's Sweater? We have sizes ranging from small to extra-large." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "i'll choose M"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! The Nineteen Solid Round Neck Casual Women's Sweater in size M has been added to your cart with quantity 1." ]
+      }, {
+        "text": [ "Would you like to purchase anything else?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712693992,
+    "nanos": 621910000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "sweater"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of Nineteen Solid Round Neck Casual Women's Sweater Sweater Full Sleeve Solid Round Neck,Nineteen Solid Round Neck Casual Women's Sweater Price: Rs. 800 Pink tunic sweater with slit on sides, full sleeves and high neck.,Specifications of Nineteen Solid Round Neck Casual Women's Sweater Sweater Details Hooded No Sleeve Full Sleeve Number of Contents in Sales Package Pack of 1 Reversible No Fabric Cotton Neck Round Neck General Details Pattern Solid Ideal For Women's Occasion Casual Fabric Care Hand wash in cold Water.. Wash dark color garments separately. Additional Details Style Code NTWWJ15F37D1PN In the Box Sweater",
+                      "id": "c5e9Im1a4pAOozxAAVFebw",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/sweater/q/z/g/ntwwj15f37d1pn-nineteen-m-original-imaeg83sqag9frwv.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/c5e9Im1a4pAOozxAAVFebw",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 59
+                      },
+                      "title": "Nineteen Solid Round Neck Casual Women's Sweater"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Key Features of Spink Solid Round Neck Casual Women's Sweater Spink women's sweaters girls sweaters,Specifications of Spink Solid Round Neck Casual Women's Sweater Sweater Details Sleeve Full Sleeve Hooded No Number of Contents in Sales Package Pack of 1 Reversible No Fabric Acrylic Neck Round Neck General Details Pattern Solid Occasion Casual Ideal For Women's In the Box Sweater Additional Details Style Code 1914-Royal-free Fabric Care Simple Wash",
+                      "id": "l9BC9swANtCSZRCeBOar2A",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/sweater/h/k/f/1914-royal-free-spink-m-original-imaee5r4za7t5hkp.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/l9BC9swANtCSZRCeBOar2A",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 53
+                      },
+                      "title": "Spink Solid Round Neck Casual Women's Sweater"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/11c17021-f695-4969-842e-f7fe9f664274",
+        "action": "get_product_details",
+        "inputActionParameters": {
+          "requestBody": {
+            "product_ids": [ "c5e9Im1a4pAOozxAAVFebw", "l9BC9swANtCSZRCeBOar2A" ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "products": [ {
+              "product": {
+                "description": "Key Features of Spink Solid Round Neck Casual Women's Sweater Spink women's sweaters girls sweaters,Specifications of Spink Solid Round Neck Casual Women's Sweater Sweater Details Sleeve Full Sleeve Hooded No Number of Contents in Sales Package Pack of 1 Reversible No Fabric Acrylic Neck Round Neck General Details Pattern Solid Occasion Casual Ideal For Women's In the Box Sweater Additional Details Style Code 1914-Royal-free Fabric Care Simple Wash",
+                "id": "l9BC9swANtCSZRCeBOar2A",
+                "images": [ {
+                  "uri": "https://storage.googleapis.com/gcp-retail-demo/image/sweater/h/k/f/1914-royal-free-spink-m-original-imaee5r4za7t5hkp.jpeg"
+                } ],
+                "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/l9BC9swANtCSZRCeBOar2A",
+                "priceInfo": {
+                  "currencyCode": "USD",
+                  "originalPrice": 53,
+                  "price": 53,
+                  "priceRange": {
+
+                  }
+                },
+                "title": "Spink Solid Round Neck Casual Women's Sweater"
+              }
+            }, {
+              "product": {
+                "description": "Key Features of Nineteen Solid Round Neck Casual Women's Sweater Sweater Full Sleeve Solid Round Neck,Nineteen Solid Round Neck Casual Women's Sweater Price: Rs. 800 Pink tunic sweater with slit on sides, full sleeves and high neck.,Specifications of Nineteen Solid Round Neck Casual Women's Sweater Sweater Details Hooded No Sleeve Full Sleeve Number of Contents in Sales Package Pack of 1 Reversible No Fabric Cotton Neck Round Neck General Details Pattern Solid Ideal For Women's Occasion Casual Fabric Care Hand wash in cold Water.. Wash dark color garments separately. Additional Details Style Code NTWWJ15F37D1PN In the Box Sweater",
+                "id": "c5e9Im1a4pAOozxAAVFebw",
+                "images": [ {
+                  "uri": "https://storage.googleapis.com/gcp-retail-demo/image/sweater/q/z/g/ntwwj15f37d1pn-nineteen-m-original-imaeg83sqag9frwv.jpeg"
+                } ],
+                "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/c5e9Im1a4pAOozxAAVFebw",
+                "priceInfo": {
+                  "currencyCode": "USD",
+                  "originalPrice": 59,
+                  "price": 59,
+                  "priceRange": {
+
+                  }
+                },
+                "title": "Nineteen Solid Round Neck Casual Women's Sweater"
+              }
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

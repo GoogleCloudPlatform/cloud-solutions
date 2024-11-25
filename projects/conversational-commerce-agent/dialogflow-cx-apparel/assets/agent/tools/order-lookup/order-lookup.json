@@ -1,0 +1,13 @@
+{
+  "name": "ac8ca820-7ebe-4c4e-9d22-f2e20d3bced7",
+  "displayName": "order-lookup",
+  "description": "Retrieve order details from Firestore database.",
+  "openApiSpec": {
+    "authentication": {
+      "serviceAgentAuthConfig": {
+        "serviceAgentAuth": "ACCESS_TOKEN"
+      }
+    }
+  },
+  "toolType": "CUSTOMIZED_TOOL"
+}

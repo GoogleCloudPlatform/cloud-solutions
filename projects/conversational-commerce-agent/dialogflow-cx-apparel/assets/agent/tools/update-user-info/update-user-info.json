@@ -1,0 +1,9 @@
+{
+  "name": "2fea8611-eefd-400a-8c92-cc7d61a9ab1e",
+  "displayName": "update-user-info",
+  "description": "Update user's personal information.",
+  "openApiSpec": {
+
+  },
+  "toolType": "CUSTOMIZED_TOOL"
+}

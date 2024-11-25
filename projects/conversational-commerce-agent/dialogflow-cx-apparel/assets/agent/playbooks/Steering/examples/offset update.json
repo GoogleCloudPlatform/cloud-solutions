@@ -1,0 +1,332 @@
+{
+  "name": "5d4e7819-df49-46b6-9b5b-2951faedd7c6",
+  "actions": [ {
+    "userUtterance": {
+
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/flows/18d54b97-4b25-4c2d-b1f1-f521c289c21d",
+      "inputActionParameters": {
+
+      },
+      "outputActionParameters": {
+
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to select from the options above, or just type in what you're looking for and I'll assist you."
+    }
+  }, {
+    "userUtterance": {
+      "text": "t-shirt"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for a t-shirt.",
+        "actionParameters": {
+          "offset": 0,
+          "previous_search": ""
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer is looking for a t-shirt.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "t-shirt"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for a t-shirt.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the agent has fetched t-shirts and stored them. ",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "rgT5wMHTJFAGr2sj3Jz00w",
+            "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+          }, {
+            "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+            "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Do any of these products catch your interest, or are you after different options?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "show me more"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to see more t-shirts.",
+        "actionParameters": {
+          "offset": 0,
+          "previous_search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer wants to see t-shirts.",
+        "actionParameters": {
+          "offset": 2,
+          "search": "t-shirt"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to see t-shirts.",
+        "actionParameters": {
+          "offset": 3,
+          "search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The agent has fetched and stored t-shirts.",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "gzzQQgUMNfWMYP0LsRxUoQ",
+            "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+          }, {
+            "id": "60PnAopHI4ysQTAusIvFdA",
+            "title": "Crux\u0026Hunter Printed Boy's Round Neck Orange T-Shirt"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Do any of these look good to you, or are you looking for something else?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "show me other products"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer wants to see other t-shirts",
+        "actionParameters": {
+          "offset": 2,
+          "previous_search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer wants to see t-shirts",
+        "actionParameters": {
+          "offset": 4,
+          "search": "t-shirt"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer wants to see t-shirts",
+        "actionParameters": {
+          "offset": 6,
+          "search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the agent has fetched and stored the t-shirts",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "POMakMvwfA9iKfLWU4kBsA",
+            "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+          }, {
+            "id": "eLSgb6reUVzseZ7v3Ylb2w",
+            "title": "United Colors of Benetton Printed Round Neck T-Shirt"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Do any of these products catch your interest, or are you after different options?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "the previous one was looking better. Can you show me those again?"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer wants to see previously shown t-shirts.",
+        "actionParameters": {
+          "offset": 4,
+          "previous_search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the customer wants to see t-shirts.",
+        "actionParameters": {
+          "offset": 2,
+          "search": "t-shirt"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer wants to see t-shirts.",
+        "actionParameters": {
+          "offset": 3,
+          "search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The agent has fetched and stored t-shirts.",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "rgT5wMHTJFAGr2sj3Jz00w",
+            "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+          }, {
+            "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+            "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Do any of these catch your eye, or are you in search of something different?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "show me previous one"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer wants to see previously shown t-shirts.",
+        "actionParameters": {
+          "offset": 2,
+          "previous_search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the customer wants to see t-shirts.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "t-shirt"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer wants to see t-shirts",
+        "actionParameters": {
+          "offset": 0,
+          "search": "t-shirt"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the agent has fetched and stored t-shirts",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "rgT5wMHTJFAGr2sj3Jz00w",
+            "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+          }, {
+            "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+            "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Did any of these catch your eye, or would you like to see something else?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "these are good. I'll come back later for t-shirts. Show me jeans now."
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer wants to see jeans",
+        "actionParameters": {
+          "offset": 0,
+          "previous_search": "jeans"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the customer wants to see jeans",
+        "actionParameters": {
+          "offset": 0,
+          "search": "jeans"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer wants to see jeans",
+        "actionParameters": {
+          "offset": 0,
+          "search": "jeans"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the agent has fetched jeans and stored them.",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "RrLrbKJEnb5woYOSj5oF1Q",
+            "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans"
+          }, {
+            "id": "CBpBaXCy4QIdstPxVbKpxg",
+            "title": "D-ROCK Jeans Girl's Combo"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Were any of these products to your liking, or are you after different options?"
+    }
+  } ],
+  "displayName": "offset update",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

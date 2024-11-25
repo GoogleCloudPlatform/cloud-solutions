@@ -1,0 +1,32 @@
+/* stylelint-disable -- imported file, disable linting. */
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+df-messenger {
+  display: block;
+  flex-grow: 1;
+  overflow: hidden;
+
+  padding: 24px;
+  padding-right: 32%;
+  padding-left: 32%;
+  width: 100vw;
+  box-sizing: border-box;
+
+  /* Override: "bot writing" to better fit the image. */
+  --df-messenger-message-bot-writing-padding: 0;
+  --df-messenger-message-bot-writing-background-color: transparent;
+
+  /* Amortization for avatars in Feedback. */
+  --df-messenger-rich-feedback-block-separator-padding-left-offset: -72px;
+}
+/* stylelint-enable */

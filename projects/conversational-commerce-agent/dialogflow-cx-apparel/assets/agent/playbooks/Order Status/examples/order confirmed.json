@@ -1,0 +1,54 @@
+{
+  "name": "518b65bb-594c-434d-996e-5377f9b5932c",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/907cd4eb-3c90-4b09-a4a0-30b94ef6a02d",
+      "action": "orderStatus",
+      "inputActionParameters": {
+        "requestBody": {
+          "order_id": "0a2796f8"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "message": "Your order is confirmed and is currently being processed. Please check again later for shipping updates.",
+          "order_details": {
+            "order_created_on": "2024-04-12T18:47:40.599748Z",
+            "order_id": "0a2796f8",
+            "order_status": "confirmed",
+            "products": [ {
+              "delivery_date": "April 19, 2024",
+              "earliest_delivery_date": "April 19, 2024",
+              "id": "rgT5wMHTJFAGr2sj3Jz00w",
+              "quantity": 1,
+              "size": "small",
+              "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+            } ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Your order is confirmed! It's currently being processed, Here's what you ordered:\n\nYK Printed Boy's Round Neck Dark Blue T-Shirt\nSize: Small\nQuantity: 1\nEstimated Delivery: April 19, 2024\n\nIs there anything else I can help you with?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "no thanks"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to know their order status",
+    "actionParameters": {
+      "order_id": "0a2796f8"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the customer does not want any other help.",
+    "state": "OK"
+  },
+  "displayName": "order confirmed",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "eadbb305-8750-40b5-8806-c05d5dc152ee",
+  "playbookInput": {
+    "precedingConversationSummary": "the customer wants to see other suits.",
+    "actionParameters": {
+      "offset": 2,
+      "previous_search": "suits"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the customer wants to see suits",
+    "state": "OK",
+    "actionParameters": {
+      "offset": 4,
+      "search": "suits"
+    }
+  },
+  "displayName": "offset 2",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

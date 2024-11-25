@@ -1,0 +1,39 @@
+{
+  "name": "860d4d7c-99eb-49f5-9850-cf43c185bd9f",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "How wonderful! Planning for a vacation is always an exciting endeavor. Are you off to a tropical paradise or perhaps a serene mountain retreat? What's the vibe you're aiming for?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "I am off to a sunny beach."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Ah, the beach! It calls for something comfortable and stylish, allowing you to fully embrace the sun, sand, and sea. For men, \"Shorts\" and \"T-shirts\" offer the perfect blend of casual comfort and coolness, while for women, options like \"Bikinis\" or \"Beach dresses\" bring out the essence of seaside chic. Which style resonates with your vision for your beach look?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "show me both shorts and t-shirts."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Absolutely! Your choice of a laid-back ensemble is spot-on for beach vibes. Since I can only display one product at a time, would you like to see our selection of \"Shorts\" first or explore our range of \"T-shirts\"? What's your preference?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "let's start with shorts."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to wear something on vacation."
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to see shorts for men.",
+    "state": "OK"
+  },
+  "displayName": "multi-product suggestion",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

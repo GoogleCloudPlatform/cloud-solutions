@@ -1,0 +1,81 @@
+{
+  "name": "0a393873-c3fe-4483-8c54-ad1f3c5bb98c",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+      "action": "get_reviews",
+      "inputActionParameters": {
+        "requestBody": {
+          "shown_products": [ {
+            "id": "SNDEHZPDGB2ZT8ZY",
+            "title": "Katalogue Women Heels"
+          }, {
+            "id": "SNDEGQ7NBVGASKHA",
+            "title": "Titli Women Heels"
+          } ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "desc": "the Katalogue Women Heels fit real well at first, I suppose. However after a few hours into the night. I started to wish I had gone up a size or two. Every couple minutes I had to re-adjust. It wasn't a cute look on the dance floor haha. Wish I had size up, otherwise I've no other regrets.",
+                  "product_id": "SNDEHZPDGB2ZT8ZY",
+                  "rating": 3,
+                  "title": "Katalogue Women Heels",
+                  "user": "Briene Sanje"
+                }, {
+                  "desc": "As a first-time buyer, I must say, I am head over heels in love with my purchase! The moment I delicately wear the Katalogue Women Heels, I felt an instant connection, as if it was meant to be. What impressed me the most was the comfort it provded throughout the day.",
+                  "product_id": "SNDEHZPDGB2ZT8ZY",
+                  "rating": 5,
+                  "title": "Katalogue Women Heels",
+                  "user": "Jenny Rahme"
+                }, {
+                  "desc": "I recently had the pleasure of wearing the most enchanting Titli Women Heels for a special occasion, and let me tell you, heads turned and compliments poured in all night long! The fit was mostly great.",
+                  "product_id": "SNDEGQ7NBVGASKHA",
+                  "rating": 4,
+                  "title": "Titli Women Heels",
+                  "user": "Nadine Bhakta"
+                }, {
+                  "desc": "I recently purchased the Titli Women Heels from this store, and I must say, it's absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship. The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+                  "product_id": "SNDEGQ7NBVGASKHA",
+                  "rating": 5,
+                  "title": "Titli Women Heels",
+                  "user": "Anjali Gupta"
+                } ]
+              },
+              "type": "custom_template"
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Sure! The Titli Women Heels has the highest rating of 4.5 out of 5 stars."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to add the highly rated product to the cart.",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "SNDEHZPDGB2ZT8ZY",
+        "title": "Katalogue Women Heels"
+      }, {
+        "id": "SNDEGQ7NBVGASKHA",
+        "title": "Titli Women Heels"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to add the product \"Titli Women Heels\" to the cart.",
+    "state": "OK"
+  },
+  "displayName": "add the highly rated product to the cart",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

@@ -1,0 +1,65 @@
+{
+  "name": "2cfe2aaa-3c62-4ec0-a2b4-066b7882ed19",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "offset": 0,
+          "search": "Women's classic lehenga"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    },
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer is looking to see Women's classic lehenga.",
+    "actionParameters": {
+      "offset": 0,
+      "search": "Women's classic lehenga"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the agent has fetched women's classic lehengas and stored them. ",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "",
+        "title": ""
+      }, {
+        "id": "",
+        "title": ""
+      } ]
+    }
+  },
+  "displayName": "product found",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

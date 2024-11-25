@@ -1,0 +1,36 @@
+{
+  "name": "2912947c-a7b3-4de5-85e3-e19d3e96e7b8",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "offset": 0,
+          "search": "heels"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+
+        }
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "the customer is looking for heels.",
+    "actionParameters": {
+      "offset": 0,
+      "search": "heels"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "heels are out of stock at the moment.",
+    "actionParameters": {
+      "shown_products": [ ]
+    }
+  },
+  "displayName": "product not found",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

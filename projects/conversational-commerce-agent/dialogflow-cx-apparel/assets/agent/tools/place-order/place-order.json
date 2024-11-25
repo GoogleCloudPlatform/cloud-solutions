@@ -1,0 +1,20 @@
+{
+  "name": "8db09d00-b9d9-444b-af03-72c667f1b3c4",
+  "displayName": "place-order",
+  "description": "place an order for the shopping cart items.",
+  "openApiSpec": {
+    "authentication": {
+      "serviceAgentAuthConfig": {
+        "serviceAgentAuth": "ACCESS_TOKEN"
+      }
+    }
+  },
+  "sharedSchemas": [ {
+    "name": "PlaceOrderQuery",
+    "schema": "{\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"cart\" : {\n      \"type\" : \"object\",\n      \"properties\" : {\n        \"products\" : {\n          \"type\" : \"array\",\n          \"items\" : {\n            \"type\" : \"object\",\n            \"properties\" : {\n              \"id\" : {\n                \"type\" : \"string\"\n              },\n              \"title\" : {\n                \"type\" : \"string\"\n              },\n              \"size\" : {\n                \"type\" : \"string\"\n              },\n              \"quantity\" : {\n                \"type\" : \"number\"\n              },\n              \"delivery_date\" : {\n                \"type\" : \"string\"\n              },\n              \"earliest_delivery_date\" : {\n                \"type\" : \"string\"\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "name": "PlaceOrderSuccessResp",
+    "schema": "{\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"order_id\" : {\n      \"type\" : \"string\"\n    },\n    \"order_status\" : {\n      \"type\" : \"string\"\n    },\n    \"order_created_on\" : {\n      \"type\" : \"string\"\n    },\n    \"products\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"type\" : \"object\",\n        \"properties\" : {\n          \"id\" : {\n            \"type\" : \"string\"\n          },\n          \"title\" : {\n            \"type\" : \"string\"\n          },\n          \"size\" : {\n            \"type\" : \"string\"\n          },\n          \"quantity\" : {\n            \"type\" : \"number\"\n          },\n          \"delivery_date\" : {\n            \"type\" : \"string\"\n          },\n          \"earliest_delivery_date\" : {\n            \"type\" : \"string\"\n          }\n        }\n      }\n    }\n  }\n}"
+  } ],
+  "toolType": "CUSTOMIZED_TOOL"
+}

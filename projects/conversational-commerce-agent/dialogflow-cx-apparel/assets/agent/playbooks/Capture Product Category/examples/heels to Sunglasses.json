@@ -1,0 +1,22 @@
+{
+  "name": "1fcb7b9c-bd1a-4eed-845d-934c96a9ee50",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to buy cool sunglasses.",
+    "actionParameters": {
+      "offset": 4,
+      "previous_search": "heels"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer is looking for sunglasses.",
+    "state": "OK",
+    "actionParameters": {
+      "offset": 0,
+      "search": "Sunglasses"
+    }
+  },
+  "displayName": "heels to Sunglasses",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

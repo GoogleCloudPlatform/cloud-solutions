@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: place-order
+  description: place the order
+  version: 1.0.0
+servers:
+  - url: 'https://integrations.googleapis.com'
+paths:
+  /v2/projects/customermod-genai-sa/locations/us-central1/integrations/apparel-search-prod:execute?triggerId=api_trigger/place_order:
+    post:
+      summary: place the order
+      operationId: place_order
+      requestBody:
+        description: shopping cart items
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaceOrderQuery'
+      responses:
+        default:
+          description: >-
+            order data with status, creation timestamp, order id and ordered
+            items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceOrderSuccessResp'
+components:
+  schemas:
+    PlaceOrderQuery:
+      type: object
+      properties:
+        cart:
+          type: object
+          properties:
+            products:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  size:
+                    type: string
+                  quantity:
+                    type: number
+                  delivery_date:
+                    type: string
+                  earliest_delivery_date:
+                    type: string
+    PlaceOrderSuccessResp:
+      type: object
+      properties:
+        order_id:
+          type: string
+        order_status:
+          type: string
+        order_created_on:
+          type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+              size:
+                type: string
+              quantity:
+                type: number
+              delivery_date:
+                type: string
+              earliest_delivery_date:
+                type: string

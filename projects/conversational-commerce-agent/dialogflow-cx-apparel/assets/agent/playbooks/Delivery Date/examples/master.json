@@ -1,0 +1,218 @@
+{
+  "name": "a77c8d33-1f47-4962-bf43-9e40e089cf49",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/bc35ec86-053c-4f53-8121-7b4b5202414a",
+      "action": "get_delivery_date",
+      "inputActionParameters": {
+        "requestBody": {
+          "shopping_cart": [ {
+            "id": "TSHEJQ22W8XPPGGH",
+            "quantity": 1,
+            "size": "Small",
+            "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+          }, {
+            "id": "TSHEJQ2FHCZZMUZB",
+            "quantity": 2,
+            "size": "Large",
+            "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+          } ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "shopping_cart": [ {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ22W8XPPGGH",
+            "quantity": 1,
+            "size": "Small",
+            "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+          }, {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ2FHCZZMUZB",
+            "quantity": 2,
+            "size": "Large",
+            "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "The soonest we can get the ARISE Self Design, Printed Men's Henley Maroon T-Shirt and the ARISE Self Design, Printed Men's Henley Green T-Shirt to you is by April 7, 2024. How does that timeframe work for you?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "I need the maroon t-shirt on April 5."
+    }
+  }, {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/35f03e4d-e514-423a-b81b-4bf5ec943131",
+      "action": "store_delivery_date",
+      "inputActionParameters": {
+        "requestBody": {
+          "preferred_delivery_date": [ {
+            "id": "TSHEJQ22W8XPPGGH",
+            "preferred_delivery_date": "April 5, 2024"
+          } ],
+          "shopping_cart": [ {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ22W8XPPGGH",
+            "quantity": 1,
+            "size": "Small",
+            "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+          }, {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ2FHCZZMUZB",
+            "quantity": 2,
+            "size": "Large",
+            "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+          } ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "preferred_delivery_date": [ {
+            "id": "TSHEJQ22W8XPPGGH",
+            "preferred_delivery_date": "April 5, 2024",
+            "reason": "The preferred delivery date (April 5, 2024) is before the earliest delivery date (April 7, 2024) for the ARISE Self Design, Printed Men's Henley Maroon T-Shirt",
+            "status": "fail"
+          } ],
+          "shopping_cart": [ {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ22W8XPPGGH",
+            "quantity": 1,
+            "size": "Small",
+            "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+          }, {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ2FHCZZMUZB",
+            "quantity": 2,
+            "size": "Large",
+            "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "I understand your need for urgency. However, we can only guarantee delivery of the ARISE Self Design, Printed Men's Henley Maroon T-Shirt by April 7, 2024. Is there any flexibility in your schedule to accommodate this?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "can you deliver both of it on april 8?"
+    }
+  }, {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/35f03e4d-e514-423a-b81b-4bf5ec943131",
+      "action": "store_delivery_date",
+      "inputActionParameters": {
+        "requestBody": {
+          "preferred_delivery_date": [ {
+            "id": "TSHEJQ22W8XPPGGH",
+            "preferred_delivery_date": "April 8, 2024"
+          }, {
+            "id": "TSHEJQ2FHCZZMUZB",
+            "preferred_delivery_date": "April 8, 2024"
+          } ],
+          "shopping_cart": [ {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ22W8XPPGGH",
+            "quantity": 1,
+            "size": "Small",
+            "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+          }, {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ2FHCZZMUZB",
+            "quantity": 2,
+            "size": "Large",
+            "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+          } ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "preferred_delivery_date": [ {
+            "id": "TSHEJQ22W8XPPGGH",
+            "preferred_delivery_date": "April 8, 2024",
+            "reason": "",
+            "status": "success"
+          }, {
+            "id": "TSHEJQ2FHCZZMUZB",
+            "preferred_delivery_date": "April 8, 2024",
+            "reason": "",
+            "status": "success"
+          } ],
+          "shopping_cart": [ {
+            "delivery_date": "April 8, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ22W8XPPGGH",
+            "quantity": 1,
+            "size": "Small",
+            "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+          }, {
+            "delivery_date": "April 8, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "TSHEJQ2FHCZZMUZB",
+            "quantity": 2,
+            "size": "Large",
+            "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Certainly, I've arranged for both the ARISE Self Design, Printed Men's Henley Maroon T-Shirt and the ARISE Self Design, Printed Men's Henley Green T-Shirt to be delivered on April 8, 2024."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer has added the products to the shopping cart.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "id": "TSHEJQ22W8XPPGGH",
+        "quantity": 1,
+        "size": "Small",
+        "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+      }, {
+        "id": "TSHEJQ2FHCZZMUZB",
+        "quantity": 2,
+        "size": "Large",
+        "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer has confirmed the delivery dates for all the shopping cart products.",
+    "state": "OK",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "delivery_date": "April 8, 2024",
+        "earliest_delivery_date": "April 7, 2024",
+        "id": "TSHEJQ22W8XPPGGH",
+        "quantity": 1,
+        "size": "Small",
+        "title": "ARISE Self Design, Printed Men's Henley Maroon T-Shirt"
+      }, {
+        "delivery_date": "April 8, 2024",
+        "earliest_delivery_date": "April 7, 2024",
+        "id": "TSHEJQ2FHCZZMUZB",
+        "quantity": 2,
+        "size": "Large",
+        "title": "ARISE Self Design, Printed Men's Henley Green T-Shirt"
+      } ]
+    }
+  },
+  "displayName": "master",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

@@ -1,0 +1,32 @@
+openapi: 3.0.0
+info:
+  title: Order Lookup API
+  version: 1.0.0
+servers:
+  - url: 'https://integrations.googleapis.com'
+paths:
+  /v2/projects/customermod-genai-sa/locations/us-central1/integrations/apparel-search-prod:execute?triggerId=api_trigger/lookup-order:
+    post:
+      summary: Retrieve order details by order ID.
+      operationId: lookup_order
+      requestBody:
+        description: order id against which order data needs to be pulled.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+              properties:
+                order_id:
+                  type: string
+                  description: The unique identifier for the customer's order.
+      responses:
+        default:
+          description: Order data.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true

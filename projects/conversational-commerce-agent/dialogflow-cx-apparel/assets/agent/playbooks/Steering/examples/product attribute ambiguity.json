@@ -1,0 +1,210 @@
+{
+  "name": "12a795f5-c231-4b61-a810-1805468402e7",
+  "actions": [ {
+    "userUtterance": {
+      "text": "hi"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/flows/18d54b97-4b25-4c2d-b1f1-f521c289c21d"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to select from the options above, or just type in what you're looking for and I'll assist you."
+    }
+  }, {
+    "userUtterance": {
+      "text": "I am looking for a tuxedo for wedding"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for a wedding tuxedo.",
+        "actionParameters": {
+          "offset": 0,
+          "previous_search": ""
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer is looking for a wedding tuxedo.",
+        "state": "OK",
+        "actionParameters": {
+          "offset": 0,
+          "search": "tuxedo"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for a wedding tuxedo.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "tuxedo"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the agent has fetched tuxedos and stored them. ",
+        "state": "OK",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "ZDV8A0qPvLU1aoZXBizk7Q",
+            "title": "blue stag Self Design Tuxedo Style Wedding, Casual, Casual Men's Blazer"
+          }, {
+            "id": "CO6jNNSpqTlb7e8kUOORug",
+            "title": "Menjestic Solid Tuxedo Style Wedding, Casual, Party Men's Blazer"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Do any of these products catch your interest, or are you after different options?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "maybe something more colorful"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for a colorful tuxedo.",
+        "actionParameters": {
+          "offset": 0,
+          "previous_search": "tuxedo"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer is looking for a colorful tuxedo.",
+        "state": "OK",
+        "actionParameters": {
+          "offset": 0,
+          "search": "colorful tuxedo"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for a colorful tuxedo.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "colorful tuxedo"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "colorful tuxedos are out of stock at the moment.",
+        "state": "OK",
+        "actionParameters": {
+          "shown_products": [ ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Unfortunately, we don't have any colorful tuxedos available right now. Is there anything else you are interested in?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "how about black?"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer is looking for black tuxedos.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "colorful tuxedo"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer is looking for black tuxedos.",
+        "state": "OK",
+        "actionParameters": {
+          "offset": 0,
+          "search": "black tuxedo"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for black tuxedos.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "black tuxedo"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "black tuxedos are out of stock at the moment.",
+        "state": "OK",
+        "actionParameters": {
+          "shown_products": [ ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Unfortunately, black tuxedos are unavailable at the moment. Can I assist you in finding an alternative products?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "lets do the black one, then"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "I'm sorry, I cannot distinguish items based on color. Are you referring to the blue stag Self Design Tuxedo Style Wedding, Casual, Casual Men's Blazer or the Menjestic Solid Tuxedo Style Wedding, Casual, Party Men's Blazer?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "the self design one."
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/25416576-c678-4619-9301-28d82deaac05",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to add the blue stag Self Design Tuxedo Style Wedding, Casual, Casual Men's Blazer to the cart.",
+        "actionParameters": {
+          "id": "ZDV8A0qPvLU1aoZXBizk7Q",
+          "quantity": 1,
+          "shopping_cart": [ ],
+          "size": "",
+          "title": "blue stag Self Design Tuxedo Style Wedding, Casual, Casual Men's Blazer"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The blue stag Self Design Tuxedo Style Wedding, Casual, Casual Men's Blazer has been added to the cart.",
+        "state": "OK",
+        "actionParameters": {
+          "shopping_cart": [ {
+            "id": "ZDV8A0qPvLU1aoZXBizk7Q",
+            "quantity": 1,
+            "size": "Large",
+            "title": "blue stag Self Design Tuxedo Style Wedding, Casual, Casual Men's Blazer"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Would you like to purchase any other item?"
+    }
+  } ],
+  "displayName": "product attribute ambiguity",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

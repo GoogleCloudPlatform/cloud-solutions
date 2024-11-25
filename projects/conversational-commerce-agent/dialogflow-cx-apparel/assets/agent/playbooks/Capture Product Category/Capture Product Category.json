@@ -1,0 +1,119 @@
+{
+  "name": "9e798f89-69d2-45a2-89de-72564b92d24b",
+  "displayName": "Capture Product Category",
+  "goal": "your task is to create a search query by collecting only the product category from the customer and manipulate the offset value. \n\nkeywords to include in search query: product category (required), product color(optional), gender(optional).\nkeywords to not include in search query: product type, product fabric, product style, product size, product price.\n\nYou cannot filter out the products by fabric, size, style, price, etc.",
+  "steps": [ {
+    "text": "previous search query is accessible from the parameter $previous_search."
+  }, {
+    "text": "new search query is accessible from the parameter $search."
+  }, {
+    "text": "offset value is accessible from the parameter $offset."
+  }, {
+    "text": "Examples of product categories are \"shirt\", \"t-shirt\", \"ring\", \"jeans\", \"lehenga\", \"top\", \"watch\", \"sunglasses\", etc."
+  }, {
+    "text": "Examples of product styles are \"straight cut\", \"casual\", \"everyday wear\", \"classic\", \"off shoulder\", etc."
+  }, {
+    "text": "Create a search query from the product category provided in the customer's query."
+  }, {
+    "text": "Do not narrow down to understand kind of product or style. Only check for product category."
+  }, {
+    "text": "If a customer wants to see multiple categories products, select only one category of them to add in the search query."
+  }, {
+    "text": "Once the search query contains product category, move on to update the offset value."
+  }, {
+    "text": "to update the offset value,",
+    "steps": [ {
+      "text": "compare the new search query with the previous one,",
+      "steps": [ {
+        "text": "if the new search query is different from the previous one, set the offset to 0."
+      }, {
+        "text": "if the new search query is the same as the previous one, proceed with below steps:",
+        "steps": [ {
+          "text": "compare the previous search query and the customer's query:",
+          "steps": [ {
+            "text": "if the customer wants to see more products, increment the offset by 2."
+          }, {
+            "text": "if the customer wants to see previous products, decrement the offset by 2."
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "text": "Once the search query and offset both have been updated, end the task."
+  } ],
+  "inputParameterDefinitions": [ {
+    "name": "previous_search",
+    "description": "previous product search query",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "STRING"
+      }
+    }
+  }, {
+    "name": "offset",
+    "description": "product's index number.",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "NUMBER"
+      }
+    }
+  } ],
+  "outputParameterDefinitions": [ {
+    "name": "search",
+    "description": "product search query",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "STRING"
+      }
+    }
+  }, {
+    "name": "offset",
+    "description": "updated product's index number",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "NUMBER"
+      }
+    }
+  } ],
+  "instruction": {
+    "steps": [ {
+      "text": "previous search query is accessible from the parameter $previous_search."
+    }, {
+      "text": "new search query is accessible from the parameter $search."
+    }, {
+      "text": "offset value is accessible from the parameter $offset."
+    }, {
+      "text": "Examples of product categories are \"shirt\", \"t-shirt\", \"ring\", \"jeans\", \"lehenga\", \"top\", \"watch\", \"sunglasses\", etc."
+    }, {
+      "text": "Examples of product styles are \"straight cut\", \"casual\", \"everyday wear\", \"classic\", \"off shoulder\", etc."
+    }, {
+      "text": "Create a search query from the product category provided in the customer's query."
+    }, {
+      "text": "Do not narrow down to understand kind of product or style. Only check for product category."
+    }, {
+      "text": "If a customer wants to see multiple categories products, select only one category of them to add in the search query."
+    }, {
+      "text": "Once the search query contains product category, move on to update the offset value."
+    }, {
+      "text": "to update the offset value,",
+      "steps": [ {
+        "text": "compare the new search query with the previous one,",
+        "steps": [ {
+          "text": "if the new search query is different from the previous one, set the offset to 0."
+        }, {
+          "text": "if the new search query is the same as the previous one, proceed with below steps:",
+          "steps": [ {
+            "text": "compare the previous search query and the customer's query:",
+            "steps": [ {
+              "text": "if the customer wants to see more products, increment the offset by 2."
+            }, {
+              "text": "if the customer wants to see previous products, decrement the offset by 2."
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "text": "Once the search query and offset both have been updated, end the task."
+    } ]
+  }
+}

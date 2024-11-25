@@ -1,0 +1,16 @@
+{
+  "name": "35f03e4d-e514-423a-b81b-4bf5ec943131",
+  "displayName": "store-delivery-date",
+  "description": "Store customer's preferred delivery date.",
+  "openApiSpec": {
+
+  },
+  "sharedSchemas": [ {
+    "name": "DeliveryDatesQuery",
+    "schema": "{\n  \"required\" : [ \"shopping_cart\" ],\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"shopping_cart\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"type\" : \"object\",\n        \"properties\" : {\n          \"id\" : {\n            \"type\" : \"string\"\n          },\n          \"title\" : {\n            \"type\" : \"string\"\n          },\n          \"size\" : {\n            \"type\" : \"string\"\n          },\n          \"quantity\" : {\n            \"type\" : \"number\"\n          },\n          \"delivery_date\" : {\n            \"type\" : \"string\"\n          },\n          \"earliest_delivery_date\" : {\n            \"type\" : \"string\"\n          }\n        }\n      }\n    },\n    \"preferred_delivery_date\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"type\" : \"object\",\n        \"properties\" : {\n          \"id\" : {\n            \"type\" : \"string\"\n          },\n          \"preferred_delivery_date\" : {\n            \"type\" : \"string\"\n          }\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "name": "DeliveryDatesResp",
+    "schema": "{\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"preferred_delivery_date\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"type\" : \"object\",\n        \"properties\" : {\n          \"id\" : {\n            \"type\" : \"string\"\n          },\n          \"preferred_delivery_date\" : {\n            \"type\" : \"string\"\n          },\n          \"status\" : {\n            \"type\" : \"string\"\n          },\n          \"reason\" : {\n            \"type\" : \"string\"\n          }\n        }\n      }\n    },\n    \"shopping_cart\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"type\" : \"object\",\n        \"properties\" : {\n          \"id\" : {\n            \"type\" : \"string\"\n          },\n          \"title\" : {\n            \"type\" : \"string\"\n          },\n          \"size\" : {\n            \"type\" : \"string\"\n          },\n          \"quantity\" : {\n            \"type\" : \"number\"\n          },\n          \"delivery_date\" : {\n            \"type\" : \"string\"\n          },\n          \"earliest_delivery_date\" : {\n            \"type\" : \"string\"\n          }\n        }\n      }\n    }\n  }\n}"
+  } ],
+  "toolType": "CUSTOMIZED_TOOL"
+}

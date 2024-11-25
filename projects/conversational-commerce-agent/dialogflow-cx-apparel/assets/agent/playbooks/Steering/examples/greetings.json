@@ -1,0 +1,40 @@
+{
+  "name": "72338b13-c917-43d5-8553-b2fc82ca37c0",
+  "actions": [ {
+    "flowInvocation": {
+      "flow": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/flows/18d54b97-4b25-4c2d-b1f1-f521c289c21d"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to select from the options above, or just type in what you're looking for and I'll assist you."
+    }
+  }, {
+    "userUtterance": {
+      "text": "hi"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/flows/18d54b97-4b25-4c2d-b1f1-f521c289c21d"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to select from the options above, or just type in what you're looking for and I'll assist you."
+    }
+  }, {
+    "userUtterance": {
+      "text": "hey"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/flows/18d54b97-4b25-4c2d-b1f1-f521c289c21d"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to select from the options above, or just type in what you're looking for and I'll assist you."
+    }
+  } ],
+  "displayName": "greetings",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "undetected"
+}

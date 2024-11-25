@@ -1,0 +1,207 @@
+{
+  "name": "7435ed93-bc82-447b-b5b9-4b0177dd9be1",
+  "displayName": "lehenga_for_wedding",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "show me lehenga for wedding"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these products catch your interest, or are you after different options?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "what products do I get in the set?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "The Ambika Lahenga Embroidered Lehenga, Choli, and Dupatta Set includes a lehenga, choli, and dupatta set. Would you like to know more about this product?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "perfect.I'll purchase the first one"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Absolutely! We have the Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set in stock. What size would you like?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "what are the options?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "The Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set comes in sizes small, medium, large, and extra-large." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "Normally medium t-shirt fits me. what do you think which size would fit to me for the lehenga?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Since the Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set is a traditional Indian garment, its sizing may differ from regular t-shirts. To ensure the best fit, I recommend choosing a size larger than your usual t-shirt size. In this case, I suggest selecting the large size." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "ok let's do that"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! The Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set in size large has been added to your cart." ]
+      }, {
+        "text": [ "Is there anything else you'd like to add to your purchase?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712692714,
+    "nanos": 770821000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "lehenga"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of fashion bazar Self Design Women's Lehenga Choli Lehenga Fabric: Raw silk, Net Brand Color: Pink,Specifications of fashion bazar Self Design Women's Lehenga Choli General Details Ideal For Women's Pattern Self Design Lehenga Choli Details Type Lehenga Choli Lehenga Fabric Raw silk, Net In the Box 1 Lehengha choli",
+                      "id": "sCpJyHcfmuFXZC1POTGC0g",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/lehenga-choli/p/z/r/sf-01254-fashion-bazar-42-1000x1000-imaehyfsf3fz5nb2.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/sCpJyHcfmuFXZC1POTGC0g",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 149
+                      },
+                      "title": "fashion bazar Self Design Women's Lehenga Choli"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Key Features of Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set Pink Net,Specifications of Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set Lehenga Details Fabric Net Lining Type satin lining Type Lehenga, Choli and Dupatta Set Work Zardosi Work Dimensions Length 42 inch General Details Age Group 0 - 0 month Pattern Embroidered Ideal For Women's Occasion Party Fabric Care Dry Wash In the Box Lehenga, Choli and Dupatta Set",
+                      "id": "Urvi6A19jVf0elaczoz4IA",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/lehenga/r/p/w/g55-ambika-lahenga-42-original-imaegg798ephhu6h.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/Urvi6A19jVf0elaczoz4IA",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 1199
+                      },
+                      "title": "Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/11c17021-f695-4969-842e-f7fe9f664274",
+        "action": "get_product_details",
+        "inputActionParameters": {
+          "requestBody": {
+            "product_ids": [ "sCpJyHcfmuFXZC1POTGC0g", "Urvi6A19jVf0elaczoz4IA" ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "products": [ {
+              "product": {
+                "description": "Key Features of Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set Pink Net,Specifications of Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set Lehenga Details Fabric Net Lining Type satin lining Type Lehenga, Choli and Dupatta Set Work Zardosi Work Dimensions Length 42 inch General Details Age Group 0 - 0 month Pattern Embroidered Ideal For Women's Occasion Party Fabric Care Dry Wash In the Box Lehenga, Choli and Dupatta Set",
+                "id": "Urvi6A19jVf0elaczoz4IA",
+                "images": [ {
+                  "uri": "https://storage.googleapis.com/gcp-retail-demo/image/lehenga/r/p/w/g55-ambika-lahenga-42-original-imaegg798ephhu6h.jpeg"
+                } ],
+                "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/Urvi6A19jVf0elaczoz4IA",
+                "priceInfo": {
+                  "currencyCode": "USD",
+                  "originalPrice": 1199,
+                  "price": 1199,
+                  "priceRange": {
+
+                  }
+                },
+                "title": "Ambika Lahenga Embroidered Lehenga, Choli and Dupatta Set"
+              }
+            }, {
+              "product": {
+                "description": "Key Features of fashion bazar Self Design Women's Lehenga Choli Lehenga Fabric: Raw silk, Net Brand Color: Pink,Specifications of fashion bazar Self Design Women's Lehenga Choli General Details Ideal For Women's Pattern Self Design Lehenga Choli Details Type Lehenga Choli Lehenga Fabric Raw silk, Net In the Box 1 Lehengha choli",
+                "id": "sCpJyHcfmuFXZC1POTGC0g",
+                "images": [ {
+                  "uri": "https://storage.googleapis.com/gcp-retail-demo/image/lehenga-choli/p/z/r/sf-01254-fashion-bazar-42-1000x1000-imaehyfsf3fz5nb2.jpeg"
+                } ],
+                "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/sCpJyHcfmuFXZC1POTGC0g",
+                "priceInfo": {
+                  "currencyCode": "USD",
+                  "originalPrice": 149,
+                  "price": 149,
+                  "priceRange": {
+
+                  }
+                },
+                "title": "fashion bazar Self Design Women's Lehenga Choli"
+              }
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

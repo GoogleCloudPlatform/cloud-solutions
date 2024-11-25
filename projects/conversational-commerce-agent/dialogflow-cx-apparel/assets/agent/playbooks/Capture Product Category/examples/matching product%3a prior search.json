@@ -1,0 +1,18 @@
+{
+  "name": "c75ad7a4-18a9-4f4b-820d-490b0630f518",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to see matching heels with the Mahek Saree Striped Fashion Cotton Sari.",
+    "actionParameters": {
+      "previous_search": "traditional saree"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to see matching heels with the Mahek Saree Striped Fashion Cotton Sari.",
+    "actionParameters": {
+      "search": "heels"
+    }
+  },
+  "displayName": "matching product: prior search",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

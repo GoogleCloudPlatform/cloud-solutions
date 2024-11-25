@@ -1,0 +1,85 @@
+{
+  "name": "23ab18d5-16ab-4f4d-a251-7393f344133b",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "I'm here to help you with your return. To kick things off, could you please share your order number with me?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "47f0d5e9"
+    }
+  }, {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/ac8ca820-7ebe-4c4e-9d22-f2e20d3bced7",
+      "action": "lookup_order",
+      "inputActionParameters": {
+        "requestBody": {
+          "order_id": "47f0d5e9"
+        }
+      },
+      "outputActionParameters": {
+        "default": {
+          "order_created_on": "2024-04-11T17:35:11.728285Z",
+          "order_id": "47f0d5e9",
+          "order_status": "confirmed",
+          "products": [ {
+            "delivery_date": "April 06, 2024",
+            "earliest_delivery_date": "April 06, 2024",
+            "id": "1o14yPSoqno1MiUAjPIHRg",
+            "quantity": 1,
+            "size": "10",
+            "title": "Caratcents White Gold 14 K Ring"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Thank you for providing your order number. I've found your order placed on April 11th, 2024. The order contains a Caratcents White Gold 14 K Ring in size 10. Is that the item you'd like to return?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "yes"
+    }
+  }, {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/4b3efa6f-637e-428b-84f0-e9ef631d3d7a",
+      "action": "return_order",
+      "inputActionParameters": {
+        "requestBody": {
+          "order_id": "47f0d5e9"
+        }
+      },
+      "outputActionParameters": {
+        "default": {
+          "message": "Return initiation is successful. Return label generated."
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Alright, I've initiated the return process. You'll find the return label attached below. Please print it out and attach it to your package before sending it back"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/flows/0f1577fc-2fcc-4ae9-93f1-ddfc2b6cd2cf"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Is there anything else I can help you with?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Yes. what is the current status of my order?"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The user wants to return their order"
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to know the current status of the order."
+  },
+  "displayName": "return order",
+  "retrievalStrategy": "STATIC",
+  "languageCode": "en"
+}

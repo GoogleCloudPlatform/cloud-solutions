@@ -1,0 +1,83 @@
+{
+  "name": "18d54b97-4b25-4c2d-b1f1-f521c289c21d",
+  "displayName": "Greeting",
+  "transitionRoutes": [ {
+    "condition": "true",
+    "triggerFulfillment": {
+      "messages": [ {
+        "payload": {
+          "richContent": [ [ {
+            "image": {
+              "src": {
+                "rawUrl": "https://i.ibb.co/kxqVHQF/DALL-E-2024-04-03-16-34-10-Design-a-sophisticated-and-elegant-logo-for-Cymbal-a-high-end-fashion-bra.webp"
+              }
+            },
+            "subtitle": "Let's find your perfect style. What are you interested in today?",
+            "title": "Welcome to Cymbal Apparel: Fashion Forward and step into style",
+            "type": "info"
+          }, {
+            "options": [ {
+              "event": {
+                "languageCode": "en",
+                "name": "SHOW_JEANS",
+                "parameters": {
+
+                }
+              },
+              "text": "Explore hoodies"
+            }, {
+              "event": {
+                "languageCode": "en",
+                "name": "SHOW_GYM_CLOTHES",
+                "parameters": {
+
+                }
+              },
+              "text": "Show me t-shirts"
+            }, {
+              "event": {
+                "languageCode": "en",
+                "name": "STYLE_ADVICE",
+                "parameters": {
+
+                }
+              },
+              "text": "Suggest the perfect outfit"
+            } ],
+            "type": "chips"
+          } ] ]
+        },
+        "languageCode": "en"
+      } ]
+    },
+    "targetPage": "End Flow",
+    "name": "1fa95672-2497-402a-9b39-33bd677e5c65"
+  } ],
+  "eventHandlers": [ {
+    "event": "sys.no-match-default",
+    "triggerFulfillment": {
+      "messages": [ {
+        "text": {
+          "text": [ "I didn't get that. Can you say it again?", "I missed what you said. What was that?", "Sorry, could you say that again?", "Sorry, can you say that again?", "Can you say that again?", "Sorry, I didn't get that. Can you rephrase?", "Sorry, what was that?", "One more time?", "What was that?", "Say that one more time?", "I didn't get that. Can you repeat?", "I missed that, say that again?" ]
+        },
+        "languageCode": "en"
+      } ]
+    },
+    "name": "db6737b3-add3-4acc-825b-a2906022ac96"
+  }, {
+    "event": "sys.no-input-default",
+    "triggerFulfillment": {
+      "messages": [ {
+        "text": {
+          "text": [ "I didn't get that. Can you say it again?", "I missed what you said. What was that?", "Sorry, could you say that again?", "Sorry, can you say that again?", "Can you say that again?", "Sorry, I didn't get that. Can you rephrase?", "Sorry, what was that?", "One more time?", "What was that?", "Say that one more time?", "I didn't get that. Can you repeat?", "I missed that, say that again?" ]
+        },
+        "languageCode": "en"
+      } ]
+    },
+    "name": "63f85fd3-43ff-4583-9b51-62068a5e7511"
+  } ],
+  "nluSettings": {
+    "modelType": "MODEL_TYPE_ADVANCED",
+    "classificationThreshold": 0.30000001
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "name": "d3430913-215b-4d71-86ec-3da82ea222fa",
+  "displayName": "dress-review_compare",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "I am looking for a cute dress"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Absolutely! Whether it's a casual day out or a special occasion, a cute dress can elevate any look. Are you looking for something casual and comfy, or perhaps a more formal and elegant style?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "elegant"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! For an elegant look, \"Maxi dresses\" and \"Cocktail dresses\" are always stunning choices. If you're looking for something a bit more unique, \"Wrap dresses\" and \"Jumpsuits\" can also make a statement. Which style catches your eye?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "maxi looks fun"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these products catch your interest, or are you after different options?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "both look good, I am not sure which one I would buy, I wish I could try them on."
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Unfortunately, we don't have a feature to try on clothes virtually. However, I can provide you with more details about each dress to help you make a decision. Would you like to know more about the materials, sizes, or styles?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "okay. can you go through reviews and let me know what others are saying?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Both the Koolkids Girl's A-line Red Dress and the Tiny Toon Girl's Gathered Red Dress have received positive reviews. Customers have praised their comfort and style. Ultimately, the best choice depends on your personal preferences. Would you like to know more about either dress?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "okay. lets go with the tiny toon dress"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "What size would you like to go with the Tiny Toon Girl's Gathered Red Dress? We have sizes ranging from small to extra-large." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "do you have extra small in this?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "I'm sorry, we don't have the Tiny Toon Girl's Gathered Red Dress in extra small. Would you like to choose a different size or a different product?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "nope. give me the small one "
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! The Tiny Toon Girl's Gathered Red Dress in size small has been added to your cart with quantity 1." ]
+      }, {
+        "text": [ "Is there anything else you'd like to add to your purchase?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712687955,
+    "nanos": 60290000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "maxi dress"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of Koolkids Girl's A-line Red Dress Fashionable Attractive,Koolkids Girl's A-line Red Dress Price: Rs. 1,218 Shopping for a stylish yet simple apparels is one of the added perks of being trendy. It's time to revamp your wardrobe for the upcoming season or build a new one from scratch, Koolkids is just the right junction for you with varierty of choices to be selected from the house of Shree Shyam Creations , which surely going to add a radiance to your clothing choice.,Specifications of Koolkids Girl's A-line Red Dress In The Box 2 Dress Dimensions Length Midi/Knee Length General Details Ideal For Girl's Occasion Casual Dress Details Number of Contents in Sales Package Pack of 2 Fabric Acrylic Type A-line Fabric Care Do Not Bleach Additional Details Other Details A beautiful combo of 2 Dress",
+                      "id": "VDshUOCtUluPlSqZtChphw",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/dress/2/t/f/dn9050bred-9713orange-koolkids-5-6-years-original-imaegz6xjvdh5cgs.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/VDshUOCtUluPlSqZtChphw",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 99
+                      },
+                      "title": "Koolkids Girl's A-line Red Dress"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Specifications of Tiny Toon Girl's Gathered Red Dress In The Box 1 Dress Dimensions Length Maxi/Full Length General Details Pattern Self Design Ideal For Girl's Occasion Party Dress Details Sleeve Sleeveless Fabric Synthetic Type Gathered Style Western",
+                      "id": "qOPipaehNEo3a0N0ybwZuQ",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/dress/e/j/r/f5055-tiny-toon-9-10-years-1000x1000-imae6tr34hhwhgpf.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/qOPipaehNEo3a0N0ybwZuQ",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 59
+                      },
+                      "title": "Tiny Toon Girl's Gathered Red Dress"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+        "action": "get_reviews",
+        "inputActionParameters": {
+          "requestBody": {
+            "shown_products": [ {
+              "id": "VDshUOCtUluPlSqZtChphw",
+              "title": "Koolkids Girl's A-line Red Dress"
+            }, {
+              "id": "qOPipaehNEo3a0N0ybwZuQ",
+              "title": "Tiny Toon Girl's Gathered Red Dress"
+            } ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "review-template",
+                "payload": {
+                  "items": [ {
+                    "desc": "the Koolkids Girl's A-line Red Dress fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+                    "product_id": "VDshUOCtUluPlSqZtChphw",
+                    "rating": 3,
+                    "title": "Koolkids Girl's A-line Red Dress",
+                    "user": "Briene Sanje"
+                  }, {
+                    "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the Koolkids Girl's A-line Red Dress, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+                    "product_id": "VDshUOCtUluPlSqZtChphw",
+                    "rating": 5,
+                    "title": "Koolkids Girl's A-line Red Dress",
+                    "user": "Jenny Rahme"
+                  }, {
+                    "desc": "I recently had the pleasure of wearing the most enchanting Tiny Toon Girl's Gathered Red Dress               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+                    "product_id": "qOPipaehNEo3a0N0ybwZuQ",
+                    "rating": 4,
+                    "title": "Tiny Toon Girl's Gathered Red Dress",
+                    "user": "Nadine Bhakta"
+                  }, {
+                    "desc": "I recently purchased the Tiny Toon Girl's Gathered Red Dress from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+                    "product_id": "qOPipaehNEo3a0N0ybwZuQ",
+                    "rating": 5,
+                    "title": "Tiny Toon Girl's Gathered Red Dress",
+                    "user": "Anjali Gupta"
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            },
+            "reviews": [ {
+              "desc": "the Koolkids Girl's A-line Red Dress fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+              "product_id": "VDshUOCtUluPlSqZtChphw",
+              "rating": 3,
+              "title": "Koolkids Girl's A-line Red Dress",
+              "user": "Briene Sanje"
+            }, {
+              "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the Koolkids Girl's A-line Red Dress, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+              "product_id": "VDshUOCtUluPlSqZtChphw",
+              "rating": 5,
+              "title": "Koolkids Girl's A-line Red Dress",
+              "user": "Jenny Rahme"
+            }, {
+              "desc": "I recently had the pleasure of wearing the most enchanting Tiny Toon Girl's Gathered Red Dress               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+              "product_id": "qOPipaehNEo3a0N0ybwZuQ",
+              "rating": 4,
+              "title": "Tiny Toon Girl's Gathered Red Dress",
+              "user": "Nadine Bhakta"
+            }, {
+              "desc": "I recently purchased the Tiny Toon Girl's Gathered Red Dress from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+              "product_id": "qOPipaehNEo3a0N0ybwZuQ",
+              "rating": 5,
+              "title": "Tiny Toon Girl's Gathered Red Dress",
+              "user": "Anjali Gupta"
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

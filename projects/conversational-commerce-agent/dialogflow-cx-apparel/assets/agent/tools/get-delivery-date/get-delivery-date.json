@@ -1,0 +1,16 @@
+{
+  "name": "bc35ec86-053c-4f53-8121-7b4b5202414a",
+  "displayName": "get-delivery-date",
+  "description": "Get delivery date for the shopping cart items.",
+  "openApiSpec": {
+
+  },
+  "sharedSchemas": [ {
+    "name": "DeliveryResp",
+    "schema": "{\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"shopping_cart\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"type\" : \"object\",\n        \"properties\" : {\n          \"id\" : {\n            \"type\" : \"string\"\n          },\n          \"title\" : {\n            \"type\" : \"string\"\n          },\n          \"size\" : {\n            \"type\" : \"string\"\n          },\n          \"quantity\" : {\n            \"type\" : \"number\"\n          },\n          \"delivery_date\" : {\n            \"type\" : \"string\"\n          },\n          \"earliest_delivery_date\" : {\n            \"type\" : \"string\"\n          }\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "name": "DeliveryQuery",
+    "schema": "{\n  \"required\" : [ \"shopping_cart\" ],\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"shopping_cart\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"type\" : \"object\",\n        \"properties\" : {\n          \"id\" : {\n            \"type\" : \"string\"\n          },\n          \"title\" : {\n            \"type\" : \"string\"\n          },\n          \"size\" : {\n            \"type\" : \"string\"\n          },\n          \"quantity\" : {\n            \"type\" : \"number\"\n          }\n        }\n      }\n    }\n  }\n}"
+  } ],
+  "toolType": "CUSTOMIZED_TOOL"
+}

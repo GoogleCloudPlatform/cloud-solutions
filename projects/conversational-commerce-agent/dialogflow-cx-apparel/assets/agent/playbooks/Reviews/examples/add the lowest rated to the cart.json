@@ -1,0 +1,106 @@
+{
+  "name": "a273d823-3dd1-4025-8232-89aace251904",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+      "action": "get_reviews",
+      "inputActionParameters": {
+        "requestBody": {
+          "shown_products": [ {
+            "id": "rgT5wMHTJFAGr2sj3Jz00w",
+            "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+          }, {
+            "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+            "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+          } ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "review-template",
+              "payload": {
+                "items": [ {
+                  "desc": "the YK Printed Boy's Round Neck Dark Blue T-Shirt fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+                  "product_id": "rgT5wMHTJFAGr2sj3Jz00w",
+                  "rating": 3,
+                  "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt",
+                  "user": "Briene Sanje"
+                }, {
+                  "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the YK Printed Boy's Round Neck Dark Blue T-Shirt, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+                  "product_id": "rgT5wMHTJFAGr2sj3Jz00w",
+                  "rating": 5,
+                  "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt",
+                  "user": "Jenny Rahme"
+                }, {
+                  "desc": "I recently had the pleasure of wearing the most enchanting KRAZY KATZ Solid Men's Round Neck T-Shirt               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+                  "product_id": "S5tJwu7uDnhnbfQpEOv2vQ",
+                  "rating": 4,
+                  "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt",
+                  "user": "Nadine Bhakta"
+                }, {
+                  "desc": "I recently purchased the KRAZY KATZ Solid Men's Round Neck T-Shirt from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+                  "product_id": "S5tJwu7uDnhnbfQpEOv2vQ",
+                  "rating": 5,
+                  "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt",
+                  "user": "Anjali Gupta"
+                } ]
+              },
+              "type": "custom_template"
+            } ] ]
+          },
+          "reviews": [ {
+            "desc": "the YK Printed Boy's Round Neck Dark Blue T-Shirt fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+            "product_id": "rgT5wMHTJFAGr2sj3Jz00w",
+            "rating": 3,
+            "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt",
+            "user": "Briene Sanje"
+          }, {
+            "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the YK Printed Boy's Round Neck Dark Blue T-Shirt, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+            "product_id": "rgT5wMHTJFAGr2sj3Jz00w",
+            "rating": 5,
+            "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt",
+            "user": "Jenny Rahme"
+          }, {
+            "desc": "I recently had the pleasure of wearing the most enchanting KRAZY KATZ Solid Men's Round Neck T-Shirt               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+            "product_id": "S5tJwu7uDnhnbfQpEOv2vQ",
+            "rating": 4,
+            "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt",
+            "user": "Nadine Bhakta"
+          }, {
+            "desc": "I recently purchased the KRAZY KATZ Solid Men's Round Neck T-Shirt from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+            "product_id": "S5tJwu7uDnhnbfQpEOv2vQ",
+            "rating": 5,
+            "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt",
+            "user": "Anjali Gupta"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "The YK Printed Boy's Round Neck Dark Blue T-Shirt has an average lowest rating of 4 out of 5 stars."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to add the lowest rated t-shirt to the cart.",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "rgT5wMHTJFAGr2sj3Jz00w",
+        "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+      }, {
+        "id": "S5tJwu7uDnhnbfQpEOv2vQ",
+        "title": "KRAZY KATZ Solid Men's Round Neck T-Shirt"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to add the YK Printed Boy's Round Neck Dark Blue T-Shirt to the cart.",
+    "state": "OK"
+  },
+  "displayName": "add the lowest rated to the cart",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

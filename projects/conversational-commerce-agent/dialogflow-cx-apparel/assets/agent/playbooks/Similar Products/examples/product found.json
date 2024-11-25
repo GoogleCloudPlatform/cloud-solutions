@@ -1,0 +1,66 @@
+{
+  "name": "d8ba70fe-4914-4257-81fd-3a1a64d9616a",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/5912b66b-5c40-45fa-8779-24b7e19fb3bb",
+      "action": "similar-products",
+      "inputActionParameters": {
+        "requestBody": {
+          "product_id": "DREE6TUDFCEGGVWM"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    },
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to see similar products like the Tiny Toon Girl's Gathered Red Dress.",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "DREE6TUDFCEGGVWM",
+        "title": "Tiny Toon Girl's Gathered Red Dress"
+      }, {
+        "id": "DREEJH2UDQAQYBZZ",
+        "title": "Koolkids Girl's A-line Red Dress"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The agent has fetched the similar products.",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "",
+        "title": ""
+      } ]
+    }
+  },
+  "displayName": "product found",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "cfa25561-44f9-47ef-b889-c434a1ae6de1",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer is looking for a large size black shirt.",
+    "actionParameters": {
+      "previous_search": "black t-shirt"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the customer is looking for a large size black shirt. The agent cannot filter the products by sizes, but it can show black shirts.",
+    "state": "OK",
+    "actionParameters": {
+      "search": "black shirt"
+    }
+  },
+  "displayName": "size with prior search",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

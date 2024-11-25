@@ -1,0 +1,27 @@
+{
+  "name": "bb782b76-1e8f-4e55-a9e0-b9962985aa09",
+  "actions": [ {
+    "userUtterance": {
+      "text": "I want to return my order"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/35bd5df8-115a-44fe-97e8-9af053b513a3",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to return their order."
+      },
+      "playbookOutput": {
+        "executionSummary": "the customer does not want any other help."
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "I'm glad I could help! If you ever need anything from Cymbal Apparel, I'm just a click away."
+    }
+  } ],
+  "displayName": "return order",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

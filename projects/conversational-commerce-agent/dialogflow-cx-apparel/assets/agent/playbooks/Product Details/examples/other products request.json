@@ -1,0 +1,61 @@
+{
+  "name": "2f19653c-e139-43e6-9573-fe8281407897",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/11c17021-f695-4969-842e-f7fe9f664274",
+      "action": "get_product_details",
+      "inputActionParameters": {
+        "requestBody": {
+          "product_ids": [ "SNDEHZPDGB2ZT8ZY", "SNDEGQ7NBVGASKHA" ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "products": [ {
+            "product": {
+              "description": "",
+              "id": "",
+              "images": [ {
+                "height": 0,
+                "uri": "",
+                "width": 0
+              } ],
+              "name": "",
+              "priceInfo": {
+                "currencyCode": "",
+                "price": 0
+              },
+              "title": ""
+            }
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "The Titli Women's Heels in elegant gold are quite stunning. Would they be a perfect match for what you're looking for?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Can you show me other heels with white color?"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to know the color of the \"Titli Women Heels\".",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "SNDEHZPDGB2ZT8ZY",
+        "title": "Katalogue Women Heels"
+      }, {
+        "id": "SNDEGQ7NBVGASKHA",
+        "title": "Titli Women Heels"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to see more heels with the white color."
+  },
+  "displayName": "other products request",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

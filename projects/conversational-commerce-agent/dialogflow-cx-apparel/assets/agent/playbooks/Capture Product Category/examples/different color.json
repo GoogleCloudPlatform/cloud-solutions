@@ -1,0 +1,18 @@
+{
+  "name": "32a79fed-0491-41d3-a1af-0d1b67471861",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer is looking for the products in black color.",
+    "actionParameters": {
+      "previous_search": "jeans"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer is looking for a black jeans.",
+    "actionParameters": {
+      "search": "black jeans"
+    }
+  },
+  "displayName": "different color",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

@@ -1,0 +1,1020 @@
+{
+  "name": "projects/YOUR-PROJECT-NUMBER/locations/us-central1/integrations/apparel-search-prod/versions/c05cf3b2-e2a9-4891-8a1f-46f39873ee60",
+  "updateTime": "2024-08-08T19:28:14.336Z",
+  "createTime": "2024-08-08T19:27:18.134Z",
+  "lastModifierEmail": "",
+  "triggerConfigs": [{
+    "label": "return-order",
+    "startTasks": [{
+      "taskId": "9",
+      "condition": "$order_id$ !\u003d \"\""
+    }, {
+      "taskId": "12",
+      "condition": "$order_id$ \u003d \"\""
+    }],
+    "properties": {
+      "Trigger name": "return-order"
+    },
+    "triggerType": "API",
+    "triggerNumber": "2",
+    "triggerId": "api_trigger/return-order",
+    "position": {
+      "x": 1468,
+      "y": 45
+    }
+  }, {
+    "label": "track",
+    "startTasks": [{
+      "taskId": "12",
+      "condition": "$order_id$ \u003d \"\""
+    }, {
+      "taskId": "14",
+      "condition": "$order_id$ !\u003d \"\""
+    }],
+    "properties": {
+      "Trigger name": "track"
+    },
+    "triggerType": "API",
+    "triggerNumber": "3",
+    "triggerId": "api_trigger/track",
+    "position": {
+      "x": 2344,
+      "y": 45
+    }
+  }, {
+    "label": "place_order",
+    "startTasks": [{
+      "taskId": "28",
+      "condition": "$cart.products$ !\u003d []"
+    }, {
+      "taskId": "24",
+      "condition": "$cart.products$ \u003d []"
+    }],
+    "properties": {
+      "Trigger name": "place_order"
+    },
+    "triggerType": "API",
+    "triggerNumber": "4",
+    "triggerId": "api_trigger/place_order",
+    "position": {
+      "x": 3304,
+      "y": 45
+    }
+  }, {
+    "label": "lookup-order",
+    "startTasks": [{
+      "taskId": "12",
+      "condition": "$order_id$ \u003d \"\""
+    }, {
+      "taskId": "8",
+      "condition": "$order_id$ !\u003d \"\""
+    }],
+    "properties": {
+      "Trigger name": "lookup-order"
+    },
+    "triggerType": "API",
+    "triggerNumber": "1",
+    "triggerId": "api_trigger/lookup-order",
+    "position": {
+      "x": 536,
+      "y": 45
+    }
+  }],
+  "taskConfigs": [{
+    "task": "FieldMappingTask",
+    "taskId": "10",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$order$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$return_value$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "6",
+      "condition": "$endpoint$ \u003d \"return-order\""
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-return-value",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 564,
+      "y": 997
+    }
+  }, {
+    "task": "JavaScriptTask",
+    "taskId": "11",
+    "parameters": {
+      "script": {
+        "key": "script",
+        "value": {
+          "stringValue": "\n/**\n * Function that is called during the JavaScript Task execution.\n * @param {IntegrationEvent} event\n */\nfunction executeScript(event) {\n  function toJSON(proto) {\n    if (proto.hasOwnProperty(\"nullValue\")) {\n      return proto.nullValue;\n    } else if (proto.hasOwnProperty(\"boolValue\")) {\n      return proto.boolValue;\n    } else if (proto.hasOwnProperty(\"integerValue\")) {\n      return parseInt(proto.integerValue);\n    } else if (proto.hasOwnProperty(\"doubleValue\")) {\n      return proto.doubleValue;\n    } else if (proto.hasOwnProperty(\"timestampValue\")) {\n      return proto.timestampValue;\n    } else if (proto.hasOwnProperty(\"stringValue\")) {\n      return proto.stringValue;\n    } else if (proto.hasOwnProperty(\"bytesValue\")) {\n      return proto.bytesValue;\n    } else if (proto.hasOwnProperty(\"referenceValue\")) {\n      return proto.referenceValue;\n    } else if (proto.hasOwnProperty(\"geoPointValue\")) {\n      return proto.geoPointValue;\n    } else if (proto.hasOwnProperty(\"arrayValue\")) {\n      return proto.arrayValue.values.map(toJSON);\n    } else if (proto.hasOwnProperty(\"mapValue\")) {\n      const jsonObject \u003d {};\n      Object.keys(proto.mapValue.fields).forEach(key \u003d\u003e {\n        jsonObject[key] \u003d toJSON(proto.mapValue.fields[key]);\n      });\n      return jsonObject;\n    } else {\n      return proto;\n    }\n  }\n \n  event.setParameter(\"order\", toJSON({\"mapValue\": {\"fields\": event.getParameter(\"document\")}}));\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "10",
+      "condition": "$endpoint$ \u003d \"lookup-order\" OR $endpoint$ \u003d \"return-order\""
+    }, {
+      "taskId": "15",
+      "condition": "$endpoint$ \u003d \"track\""
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-order-variable",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1016,
+      "y": 861
+    }
+  }, {
+    "task": "ReturnTask",
+    "taskId": "12",
+    "parameters": {
+      "httpErrorCode": {
+        "key": "httpErrorCode",
+        "value": {
+          "intValue": "400"
+        }
+      },
+      "errorMessage": {
+        "key": "errorMessage",
+        "value": {
+          "stringValue": "Missing order_id"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "missing-order-id",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1496,
+      "y": 181
+    }
+  }, {
+    "task": "ReturnTask",
+    "taskId": "13",
+    "parameters": {
+      "httpErrorCode": {
+        "key": "httpErrorCode",
+        "value": {
+          "intValue": "404"
+        }
+      },
+      "errorMessage": {
+        "key": "errorMessage",
+        "value": {
+          "stringValue": "Order not found"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Return Task",
+    "externalTaskType": "ERROR_TASK",
+    "position": {
+      "x": 3784,
+      "y": 181
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "14",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"track\"\n          }\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$endpoint$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "2"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-endpoint",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 2344,
+      "y": 181
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "15",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$order$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_status\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$order_status$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "17",
+      "condition": "$order_status$ \u003d \"shipped\""
+    }, {
+      "taskId": "16",
+      "condition": "$order_status$ \u003d \"confirmed\" OR $order_status$ \u003d \"return_pending\""
+    }, {
+      "taskId": "18",
+      "condition": "$order_status$ !\u003d \"confirmed\" AND $order_status$ !\u003d \"return_pending\" AND $order_status$ !\u003d \"shipped\""
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-order_status-variable",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1284,
+      "y": 997
+    }
+  }, {
+    "task": "JavaScriptTask",
+    "taskId": "16",
+    "parameters": {
+      "script": {
+        "key": "script",
+        "value": {
+          "stringValue": "\n/**\n * Function that is called during the JavaScript Task execution.\n * @param {IntegrationEvent} event\n */\nfunction executeScript(event) {\n    switch (event.getParameter(\"order_status\")) {\n        case \"confirmed\":\n            event.setParameter(\"return_value\", {\n                \u0027message\u0027: \u0027Your order is confirmed and is currently being processed. Please check again later for shipping updates.\u0027,\n                \u0027order_details\u0027: event.getParameter(\"order\")\n            });\n            return;\n        case \u0027return_pending\u0027:\n            event.setParameter(\"return_value\", {\n                \u0027message\u0027: \u0027Your return is currently pending. Please follow the return instructions provided to complete the process.\u0027,\n                \u0027order_details\u0027: event.getParameter(\"order\")\n            });\n            return;\n    }\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-return-value",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1524,
+      "y": 1133
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "17",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_17_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"accept\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"application/json\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_17_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_17_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://api-test.dhl.com/track/shipments"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"trackingNumber\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"1234\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"service\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"express\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"language\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"en\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"offset\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"0\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"limit\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"5\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"DHL-API-Key\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"demo-key\"\n      }\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "22"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "dhl-track",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1044,
+      "y": 1133
+    }
+  }, {
+    "task": "ReturnTask",
+    "taskId": "18",
+    "parameters": {
+      "httpErrorCode": {
+        "key": "httpErrorCode",
+        "value": {
+          "intValue": "500"
+        }
+      },
+      "errorMessage": {
+        "key": "errorMessage",
+        "value": {
+          "stringValue": "Unknown order status"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "unknown-order-status",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 2004,
+      "y": 1133
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "2",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"orders/\"\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$order_id$\"\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$document_path$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"baseFunction\": {\n            \"functionType\": {\n              \"baseFunction\": {\n                \"functionName\": \"GET_PROJECT_ID\"\n              }\n            }\n          }\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$project_id$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "32"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "get-firestore-params",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1016,
+      "y": 317
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "22",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_17_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"shipments\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"FOR_EACH\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"protoValue\": {\n                  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.TransformExpression\",\n                  \"initialValue\": {\n                    \"referenceValue\": \"~x\"\n                  },\n                  \"transformationFunctions\": [{\n                    \"functionType\": {\n                      \"jsonFunction\": {\n                        \"functionName\": \"GET_PROPERTY\"\n                      }\n                    },\n                    \"parameters\": [{\n                      \"initialValue\": {\n                        \"literalValue\": {\n                          \"stringValue\": \"events\"\n                        }\n                      }\n                    }]\n                  }, {\n                    \"functionType\": {\n                      \"jsonFunction\": {\n                        \"functionName\": \"FILTER_ELEMENTS\"\n                      }\n                    },\n                    \"parameters\": [{\n                      \"initialValue\": {\n                        \"literalValue\": {\n                          \"protoValue\": {\n                            \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.TransformExpression\",\n                            \"initialValue\": {\n                              \"referenceValue\": \"~~x\"\n                            },\n                            \"transformationFunctions\": [{\n                              \"functionType\": {\n                                \"jsonFunction\": {\n                                  \"functionName\": \"GET_PROPERTY\"\n                                }\n                              },\n                              \"parameters\": [{\n                                \"initialValue\": {\n                                  \"literalValue\": {\n                                    \"stringValue\": \"statusCode\"\n                                  }\n                                }\n                              }]\n                            }, {\n                              \"functionType\": {\n                                \"jsonFunction\": {\n                                  \"functionName\": \"EQUALS\"\n                                }\n                              },\n                              \"parameters\": [{\n                                \"initialValue\": {\n                                  \"literalValue\": {\n                                    \"stringValue\": \"delivered\"\n                                  }\n                                }\n                              }]\n                            }]\n                          }\n                        }\n                      }\n                    }]\n                  }, {\n                    \"functionType\": {\n                      \"jsonFunction\": {\n                        \"functionName\": \"FOR_EACH\"\n                      }\n                    },\n                    \"parameters\": [{\n                      \"initialValue\": {\n                        \"literalValue\": {\n                          \"protoValue\": {\n                            \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.TransformExpression\",\n                            \"initialValue\": {\n                              \"referenceValue\": \"~~x\"\n                            },\n                            \"transformationFunctions\": [{\n                              \"functionType\": {\n                                \"jsonFunction\": {\n                                  \"functionName\": \"SET_PROPERTY\"\n                                }\n                              },\n                              \"parameters\": [{\n                                \"initialValue\": {\n                                  \"baseFunction\": {\n                                    \"functionType\": {\n                                      \"baseFunction\": {\n                                        \"functionName\": \"NOW_IN_MILLIS\"\n                                      }\n                                    }\n                                  }\n                                },\n                                \"transformationFunctions\": [{\n                                  \"functionType\": {\n                                    \"intFunction\": {\n                                      \"functionName\": \"ADD\"\n                                    }\n                                  },\n                                  \"parameters\": [{\n                                    \"initialValue\": {\n                                      \"literalValue\": {\n                                        \"intValue\": \"604800000\"\n                                      }\n                                    }\n                                  }]\n                                }, {\n                                  \"functionType\": {\n                                    \"intFunction\": {\n                                      \"functionName\": \"EPOCH_TO_HUMAN_READABLE_TIME\"\n                                    }\n                                  },\n                                  \"parameters\": [{\n                                    \"initialValue\": {\n                                      \"literalValue\": {\n                                        \"stringValue\": \"yyyy-MM-dd\\u0027T\\u0027HH:mm:ss\"\n                                      }\n                                    }\n                                  }, {\n                                    \"initialValue\": {\n                                      \"literalValue\": {\n                                        \"stringValue\": \"UTC\"\n                                      }\n                                    }\n                                  }]\n                                }]\n                              }, {\n                                \"initialValue\": {\n                                  \"literalValue\": {\n                                    \"stringValue\": \"timestamp\"\n                                  }\n                                }\n                              }]\n                            }]\n                          }\n                        }\n                      }\n                    }]\n                  }]\n                }\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"FLATTEN\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$trackingInfo$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "23"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-trackingInfo",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1044,
+      "y": 1269
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "23",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$return_value$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$trackingInfo$\"\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"trackingInfo\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$order$\"\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_details\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$return_value$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-return-value",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1044,
+      "y": 1405
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "24",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$return_value$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"not_placed\"\n              }\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_status\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"Shopping Cart is empty!\"\n              }\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"reason\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$return_value$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-return-value",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 3304,
+      "y": 181
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "25",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$document$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"{}\"\n              }\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"stringFunction\": {\n                  \"functionName\": \"TO_JSON\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"SET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"baseFunction\": {\n                    \"functionType\": {\n                      \"baseFunction\": {\n                        \"functionName\": \"GET_UUID\"\n                      }\n                    }\n                  }\n                },\n                \"transformationFunctions\": [{\n                  \"functionType\": {\n                    \"stringFunction\": {\n                      \"functionName\": \"SUBSTRING\"\n                    }\n                  },\n                  \"parameters\": [{\n                    \"initialValue\": {\n                      \"literalValue\": {\n                        \"intValue\": \"0\"\n                      }\n                    }\n                  }, {\n                    \"initialValue\": {\n                      \"literalValue\": {\n                        \"intValue\": \"8\"\n                      }\n                    }\n                  }]\n                }]\n              }, {\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"stringValue\"\n                  }\n                }\n              }]\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_id\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"{\\\"stringValue\\\": \\\"confirmed\\\"}\"\n              }\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"stringFunction\": {\n                  \"functionName\": \"TO_JSON\"\n                }\n              }\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_status\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"{}\"\n              }\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"stringFunction\": {\n                  \"functionName\": \"TO_JSON\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"SET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"baseFunction\": {\n                    \"functionType\": {\n                      \"baseFunction\": {\n                        \"functionName\": \"NOW_IN_MILLIS\"\n                      }\n                    }\n                  }\n                },\n                \"transformationFunctions\": [{\n                  \"functionType\": {\n                    \"intFunction\": {\n                      \"functionName\": \"EPOCH_TO_HUMAN_READABLE_TIME\"\n                    }\n                  },\n                  \"parameters\": [{\n                    \"initialValue\": {\n                      \"literalValue\": {\n                        \"stringValue\": \"yyyy-MM-dd\\u0027T\\u0027HH:mm:ss.SSS\\u0027Z\\u0027\"\n                      }\n                    }\n                  }, {\n                    \"initialValue\": {\n                      \"literalValue\": {\n                        \"stringValue\": \"UTC\"\n                      }\n                    }\n                  }]\n                }]\n              }, {\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"stringValue\"\n                  }\n                }\n              }]\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_created_on\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$products_proto$\"\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"products\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$document$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"baseFunction\": {\n            \"functionType\": {\n              \"baseFunction\": {\n                \"functionName\": \"GET_PROJECT_ID\"\n              }\n            }\n          }\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$project_id$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "27"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "get-firestore-params",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 2824,
+      "y": 317
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "27",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"{}\"\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"[]\"\n              }\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"stringFunction\": {\n                  \"functionName\": \"TO_JSON\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"APPEND_ELEMENT\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"{\\\"currentDocument\\\": {\\\"exists\\\": false}}\"\n                  }\n                },\n                \"transformationFunctions\": [{\n                  \"functionType\": {\n                    \"stringFunction\": {\n                      \"functionName\": \"TO_JSON\"\n                    }\n                  }\n                }, {\n                  \"functionType\": {\n                    \"jsonFunction\": {\n                      \"functionName\": \"SET_PROPERTY\"\n                    }\n                  },\n                  \"parameters\": [{\n                    \"initialValue\": {\n                      \"literalValue\": {\n                        \"stringValue\": \"{}\"\n                      }\n                    },\n                    \"transformationFunctions\": [{\n                      \"functionType\": {\n                        \"stringFunction\": {\n                          \"functionName\": \"TO_JSON\"\n                        }\n                      }\n                    }, {\n                      \"functionType\": {\n                        \"jsonFunction\": {\n                          \"functionName\": \"SET_PROPERTY\"\n                        }\n                      },\n                      \"parameters\": [{\n                        \"initialValue\": {\n                          \"literalValue\": {\n                            \"stringValue\": \"projects/\"\n                          }\n                        },\n                        \"transformationFunctions\": [{\n                          \"functionType\": {\n                            \"stringFunction\": {\n                              \"functionName\": \"CONCAT\"\n                            }\n                          },\n                          \"parameters\": [{\n                            \"initialValue\": {\n                              \"baseFunction\": {\n                                \"functionType\": {\n                                  \"baseFunction\": {\n                                    \"functionName\": \"GET_PROJECT_ID\"\n                                  }\n                                }\n                              }\n                            }\n                          }]\n                        }, {\n                          \"functionType\": {\n                            \"stringFunction\": {\n                              \"functionName\": \"CONCAT\"\n                            }\n                          },\n                          \"parameters\": [{\n                            \"initialValue\": {\n                              \"literalValue\": {\n                                \"stringValue\": \"/databases/apparel-db\"\n                              }\n                            }\n                          }]\n                        }, {\n                          \"functionType\": {\n                            \"stringFunction\": {\n                              \"functionName\": \"CONCAT\"\n                            }\n                          },\n                          \"parameters\": [{\n                            \"initialValue\": {\n                              \"literalValue\": {\n                                \"stringValue\": \"/documents/orders/\"\n                              }\n                            }\n                          }]\n                        }, {\n                          \"functionType\": {\n                            \"stringFunction\": {\n                              \"functionName\": \"CONCAT\"\n                            }\n                          },\n                          \"parameters\": [{\n                            \"initialValue\": {\n                              \"referenceValue\": \"$document$\"\n                            },\n                            \"transformationFunctions\": [{\n                              \"functionType\": {\n                                \"jsonFunction\": {\n                                  \"functionName\": \"GET_PROPERTY\"\n                                }\n                              },\n                              \"parameters\": [{\n                                \"initialValue\": {\n                                  \"literalValue\": {\n                                    \"stringValue\": \"order_id.stringValue\"\n                                  }\n                                }\n                              }]\n                            }]\n                          }]\n                        }]\n                      }, {\n                        \"initialValue\": {\n                          \"literalValue\": {\n                            \"stringValue\": \"name\"\n                          }\n                        }\n                      }]\n                    }, {\n                      \"functionType\": {\n                        \"jsonFunction\": {\n                          \"functionName\": \"SET_PROPERTY\"\n                        }\n                      },\n                      \"parameters\": [{\n                        \"initialValue\": {\n                          \"referenceValue\": \"$document$\"\n                        }\n                      }, {\n                        \"initialValue\": {\n                          \"literalValue\": {\n                            \"stringValue\": \"fields\"\n                          }\n                        }\n                      }]\n                    }]\n                  }, {\n                    \"initialValue\": {\n                      \"literalValue\": {\n                        \"stringValue\": \"update\"\n                      }\n                    }\n                  }]\n                }]\n              }]\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"writes\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$create_request_body$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "35"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-create_request_body-variable",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 2824,
+      "y": 453
+    }
+  }, {
+    "task": "JavaScriptTask",
+    "taskId": "28",
+    "parameters": {
+      "script": {
+        "key": "script",
+        "value": {
+          "stringValue": "/**\n * Function that is called during the JavaScript Task execution.\n * @param {IntegrationEvent} event\n */\nfunction executeScript(event) {\n    function toProto(value) {\n        switch (typeof value) {\n            case \"bigint\":\n                return {integerValue: value.toString()};\n            case \"number\":\n                return Number.isInteger(value) ? {integerValue: value.toString()} : {doubleValue: value};\n            case \"boolean\":\n                return {booleanValue: value};\n            case \"string\":\n                return {stringValue: value};\n            case \"undefined\":\n                return {nullValue: value};\n            case \"object\":\n                if (Array.isArray(value)) {\n                    return {arrayValue: {values: value.map(toProto)}};\n                 }\n                else {\n                    const fields \u003d {};\n                    Object.keys(value).forEach(key \u003d\u003e {\n                        fields[key] \u003d toProto(value[key]);\n                    });\n                    return {mapValue: {fields: fields}};\n                }\n        }\n    }\n    event.setParameter(\"products_proto\", toProto(event.getParameter(\"cart\").products));\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "25"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-products_proto",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 2824,
+      "y": 181
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "29",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"{}\"\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$document$\"\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"GET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"order_id.stringValue\"\n                  }\n                }\n              }]\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_id\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$document$\"\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"GET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"order_status.stringValue\"\n                  }\n                }\n              }]\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_status\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$document$\"\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"GET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"order_created_on.stringValue\"\n                  }\n                }\n              }]\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"order_created_on\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$products$\"\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"products\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$return_value$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-return-value",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 2824,
+      "y": 861
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "3",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_31_connectorOutputPayload`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_ELEMENT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"0\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"ResponseBody\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"TO_STRING\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"fields\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$document$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "11"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-document-variable",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1016,
+      "y": 725
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "30",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"{\\\"order_status\\\": \\\"not_placed\\\",\\\"reason\\\": \\\"Internal Server Error!\\\"}\"\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$return_value$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-return-value",
+    "externalTaskType": "ERROR_TASK",
+    "position": {
+      "x": 4264,
+      "y": 181
+    }
+  }, {
+    "task": "GenericConnectorTask",
+    "taskId": "31",
+    "parameters": {
+      "connectorInputPayload": {
+        "key": "connectorInputPayload",
+        "value": {
+          "stringValue": "$`Task_31_connectorInputPayload`$"
+        }
+      },
+      "connectionName": {
+        "key": "connectionName",
+        "value": {
+          "stringValue": "projects/YOUR-PROJECT-ID/locations/us-central1/connections/firestore"
+        }
+      },
+      "connectorOutputPayload": {
+        "key": "connectorOutputPayload",
+        "value": {
+          "stringValue": "$`Task_31_connectorOutputPayload`$"
+        }
+      },
+      "operation": {
+        "key": "operation",
+        "value": {
+          "stringValue": "EXECUTE_ACTION"
+        }
+      },
+      "connectionVersion": {
+        "key": "connectionVersion",
+        "value": {
+          "stringValue": "projects/YOUR-PROJECT-ID/locations/global/providers/gcp/connectors/firestore/versions/1"
+        }
+      },
+      "actionName": {
+        "key": "actionName",
+        "value": {
+          "stringValue": "GET_v1/%7Bname%7D**notused**b332d7ee-5511-42ec-8b67-68892be524b7"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "3"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "firestore-get-order",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1016,
+      "y": 589
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "32",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"{}\"\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"{}\"\n              }\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"stringFunction\": {\n                  \"functionName\": \"TO_JSON\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"SET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"projects/\"\n                  }\n                },\n                \"transformationFunctions\": [{\n                  \"functionType\": {\n                    \"stringFunction\": {\n                      \"functionName\": \"CONCAT\"\n                    }\n                  },\n                  \"parameters\": [{\n                    \"initialValue\": {\n                      \"baseFunction\": {\n                        \"functionType\": {\n                          \"baseFunction\": {\n                            \"functionName\": \"GET_PROJECT_ID\"\n                          }\n                        }\n                      }\n                    }\n                  }]\n                }, {\n                  \"functionType\": {\n                    \"stringFunction\": {\n                      \"functionName\": \"CONCAT\"\n                    }\n                  },\n                  \"parameters\": [{\n                    \"initialValue\": {\n                      \"literalValue\": {\n                        \"stringValue\": \"/databases/apparel-db/documents/\"\n                      }\n                    }\n                  }]\n                }, {\n                  \"functionType\": {\n                    \"stringFunction\": {\n                      \"functionName\": \"CONCAT\"\n                    }\n                  },\n                  \"parameters\": [{\n                    \"initialValue\": {\n                      \"referenceValue\": \"$document_path$\"\n                    }\n                  }]\n                }]\n              }, {\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"name\"\n                  }\n                }\n              }]\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"Path parameters\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_31_connectorInputPayload`$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "synchronousCallFailurePolicy": {
+    },
+    "nextTasks": [{
+      "taskId": "31"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-get-firestore-order-input",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1016,
+      "y": 453
+    },
+    "errorCatcherId": "order-not-found"
+  }, {
+    "task": "GenericConnectorTask",
+    "taskId": "33",
+    "parameters": {
+      "connectorInputPayload": {
+        "key": "connectorInputPayload",
+        "value": {
+          "stringValue": "$`Task_33_connectorInputPayload`$"
+        }
+      },
+      "connectionName": {
+        "key": "connectionName",
+        "value": {
+          "stringValue": "projects/YOUR-PROJECT-ID/locations/us-central1/connections/firestore"
+        }
+      },
+      "connectorOutputPayload": {
+        "key": "connectorOutputPayload",
+        "value": {
+          "stringValue": "$`Task_33_connectorOutputPayload`$"
+        }
+      },
+      "operation": {
+        "key": "operation",
+        "value": {
+          "stringValue": "EXECUTE_ACTION"
+        }
+      },
+      "connectionVersion": {
+        "key": "connectionVersion",
+        "value": {
+          "stringValue": "projects/YOUR-PROJECT-ID/locations/global/providers/gcp/connectors/firestore/versions/1"
+        }
+      },
+      "actionName": {
+        "key": "actionName",
+        "value": {
+          "stringValue": "POST_v1/%7Bdatabase%7D/documents%3AbatchWrite"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "firestore-return-order",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 564,
+      "y": 1269
+    }
+  }, {
+    "task": "GenericConnectorTask",
+    "taskId": "34",
+    "parameters": {
+      "connectorInputPayload": {
+        "key": "connectorInputPayload",
+        "value": {
+          "stringValue": "$`Task_34_connectorInputPayload`$"
+        }
+      },
+      "connectionName": {
+        "key": "connectionName",
+        "value": {
+          "stringValue": "projects/YOUR-PROJECT-ID/locations/us-central1/connections/firestore"
+        }
+      },
+      "connectorOutputPayload": {
+        "key": "connectorOutputPayload",
+        "value": {
+          "stringValue": "$`Task_34_connectorOutputPayload`$"
+        }
+      },
+      "operation": {
+        "key": "operation",
+        "value": {
+          "stringValue": "EXECUTE_ACTION"
+        }
+      },
+      "connectionVersion": {
+        "key": "connectionVersion",
+        "value": {
+          "stringValue": "projects/YOUR-PROJECT-ID/locations/global/providers/gcp/connectors/firestore/versions/1"
+        }
+      },
+      "actionName": {
+        "key": "actionName",
+        "value": {
+          "stringValue": "POST_v1/%7Bdatabase%7D/documents%3AbatchWrite"
+        }
+      }
+    },
+    "synchronousCallFailurePolicy": {
+    },
+    "nextTasks": [{
+      "taskId": "29"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "firestore-place-order",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 2824,
+      "y": 725
+    },
+    "errorCatcherId": "order-placement-error"
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "35",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"{}\"\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"{}\"\n              }\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"stringFunction\": {\n                  \"functionName\": \"TO_JSON\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"SET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"projects/\"\n                  }\n                },\n                \"transformationFunctions\": [{\n                  \"functionType\": {\n                    \"stringFunction\": {\n                      \"functionName\": \"CONCAT\"\n                    }\n                  },\n                  \"parameters\": [{\n                    \"initialValue\": {\n                      \"baseFunction\": {\n                        \"functionType\": {\n                          \"baseFunction\": {\n                            \"functionName\": \"GET_PROJECT_ID\"\n                          }\n                        }\n                      }\n                    }\n                  }]\n                }, {\n                  \"functionType\": {\n                    \"stringFunction\": {\n                      \"functionName\": \"CONCAT\"\n                    }\n                  },\n                  \"parameters\": [{\n                    \"initialValue\": {\n                      \"literalValue\": {\n                        \"stringValue\": \"/databases/apparel-db\"\n                      }\n                    }\n                  }]\n                }]\n              }, {\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"database\"\n                  }\n                }\n              }]\n            }]\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"Path parameters\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"SET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$create_request_body$\"\n            }\n          }, {\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"RequestBody\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_34_connectorInputPayload`$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "synchronousCallFailurePolicy": {
+    },
+    "nextTasks": [{
+      "taskId": "34"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-firestore-place-order-input",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 2824,
+      "y": 589
+    }
+  }, {
+    "task": "JavaScriptTask",
+    "taskId": "6",
+    "parameters": {
+      "script": {
+        "key": "script",
+        "value": {
+          "stringValue": "\n/**\n * Function that is called during the JavaScript Task execution.\n * @param {IntegrationEvent} event\n */\nfunction executeScript(event) {\n  event.setParameter(\"`Task_33_connectorInputPayload`\", {\n    \"Path parameters\": {\n      \"database\": \"projects/\" + event.getParameter(\"project_id\") + \"/databases/apparel-db\"\n    },\n    \"RequestBody\": {    \n      \"writes\": [{\n        \"currentDocument\": {\"exists\": true},\n        \"updateMask\": { \"fieldPaths\": [\"order_status\"] },\n        \"update\": {\n          \"name\": \"projects/\" + event.getParameter(\"project_id\") + \"/databases/apparel-db/documents/\" + event.getParameter(\"document_path\"),\n          \"fields\": {\n            \"order_status\": {\n              \"stringValue\": \"return_pending\"\n            }\n          }\n        }\n      }]\n    }\n  });\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "33"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-firestore-update-request",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 564,
+      "y": 1133
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "8",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"lookup-order\"\n          }\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$endpoint$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "2"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-endpoint",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 536,
+      "y": 181
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "9",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"return-order\"\n          }\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$endpoint$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "2"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "set-endpoint",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1016,
+      "y": 181
+    }
+  }],
+  "integrationParameters": [{
+    "key": "project_id",
+    "dataType": "STRING_VALUE",
+    "displayName": "project_id"
+  }, {
+    "key": "document_path",
+    "dataType": "STRING_VALUE",
+    "displayName": "document_path"
+  }, {
+    "key": "update-request",
+    "dataType": "JSON_VALUE",
+    "displayName": "update-request"
+  }, {
+    "key": "endpoint",
+    "dataType": "STRING_VALUE",
+    "displayName": "endpoint"
+  }, {
+    "key": "order",
+    "dataType": "JSON_VALUE",
+    "displayName": "order"
+  }, {
+    "key": "order_id",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "order_id",
+    "inputOutputType": "IN"
+  }, {
+    "key": "order_status",
+    "dataType": "STRING_VALUE",
+    "displayName": "order_status"
+  }, {
+    "key": "`Task_17_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_17_responseHeader`",
+    "isTransient": true,
+    "producer": "1_17"
+  }, {
+    "key": "`Task_17_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_17_responseBody`",
+    "isTransient": true,
+    "producer": "1_17"
+  }, {
+    "key": "`Task_17_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_17_responseStatus`",
+    "isTransient": true,
+    "producer": "1_17"
+  }, {
+    "key": "return_value",
+    "dataType": "JSON_VALUE",
+    "defaultValue": {
+      "jsonValue": "{\n}"
+    },
+    "displayName": "return_value",
+    "inputOutputType": "OUT"
+  }, {
+    "key": "trackingInfo",
+    "dataType": "JSON_VALUE",
+    "displayName": "trackingInfo"
+  }, {
+    "key": "document",
+    "dataType": "JSON_VALUE",
+    "defaultValue": {
+      "jsonValue": "{\n}"
+    },
+    "displayName": "document"
+  }, {
+    "key": "products_proto",
+    "dataType": "JSON_VALUE",
+    "displayName": "products_proto"
+  }, {
+    "key": "cart",
+    "dataType": "JSON_VALUE",
+    "defaultValue": {
+      "jsonValue": "{\n  \"products\": []\n}"
+    },
+    "displayName": "cart",
+    "inputOutputType": "IN",
+    "jsonSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"products\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\"\n          },\n          \"title\": {\n            \"type\": \"string\"\n          },\n          \"size\": {\n            \"type\": \"string\"\n          },\n          \"quantity\": {\n            \"type\": \"number\"\n          },\n          \"delivery_date\": {\n            \"type\": \"string\"\n          },\n          \"earliest_delivery_date\": {\n            \"type\": \"string\"\n          }\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "key": "`Task_31_connectorInputPayload`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_31_connectorInputPayload`",
+    "producer": "1_31",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"ResponseHasBytes\": {\n      \"type\": \"boolean\",\n      \"description\": \"Indicates if response has bytes\"\n    },\n    \"Query parameters\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"readTime\": {\n          \"type\": \"string\",\n          \"description\": \"Reads the version of the document at the given time. This must be a microsecond precision timestamp within the past one hour, or if Point-in-Time Recovery is enabled, can additionally be a whole minute timestamp within the past 7 days.\",\n          \"format\": \"google-datetime\"\n        },\n        \"transaction\": {\n          \"type\": \"string\",\n          \"description\": \"Reads the document in a transaction.\",\n          \"format\": \"byte\"\n        },\n        \"mask.fieldPaths\": {\n          \"type\": \"string\",\n          \"description\": \"The list of field paths in the mask. See Document.fields for a field path syntax reference.\"\n        }\n      }\n    },\n    \"Path parameters\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"name\": {\n          \"type\": \"string\",\n          \"description\": \"Required. The resource name of the Document to get. In the format: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n        }\n      }\n    },\n    \"Headers\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"x-goog-request-params\": {\n          \"type\": \"string\",\n          \"description\": \"Routing parameter with format: project_id\\u003d{project_id}\\u0026database_id\\u003d{database_id}\"\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "key": "`Task_31_connectorOutputPayload`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_31_connectorOutputPayload`",
+    "isTransient": true,
+    "producer": "1_31",
+    "jsonSchema": "{\n  \"type\": \"array\",\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"Status\": {\n        \"type\": \"number\",\n        \"description\": \"Status Code received.\"\n      },\n      \"ResponseBody\": {\n        \"type\": \"string\"\n      },\n      \"ResponseHeaders\": {\n        \"type\": \"object\",\n        \"description\": \"Response headers. Will consist of (key,value) and (key, list of value) pairs.\"\n      }\n    },\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n  }\n}"
+  }, {
+    "key": "`Task_33_connectorInputPayload`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_33_connectorInputPayload`",
+    "producer": "1_33",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"RequestBody\": {\n      \"type\": \"object\",\n      \"description\": \"The request for Firestore.BatchWrite.\",\n      \"properties\": {\n        \"writes\": {\n          \"type\": \"array\",\n          \"description\": \"The writes to apply. Method does not apply writes atomically and does not guarantee ordering. Each write succeeds or fails independently. You cannot write to the same document more than once per request.\",\n          \"items\": {\n            \"type\": \"object\",\n            \"description\": \"A write on a document.\",\n            \"properties\": {\n              \"updateMask\": {\n                \"type\": \"object\",\n                \"description\": \"A set of field paths on a document. Used to restrict a get or update operation on a document to a subset of its fields. This is different from standard field masks, as this is always scoped to a Document, and takes in account the dynamic nature of Value.\",\n                \"properties\": {\n                  \"fieldPaths\": {\n                    \"type\": \"array\",\n                    \"description\": \"The list of field paths in the mask. See Document.fields for a field path syntax reference.\",\n                    \"items\": {\n                      \"type\": \"string\"\n                    }\n                  }\n                }\n              },\n              \"updateTransforms\": {\n                \"type\": \"array\",\n                \"description\": \"The transforms to perform after update. This field can be set only when the operation is `update`. If present, this write is equivalent to performing `update` and `transform` to the same document atomically and in order.\",\n                \"items\": {\n                  \"type\": \"object\",\n                  \"description\": \"A transformation of a field of the document.\",\n                  \"properties\": {\n                    \"fieldPath\": {\n                      \"type\": \"string\",\n                      \"description\": \"The path of the field. See Document.fields for the field path syntax reference.\"\n                    },\n                    \"increment\": {\n                      \"type\": \"object\",\n                      \"description\": \"A message that can hold any of the supported value types.\",\n                      \"properties\": {\n                        \"booleanValue\": {\n                          \"type\": \"boolean\",\n                          \"description\": \"A boolean value.\"\n                        },\n                        \"referenceValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                        },\n                        \"geoPointValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                          \"properties\": {\n                            \"longitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                              \"format\": \"double\"\n                            },\n                            \"latitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                              \"format\": \"double\"\n                            }\n                          }\n                        },\n                        \"doubleValue\": {\n                          \"type\": \"number\",\n                          \"description\": \"A double value.\",\n                          \"format\": \"double\"\n                        },\n                        \"stringValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                        },\n                        \"nullValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A null value.\"\n                        },\n                        \"mapValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"A map value.\",\n                          \"properties\": {\n                            \"fields\": {\n                              \"type\": \"object\",\n                              \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                            }\n                          }\n                        },\n                        \"timestampValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                          \"format\": \"google-datetime\"\n                        },\n                        \"integerValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"An integer value.\",\n                          \"format\": \"int64\"\n                        },\n                        \"bytesValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                          \"format\": \"byte\"\n                        },\n                        \"arrayValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\"\n                            }\n                          }\n                        }\n                      }\n                    },\n                    \"maximum\": {\n                      \"type\": \"object\",\n                      \"description\": \"A message that can hold any of the supported value types.\",\n                      \"properties\": {\n                        \"mapValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"A map value.\",\n                          \"properties\": {\n                            \"fields\": {\n                              \"type\": \"object\",\n                              \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                            }\n                          }\n                        },\n                        \"integerValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"An integer value.\",\n                          \"format\": \"int64\"\n                        },\n                        \"nullValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A null value.\"\n                        },\n                        \"arrayValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\"\n                            }\n                          }\n                        },\n                        \"bytesValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                          \"format\": \"byte\"\n                        },\n                        \"doubleValue\": {\n                          \"type\": \"number\",\n                          \"description\": \"A double value.\",\n                          \"format\": \"double\"\n                        },\n                        \"geoPointValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                          \"properties\": {\n                            \"latitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                              \"format\": \"double\"\n                            },\n                            \"longitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                              \"format\": \"double\"\n                            }\n                          }\n                        },\n                        \"referenceValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                        },\n                        \"booleanValue\": {\n                          \"type\": \"boolean\",\n                          \"description\": \"A boolean value.\"\n                        },\n                        \"stringValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                        },\n                        \"timestampValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                          \"format\": \"google-datetime\"\n                        }\n                      }\n                    },\n                    \"minimum\": {\n                      \"type\": \"object\",\n                      \"description\": \"A message that can hold any of the supported value types.\",\n                      \"properties\": {\n                        \"booleanValue\": {\n                          \"type\": \"boolean\",\n                          \"description\": \"A boolean value.\"\n                        },\n                        \"stringValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                        },\n                        \"arrayValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\"\n                            }\n                          }\n                        },\n                        \"timestampValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                          \"format\": \"google-datetime\"\n                        },\n                        \"bytesValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                          \"format\": \"byte\"\n                        },\n                        \"doubleValue\": {\n                          \"type\": \"number\",\n                          \"description\": \"A double value.\",\n                          \"format\": \"double\"\n                        },\n                        \"mapValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"A map value.\",\n                          \"properties\": {\n                            \"fields\": {\n                              \"type\": \"object\",\n                              \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                            }\n                          }\n                        },\n                        \"integerValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"An integer value.\",\n                          \"format\": \"int64\"\n                        },\n                        \"referenceValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                        },\n                        \"geoPointValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                          \"properties\": {\n                            \"latitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                              \"format\": \"double\"\n                            },\n                            \"longitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                              \"format\": \"double\"\n                            }\n                          }\n                        },\n                        \"nullValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A null value.\"\n                        }\n                      }\n                    },\n                    \"removeAllFromArray\": {\n                      \"type\": \"object\",\n                      \"description\": \"An array value.\",\n                      \"properties\": {\n                        \"values\": {\n                          \"type\": \"array\",\n                          \"description\": \"Values in the array.\",\n                          \"items\": {\n                            \"type\": \"object\",\n                            \"description\": \"A message that can hold any of the supported value types.\",\n                            \"properties\": {\n                              \"geoPointValue\": {\n                                \"type\": \"object\",\n                                \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                                \"properties\": {\n                                  \"latitude\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                    \"format\": \"double\"\n                                  },\n                                  \"longitude\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                    \"format\": \"double\"\n                                  }\n                                }\n                              },\n                              \"booleanValue\": {\n                                \"type\": \"boolean\",\n                                \"description\": \"A boolean value.\"\n                              },\n                              \"nullValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A null value.\"\n                              },\n                              \"integerValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"An integer value.\",\n                                \"format\": \"int64\"\n                              },\n                              \"referenceValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                              },\n                              \"stringValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                              },\n                              \"doubleValue\": {\n                                \"type\": \"number\",\n                                \"description\": \"A double value.\",\n                                \"format\": \"double\"\n                              },\n                              \"timestampValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                                \"format\": \"google-datetime\"\n                              },\n                              \"bytesValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                                \"format\": \"byte\"\n                              },\n                              \"mapValue\": {\n                                \"type\": \"object\",\n                                \"description\": \"A map value.\",\n                                \"properties\": {\n                                  \"fields\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                  }\n                                }\n                              }\n                            }\n                          }\n                        }\n                      }\n                    },\n                    \"setToServerValue\": {\n                      \"type\": \"string\",\n                      \"description\": \"Sets the field to the given server value.\"\n                    },\n                    \"appendMissingElements\": {\n                      \"type\": \"object\",\n                      \"description\": \"An array value.\",\n                      \"properties\": {\n                        \"values\": {\n                          \"type\": \"array\",\n                          \"description\": \"Values in the array.\",\n                          \"items\": {\n                            \"type\": \"object\",\n                            \"description\": \"A message that can hold any of the supported value types.\",\n                            \"properties\": {\n                              \"booleanValue\": {\n                                \"type\": \"boolean\",\n                                \"description\": \"A boolean value.\"\n                              },\n                              \"bytesValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                                \"format\": \"byte\"\n                              },\n                              \"mapValue\": {\n                                \"type\": \"object\",\n                                \"description\": \"A map value.\",\n                                \"properties\": {\n                                  \"fields\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                  }\n                                }\n                              },\n                              \"doubleValue\": {\n                                \"type\": \"number\",\n                                \"description\": \"A double value.\",\n                                \"format\": \"double\"\n                              },\n                              \"nullValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A null value.\"\n                              },\n                              \"stringValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                              },\n                              \"timestampValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                                \"format\": \"google-datetime\"\n                              },\n                              \"referenceValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                              },\n                              \"geoPointValue\": {\n                                \"type\": \"object\",\n                                \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                                \"properties\": {\n                                  \"latitude\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                    \"format\": \"double\"\n                                  },\n                                  \"longitude\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                    \"format\": \"double\"\n                                  }\n                                }\n                              },\n                              \"integerValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"An integer value.\",\n                                \"format\": \"int64\"\n                              }\n                            }\n                          }\n                        }\n                      }\n                    }\n                  }\n                }\n              },\n              \"currentDocument\": {\n                \"type\": \"object\",\n                \"description\": \"A precondition on a document, used for conditional operations.\",\n                \"properties\": {\n                  \"updateTime\": {\n                    \"type\": \"string\",\n                    \"description\": \"When set, the target document must exist and have been last updated at that time. Timestamp must be microsecond aligned.\",\n                    \"format\": \"google-datetime\"\n                  },\n                  \"exists\": {\n                    \"type\": \"boolean\",\n                    \"description\": \"When set to `true`, the target document must exist. When set to `false`, the target document must not exist.\"\n                  }\n                }\n              },\n              \"delete\": {\n                \"type\": \"string\",\n                \"description\": \"A document name to delete. In the format: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n              },\n              \"transform\": {\n                \"type\": \"object\",\n                \"description\": \"A transformation of a document.\",\n                \"properties\": {\n                  \"fieldTransforms\": {\n                    \"type\": \"array\",\n                    \"description\": \"The list of transformations to apply to the fields of the document, in order. This must not be empty.\",\n                    \"items\": {\n                      \"type\": \"object\",\n                      \"description\": \"A transformation of a field of the document.\",\n                      \"properties\": {\n                        \"maximum\": {\n                          \"type\": \"object\",\n                          \"description\": \"A message that can hold any of the supported value types.\",\n                          \"properties\": {\n                            \"bytesValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                              \"format\": \"byte\"\n                            },\n                            \"integerValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"An integer value.\",\n                              \"format\": \"int64\"\n                            },\n                            \"arrayValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An array value.\",\n                              \"properties\": {\n                                \"values\": {\n                                  \"type\": \"array\",\n                                  \"description\": \"Values in the array.\"\n                                }\n                              }\n                            },\n                            \"doubleValue\": {\n                              \"type\": \"number\",\n                              \"description\": \"A double value.\",\n                              \"format\": \"double\"\n                            },\n                            \"booleanValue\": {\n                              \"type\": \"boolean\",\n                              \"description\": \"A boolean value.\"\n                            },\n                            \"referenceValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                            },\n                            \"nullValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A null value.\"\n                            },\n                            \"stringValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                            },\n                            \"geoPointValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                              \"properties\": {\n                                \"latitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                  \"format\": \"double\"\n                                },\n                                \"longitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                  \"format\": \"double\"\n                                }\n                              }\n                            },\n                            \"timestampValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                              \"format\": \"google-datetime\"\n                            },\n                            \"mapValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"A map value.\",\n                              \"properties\": {\n                                \"fields\": {\n                                  \"type\": \"object\",\n                                  \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                }\n                              }\n                            }\n                          }\n                        },\n                        \"minimum\": {\n                          \"type\": \"object\",\n                          \"description\": \"A message that can hold any of the supported value types.\",\n                          \"properties\": {\n                            \"arrayValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An array value.\",\n                              \"properties\": {\n                                \"values\": {\n                                  \"type\": \"array\",\n                                  \"description\": \"Values in the array.\"\n                                }\n                              }\n                            },\n                            \"doubleValue\": {\n                              \"type\": \"number\",\n                              \"description\": \"A double value.\",\n                              \"format\": \"double\"\n                            },\n                            \"referenceValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                            },\n                            \"geoPointValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                              \"properties\": {\n                                \"latitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                  \"format\": \"double\"\n                                },\n                                \"longitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                  \"format\": \"double\"\n                                }\n                              }\n                            },\n                            \"stringValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                            },\n                            \"booleanValue\": {\n                              \"type\": \"boolean\",\n                              \"description\": \"A boolean value.\"\n                            },\n                            \"nullValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A null value.\"\n                            },\n                            \"bytesValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                              \"format\": \"byte\"\n                            },\n                            \"mapValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"A map value.\",\n                              \"properties\": {\n                                \"fields\": {\n                                  \"type\": \"object\",\n                                  \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                }\n                              }\n                            },\n                            \"integerValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"An integer value.\",\n                              \"format\": \"int64\"\n                            },\n                            \"timestampValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                              \"format\": \"google-datetime\"\n                            }\n                          }\n                        },\n                        \"removeAllFromArray\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\",\n                              \"items\": {\n                                \"type\": \"object\",\n                                \"description\": \"A message that can hold any of the supported value types.\",\n                                \"properties\": {\n                                  \"doubleValue\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"A double value.\",\n                                    \"format\": \"double\"\n                                  },\n                                  \"nullValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A null value.\"\n                                  },\n                                  \"referenceValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                                  },\n                                  \"integerValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"An integer value.\",\n                                    \"format\": \"int64\"\n                                  },\n                                  \"mapValue\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"A map value.\",\n                                    \"properties\": {\n                                      \"fields\": {\n                                        \"type\": \"object\",\n                                        \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                      }\n                                    }\n                                  },\n                                  \"bytesValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                                    \"format\": \"byte\"\n                                  },\n                                  \"geoPointValue\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                                    \"properties\": {\n                                      \"longitude\": {\n                                        \"type\": \"number\",\n                                        \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                        \"format\": \"double\"\n                                      },\n                                      \"latitude\": {\n                                        \"type\": \"number\",\n                                        \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                        \"format\": \"double\"\n                                      }\n                                    }\n                                  },\n                                  \"timestampValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                                    \"format\": \"google-datetime\"\n                                  },\n                                  \"stringValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                                  },\n                                  \"booleanValue\": {\n                                    \"type\": \"boolean\",\n                                    \"description\": \"A boolean value.\"\n                                  }\n                                }\n                              }\n                            }\n                          }\n                        },\n                        \"setToServerValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"Sets the field to the given server value.\"\n                        },\n                        \"appendMissingElements\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\",\n                              \"items\": {\n                                \"type\": \"object\",\n                                \"description\": \"A message that can hold any of the supported value types.\",\n                                \"properties\": {\n                                  \"nullValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A null value.\"\n                                  },\n                                  \"integerValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"An integer value.\",\n                                    \"format\": \"int64\"\n                                  },\n                                  \"geoPointValue\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                                    \"properties\": {\n                                      \"latitude\": {\n                                        \"type\": \"number\",\n                                        \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                        \"format\": \"double\"\n                                      },\n                                      \"longitude\": {\n                                        \"type\": \"number\",\n                                        \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                        \"format\": \"double\"\n                                      }\n                                    }\n                                  },\n                                  \"stringValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                                  },\n                                  \"timestampValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                                    \"format\": \"google-datetime\"\n                                  },\n                                  \"bytesValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                                    \"format\": \"byte\"\n                                  },\n                                  \"doubleValue\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"A double value.\",\n                                    \"format\": \"double\"\n                                  },\n                                  \"mapValue\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"A map value.\",\n                                    \"properties\": {\n                                      \"fields\": {\n                                        \"type\": \"object\",\n                                        \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                      }\n                                    }\n                                  },\n                                  \"referenceValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                                  },\n                                  \"booleanValue\": {\n                                    \"type\": \"boolean\",\n                                    \"description\": \"A boolean value.\"\n                                  }\n                                }\n                              }\n                            }\n                          }\n                        },\n                        \"fieldPath\": {\n                          \"type\": \"string\",\n                          \"description\": \"The path of the field. See Document.fields for the field path syntax reference.\"\n                        },\n                        \"increment\": {\n                          \"type\": \"object\",\n                          \"description\": \"A message that can hold any of the supported value types.\",\n                          \"properties\": {\n                            \"bytesValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                              \"format\": \"byte\"\n                            },\n                            \"mapValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"A map value.\",\n                              \"properties\": {\n                                \"fields\": {\n                                  \"type\": \"object\",\n                                  \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                }\n                              }\n                            },\n                            \"referenceValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                            },\n                            \"integerValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"An integer value.\",\n                              \"format\": \"int64\"\n                            },\n                            \"stringValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                            },\n                            \"booleanValue\": {\n                              \"type\": \"boolean\",\n                              \"description\": \"A boolean value.\"\n                            },\n                            \"nullValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A null value.\"\n                            },\n                            \"doubleValue\": {\n                              \"type\": \"number\",\n                              \"description\": \"A double value.\",\n                              \"format\": \"double\"\n                            },\n                            \"arrayValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An array value.\",\n                              \"properties\": {\n                                \"values\": {\n                                  \"type\": \"array\",\n                                  \"description\": \"Values in the array.\"\n                                }\n                              }\n                            },\n                            \"geoPointValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                              \"properties\": {\n                                \"latitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                  \"format\": \"double\"\n                                },\n                                \"longitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                  \"format\": \"double\"\n                                }\n                              }\n                            },\n                            \"timestampValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                              \"format\": \"google-datetime\"\n                            }\n                          }\n                        }\n                      }\n                    }\n                  },\n                  \"document\": {\n                    \"type\": \"string\",\n                    \"description\": \"The name of the document to transform.\"\n                  }\n                }\n              },\n              \"update\": {\n                \"type\": \"object\",\n                \"description\": \"A Firestore document. Must not exceed 1 MiB - 4 bytes.\",\n                \"properties\": {\n                  \"updateTime\": {\n                    \"type\": \"string\",\n                    \"description\": \"Output only. The time at which the document was last changed. This value is initially set to the `create_time` then increases monotonically with each change to the document. It can also be compared to values from other documents and the `read_time` of a query.\",\n                    \"format\": \"google-datetime\"\n                  },\n                  \"createTime\": {\n                    \"type\": \"string\",\n                    \"description\": \"Output only. The time at which the document was created. This value increases monotonically when a document is deleted then recreated. It can also be compared to values from other documents and the `read_time` of a query.\",\n                    \"format\": \"google-datetime\"\n                  },\n                  \"fields\": {\n                    \"type\": \"object\"\n                  },\n                  \"name\": {\n                    \"type\": \"string\",\n                    \"description\": \"The resource name of the document, for example `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                  }\n                }\n              }\n            }\n          }\n        },\n        \"labels\": {\n          \"type\": \"object\",\n          \"description\": \"Labels associated with this batch write.\"\n        }\n      }\n    },\n    \"RequestHasBytes\": {\n      \"type\": \"boolean\",\n      \"description\": \"Indicates if request has bytes\"\n    },\n    \"ResponseHasBytes\": {\n      \"type\": \"boolean\",\n      \"description\": \"Indicates if response has bytes\"\n    },\n    \"Path parameters\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"database\": {\n          \"type\": \"string\",\n          \"description\": \"Required. The database name. In the format: `projects/{project_id}/databases/{database_id}`.\"\n        }\n      }\n    },\n    \"Headers\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"x-goog-request-params\": {\n          \"type\": \"string\",\n          \"description\": \"Routing parameter with format: project_id\\u003d{project_id}\\u0026database_id\\u003d{database_id}\"\n        }\n      }\n    }\n  }\n}"
+  }, {
+    "key": "`Task_33_connectorOutputPayload`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_33_connectorOutputPayload`",
+    "isTransient": true,
+    "producer": "1_33",
+    "jsonSchema": "{\n  \"type\": \"array\",\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"Status\": {\n        \"type\": \"number\",\n        \"description\": \"Status Code received.\"\n      },\n      \"ResponseBody\": {\n        \"type\": \"string\"\n      },\n      \"ResponseHeaders\": {\n        \"type\": \"object\",\n        \"description\": \"Response headers. Will consist of (key,value) and (key, list of value) pairs.\"\n      }\n    },\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n  }\n}"
+  }, {
+    "key": "`Task_34_connectorInputPayload`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_34_connectorInputPayload`",
+    "producer": "1_34",
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"ResponseHasBytes\": {\n      \"type\": \"boolean\",\n      \"description\": \"Indicates if response has bytes\"\n    },\n    \"Path parameters\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"database\": {\n          \"type\": \"string\",\n          \"description\": \"Required. The database name. In the format: `projects/{project_id}/databases/{database_id}`.\"\n        }\n      }\n    },\n    \"Headers\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"x-goog-request-params\": {\n          \"type\": \"string\",\n          \"description\": \"Routing parameter with format: project_id\\u003d{project_id}\\u0026database_id\\u003d{database_id}\"\n        }\n      }\n    },\n    \"RequestBody\": {\n      \"type\": \"object\",\n      \"description\": \"The request for Firestore.BatchWrite.\",\n      \"properties\": {\n        \"labels\": {\n          \"type\": \"object\",\n          \"description\": \"Labels associated with this batch write.\"\n        },\n        \"writes\": {\n          \"type\": \"array\",\n          \"description\": \"The writes to apply. Method does not apply writes atomically and does not guarantee ordering. Each write succeeds or fails independently. You cannot write to the same document more than once per request.\",\n          \"items\": {\n            \"type\": \"object\",\n            \"description\": \"A write on a document.\",\n            \"properties\": {\n              \"delete\": {\n                \"type\": \"string\",\n                \"description\": \"A document name to delete. In the format: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n              },\n              \"transform\": {\n                \"type\": \"object\",\n                \"description\": \"A transformation of a document.\",\n                \"properties\": {\n                  \"fieldTransforms\": {\n                    \"type\": \"array\",\n                    \"description\": \"The list of transformations to apply to the fields of the document, in order. This must not be empty.\",\n                    \"items\": {\n                      \"type\": \"object\",\n                      \"description\": \"A transformation of a field of the document.\",\n                      \"properties\": {\n                        \"maximum\": {\n                          \"type\": \"object\",\n                          \"description\": \"A message that can hold any of the supported value types.\",\n                          \"properties\": {\n                            \"booleanValue\": {\n                              \"type\": \"boolean\",\n                              \"description\": \"A boolean value.\"\n                            },\n                            \"geoPointValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                              \"properties\": {\n                                \"latitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                  \"format\": \"double\"\n                                },\n                                \"longitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                  \"format\": \"double\"\n                                }\n                              }\n                            },\n                            \"nullValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A null value.\"\n                            },\n                            \"doubleValue\": {\n                              \"type\": \"number\",\n                              \"description\": \"A double value.\",\n                              \"format\": \"double\"\n                            },\n                            \"mapValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"A map value.\",\n                              \"properties\": {\n                                \"fields\": {\n                                  \"type\": \"object\",\n                                  \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                }\n                              }\n                            },\n                            \"stringValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                            },\n                            \"bytesValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                              \"format\": \"byte\"\n                            },\n                            \"arrayValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An array value.\",\n                              \"properties\": {\n                                \"values\": {\n                                  \"type\": \"array\",\n                                  \"description\": \"Values in the array.\"\n                                }\n                              }\n                            },\n                            \"timestampValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                              \"format\": \"google-datetime\"\n                            },\n                            \"referenceValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                            },\n                            \"integerValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"An integer value.\",\n                              \"format\": \"int64\"\n                            }\n                          }\n                        },\n                        \"minimum\": {\n                          \"type\": \"object\",\n                          \"description\": \"A message that can hold any of the supported value types.\",\n                          \"properties\": {\n                            \"geoPointValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                              \"properties\": {\n                                \"longitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                  \"format\": \"double\"\n                                },\n                                \"latitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                  \"format\": \"double\"\n                                }\n                              }\n                            },\n                            \"mapValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"A map value.\",\n                              \"properties\": {\n                                \"fields\": {\n                                  \"type\": \"object\",\n                                  \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                }\n                              }\n                            },\n                            \"arrayValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An array value.\",\n                              \"properties\": {\n                                \"values\": {\n                                  \"type\": \"array\",\n                                  \"description\": \"Values in the array.\"\n                                }\n                              }\n                            },\n                            \"nullValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A null value.\"\n                            },\n                            \"stringValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                            },\n                            \"timestampValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                              \"format\": \"google-datetime\"\n                            },\n                            \"referenceValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                            },\n                            \"booleanValue\": {\n                              \"type\": \"boolean\",\n                              \"description\": \"A boolean value.\"\n                            },\n                            \"bytesValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                              \"format\": \"byte\"\n                            },\n                            \"integerValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"An integer value.\",\n                              \"format\": \"int64\"\n                            },\n                            \"doubleValue\": {\n                              \"type\": \"number\",\n                              \"description\": \"A double value.\",\n                              \"format\": \"double\"\n                            }\n                          }\n                        },\n                        \"removeAllFromArray\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\",\n                              \"items\": {\n                                \"type\": \"object\",\n                                \"description\": \"A message that can hold any of the supported value types.\",\n                                \"properties\": {\n                                  \"integerValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"An integer value.\",\n                                    \"format\": \"int64\"\n                                  },\n                                  \"mapValue\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"A map value.\",\n                                    \"properties\": {\n                                      \"fields\": {\n                                        \"type\": \"object\",\n                                        \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                      }\n                                    }\n                                  },\n                                  \"timestampValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                                    \"format\": \"google-datetime\"\n                                  },\n                                  \"stringValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                                  },\n                                  \"referenceValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                                  },\n                                  \"doubleValue\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"A double value.\",\n                                    \"format\": \"double\"\n                                  },\n                                  \"bytesValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                                    \"format\": \"byte\"\n                                  },\n                                  \"nullValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A null value.\"\n                                  },\n                                  \"booleanValue\": {\n                                    \"type\": \"boolean\",\n                                    \"description\": \"A boolean value.\"\n                                  },\n                                  \"geoPointValue\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                                    \"properties\": {\n                                      \"longitude\": {\n                                        \"type\": \"number\",\n                                        \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                        \"format\": \"double\"\n                                      },\n                                      \"latitude\": {\n                                        \"type\": \"number\",\n                                        \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                        \"format\": \"double\"\n                                      }\n                                    }\n                                  }\n                                }\n                              }\n                            }\n                          }\n                        },\n                        \"setToServerValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"Sets the field to the given server value.\"\n                        },\n                        \"appendMissingElements\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\",\n                              \"items\": {\n                                \"type\": \"object\",\n                                \"description\": \"A message that can hold any of the supported value types.\",\n                                \"properties\": {\n                                  \"integerValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"An integer value.\",\n                                    \"format\": \"int64\"\n                                  },\n                                  \"nullValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A null value.\"\n                                  },\n                                  \"booleanValue\": {\n                                    \"type\": \"boolean\",\n                                    \"description\": \"A boolean value.\"\n                                  },\n                                  \"timestampValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                                    \"format\": \"google-datetime\"\n                                  },\n                                  \"mapValue\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"A map value.\",\n                                    \"properties\": {\n                                      \"fields\": {\n                                        \"type\": \"object\",\n                                        \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                      }\n                                    }\n                                  },\n                                  \"geoPointValue\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                                    \"properties\": {\n                                      \"longitude\": {\n                                        \"type\": \"number\",\n                                        \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                        \"format\": \"double\"\n                                      },\n                                      \"latitude\": {\n                                        \"type\": \"number\",\n                                        \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                        \"format\": \"double\"\n                                      }\n                                    }\n                                  },\n                                  \"stringValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                                  },\n                                  \"bytesValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                                    \"format\": \"byte\"\n                                  },\n                                  \"referenceValue\": {\n                                    \"type\": \"string\",\n                                    \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                                  },\n                                  \"doubleValue\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"A double value.\",\n                                    \"format\": \"double\"\n                                  }\n                                }\n                              }\n                            }\n                          }\n                        },\n                        \"fieldPath\": {\n                          \"type\": \"string\",\n                          \"description\": \"The path of the field. See Document.fields for the field path syntax reference.\"\n                        },\n                        \"increment\": {\n                          \"type\": \"object\",\n                          \"description\": \"A message that can hold any of the supported value types.\",\n                          \"properties\": {\n                            \"geoPointValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                              \"properties\": {\n                                \"longitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                  \"format\": \"double\"\n                                },\n                                \"latitude\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                  \"format\": \"double\"\n                                }\n                              }\n                            },\n                            \"mapValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"A map value.\",\n                              \"properties\": {\n                                \"fields\": {\n                                  \"type\": \"object\",\n                                  \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                }\n                              }\n                            },\n                            \"referenceValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                            },\n                            \"doubleValue\": {\n                              \"type\": \"number\",\n                              \"description\": \"A double value.\",\n                              \"format\": \"double\"\n                            },\n                            \"integerValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"An integer value.\",\n                              \"format\": \"int64\"\n                            },\n                            \"timestampValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                              \"format\": \"google-datetime\"\n                            },\n                            \"nullValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A null value.\"\n                            },\n                            \"booleanValue\": {\n                              \"type\": \"boolean\",\n                              \"description\": \"A boolean value.\"\n                            },\n                            \"stringValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                            },\n                            \"arrayValue\": {\n                              \"type\": \"object\",\n                              \"description\": \"An array value.\",\n                              \"properties\": {\n                                \"values\": {\n                                  \"type\": \"array\",\n                                  \"description\": \"Values in the array.\"\n                                }\n                              }\n                            },\n                            \"bytesValue\": {\n                              \"type\": \"string\",\n                              \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                              \"format\": \"byte\"\n                            }\n                          }\n                        }\n                      }\n                    }\n                  },\n                  \"document\": {\n                    \"type\": \"string\",\n                    \"description\": \"The name of the document to transform.\"\n                  }\n                }\n              },\n              \"update\": {\n                \"type\": \"object\",\n                \"description\": \"A Firestore document. Must not exceed 1 MiB - 4 bytes.\",\n                \"properties\": {\n                  \"name\": {\n                    \"type\": \"string\",\n                    \"description\": \"The resource name of the document, for example `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                  },\n                  \"updateTime\": {\n                    \"type\": \"string\",\n                    \"description\": \"Output only. The time at which the document was last changed. This value is initially set to the `create_time` then increases monotonically with each change to the document. It can also be compared to values from other documents and the `read_time` of a query.\",\n                    \"format\": \"google-datetime\"\n                  },\n                  \"createTime\": {\n                    \"type\": \"string\",\n                    \"description\": \"Output only. The time at which the document was created. This value increases monotonically when a document is deleted then recreated. It can also be compared to values from other documents and the `read_time` of a query.\",\n                    \"format\": \"google-datetime\"\n                  },\n                  \"fields\": {\n                    \"type\": \"object\"\n                  }\n                }\n              },\n              \"updateMask\": {\n                \"type\": \"object\",\n                \"description\": \"A set of field paths on a document. Used to restrict a get or update operation on a document to a subset of its fields. This is different from standard field masks, as this is always scoped to a Document, and takes in account the dynamic nature of Value.\",\n                \"properties\": {\n                  \"fieldPaths\": {\n                    \"type\": \"array\",\n                    \"description\": \"The list of field paths in the mask. See Document.fields for a field path syntax reference.\",\n                    \"items\": {\n                      \"type\": \"string\"\n                    }\n                  }\n                }\n              },\n              \"updateTransforms\": {\n                \"type\": \"array\",\n                \"description\": \"The transforms to perform after update. This field can be set only when the operation is `update`. If present, this write is equivalent to performing `update` and `transform` to the same document atomically and in order.\",\n                \"items\": {\n                  \"type\": \"object\",\n                  \"description\": \"A transformation of a field of the document.\",\n                  \"properties\": {\n                    \"minimum\": {\n                      \"type\": \"object\",\n                      \"description\": \"A message that can hold any of the supported value types.\",\n                      \"properties\": {\n                        \"geoPointValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                          \"properties\": {\n                            \"latitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                              \"format\": \"double\"\n                            },\n                            \"longitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                              \"format\": \"double\"\n                            }\n                          }\n                        },\n                        \"doubleValue\": {\n                          \"type\": \"number\",\n                          \"description\": \"A double value.\",\n                          \"format\": \"double\"\n                        },\n                        \"booleanValue\": {\n                          \"type\": \"boolean\",\n                          \"description\": \"A boolean value.\"\n                        },\n                        \"referenceValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                        },\n                        \"mapValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"A map value.\",\n                          \"properties\": {\n                            \"fields\": {\n                              \"type\": \"object\",\n                              \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                            }\n                          }\n                        },\n                        \"integerValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"An integer value.\",\n                          \"format\": \"int64\"\n                        },\n                        \"nullValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A null value.\"\n                        },\n                        \"arrayValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\"\n                            }\n                          }\n                        },\n                        \"timestampValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                          \"format\": \"google-datetime\"\n                        },\n                        \"bytesValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                          \"format\": \"byte\"\n                        },\n                        \"stringValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                        }\n                      }\n                    },\n                    \"removeAllFromArray\": {\n                      \"type\": \"object\",\n                      \"description\": \"An array value.\",\n                      \"properties\": {\n                        \"values\": {\n                          \"type\": \"array\",\n                          \"description\": \"Values in the array.\",\n                          \"items\": {\n                            \"type\": \"object\",\n                            \"description\": \"A message that can hold any of the supported value types.\",\n                            \"properties\": {\n                              \"mapValue\": {\n                                \"type\": \"object\",\n                                \"description\": \"A map value.\",\n                                \"properties\": {\n                                  \"fields\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                  }\n                                }\n                              },\n                              \"doubleValue\": {\n                                \"type\": \"number\",\n                                \"description\": \"A double value.\",\n                                \"format\": \"double\"\n                              },\n                              \"bytesValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                                \"format\": \"byte\"\n                              },\n                              \"integerValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"An integer value.\",\n                                \"format\": \"int64\"\n                              },\n                              \"nullValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A null value.\"\n                              },\n                              \"timestampValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                                \"format\": \"google-datetime\"\n                              },\n                              \"stringValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                              },\n                              \"geoPointValue\": {\n                                \"type\": \"object\",\n                                \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                                \"properties\": {\n                                  \"longitude\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                    \"format\": \"double\"\n                                  },\n                                  \"latitude\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                    \"format\": \"double\"\n                                  }\n                                }\n                              },\n                              \"booleanValue\": {\n                                \"type\": \"boolean\",\n                                \"description\": \"A boolean value.\"\n                              },\n                              \"referenceValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                              }\n                            }\n                          }\n                        }\n                      }\n                    },\n                    \"setToServerValue\": {\n                      \"type\": \"string\",\n                      \"description\": \"Sets the field to the given server value.\"\n                    },\n                    \"appendMissingElements\": {\n                      \"type\": \"object\",\n                      \"description\": \"An array value.\",\n                      \"properties\": {\n                        \"values\": {\n                          \"type\": \"array\",\n                          \"description\": \"Values in the array.\",\n                          \"items\": {\n                            \"type\": \"object\",\n                            \"description\": \"A message that can hold any of the supported value types.\",\n                            \"properties\": {\n                              \"referenceValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                              },\n                              \"doubleValue\": {\n                                \"type\": \"number\",\n                                \"description\": \"A double value.\",\n                                \"format\": \"double\"\n                              },\n                              \"mapValue\": {\n                                \"type\": \"object\",\n                                \"description\": \"A map value.\",\n                                \"properties\": {\n                                  \"fields\": {\n                                    \"type\": \"object\",\n                                    \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                                  }\n                                }\n                              },\n                              \"stringValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                              },\n                              \"booleanValue\": {\n                                \"type\": \"boolean\",\n                                \"description\": \"A boolean value.\"\n                              },\n                              \"bytesValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                                \"format\": \"byte\"\n                              },\n                              \"integerValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"An integer value.\",\n                                \"format\": \"int64\"\n                              },\n                              \"timestampValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                                \"format\": \"google-datetime\"\n                              },\n                              \"nullValue\": {\n                                \"type\": \"string\",\n                                \"description\": \"A null value.\"\n                              },\n                              \"geoPointValue\": {\n                                \"type\": \"object\",\n                                \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                                \"properties\": {\n                                  \"longitude\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                                    \"format\": \"double\"\n                                  },\n                                  \"latitude\": {\n                                    \"type\": \"number\",\n                                    \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                                    \"format\": \"double\"\n                                  }\n                                }\n                              }\n                            }\n                          }\n                        }\n                      }\n                    },\n                    \"fieldPath\": {\n                      \"type\": \"string\",\n                      \"description\": \"The path of the field. See Document.fields for the field path syntax reference.\"\n                    },\n                    \"increment\": {\n                      \"type\": \"object\",\n                      \"description\": \"A message that can hold any of the supported value types.\",\n                      \"properties\": {\n                        \"bytesValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                          \"format\": \"byte\"\n                        },\n                        \"mapValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"A map value.\",\n                          \"properties\": {\n                            \"fields\": {\n                              \"type\": \"object\",\n                              \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                            }\n                          }\n                        },\n                        \"stringValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                        },\n                        \"timestampValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                          \"format\": \"google-datetime\"\n                        },\n                        \"booleanValue\": {\n                          \"type\": \"boolean\",\n                          \"description\": \"A boolean value.\"\n                        },\n                        \"integerValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"An integer value.\",\n                          \"format\": \"int64\"\n                        },\n                        \"nullValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A null value.\"\n                        },\n                        \"geoPointValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                          \"properties\": {\n                            \"latitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                              \"format\": \"double\"\n                            },\n                            \"longitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                              \"format\": \"double\"\n                            }\n                          }\n                        },\n                        \"doubleValue\": {\n                          \"type\": \"number\",\n                          \"description\": \"A double value.\",\n                          \"format\": \"double\"\n                        },\n                        \"referenceValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                        },\n                        \"arrayValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\"\n                            }\n                          }\n                        }\n                      }\n                    },\n                    \"maximum\": {\n                      \"type\": \"object\",\n                      \"description\": \"A message that can hold any of the supported value types.\",\n                      \"properties\": {\n                        \"booleanValue\": {\n                          \"type\": \"boolean\",\n                          \"description\": \"A boolean value.\"\n                        },\n                        \"stringValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A string value. The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes of the UTF-8 representation are considered by queries.\"\n                        },\n                        \"bytesValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A bytes value. Must not exceed 1 MiB - 89 bytes. Only the first 1,500 bytes are considered by queries.\",\n                          \"format\": \"byte\"\n                        },\n                        \"mapValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"A map value.\",\n                          \"properties\": {\n                            \"fields\": {\n                              \"type\": \"object\",\n                              \"description\": \"The map\\u0027s fields. The map keys represent field names. Field names matching the regular expression `__.*__` are reserved. Reserved field names are forbidden except in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.\"\n                            }\n                          }\n                        },\n                        \"nullValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A null value.\"\n                        },\n                        \"arrayValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An array value.\",\n                          \"properties\": {\n                            \"values\": {\n                              \"type\": \"array\",\n                              \"description\": \"Values in the array.\"\n                            }\n                          }\n                        },\n                        \"timestampValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A timestamp value. Precise only to microseconds. When stored, any additional precision is rounded down.\",\n                          \"format\": \"google-datetime\"\n                        },\n                        \"doubleValue\": {\n                          \"type\": \"number\",\n                          \"description\": \"A double value.\",\n                          \"format\": \"double\"\n                        },\n                        \"geoPointValue\": {\n                          \"type\": \"object\",\n                          \"description\": \"An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges.\",\n                          \"properties\": {\n                            \"latitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The latitude in degrees. It must be in the range [-90.0, +90.0].\",\n                              \"format\": \"double\"\n                            },\n                            \"longitude\": {\n                              \"type\": \"number\",\n                              \"description\": \"The longitude in degrees. It must be in the range [-180.0, +180.0].\",\n                              \"format\": \"double\"\n                            }\n                          }\n                        },\n                        \"integerValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"An integer value.\",\n                          \"format\": \"int64\"\n                        },\n                        \"referenceValue\": {\n                          \"type\": \"string\",\n                          \"description\": \"A reference to a document. For example: `projects/{project_id}/databases/{database_id}/documents/{document_path}`.\"\n                        }\n                      }\n                    }\n                  }\n                }\n              },\n              \"currentDocument\": {\n                \"type\": \"object\",\n                \"description\": \"A precondition on a document, used for conditional operations.\",\n                \"properties\": {\n                  \"updateTime\": {\n                    \"type\": \"string\",\n                    \"description\": \"When set, the target document must exist and have been last updated at that time. Timestamp must be microsecond aligned.\",\n                    \"format\": \"google-datetime\"\n                  },\n                  \"exists\": {\n                    \"type\": \"boolean\",\n                    \"description\": \"When set to `true`, the target document must exist. When set to `false`, the target document must not exist.\"\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    },\n    \"RequestHasBytes\": {\n      \"type\": \"boolean\",\n      \"description\": \"Indicates if request has bytes\"\n    }\n  }\n}"
+  }, {
+    "key": "`Task_34_connectorOutputPayload`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_34_connectorOutputPayload`",
+    "isTransient": true,
+    "producer": "1_34",
+    "jsonSchema": "{\n  \"type\": \"array\",\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"ResponseBody\": {\n        \"type\": \"string\"\n      },\n      \"ResponseHeaders\": {\n        \"type\": \"object\",\n        \"description\": \"Response headers. Will consist of (key,value) and (key, list of value) pairs.\"\n      },\n      \"Status\": {\n        \"type\": \"number\",\n        \"description\": \"Status Code received.\"\n      }\n    },\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n  }\n}"
+  }, {
+    "key": "create_request_body",
+    "dataType": "JSON_VALUE",
+    "displayName": "create_request_body"
+  }],
+  "errorCatcherConfigs": [{
+    "label": "order-not-found",
+    "errorCatcherNumber": "1",
+    "startErrorTasks": [{
+      "taskId": "13"
+    }],
+    "position": {
+      "x": 3784,
+      "y": 45
+    },
+    "errorCatcherId": "order-not-found"
+  }, {
+    "label": "order-placement-error",
+    "errorCatcherNumber": "2",
+    "startErrorTasks": [{
+      "taskId": "30"
+    }],
+    "position": {
+      "x": 4264,
+      "y": 45
+    },
+    "errorCatcherId": "order-placement-error"
+  }],
+  "runAsServiceAccount": "YOUR-PROJECT-NUMBER-compute@developer.gserviceaccount.com",
+  "cloudLoggingDetails": {
+    "cloudLoggingSeverity": "INFO",
+    "enableCloudLogging": true
+  }
+}

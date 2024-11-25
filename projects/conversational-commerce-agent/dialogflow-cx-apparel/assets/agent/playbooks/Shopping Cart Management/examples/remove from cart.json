@@ -1,0 +1,36 @@
+{
+  "name": "3dd0601d-8a15-47c3-b201-30a735e3ab78",
+  "playbookInput": {
+    "precedingConversationSummary": "the customer wants to remove the product from the cart.",
+    "actionParameters": {
+      "id": "SHTECB92WG7ZCPBV",
+      "shopping_cart": [ {
+        "id": "SHTECB92WG7ZCPBV",
+        "quantity": 1,
+        "size": "Medium",
+        "title": "Specimen Men's Solid Casual Shirt"
+      }, {
+        "id": "SHTEJGFAUKFZSGYN",
+        "quantity": 3,
+        "size": "Small",
+        "title": "Livastar Men's Solid Casual Blue Shirt"
+      } ],
+      "title": "Specimen Men's Solid Casual Shirt"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "the Specimen Men's Solid Casual Shirt has been removed from the cart.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "id": "SHTEJGFAUKFZSGYN",
+        "quantity": 3,
+        "size": "Small",
+        "title": "Livastar Men's Solid Casual Blue Shirt"
+      } ]
+    }
+  },
+  "displayName": "remove from cart",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

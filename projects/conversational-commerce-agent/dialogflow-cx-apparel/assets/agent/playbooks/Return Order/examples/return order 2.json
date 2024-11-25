@@ -1,0 +1,65 @@
+{
+  "name": "e9fe1b02-9de4-48da-82dc-f6e73ff47e04",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/ac8ca820-7ebe-4c4e-9d22-f2e20d3bced7",
+      "action": "lookup_order",
+      "inputActionParameters": {
+        "requestBody": {
+          "order_id": "0c08a78b"
+        }
+      },
+      "outputActionParameters": {
+        "default": {
+          "order_created_on": "2024-04-11T20:32:56.785586Z",
+          "order_id": "0c08a78b",
+          "order_status": "confirmed",
+          "products": [ {
+            "delivery_date": "April 18, 2024",
+            "earliest_delivery_date": "April 16, 2024",
+            "id": "RrLrbKJEnb5woYOSj5oF1Q",
+            "quantity": 1,
+            "size": "34",
+            "title": "DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Thank you for providing your order number. I found your order was placed on April 11th, 2024. The order contains a DENIM CAFE Slim Fit Men's Blue, Dark Blue Jeans in size 34. Is that the item you'd like to return?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "yes"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Alright, I've initiated the return process. You'll find the return label attached below. Please print it out and attach it to your package before sending it back"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/flows/0f1577fc-2fcc-4ae9-93f1-ddfc2b6cd2cf"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "May I help you with anything else?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "nope"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The user wants to return their order",
+    "actionParameters": {
+      "order_id": "0c08a78b"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer does not want any other help."
+  },
+  "displayName": "return order 2",
+  "retrievalStrategy": "STATIC",
+  "languageCode": "en"
+}

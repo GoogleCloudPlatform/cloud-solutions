@@ -1,0 +1,331 @@
+{
+  "name": "545e7b13-ee05-4026-a802-9dbe7ed4cf1b",
+  "actions": [ {
+    "userUtterance": {
+      "text": "hi"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/flows/18d54b97-4b25-4c2d-b1f1-f521c289c21d"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to select from the options above, or just type in what you're looking for and I'll assist you."
+    }
+  }, {
+    "userUtterance": {
+      "text": "I am looking to wear something for my friends wedding"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/eb1486e8-2e21-4f8f-997d-a52de04d6059",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is attending their friends wedding, and looking for something to wear."
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer is looking for a women's lehenga to wear at a wedding.",
+        "state": "OK"
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for a women's lehenga to wear at a wedding.",
+        "actionParameters": {
+          "offset": 0,
+          "previous_search": ""
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer is looking for a women's lehenga to wear at a wedding.",
+        "state": "OK",
+        "actionParameters": {
+          "offset": 0,
+          "search": "women lehenga"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is looking for a women's lehenga to wear at wedding.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "women lehenga"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "women's classic lehengas are fetched and stored.",
+        "state": "OK",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "LCHEGGYP5SGJMZUC",
+            "title": "khodal fashion Embroidered Women's Lehenga, Choli and Dupatta Set"
+          }, {
+            "id": "LCHEGGGGGXNGZXYT",
+            "title": "fashion rudraksh Embroidered Women's Lehenga, Choli and Dupatta Set"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Do any of these look good to you, or are you looking for something else?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "I want to know more about the khodal fashion Embroidered Women's Lehenga."
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/4fb8cd28-eece-4a94-9bfd-cdd9e34879a3",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to know more about the khodal fashion Embroidered Women's Lehenga.",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "LCHEGGYP5SGJMZUC",
+            "title": "khodal fashion Embroidered Women's Lehenga, Choli and Dupatta Set"
+          }, {
+            "id": "LCHEGGGGGXNGZXYT",
+            "title": "fashion rudraksh Embroidered Women's Lehenga, Choli and Dupatta Set"
+          } ]
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer wants to see sarees.",
+        "state": "OK"
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to see sarees.",
+        "actionParameters": {
+          "offset": 0,
+          "previous_search": "women lehenga"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer wants to see sarees",
+        "state": "OK",
+        "actionParameters": {
+          "offset": 0,
+          "search": "women saree"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "actionParameters": {
+          "offset": 0,
+          "search": "women saree"
+        }
+      },
+      "playbookOutput": {
+        "state": "OK",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "SAREGSFVGA9ZCPT2",
+            "title": "Mahek Saree Striped Fashion Cotton Sari"
+          }, {
+            "id": "SAREG7H4PSRJ5XZV",
+            "title": "SATYA SITA Embriodered Bollywood Georgette Sari"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Are you interested in buying any of these items?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Can you show me similar sarees like the Mahek Saree?"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/608ee0ab-bab1-49ab-8f67-5754fc73c027",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to see similar products like the Mahek Saree Striped Fashion Cotton Sari.",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "SAREGSFVGA9ZCPT2",
+            "title": "Mahek Saree Striped Fashion Cotton Sari"
+          }, {
+            "id": "SAREG7H4PSRJ5XZV",
+            "title": "SATYA SITA Embriodered Bollywood Georgette Sari"
+          } ]
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The agent has fetched similar products like the Mahek Saree Striped Fashion Cotton Sari.",
+        "state": "OK",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "SAREJWN4Y4AE8AHQ",
+            "title": "Khwaab Enterprise Solid Fashion Chiffon Sari"
+          }, {
+            "id": "KTAEJJCHWJGMMF5Y",
+            "title": "Baalaa Striped Women's Straight Kurta"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "How do you feel about these options?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "can you go through the customer review and pick the best one from these?"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9af02c24-62d6-4d5f-8e19-554fb76fe995",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to see the reviews to pick the best one.",
+        "actionParameters": {
+          "shown_products": [ {
+            "id": "SAREJWN4Y4AE8AHQ",
+            "title": "Khwaab Enterprise Solid Fashion Chiffon Sari"
+          }, {
+            "id": "KTAEJJCHWJGMMF5Y",
+            "title": "Baalaa Striped Women's Straight Kurta"
+          } ]
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer likes the Khwaab Enterprise Solid Fashion Chiffon Sari.",
+        "state": "OK"
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/25416576-c678-4619-9301-28d82deaac05",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer likes the Khwaab Enterprise Solid Fashion Chiffon Sari.",
+        "actionParameters": {
+          "id": "SAREJWN4Y4AE8AHQ",
+          "quantity": 1,
+          "shopping_cart": [ ],
+          "size": "",
+          "title": "Khwaab Enterprise Solid Fashion Chiffon Sari"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer has added the Khwaab Enterprise Solid Fashion Chiffon Sari to the cart.",
+        "state": "OK",
+        "actionParameters": {
+          "shopping_cart": [ {
+            "id": "SAREJWN4Y4AE8AHQ",
+            "quantity": 1,
+            "size": "Medium",
+            "title": "Khwaab Enterprise Solid Fashion Chiffon Sari"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Is there anything else you'd like to add to your cart?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "I am good for now."
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/37991adf-e963-48e4-8ad8-d4bd0f66faa1",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer has added the products to the shopping cart.",
+        "actionParameters": {
+          "shopping_cart": [ {
+            "id": "SAREJWN4Y4AE8AHQ",
+            "quantity": 1,
+            "size": "Medium",
+            "title": "Khwaab Enterprise Solid Fashion Chiffon Sari"
+          } ]
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer has confirmed the delivery dates for all the shopping cart products",
+        "state": "OK",
+        "actionParameters": {
+          "shopping_cart": [ {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "SAREJWN4Y4AE8AHQ",
+            "quantity": 1,
+            "size": "Medium",
+            "title": "Khwaab Enterprise Solid Fashion Chiffon Sari"
+          } ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/3c2b5968-eced-4557-8496-d139cc1ab08c",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer has confirmed the delivery dates for all the shopping cart products"
+      },
+      "playbookOutput": {
+        "executionSummary": "The customer has confirmed all the user details.",
+        "state": "OK"
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/620e9ea5-4076-4aea-8a99-1a563a547f47",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer has confirmed the delivery dates for the shopping cart items and the user details.",
+        "actionParameters": {
+          "shopping_cart": [ {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "SAREJWN4Y4AE8AHQ",
+            "quantity": 1,
+            "size": "Medium",
+            "title": "Khwaab Enterprise Solid Fashion Chiffon Sari"
+          } ]
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "The order is placed and acknowledged to the customer. The next step is to ask follow-up question, if the customer needs any other help.",
+        "state": "OK"
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "May I help you with anything else?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "nope I am good."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "I'm glad I could help! If you ever need anything from Cymbal Apparel, I'm just a click away."
+    }
+  } ],
+  "displayName": "master",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

@@ -1,0 +1,16 @@
+{
+  "name": "2b40c29f-06c8-42d5-adcd-61d898900dfc",
+  "actions": [ {
+    "userUtterance": {
+      "text": "What do you sell?"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "We have a wide variety of items in stock! To help me narrow down your search, could you tell me what you're looking for? For example, are you interested in clothing, accessories, or something else?"
+    }
+  } ],
+  "displayName": "Inventory",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

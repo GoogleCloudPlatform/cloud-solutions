@@ -1,0 +1,55 @@
+{
+  "name": "b0f42d84-7441-40b7-a0b3-3a2a23e3e159",
+  "actions": [ {
+    "userUtterance": {
+      "text": "I need purple dress"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/9e798f89-69d2-45a2-89de-72564b92d24b",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer wants to see purple dress.",
+        "actionParameters": {
+          "offset": 0,
+          "previous_search": ""
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "the customer is looking for purple dress.",
+        "state": "OK",
+        "actionParameters": {
+          "offset": 0,
+          "search": "purple dress"
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/playbooks/bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer is looking for a purple dress.",
+        "actionParameters": {
+          "offset": 0,
+          "search": "purple dress"
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "purple dresses are out of stock.",
+        "state": "OK",
+        "actionParameters": {
+          "shown_products": [ ]
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Apologies, but we are currently out of stock for the purple dress. Can I help you find another outfit?"
+    }
+  } ],
+  "displayName": "products out of stock",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

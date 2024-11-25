@@ -1,0 +1,37 @@
+{
+  "name": "dc9e19cc-411c-4f6b-bf37-387013884fe4",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "What size would you like to go with the YK Printed Boy's Round Neck Dark Blue T-Shirt? We have sizes ranging from small to extra-large."
+    }
+  }, {
+    "userUtterance": {
+      "text": "large would fit me best I think."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to add the YK Printed Boy's Round Neck Dark Blue T-Shirt to the cart.",
+    "actionParameters": {
+      "id": "rgT5wMHTJFAGr2sj3Jz00w",
+      "quantity": 1,
+      "shopping_cart": [ ],
+      "size": "",
+      "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The YK Printed Boy's Round Neck Dark Blue T-Shirt has been added to the cart.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "id": "rgT5wMHTJFAGr2sj3Jz00w",
+        "quantity": 1,
+        "size": "Large",
+        "title": "YK Printed Boy's Round Neck Dark Blue T-Shirt"
+      } ]
+    }
+  },
+  "displayName": "add to cart - missing size",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

@@ -1,0 +1,40 @@
+{
+  "name": "4af3dc58-33a0-4844-b02e-057b6862667c",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/5912b66b-5c40-45fa-8779-24b7e19fb3bb",
+      "action": "similar-products",
+      "inputActionParameters": {
+        "requestBody": {
+          "product_id": "DREEJH2UDQAQYBZZ"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+
+        }
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to see similar products like the Koolkids Girl's A-line Red Dress.",
+    "actionParameters": {
+      "shown_products": [ {
+        "id": "DREE6TUDFCEGGVWM",
+        "title": "Tiny Toon Girl's Gathered Red Dress"
+      }, {
+        "id": "DREEJH2UDQAQYBZZ",
+        "title": "Koolkids Girl's A-line Red Dress"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The agent could not find the similar products.",
+    "actionParameters": {
+      "shown_products": [ ]
+    }
+  },
+  "displayName": "product not found",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

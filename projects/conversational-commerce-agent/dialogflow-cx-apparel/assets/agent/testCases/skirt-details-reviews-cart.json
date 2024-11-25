@@ -1,0 +1,267 @@
+{
+  "name": "bd988a69-3346-4df5-9616-b1f2557f3f6f",
+  "displayName": "skirt-details-reviews-cart",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "can you help me select a skirt?"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these look good to you, or are you looking for something else?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "tell me more about the second one"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "The Antistreet Printed, Self Design, Solid Women's Regular Black Skirt is made of georgette spandex, giving it a sophisticated look that hugs your curves flawlessly. It's perfect for beach wear, casual outings, festive occasions, parties, and even sports. Would you like to add it to your cart?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "first I want to see what other customers say about it"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Sure! The Antistreet Printed, Self Design, Solid Women's Regular Black Skirt has received mixed reviews. Some customers found it comfortable at first but uncomfortable after a few hours, while others praised its comfort. Overall, it has an average rating of 4 out of 5 stars. Is there anything else you'd like to know about this product?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "hmm. it seems good. lets add it to the cart now"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "What size would you like for the Antistreet Printed, Self Design, Solid Women's Regular Black Skirt? We have sizes ranging from extra small to extra-large." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "small "
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Perfect! The Antistreet Printed, Self Design, Solid Women's Regular Black Skirt in size small has been added to your cart with quantity 1." ]
+      }, {
+        "text": [ "Is there anything else you'd like to add to your purchase?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712703063,
+    "nanos": 303054000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "skirts"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of Sharleez Solid Women's A-line Red Skirt Red Georgette,Sharleez Solid Women's A-line Red Skirt Price: Rs. 749 Sharleez presents this Skirt, which will make you look charming and quite striking. This skirt ensures total comfort and maximum breathability. Featuring regular fit, this skirt will be a perfect addition to your wardrobe.,Specifications of Sharleez Solid Women's A-line Red Skirt Skirt Details Number of Contents in Sales Package Pack of 1 Fabric Georgette Type A-line Waistband Lace Dimensions Length Full Length General Details Pattern Solid Occasion Casual Ideal For Women's In the Box 1 Skirt Fabric Care Machine wash,do not bleach.",
+                      "id": "Ps9QkZS311GnlXGRwoIY8w",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/skirt/z/t/y/skt9020-rd-sharleez-l-original-imadzzty36cntyk6.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/Ps9QkZS311GnlXGRwoIY8w",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 89
+                      },
+                      "title": "Sharleez Solid Women's A-line Red Skirt"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Key Features of Antistreet Printed, Self Design, Solid Women's Regular Black Skirt Black Georgette,Antistreet Printed, Self Design, Solid Women's Regular Black Skirt Price: Rs. 1,080 A woman without style is like a soup without salt. On every other occasion, you need a new attire for a unique outlook. So, here is this Antistreet Suspender Skirt that is of a Black color.tailored with Georgette spandex. An outstanding yet sophisticated outlook can be earned in this article that even hugs your curves in a flawless way. For your comfort. Look like a Bollywood diva and set a benchmark for others to follow the same style statements. Complement this shimmery skirt with a crop blouse and high heels while heading to a weekend party.,Specifications of Antistreet Printed, Self Design, Solid Women's Regular Black Skirt Skirt Details Number of Contents in Sales Package Pack of 1 Fabric Georgette Type Regular Dimensions Length Above Knee Length General Details Pattern Printed, Self Design, Solid Ideal For Women's Occasion Beach Wear, Casual, Festive, Party, Sports Fabric Care Gentle Machine Wash in Lukewarm Water, Do Not Bleach In the Box 1 Skirt",
+                      "id": "1nY2FwSiF7NMmSyNylu8ng",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/skirt/a/n/w/skt9020-blk-antistreet-xl-original-imaeghywpjcnsufr.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/1nY2FwSiF7NMmSyNylu8ng",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 97
+                      },
+                      "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/11c17021-f695-4969-842e-f7fe9f664274",
+        "action": "get_product_details",
+        "inputActionParameters": {
+          "requestBody": {
+            "product_ids": [ "Ps9QkZS311GnlXGRwoIY8w", "1nY2FwSiF7NMmSyNylu8ng" ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "products": [ {
+              "product": {
+                "description": "Key Features of Sharleez Solid Women's A-line Red Skirt Red Georgette,Sharleez Solid Women's A-line Red Skirt Price: Rs. 749 Sharleez presents this Skirt, which will make you look charming and quite striking. This skirt ensures total comfort and maximum breathability. Featuring regular fit, this skirt will be a perfect addition to your wardrobe.,Specifications of Sharleez Solid Women's A-line Red Skirt Skirt Details Number of Contents in Sales Package Pack of 1 Fabric Georgette Type A-line Waistband Lace Dimensions Length Full Length General Details Pattern Solid Occasion Casual Ideal For Women's In the Box 1 Skirt Fabric Care Machine wash,do not bleach.",
+                "id": "Ps9QkZS311GnlXGRwoIY8w",
+                "images": [ {
+                  "uri": "https://storage.googleapis.com/gcp-retail-demo/image/skirt/z/t/y/skt9020-rd-sharleez-l-original-imadzzty36cntyk6.jpeg"
+                } ],
+                "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/Ps9QkZS311GnlXGRwoIY8w",
+                "priceInfo": {
+                  "currencyCode": "USD",
+                  "originalPrice": 89,
+                  "price": 89,
+                  "priceRange": {
+
+                  }
+                },
+                "title": "Sharleez Solid Women's A-line Red Skirt"
+              }
+            }, {
+              "product": {
+                "description": "Key Features of Antistreet Printed, Self Design, Solid Women's Regular Black Skirt Black Georgette,Antistreet Printed, Self Design, Solid Women's Regular Black Skirt Price: Rs. 1,080 A woman without style is like a soup without salt. On every other occasion, you need a new attire for a unique outlook. So, here is this Antistreet Suspender Skirt that is of a Black color.tailored with Georgette spandex. An outstanding yet sophisticated outlook can be earned in this article that even hugs your curves in a flawless way. For your comfort. Look like a Bollywood diva and set a benchmark for others to follow the same style statements. Complement this shimmery skirt with a crop blouse and high heels while heading to a weekend party.,Specifications of Antistreet Printed, Self Design, Solid Women's Regular Black Skirt Skirt Details Number of Contents in Sales Package Pack of 1 Fabric Georgette Type Regular Dimensions Length Above Knee Length General Details Pattern Printed, Self Design, Solid Ideal For Women's Occasion Beach Wear, Casual, Festive, Party, Sports Fabric Care Gentle Machine Wash in Lukewarm Water, Do Not Bleach In the Box 1 Skirt",
+                "id": "1nY2FwSiF7NMmSyNylu8ng",
+                "images": [ {
+                  "uri": "https://storage.googleapis.com/gcp-retail-demo/image/skirt/a/n/w/skt9020-blk-antistreet-xl-original-imaeghywpjcnsufr.jpeg"
+                } ],
+                "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/1nY2FwSiF7NMmSyNylu8ng",
+                "priceInfo": {
+                  "currencyCode": "USD",
+                  "originalPrice": 97,
+                  "price": 97,
+                  "priceRange": {
+
+                  }
+                },
+                "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt"
+              }
+            } ]
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+        "action": "get_reviews",
+        "inputActionParameters": {
+          "requestBody": {
+            "shown_products": [ {
+              "id": "1nY2FwSiF7NMmSyNylu8ng",
+              "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt"
+            } ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "review-template",
+                "payload": {
+                  "items": [ {
+                    "desc": "the Antistreet Printed, Self Design, Solid Women's Regular Black Skirt fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+                    "product_id": "1nY2FwSiF7NMmSyNylu8ng",
+                    "rating": 3,
+                    "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt",
+                    "user": "Briene Sanje"
+                  }, {
+                    "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the Antistreet Printed, Self Design, Solid Women's Regular Black Skirt, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+                    "product_id": "1nY2FwSiF7NMmSyNylu8ng",
+                    "rating": 5,
+                    "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt",
+                    "user": "Jenny Rahme"
+                  }, {
+                    "desc": "I recently had the pleasure of wearing the most enchanting Antistreet Printed, Self Design, Solid Women's Regular Black Skirt               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+                    "product_id": "1nY2FwSiF7NMmSyNylu8ng",
+                    "rating": 4,
+                    "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt",
+                    "user": "Nadine Bhakta"
+                  }, {
+                    "desc": "I recently purchased the Antistreet Printed, Self Design, Solid Women's Regular Black Skirt from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+                    "product_id": "1nY2FwSiF7NMmSyNylu8ng",
+                    "rating": 5,
+                    "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt",
+                    "user": "Anjali Gupta"
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            },
+            "reviews": [ {
+              "desc": "the Antistreet Printed, Self Design, Solid Women's Regular Black Skirt fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+              "product_id": "1nY2FwSiF7NMmSyNylu8ng",
+              "rating": 3,
+              "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt",
+              "user": "Briene Sanje"
+            }, {
+              "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the Antistreet Printed, Self Design, Solid Women's Regular Black Skirt, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+              "product_id": "1nY2FwSiF7NMmSyNylu8ng",
+              "rating": 5,
+              "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt",
+              "user": "Jenny Rahme"
+            }, {
+              "desc": "I recently had the pleasure of wearing the most enchanting Antistreet Printed, Self Design, Solid Women's Regular Black Skirt               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+              "product_id": "1nY2FwSiF7NMmSyNylu8ng",
+              "rating": 4,
+              "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt",
+              "user": "Nadine Bhakta"
+            }, {
+              "desc": "I recently purchased the Antistreet Printed, Self Design, Solid Women's Regular Black Skirt from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+              "product_id": "1nY2FwSiF7NMmSyNylu8ng",
+              "rating": 5,
+              "title": "Antistreet Printed, Self Design, Solid Women's Regular Black Skirt",
+              "user": "Anjali Gupta"
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

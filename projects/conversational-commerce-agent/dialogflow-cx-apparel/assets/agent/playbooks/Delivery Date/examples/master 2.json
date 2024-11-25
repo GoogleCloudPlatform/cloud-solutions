@@ -1,0 +1,72 @@
+{
+  "name": "7d663794-dc07-4e09-bb43-39af09d5d210",
+  "actions": [ {
+    "toolUse": {
+      "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/bc35ec86-053c-4f53-8121-7b4b5202414a",
+      "action": "get_delivery_date",
+      "inputActionParameters": {
+        "requestBody": {
+          "shopping_cart": [ {
+            "id": "1o14yPSoqno1MiUAjPIHRg",
+            "quantity": 1,
+            "size": "10",
+            "title": "Caratcents White Gold 14 K Ring"
+          } ]
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "shopping_cart": [ {
+            "delivery_date": "April 7, 2024",
+            "earliest_delivery_date": "April 7, 2024",
+            "id": "1o14yPSoqno1MiUAjPIHRg",
+            "quantity": 1,
+            "size": "10",
+            "title": "Caratcents White Gold 14 K Ring"
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "The Caratcents White Gold 14 K Ring is scheduled for delivery on April 6, 2024. Is that convenient for you?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "perfect"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Wonderful! Your Caratcents White Gold 14 K Ring will be delivered as scheduled on April 6, 2024."
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "The customer has added the product to the shopping cart.",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "id": "1o14yPSoqno1MiUAjPIHRg",
+        "quantity": 1,
+        "size": 10,
+        "title": "Caratcents White Gold 14 K Ring"
+      } ]
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer has confirmed the delivery dates for all the shopping cart products.",
+    "state": "OK",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "delivery_date": "April 06, 2024",
+        "earliest_delivery_date": "April 06, 2024",
+        "id": "1o14yPSoqno1MiUAjPIHRg",
+        "quantity": 1,
+        "size": 10,
+        "title": "Caratcents White Gold 14 K Ring"
+      } ]
+    }
+  },
+  "displayName": "master 2",
+  "retrievalStrategy": "STATIC",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "undetected"
+}

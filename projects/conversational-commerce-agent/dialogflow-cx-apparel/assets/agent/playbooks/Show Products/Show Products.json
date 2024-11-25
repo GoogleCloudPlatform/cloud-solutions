@@ -1,0 +1,55 @@
+{
+  "name": "bfc56e5e-23b2-49ae-9d42-eb068c03dd1e",
+  "displayName": "Show Products",
+  "goal": "Your task is to fetch products based on a search query. Do not respond to the customer and end the task.\n\nNote:\n1. Do not ask the customer if they want to see the product or not. Because, the products are already displayed by the frontend when they are fetched.",
+  "steps": [ {
+    "text": "Call ${TOOL: search-products} to fetch the products and continue with the below instructions,",
+    "steps": [ {
+      "text": "if the response has data, store the products id and title in the parameter $shown_products, and without responding end your task."
+    }, {
+      "text": "if response is empty, keep the $shown_product parameter as an empty array and without responsding end your task."
+    } ]
+  } ],
+  "inputParameterDefinitions": [ {
+    "name": "search",
+    "description": "product search query",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "STRING"
+      }
+    }
+  }, {
+    "name": "offset",
+    "description": "product's index number",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "NUMBER"
+      }
+    }
+  } ],
+  "outputParameterDefinitions": [ {
+    "name": "shown_products",
+    "description": "products shown to the customer",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "referencedTools": [ "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842" ],
+  "instruction": {
+    "steps": [ {
+      "text": "Call ${TOOL: search-products} to fetch the products and continue with the below instructions,",
+      "steps": [ {
+        "text": "if the response has data, store the products id and title in the parameter $shown_products, and without responding end your task."
+      }, {
+        "text": "if response is empty, keep the $shown_product parameter as an empty array and without responsding end your task."
+      } ]
+    } ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "1266fb2d-e96d-4449-9a02-776e324dfc79",
+  "displayName": "get-user-info",
+  "description": "Retrieve customer's personal info.",
+  "openApiSpec": {
+
+  },
+  "toolType": "CUSTOMIZED_TOOL"
+}

@@ -1,0 +1,145 @@
+{
+  "name": "fd1c6756-0826-465d-8c4b-52713c0b26f0",
+  "displayName": "t-shirt_material",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "show me women's t-shirt"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these products catch your interest, or are you after different options?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "what material is used in the first t-shirt"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "The Point Fit Solid Women's V-neck T-Shirt is made of cotton, providing a comfortable and breathable feel. Would you like to add it to your cart?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712692853,
+    "nanos": 385362000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "women t-shirt"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of Point Fit Solid Women's V-neck T-Shirt Fit: Slim Fit Suitable For: Western Wear Sleeve: Short Sleeve Fabric: Cotton,Point Fit Solid Women's V-neck T-Shirt Price: Rs. 399 Point Fit T-Shirt for Women, suitable for Casual Wear,Specifications of Point Fit Solid Women's V-neck T-Shirt T-shirt Details Sleeve Short Sleeve Number of Contents in Sales Package Pack of 1 Fabric Cotton Type V-neck Fit Regular General Details Pattern Solid Ideal For Women's Occasion Casual Additional Details Style Code PFT1006-M",
+                      "id": "YxGjIWqzbPw92l0xIxZfkw",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/t-shirt/9/y/y/pft1006-m-point-fit-l-original-imaegvpupszjyjyr.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/YxGjIWqzbPw92l0xIxZfkw",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 29
+                      },
+                      "title": "Point Fit Solid Women's V-neck T-Shirt"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Key Features of Starsy Solid Women's Round Neck Green T-Shirt Stylish Starsy women Regular T Shirt,Starsy Solid Women's Round Neck Green T-Shirt Price: Rs. 639 Spruce up your cool and trendy look wearing this Green coloured T-shirt from the house of Starsy. Made of Cotton, this T-shirt for women is high on quality as well as comfort. Featuring regular fit, this T-shirt will go well with slim-fit denims and wedges.,Specifications of Starsy Solid Women's Round Neck Green T-Shirt T-shirt Details Sleeve 3/4 Sleeve Number of Contents in Sales Package Pack of 1 Fabric Cotton Type Round Neck Fit Regular General Details Pattern Solid Ideal For Women's Occasion Party Fabric Care Mild Wash do not Bleach Additional Details Style Code TS0208Green In the Box 1 T Shirt",
+                      "id": "rJ4iVFccG1wR81yRmGOAnw",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/t-shirt/h/u/y/ts0208green-starsy-xxl-1000x1000-imaegf43j7uhygzv.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/rJ4iVFccG1wR81yRmGOAnw",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 23
+                      },
+                      "title": "Starsy Solid Women's Round Neck Green T-Shirt"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/11c17021-f695-4969-842e-f7fe9f664274",
+        "action": "get_product_details",
+        "inputActionParameters": {
+          "requestBody": {
+            "product_ids": [ "YxGjIWqzbPw92l0xIxZfkw", "rJ4iVFccG1wR81yRmGOAnw" ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "products": [ {
+              "product": {
+                "description": "Key Features of Point Fit Solid Women's V-neck T-Shirt Fit: Slim Fit Suitable For: Western Wear Sleeve: Short Sleeve Fabric: Cotton,Point Fit Solid Women's V-neck T-Shirt Price: Rs. 399 Point Fit T-Shirt for Women, suitable for Casual Wear,Specifications of Point Fit Solid Women's V-neck T-Shirt T-shirt Details Sleeve Short Sleeve Number of Contents in Sales Package Pack of 1 Fabric Cotton Type V-neck Fit Regular General Details Pattern Solid Ideal For Women's Occasion Casual Additional Details Style Code PFT1006-M",
+                "id": "YxGjIWqzbPw92l0xIxZfkw",
+                "images": [ {
+                  "uri": "https://storage.googleapis.com/gcp-retail-demo/image/t-shirt/9/y/y/pft1006-m-point-fit-l-original-imaegvpupszjyjyr.jpeg"
+                } ],
+                "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/YxGjIWqzbPw92l0xIxZfkw",
+                "priceInfo": {
+                  "currencyCode": "USD",
+                  "originalPrice": 29,
+                  "price": 29,
+                  "priceRange": {
+
+                  }
+                },
+                "title": "Point Fit Solid Women's V-neck T-Shirt"
+              }
+            }, {
+              "product": {
+                "description": "Key Features of Starsy Solid Women's Round Neck Green T-Shirt Stylish Starsy women Regular T Shirt,Starsy Solid Women's Round Neck Green T-Shirt Price: Rs. 639 Spruce up your cool and trendy look wearing this Green coloured T-shirt from the house of Starsy. Made of Cotton, this T-shirt for women is high on quality as well as comfort. Featuring regular fit, this T-shirt will go well with slim-fit denims and wedges.,Specifications of Starsy Solid Women's Round Neck Green T-Shirt T-shirt Details Sleeve 3/4 Sleeve Number of Contents in Sales Package Pack of 1 Fabric Cotton Type Round Neck Fit Regular General Details Pattern Solid Ideal For Women's Occasion Party Fabric Care Mild Wash do not Bleach Additional Details Style Code TS0208Green In the Box 1 T Shirt",
+                "id": "rJ4iVFccG1wR81yRmGOAnw",
+                "images": [ {
+                  "uri": "https://storage.googleapis.com/gcp-retail-demo/image/t-shirt/h/u/y/ts0208green-starsy-xxl-1000x1000-imaegf43j7uhygzv.jpeg"
+                } ],
+                "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/2/products/rJ4iVFccG1wR81yRmGOAnw",
+                "priceInfo": {
+                  "currencyCode": "USD",
+                  "originalPrice": 23,
+                  "price": 23,
+                  "priceRange": {
+
+                  }
+                },
+                "title": "Starsy Solid Women's Round Neck Green T-Shirt"
+              }
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

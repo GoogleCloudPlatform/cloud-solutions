@@ -1,0 +1,41 @@
+{
+  "name": "9fdba148-3f01-4b7f-96bf-106d95ab9bf7",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to update the FS Mini Klub Regular Fit Girl's Jeans quantity to 2.",
+    "actionParameters": {
+      "id": "JEAEG6GRMCRZZJ7H",
+      "quantity": 2,
+      "shopping_cart": [ {
+        "id": "JEAEG6GRMCRZZJ7H",
+        "quantity": 1,
+        "size": "24",
+        "title": "FS Mini Klub Regular Fit Girl's Jeans"
+      }, {
+        "id": "TOPEGFXUHQGDNZ8A",
+        "quantity": 1,
+        "size": "Extra Small",
+        "title": "Riot Jeans Casual Short Sleeve Printed Women's Top"
+      } ],
+      "title": "FS Mini Klub Regular Fit Girl's Jeans"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The FS Mini Klub Regular Fit Girl's Jeans quantity has been updated to 2 in the cart. ",
+    "actionParameters": {
+      "shopping_cart": [ {
+        "id": "JEAEG6GRMCRZZJ7H",
+        "quantity": 2,
+        "size": "24",
+        "title": "FS Mini Klub Regular Fit Girl's Jeans"
+      }, {
+        "id": "TOPEGFXUHQGDNZ8A",
+        "quantity": 1,
+        "size": "Extra Small",
+        "title": "Riot Jeans Casual Short Sleeve Printed Women's Top"
+      } ]
+    }
+  },
+  "displayName": "update quantity",
+  "retrievalStrategy": "DEFAULT",
+  "languageCode": "undetected"
+}

@@ -1,0 +1,94 @@
+{
+  "name": "115f9793-994f-4311-99b3-e259bad9eb68",
+  "displayName": "hat_recommendation",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "I am looking for a hat"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these products catch your interest, or are you after different options?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "which one do you think would go with yellow dress"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Unfortunately, I can't provide fashion advice as there are no hats in the shown products. Is there anything else I can help you with?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712693833,
+    "nanos": 851636000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "hats"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Specifications of Portia Hat (Pink, Pack of 1) In The Box Number of Contents in Sales Package Pack of 1 General Ideal For Girls",
+                      "id": "EpYQTK95y7rYY7sqzZOf2g",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/hat/a/z/g/sunflower-1-sunflowerdpink-portia-sunflower-free-size-original-imaehcjqcnpbpay9.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/EpYQTK95y7rYY7sqzZOf2g",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 23
+                      },
+                      "title": "Portia Hat"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Key Features of Eccellente Solid Hip Hop Cap Blue2 Cotton,Eccellente Solid Hip Hop Cap Price: Rs. 449 Eccellente, a brand known for its exclusive range of Caps \u0026 Hats, Sunglasses, Suspenders, Bow tie, Pocket Square, Umbrella, and other fashion accessories. Brand Tree Marketing is known for its quality across all categories. The above Cap is designed to give you a best look.,Specifications of Eccellente Solid Hip Hop Cap General Details Pattern Solid Ideal For Boy's, Girl's, Men's, Women's Occasion Beach Wear, Casual, Sports Cap Details Number of Contents in Sales Package Pack of 1 Fabric Cotton Type Hip Hop Additional Details Style Code CAP484 In the Box 1 Cap",
+                      "id": "4ZXWM7ppz6Pn9PbG17H6ZQ",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/cap/2/q/k/cap484-eccellente-free-original-imaehwhaabwxnzey.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/4ZXWM7ppz6Pn9PbG17H6ZQ",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 26
+                      },
+                      "title": "Eccellente Solid Hip Hop Cap"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

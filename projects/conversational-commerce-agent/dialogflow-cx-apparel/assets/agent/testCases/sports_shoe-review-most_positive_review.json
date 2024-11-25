@@ -1,0 +1,221 @@
+{
+  "name": "745ee668-8a8b-47c4-a1b1-63e0659856a6",
+  "displayName": "sports_shoe-review-most_positive_review",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "I am looking for a sport shoes"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Do any of these products catch your interest, or are you after different options?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "yeah but don't know which one to choose can you suggest which one is             best for me"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Got it. Should I check out customer reviews to find out more about the size and fit?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "sure"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Both the JQR JQR Sports Shoes Running Shoes and the N Five Running Shoes have received positive reviews. Customers have praised their comfort and style. The JQR JQR Sports Shoes Running Shoes have an average rating of 4 out of 5 stars, while the N Five Running Shoes have an average rating of 4.5 out of 5 stars. Which one would you like to add to your cart?" ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "I will go with whichever has the most positive review"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "The N Five Running Shoes has the most positive reviews." ]
+      }, {
+        "text": [ "What size would you like for the N Five Running Shoes? We have sizes ranging from 6 to 12." ]
+      } ]
+    }
+  }, {
+    "userInput": {
+      "isWebhookEnabled": true,
+      "input": {
+        "text": {
+          "text": "lets do 10"
+        },
+        "languageCode": "en"
+      }
+    },
+    "virtualAgentOutput": {
+      "textResponses": [ {
+        "text": [ "Great! The N Five Running Shoes in size 10 has been added to your cart with quantity 1." ]
+      }, {
+        "text": [ "Would you like to purchase anything else?" ]
+      } ]
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1712686983,
+    "nanos": 343498000
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/f2f8ad9c-03fb-45fc-82ec-713761a34842",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "search": "sports shoes"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Key Features of JQR JQR Sports Shoes Running Shoes Material: phylon sole Occasion: Sports Comfortable Sole Latest Design,JQR JQR Sports Shoes Running Shoes Price: Rs. 1,299 APM Presents An Amazing Range Of JQR For Mens Who Want To Look Perfect For Every Occasion Vivid Colours And Latest Styling Are The Scoring Points For This Range; These Footwear Have Been Designed Keeping The Needs Of Today'S Youth In Mind.,Specifications of JQR JQR Sports Shoes Running Shoes General Occasion Sports Ideal For Men Shoe Details Sole Material Phylon Weight 840 g (per single Shoe) - Weight of the product may vary depending on size. Heel Height 1 inch Outer Material Synthetic Leather Color Black, Red Additional Details Care Instructions Wash in Lukewarm Water, Do Not Bleach",
+                      "id": "OcGWFWPRZZbRHsAOSStWjA",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/shoe/u/r/d/black-red-jqr-12blade-3-jqr-44-original-imaeh7y5kyuwer3d.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/OcGWFWPRZZbRHsAOSStWjA",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 38
+                      },
+                      "title": "JQR JQR Sports Shoes Running Shoes"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Key Features of N Five Running Shoes Foot Length-20.1 Comfortable And Stylish Colour : Blue Material : Faux Leather Boys Sports Shoes,N Five Running Shoes Price: Rs. 1,199 This Nfive Shoe Is Smart And Elegant Casual Sports Shoes For Daily Wear, Promising Maximum Breathability And Stability. Upper Made Of High Quality Pu Material. The Shoe Sole Further Ensures The Best Traction And Balance On All Kind Of Surface. Also Offers Comfortable With Vibrant And Multi Color For Little Feet.Type:-Sneakers::Casuals::Outdoors::Party Wear.Type Of Sports:-Badminton Shoes::Barefoot Shoes::Basketball Shoes::Bowling Shoes::Boxing \u0026 Wrestling.Occassion:-Casual::Party::Riding::Sports::Wedding Shoes::Cricket Shoes::Cycling Shoes::Football Shoes::Golf Shoes::Hiking \u0026 Trekking Shoes::Hockey Shoes::Riding Shoes::Rock Climbing Shoes::Running Shoes::Squash Shoes::Tennis Shoes::Walking Shoes,Specifications of N Five Running Shoes General Ideal For Boys Occasion Sports Shoe Details Number of Contents in Sales Package Pack of 1 Weight 525 g (per single Shoe) - Weight of the product may vary depending on size. Heel Height 0 inch Outer Material Artificial Leather Color Blue In the Box 1 Pair of shoes",
+                      "id": "VohA4kup0QpcLt4O8jOx6g",
+                      "images": [ {
+                        "uri": "https://storage.googleapis.com/gcp-retail-demo/image/shoe/g/q/k/blue-nfa31-n-five-34-original-imaej3ehzhz4jata.jpeg"
+                      } ],
+                      "name": "projects/290493077924/locations/global/catalogs/default_catalog/branches/1/products/VohA4kup0QpcLt4O8jOx6g",
+                      "priceInfo": {
+                        "currencyCode": "USD",
+                        "price": 71
+                      },
+                      "title": "N Five Running Shoes"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/cae506e1-ad8b-4af1-9fda-fd5df0d98c97/tools/93eba7e3-f828-4b0d-91cc-1f16e99a7198",
+        "action": "get_reviews",
+        "inputActionParameters": {
+          "requestBody": {
+            "shown_products": [ {
+              "id": "OcGWFWPRZZbRHsAOSStWjA",
+              "title": "JQR JQR Sports Shoes Running Shoes"
+            }, {
+              "id": "VohA4kup0QpcLt4O8jOx6g",
+              "title": "N Five Running Shoes"
+            } ]
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "review-template",
+                "payload": {
+                  "items": [ {
+                    "desc": "the JQR JQR Sports Shoes Running Shoes fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+                    "product_id": "OcGWFWPRZZbRHsAOSStWjA",
+                    "rating": 3,
+                    "title": "JQR JQR Sports Shoes Running Shoes",
+                    "user": "Briene Sanje"
+                  }, {
+                    "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the JQR JQR Sports Shoes Running Shoes, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+                    "product_id": "OcGWFWPRZZbRHsAOSStWjA",
+                    "rating": 5,
+                    "title": "JQR JQR Sports Shoes Running Shoes",
+                    "user": "Jenny Rahme"
+                  }, {
+                    "desc": "I recently had the pleasure of wearing the most enchanting N Five Running Shoes               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+                    "product_id": "VohA4kup0QpcLt4O8jOx6g",
+                    "rating": 4,
+                    "title": "N Five Running Shoes",
+                    "user": "Nadine Bhakta"
+                  }, {
+                    "desc": "I recently purchased the N Five Running Shoes from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+                    "product_id": "VohA4kup0QpcLt4O8jOx6g",
+                    "rating": 5,
+                    "title": "N Five Running Shoes",
+                    "user": "Anjali Gupta"
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            },
+            "reviews": [ {
+              "desc": "the JQR JQR Sports Shoes Running Shoes fit real well at first, I suppose. However after a few hours into the night               I started to wish I had gone up a size or two. Every couple minutes I had to               re-adjust. It wasn't a cute look on the dance floor haha. Wish I had               size up, otherwise I've no other regrets.",
+              "product_id": "OcGWFWPRZZbRHsAOSStWjA",
+              "rating": 3,
+              "title": "JQR JQR Sports Shoes Running Shoes",
+              "user": "Briene Sanje"
+            }, {
+              "desc": "As a first-time buyer, I must say, I am head over heels in love with my               purchase! The moment I delicately wear the JQR JQR Sports Shoes Running Shoes, I felt an instant               connection, as if it was meant to be.               What impressed me the most was the comfort it provded throughout the day.",
+              "product_id": "OcGWFWPRZZbRHsAOSStWjA",
+              "rating": 5,
+              "title": "JQR JQR Sports Shoes Running Shoes",
+              "user": "Jenny Rahme"
+            }, {
+              "desc": "I recently had the pleasure of wearing the most enchanting N Five Running Shoes               for a special occasion, and let me tell you, heads turned and compliments poured               in all night long!               The fit was mostly great.",
+              "product_id": "VohA4kup0QpcLt4O8jOx6g",
+              "rating": 4,
+              "title": "N Five Running Shoes",
+              "user": "Nadine Bhakta"
+            }, {
+              "desc": "I recently purchased the N Five Running Shoes from this store, and I must say, it's               absolutely stunning! The quality is premium, and the work is a testament to the remarkable craftsmanship.               The product is beautiful, and the rich color hasn't faded a bit even after a few wears.",
+              "product_id": "VohA4kup0QpcLt4O8jOx6g",
+              "rating": 5,
+              "title": "N Five Running Shoes",
+              "user": "Anjali Gupta"
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

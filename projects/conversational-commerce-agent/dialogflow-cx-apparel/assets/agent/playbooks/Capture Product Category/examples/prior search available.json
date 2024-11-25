@@ -1,0 +1,20 @@
+{
+  "name": "e9ca6209-4695-4359-abcd-77a202145b22",
+  "playbookInput": {
+    "precedingConversationSummary": "The customer wants to see women's t-shirts.",
+    "actionParameters": {
+      "offset": 2,
+      "previous_search": "men t-shirt"
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "The customer wants to see women's t-shirts.",
+    "actionParameters": {
+      "offset": 0,
+      "search": "women t-shirt"
+    }
+  },
+  "displayName": "prior search available",
+  "retrievalStrategy": "STATIC",
+  "languageCode": "undetected"
+}
