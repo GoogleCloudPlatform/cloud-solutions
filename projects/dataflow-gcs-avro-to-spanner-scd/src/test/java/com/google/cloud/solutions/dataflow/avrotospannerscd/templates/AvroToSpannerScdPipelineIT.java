@@ -202,7 +202,13 @@ public final class AvroToSpannerScdPipelineIT {
       throws IOException, ExecutionException, InterruptedException {
     String ddl =
         String.join(
-            " ", Resources.readLines(Resources.getResource(resourceName), StandardCharsets.UTF_8));
+            " ",
+            Resources.readLines(Resources.getResource(resourceName), StandardCharsets.UTF_8)
+                .stream()
+                // Comments break DDL statements, especially when joined in one
+                // line like the above.
+                .filter(line -> line.length() < 2 || !line.strip().substring(0, 2).equals("--"))
+                .toList());
     ddl = ddl.trim();
     List<String> ddls = Arrays.stream(ddl.split(";")).filter(d -> !d.isBlank()).collect(toList());
 
