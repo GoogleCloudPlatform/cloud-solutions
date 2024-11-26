@@ -48,6 +48,7 @@ public class TrinoAutoscalerApp {
   private final ClusterScalingSpec autoscaleSpec;
   private final Factory<OkHttpClient> okHttpClientFactory;
   private final Factory<AccessToken> credentialProvider;
+  private final Integer trinoWorkerPort;
   private final ScheduledExecutorService scheduledExecutorService;
 
   /** Simple all parameter constructor. */
@@ -58,32 +59,40 @@ public class TrinoAutoscalerApp {
       GoogleCloudServicesFactory googleCloudServicesFactory,
       Factory<OkHttpClient> okHttpClientFactory,
       Factory<AccessToken> credentialProvider,
+      Integer trinoWorkerPort,
       ScheduledExecutorService scheduledExecutorService) {
     this.clusterInformation = clusterInformation;
     this.autoscaleSpec = config;
     this.googleCloudServicesFactory = googleCloudServicesFactory;
     this.okHttpClientFactory = okHttpClientFactory;
     this.credentialProvider = credentialProvider;
+    this.trinoWorkerPort = trinoWorkerPort;
     this.scheduledExecutorService = scheduledExecutorService;
   }
 
   /** The main tread loop that instantiates the application. */
   public static void main(String[] args) throws IOException, InterruptedException {
 
-    if (args.length != 1) {
-      logger.atSevere().log("Requires one argument <file-path-to-config-textpb>");
+    if (args.length == 0 || args.length > 2) {
+      logger.atSevere().log(
+          "Requires one or two arguments <file-path-to-config-textpb> <trino-worker-port>");
     }
 
     logger.atInfo().log("using configuration from: %s", args[0]);
+
+    var scalingConfig = readFileAsPb(ClusterScalingSpec.class, args[0]);
+
+    var trinoWorkerPort = (args.length == 2) ? Integer.parseInt(args[1]) : null;
 
     var clusterInformation = new DataprocClusterInformationService(OkHttpClient::new).retrieve();
 
     new TrinoAutoscalerApp(
             clusterInformation,
-            readFileAsPb(ClusterScalingSpec.class, args[0]),
+            scalingConfig,
             ProductionGoogleCloudServicesFactory.create(clusterInformation),
             OkHttpClient::new,
             new ApplicationDefaultCredentialProvider(),
+            trinoWorkerPort,
             Executors.newScheduledThreadPool(10))
         .run();
   }
@@ -131,7 +140,8 @@ public class TrinoAutoscalerApp {
             okHttpClientFactory,
             () -> dataprocInstanceShutdownService,
             Duration.parse(
-                autoscaleSpec.getTimingConfiguration().getTrinoGracefulShutdownDuration()));
+                autoscaleSpec.getTimingConfiguration().getTrinoGracefulShutdownDuration()),
+            trinoWorkerPort);
 
     return new DataprocClusterResizeService(
         autoscaleSpec,

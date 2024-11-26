@@ -119,7 +119,7 @@ master node as a daemon process.
 1.  Invoke the autoscaler application using:
 
     ```bash
-    java -jar <path/to/jarFile> <path/to/configfile>
+    java -jar <path/to/jarFile> <path/to/configfile> [optional:trino-worker-port:-8060]
     ```
 
     It is recommended that the autoscaler be installed as a systemd daemon.

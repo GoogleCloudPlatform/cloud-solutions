@@ -14,8 +14,6 @@
 # limitations under the License.
 #
 
-## Description: Run unit tests in this directory isolated in a docker container.
-
 FROM gradle:8-jdk17
 ARG PROJECT_SUBDIRECTORY
 WORKDIR "${PROJECT_SUBDIRECTORY}"

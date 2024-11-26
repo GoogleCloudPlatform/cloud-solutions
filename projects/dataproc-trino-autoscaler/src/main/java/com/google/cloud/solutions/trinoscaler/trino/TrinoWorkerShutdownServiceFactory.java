@@ -16,6 +16,8 @@
 
 package com.google.cloud.solutions.trinoscaler.trino;
 
+import static java.util.Objects.requireNonNullElse;
+
 import com.google.cloud.solutions.trinoscaler.Factory;
 import com.google.cloud.solutions.trinoscaler.scaler.WorkerShutdownService;
 import com.google.common.flogger.GoogleLogger;
@@ -27,7 +29,7 @@ import okhttp3.OkHttpClient;
 /** Creates a task that gracefully shutdowns a Trino worker. */
 public class TrinoWorkerShutdownServiceFactory {
 
-  private static final int TRINO_WORKER_PORT = 8060;
+  private static final int DEFAULT_TRINO_WORKER_PORT = 8060;
 
   private final Factory<OkHttpClient> okHttpClientFactory;
 
@@ -35,14 +37,18 @@ public class TrinoWorkerShutdownServiceFactory {
 
   private final Duration gracefulShutdownDuration;
 
+  private final int trinoWorkerPort;
+
   /** Simple all parameter constructor. */
   public TrinoWorkerShutdownServiceFactory(
       Factory<OkHttpClient> okHttpClientFactory,
       Factory<WorkerShutdownService> workerShutdownServiceFactory,
-      Duration gracefulShutdownDuration) {
+      Duration gracefulShutdownDuration,
+      Integer trinoWorkerPort) {
     this.okHttpClientFactory = okHttpClientFactory;
     this.workerShutdownServiceFactory = workerShutdownServiceFactory;
     this.gracefulShutdownDuration = gracefulShutdownDuration;
+    this.trinoWorkerPort = requireNonNullElse(trinoWorkerPort, DEFAULT_TRINO_WORKER_PORT);
   }
 
   /** Returns a runnable task to shut down a specific worker specified using the worker name. */
@@ -53,7 +59,7 @@ public class TrinoWorkerShutdownServiceFactory {
           workerShutdownServiceFactory.create(),
           gracefulShutdownDuration,
           workerName,
-          TRINO_WORKER_PORT);
+          trinoWorkerPort);
     } catch (IOException ioException) {
       GoogleLogger.forEnclosingClass()
           .atSevere()

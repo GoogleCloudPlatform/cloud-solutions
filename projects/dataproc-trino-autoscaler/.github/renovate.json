@@ -1,28 +1,33 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":semanticCommits"],
-  "dependencyDashboardApproval": true,
-  "rangeStrategy": "bump",
-  "customManagers": [
-    {
-      "customType": "regex",
-      "description": "Update _VERSION variables in Dockerfiles, shell scripts, and files in the ci-tasks directory",
-      "fileMatch": [
-        "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
-        "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$",
-        "(^|/)*.sh",
-        "ci-tasks/.*$"
-      ],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s(?:ENV|ARG)?\\s*.+?_VERSION=\"?(?<currentValue>.+?)\"?\\s"
-      ]
-    }
-  ],
-  "packageRules": [
-    {
-      "matchFileNames": ["**"],
-      "groupName": "dataproc-trino-autoscaler",
-      "commitMessagePrefix": "chore(deps): [dataproc-trino-autoscaler]"
-    }
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Update _VERSION variables in Dockerfiles, shell scripts, and files in the ci-tasks directory",
+            "fileMatch": [
+                "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
+                "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$",
+                "(^|/)*.sh",
+                "ci-tasks/.*$"
+            ],
+            "matchStrings": [
+                "# renovate: datasource\u003d(?\u003cdatasource\u003e[a-z-]+?)(?: depName\u003d(?\u003cdepName\u003e.+?))? packageName\u003d(?\u003cpackageName\u003e.+?)(?: versioning\u003d(?\u003cversioning\u003e[a-z-]+?))?\\s(?:ENV|ARG)?\\s*.+?_VERSION\u003d\"?(?\u003ccurrentValue\u003e.+?)\"?\\s"
+            ]
+        }
+    ],
+    "dependencyDashboardApproval": true,
+    "extends": [
+        "config:recommended",
+        ":semanticCommits"
+    ],
+    "packageRules": [
+        {
+            "commitMessagePrefix": "chore(deps): [dataproc-trino-autoscaler]",
+            "groupName": "dataproc-trino-autoscaler",
+            "matchFileNames": [
+                "**"
+            ]
+        }
+    ],
+    "rangeStrategy": "bump"
 }
