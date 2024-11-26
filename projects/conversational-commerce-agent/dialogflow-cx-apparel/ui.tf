@@ -21,7 +21,7 @@ resource "google_storage_bucket" "ui_src_bucket" {
 resource "google_storage_bucket_object" "ui_index" {
   name    = "static/index.html"
   bucket  = google_storage_bucket.ui_src_bucket.name
-  content = replace(replace(file("${path.module}/assets/ui/static/index.html.tmpl"), "_AGENT_ID_", google_dialogflow_cx_agent.cc_agent.id), "_PROJECT_ID_", var.project_id)
+  content = replace(replace(file("${path.module}/assets/ui/static/index.html.tmpl"), "_AGENT_ID_", google_dialogflow_cx_agent.cc_agent.name), "_PROJECT_ID_", var.project_id)
 }
 
 resource "google_storage_bucket_object" "ui_static_fiels" {
@@ -101,7 +101,10 @@ resource "google_cloud_run_v2_service" "ui_static" {
       }
     }
   }
-  depends_on = [google_secret_manager_secret.nginx_config, google_storage_bucket.ui_src_bucket]
+  depends_on = [google_secret_manager_secret.nginx_config,
+    google_storage_bucket.ui_src_bucket,
+    google_secret_manager_secret_version.nginx_config_data
+  ]
 }
 
 resource "google_cloud_run_service_iam_binding" "allow_public" {

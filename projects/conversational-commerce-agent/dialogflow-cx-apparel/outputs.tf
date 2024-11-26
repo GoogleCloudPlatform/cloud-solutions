@@ -12,29 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-output "cloudfunction_uri" {
-  description = "The uri of the cloudfunction"
-  value       = google_cloudfunctions2_function.function.service_config[0].uri
-}
-
-output "dfcx_agent_id" {
-  description = "The id of dialogflow cx agent"
-  value       = google_dialogflow_cx_agent.cc_agent.id
-}
-
-output "agent_playbook_gs_uri" {
-  description = "The gcs uri to agent_playbook"
-  value       = "gs://${google_storage_bucket.dialogflowcx_assets_bucket.name}/${google_storage_bucket_object.agent_playbook_archive.name}"
-}
-
-output "application_integration_json" {
-  description = "The file name of Application Integration manifest json"
-  value       = local_file.app_integration.filename
-}
-
-output "ui_bucket_url" {
-  description = "The gcs url to the bucket of ui static files"
-  value       = "gs://${google_storage_bucket.ui_src_bucket.name}"
+output "agent_gs_bucket" {
+  description = "The gcs bucket to agent_playbook"
+  value       = "gs://${google_storage_bucket.dialogflowcx_assets_bucket.name}"
 }
 
 output "ui_cloudrun_url" {
