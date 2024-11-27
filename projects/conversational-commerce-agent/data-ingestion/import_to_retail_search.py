@@ -104,6 +104,29 @@ def set_default_branch(project_number:str, branch:str="0"):
     )
     client.set_default_branch(request=request)
 
+
+def update_product_level():
+    """
+    Set the default branch of the Search for Retail service.
+
+    Args:
+        project_number (str): Google Cloud Project number.
+        branch (str): Branch ID. Must be one of 0,1,2.
+    """
+    # Update Product Level before importing data
+    # https://cloud.google.com/retail/docs/upload-catalog#json
+    client = retail_v2.CatalogServiceClient()
+    catalog = retail_v2.Catalog()
+    catalog.name = "default_catalog"
+    catalog.display_name = "default_catalog"
+    catalog.product_level_config = retail_v2.types.ProductLevelConfig(
+    )
+    request = retail_v2.UpdateCatalogRequest(
+        catalog=catalog,
+    )
+    response = client.update_catalog(request=request)
+    logging.info("Update Catalog: %s", response)
+
 def prepare_arguments() -> dict:
     """
     Configure and parse commandline arguments.
@@ -183,6 +206,10 @@ def import_products(gcs_errors_path:str,
 if __name__ == "__main__":
     params = prepare_arguments()
 
+    if params["set_default_branch"]:
+        set_default_branch(params["project_number"],
+                           params["branch"])
+
     gcs_files = upload_dataset_to_gcs(
         params["gcs_bucket"],
         params["project_number"],
@@ -197,6 +224,3 @@ if __name__ == "__main__":
             branch=params["branch"])
         time.sleep(2)
 
-    if params["set_default_branch"]:
-        set_default_branch(params["project_number"],
-                           params["branch"])

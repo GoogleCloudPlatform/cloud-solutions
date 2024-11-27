@@ -191,7 +191,27 @@ if __name__ == "__main__":
         "images",
         "colors"
     ]
-
+    SEARCH_ABLE_ATTRIBUTES = [
+        "ageGroups",
+        "occasion",
+        "brands",
+        "categories",
+        "colorFamilies",
+        "conditions",
+        "description",
+        "materials"
+        "patterns",
+        "sizes",
+        "title",
+        "fabric",
+        "Type",
+        "Fabric",
+        "Ideal for",
+        "attributes.Fabric",
+        "type",
+        "attributes.Type",
+        "attributes.Ideal For"
+    ]
     # The update attribute config API takes <1000 attributes per API call.
     # We first fetch all attributes then updates only required attributes.
     updates = {}
@@ -201,13 +221,19 @@ if __name__ == "__main__":
                 CatalogAttribute.RetrievableOption(
                     CatalogAttribute.RetrievableOption.RETRIEVABLE_ENABLED)
             )
-            if key not in NON_SEARCHABLE_ATTRIBUTES:
+            if key in NON_SEARCHABLE_ATTRIBUTES:
                 attr_cfg[key].searchable_option = (
                     CatalogAttribute.SearchableOption(
-                        CatalogAttribute.SearchableOption.SEARCHABLE_ENABLED)
+                        CatalogAttribute.SearchableOption.SEARCHABLE_DISABLED)
                 )
             updates[key] = attr_cfg[key]
 
+        if key in SEARCH_ABLE_ATTRIBUTES:
+            attr_cfg[key].searchable_option = (
+                CatalogAttribute.SearchableOption(
+                    CatalogAttribute.SearchableOption.SEARCHABLE_ENABLED)
+            )
+            updates[key] = attr_cfg[key]
     update_catalog_attribute(
         project_number=gcp_project_number,
         attributes=updates,

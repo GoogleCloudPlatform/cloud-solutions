@@ -118,6 +118,26 @@ def update_attributes(source_obj) -> dict:
         logging.error("Product Spec not found.")
     return target_attrs
 
+def replace_domain_host(
+    url:str,
+    new_domain:str) -> str:
+    """Replaces the domain name of a given URL.
+
+    Args:
+        url: The URL to modify.
+        new_domain: The new domain name to use.
+
+    Returns:
+        The modified URL with the new domain name.
+    """
+
+    try:
+        start = url.index("//") + 2
+        end = url.find("/", start)
+        return f"""{url[:start]}{new_domain}{url[end:]}"""
+    except ValueError:
+        # Return original url if errors
+        return url
 
 def convert_flipkart_to_retail_search_product(
     input_file:str,
@@ -207,14 +227,17 @@ def convert_flipkart_to_retail_search_product(
                             for img in json.loads(source_images)
                             if "image" in source_obj
                         ]
-                        # Discard the product if first image
-                        # is not responding in one second.
-                        url=target_obj["images"][0]["uri"]
-                        if not check_existense(url=url):
-                            logging.error(
-                                "[Error]No Image found: %s.",
-                                target_obj["title"]
-                            )
+
+                        # Use the images on the shared GCS bucket.
+                        for image_url in target_obj["images"]:
+                            new_url = replace_domain_host(
+                                url=image_url["uri"],
+                                new_domain=(
+                                    "storage.googleapis.com/"
+                                    "gcp-retail-demo")
+                                )
+                            image_url["uri"] = new_url
+
                             continue
                     else:
                         logging.error(
