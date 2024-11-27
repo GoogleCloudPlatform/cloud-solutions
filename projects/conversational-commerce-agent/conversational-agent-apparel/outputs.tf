@@ -17,6 +17,11 @@ output "agent_gs_bucket" {
   value       = "gs://${google_storage_bucket.dialogflowcx_assets_bucket.name}"
 }
 
+output "app_integraion" {
+  description = "The json file used to create application integraion"
+  value       = local_file.app_integration.filename
+}
+
 output "ui_cloudrun_url" {
   description = "The url to the cloud run service hosting the UI"
   value       = google_cloud_run_v2_service.ui_static.urls[0]

@@ -24,7 +24,7 @@ data "archive_file" "agent_playbook" {
   dynamic "source" {
     for_each = fileset("${path.module}/assets/agent/", "**/*.yaml.tmpl")
     content {
-      content  = replace(file("${path.module}/assets/agent/${source.value}"), "_CF_URL_PLACEHOLDER_", google_cloudfunctions2_function.function.service_config[0].uri)
+      content  = replace(replace(file("${path.module}/assets/agent/${source.value}"), "_CF_URL_PLACEHOLDER_", google_cloudfunctions2_function.function.service_config[0].uri), "_PROJECT_AND_REGION_", "projects/${var.project_id}/locations/${var.region}")
       filename = trimsuffix(source.value, ".tmpl")
     }
   }

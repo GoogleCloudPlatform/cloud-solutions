@@ -24,5 +24,5 @@ module "firestore_connector" {
 resource "local_file" "app_integration" {
   content = replace(replace(local.apparel_search_prod, "YOUR-PROJECT-NUMBER", local.target_project_number),
   "YOUR-PROJECT-ID", var.project_id)
-  filename = "${path.module}/app-integ.json"
+  filename = "${path.module}/app-integration.json"
 }
