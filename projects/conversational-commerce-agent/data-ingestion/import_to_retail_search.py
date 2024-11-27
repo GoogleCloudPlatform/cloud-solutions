@@ -19,16 +19,48 @@ to Google Cloud Search for Retail.
 
 import argparse
 import logging
+import os
+import time
 
 from google.cloud import retail_v2, storage
 from google.cloud.retail_v2.types import GcsSource, ImportErrorsConfig as ErrorsConfig
 
 logging.basicConfig(level=logging.INFO)
 
-def upload_dataset_to_gsc(
+def split_jsonl(input_file:str,
+                output_prefix:str,
+                max_lines:int=500) -> list[str]:
+    """
+    Splits a large JSONL file into smaller files.
+
+    Args:
+        input_file: Path to the input JSONL file.
+        output_prefix: Prefix for the output files (e.g., 'output_').
+        max_lines: Maximum number of lines per output file.
+    Returns:
+        List of output file names.
+    """
+
+    file_names = []
+    folder = os.path.dirname(input_file)
+
+    with open(input_file, "r", encoding="utf-8") as infile:
+        lines = infile.readlines()
+        chunks = [
+            lines[i:i + max_lines]
+            for i in range(0, len(lines), max_lines)
+        ]
+        for index, chunk in enumerate(chunks):
+            fn = f"{folder}/{output_prefix}{index}.jsonl"
+            file_names.append(fn)
+            with open(fn, "w", encoding="utf-8") as f:
+                f.write("".join(chunk))
+    return file_names
+
+def upload_dataset_to_gcs(
     gcs_bucket:str,
     project_id:str,
-    input_file:str) -> str:
+    input_file:str) -> list[str]:
     """
     Upload Search for Retail dataset file to GCS bucket.
 
@@ -39,12 +71,21 @@ def upload_dataset_to_gsc(
     Returns:
         GCS URL of the uploaded file.
     """
+    files = split_jsonl(
+        input_file=input_file,
+        output_prefix="flipkart-retail-search-"
+    )
     client = storage.Client(project=project_id)
     bucket = client.get_bucket(gcs_bucket)
-    fn = input_file.split("/")[-1]
-    blob = bucket.blob(fn)
-    blob.upload_from_filename(input_file)
-    return f"gs://{gcs_bucket}/{fn}"
+
+    gcs = []
+    for file in files:
+        fn = file.split("/")[-1]
+        blob = bucket.blob(fn)
+        blob.upload_from_filename(file)
+        gcs.append(f"gs://{gcs_bucket}/{fn}")
+
+    return gcs
 
 def set_default_branch(project_number:str, branch:str="0"):
     """
@@ -142,16 +183,19 @@ def import_products(gcs_errors_path:str,
 if __name__ == "__main__":
     params = prepare_arguments()
 
-    gcs_file = upload_dataset_to_gsc(
+    gcs_files = upload_dataset_to_gcs(
         params["gcs_bucket"],
         params["project_number"],
         params["input_file"])
 
-    import_products(
-        gcs_errors_path=f"""gs://{params["gcs_bucket"]}/errors""",
-        gcs_url=gcs_file,
-        project_number=params["project_number"],
-        branch=params["branch"])
+    for gcs_file in gcs_files:
+        logging.info("* Processing %s", gcs_file)
+        import_products(
+            gcs_errors_path=f"""gs://{params["gcs_bucket"]}/errors""",
+            gcs_url=gcs_file,
+            project_number=params["project_number"],
+            branch=params["branch"])
+        time.sleep(2)
 
     if params["set_default_branch"]:
         set_default_branch(params["project_number"],
