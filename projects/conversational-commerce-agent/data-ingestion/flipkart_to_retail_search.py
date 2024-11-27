@@ -234,7 +234,7 @@ def convert_flipkart_to_retail_search_product(
                         source_obj.get("retail_price", 0)
                     )
                     target_obj["priceInfo"] = {
-                        "currencyCode": "USD", # Replace with actual currency
+                        "currencyCode": "INR", # Replace with actual currency
                         "price": item_price,
                         "originalPrice": item_original_price,
                         "priceRange": {},
@@ -257,7 +257,10 @@ def convert_flipkart_to_retail_search_product(
                             "placeIds": ["mobile", "www"]
                          }
                     ]
-
+                    target_obj["retrievableFields"] = (
+                        "name,title,brands,uri,categories,"
+                        "priceInfo,description"
+                        )
                     outfile.write(json.dumps(target_obj) + "\n")
 
                 except json.JSONDecodeError as e:
