@@ -251,11 +251,15 @@
       "groupName": "vision-ai-edge-platform",
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]"
     },
-
     {
       "matchFileNames": ["projects/alloydb-auth-workload-identity/**"],
       "groupName": "alloydb-auth-workload-identity",
       "commitMessagePrefix": "chore(deps): [alloydb-auth-workload-identity]"
+    },
+    {
+      "matchFileNames": ["projects/like-scelsius-but-better/**"],
+      "groupName": "like-scelsius-but-better",
+      "commitMessagePrefix": "chore(deps): [like-scelsius-but-better]"
     }
   ]
 }
