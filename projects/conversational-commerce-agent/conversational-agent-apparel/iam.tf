@@ -23,8 +23,17 @@ resource "google_project_iam_binding" "default" {
     "roles/serviceusage.serviceUsageConsumer",
     "roles/aiplatform.user",
     "roles/datastore.owner",
-    "roles/secretmanager.viewer"
+    "roles/secretmanager.viewer",
+    "roles/connectors.admin",
+    "roles/connectors.viewer",
+    "roles/iam.serviceAccountTokenCreator"
   ])
   role    = each.key
   members = ["serviceAccount:${local.compute_service_account}"]
+}
+
+resource "google_project_iam_binding" "dialogflow_service_agent" {
+  project = var.project_id
+  role    = "roles/integrations.integrationInvoker"
+  members = ["serviceAccount:service-${local.target_project_number}@gcp-sa-dialogflow.iam.gserviceaccount.com"]
 }

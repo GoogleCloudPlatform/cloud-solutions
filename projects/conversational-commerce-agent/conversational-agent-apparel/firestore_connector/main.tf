@@ -19,7 +19,7 @@ locals {
       additionalVariables = [
         {
           key         = "scopes"
-          stringValue = "https://www.googleapis.com/auth/cloud-platform, https://www.googleapis.com/auth/datastore"
+          stringValue = "https://www.googleapis.com/auth/cloud-platform"
         }
       ]
       authKey = "service_account"
