@@ -45,10 +45,9 @@ resource "google_storage_bucket_object" "agent_playbook_archive" {
 
 
 resource "google_dialogflow_cx_agent" "cc_agent" {
-  default_language_code = "en"
-  display_name          = "Conversational Commerce Agent"
-  location              = var.region
-  #    name                     = "8224d296-a944-4d8b-9bee-d2a733247a03"
+  default_language_code    = "en"
+  display_name             = "Conversational Commerce Agent"
+  location                 = var.region
   project                  = var.project_id
   supported_language_codes = []
   time_zone                = "America/Los_Angeles"
