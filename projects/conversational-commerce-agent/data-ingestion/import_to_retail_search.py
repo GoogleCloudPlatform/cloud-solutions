@@ -206,9 +206,6 @@ def import_products(gcs_errors_path:str,
 if __name__ == "__main__":
     params = prepare_arguments()
 
-    if params["set_default_branch"]:
-        set_default_branch(params["project_number"],
-                           params["branch"])
 
     gcs_files = upload_dataset_to_gcs(
         params["gcs_bucket"],
@@ -224,3 +221,6 @@ if __name__ == "__main__":
             branch=params["branch"])
         time.sleep(2)
 
+    if params["set_default_branch"]:
+        set_default_branch(params["project_number"],
+                           params["branch"])
