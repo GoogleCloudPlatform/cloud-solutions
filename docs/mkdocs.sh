@@ -65,7 +65,8 @@ ln -sf "${DOCS_DIR}/common" "${BUILD_DIR}/docs/common"
 
 for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
   PROJECT_DIRNAME="$(basename "$CURRENT_PROJECT_DIR")"
-  if [[ -d "${CURRENT_PROJECT_DIR}/docs" ]]; then
+  if [[ -e "${CURRENT_PROJECT_DIR}/docs/index.md" || -e "${CURRENT_PROJECT_DIR}/docs/README.md" ]]; then
+    # Use docs dir for documentation
     ln -s "${CURRENT_PROJECT_DIR}/docs" "${BUILD_DIR}/docs/${PROJECT_DIRNAME}"
   elif [[ -f "${CURRENT_PROJECT_DIR}/README.md" ]]; then
     echo "Using README.md for ${PROJECT_DIRNAME}"
