@@ -77,24 +77,18 @@ Here are the steps:
 cd conversational-agent-apparel
 ```
 
-*   Create a `terraform.tfvars` file
-
-```shell
-project_id = "<PROJECT_ID>"
-```
-
 *   Apply Terraform
 
 ```shell
 terraform init
-terraform apply
+terraform apply -var project_id="$PROJECT_ID"
 ```
 
 When instructed, answer "yes".
 
 You should see output like below:
 
-```shell
+```text
 agent_gs_bucket = "gs://<project-id>-dialogflowcx-assets"
 app_integraion = "./app-integration.json"
 ui_cloudrun_url = "https://<cloudrun-service-id>.<region>.run.app"
@@ -219,7 +213,7 @@ python3 update_controls.py -n $PROJECT_NUMBER
   end up with no search results.
     *   For demo purposes, you may want to reduce the size of the final dataset
     to reduce the time of import.
-    *   Catalog and product information is imported to **Branch 1,**
+    *   Catalog and product information is imported to **Branch 1**,
     which is set as the default branch.
 
 ```shell
@@ -232,7 +226,7 @@ python3 import_to_retail_search.py -i dataset/flipkart-all.jsonl -g $BUCKET_NAME
 You may see errors below, which indicates this product has invalid data.
 The problematic product will be ignored and not imported to Search for Retail.
 
-```shell
+```text
 INFO:root:error_samples {
   code: 3
   message: "The string in \"product.attributes.value.text\" must be with a length limit of 256 Unicode characters, but 1447 Unicode characters found."
