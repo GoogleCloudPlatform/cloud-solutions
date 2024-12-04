@@ -157,6 +157,9 @@ To install autoscaler as a systemd daemon follow the steps:
     -   The code systemctl daemon-reload reloads the systemd daemon
         configuration. This ensures that the systemd daemon is aware of the new
         service file trino_autoscaler.service.
+    -   When you are using a port other than 8060 for Trino,
+        add the port number with a space after `config.textproto`
+        on the `ExecStart` command.
 
     ```bash
     TRINO_AUTO_SCALER_SERVICE_FOLDER="/usr/lib/systemd/system/"
@@ -174,8 +177,7 @@ To install autoscaler as a systemd daemon follow the steps:
     [Service]
 
     Type=simple
-    ExecStart=java -jar ${TRINO_AUTOSCALE_FOLDER}/trino_autoscaler.jar
-    ${TRINO_AUTOSCALE_FOLDER}/config.textproto
+    ExecStart=java -jar ${TRINO_AUTOSCALE_FOLDER}/trino_autoscaler.jar ${TRINO_AUTOSCALE_FOLDER}/config.textproto
     ExecStop=/bin/kill -15 \$MAINPID
     Restart=always
     StandardOutput=append:/var/log/trino_autoscaler.log
