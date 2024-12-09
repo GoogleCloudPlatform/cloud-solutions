@@ -71,7 +71,9 @@ auth_req = google.auth.transport.requests.Request()
 
 client = retail_v2.SearchServiceClient(
     credentials=credentials,
-    client_info=ClientInfo("cloud-solutions/conv-commerce-apparel"),
+    client_info=ClientInfo(
+        "cloud-solutions/conversational-commerce-agent-v0.0.1"
+    ),
 )
 
 predict_client = retail_v2.PredictionServiceClient(credentials=credentials)
