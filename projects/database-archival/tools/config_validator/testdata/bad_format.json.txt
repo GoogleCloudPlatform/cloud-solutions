@@ -1,0 +1,5 @@
+[
+  {
+    'database_table_name': 'User',
+  }
+]

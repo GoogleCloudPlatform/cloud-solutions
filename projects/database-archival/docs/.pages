@@ -1,0 +1,7 @@
+title: Database Archival and Pruning
+nav:
+  - 'Overview': 'index.md'
+  - 'Architecture': 'architecture.md'
+  - 'Deployment and Configuration': 'deployment.md'
+  - 'Best Practices and Considerations': 'best_practices.md'
+  - 'Frequently Asked Questions (FAQs)': 'faqs.md'

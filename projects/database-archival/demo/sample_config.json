@@ -1,0 +1,27 @@
+[
+  {
+    "database_table_name": "Transaction",
+    "bigquery_location": "${REGION}",
+    "bigquery_table_name": "${PROJECT_ID}.${BIGQUERY_DATASET}.${CLOUD_SQL_DATABASE_NAME}_Transaction",
+    "bigquery_days_to_keep": 3650,
+    "database_prune_data": true,
+    "database_prune_batch_size": 1000,
+    "table_primary_key_columns": ["transaction_id"],
+    "table_date_column": "transaction_date",
+    "table_date_column_data_type": "DATE",
+    "database_days_to_keep": 730,
+    "database_type": "MYSQL",
+    "database_instance_name": "${CLOUD_SQL_INSTANCE_NAME}",
+    "database_name": "${CLOUD_SQL_DATABASE_NAME}",
+    "database_username": "${CLOUD_SQL_USER_NAME}",
+    "database_password_secret": "${CLOUD_SQL_PASSWORD_SECRET}"
+  },
+
+  {
+    "database_table_name": "User",
+    "bigquery_location": "${REGION}",
+    "bigquery_table_name": "${PROJECT_ID}.${BIGQUERY_DATASET}.${CLOUD_SQL_DATABASE_NAME}_User",
+    "bigquery_days_to_keep": 3650,
+    "database_prune_data": false
+  }
+]

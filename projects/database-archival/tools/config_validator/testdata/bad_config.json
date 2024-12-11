@@ -1,0 +1,17 @@
+[
+  {
+    "database_table_name": "User",
+    "bigquery_location": "asia-southeast1",
+    "bigquery_table_name": "project_id.dataset.User",
+    "bigquery_days_to_keep": 3650,
+    "database_prune_data": false
+  },
+
+  {
+    "database_table_name": "Transaction",
+    "bigquery_location": "asia-southeast1",
+    "bigquery_table_name": "project_id.dataset.Trasaction",
+    "bigquery_days_to_keep": 3650,
+    "database_prune_data": true
+  }
+]

@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools == 75.1.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "database_archival"
+description = "Airflow DAG for Database Archival."
+dependencies = [
+  # DAG.
+  "apache-airflow==2.10.1",
+  "apache-airflow-providers-google==10.22.0",
+  "google-api-core[grpc]==2.19.2",
+  "google-cloud-storage==2.18.2",
+
+  # Common.
+  "google-cloud-secret-manager==2.20.2",
+
+  # Cloud Function.
+  # Keep in sync with pruning_function/requirements.in
+  "cloud-sql-python-connector==1.12.1",
+  "frozendict==2.4.6",
+  "functions-framework==3.8.1",
+  "google-cloud-alloydb-connector==1.6.0",
+  "google-cloud-logging==3.11.2",
+  "pg8000==1.31.2",
+  "pymysql==1.1.1",
+  # Leave version blank of these packages for compatibility with apache-airflow.
+  "google-cloud-bigquery",
+  "Flask",
+  "sqlalchemy",
+  "sqlalchemy-pytds",
+  "Werkzeug",
+
+  # Testing.
+  "absl-py==2.1.0",
+  "testcontainers==4.8.2",
+]
+requires-python = ">=3.9"
+version = "0.1"

@@ -1,0 +1,21 @@
+# Requirements for Cloud Function tracked separetely to avoid conflicts
+# with versions required for Composer.
+
+# Common.
+google-cloud-secret-manager==2.20.2
+
+# Cloud Function requirements.
+cloud-sql-python-connector==1.12.1
+frozendict==2.4.6
+functions-framework==3.8.1
+google-cloud-alloydb-connector==1.6.0
+google-cloud-logging==3.11.2
+pg8000==1.31.2
+pymysql==1.1.1
+
+# Modules whose version is incompatible with Airflow.
+Flask==3.0.3
+google-cloud-bigquery==3.26.0
+sqlalchemy==2.0.36
+sqlalchemy-pytds==1.0.2
+Werkzeug==3.0.4
