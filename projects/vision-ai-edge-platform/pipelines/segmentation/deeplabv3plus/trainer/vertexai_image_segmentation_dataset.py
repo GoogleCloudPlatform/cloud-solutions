@@ -204,9 +204,10 @@ class VertexAIImageSegmentationDataset(tfds.core.GeneratorBasedBuilder):
 
 
         for el in dataset_items:
-            image = resize_image(_load_image(el['uri'])).numpy()
+            image = _load_image(el['uri'])
             mask = create_mask(image, el['polygons'], el['classes']).numpy()
             yield ('split_' + el['uri'],
                    {
-                       'image': image,
-                        'segmentation_mask': mask})
+                       'image': resize_image(image).numpy(),
+                       'segmentation_mask': resize_image(mask).numpy()
+                    })

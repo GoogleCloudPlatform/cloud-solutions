@@ -47,9 +47,9 @@ Depending on which tool you used to label the data, we have conversion scripts
 that help to import images into Vertex AI with a correct import file.
 The following notebooks help you with the conversion:
 
--   [From Visual Inspection AI dataset](./convert_viai_cosmetic_defect.ipynb)
+-   [From Visual Inspection AI dataset](notebooks/convert_viai_cosmetic_defect.ipynb)
 
--   [From COCO segmentation dataset](./convert_coco_segmentation.ipynb)
+-   [From COCO segmentation dataset](notebooks/convert_coco_segmentation.ipynb)
 
 All conversion tools above support polygon annotations and create a Vertex AI
 compatible annotation file with polygon segmentation labels.
@@ -134,18 +134,33 @@ ID which we can find in the Cloud Console (see the screenshot below).
 
 You have two options to train a model, namely
 
-1.  use the `launch_trainer.ipynb` notebook to train a model on your dataset
-with a custom job
+1.  use the `notebooks/launch_trainer.ipynb` notebook to train a
+model on your dataset with a custom job
 
-1.  use the `launch_pipeline.ipynb` notebook to launch a Vertex AI pipeline
-which will train a model on your dataset and deploy it to a Vertex AI endpoint
+1.  use the `notebooks/launch_pipeline.ipynb` notebook to launch a
+Vertex AI pipeline which will train a model on your dataset and
+deploy it to a Vertex AI endpoint
 
 In each of the notebooks the top cell allows to set parameters, such as
 the dataset ID or a Cloud region. Follow the instructions of the notebook to
 complete training a DeepLabV3+ segmentation model.
 
-The `launch_pipeline.ipynb` notebook offers a flag `deploy_model` which allows
-to deploy the model on Vertex AI. Set the flag if you want to test the model
-from an endpoint in the next step.
+The `notebooks/launch_pipeline.ipynb` notebook offers a flag `deploy_model`
+which allows to deploy the model on Vertex AI. Set the flag if you want to
+test the model from an endpoint in the next step.
 
 ## Testing the vision AI model
+
+After the pipeline finishes the model is registered
+in the Vertex AI Model Registry. You can deploy or export the model anytime
+from the registry. If you set the flag `deploy_model` in
+the `notebooks/launch_pipeline.ipynb`, a private endpoint should be serving the model
+already.
+
+There are two code examples to help you test the model after the training:
+
+1.  use the notebook `notebooks/test_trained_model_local.ipynb` to test
+the exported model on your local Python environment.
+
+1.  use the notebook `notebooks/test_trained_model_remote.ipynb` to test
+the model deployed on a Vertex AI Endpoint.

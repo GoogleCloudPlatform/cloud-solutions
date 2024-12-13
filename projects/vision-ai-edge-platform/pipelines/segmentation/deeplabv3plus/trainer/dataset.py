@@ -21,7 +21,7 @@ import keras_cv
 from vertexai_image_segmentation_dataset import VertexAIImageSegmentationDataset
 
 
-class AugmentImage(tf.keras.layers.Layer):
+class AugmentImages(tf.keras.layers.Layer):
     def __init__(self, seed=42):
         super().__init__()
         self.augment = tf.keras.Sequential([
@@ -55,8 +55,10 @@ def build_datasets(params):
                    num_parallel_calls=tf.data.AUTOTUNE))
         ds_aug = (ds
                   .repeat(augmentation_factor)
-                  .map(AugmentImage(),
-                       num_parallel_calls=tf.data.AUTOTUNE))
+                  .batch(batch_size, drop_remainder=True)
+                  .map(AugmentImages(),
+                       num_parallel_calls=tf.data.AUTOTUNE)
+                  .unbatch())
 
         return (tf.data.Dataset.sample_from_datasets(
             [ds, ds_aug],
