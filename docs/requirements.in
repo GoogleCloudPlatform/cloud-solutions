@@ -26,7 +26,7 @@ pygments == 2.18.0
 ## Mkdocs Plugins
 mkdocs == 1.6.1
 mkdocs-get-deps == 0.2.0
-mkdocs-material == 9.5.44
+mkdocs-material ==9.5.48
 mkdocs-redirects == 1.2.2
 mkdocstrings[python] == 0.27.0
 mkdocs-awesome-pages-plugin == 2.9.3
