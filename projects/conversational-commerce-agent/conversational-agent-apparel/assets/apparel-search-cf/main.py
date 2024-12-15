@@ -38,12 +38,13 @@ from flask import request
 
 from google.cloud import firestore
 from google.cloud import retail_v2
+from google.cloud.aiplatform import telemetry
 
 from google.protobuf.json_format import MessageToDict
 from google.api_core.gapic_v1.client_info import ClientInfo
 import tomllib
 
-# User-Agent: cloud-solutions/conversational-commerce-agent-v0.0.1
+_USER_AGENT = "cloud-solutions/conversational-commerce-agent-v0.0.1"
 TOML_PATH = os.getenv("CONFIG_TOML_PATH", "config.toml")
 with open(TOML_PATH, "rb") as f:
     config = tomllib.load(f)
@@ -142,9 +143,9 @@ def search():
     """
     returns products based on a search query from product catalog.
     """
-    app.logger.warning("REACHED /SEARCH")
+    app.logger.debug("REACHED /SEARCH")
     request_json = request.get_json(silent=False)
-    app.logger.warning("REQUEST: %s", request_json)
+    app.logger.debug("REQUEST: %s", request_json)
 
     # Capture the user's search query.
     query = request_json["search"]
@@ -167,34 +168,35 @@ def search():
         "query_expansion_spec": {"condition": "AUTO"},
     }
     try:
-        # Retail Search API call
-        response = client.search(search_request)
-        res = MessageToDict(response._pb)
-        app.logger.warning("RAW RESULT: %s", res["results"])
+        with telemetry.tool_context_manager(_USER_AGENT):
+            # Retail Search API call
+            response = client.search(search_request)
+            res = MessageToDict(response._pb)
+            app.logger.debug("RAW RESULT: %s", res["results"])
 
-        # extract products based on the offset index from the returned products
-        if start_index > len(res["results"]) - 1:
-            return flask.jsonify(
-                {"message": "No more products available to show"}
+            # extract products based on the offset index from the returned products
+            if start_index > len(res["results"]) - 1:
+                return flask.jsonify(
+                    {"message": "No more products available to show"}
+                )
+
+            num_products = 3  # number of products to display in the UI
+            end_index = start_index + num_products
+            end_index = (
+                end_index
+                if len(res["results"]) > end_index
+                else len(res["results"])
             )
+            products = res["results"][start_index:end_index]
 
-        num_products = 3  # number of products to display in the UI
-        end_index = start_index + num_products
-        end_index = (
-            end_index
-            if len(res["results"]) > end_index
-            else len(res["results"])
-        )
-        products = res["results"][start_index:end_index]
+            # remove unnecessary fields from product's data
+            data = get_minimal_payload(products)
+            app.logger.debug("RESULT: %s", data)
 
-        # remove unnecessary fields from product's data
-        data = get_minimal_payload(products)
-        app.logger.warning("RESULT: %s", data)
+            # Transform the product's data into a customer template format to display in the UI
+            response = generate_custom_template(data)
 
-        # Transform the product's data into a customer template format to display in the UI
-        response = generate_custom_template(data)
-
-        return flask.jsonify(response)
+            return flask.jsonify(response)
     except Exception as e:
         app.logger.warning("Retail Search Exception: %s", e)
         return flask.jsonify({})
@@ -205,27 +207,28 @@ def get_product_details():
     """
     Fetch products details to answer customer's queries related to products.
     """
-    app.logger.warning("REACHED /GET_PRODUCT_DETAILS")
+    app.logger.debug("REACHED /GET_PRODUCT_DETAILS")
     request_json = request.get_json(silent=False)
-    app.logger.warning("REQUEST: %s", request_json)
+    app.logger.debug("REQUEST: %s", request_json)
 
     product_ids = list(set(request_json["product_ids"]))
-    app.logger.warning("PRODUCT_IDS: %s", product_ids)
+    app.logger.debug("PRODUCT_IDS: %s", product_ids)
 
     data = []
     for product_id in product_ids:
         # Retail API call
-        product = product_client.get_product(name=product_name + product_id)
-        product.retrievable_fields = None
-        res = MessageToDict(product._pb)
-        obj = {"product": res}
-        data.append(obj)
+        with telemetry.tool_context_manager(_USER_AGENT):
+            product = product_client.get_product(name=product_name + product_id)
+            product.retrievable_fields = None
+            res = MessageToDict(product._pb)
+            obj = {"product": res}
+            data.append(obj)
 
-    app.logger.warning("RAW RESULT: %s", data)
+    app.logger.debug("RAW RESULT: %s", data)
 
     # Keep only neccessary fields from product's data
     product_details = get_minimal_payload(data)
-    app.logger.warning("PRODUCTS: %s", product_details)
+    app.logger.debug("PRODUCTS: %s", product_details)
 
     return flask.jsonify({"products": product_details})
 
@@ -235,9 +238,9 @@ def similar():
     """
     Find similar products using Retail Recommendation API.
     """
-    app.logger.warning("REACHED /SIMILAR")
+    app.logger.debug("REACHED /SIMILAR")
     request_json = request.get_json(silent=False)
-    app.logger.warning("REQUEST: %s", request_json)
+    app.logger.debug("REQUEST: %s", request_json)
 
     product_id = request_json["product_id"]
 
@@ -264,17 +267,18 @@ def similar():
 
     try:
         # Retail Recommendation API call
-        response = predict_client.predict(predict_request)
+        with telemetry.tool_context_manager(_USER_AGENT):
+            response = predict_client.predict(predict_request)
         res = MessageToDict(response._pb)
-        app.logger.warning("RAW RESPONSE: %s", res)
-        app.logger.warning("RAW RESULT: %s", res["results"])
+        app.logger.debug("RAW RESPONSE: %s", res)
+        app.logger.debug("RAW RESULT: %s", res["results"])
         data = res["results"]
 
         # Remove unnecessary 'metadata' parent nodes to normalize output between /search and /similar results.
         for i in range(len(data)):
             data[i] = data[i]["metadata"]
         data = get_minimal_payload(data)
-        app.logger.warning("RESULT: %s", data)
+        app.logger.debug("RESULT: %s", data)
 
         if len(data) > 0:
             # Transform product's data into custom template format to display in UI
@@ -293,14 +297,14 @@ def get_reviews():
     """
     retrieve product's reviews (Currently using DUMMY reviews)
     """
-    app.logger.warning("REACHED /GET_REVIEWS")
+    app.logger.debug("REACHED /GET_REVIEWS")
     request_json = request.get_json(silent=False)
-    app.logger.warning("REQUEST: %s", request_json)
+    app.logger.debug("REQUEST: %s", request_json)
 
     # Eventually this should look up reviews based on the product ID provided.
     shown_products = request_json["shown_products"]
     reviews_per_product = len(REVIEWS) // len(shown_products)
-    app.logger.warning("reviews_per_product: %s", reviews_per_product)
+    app.logger.debug("reviews_per_product: %s", reviews_per_product)
 
     # splitting the reviews for the shown products
     reviews = []
@@ -317,7 +321,7 @@ def get_reviews():
 
             reviews.append(review)
 
-    app.logger.warning("REVIEWS: %s", reviews)
+    app.logger.debug("REVIEWS: %s", reviews)
 
     # Transforming reviews into a customer template format to display in UI
     response = generate_custom_template(reviews, template="review-template")
@@ -330,12 +334,12 @@ def get_delivery_date():
     """
     Get the estimated delivery date
     """
-    app.logger.warning("REACHED /GET_DELIVERY_DATE")
+    app.logger.debug("REACHED /GET_DELIVERY_DATE")
     request_json = request.get_json(silent=False)
-    app.logger.warning("REQUEST: %s", request_json)
+    app.logger.debug("REQUEST: %s", request_json)
 
     shopping_cart = request_json["shopping_cart"]
-    app.logger.warning("SHOPPING CART: %s", shopping_cart)
+    app.logger.debug("SHOPPING CART: %s", shopping_cart)
 
     # set estimated delivery date between next 3 to 7 days
     dt = datetime.now()
@@ -354,7 +358,7 @@ def get_delivery_date():
         )
         cart_with_delivery_dates.append(new_item)
 
-    app.logger.warning("CART WITH DELIVERY DATES: %s", cart_with_delivery_dates)
+    app.logger.debug("CART WITH DELIVERY DATES: %s", cart_with_delivery_dates)
 
     return flask.jsonify({"shopping_cart": cart_with_delivery_dates})
 
@@ -364,14 +368,14 @@ def store_delivery_date():
     """
     Store the user's preferred delivery date (should be in future than the earliest estimated delivery date)
     """
-    app.logger.warning("REACHED /STORE_DELIVERY_DATE")
+    app.logger.debug("REACHED /STORE_DELIVERY_DATE")
     request_json = request.get_json(silent=False)
-    app.logger.warning("REQUEST: %s", request_json)
+    app.logger.debug("REQUEST: %s", request_json)
 
     shopping_cart = request_json["shopping_cart"]
     preferred_delivery_dates = request_json["preferred_delivery_date"]
-    app.logger.warning("SHOPPING CART: %s", shopping_cart)
-    app.logger.warning("PREFERRED DELIVERY DATES: %s", preferred_delivery_dates)
+    app.logger.debug("SHOPPING CART: %s", shopping_cart)
+    app.logger.debug("PREFERRED DELIVERY DATES: %s", preferred_delivery_dates)
 
     response = {
         "status": "failure",
@@ -380,7 +384,7 @@ def store_delivery_date():
 
     if len(preferred_delivery_dates) > 0:
         for item in preferred_delivery_dates:
-            app.logger.warning("PREFERRED DELIVERY DATE ITEM: %s", item)
+            app.logger.debug("PREFERRED DELIVERY DATE ITEM: %s", item)
             if item and item["id"] and item["preferred_delivery_date"]:
                 # copy product by value
                 product = (
@@ -419,7 +423,7 @@ def store_delivery_date():
                     )
                     item["status"] = "fail"
 
-    app.logger.warning(
+    app.logger.debug(
         "DELIVERY DATES CHANGE STATUS: %s", preferred_delivery_dates
     )
 
@@ -436,15 +440,15 @@ def place_order():
     """
     Place the order for the shopping cart items
     """
-    app.logger.warning("REACHED /PLACE_ORDER")
+    app.logger.debug("REACHED /PLACE_ORDER")
     request_json = request.get_json(silent=True)
-    app.logger.warning("REQUEST: %s", request_json)
+    app.logger.debug("REQUEST: %s", request_json)
 
     products = request_json.get("products", [])
-    app.logger.warning("SHOPPING CART PRODUCTS: %s", products)
+    app.logger.debug("SHOPPING CART PRODUCTS: %s", products)
 
     if not products:
-        app.logger.warning("EMPTY CART: %s", products)
+        app.logger.debug("EMPTY CART: %s", products)
         return flask.jsonify(
             {"order_status": "not_placed", "reason": "Shopping cart is empty!"}
         )
@@ -462,9 +466,10 @@ def place_order():
 
     try:
         # store the order data in firestore
-        db.collection("orders").document(order_id).set(order_data)
-        app.logger.warning("ORDER PLACED: %s", order_data)
-        return flask.jsonify(order_data)
+        with telemetry.tool_context_manager(_USER_AGENT):
+            db.collection("orders").document(order_id).set(order_data)
+            app.logger.debug("ORDER PLACED: %s", order_data)
+            return flask.jsonify(order_data)
     except Exception as e:
         app.logger.warning("PLACE ORDER EXCEPTION: %s", e)
         return flask.jsonify(
@@ -478,9 +483,9 @@ def get_user_info():
     Fetch user's personal info.
     NOTE: currently using DUMMY user info. In an actual app, this should be coming from user's account.
     """
-    app.logger.warning("REACHED /USER_INFO")
+    app.logger.debug("REACHED /USER_INFO")
     request_json = request.get_json(silent=True)
-    app.logger.warning("REQUEST: %s", request_json)
+    app.logger.debug("REQUEST: %s", request_json)
 
     return flask.jsonify(user_info)
 
@@ -530,7 +535,7 @@ def no_op():
     """
     Healthcheck endpoint
     """
-    app.logger.warning("REACHED /NO_OP")
+    app.logger.debug("REACHED /NO_OP")
     return flask.jsonify(True)
 
 
@@ -561,7 +566,8 @@ def generate_custom_template(payload, template="retail-template"):
 
     Parameters:
       payload: The data being returned
-      template: The Custom template for DF Messenger to use to render the rich content. Default is retail-template.
+      template: The Custom template for DF Messenger to use to render the rich content.
+        Default is retail-template.
     Returns:
       response: The response object which contains custom template payload under "payload" field.
     """
@@ -580,6 +586,63 @@ def generate_custom_template(payload, template="retail-template"):
         }
     }
 
+@app.post("/search_filter")
+def search_filter():
+    """
+    returns products based on a search query from product catalog.
+    """
+    app.logger.debug("REACHED /SEARCH")
+    request_json = request.get_json(silent=False)
+    app.logger.debug("REQUEST: %s", request_json)
+
+    # Capture the user's search query.
+    query = request_json['search']
+     # index number from which the products should be returned
+    start_index = request_json['offset']
+    filter = request_json['filter']
+
+    session_id = str(uuid.uuid4())
+    visitorid = session_id
+    # A search model name which was configured while creating product catalog
+    placement = 'default_search'
+
+    # Retail API search request
+    search_request = {
+        'placement':
+            'projects/' + PROJECT_NUMBER +
+            '/locations/global/catalogs/default_catalog/placements/' + placement,
+        'query': query,
+        'visitor_id': visitorid,
+        'query_expansion_spec': {
+            'condition': 'AUTO'
+        },
+        'filter': filter
+    }
+    try:
+        # Retail Search API call
+        with telemetry.tool_context_manager(_USER_AGENT):
+            response = client.search(search_request)
+            res = MessageToDict(response._pb)
+        # extract products based on the offset index from the returned products
+        if(start_index > len(res["results"])-1):
+            return flask.jsonify({"message": "No more products available to show"})
+
+        num_products = 3    # number of products to display in the UI
+        end_index = start_index + num_products
+        end_index = end_index if len(res["results"]) > end_index else len(res["results"])
+        products = res["results"][start_index:end_index]
+
+        # remove unnecessary fields from product's data
+        data = get_minimal_payload(products)
+        app.logger.debug("RESULT: %s", data)
+
+        # Transform the product's data into a customer template format to display in the UI
+        response = generate_custom_template(data)
+
+        return flask.jsonify(response)
+    except Exception as e:
+        app.logger.warning("Retail Search Exception: %s", e)
+        return flask.jsonify({})
 
 @https_fn.on_request()
 def main(req: https_fn.Request) -> https_fn.Response:

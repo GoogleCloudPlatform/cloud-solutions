@@ -178,7 +178,8 @@ if __name__ == "__main__":
             "price",
             "cost",
             "currencyCode",
-            "images"
+            "images",
+            "attributes.Tags"
         ]
 
     # Make these attributes not searchable.
@@ -210,7 +211,8 @@ if __name__ == "__main__":
         "attributes.Fabric",
         "type",
         "attributes.Type",
-        "attributes.Ideal For"
+        "attributes.Ideal For",
+        "attributes.Tags"
     ]
     # The update attribute config API takes <1000 attributes per API call.
     # We first fetch all attributes then updates only required attributes.
