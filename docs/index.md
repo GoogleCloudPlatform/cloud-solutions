@@ -1,31 +1,28 @@
-# Overview
+# [![Google Cloud](common/images/google-cloud-lockup.svg){style="height: 77.5px;"}](https://cloud.google.com)
 
-Browse tools and reference architectures that can help you build solutions using
+----
+
+This repository contains various tools, demos and reference architectures from
+the Google Cloud Solutions Architects team that can help you build solutions on
 Google Cloud.
 
-## Reference architectures
+Use the Table of Contents to view the documentation on all available projects,
+or browse the source code at GitHub:
+[GoogleCloudPlatform/cloud-solutions](https://github.com/GoogleCloudPlatform/cloud-solutions)
 
-### BigQuery change data capture
+All these projects are [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
+licensed.
 
-Use the BigqueryIO change data capture (CDC) functionality to capture data
-streams from databases such as Spanner.
-[More details »](dataflow-bigquery-change-data-capture/index.md)
+Other solutions from the Google Cloud Solutions team can be found at:
 
-### Imagen Voice Captioning
+*   [![Google Cloud Icon
+    ](common/images/super-cloud.svg){style="width:1em; height:1em"}
+    Google Cloud Solutions](https://cloud.google.com/solutions)
 
-Use Vertex AI Generative AI Vision and Text-to-Speech AI to generate a voice
-description for an image. [More details »](imagen-voice-captioning/index.md)
+*   [![Google Cloud Solutions Center Icon
+    ](common/images/solutions-center.png){style="width:1em; height:1em"}
+    Google Cloud Solutions Center](https://solutions.cloud.google.com/)
 
-### Serverless event processing
-
-Implement an event-driven data processing pipeline without having to manage the
-underlying infrastructure.
-[More details »](serverless-event-processing/index.md)
-
-## Tools
-
-### Binpacker
-
-Optimize Google Kubernetes Engine (GKE) utilization by analyzing existing
-workloads and creating binpacking recommendations.
-[More details »](sa-tools/binpacker.md)
+*   [![Google Cloud Icon
+    ](common/images/super-cloud.svg){style="width:1em; height:1em"}
+    Google Cloud Architecture Center](https://cloud.google.com/architecture)
