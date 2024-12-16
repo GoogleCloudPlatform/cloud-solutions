@@ -26,16 +26,7 @@ SCRIPT_DIR=$(dirname "${SCRIPT}")
 DOCS_DIR="${SCRIPT_DIR}"
 PROJECTS_DIR=$(realpath "${SCRIPT_DIR}/../projects")
 BUILD_DIR="${DOCS_DIR}/build"
-
-if [[ -z "${THE_REPO_ROOT:-}" ]]; then
-  THE_REPO_ROOT="$(realpath "${SCRIPT_DIR}/..")"
-fi
-
-# shellcheck disable=SC1091 # do not follow
-source "$THE_REPO_ROOT/kokoro/ci-tasks/common-defs.sh"
-
-# shellcheck disable=SC1091 # do not follow
-source "$THE_REPO_ROOT/kokoro/ci-tasks/setup-python-env.sh"
+VENV_DIR="${BUILD_DIR}/venv"
 
 #
 # The script creates a temporary build directory that uses
@@ -105,5 +96,20 @@ cd "${DOCS_DIR}"
 [[ -e "${BUILD_DIR}/docs/user-guide" ]] &&
   mv "${BUILD_DIR}/docs/user-guide" "${BUILD_DIR}/docs/aaa-user-guide"
 
+# Create Python venv.
+echo "Initialize Python venv at: ${VENV_DIR}"
+python3 -m venv "${VENV_DIR}"
+
+## Activate python virtual environment to install and launch mkdocs
+# shellcheck source=/dev/null
+source "${VENV_DIR}/bin/activate"
+echo "Installing python requirements: ${VENV_DIR}"
+pip3 install \
+  --quiet \
+  --exists-action i \
+  --require-hashes \
+  --require-virtualenv \
+  -r "${SCRIPT_DIR}/requirements.txt"
+
 # Run mkdocs.
-runInPythonEnv "cd ${SCRIPT_DIR} && python3 -m mkdocs $*"
+(cd "${SCRIPT_DIR}" && python3 -m mkdocs "$@")
