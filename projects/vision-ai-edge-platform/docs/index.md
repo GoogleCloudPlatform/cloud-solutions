@@ -1,4 +1,6 @@
-# Vision AI Edge Platform Overview
+# Overview
+
+## Vision AI Edge Platform Overview
 
 Vision AI Edge platform is a template of Google Cloud infrastructure that
 compose the Vision AI Edge service with Vision AI Edge Camera Client. Vision AI
@@ -15,7 +17,7 @@ This is a simplified an example architecture of Vision AI Edge service with the
 Vision AI Edge Camera Client with arrows that explain the operation process of
 each tasks.
 
-![Vision AI Edge for MDE](common/images/architecture.svg)
+![Vision AI Edge for MDE](common/images/architecture-vae-platform.svg)
 
 ## Training New ML Model
 

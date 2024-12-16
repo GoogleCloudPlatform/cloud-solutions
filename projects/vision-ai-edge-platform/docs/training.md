@@ -1,4 +1,6 @@
-# How to training new ML Model
+# Training
+
+## How to training new ML Model
 
 List of ML Model training pipeline examples
 
