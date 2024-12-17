@@ -600,7 +600,9 @@ def search_filter():
      # index number from which the products should be returned
     start_index = request_json['offset']
     filter = request_json['filter']
-
+    # Workaround that the conversation Agent Tool
+    # cannot parse '\"' in request body.
+    filter = filter.replace("^", "\"")
     session_id = str(uuid.uuid4())
     visitorid = session_id
     # A search model name which was configured while creating product catalog
@@ -636,9 +638,10 @@ def search_filter():
         data = get_minimal_payload(products)
         app.logger.debug("RESULT: %s", data)
 
-        # Transform the product's data into a customer template format to display in the UI
+        # Transform the product's data into a customer template format to
+        # display in the UI
         response = generate_custom_template(data)
-
+        app.logger.debug("response: %s", response)
         return flask.jsonify(response)
     except Exception as e:
         app.logger.warning("Retail Search Exception: %s", e)

@@ -160,7 +160,11 @@ These scripts report errors if the Search for Retail service is not ready for us
 if you see errors when running the following scripts.
 Please wait 5 minutes and try again.
 
-*   Switch to the data-ingestion folder and download
+This demo solution consists of two different use cases - Apparel and Cosmetic.
+
+*   To setup Apparel use case demo.
+
+Switch to the data-ingestion folder and download
 [Flipkart dataset](https://www.kaggle.com/datasets/PromptCloudHQ/flipkart-products).
 
 ```shell
@@ -172,16 +176,28 @@ dataset/archive.zip https://www.kaggle.com/api/v1/datasets/download/PromptCloudH
 unzip dataset/archive.zip -d dataset
 ```
 
+*   To setup Cosmetic use case demo.
+
+Switch to the data-ingestion folder and download
+[Flipkart cosmetic dataset](https://www.kaggle.com/datasets/shivd24coder/cosmetic-brand-products-dataset).
+
+```shell
+cd ../data-ingestion
+mkdir -p dataset
+
+curl -L -o \
+dataset/archive.zip https://www.kaggle.com/api/v1/datasets/download/shivd24coder/cosmetic-brand-products-dataset
+unzip dataset/archive.zip -d dataset
+```
+
 *   Setup environment variables.
 
 ```shell
 export PROJECT_ID=<YOUR PROJECT ID>
 gcloud config set project $PROJECT_ID
 
-export PROJECT_NUMBER=$(gcloud projects list \
-   --filter="$(gcloud config get-value project)" \
-   --format="value(PROJECT_NUMBER)")
-
+export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID \
+  --format="value(projectNumber)")
 echo $PROJECT_NUMBER
 ```
 
