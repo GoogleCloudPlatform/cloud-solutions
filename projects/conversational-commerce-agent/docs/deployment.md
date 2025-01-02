@@ -160,34 +160,17 @@ These scripts report errors if the Search for Retail service is not ready for us
 if you see errors when running the following scripts.
 Please wait 5 minutes and try again.
 
-This demo solution consists of two different use cases - Apparel and Cosmetic.
+This demo solution consists of three different use cases -
+Apparel, Cosmetic and Food.
 
-*   To setup Apparel use case demo.
-
-Switch to the data-ingestion folder and download
-[Flipkart dataset](https://www.kaggle.com/datasets/PromptCloudHQ/flipkart-products).
+*   Create Python Virtual environment.
 
 ```shell
-cd ../data-ingestion
-mkdir -p dataset
+cd data-ingestion
+python3 -m venv .venv
+source .venv/bin/activate
 
-curl -L -o \
-dataset/archive.zip https://www.kaggle.com/api/v1/datasets/download/PromptCloudHQ/flipkart-products
-unzip dataset/archive.zip -d dataset
-```
-
-*   To setup Cosmetic use case demo.
-
-Switch to the data-ingestion folder and download
-[Flipkart cosmetic dataset](https://www.kaggle.com/datasets/shivd24coder/cosmetic-brand-products-dataset).
-
-```shell
-cd ../data-ingestion
-mkdir -p dataset
-
-curl -L -o \
-dataset/archive.zip https://www.kaggle.com/api/v1/datasets/download/shivd24coder/cosmetic-brand-products-dataset
-unzip dataset/archive.zip -d dataset
+pip install -r requirements.txt --require-hashes
 ```
 
 *   Setup environment variables.
@@ -201,19 +184,83 @@ export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID \
 echo $PROJECT_NUMBER
 ```
 
-*   Convert Flipkart dataset to Search for Retail format.
-    *   Note that in this demo, we use **Branch** **1** as the default branch.
-  For more information about Search for Retail Branches,
-  please see the [documentation](https://cloud.google.com/retail/docs/catalog#branch).
+*   Convert data file and import data to Search for Retail.
+
+Note that in this demo, we use **Branch** **1** as the default branch.
+
+For more information about Search for Retail Branches,
+please see the [documentation](https://cloud.google.com/retail/docs/catalog#branch).
+
+*   Choose one of the following use cases.
+
+[Apparel](#to-setup-apparel-use-case-demo)
+
+[Cosmetic](#to-setup-cosmetic-use-case-demo)
+
+[Food](#to-setup-food-use-case-demo)
+
+##### To setup Apparel use case demo
+
+Switch to the data-ingestion folder and download
+[Flipkart dataset](https://www.kaggle.com/datasets/PromptCloudHQ/flipkart-products).
 
 ```shell
-python3 -m venv .venv
-source .venv/bin/activate
+cd ../data-ingestion
+mkdir -p dataset
 
-pip install -r requirements.txt --require-hashes
+# Download dataset
+curl -L -o \
+dataset/archive.zip https://www.kaggle.com/api/v1/datasets/download/PromptCloudHQ/flipkart-products
+unzip dataset/archive.zip -d dataset
 
+# Convert data format
 python3 flipkart_to_retail_search.py \
    -i dataset/flipkart_com-ecommerce_sample.csv \
+   -o dataset/flipkart-all.jsonl -p $PROJECT_NUMBER -b 1
+```
+
+*   Go to [Next Step](#import-data-and-set-the-default-branch)
+
+##### To setup Cosmetic use case demo
+
+Switch to the data-ingestion folder and download
+[Flipkart cosmetic dataset](https://www.kaggle.com/datasets/shivd24coder/cosmetic-brand-products-dataset).
+
+```shell
+cd ../data-ingestion
+mkdir -p dataset
+
+# Download dataset
+curl -L -o \
+dataset/archive.zip https://www.kaggle.com/api/v1/datasets/download/shivd24coder/cosmetic-brand-products-dataset
+unzip dataset/archive.zip -d dataset
+
+# Convert data format
+python3 cosmetics_to_retail_search.py \
+   -i dataset/makeup_data.json \
+   -o dataset/flipkart-all.jsonl -p $PROJECT_NUMBER -b 1
+
+```
+
+*   Go to [Next Step](#import-data-and-set-the-default-branch)
+
+##### To setup Food use case demo
+
+Switch to the data-ingestion folder and download
+[Flipkart cosmetic dataset](https://www.kaggle.com/datasets/shivd24coder/cosmetic-brand-products-dataset)
+
+```shell
+cd ../data-ingestion
+mkdir -p dataset
+
+# Download dataset
+curl -L -o \
+dataset/archive.zip https://www.kaggle.com/api/v1/datasets/download/graphquest/restaurant-menu-items
+unzip dataset/archive.zip -d dataset
+
+# Convert data format
+python3 food_to_retail_search.py \
+   -i dataset/restaurantmenuchanges.csv \
    -o dataset/flipkart-all.jsonl -p $PROJECT_NUMBER -b 1
 ```
 
@@ -223,14 +270,19 @@ python3 flipkart_to_retail_search.py \
 python3 update_controls.py -n $PROJECT_NUMBER
 ```
 
-*   Import data and set the default branch.
-    *   Note that large catalog imports can take hours to fully propagate.
-  Before the data is fully propagated your conversation with the agent may
-  end up with no search results.
-    *   For demo purposes, you may want to reduce the size of the final dataset
-    to reduce the time of import.
-    *   Catalog and product information is imported to **Branch 1**,
-    which is set as the default branch.
+*   Go to [Next Step](#import-data-and-set-the-default-branch)
+
+##### Import data and set the default branch
+
+*   Note that large catalog imports can take hours to fully propagate.
+Before the data is fully propagated your conversation with the agent may
+end up with no search results.
+
+*   For demo purposes, you may want to reduce the size of the final dataset
+to reduce the time of import.
+
+*   Catalog and product information is imported to **Branch 1**,
+which is set as the default branch.
 
 ```shell
 export BUCKET_NAME=${PROJECT_ID}-dialogflowcx-assets

@@ -29,8 +29,10 @@ import flask
 import google.auth
 import os
 import random
-from datetime import datetime, timedelta
+import tomllib
 import uuid
+
+from datetime import datetime, timedelta
 
 from firebase_admin import db, initialize_app
 from firebase_functions import https_fn
@@ -42,7 +44,8 @@ from google.cloud.aiplatform import telemetry
 
 from google.protobuf.json_format import MessageToDict
 from google.api_core.gapic_v1.client_info import ClientInfo
-import tomllib
+
+from utils import shopping_cart
 
 _USER_AGENT = "cloud-solutions/conversational-commerce-agent-v0.0.1"
 TOML_PATH = os.getenv("CONFIG_TOML_PATH", "config.toml")
@@ -554,7 +557,10 @@ def get_minimal_payload(resp_json):
         output["product"]["name"] = item["product"]["name"]
         output["product"]["priceInfo"] = item["product"]["priceInfo"]
         output["product"]["images"] = [item["product"]["images"][0]]
-        output["product"]["description"] = item["product"]["description"]
+        if "description" in item["product"]:
+            output["product"]["description"] = item["product"]["description"]
+        else:
+            output["product"]["description"] = item["product"]["title"]
         results.append(output)
 
     return results
@@ -599,10 +605,10 @@ def search_filter():
     query = request_json['search']
      # index number from which the products should be returned
     start_index = request_json['offset']
-    filter = request_json['filter']
+    search_filter = request_json['filter']
     # Workaround that the conversation Agent Tool
     # cannot parse '\"' in request body.
-    filter = filter.replace("^", "\"")
+    search_filter = search_filter.replace("^", "\"")
     session_id = str(uuid.uuid4())
     visitorid = session_id
     # A search model name which was configured while creating product catalog
@@ -618,7 +624,7 @@ def search_filter():
         'query_expansion_spec': {
             'condition': 'AUTO'
         },
-        'filter': filter
+        'filter': search_filter
     }
     try:
         # Retail Search API call
@@ -646,6 +652,13 @@ def search_filter():
     except Exception as e:
         app.logger.warning("Retail Search Exception: %s", e)
         return flask.jsonify({})
+
+@app.post("/shopping_cart")
+def show_shopping_cart():
+    app.logger.debug("REACHED /shopping_cart")
+    request_json = request.get_json(silent=False)
+    app.logger.debug("REQUEST: %s", request_json)
+    return shopping_cart(request_json)
 
 @https_fn.on_request()
 def main(req: https_fn.Request) -> https_fn.Response:
