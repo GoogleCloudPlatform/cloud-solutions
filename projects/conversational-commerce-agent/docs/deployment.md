@@ -264,15 +264,15 @@ python3 food_to_retail_search.py \
    -o dataset/flipkart-all.jsonl -p $PROJECT_NUMBER -b 1
 ```
 
+*   Go to [Next Step](#import-data-and-set-the-default-branch)
+
+##### Import data and set the default branch
+
 *   Update Search for Retail catalog level attribute controls.
 
 ```shell
 python3 update_controls.py -n $PROJECT_NUMBER
 ```
-
-*   Go to [Next Step](#import-data-and-set-the-default-branch)
-
-##### Import data and set the default branch
 
 *   Note that large catalog imports can take hours to fully propagate.
 Before the data is fully propagated your conversation with the agent may

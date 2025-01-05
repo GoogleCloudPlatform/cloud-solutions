@@ -26,6 +26,11 @@ data "archive_file" "apparel_search_cf" {
   }
 
   source {
+    content  = file("${path.module}/assets/apparel-search-cf/utils.py")
+    filename = "utils.py"
+  }
+
+  source {
     content  = <<-EOT
     [gcp]
     project_id = "${var.project_id}"
