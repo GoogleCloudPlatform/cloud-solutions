@@ -74,7 +74,7 @@ Here are the steps:
 *   Change to application folder.
 
 ```shell
-cd conversational-agent-apparel
+cd conversational-agent-examples
 ```
 
 *   Apply Terraform
