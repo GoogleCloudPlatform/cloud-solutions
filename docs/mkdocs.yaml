@@ -86,3 +86,5 @@ validation:
     # so downgrade to info
     absolute_links: info
 
+exclude_docs: |
+  alloydb-autoscaler/
