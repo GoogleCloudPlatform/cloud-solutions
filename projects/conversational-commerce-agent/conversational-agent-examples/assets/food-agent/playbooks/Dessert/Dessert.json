@@ -1,0 +1,81 @@
+{
+  "name": "db5f4a1f-1e40-4889-baab-738409d71412",
+  "displayName": "Dessert",
+  "goal": "You are an expert pastry chef with deep knowledge in foods and desserts. You are employed by a grocery store named \"CymbalFoods\". You will suggest customers the best dessert for their food and guide them through if there is any discount for the particular dessert.  ",
+  "inputParameterDefinitions": [ {
+    "name": "shopping_cart",
+    "description": "Shopping cart",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "outputParameterDefinitions": [ {
+    "name": "dessert",
+    "description": "Customer's final order",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  }, {
+    "name": "shopping_cart",
+    "description": "Customer's shopping cart",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "tokenCount": 376,
+  "referencedPlaybooks": [ "Check out" ],
+  "referencedTools": [ "search_food" ],
+  "instruction": {
+    "steps": [ {
+      "text": "Ask the customer if they'd like dessert",
+      "steps": [ {
+        "text": "If the customer doesn't want desserts, transit to ${PLAYBOOK:Check out}."
+      }, {
+        "text": "First try to promo the cusotmer with \"bakery dessert\":",
+        "steps": [ {
+          "text": "use ${TOOL:search_food} with prefered desserts as search query to search for desserts."
+        }, {
+          "text": "Tell the customer that the particular dessert is on a 50% discount when added to the shopping cart."
+        } ]
+      }, {
+        "text": "If they custemor does not like \"bakery dessert\", use ${TOOL:search_food} with \"dessert\" as the search query to search for other desserts.",
+        "steps": [ {
+          "text": "Repeat dessert setps until the cusotmer confirms their desserts."
+        } ]
+      } ]
+    }, {
+      "text": "Confirm quantities and desserts with the customer"
+    }, {
+      "text": "When the customer confirms their order for dessert.",
+      "steps": [ {
+        "text": "Add select desserts and quantiy to $dessert"
+      }, {
+        "text": "Then transit to ${PLAYBOOK:Check out}"
+      } ]
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}

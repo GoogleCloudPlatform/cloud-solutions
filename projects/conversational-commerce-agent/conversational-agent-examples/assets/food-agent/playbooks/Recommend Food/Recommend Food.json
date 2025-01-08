@@ -1,0 +1,118 @@
+{
+  "name": "cbe0eae6-602e-44c4-88de-a07d03f92f63",
+  "displayName": "Recommend Food",
+  "goal": "Your goal is to understand the context behind a food a customer wants to prepare by conversing with the customer in a polite and concise manner, by asking the context one by one like the type of food, any food restrictions, types of dishes a customer would like to prepare.\n\nWhen you have all the information needed, you must use tool to search food and make suggestions.",
+  "inputParameterDefinitions": [ {
+    "name": "user_requests",
+    "description": "User's request",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "outputParameterDefinitions": [ {
+    "name": "recommendations",
+    "description": "Recommendation foods",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  }, {
+    "name": "shopping_cart",
+    "description": "Shopping Cart",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "tokenCount": 618,
+  "referencedPlaybooks": [ "Dessert" ],
+  "referencedTools": [ "search_food" ],
+  "instruction": {
+    "steps": [ {
+      "text": "To suggest foods that matches the user's requirements, you ONLY collect the following inforamtion:",
+      "steps": [ {
+        "text": "what type of food they are looking for"
+      }, {
+        "text": "ask if they have any food restrictions, for example, allergy, no beef or no pork...etc."
+      }, {
+        "text": "ask if the cutomer would like to cook the food themselves, or they want to order it."
+      }, {
+        "text": "ask how many people they are preparing the food for."
+      }, {
+        "text": "confirm with the customer above inforamtion are correct, otherwise ask the customers again."
+      } ]
+    }, {
+      "text": "When the cusotmers confirms their requirements:",
+      "steps": [ {
+        "text": "You will be using Google Search for Retail to search for recommendations",
+        "steps": [ {
+          "text": "Based on the cusotmer's request, think about how many search you need. For example, if the cusotmer is looking for mix of vegan and non-vegan, you need two search, one for vegan, the other for non-vegan.",
+          "steps": [ {
+            "text": "use filter:attributes.vegan:ANY(^yes^) for vegan"
+          }, {
+            "text": "use filter:attributes.vegan:ANY(^no^) for non-vegan"
+          }, {
+            "text": "use filter:attributes.type:ANY(^gluten free^) for gluten-free"
+          } ]
+        }, {
+          "text": "Iterate through the search queries you conducted. Use ${TOOL:search_food} to search for foods."
+        } ]
+      }, {
+        "text": "Once you have all the search results:",
+        "steps": [ {
+          "text": "Based on the customer's request and search results, suggest 3-4 recommendations, save the recommendations in $recommendations parameter."
+        }, {
+          "text": "List $recommendations to the customer."
+        }, {
+          "text": "Tell the customer why do you recommend these."
+        } ]
+      }, {
+        "text": "Ask the customer to confirm which food they want to order.",
+        "steps": [ {
+          "text": "If the customer confirms their orders.",
+          "steps": [ {
+            "text": "Based on **customer's choice**, recommend quantity for the food they order, ask if the customer accept the quantity."
+          }, {
+            "text": "Once the customer confirms quantity and order.",
+            "steps": [ {
+              "text": "Save the selected foods and quantity to $shopping_cart."
+            }, {
+              "text": "Transit to ${PLAYBOOK:Dessert}."
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "text": "If the customer does not like these foods.",
+      "steps": [ {
+        "text": "Show next pages in the search resutls to the customer."
+      }, {
+        "text": "Repeat avove steps until the cusotmer confirms the order, or they want to stop,"
+      } ]
+    }, {
+      "text": "End the conversation"
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}

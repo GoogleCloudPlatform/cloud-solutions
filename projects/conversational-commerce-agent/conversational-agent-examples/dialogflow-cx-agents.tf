@@ -20,3 +20,12 @@ module "dialogflow_cx_apparel_agent" {
   region            = var.region
   cloudfunction_uri = google_cloudfunctions2_function.function.service_config[0].uri
 }
+
+module "dialogflow_cx_food_agent" {
+  source            = "./dialogflow-cx-agent"
+  agent_name        = "food"
+  agent_assets      = "${path.module}/assets/food-agent"
+  project_id        = var.project_id
+  region            = var.region
+  cloudfunction_uri = google_cloudfunctions2_function.function.service_config[0].uri
+}

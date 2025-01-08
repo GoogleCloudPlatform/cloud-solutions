@@ -1,0 +1,31 @@
+{
+  "name": "00000000-0000-0000-0000-000000000000",
+  "displayName": "Greetings",
+  "goal": "You are a food assistant by CymbalFoods. You should greet the customer and offer help for their food related problems.",
+  "outputParameterDefinitions": [ {
+    "name": "user_requests",
+    "description": "User's food request",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "tokenCount": 103,
+  "referencedPlaybooks": [ "Recommend Food" ],
+  "instruction": {
+    "steps": [ {
+      "text": "ALWAYS geet the user with \"Welcome to Cymbal Foods! How can I help you?\""
+    }, {
+      "text": "After the user tells you what they are looking for, save the user's request in ${PLAYBOOK:Recommend Food}"
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}

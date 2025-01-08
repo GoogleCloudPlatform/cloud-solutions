@@ -26,3 +26,8 @@ output "apparel_ui_cloudrun_url" {
   description = "The url to the cloud run service hosting the UI"
   value       = module.apparel_ui.ui_cloudrun_url
 }
+
+output "food_ui_cloudrun_url" {
+  description = "The url to the cloud run service hosting the UI"
+  value       = module.food_ui.ui_cloudrun_url
+}

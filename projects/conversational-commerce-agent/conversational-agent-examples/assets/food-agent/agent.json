@@ -1,0 +1,45 @@
+{
+  "displayName": "Food",
+  "defaultLanguageCode": "en",
+  "timeZone": "America/Los_Angeles",
+  "enableLogging": true,
+  "projectNumber": 19651678978,
+  "speechToTextSettings": {
+
+  },
+  "enableStackdriverLogging": true,
+  "advancedSettings": {
+    "audioExportGcsDestination": {
+
+    },
+    "speechSettings": {
+      "endpointerSensitivity": 90,
+      "noSpeechTimeout": {
+        "seconds": 5
+      }
+    },
+    "playbackInterruptionSettings": {
+
+    },
+    "loggingSettings": {
+      "enableStackdriverLogging": true,
+      "enableInteractionLogging": true
+    }
+  },
+  "speakerIdSettings": {
+
+  },
+  "textToSpeechSettings": {
+
+  },
+  "duplexSettings": {
+
+  },
+  "answerFeedbackSettings": {
+
+  },
+  "startPlaybook": "Greetings",
+  "webClientSettings": {
+    "boxBorderRadius": "0"
+  }
+}

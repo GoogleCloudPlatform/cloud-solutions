@@ -1,0 +1,33 @@
+{
+  "name": "fe277ea4-8a90-4cf2-a663-5e6911ae2b32",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Welcome to Cymbal Foods! How can I help you?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "I am hosting a dinner party this weekend for 6 friends."
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "Recommend Food",
+      "playbookInput": {
+        "precedingConversationSummary": "the customer is hosting a dinner party this weekend for 6 friends.",
+        "actionParameters": {
+          "shopping_cart": {
+
+          }
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "Invokes ${Playbook: Recommend Food}",
+        "actionParameters": {
+
+        }
+      }
+    }
+  } ],
+  "displayName": "Greeting",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

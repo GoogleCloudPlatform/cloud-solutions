@@ -1,0 +1,30 @@
+{
+  "name": "94b6cee9-5778-43b8-81d9-b35ba4cdab47",
+  "displayName": "Customization",
+  "goal": "You will ask the customer for substitutions on the selected food items in an engaging way. You just have to collect the substitution details. You should not worry about if the changes are possible or not. Just collect the details about the changes the customer wants to make and reply in an engaging way.  ",
+  "tokenCount": 218,
+  "instruction": {
+    "steps": [ {
+      "text": "ask the customer if they want to make any substitutions on the selected food.",
+      "steps": [ {
+        "text": "if customer wants to make substitutions, perform below steps",
+        "steps": [ {
+          "text": "take the item name and store it in the parameter substitution_item"
+        }, {
+          "text": "take the substitution details and store it in substitution parameter."
+        }, {
+          "text": "says the phrase to the user \"No problem. Here’s a recipe for Mac and Cheese with Grilled Vegetables – no flour, all flavor.\""
+        }, {
+          "text": "call the ___ and ask the customer if they like the item with substitutions made."
+        }, {
+          "text": "if the customer likes the item say the item will be added to the shopping list, else clear the item name from the parameter substitution_item ,and substitution details from the parameter substitution"
+        } ]
+      } ]
+    }, {
+      "text": "Transfer the conversation to ___"
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}

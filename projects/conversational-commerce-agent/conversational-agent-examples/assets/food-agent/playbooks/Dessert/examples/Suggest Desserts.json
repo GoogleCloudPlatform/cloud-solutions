@@ -1,0 +1,194 @@
+{
+  "name": "b72189e1-c5d5-4785-8585-9b5851a0b26c",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Would you like desserts ?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "sure, what do you have"
+    }
+  }, {
+    "toolUse": {
+      "tool": "search_food",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "",
+          "offset": 0,
+          "search": "bakery dessert"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "retail-template",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "Dark chocolate brownie, m and m cookie.",
+                    "id": "6a1ab2c6-5593-4b60-811b-330dffe3c02f",
+                    "images": [ {
+                      "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photos/eda098b1-9872-497f-9dcd-c3fc7806a5e6-retina-large-jpeg"
+                    } ],
+                    "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/6a1ab2c6-5593-4b60-811b-330dffe3c02f",
+                    "priceInfo": {
+                      "currencyCode": "INR",
+                      "price": 4.1500000000000004
+                    },
+                    "title": "Debusker"
+                  }
+                }, {
+                  "product": {
+                    "description": "Banana Pudding Cake Slice",
+                    "id": "243587a3-8afd-4f5f-8ff1-a8fffafa96e6",
+                    "images": [ {
+                      "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photos/1fa938d3-afab-4bfb-bcca-6c235199c47c-retina-large-jpeg"
+                    } ],
+                    "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/243587a3-8afd-4f5f-8ff1-a8fffafa96e6",
+                    "priceInfo": {
+                      "currencyCode": "INR",
+                      "price": 10
+                    },
+                    "title": "Banana Pudding Cake Slice"
+                  }
+                }, {
+                  "product": {
+                    "description": "One slice of our moist made-from-scratch lemon cake filled with homemade blueberry filling and topped with delicious lemon cream cheese frosting",
+                    "id": "8379333b-4dfd-4b9d-8879-44d8666a94e8",
+                    "images": [ {
+                      "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/dd36888c-9c0d-4695-80f9-f78db0a71b88-retina-large.JPG"
+                    } ],
+                    "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/8379333b-4dfd-4b9d-8879-44d8666a94e8",
+                    "priceInfo": {
+                      "currencyCode": "INR",
+                      "price": 7
+                    },
+                    "title": "Lemon Blueberry Cake"
+                  }
+                } ]
+              },
+              "type": "custom_template"
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "For the Comfort Food menu, these would be tasty."
+    }
+  }, {
+    "userUtterance": {
+      "text": "I am not sure if I like bakery desserts..."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "For the bakery desserts, we’re offering these macarons at a 50% discount when you add to the grocery order. They're light and fun, and they’re grain-free."
+    }
+  }, {
+    "userUtterance": {
+      "text": "Ok, I'll have 4 Debuster then."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Ok, add 4 Debuster then. to the shopping cart, correct ? "
+    }
+  }, {
+    "userUtterance": {
+      "text": "yes, that's correct"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "Check out",
+      "playbookInput": {
+        "precedingConversationSummary": "shopping cart",
+        "actionParameters": {
+          "dessert": {
+            "items": [ {
+              "id": "6a1ab2c6-5593-4b60-811b-330dffe3c02f",
+              "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photos/eda098b1-9872-497f-9dcd-c3fc7806a5e6-retina-large-jpeg",
+              "price": 4.1500000000000004,
+              "quantity": 4,
+              "title": "Debusker"
+            } ]
+          },
+          "shopping_cart": {
+            "items": [ {
+              "id": "995d2233-b94e-44b0-b37c-56872cf51f80",
+              "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/e86f793a-c09a-488e-9fb5-f41b53a8f831-39a46c63-598b-4251-b45a-944037610da6-retina-large.JPG",
+              "price": 14.09,
+              "quantity": 2,
+              "title": "Prosciutto \u0026 Chicken Sandwich"
+            }, {
+              "id": "f1332bf0-7f61-46cf-9679-78ac10606838",
+              "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/b5275c1c-674e-48f8-8e05-fd6a1a137543-retina-large.jpeg",
+              "price": 14,
+              "quantity": 2,
+              "title": "Thai Peanut Salad"
+            } ]
+          }
+        }
+      },
+      "playbookOutput": {
+        "actionParameters": {
+
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "customer's shopping cart",
+    "actionParameters": {
+      "shopping_cart": {
+        "items": [ {
+          "id": "995d2233-b94e-44b0-b37c-56872cf51f80",
+          "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/e86f793a-c09a-488e-9fb5-f41b53a8f831-39a46c63-598b-4251-b45a-944037610da6-retina-large.JPG",
+          "price": 14.09,
+          "quantity": 2,
+          "title": "Prosciutto \u0026 Chicken Sandwich"
+        }, {
+          "id": "f1332bf0-7f61-46cf-9679-78ac10606838",
+          "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/b5275c1c-674e-48f8-8e05-fd6a1a137543-retina-large.jpeg",
+          "price": 14,
+          "quantity": 2,
+          "title": "Thai Peanut Salad"
+        } ]
+      }
+    }
+  },
+  "playbookOutput": {
+    "actionParameters": {
+      "dessert": {
+        "items": [ {
+          "id": "6a1ab2c6-5593-4b60-811b-330dffe3c02f",
+          "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photos/eda098b1-9872-497f-9dcd-c3fc7806a5e6-retina-large-jpeg",
+          "price": 4.1500000000000004,
+          "quantity": 4,
+          "title": "Debusker"
+        } ]
+      },
+      "shopping_cart": {
+        "items": [ {
+          "id": "995d2233-b94e-44b0-b37c-56872cf51f80",
+          "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/e86f793a-c09a-488e-9fb5-f41b53a8f831-39a46c63-598b-4251-b45a-944037610da6-retina-large.JPG",
+          "price": 14.09,
+          "quantity": 2,
+          "title": "Prosciutto \u0026 Chicken Sandwich"
+        }, {
+          "id": "f1332bf0-7f61-46cf-9679-78ac10606838",
+          "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/b5275c1c-674e-48f8-8e05-fd6a1a137543-retina-large.jpeg",
+          "price": 14,
+          "quantity": 2,
+          "title": "Thai Peanut Salad"
+        } ]
+      }
+    }
+  },
+  "displayName": "Suggest Desserts",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

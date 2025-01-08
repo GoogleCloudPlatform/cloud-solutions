@@ -1,0 +1,8 @@
+{
+  "name": "42d6cf3a-93e4-41ae-9d00-f5f1c3f0172d",
+  "displayName": "search_food",
+  "openApiSpec": {
+    "ignoreUnknownFields": true
+  },
+  "toolType": "CUSTOMIZED_TOOL"
+}

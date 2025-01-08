@@ -1,0 +1,439 @@
+{
+  "name": "947d3a89-50e0-49cd-a564-a21c703fc1c5",
+  "displayName": "End-to-End",
+  "testCaseConversationTurns": [ {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "I'll have 6 DESSERT Flan"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "sure,. what do you have ?"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "i mean, 3 Thai Peanut Salads and 3 Prosciutto \u0026 Chicken Sandwiches"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "sure"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "that looks good"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "correct"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "Definitely. I want to enjoy the whole party with my friends, not interested in cooking and cleaning all day"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "Yes, I am looking for grain-free options"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "I have a mix of vegetarian and non-vegetarian friends coming over, so I need options for both.\n\n"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "text": {
+          "text": "I am hosting a dinner party this weekend for 6 friends."
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  }, {
+    "userInput": {
+      "input": {
+        "event": {
+          "event": "WelcomeEvent"
+        }
+      }
+    },
+    "virtualAgentOutput": {
+
+    }
+  } ],
+  "creationTime": {
+    "seconds": 1734752412,
+    "nanos": 718028000
+  },
+  "testConfig": {
+    "playbookVersion": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/719dca2b-c3fb-4c94-93fb-dce85b9d85a0/playbooks/00000000-0000-0000-0000-000000000000/versions/0"
+  },
+  "expectedTestCaseResult": {
+    "expectedActions": [ {
+      "playbookInvocation": {
+        "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/719dca2b-c3fb-4c94-93fb-dce85b9d85a0/playbooks/c4d90f48-437d-40eb-9283-c85d9e5b9771",
+        "playbookInput": {
+          "precedingConversationSummary": "shopping cart",
+          "actionParameters": {
+            "shopping_cart": {
+              "items": [ {
+                "id": "995d2233-b94e-44b0-b37c-56872cf51f80",
+                "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/e86f793a-c09a-488e-9fb5-f41b53a8f831-39a46c63-598b-4251-b45a-944037610da6-retina-large.JPG",
+                "price": 14.09,
+                "quantity": 3,
+                "title": "Prosciutto \u0026 Chicken Sandwich"
+              }, {
+                "id": "f1332bf0-7f61-46cf-9679-78ac10606838",
+                "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/b5275c1c-674e-48f8-8e05-fd6a1a137543-retina-large.jpeg",
+                "price": 14,
+                "quantity": 3,
+                "title": "Thai Peanut Salad"
+              }, {
+                "id": "e8b0996e-ba6c-4561-8758-d68e332d4044",
+                "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/7a993e17-ed09"
+              } ]
+            }
+          }
+        },
+        "playbookOutput": {
+          "state": "OK"
+        },
+        "playbookState": "OUTPUT_STATE_PENDING"
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/719dca2b-c3fb-4c94-93fb-dce85b9d85a0/tools/04c5510a-07c6-4302-b23b-6c5340787c46",
+        "action": "shopping_cart",
+        "inputActionParameters": {
+          "requestBody": {
+            "items": [ {
+              "id": "995d2233-b94e-44b0-b37c-56872cf51f80",
+              "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/e86f793a-c09a-488e-9fb5-f41b53a8f831-39a46c63-598b-4251-b45a-944037610da6-retina-large.JPG",
+              "price": 14.09,
+              "quantity": 3,
+              "title": "Prosciutto \u0026 Chicken Sandwich"
+            }, {
+              "id": "f1332bf0-7f61-46cf-9679-78ac10606838",
+              "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/b5275c1c-674e-48f8-8e05-fd6a1a137543-retina-large.jpeg",
+              "price": 14,
+              "quantity": 3,
+              "title": "Thai Peanut Salad"
+            }, {
+              "id": "e8b0996e-ba6c-4561-8758-d68e332d4044",
+              "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/7a993e17-ed09-4747-9097-0444444"
+            } ]
+          }
+        },
+        "outputActionParameters": {
+          "error": "500 Internal Server Error: The server encountered an internal error and was \nunable to complete your request. Either the server is overloaded or there \nis an error in the application."
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/719dca2b-c3fb-4c94-93fb-dce85b9d85a0/tools/42d6cf3a-93e4-41ae-9d00-f5f1c3f0172d",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "filter": "",
+            "offset": 0,
+            "search": "dessert"
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Chocolate Pudding with Oreo Cookie Crumbles, and Whipped Topping",
+                      "id": "44f1dde8-e8de-4b9f-859a-4062776f852f",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photos/6ce1fdcd-db8c-40ae-8bb5-f88e01b72a46-retina-large.jpg"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/44f1dde8-e8de-4b9f-859a-4062776f852f",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 3.5899999999999999
+                      },
+                      "title": "Chocolate Pudding Parfait"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Home made cream cheese flan with delicious caramel on top.",
+                      "id": "e8b0996e-ba6c-4561-8758-d68e332d4044",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/7a993e17-ed09-4874-b227-2bcd4dc7fce0-b280ced4-0adf-45af-a3bc-567d5ad1f993-retina-large.JPG"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/e8b0996e-ba6c-4561-8758-d68e332d4044",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 9.5899999999999999
+                      },
+                      "title": "DESSERT Flan"
+                    }
+                  }, {
+                    "product": {
+                      "description": "One of the most iconic deserts around.",
+                      "id": "972d65eb-f2ef-45bc-a29e-b00cc0f8b0d1",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/fe9c4065-8bd8-4baf-a05b-6bcca4b1d347-6d8e3e8b-1ac1-44dc-97b8-ae94fee12fab-retina-large.JPG"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/972d65eb-f2ef-45bc-a29e-b00cc0f8b0d1",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 7.9900000000000002
+                      },
+                      "title": "DESSERT Arroz con Leche"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "playbookInvocation": {
+        "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/719dca2b-c3fb-4c94-93fb-dce85b9d85a0/playbooks/db5f4a1f-1e40-4889-baab-738409d71412",
+        "playbookInput": {
+          "precedingConversationSummary": "customer's shopping cart",
+          "actionParameters": {
+            "shopping_cart": {
+              "items": [ {
+                "id": "995d2233-b94e-44b0-b37c-56872cf51f80",
+                "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/e86f793a-c09a-488e-9fb5-f41b53a8f831-39a46c63-598b-4251-b45a-944037610da6-retina-large.JPG",
+                "price": 14.09,
+                "quantity": 3,
+                "title": "Prosciutto \u0026 Chicken Sandwich"
+              }, {
+                "id": "f1332bf0-7f61-46cf-9679-78ac10606838",
+                "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/b5275c1c-674e-48f8-8e05-fd6a1a137543-retina-large.jpeg",
+                "price": 14,
+                "quantity": 3,
+                "title": "Thai Peanut Salad"
+              } ]
+            }
+          }
+        },
+        "playbookOutput": {
+          "state": "OK"
+        },
+        "playbookState": "OUTPUT_STATE_PENDING"
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/719dca2b-c3fb-4c94-93fb-dce85b9d85a0/tools/42d6cf3a-93e4-41ae-9d00-f5f1c3f0172d",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "filter": "(attributes.Tags:ANY(^grill^) AND attributes.Tags:ANY(^gluten free^) AND attributes.Vegan:ANY(^no^))",
+            "offset": 0,
+            "search": ""
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "prosciutto \u0026 roasted chicken breast with fresh mozzarella, crushed honey roasted almonds, basil pesto, balsamic glaze drizzle, tomatoes (580 cal) on panini-pressed ciabatta (260 cal)can be requested gluten free by selecting the gf bread option",
+                      "id": "995d2233-b94e-44b0-b37c-56872cf51f80",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/e86f793a-c09a-488e-9fb5-f41b53a8f831-39a46c63-598b-4251-b45a-944037610da6-retina-large.JPG"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/995d2233-b94e-44b0-b37c-56872cf51f80",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 14.09
+                      },
+                      "title": "Prosciutto \u0026 Chicken Sandwich"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Grilled chicken, rice, egg, chopped vegetables and a combination of chili peppers, ginger, Sriracha sauce, and Gluten-Free Soy Sauce.",
+                      "id": "e047ab96-e93c-42f1-b7ae-aabb80686454",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/ad5be84b-ae47-4569-a93e-f513e6a8ad4d-retina-large.png"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/e047ab96-e93c-42f1-b7ae-aabb80686454",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 7.2000000000000002
+                      },
+                      "title": "SPICY HIBACHI CHICKEN RICE"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Served with Gluten-Free Soy Sauce.",
+                      "id": "25fcdc81-b347-4092-b7a0-b7412ad401e6",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/8d4d0ceb-bd5f-4f72-a1d9-9f21f13ac1a6-retina-large.png"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/25fcdc81-b347-4092-b7a0-b7412ad401e6",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 13.9
+                      },
+                      "title": "SHRIMP SAUTÉ"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "toolUse": {
+        "tool": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/719dca2b-c3fb-4c94-93fb-dce85b9d85a0/tools/42d6cf3a-93e4-41ae-9d00-f5f1c3f0172d",
+        "action": "search",
+        "inputActionParameters": {
+          "requestBody": {
+            "filter": "(attributes.Tags:ANY(^grill^) AND attributes.Tags:ANY(^gluten free^) AND attributes.Vegan:ANY(^yes^))",
+            "offset": 0,
+            "search": ""
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "payload": {
+              "richContent": [ [ {
+                "name": "retail-template",
+                "payload": {
+                  "items": [ {
+                    "product": {
+                      "description": "Mixed greens,sauteed mushrooms, peppers, basil,roasted peanuts, sesame seeds, peanut dressing, lemon wedge. Served with a base of your choice and either roasted antibiotic-free chicken or roasted sesame tofu. (Gluten-Free \u0026 Vegan)",
+                      "id": "f1332bf0-7f61-46cf-9679-78ac10606838",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/b5275c1c-674e-48f8-8e05-fd6a1a137543-retina-large.jpeg"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/f1332bf0-7f61-46cf-9679-78ac10606838",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 14
+                      },
+                      "title": "Thai Peanut Salad"
+                    }
+                  }, {
+                    "product": {
+                      "description": "Gluten-free potstickers filled with Impossible Beef, fresh garlic, and fresh ginger. Pan fried. 5 per order. (Gluten-Free \u0026 Vegan)",
+                      "id": "b36d79e5-ddd7-4b78-be4e-6f5946fadada",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/645834f8-ba83-4fc7-b4a5-5e2fdf6fed90-retina-large.jpeg"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/b36d79e5-ddd7-4b78-be4e-6f5946fadada",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 12
+                      },
+                      "title": "The Impossible Potsticker "
+                    }
+                  }, {
+                    "product": {
+                      "description": "Gluten-free potstickers filled with Impossible Beef, fresh garlic, and fresh ginger. Pan fried and served with our house-made ginger garlic sauce. 5 per order. (gluten-Free \u0026 vegan)",
+                      "id": "a96205f7-4feb-441c-adbf-6ed31927217a",
+                      "images": [ {
+                        "uri": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1200,height=672,format=auto/https://doordash-static.s3.amazonaws.com/media/photosV2/3d463dff-de17-4323-8638-5de612d9f954-retina-large.jpeg"
+                      } ],
+                      "name": "projects/19651678978/locations/global/catalogs/default_catalog/branches/2/products/a96205f7-4feb-441c-adbf-6ed31927217a",
+                      "priceInfo": {
+                        "currencyCode": "INR",
+                        "price": 12
+                      },
+                      "title": "The Impossible Potsticker"
+                    }
+                  } ]
+                },
+                "type": "custom_template"
+              } ] ]
+            }
+          }
+        }
+      }
+    }, {
+      "playbookInvocation": {
+        "playbook": "projects/kalschi-conv-commerce-test/locations/us-central1/agents/719dca2b-c3fb-4c94-93fb-dce85b9d85a0/playbooks/cbe0eae6-602e-44c4-88de-a07d03f92f63",
+        "playbookInput": {
+          "precedingConversationSummary": "the customer is hosting a dinner party this weekend for 6 friends.",
+          "actionParameters": {
+            "user_requests": [ "I am hosting a dinner party this weekend for 6 friends." ]
+          }
+        },
+        "playbookOutput": {
+          "state": "OK"
+        },
+        "playbookState": "OUTPUT_STATE_PENDING"
+      }
+    } ]
+  },
+  "languageCode": "en"
+}

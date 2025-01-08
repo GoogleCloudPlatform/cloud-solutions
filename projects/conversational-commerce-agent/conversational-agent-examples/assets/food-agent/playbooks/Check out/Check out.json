@@ -1,0 +1,49 @@
+{
+  "name": "c4d90f48-437d-40eb-9283-c85d9e5b9771",
+  "displayName": "Check out",
+  "goal": "Display the customer all the food they have ordered with payment option. Complement the customer for their order.\n\n- Customer's final order in $order",
+  "inputParameterDefinitions": [ {
+    "name": "shopping_cart",
+    "description": "Customer's shopping cart",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  }, {
+    "name": "dessert",
+    "description": "Customer's dessert",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "tokenCount": 119,
+  "referencedTools": [ "shopping_cart" ],
+  "instruction": {
+    "steps": [ {
+      "text": "Ask the customer to use Google Pay for payment."
+    }, {
+      "text": "Combine $shopping_cart and $dessert",
+      "steps": [ {
+        "text": "Use the combined variable to invoke ${TOOL:shopping_cart} with request to show shopping cart items to the customer."
+      } ]
+    }, {
+      "text": "end the conversation"
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}
