@@ -1,0 +1,88 @@
+{
+  "name": "2a9076cb-90aa-4a81-a67b-81b5525d0e23",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Absolutely! Check these out – alcohol-free foundations, and they're all under $100"
+    }
+  }, {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "(attributes.Tags:ANY(\"alcohol free\")) AND (price:IN(*,100i))",
+          "offset": 0,
+          "search": ""
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": [ {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    } ],
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Let me know if you have any questions"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Feel glow foundation looks good. Is it paraben-free?"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Yes, all our products are paraben-free"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Perfect! I'll go with that."
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "SA_Recommendation_Blender",
+      "playbookInput": {
+        "actionParameters": {
+
+        }
+      },
+      "playbookOutput": {
+        "actionParameters": {
+
+        }
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "customer is looking for alcohol free foundation under $100"
+  },
+  "playbookOutput": {
+    "executionSummary": "show the customer products meet her needs."
+  },
+  "displayName": "Suggestions_budget_paraben",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

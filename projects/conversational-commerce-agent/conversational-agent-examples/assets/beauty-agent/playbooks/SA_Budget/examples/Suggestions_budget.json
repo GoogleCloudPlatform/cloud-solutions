@@ -1,0 +1,58 @@
+{
+  "name": "3e17386b-f86a-4793-a8c2-95412571298a",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Absolutely! Check these out – alcohol-free foundations, and they're all under $40"
+    }
+  }, {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "(attributes.Tags:ANY(\"alcohol free\")) AND (price:IN(*,40i))",
+          "offset": 0,
+          "search": "foundation"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": [ {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    } ],
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "customer is looking for foundation products without alcohol and under $40"
+  },
+  "playbookOutput": {
+    "executionSummary": "Show the customer products meet their requirements."
+  },
+  "displayName": "Suggestions_budget",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

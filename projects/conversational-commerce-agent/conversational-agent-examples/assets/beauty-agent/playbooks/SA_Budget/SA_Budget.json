@@ -1,0 +1,65 @@
+{
+  "name": "cfe682c5-8b64-4660-832f-02ddf6997412",
+  "displayName": "SA_Budget",
+  "goal": "Your goal is to provide list of products under $budget\n\nGeneral Instruction:\n-Do not ask customer about their budget\n\n",
+  "inputParameterDefinitions": [ {
+    "name": "sa_product_list",
+    "description": "Product list",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  }, {
+    "name": "budget",
+    "description": "amount in dollars",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "NUMBER"
+      }
+    }
+  } ],
+  "outputParameterDefinitions": [ {
+    "name": "product",
+    "description": "Product name",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "STRING"
+      }
+    }
+  }, {
+    "name": "sa_product_list",
+    "description": "Product list",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "tokenCount": 162,
+  "referencedPlaybooks": [ "SA_Recommendation_Blender" ],
+  "referencedTools": [ "get_suggestions_with_filter" ],
+  "instruction": {
+    "steps": [ {
+      "text": "Use ${TOOL:get_suggestions_with_filter} to find the user alcohol free foundations under $budget.",
+      "steps": [ {
+        "text": "If customer asks if $product is paraben-free then inform the customer that all our products are paraben-free"
+      }, {
+        "text": "If the customer selects $product then add $product to $product_list then transition to ${PLAYBOOK:SA_Recommendation_Blender}"
+      } ]
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}

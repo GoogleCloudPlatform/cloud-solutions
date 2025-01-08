@@ -1,0 +1,9 @@
+{
+  "name": "9b880227-2aca-41e1-8327-4e198b10d8b9",
+  "displayName": "get_suggestions",
+  "description": "Search products based on user profile.",
+  "openApiSpec": {
+    "ignoreUnknownFields": true
+  },
+  "toolType": "CUSTOMIZED_TOOL"
+}

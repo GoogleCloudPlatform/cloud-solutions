@@ -1,0 +1,139 @@
+/* stylelint-disable -- imported file, disable linting. */
+df-messenger {
+  /* Overarching values. */
+  --df-messenger-primary-color: rgb(60, 64, 67);
+  --df-messenger-passive-color: rgb(128, 134, 139);
+  --df-messenger-border-color: rgb(196, 199, 197);
+  /*--df-messenger-font-family: "Arial Rounded MT", sans-serif;*/
+  --df-messenger-actor-image-size: 27px;
+
+  /* Titlebar. */
+  --df-messenger-titlebar-background: #D58383;
+  --df-messenger-titlebar-title-align: left;
+  --df-messenger-titlebar-title-font-size: 0px;
+  --df-messenger-titlebar-font-color: rgb(1, 1, 1);
+  --df-messenger-titlebar-icon-padding: 10px;
+  --df-messenger-titlebar-icon-width: 220px;
+  --df-messenger-titlebar-icon-height: 40px;
+
+  /* Chat. */
+  --df-messenger-chat-border-radius: 16px;
+  --df-messenger-chat-background: rgb(243, 246, 252, 0.4);
+  --df-messenger-chat-padding: 0px;
+  --df-messenger-chat-scroll-button-display: block;
+  --df-messenger-chat-max-width: 1200px;
+
+  /* Messages. */
+  --df-messenger-message-padding: 12px;
+  --df-messenger-message-font-size: 17px;
+  --df-messenger-message-line-height: 24px;
+  --df-messenger-message-bot-background: #F5F5F5;
+  --df-messenger-message-bot-font-color: D58383;
+  --df-messenger-message-user-align: strech;
+  --df-messenger-message-user-margin-left: 150px;
+  --df-messenger-message-user-background: #FFFF;
+  --df-messenger-message-user-font-color: rgb(128, 128, 128);
+  --df-messenger-message-group-padding: 16px;
+  --df-messenger-message-group-border-radius: 16px;
+  --df-messenger-message-rich-text-align: stretch;
+  --df-messenger-message-bot-margin-right: 150px;
+  /*--df-messenger-message-bot-group-background: rgb(255, 255, 255);*/
+
+  /* User Input. */
+  --df-messenger-input-box-background: rgb(255, 255, 255);
+  --df-messenger-input-padding: 16px 8px 24px 24px;
+  --df-messenger-input-inner-padding: 0 48px 0 0;
+  --df-messenger-input-background: rgb(243, 246, 252);
+  --df-messenger-input-border-top: none;
+  --df-messenger-input-box-border: 1px solid var(--df-messenger-border-color);
+  --df-messenger-input-box-border-radius: 999px;
+  --df-messenger-input-box-padding: 16px 32px;
+  --df-messenger-input-box-focus-border: 2px solid var(--df-messenger-primary-color);
+  --df-messenger-input-box-focus-padding: 15px 31px;
+  --df-messenger-send-icon-offset-y: 2px;
+
+  /* Links (in MD / HTML). */
+  --df-messenger-link-decoration: none;
+  --df-messenger-link-font-color: var(--df-messenger-primary-color);
+  --df-messenger-link-visited-font-color: var(--df-messenger-primary-color);
+  --df-messenger-link-hover-font-color: var(--df-messenger-primary-color);
+  --df-messenger-link-background-color: rgb(255, 255, 255);
+  --df-messenger-link-padding: 2px 6px;
+  --df-messenger-link-border: 1px solid var(--df-messenger-primary-color);
+  --df-messenger-link-border-radius: 4px;
+
+  /* Tables (in MD / HTML). */
+  --df-messenger-table-width: 100%;
+  --df-messenger-table-border-color: rgb(230, 230, 230);
+  --df-messenger-table-padding: 12px 16px;
+  --df-messenger-table-font-size: 14px;
+  --df-messenger-table-border-radius: 16px;
+  --df-messenger-table-header-background: rgb(242, 242, 242);
+  --df-messenger-table-header-padding: 12px 16px;
+  --df-messenger-table-header-font-size: 14px;
+  --df-messenger-table-header-font-weight: 500;
+  --df-messenger-table-header-border-top: 1px solid var(--df-messenger-table-border-color);
+  --df-messenger-table-header-border-bottom: 1px solid var(--df-messenger-table-border-color);
+  --df-messenger-table-header-border-left-first: 1px solid var(--df-messenger-table-border-color);
+  --df-messenger-table-header-border-right-last: 1px solid var(--df-messenger-table-border-color);
+  --df-messenger-table-border-bottom: 1px solid var(--df-messenger-table-border-color);
+  --df-messenger-table-border-left-first: 1px solid var(--df-messenger-table-border-color);
+  --df-messenger-table-border-right-last: 1px solid var(--df-messenger-table-border-color);
+
+  /* Card. */
+  --df-messenger-card-box-shadow: none;
+  --df-messenger-card-border: none;
+  --df-messenger-card-padding: 10px 0;
+
+  /* Chips. */
+  --df-messenger-chips-box-shadow: none;
+  --df-messenger-chips-font-color: rgb(68, 71, 70);
+  --df-messenger-chips-icon-font-color: rgb(68, 71, 70);
+  --df-messenger-chips-border-radius: 8px;
+  --df-messenger-chips-font-color: rgb(68, 71, 70);
+
+  /* Citations. */
+  --df-messenger-citations-font-color: rgb(0, 0, 0);
+  --df-messenger-citations-border-color: var(--df-messenger-border-color);
+  --df-messenger-citations-border-radius: 999px;
+  --df-messenger-citations-padding: 4px 16px;
+  --df-messenger-citations-icon-offset: -8px;
+  --df-messenger-citations-icon-font-size: 24px;
+  --df-messenger-citations-message-display: none;
+
+  /* Button. */
+  --df-messenger-button-border: 1px solid var(--df-messenger-border-color);
+  --df-messenger-button-padding: 8px;
+
+  /* Image. */
+  --df-messenger-image-border-radius: 16px;
+
+  /* Video. */
+  --df-messenger-video-border: 1px solid var(--df-messenger-border-color);
+
+  /* List. */
+  --df-messenger-list-padding: 16px 0;
+  --df-messenger-list-inset: 16px;
+
+  /* Feedback. */
+  --df-messenger-message-rich-feedback-spacing: 16px;
+  --df-messenger-message-rich-feedback-chips-spacing: 24px;
+  --df-messenger-message-rich-feedback-chips-background: rgb(255, 255, 255);
+  --df-messenger-message-rich-feedback-chips-background-active: rgba(68, 71, 70, 0.12);
+  --df-messenger-message-rich-feedback-chip-font-color: rgb(68, 71, 70);
+  --df-messenger-message-rich-feedback-chips-font-color-active: rgb(68, 71, 70);
+  --df-messenger-message-rich-feedback-submit-align: flex-start;
+  --df-messenger-message-rich-feedback-submit-font-color: rgb(68, 71, 70);
+  --df-messenger-message-rich-feedback-block-separator-display: block;
+  --df-messenger-message-rich-feedback-block-separator-padding-offset: -16px;
+  --df-messenger-message-feedback-icon-font-color-active: var(--df-messenger-primary-color);
+
+  /* Actors. */
+  /*--df-messenger-message-user-actor-order: row;*/
+  /*--df-messenger-message-user-actor-background: var(--df-messenger-primary-color);*/
+  --df-messenger-message-user-actor-offset-top: -8px;
+  --df-messenger-message-user-actor-offset-bottom: -8px;
+  /* --df-messenger-message-bot-actor-background: transparent; */
+  --df-messenger-message-bot-actor-offset-top: -8px;
+  --df-messenger-message-bot-actor-offset-bottom: -8px;
+}

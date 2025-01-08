@@ -29,3 +29,12 @@ module "dialogflow_cx_food_agent" {
   region            = var.region
   cloudfunction_uri = google_cloudfunctions2_function.function.service_config[0].uri
 }
+
+module "dialogflow_cx_beauty_agent" {
+  source            = "./dialogflow-cx-agent"
+  agent_name        = "beauty"
+  agent_assets      = "${path.module}/assets/beauty-agent"
+  project_id        = var.project_id
+  region            = var.region
+  cloudfunction_uri = google_cloudfunctions2_function.function.service_config[0].uri
+}

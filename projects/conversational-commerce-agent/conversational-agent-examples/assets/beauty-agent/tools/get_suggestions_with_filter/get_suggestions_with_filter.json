@@ -1,0 +1,8 @@
+{
+  "name": "9659b4a3-4c7c-4a65-8978-add214b90044",
+  "displayName": "get_suggestions_with_filter",
+  "openApiSpec": {
+    "ignoreUnknownFields": true
+  },
+  "toolType": "CUSTOMIZED_TOOL"
+}

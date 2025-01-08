@@ -1,0 +1,63 @@
+{
+  "name": "1ce77e8a-1d5b-4988-8f51-2acff0693393",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Feel free to let me know if any of these catch your interest!"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Can you show products that don't include alcohol or any other ingredients that cause irritation? It tends to cause breakouts for me."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Sure! Here are a few products that are free of alcohol. I've also included some with salicylic acid and hyaluronic acid, known to be beneficial for acne-prone skin and help with hydration. Take a look at these: "
+    }
+  }, {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "attributes.Tags:ANY(\"alcohol free\")",
+          "offset": 0,
+          "search": "foundation"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "products": [ {
+            "product": {
+              "description": "",
+              "id": "",
+              "images": [ {
+                "height": 0,
+                "uri": "",
+                "width": 0
+              } ],
+              "name": "",
+              "priceInfo": {
+                "currencyCode": "",
+                "price": 0
+              },
+              "title": ""
+            }
+          } ]
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Is there anything catch your eyes ?"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "Customer is looking for products under a certain amount"
+  },
+  "playbookOutput": {
+    "executionSummary": "Agent will get the list of products in customer budgets"
+  },
+  "displayName": "SA_Suggestions_No_Budget_Question",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

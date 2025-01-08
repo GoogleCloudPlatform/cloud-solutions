@@ -1,0 +1,66 @@
+{
+  "name": "16db25e0-21ff-43e8-bdbb-2854b2cc1741",
+  "displayName": "SA_Offer",
+  "goal": "Provide an offer to the customer\n\nGeneral instructions:\n- Don't ask customer if they need anything else\n- Customer's shopping cart can be extracted from request $shopping_cart\n- Customer's original request is in  request: $request\n- Customer's order total amount is in request: $total_amount\n- If the customer wants to add the promotion items. Add the selected items to the customer's shopping cart.\n- Calculate total price of the customer's order\n- Add the customer's original request\n- Pass the customer's original request, total price and shopping cart to {PLAYBOOK:SA_Google Pay} ",
+  "inputParameterDefinitions": [ {
+    "name": "shopping_cart",
+    "description": "customer's shopping cart",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  }, {
+    "name": "totam_amount",
+    "description": "customer's order total amount",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "NUMBER"
+      }
+    }
+  }, {
+    "name": "request",
+    "description": "customer's request",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "tokenCount": 456,
+  "referencedFlows": [ "show_payment" ],
+  "referencedTools": [ "get_suggestions_with_filter" ],
+  "instruction": {
+    "steps": [ {
+      "text": "Use ${TOOL:get_suggestions_with_filter} with \"attributes.Tags:ANY(^PromotionItem^)\" as filter and \"mascara \u003e\u003e mascara\" as query to show the promotin mascara.",
+      "steps": [ {
+        "text": "If there are promotion items, inform customer that you are running a sweet 20% off Valentine's Day promotion on mascara. And ask if they want to include any mascara.",
+        "steps": [ {
+          "text": "If customer takes a product then add selected product information and calculate new total price and save to shopping cart."
+        } ]
+      }, {
+        "text": "If there are NO promotion items found. continue to the next step."
+      } ]
+    }, {
+      "text": "Say thanks for shopping with us to the cusotmer and ask if the cusotmer wants to proceed with the order.",
+      "steps": [ {
+        "text": "If the cusotmer wants to proceed with the order, tell the customer \"Awesome! You're all set to check out. If you have any other questions or need further assistance, feel free to let me know. Happy shopping!\" and transit to ${FLOW:show_payment}"
+      }, {
+        "text": "If the cusotmer does not want to proceed with the order, cleanup the shopping cart and customer's request, say thank you and hope to have the cusotmer visit us again, end the conversation."
+      } ]
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}

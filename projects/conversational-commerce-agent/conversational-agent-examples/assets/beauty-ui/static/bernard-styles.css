@@ -1,0 +1,37 @@
+/* stylelint-disable -- imported file, disable linting. */
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+df-messenger {
+  display: block;
+  flex-grow: 1;
+  overflow: hidden;
+
+  padding: 24px;
+  padding-right: 32%;
+  padding-left: 32%;
+  width: 100vw;
+  box-sizing: border-box;
+
+  /* Make images bigger and add circular border */
+    .df-messenger-message-user img {
+      width: 100px;
+      /* Set your desired width */
+      height: 100px;
+      /* Set your desired height */
+      border-radius: 50%;
+      /* Make it circular */
+      border: 2px solid #000;
+      /* Add a border */
+    }
+}

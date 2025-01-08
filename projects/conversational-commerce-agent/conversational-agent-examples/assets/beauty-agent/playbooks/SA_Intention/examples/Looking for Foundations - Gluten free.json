@@ -1,0 +1,156 @@
+{
+  "name": "838abe4a-298b-4cd5-a42b-2801a320fda2",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Welcome to Cymbal Beauty! I am your personal beauty assistant. How can I help you?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "I am looking for a lightweight foundation."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Absolutely! Your profile shows that you have a light-medium skin tone, and you prefer a natural look. May I toss in some suggestions that match those preferences of yours?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "sure"
+    }
+  }, {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "attributes.Tags:ANY(^Natural^)",
+          "offset": 0,
+          "search": "foundation"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": [ {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    } ],
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to let me know if any of these catch your interest!"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Can you show products that free of gluten or any other ingredients that cause irritation? It tends to cause breakouts for me."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Sure! Here are a few products that are free of alcohol. I've also included some with salicylic acid and hyaluronic acid, known to be beneficial for acne-prone skin and help with hydration"
+    }
+  }, {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "(attributes.Tags:ANY(^Gluten Free^) AND attributes.Tags:ANY(^Natural^))",
+          "offset": 0,
+          "search": "foundations"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": [ {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    } ],
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Please take a look at these and let me know if anything catches your eyes."
+    }
+  }, {
+    "userUtterance": {
+      "text": "Cranl foundation looks good. Is it paraben-free?"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Yes. All our products are paraben-free."
+    }
+  }, {
+    "userUtterance": {
+      "text": "Great! I will go with it!"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "SA_Recommendation_Blender",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer has decided to purchase selected product.",
+        "actionParameters": {
+
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "Recommend the customer blend products.",
+        "actionParameters": {
+
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Thank you for shopping with us."
+    }
+  } ],
+  "playbookOutput": {
+    "executionSummary": "Customer's shopping cart and original request"
+  },
+  "displayName": "Looking for Foundations - Gluten free",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_PENDING",
+  "languageCode": "en"
+}

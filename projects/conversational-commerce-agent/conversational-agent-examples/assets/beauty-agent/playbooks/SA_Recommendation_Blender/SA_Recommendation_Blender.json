@@ -1,0 +1,61 @@
+{
+  "name": "34aae0fc-2863-47a8-8df4-07aff2775c6d",
+  "displayName": "SA_Recommendation_Blender",
+  "goal": "Help customer select a blender\n\nGeneral Instructions:\n- Do not ask any question to the customer\n- Customer's shopping cart can be extracted from the input $shopping_cart\n- Customer's order total price can be extracted from the input: $total_amount\n- Customer's original request is in  input $request\n- If the customer wants to add the recommended items. Add the selected items to the customer's shopping cart.\n- Calculate total price, and update the new total price to the customer's order\n- Add the customer's original request is in $request.\n- Pass the customer's original request, total price, order and shopping cart to {PLAYBOOK:SA_Offer} \n",
+  "inputParameterDefinitions": [ {
+    "name": "total_amount",
+    "description": "customer's order total amount",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "NUMBER"
+      }
+    }
+  }, {
+    "name": "shopping_cart",
+    "description": "customer's shopping cart",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  }, {
+    "name": "request",
+    "description": "customer's request",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "tokenCount": 442,
+  "referencedPlaybooks": [ "SA_Offer" ],
+  "referencedFlows": [ "get_video" ],
+  "referencedTools": [ "get_suggestions_with_filter" ],
+  "instruction": {
+    "steps": [ {
+      "text": "Always Greet the cusotmer with \"Greate choice! Just a heads up for the best results – we highly recommend using a mascara. Here's a popular one with top-notch reviews: \""
+    }, {
+      "text": "Use ${TOOL:get_suggestions_with_filter} to search for \"blend\", list search results to the customer and ask if the cusotmer wants to add it to the shopping cart",
+      "steps": [ {
+        "text": "If customer asks tips about mascara then provide video using ${FLOW:get_video} and ask customer if they found the video helpful"
+      }, {
+        "text": "If customer selects a blend then add selected items (if any) to $shopping_cart, update $total_amount with the new total amout and transition to ${PLAYBOOK:SA_Offer}"
+      }, {
+        "text": "If customer does not want the blend, transition to ${PLAYBOOK:SA_Offer}"
+      } ]
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}

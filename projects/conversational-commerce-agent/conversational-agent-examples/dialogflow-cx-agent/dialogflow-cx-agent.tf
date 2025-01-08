@@ -22,7 +22,7 @@ data "archive_file" "agent_playbook" {
     }
   }
   dynamic "source" {
-    for_each = fileset("${var.agent_assets}/", "**/*.yaml.tmpl")
+    for_each = fileset("${var.agent_assets}/", "**/*.{yaml,json}.tmpl")
     content {
       content  = replace(replace(file("${var.agent_assets}/${source.value}"), "_CF_URL_PLACEHOLDER_", var.cloudfunction_uri), "_PROJECT_AND_REGION_", "projects/${var.project_id}/locations/${var.region}")
       filename = trimsuffix(source.value, ".tmpl")

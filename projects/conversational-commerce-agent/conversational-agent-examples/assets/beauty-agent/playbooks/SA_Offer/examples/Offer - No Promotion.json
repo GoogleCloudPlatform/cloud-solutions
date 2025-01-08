@@ -1,0 +1,53 @@
+{
+  "name": "baf81e8a-719d-4cf5-8e72-a076b8a8ec0b",
+  "actions": [ {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "attribute.Tags:ANY(^PromotionItem^)",
+          "offset": 0,
+          "search": "mascara \u003e\u003e mascara"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Would you like to proceed with the order ?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Sure!"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Thank you for shopping with us!"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "show_payment",
+      "inputActionParameters": {
+
+      },
+      "outputActionParameters": {
+
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "Customer's shopping cart and original request"
+  },
+  "playbookOutput": {
+    "executionSummary": "Customer's shopping cart and original request"
+  },
+  "displayName": "Offer - No Promotion",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

@@ -1,0 +1,74 @@
+{
+  "name": "860fe74b-ba1b-48e1-ad27-976c71ffc3ec",
+  "actions": [ {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "attributes.Tags:ANY(^PromotionItem^)",
+          "offset": 0,
+          "search": "mascara \u003e\u003e mascara"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": [ {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    } ],
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Glad to hear that! Quick heads up, we're running a sweet 20% off Valentine's Day promotion. Do you want to include an alcohol-free mascara for light-medium skin tones?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "No, I am good"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "No problems! Would you like to proceed with the order ?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Well, I think I am not go with the order this time"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "No problems, we wish you a good day and please come visit us again"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "Customer's shopping cart and original request"
+  },
+  "playbookOutput": {
+    "executionSummary": "Customer's shopping cart and original request"
+  },
+  "displayName": "Offer - Do not place the order",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

@@ -29,3 +29,12 @@ module "food_ui" {
   ui_assets_path           = "${path.module}/assets/food-ui"
   dialogflow_cx_agent_name = module.dialogflow_cx_food_agent.agent_name
 }
+
+module "beauty_ui" {
+  source                   = "./ui"
+  project_id               = var.project_id
+  project_number           = local.target_project_number
+  ui_name                  = "beauty"
+  ui_assets_path           = "${path.module}/assets/beauty-ui"
+  dialogflow_cx_agent_name = module.dialogflow_cx_beauty_agent.agent_name
+}

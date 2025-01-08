@@ -1,0 +1,109 @@
+{
+  "name": "1424e8bd-6847-4fb6-a094-0e72db071d64",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Awesome choice! Just a heads up for the best results – we highly recommend using a beauty blender. Here's a popular one with top-notch reviews: "
+    }
+  }, {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "categories:ANY(^foundation \u003e\u003e blend^)",
+          "offset": 0,
+          "search": "blend"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": [ {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    } ],
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to let me know if you have further requests."
+    }
+  }, {
+    "userUtterance": {
+      "text": "great, I'll take it, but I've never used a beauty blender before. Any tips you can share? "
+    }
+  }, {
+    "agentUtterance": {
+      "text": " I've got you covered! Here’s a cool tutorial that breaks down the technique of using a blender step by step. Check it out!"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "get_video",
+      "inputActionParameters": {
+
+      },
+      "outputActionParameters": {
+
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Did you find the video helpful?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "Yeah! thanks for the sharing!"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Glad to hear that helps."
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "SA_Offer",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is good with the product and the blend suggested.",
+        "actionParameters": {
+
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "Agent provides the offering",
+        "actionParameters": {
+
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "Customer's shopping cart in $product_list.\nCustomer's request in $requests."
+  },
+  "playbookOutput": {
+    "executionSummary": "Agent suggests blend product."
+  },
+  "displayName": "Copy of Suggest Blend",
+  "retrievalStrategy": "NEVER",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

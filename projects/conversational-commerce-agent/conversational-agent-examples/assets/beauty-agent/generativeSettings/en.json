@@ -1,0 +1,82 @@
+{
+  "fallbackSettings": {
+    "selectedPrompt": "Default"
+  },
+  "generativeSafetySettings": {
+    "raiSettings": {
+      "categoryFilters": [ {
+        "category": "DANGEROUS_CONTENT",
+        "filterLevel": "BLOCK_FEW"
+      }, {
+        "category": "SEXUALLY_EXPLICIT_CONTENT",
+        "filterLevel": "BLOCK_FEW"
+      }, {
+        "category": "HARASSMENT",
+        "filterLevel": "BLOCK_FEW"
+      }, {
+        "category": "HATE_SPEECH",
+        "filterLevel": "BLOCK_FEW"
+      } ]
+    },
+    "defaultRaiSettings": {
+      "categoryFilters": [ {
+        "category": "DANGEROUS_CONTENT",
+        "filterLevel": "BLOCK_FEW"
+      }, {
+        "category": "SEXUALLY_EXPLICIT_CONTENT",
+        "filterLevel": "BLOCK_SOME"
+      }, {
+        "category": "HARASSMENT",
+        "filterLevel": "BLOCK_SOME"
+      }, {
+        "category": "HATE_SPEECH",
+        "filterLevel": "BLOCK_SOME"
+      } ]
+    },
+    "responsibleAiFilters": [ {
+      "category": "DANGEROUS_CONTENT",
+      "filterLevel": "MINIMAL_BLOCKING"
+    }, {
+      "category": "SEXUALLY_EXPLICIT_CONTENT",
+      "filterLevel": "MINIMAL_BLOCKING"
+    }, {
+      "category": "HARASSMENT",
+      "filterLevel": "MINIMAL_BLOCKING"
+    }, {
+      "category": "HATE_SPEECH",
+      "filterLevel": "MINIMAL_BLOCKING"
+    } ],
+    "defaultResponsibleAiFilters": [ {
+      "category": "DANGEROUS_CONTENT",
+      "filterLevel": "MINIMAL_BLOCKING"
+    }, {
+      "category": "SEXUALLY_EXPLICIT_CONTENT",
+      "filterLevel": "MODERATE_BLOCKING"
+    }, {
+      "category": "HARASSMENT",
+      "filterLevel": "MODERATE_BLOCKING"
+    }, {
+      "category": "HATE_SPEECH",
+      "filterLevel": "MODERATE_BLOCKING"
+    } ]
+  },
+  "languageCode": "en",
+  "knowledgeConnectorSettings": {
+    "business": "Cymbal beauty",
+    "agent": "Cyindi",
+    "agentIdentity": "Beauty stylist",
+    "businessDescription": "Cymbal beauty sell beauty products from major brands",
+    "agentScope": "Help select products offered by Cymbal beauty",
+    "mainLlmConfig": {
+      "configSet": "gemini_pro"
+    }
+  },
+  "llmModelSettings": {
+    "model": "gemini-1.5-flash-002",
+    "parameters": {
+      "temperature": 1,
+      "inputTokenLimit": "INPUT_TOKEN_LIMIT_LONG",
+      "outputTokenLimit": "OUTPUT_TOKEN_LIMIT_LONG"
+    }
+  }
+}

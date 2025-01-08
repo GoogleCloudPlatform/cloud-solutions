@@ -1,0 +1,90 @@
+{
+  "name": "b30ef43f-a5a8-40bc-8e9d-1aed14b86693",
+  "actions": [ {
+    "agentUtterance": {
+      "text": "Awesome choice! Just a heads up for the best results – we highly recommend using a beauty blender. Here's a popular one with top-notch reviews: "
+    }
+  }, {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "categories:ANY(^foundation \u003e\u003e blend^)",
+          "offset": 0,
+          "search": "blend"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": [ {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    } ],
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Feel free to let me know if you have further requests."
+    }
+  }, {
+    "userUtterance": {
+      "text": "No, I am good."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Sure! no problems!"
+    }
+  }, {
+    "playbookInvocation": {
+      "playbook": "SA_Offer",
+      "playbookInput": {
+        "precedingConversationSummary": "The customer is good with the product and the blend suggested.",
+        "actionParameters": {
+
+        }
+      },
+      "playbookOutput": {
+        "executionSummary": "Agent provides the offering",
+        "actionParameters": {
+
+        }
+      },
+      "playbookState": "OUTPUT_STATE_OK"
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "Customer's shopping cart, total price and original request",
+    "actionParameters": {
+
+    }
+  },
+  "playbookOutput": {
+    "executionSummary": "Customer's shopping cart and original request"
+  },
+  "displayName": "Suggest Blend - Not including blend",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

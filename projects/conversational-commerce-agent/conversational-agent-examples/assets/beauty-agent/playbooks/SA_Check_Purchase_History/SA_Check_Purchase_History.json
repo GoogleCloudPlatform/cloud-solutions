@@ -1,0 +1,43 @@
+{
+  "name": "7cfd5bff-c6f4-40e1-bd43-aa8340b8730b",
+  "displayName": "SA_Check_Purchase_History",
+  "goal": "Your goal is to help customers find products based on their criteria\n\nGeneral Instructions:\n- Do not greet the customer",
+  "inputParameterDefinitions": [ {
+    "name": "product_list",
+    "description": "Product list",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "ARRAY",
+        "items": {
+          "inlineSchema": {
+            "type": "STRING"
+          }
+        }
+      }
+    }
+  } ],
+  "outputParameterDefinitions": [ {
+    "name": "budget",
+    "description": "Amount in dollars",
+    "typeSchema": {
+      "inlineSchema": {
+        "type": "NUMBER"
+      }
+    }
+  } ],
+  "tokenCount": 119,
+  "referencedPlaybooks": [ "SA_Budget" ],
+  "referencedTools": [ "get_suggestions_with_filter", "get_suggestions_sensitive" ],
+  "instruction": {
+    "steps": [ {
+      "text": "Inform customer to let you know if they like anything"
+    }, {
+      "text": "If customer asks to show products from a specific criteria then show products from $product_list"
+    }, {
+      "text": "If customer asks to provide product under a budget then extract the budget and save it in $budget and transit to ${PLAYBOOK:SA_Budget}"
+    } ]
+  },
+  "codeBlock": {
+
+  }
+}

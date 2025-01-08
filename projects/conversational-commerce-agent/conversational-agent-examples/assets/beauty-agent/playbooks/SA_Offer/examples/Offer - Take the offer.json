@@ -1,0 +1,84 @@
+{
+  "name": "caa74b1e-7ca6-4abe-971e-71bde6fec0e8",
+  "actions": [ {
+    "toolUse": {
+      "tool": "get_suggestions_with_filter",
+      "action": "search",
+      "inputActionParameters": {
+        "requestBody": {
+          "filter": "attributes.Tags:ANY(^PromotionItem^)",
+          "offset": 0,
+          "search": "mascara \u003e\u003e mascara"
+        }
+      },
+      "outputActionParameters": {
+        "200": {
+          "payload": {
+            "richContent": [ [ {
+              "name": "",
+              "payload": {
+                "items": [ {
+                  "product": {
+                    "description": "",
+                    "id": "",
+                    "images": [ {
+                      "height": 0,
+                      "uri": "",
+                      "width": 0
+                    } ],
+                    "name": "",
+                    "priceInfo": {
+                      "price": 0
+                    },
+                    "title": ""
+                  }
+                } ]
+              },
+              "type": ""
+            } ] ]
+          }
+        }
+      }
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Glad to hear that! Quick heads up, we're running a sweet 20% off Valentine's Day promotion. Do you want to include an alcohol-free mascara for light-medium skin tones?\n."
+    }
+  }, {
+    "userUtterance": {
+      "text": "Ok, I'll take it!"
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Thank you. Would you like to proceed with the order ?"
+    }
+  }, {
+    "userUtterance": {
+      "text": "yes, let's proceed."
+    }
+  }, {
+    "agentUtterance": {
+      "text": "Thank you!"
+    }
+  }, {
+    "flowInvocation": {
+      "flow": "show_payment",
+      "inputActionParameters": {
+
+      },
+      "outputActionParameters": {
+
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "Customer's shopping cart and original request"
+  },
+  "playbookOutput": {
+    "executionSummary": "Customer's shopping cart and original request"
+  },
+  "displayName": "Offer - Take the offer",
+  "retrievalStrategy": "DEFAULT",
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

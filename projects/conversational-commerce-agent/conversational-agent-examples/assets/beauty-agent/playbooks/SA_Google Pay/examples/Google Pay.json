@@ -1,0 +1,23 @@
+{
+  "name": "485ec100-b09c-40ba-a883-fcd3e80d7ffc",
+  "actions": [ {
+    "flowInvocation": {
+      "flow": "show_payment",
+      "inputActionParameters": {
+
+      },
+      "outputActionParameters": {
+
+      }
+    }
+  } ],
+  "playbookInput": {
+    "precedingConversationSummary": "Customer's shopping cart and original request"
+  },
+  "playbookOutput": {
+    "executionSummary": "payment information"
+  },
+  "displayName": "Google Pay",
+  "retrievalStrategy": "STATIC",
+  "languageCode": "en"
+}
