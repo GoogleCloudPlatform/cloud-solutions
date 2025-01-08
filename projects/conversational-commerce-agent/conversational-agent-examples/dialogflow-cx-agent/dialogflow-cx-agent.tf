@@ -1,4 +1,4 @@
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,30 +15,30 @@
 data "archive_file" "agent_playbook" {
   type = "zip"
   dynamic "source" {
-    for_each = fileset("${path.module}/assets/agent/", "**/*.json")
+    for_each = fileset("${var.agent_assets}/", "**/*.json")
     content {
-      content  = file("${path.module}/assets/agent/${source.value}")
+      content  = file("${var.agent_assets}/${source.value}")
       filename = source.value
     }
   }
   dynamic "source" {
-    for_each = fileset("${path.module}/assets/agent/", "**/*.yaml.tmpl")
+    for_each = fileset("${var.agent_assets}/", "**/*.yaml.tmpl")
     content {
-      content  = replace(replace(file("${path.module}/assets/agent/${source.value}"), "_CF_URL_PLACEHOLDER_", google_cloudfunctions2_function.function.service_config[0].uri), "_PROJECT_AND_REGION_", "projects/${var.project_id}/locations/${var.region}")
+      content  = replace(replace(file("${var.agent_assets}/${source.value}"), "_CF_URL_PLACEHOLDER_", var.cloudfunction_uri), "_PROJECT_AND_REGION_", "projects/${var.project_id}/locations/${var.region}")
       filename = trimsuffix(source.value, ".tmpl")
     }
   }
-  output_path = "${path.module}/agent_playbook.zip"
+  output_path = "${path.module}/agent_${var.agent_name}_playbook.zip"
 }
 
 resource "google_storage_bucket" "dialogflowcx_assets_bucket" {
-  name                        = "${var.project_id}-dialogflowcx-assets" # Every bucket name must be globally unique
+  name                        = "${var.project_id}-dialogflowcx-${var.agent_name}-assets" # Every bucket name must be globally unique
   location                    = "US"
   uniform_bucket_level_access = true
 }
 
 resource "google_storage_bucket_object" "agent_playbook_archive" {
-  name   = "agent_playbook.zip"
+  name   = "agent_${var.agent_name}_playbook.zip"
   bucket = google_storage_bucket.dialogflowcx_assets_bucket.name
   source = data.archive_file.agent_playbook.output_path
 }
@@ -46,7 +46,7 @@ resource "google_storage_bucket_object" "agent_playbook_archive" {
 
 resource "google_dialogflow_cx_agent" "cc_agent" {
   default_language_code    = "en"
-  display_name             = "Conversational Commerce Agent"
+  display_name             = "${var.agent_name} Agent"
   location                 = var.region
   project                  = var.project_id
   supported_language_codes = []

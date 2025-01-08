@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "apparel_ui" {
-  source                   = "./ui"
-  project_id               = var.project_id
-  project_number           = local.target_project_number
-  ui_name                  = "apparel_search"
-  ui_assets_path           = "${path.module}/assets/apparel-ui"
-  dialogflow_cx_agent_name = module.dialogflow_cx_apparel_agent.agent_name
+output "agent_name" {
+  description = "The url to the agent service"
+  value       = google_dialogflow_cx_agent.cc_agent.name
+}
+
+output "agent_gs_bucket" {
+  description = "The gcs bucket to agent_playbook"
+  value       = "gs://${google_storage_bucket.dialogflowcx_assets_bucket.name}"
 }

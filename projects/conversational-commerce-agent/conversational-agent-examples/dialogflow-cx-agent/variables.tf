@@ -12,11 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "apparel_ui" {
-  source                   = "./ui"
-  project_id               = var.project_id
-  project_number           = local.target_project_number
-  ui_name                  = "apparel_search"
-  ui_assets_path           = "${path.module}/assets/apparel-ui"
-  dialogflow_cx_agent_name = module.dialogflow_cx_apparel_agent.agent_name
+variable "project_id" {
+  description = "The project id"
+  type        = string
+}
+
+variable "agent_assets" {
+  description = "The directory holding the agent files"
+  type        = string
+}
+
+variable "agent_name" {
+  description = "The agent name"
+  type        = string
+}
+
+variable "region" {
+  description = "The region"
+  type        = string
+}
+
+variable "cloudfunction_uri" {
+  description = "The uri to the cloudfuntion service"
+  type        = string
 }
