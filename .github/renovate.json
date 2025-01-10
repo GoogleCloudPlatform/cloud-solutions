@@ -157,6 +157,11 @@
       "commitMessagePrefix": "chore(deps): [imagen-voice-captioning]"
     },
     {
+      "matchFileNames": ["projects/k8s-hybrid-neg-controller/**"],
+      "groupName": "k8s-hybrid-neg-controller",
+      "commitMessagePrefix": "chore(deps): [k8s-hybrid-neg-controller]"
+    },
+    {
       "matchFileNames": ["projects/kubeflow-on-gcp/**"],
       "groupName": "kubeflow-on-gcp",
       "commitMessagePrefix": "chore(deps): [kubeflow-on-gcp]"
