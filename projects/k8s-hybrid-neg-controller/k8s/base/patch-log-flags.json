@@ -1,0 +1,12 @@
+[
+    {
+        "op": "add",
+        "path": "/spec/template/spec/containers/0/args/-",
+        "value": "--add_dir_header"
+    },
+    {
+        "op": "add",
+        "path": "/spec/template/spec/containers/0/args/-",
+        "value": "--vmodule=cache=2,leaderelection=2,*=4"
+    }
+]

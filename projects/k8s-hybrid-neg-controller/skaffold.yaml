@@ -1,0 +1,114 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: skaffold/v3
+kind: Config
+metadata:
+  name: k8s-hybrid-neg-controller
+  annotations:
+    config.kubernetes.io/local-config: "true"
+build:
+  artifacts:
+  # https://skaffold.dev/docs/builders/builder-types/ko/
+  - image: hybrid-neg-controller-manager
+    ko:
+      # The base image can instead be provided in a '.ko.yaml' file, see https://ko.build/configuration/
+      fromImage: gcr.io/distroless/static-debian12:nonroot
+      dependencies:
+        paths: ["cmd", "pkg", "go.mod", "main.go", "**/*.go"]
+        ignore: ["CONTRIBUTING.md", "docs", ".gitignore", "hack", "k8s", "Makefile", "README.md", "**/*_test.go"]
+      flags: ["-buildvcs=false"]
+  # https://skaffold.dev/docs/taggers/
+  tagPolicy:
+    inputDigest: {}
+deploy:
+  kubectl:
+    defaultNamespace: hybrid-neg-system # kpt-set: ${hybrid-neg-controller-namespace}
+manifests:
+  kustomize:
+    paths: []
+profiles:
+# Profile for development and debugging, using a base image that has a shell.
+- name: dev
+  activation:
+  - command: debug
+  - command: dev
+  patches:
+  - op: replace
+    path: /build/artifacts/0/ko/fromImage
+    value: gcr.io/distroless/static-debian12:debug-nonroot
+# Profile for deploying to an AKS cluster.
+- name: aks
+  manifests:
+    kustomize:
+      buildArgs: ["--load-restrictor=LoadRestrictionsNone"]
+      paths: ["k8s/overlays/aks"]
+# Profile for deploying to an EKS cluster.
+- name: eks
+  activation:
+  - kubeContext: arn:aws:eks
+  manifests:
+    kustomize:
+      buildArgs: ["--load-restrictor=LoadRestrictionsNone"]
+      paths: ["k8s/overlays/eks"]
+# Profile for deploying to a GKE cluster.
+- name: gke
+  activation:
+  - kubeContext: gke.*
+  manifests:
+    kustomize:
+      buildArgs: ["--load-restrictor=LoadRestrictionsNone"]
+      paths: ["k8s/overlays/gke"]
+# Profile for deploying to a local kind Kubernetes cluster, based on the './hack/kind-cluster-config.yaml' file.
+- name: kind
+  activation:
+  - kubeContext: kind.*
+  manifests:
+    kustomize:
+      buildArgs: ["--load-restrictor=LoadRestrictionsNone"]
+      paths: ["k8s/overlays/kind"]
+# Profile for creating release builds.
+- name: release
+  patches:
+  - op: add
+    path: /build/artifacts/0/ko/flags/-
+    value: -v
+  - op: add
+    path: /build/artifacts/0/ko/labels
+    value:
+      org.opencontainers.image.description: >-
+        k8s-hybrid-neg-controller enables integration of Kubernetes workloads
+        running on-prem or on other clouds with Cloud Service Mesh and Cloud
+        Load Balancing on Google Cloud. The controller creates and updates
+        Compute Engine hybrid connectivity Network Endpoint Groups (NEGs) from
+        endpoints of annotated Kubernetes Services.
+      org.opencontainers.image.licenses: Apache-2.0
+      org.opencontainers.image.revision: '{{.REVISION}}'
+      org.opencontainers.image.source: '{{.SOURCE}}'
+      org.opencontainers.image.title: k8s-hybrid-neg-controller
+      org.opencontainers.image.url: '{{.URL}}'
+      org.opencontainers.image.vendor: Google LLC
+      org.opencontainers.image.version: '{{.VERSION}}'
+  - op: add
+    path: /build/artifacts/0/ko/ldflags
+    value: ["-s", "-w"]
+  - op: add
+    path: /build/artifacts/0/platforms
+    value: ["linux/amd64", "linux/arm64"]
+  # https://skaffold.dev/docs/taggers/
+  - op: replace
+    path: /build/tagPolicy
+    value:
+      gitCommit:
+        variant: Tags

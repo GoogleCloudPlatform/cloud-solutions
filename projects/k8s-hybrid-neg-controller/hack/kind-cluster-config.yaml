@@ -1,0 +1,42 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# References:
+# - https://kind.sigs.k8s.io/docs/user/configuration/
+# - https://pkg.go.dev/sigs.k8s.io/kind/pkg/apis/config/v1alpha4
+# - https://gist.github.com/aojea/00bca6390f5f67c0a30db6acacf3ea91
+
+apiVersion: kind.x-k8s.io/v1alpha4
+kind: Cluster
+name: hybrid-neg
+featureGates:
+  KubeletInUserNamespace: true # https://kind.sigs.k8s.io/docs/user/known-issues/#chrome-os
+networking:
+  podSubnet: 10.30.0.0/16
+  serviceSubnet: 10.130.0.0/16
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: ClusterConfiguration
+    networking:
+      dnsDomain: cluster.example.com
+  labels:
+    topology.kubernetes.io/zone: us-west-1c
+- role: worker
+  labels:
+    topology.kubernetes.io/zone: us-west-1a
+- role: worker
+  labels:
+    topology.kubernetes.io/zone: us-west-1b

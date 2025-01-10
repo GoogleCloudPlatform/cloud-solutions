@@ -1,0 +1,44 @@
+# vi: set ft=yaml :
+#
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Patch for authenticating to Google Cloud APIs using Workload Identity Federation with Kubernetes
+# and OpenID Connect.
+# See https://cloud.google.com/iam/docs/workload-identity-federation-with-kubernetes#gcloud
+
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+metadata:
+  name: hybrid-neg-controller-manager-secure-token-service
+  annotations:
+    config.kubernetes.io/local-config: "true"
+configMapGenerator:
+- name: credential-configuration
+  namespace: hybrid-neg-system # kpt-set: ${hybrid-neg-controller-namespace}
+  files:
+  - credential-configuration.json
+patches:
+- path: patch-credential-configuration.yaml
+  target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: hybrid-neg-controller-manager
+- path: patch-google-sts-token-volume.yaml
+  target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: hybrid-neg-controller-manager
