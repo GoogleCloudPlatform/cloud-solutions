@@ -7,7 +7,7 @@ name = "database_archival"
 description = "Airflow DAG for Database Archival."
 dependencies = [
   # DAG.
-  "apache-airflow==2.10.1",
+  "apache-airflow==2.10.3",
   "apache-airflow-providers-google==10.22.0",
   "google-api-core[grpc]==2.19.2",
   "google-cloud-storage==2.18.2",

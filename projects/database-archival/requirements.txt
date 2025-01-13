@@ -135,9 +135,9 @@ anyio==4.5.0 \
     --hash=sha256:c5a275fe5ca0afd788001f58fca1e69e29ce706d746e317d660e21f70c530ef9 \
     --hash=sha256:fdeb095b7cc5a5563175eedd926ec4ae55413bb4be5770c424af0ba46ccb4a78
     # via httpx
-apache-airflow==2.10.1 \
-    --hash=sha256:1930fd97bb3651a413e6852cfc890ef64134eb11cd01e65acab9c25bcda6f635 \
-    --hash=sha256:e97942ffc7063f37f30ae8653cb885066c0fcb9fa7dd644ca828493dc30cf054
+apache-airflow==2.10.3 \
+    --hash=sha256:09038892bec9390357837eb7ec482e5052482be57a5b24013a14200745fbe40d \
+    --hash=sha256:6fb101dab139b3b6d739c04f3e390c8676478f94a9116a298fcc55a0a62e6dd6
     # via
     #   apache-airflow-providers-common-compat
     #   apache-airflow-providers-common-io
