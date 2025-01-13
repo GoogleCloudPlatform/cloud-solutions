@@ -60,13 +60,18 @@ gcloud services enable cloudresourcemanager.googleapis.com \
 
 ```
 
+### Update Organization Policy
+
+Update the `iam.allowedPolicyMemberDomains` organization policy to `Allow All`,
+if required.
+
 ### Provision Cloud Resources
 
 You will use the provided terraform script to provision the following resources：
 
-*   the Conversational Agent,
-*   a Cloud Run that hosts a demo web page
-*   a Cloud Functions
+*   The Conversational Agent,
+*   A Cloud Run that hosts a demo web page
+*   A Cloud Functions
 *   Application Integration.
 
 Here are the steps:
@@ -79,9 +84,13 @@ cd conversational-agent-examples
 
 *   Apply Terraform
 
+The demo solution support three use cases - Apparel, Food and Beauty.
+
 ```shell
+export USECASE_COMPONENT="apparel" # or "beauty", "food"
+
 terraform init
-terraform apply -var project_id="$PROJECT_ID"
+terraform apply -var project_id="$PROJECT_ID" -var component="$USECASE_COMPONENT"
 ```
 
 When instructed, answer "yes".
@@ -91,7 +100,7 @@ You should see output like below:
 ```text
 agent_gs_bucket = "gs://<project-id>-dialogflowcx-assets"
 app_integraion = "./app-integration.json"
-ui_cloudrun_url = "https://<cloudrun-service-id>.<region>.run.app"
+demo_ui_cloudrun_url = "https://<cloudrun-service-id>.<region>.run.app"
 ```
 
 Take note of the following:
@@ -107,7 +116,7 @@ you will use this ui to interact with the Conversational Agent
 in the working directory when you run
 `terraform apply`.
 The filename is in the terraform output `app_integration`
-*   Use the file to
+*   Use the json file to
 [Create an integration](https://cloud.google.com/application-integration/docs/upload-download-integrations#upload-an-integration)
 
     *   Choosing **apparel-search-prod** as the name.
@@ -126,26 +135,25 @@ click Connect.
     *   Scroll down and click the “**Enable unauthorized API**” button.
     *   Wait for the API to enable, then click **Done** to close the dialog.
 
-### Retail Search Data Import
+### Search for Commerce Data Import
 
 In this demo, we are using the public
-[Flipkart dataset](https://www.kaggle.com/datasets/PromptCloudHQ/flipkart-products)
-for products.
+Flipkart dataset for products.
 This section introduces the steps to convert the public dataset to
-Google Cloud Search for Retails data format,
-and import the converted data into Search for Retail.
+Google Cloud Search for Commerce data format,
+and import the converted data into Search for Commerce.
 
-#### Enable Search for Retail service
+#### Enable Search for Commerce service
 
-*   Goto [Search for Retail Console](https://console.cloud.google.com/ai/retail/start).
+*   Goto [Search for Commerce Console](https://console.cloud.google.com/ai/retail/start).
     *   Follow the instructions to turn on the APIs,
   agree to data use terms and turn on search & browse features.
-*   Goto [Vertex AI Search for Retail API Manage console]
+*   Goto [Vertex AI Search for Commerce API Manage console]
 (https://console.cloud.google.com/apis/api/retail.googleapis.com/).
     *   Wait several seconds until the `Create Credentials` button shows up.
     *   Click the `Create Credentials` button on the top right to
     create a service account
-  and associate it with the Search for Retail service
+  and associate it with the Search for Commerce service
         *   In the **Which API are you using? page.** Leave **Select an API**
     field default, and choose **Application Data**
         *   In the **Service account details** page. Name the service account `retail-service`
@@ -154,9 +162,9 @@ and import the converted data into Search for Retail.
     the service account.
         *   Click Done to create the service account.
 
-#### Import data to Search for Retail
+#### Import data to Search for Commerce
 
-These scripts report errors if the Search for Retail service is not ready for use,
+These scripts report errors if the Search for Commerce service is not ready for use,
 if you see errors when running the following scripts.
 Please wait 5 minutes and try again.
 
@@ -166,7 +174,7 @@ Apparel, Cosmetic and Food.
 *   Create Python Virtual environment.
 
 ```shell
-cd data-ingestion
+cd ../data-ingestion
 python3 -m venv .venv
 source .venv/bin/activate
 
@@ -184,11 +192,11 @@ export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID \
 echo $PROJECT_NUMBER
 ```
 
-*   Convert data file and import data to Search for Retail.
+*   Convert data file and import data to Search for Commerce.
 
 Note that in this demo, we use **Branch** **1** as the default branch.
 
-For more information about Search for Retail Branches,
+For more information about Search for Commerce Branches,
 please see the [documentation](https://cloud.google.com/retail/docs/catalog#branch).
 
 *   Choose one of the following use cases.
@@ -205,7 +213,6 @@ Switch to the data-ingestion folder and download
 [Flipkart dataset](https://www.kaggle.com/datasets/PromptCloudHQ/flipkart-products).
 
 ```shell
-cd ../data-ingestion
 mkdir -p dataset
 
 # Download dataset
@@ -227,7 +234,6 @@ Switch to the data-ingestion folder and download
 [Flipkart cosmetic dataset](https://www.kaggle.com/datasets/shivd24coder/cosmetic-brand-products-dataset).
 
 ```shell
-cd ../data-ingestion
 mkdir -p dataset
 
 # Download dataset
@@ -249,8 +255,10 @@ python3 cosmetics_to_retail_search.py \
 Switch to the data-ingestion folder and download
 [Flipkart cosmetic dataset](https://www.kaggle.com/datasets/shivd24coder/cosmetic-brand-products-dataset)
 
+Note that errors may be thrown as some products do not have an image url.
+Please ignore missing image error.
+
 ```shell
-cd ../data-ingestion
 mkdir -p dataset
 
 # Download dataset
@@ -268,7 +276,7 @@ python3 food_to_retail_search.py \
 
 ##### Import data and set the default branch
 
-*   Update Search for Retail catalog level attribute controls.
+*   Update Search for Commerce catalog level attribute controls.
 
 ```shell
 python3 update_controls.py -n $PROJECT_NUMBER
@@ -285,14 +293,14 @@ to reduce the time of import.
 which is set as the default branch.
 
 ```shell
-export BUCKET_NAME=${PROJECT_ID}-dialogflowcx-assets
+export BUCKET_NAME=${PROJECT_ID}-dialogflowcx-${USECASE_COMPONENT}-assets
 
 python3 import_to_retail_search.py -i dataset/flipkart-all.jsonl -g $BUCKET_NAME \
    -n $PROJECT_NUMBER -b 1 --set-default-branch
 ```
 
 You may see errors below, which indicates this product has invalid data.
-The problematic product will be ignored and not imported to Search for Retail.
+The problematic product will be ignored and not imported to Search for Commerce.
 
 ```text
 INFO:root:error_samples {
@@ -308,7 +316,10 @@ INFO:root:error_samples {
 ## Verify the deployment
 
 *   Navigate to `ui_cloudrun_url` you noted down in the previous step.
-*   Follow the [demo guide](demo.md) to verify the deployment.
+
+*   Follow the demo guide to verify the deployment.
+
+    [Apparel](demo-apparel.md)
 
 ## Troubleshooting
 

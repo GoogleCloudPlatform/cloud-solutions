@@ -74,6 +74,7 @@ resource "google_cloudfunctions2_function" "function" {
   }
 
   service_config {
+    available_memory      = "512Mi"
     ingress_settings      = "ALLOW_ALL"
     max_instance_count    = 100
     service_account_email = "${local.target_project_number}-compute@developer.gserviceaccount.com"

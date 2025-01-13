@@ -2,52 +2,58 @@
   "name": "aab6f787-edef-4885-8828-a708f9533183",
   "displayName": "SA_Google Pay",
   "goal": "Do not say anything to the customer, just use {FLOW:show_payment}",
-  "inputParameterDefinitions": [ {
-    "name": "shopping_cart",
-    "description": "customer's shopping cart",
-    "typeSchema": {
-      "inlineSchema": {
-        "type": "ARRAY",
-        "items": {
-          "inlineSchema": {
-            "type": "STRING"
+  "inputParameterDefinitions": [
+    {
+      "name": "shopping_cart",
+      "description": "customer's shopping cart",
+      "typeSchema": {
+        "inlineSchema": {
+          "type": "ARRAY",
+          "items": {
+            "inlineSchema": {
+              "type": "STRING"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "total_amount",
+      "description": "customer's order total amount",
+      "typeSchema": {
+        "inlineSchema": {
+          "type": "NUMBER"
+        }
+      }
+    },
+    {
+      "name": "request",
+      "description": "customer's request",
+      "typeSchema": {
+        "inlineSchema": {
+          "type": "ARRAY",
+          "items": {
+            "inlineSchema": {
+              "type": "STRING"
+            }
           }
         }
       }
     }
-  }, {
-    "name": "total_amount",
-    "description": "customer's order total amount",
-    "typeSchema": {
-      "inlineSchema": {
-        "type": "NUMBER"
-      }
-    }
-  }, {
-    "name": "request",
-    "description": "customer's request",
-    "typeSchema": {
-      "inlineSchema": {
-        "type": "ARRAY",
-        "items": {
-          "inlineSchema": {
-            "type": "STRING"
-          }
-        }
-      }
-    }
-  } ],
+  ],
   "tokenCount": 82,
-  "referencedFlows": [ "show_payment" ],
-  "referencedTools": [ "df-code-interpreter-tool" ],
+  "referencedFlows": [
+    "show_payment"
+  ],
   "instruction": {
-    "steps": [ {
-      "text": "Do not ask what payment method the customer would like to use, you only provide Google Pay."
-    }, {
-      "text": "Transit to ${FLOW:show_payment}"
-    } ]
+    "steps": [
+      {
+        "text": "Do not ask what payment method the customer would like to use, you only provide Google Pay."
+      },
+      {
+        "text": "Transit to ${FLOW:show_payment}"
+      }
+    ]
   },
-  "codeBlock": {
-
-  }
+  "codeBlock": {}
 }
