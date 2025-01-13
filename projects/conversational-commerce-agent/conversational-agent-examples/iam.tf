@@ -37,6 +37,6 @@ resource "google_project_iam_binding" "dialogflow_service_agent" {
   role    = "roles/integrations.integrationInvoker"
   members = ["serviceAccount:service-${local.target_project_number}@gcp-sa-dialogflow.iam.gserviceaccount.com"]
   depends_on = [
-    module.dialogflow_cx_apparel_agent
+    module.dialogflow_cx_demo_agent
   ]
 }

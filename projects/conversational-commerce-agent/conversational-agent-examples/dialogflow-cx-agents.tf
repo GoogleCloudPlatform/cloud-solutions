@@ -12,28 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "dialogflow_cx_apparel_agent" {
+module "dialogflow_cx_demo_agent" {
   source            = "./dialogflow-cx-agent"
-  agent_name        = "apparel_search"
-  agent_assets      = "${path.module}/assets/apparel-agent"
-  project_id        = var.project_id
-  region            = var.region
-  cloudfunction_uri = google_cloudfunctions2_function.function.service_config[0].uri
-}
-
-module "dialogflow_cx_food_agent" {
-  source            = "./dialogflow-cx-agent"
-  agent_name        = "food"
-  agent_assets      = "${path.module}/assets/food-agent"
-  project_id        = var.project_id
-  region            = var.region
-  cloudfunction_uri = google_cloudfunctions2_function.function.service_config[0].uri
-}
-
-module "dialogflow_cx_beauty_agent" {
-  source            = "./dialogflow-cx-agent"
-  agent_name        = "beauty"
-  agent_assets      = "${path.module}/assets/beauty-agent"
+  agent_name        = var.component
+  agent_assets      = "${path.module}/assets/${var.component}-agent"
   project_id        = var.project_id
   region            = var.region
   cloudfunction_uri = google_cloudfunctions2_function.function.service_config[0].uri

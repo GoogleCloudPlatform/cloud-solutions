@@ -14,7 +14,7 @@
 
 output "agent_gs_bucket" {
   description = "The gcs bucket to agent_playbook"
-  value       = "gs://${module.dialogflow_cx_apparel_agent.agent_gs_bucket}"
+  value       = "gs://${module.dialogflow_cx_demo_agent.agent_gs_bucket}"
 }
 
 output "app_integraion" {
@@ -22,17 +22,7 @@ output "app_integraion" {
   value       = local_file.app_integration.filename
 }
 
-output "apparel_ui_cloudrun_url" {
+output "demo_ui_cloudrun_url" {
   description = "The url to the cloud run service hosting the UI"
-  value       = module.apparel_ui.ui_cloudrun_url
-}
-
-output "food_ui_cloudrun_url" {
-  description = "The url to the cloud run service hosting the UI"
-  value       = module.food_ui.ui_cloudrun_url
-}
-
-output "beauty_ui_cloudrun_url" {
-  description = "The url to the cloud run service hosting the UI"
-  value       = module.beauty_ui.ui_cloudrun_url
+  value       = module.demo_ui.ui_cloudrun_url
 }

@@ -22,3 +22,13 @@ variable "region" {
   description = "The region for use"
   type        = string
 }
+
+variable "component" {
+  default     = "apparel"
+  description = "Deploy one of the components: apparel, food and beauty"
+  type        = string
+  validation {
+    condition     = contains(["apparel", "food", "beauty"], var.component)
+    error_message = "Component should be one of apparel, food or beauty."
+  }
+}

@@ -12,29 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "apparel_ui" {
+module "demo_ui" {
   source                   = "./ui"
   project_id               = var.project_id
   project_number           = local.target_project_number
-  ui_name                  = "apparel_search"
-  ui_assets_path           = "${path.module}/assets/apparel-ui"
-  dialogflow_cx_agent_name = module.dialogflow_cx_apparel_agent.agent_name
-}
-
-module "food_ui" {
-  source                   = "./ui"
-  project_id               = var.project_id
-  project_number           = local.target_project_number
-  ui_name                  = "food"
-  ui_assets_path           = "${path.module}/assets/food-ui"
-  dialogflow_cx_agent_name = module.dialogflow_cx_food_agent.agent_name
-}
-
-module "beauty_ui" {
-  source                   = "./ui"
-  project_id               = var.project_id
-  project_number           = local.target_project_number
-  ui_name                  = "beauty"
-  ui_assets_path           = "${path.module}/assets/beauty-ui"
-  dialogflow_cx_agent_name = module.dialogflow_cx_beauty_agent.agent_name
+  ui_name                  = var.component
+  ui_assets_path           = "${path.module}/assets/${var.component}-ui"
+  dialogflow_cx_agent_name = module.dialogflow_cx_demo_agent.agent_name
 }
