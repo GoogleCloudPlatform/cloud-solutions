@@ -167,9 +167,9 @@ apache-airflow-providers-common-sql==1.16.0 \
     #   apache-airflow
     #   apache-airflow-providers-google
     #   apache-airflow-providers-sqlite
-apache-airflow-providers-fab==1.3.0 \
-    --hash=sha256:9e33d80380ce052bb7557d5c22bf4cbd7bc5c22e47f4c747e6a931056bd74d6d \
-    --hash=sha256:f4b68c4d11ff15d66c909acdd24e8c22f51318280c05284c032b17a70c422a4c
+apache-airflow-providers-fab==1.5.2 \
+    --hash=sha256:22744241fd8f5dfd4575f02775afa00b3a965b04799b67fd0a42678f994ec3ba \
+    --hash=sha256:62180f0f2cab0060b4370bda43040fe1ebdeb656297de797b1bc846cfe7d63e3
     # via apache-airflow
 apache-airflow-providers-ftp==3.11.0 \
     --hash=sha256:3a15159cb0f113861c1588b7f7d91723e3cfd7da787e89721b8cb4da74e4a98b \
