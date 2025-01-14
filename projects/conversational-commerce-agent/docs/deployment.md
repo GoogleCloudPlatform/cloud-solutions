@@ -1,8 +1,8 @@
 # Overview
 
-The Conversational Agent \- Apparel deployment guide provides step-by-step instructions
+The Conversational Shopping Agent deployment guide provides step-by-step instructions
 on how to set up and deploy cloud resources for the
-Conversational Agent \- Apparel application.
+Conversational Shopping Agent application.
 
 This guide will guide you through enabling necessary services,
 configuring Dialogflow, Retail Search, and DHL integration.
@@ -315,11 +315,24 @@ INFO:root:error_samples {
 
 ## Verify the deployment
 
+*   Go to Cloud Console, Search for Commerce. In the left panel, goto
+Controls, Attribute Controls.
+Make sure the following attributes are made Searchable and Retrivable.
+
+    *   attributes.Tags
+    *   title
+    *   description
+    *   Name
+
 *   Navigate to `ui_cloudrun_url` you noted down in the previous step.
 
 *   Follow the demo guide to verify the deployment.
 
-    [Apparel](demo-apparel.md)
+    [Apparel Demo guide](demo-apparel.md)
+
+    [Food Demo guide](demo-food.md)
+
+    [Beauty Demo guide](demo-beauty.md)
 
 ## Troubleshooting
 

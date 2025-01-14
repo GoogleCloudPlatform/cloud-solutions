@@ -47,7 +47,7 @@ from google.api_core.gapic_v1.client_info import ClientInfo
 
 from utils import shopping_cart
 
-_USER_AGENT = "cloud-solutions/conversational-commerce-agent-v0.0.1"
+_USER_AGENT = "cloud-solutions/conversational-shopping-agent-v0.0.1"
 TOML_PATH = os.getenv("CONFIG_TOML_PATH", "config.toml")
 with open(TOML_PATH, "rb") as f:
     config = tomllib.load(f)
