@@ -1,0 +1,58 @@
+{
+  "name": "alloydb-autoscaler",
+  "version": "0.0.1",
+  "description": "Autoscaler for AlloyDB",
+  "license": "Apache-2.0",
+  "author": "Google Inc.",
+  "main": "build/src/alloydb-autoscaler/index.js",
+  "scripts": {
+    "compile": "tsc",
+    "pretest": "npm run compile",
+    "test": "jasmine --config=jasmine.json",
+    "test-forwarder-function": "npm run compile && functions-framework --target=forwarderHandleHttpRequest --port=8081",
+    "test-forwarder-function-debug": "npm run compile && node --inspect node_modules/.bin/functions-framework --target=forwarderHandleHttpRequest --port=8081",
+    "test-poller-function": "npm run compile && functions-framework --target=pollerHandleHttpRequest --port=8080",
+    "test-poller-function-debug": "npm run compile && node --inspect node_modules/.bin/functions-framework --target=pollerHandleHttpRequest --port=8080",
+    "test-scaler-function": "npm run compile && functions-framework --target=scalerHandleHttpRequest --port=8082",
+    "test-scaler-function-debug": "npm run compile && node --inspect node_modules/.bin/functions-framework --target=scalerHandleHttpRequest --port=8082"
+  },
+  "dependencies": {
+    "@google-cloud/alloydb": "^1.10.1",
+    "@google-cloud/firestore": "^7.10.0",
+    "@google-cloud/monitoring": "^4.1.0",
+    "@google-cloud/opentelemetry-cloud-monitoring-exporter": "^0.20.0",
+    "@google-cloud/opentelemetry-resource-util": "^2.4.0",
+    "@google-cloud/pino-logging-gcp-config": "^1.0.1",
+    "@google-cloud/pubsub": "^4.9.0",
+    "@google-cloud/spanner": "^7.16.0",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/core": "^1.27.0",
+    "@opentelemetry/exporter-metrics-otlp-grpc": "^0.56.0",
+    "@opentelemetry/resources": "^1.27.0",
+    "@opentelemetry/sdk-metrics": "^1.27.0",
+    "@opentelemetry/semantic-conventions": "^1.27.0",
+    "ajv": "^8.17.1",
+    "eventid": "^2.0.1",
+    "express": "^4.21.1",
+    "googleapis": "^144.0.0",
+    "js-yaml": "^4.1.0",
+    "json-rules-engine": "^7.3.1",
+    "lodash": "^4.17.21",
+    "pino": "^9.5.0",
+    "protobufjs": "^7.4.0"
+  },
+  "devDependencies": {
+    "@google-cloud/functions-framework": "^3.4.2",
+    "@types/express": "^5.0.0",
+    "@types/jasmine": "^5.1.5",
+    "@types/js-yaml": "^4.0.9",
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^22.10.1",
+    "jasmine": "^5.5.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

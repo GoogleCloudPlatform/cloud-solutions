@@ -1,0 +1,10 @@
+[
+  {
+    "projectId": "basic-configuration",
+    "regionId": "us-central1",
+    "scalerPubSubTopic": "projects/my-project/topics/autoscaler-scaling",
+    "minSize": 5,
+    "maxSize": "should be a number",
+    "scalingMethod": "DIRECT"
+  }
+]

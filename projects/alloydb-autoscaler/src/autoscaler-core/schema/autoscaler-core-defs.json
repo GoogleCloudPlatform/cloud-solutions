@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "autoscaler-core-defs.json",
+  "$defs": {
+    "projectId": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Project ID of the instance to be monitored."
+    },
+    "regionId": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Region ID of the instance to be monitored."
+    },
+    "clusterId": {
+      "type": "string",
+      "minLength": 2,
+      "description": "ID of the cluster of the instance to be monitored."
+    },
+    "instanceId": {
+      "type": "string",
+      "minLength": 2,
+      "description": "ID of the instance to be monitored."
+    },
+
+    "units": {
+      "type": "string",
+      "description": "Specifies the units how the instance capacity will be measured."
+    },
+
+    "minSize": {
+      "type": "number",
+      "minimum": 1,
+      "description": "Minimum number of instances to which it can be scaled IN to.",
+      "default": 3
+    },
+    "maxSize": {
+      "type": "number",
+      "minimum": 1,
+      "description": "Maximum number of instances to which it can be scaled OUT to.",
+      "default": 10
+    },
+
+    "scalingMethod": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Scaling method that should be used. See the scaling methods in the README for more information.",
+      "default": "STEPWISE"
+    },
+
+    "scalingProfile": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Scaling profile that should be used to determine scaling rules."
+    },
+    "scalingRules": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Array containing custom rules for scaling",
+      "items": {
+        "$ref": "autoscaler-scaling-rules-defs.json#/$defs/scalingRule"
+      }
+    },
+
+    "stepSize": {
+      "type": "number",
+      "minimum": 1,
+      "description": "Amount of capacity that should be added or removed when scaling with the STEPWISE method.",
+      "default": 1
+    },
+
+    "scaleInLimit": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Maximum number of units that can be removed on a single change when scaling with the `LINEAR` method. If `undefined` or `0`, it will not limit the number of shards.",
+      "default": 0
+    },
+    "scaleOutLimit": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Maximum number of units that can be added on a single change when scaling with the `LINEAR` method. If `undefined` or `0`, it will not limit the number of shards.",
+      "default": 0
+    },
+    "scaleOutCoolingMinutes": {
+      "type": "number",
+      "minimum": 1,
+      "description": "Minutes to wait after scaling IN or OUT before a scale OUT event can be processed.",
+      "default": 5
+    },
+    "scaleInCoolingMinutes": {
+      "type": "number",
+      "minimum": 1,
+      "description": "Minutes to wait after scaling IN or OUT before a scale IN event can be processed.",
+      "default": 30
+    },
+
+    "scalerPubSubTopic": {
+      "type": "string",
+      "minLength": 2,
+      "pattern": "^projects/[^/]+/topics/[^/]+$",
+      "description": "PubSub topic (in the form `projects/${projectId}/topics/scaler-topic`) for the Poller function to publish messages for the Scaler function (Required for Cloud Run functions deployments)."
+    },
+    "downstreamPubSubTopic": {
+      "type": "string",
+      "minLength": 2,
+      "pattern": "^projects/[^/]+/topics/[^/]+$",
+      "description": "Set this parameter to point to a pubsub topic (in the form `projects/${projectId}/topics/downstream-topic-name`) to make the Autoscaler publish events that can be consumed by downstream applications.\nSee Downstream messaging in the README for more information."
+    },
+
+    "stateProjectId": {
+      "type": "string",
+      "minLength": 2,
+      "description": "The project ID where the Autoscaler state will be persisted.\nBy default it is persisted using Cloud Firestore in the same project as the instance being scaled - see `stateDatabase`.",
+      "default": "${projectId}"
+    },
+    "stateDatabase": {
+      "type": "object",
+      "description": "Object defining the database for managing the state of the Autoscaler.",
+      "default": "firestore",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "enum": ["firestore", "spanner"],
+          "description": "Type of the database for storing the persistent state of the Autoscaler.",
+          "default": "firestore"
+        },
+        "instanceId": {
+          "type": "string",
+          "minLength": 2,
+          "description": "The instance id of the instance in which you want to persist the state. Required if name=spanner."
+        },
+        "databaseId": {
+          "type": "string",
+          "minLength": 2,
+          "description": "The instance id of the instance in which you want to persist the state. Required if name=spanner."
+        }
+      }
+    }
+  }
+}

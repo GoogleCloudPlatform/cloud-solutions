@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "alloydb-autoscaler-instance.json",
+  "title": "AlloyDB Autoscaler instance configuration",
+  "description": "JSON schema for the AlloyDB instance",
+  "$comment": "Any changes to this file also need to be reflected in src/poller/README.md, and in src/common/instance-info.ts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projectId", "regionId", "clusterId", "instanceId"],
+  "properties": {
+    "$comment": {
+      "type": "string"
+    },
+
+    "projectId": { "$ref": "autoscaler-core-defs.json#/$defs/projectId" },
+    "regionId": { "$ref": "autoscaler-core-defs.json#/$defs/regionId" },
+    "clusterId": { "$ref": "autoscaler-core-defs.json#/$defs/clusterId" },
+    "instanceId": { "$ref": "autoscaler-core-defs.json#/$defs/instanceId" },
+
+    "units": {
+      "enum": ["NODES"],
+      "description": "Specifies the units how the AlloyDB capacity will be measured.",
+      "default": "NODES"
+    },
+
+    "minSize": { "$ref": "autoscaler-core-defs.json#/$defs/minSize" },
+    "maxSize": { "$ref": "autoscaler-core-defs.json#/$defs/maxSize" },
+
+    "scalingMethod": {
+      "$ref": "autoscaler-core-defs.json#/$defs/scalingMethod"
+    },
+
+    "scalingProfile": {
+      "$ref": "autoscaler-core-defs.json#/$defs/scalingProfile"
+    },
+    "scalingRules": {
+      "$ref": "autoscaler-core-defs.json#/$defs/scalingRules"
+    },
+
+    "stepSize": { "$ref": "autoscaler-core-defs.json#/$defs/stepSize" },
+
+    "scaleInLimit": { "$ref": "autoscaler-core-defs.json#/$defs/scaleInLimit" },
+    "scaleOutLimit": {
+      "$ref": "autoscaler-core-defs.json#/$defs/scaleOutLimit"
+    },
+    "scaleOutCoolingMinutes": {
+      "$ref": "autoscaler-core-defs.json#/$defs/scaleOutCoolingMinutes"
+    },
+    "scaleInCoolingMinutes": {
+      "$ref": "autoscaler-core-defs.json#/$defs/scaleInCoolingMinutes"
+    },
+
+    "scalerPubSubTopic": {
+      "$ref": "autoscaler-core-defs.json#/$defs/scalerPubSubTopic"
+    },
+    "downstreamPubSubTopic": {
+      "$ref": "autoscaler-core-defs.json#/$defs/downstreamPubSubTopic"
+    },
+
+    "stateProjectId": {
+      "$ref": "autoscaler-core-defs.json#/$defs/stateProjectId"
+    },
+    "stateDatabase": {
+      "$ref": "autoscaler-core-defs.json#/$defs/stateDatabase"
+    }
+  }
+}

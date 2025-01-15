@@ -1,0 +1,42 @@
+[
+  {
+    "projectId": "minimal-data",
+    "regionId": "us-central1",
+    "scalerPubSubTopic": "projects/my-project/topics/autoscaler-scaling",
+    "minSize": 5,
+    "maxSize": 30,
+    "scalingMethod": "DIRECT"
+  },
+  {
+    "projectId": "complete-data",
+    "regionId": "us-central1",
+
+    "minSize": 3,
+    "maxSize": 10,
+
+    "scalingMethod": "STEPWISE",
+    "scaleInLimit": 1,
+    "scaleOutLimit": 3,
+    "scaleOutCoolingMinutes": 10,
+    "scaleInCoolingMinutes": 60,
+
+    "scalerPubSubTopic": "projects/my-project/topics/autoscaler-scaling",
+    "downstreamPubSubTopic": "projects/my-project/topics/autoscaler-downstream",
+
+    "stateProjectId": "state-project-id",
+    "stateDatabase": {
+      "instanceId": "state-instance-id",
+      "databaseId": "state-database-id"
+    }
+  },
+  {
+    "projectId": "partial-data",
+    "regionId": "us-central1",
+    "minSize": 3,
+    "maxSize": 10,
+    "scalingMethod": "LINEAR",
+    "scaleOutCoolingMinutes": 10,
+    "scaleInCoolingMinutes": 60,
+    "scalerPubSubTopic": "projects/my-project/topics/autoscaler-scaling"
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "projectId": "minimal-data",
+    "regionId": "us-central1",
+    "scalerPubSubTopic": "projects/my-project/topics/autoscaler-scaling",
+    "minSize": 5,
+    "maxSize": 30,
+    "scalingMethod": "DIRECT",
+
+    "scalingProfile": "CUSTOM",
+    "scalingRules": [
+      {
+        "name": "custom_max_memory_rule",
+        "conditions": {
+          "all": [
+            {
+              "fact": "memory_maximum_utilization",
+              "operator": "lessThan",
+              "value": 70
+            }
+          ]
+        },
+        "event": {
+          "type": "IN",
+          "params": {
+            "message": "low maximum memory utilization",
+            "scalingMetrics": ["memory_maximum_utilization"]
+          }
+        },
+        "priority": 1
+      },
+      {
+        "name": "custom_average_memory_rule",
+        "conditions": {
+          "all": [
+            {
+              "fact": "memory_average_utilization",
+              "operator": "lessThan",
+              "value": 60
+            }
+          ]
+        },
+        "event": {
+          "type": "IN",
+          "params": {
+            "message": "low average memory utilization",
+            "scalingMetrics": ["memory_average_utilization"]
+          }
+        },
+        "priority": 1
+      }
+    ]
+  }
+]

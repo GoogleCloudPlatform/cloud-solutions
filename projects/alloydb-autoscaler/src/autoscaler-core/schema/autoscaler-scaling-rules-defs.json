@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "autoscaler-scaling-rules-defs.json",
+  "$defs": {
+    "scalingRule": {
+      "type": "object",
+      "title": "Scaling Rule",
+      "description": "A Scaling Rule contains a set of conditions and a single event. When the engine is run, each rule condition is evaluated. If the results are truthy, the rule's event is triggered.",
+      "required": ["conditions", "event"],
+      "properties": {
+        "name": {
+          "$id": "#/$defs/scalingRule/properties/name",
+          "anyOf": [
+            {
+              "type": "string"
+            }
+          ],
+          "title": "The Name Schema",
+          "description": "A way of naming your rules, allowing them to be easily identifiable in Rule Results. Note that the name need not be unique, and that it has no impact on execution of the rule.",
+          "default": {},
+          "examples": ["My Rule Name"]
+        },
+        "priority": {
+          "$id": "#/$defs/scalingRule/properties/priority",
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ],
+          "title": "Priority",
+          "description": "Dictates when rule should be run, relative to other rules. Higher priority rules are run before lower priority rules. Rules with the same priority are run in parallel. Priority must be a positive, non-zero integer.",
+          "default": 1,
+          "examples": [1]
+        },
+        "conditions": {
+          "$ref": "#/$defs/scalingRule/$defs/conditions"
+        },
+        "event": {
+          "$id": "#/$defs/scalingRule/properties/event",
+          "type": "object",
+          "title": "The Event Schema",
+          "description": "Sets the on('success') and on('failure') event argument emitted whenever the rule passes. Event objects must have a type property, and an optional params property.",
+          "default": {},
+          "required": ["type", "params"],
+          "properties": {
+            "type": {
+              "$id": "#/$defs/scalingRule/properties/event/properties/type",
+              "enum": ["IN", "OUT"],
+              "title": "Event Type",
+              "description": "A string representing the scaling event this describes.",
+              "default": ""
+            },
+            "params": {
+              "$id": "#/$defs/scalingRule/properties/event/properties/params",
+              "type": "object",
+              "title": "Event Params",
+              "description": "Params to make available to the event processor.",
+              "required": ["message", "scalingMetrics"],
+              "examples": [
+                {
+                  "message": "Low average memory utilization",
+                  "scalingMetrics": "['memory_average_utilization']"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "$defs": {
+        "conditions": {
+          "$id": "#/$defs/scalingRule/$defs/conditions",
+          "type": "object",
+          "title": "Conditions",
+          "description": "Rule conditions are a combination of facts, operators, and values that determine whether the rule is a success or a failure. The simplest form of a condition consists of a fact, an operator, and a value. When the engine runs, the operator is used to compare the fact against the value. Each rule's conditions must have either an all or an any operator at its root, containing an array of conditions. The all operator specifies that all conditions contained within must be truthy for the rule to be considered a success. The any operator only requires one condition to be truthy for the rule to succeed.",
+          "default": {},
+          "examples": [
+            {
+              "all": [
+                {
+                  "value": true,
+                  "fact": "displayMessage",
+                  "operator": "equal"
+                }
+              ]
+            }
+          ],
+          "oneOf": [
+            {
+              "required": ["any"]
+            },
+            {
+              "required": ["all"]
+            }
+          ],
+          "properties": {
+            "any": {
+              "$ref": "#/$defs/scalingRule/$defs/conditions/conditionArray"
+            },
+            "all": {
+              "$ref": "#/$defs/scalingRule/$defs/conditions/conditionArray"
+            }
+          }
+        },
+        "conditionArray": {
+          "$id": "#/$defs/scalingRule/$defs/conditions/conditionArray",
+          "type": "array",
+          "title": "Condition Array",
+          "description": "An array of conditions with a possible recursive inclusion of another condition array.",
+          "default": [],
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/scalingRule/$defs/conditions"
+              },
+              {
+                "$ref": "#/$defs/scalingRule/$defs/condition"
+              }
+            ]
+          }
+        },
+        "condition": {
+          "$id": "#/$defs/scalingRule/$defs/condition",
+          "type": "object",
+          "title": "Condition",
+          "description": "Rule conditions are a combination of facts, operators, and values that determine whether the rule is a success or a failure. The simplest form of a condition consists of a fact, an operator, and a value. When the engine runs, the operator is used to compare the fact against the value. Sometimes facts require additional input to perform calculations. For this, the params property is passed as an argument to the fact handler. params essentially functions as fact arguments, enabling fact handlers to be more generic and reusable.",
+          "default": {
+            "fact": "my-fact",
+            "operator": "lessThanInclusive",
+            "value": 1
+          },
+          "required": ["fact", "operator", "value"],
+          "properties": {
+            "fact": {
+              "type": "string",
+              "title": "Fact",
+              "description": "Facts are methods or constants registered with the engine prior to runtime and referenced within rule conditions. Each fact method should be a pure function that may return a either computed value, or promise that resolves to a computed value. As rule conditions are evaluated during runtime, they retrieve fact values dynamically and use the condition operator to compare the fact result with the condition value.",
+              "default": ""
+            },
+            "operator": {
+              "type": "string",
+              "anyOf": [
+                {
+                  "const": "equal",
+                  "title": "fact must equal value"
+                },
+                {
+                  "const": "notEqual",
+                  "title": "fact must not equal value"
+                },
+                {
+                  "const": "lessThan",
+                  "title": "fact must be less than value"
+                },
+                {
+                  "const": "lessThanInclusive",
+                  "title": "fact must be less than or equal to value"
+                },
+                {
+                  "const": "greaterThan",
+                  "title": "fact must be greater than value"
+                },
+                {
+                  "const": "greaterThanInclusive",
+                  "title": "fact must be greater than or equal to value"
+                },
+                {
+                  "const": "in",
+                  "title": "fact must be included in value (an array)"
+                },
+                {
+                  "const": "notIn",
+                  "title": "fact must not be included in value (an array)"
+                },
+                {
+                  "const": "contains",
+                  "title": "fact (an array) must include value"
+                },
+                {
+                  "const": "doesNotContain",
+                  "title": "fact (an array) must not include value"
+                }
+              ],
+              "title": "Operator",
+              "description": "The operator compares the value returned by the fact to what is stored in the value property. If the result is truthy, the condition passes.",
+              "default": "",
+              "examples": ["equal"]
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ],
+              "title": "Value",
+              "description": "The value the fact should be compared to.",
+              "default": 0,
+              "examples": [40]
+            }
+          }
+        }
+      }
+    }
+  }
+}

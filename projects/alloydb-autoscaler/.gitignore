@@ -1,0 +1,49 @@
+# Auto-generated when installing Node packages, e.g. CF emulator
+node_modules
+
+# General
+tmp
+*.swp
+*.swo
+.DS_Store
+
+# https://www.gitignore.io/api/visualstudiocode
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+# Misc
+setenv.sh
+out
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+*.tfplan
+.terraform
+terraform/*/build
+terraform/*/*.json
+terraform/*/*/build
+terraform/*/*/*/build
+terraform/*/*/*.json
+!dashboard.json
+
+# Code coverage report
+.nyc_output
+
+# Kubernetes manifests generated from templates
+kubernetes/**/autoscaler-config/*.yaml
+kubernetes/**/resourcegroup.yaml
+
+# Terratest
+.test-data
+
+configeditor/build
