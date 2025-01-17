@@ -62,6 +62,7 @@ mkdir -p "${BUILD_DIR}/docs"
 ln -sf "${DOCS_DIR}/index.md" "${BUILD_DIR}/docs/index.md"
 ln -sf "${DOCS_DIR}/google13f96ebf51862cf4.html" "${BUILD_DIR}/docs/google13f96ebf51862cf4.html"
 ln -sf "${DOCS_DIR}/common" "${BUILD_DIR}/docs/common"
+ln -sf "${DOCS_DIR}/stylesheets" "${BUILD_DIR}/docs/stylesheets"
 
 for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
   PROJECT_DIRNAME="$(basename "$CURRENT_PROJECT_DIR")"

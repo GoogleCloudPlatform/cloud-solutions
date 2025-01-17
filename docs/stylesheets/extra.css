@@ -1,0 +1,12 @@
+/* Hide the version tag from the header because there are several releases in
+the monorepo and we don't want to list just one.
+Ignore the selector-class-pattern check because we don't have control on
+material for mkdocs CSS selector.
+Refs:
+- https://github.com/squidfunk/mkdocs-material/issues/2082
+- https://stylelint.io/user-guide/rules/selector-class-pattern/
+*/
+/* stylelint-disable selector-class-pattern */
+.md-source__fact--version {
+  display: none;
+}

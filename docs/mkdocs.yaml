@@ -39,6 +39,8 @@ extra:
   analytics:
     provider: google
     property: G-TX7HG7NJWJ
+extra_css:
+  - stylesheets/extra.css
 repo_name: cloud-solutions
 repo_url: https://github.com/GoogleCloudPlatform/cloud-solutions
 copyright: |
