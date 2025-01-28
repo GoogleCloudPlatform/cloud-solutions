@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/compute v1.19.1
 	cloud.google.com/go/container v1.15.0
 	cloud.google.com/go/monitoring v1.13.0
-	github.com/golang/glog v1.1.0
+	github.com/golang/glog v1.2.4
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/rs/cors v1.8.3
 	golang.org/x/oauth2 v0.7.0
@@ -29,7 +29,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/gnostic v0.5.7-v3refs // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.3 // indirect
 	github.com/googleapis/gax-go/v2 v2.7.1 // indirect
