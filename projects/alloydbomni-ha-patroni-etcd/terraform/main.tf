@@ -265,6 +265,7 @@ resource "google_compute_instance" "instances" {
 
   boot_disk {
     initialize_params {
+      size  = 20
       image = local.image
     }
   }
