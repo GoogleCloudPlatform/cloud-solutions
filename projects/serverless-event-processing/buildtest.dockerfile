@@ -6,5 +6,5 @@ WORKDIR ${PROJECT_SUBDIRECTORY}
 ENTRYPOINT [ "/bin/ash", "-e", "-x", "-c" ]
 CMD [ " \
   cd terraform || exit 1 && \
-  terraform init -input=false && \
-  terraform validate" ]
+  terraform init -input=false -no-color && \
+  terraform validate -no-color" ]
