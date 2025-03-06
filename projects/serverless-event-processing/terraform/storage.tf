@@ -14,7 +14,7 @@
 
 module "terraform_backend_gcs_buckets" {
   source  = "terraform-google-modules/cloud-storage/google"
-  version = "5.0.0"
+  version = "9.1.0"
 
   location                 = var.region
   names                    = [local.terraform_backend_gcs_bucket_name]
@@ -34,7 +34,7 @@ module "terraform_backend_gcs_buckets" {
 
 module "event_processing_gcs_buckets" {
   source  = "terraform-google-modules/cloud-storage/google"
-  version = "5.0.0"
+  version = "9.1.0"
 
   names = [
     local.event_processing_results_gcs_bucket_name,
