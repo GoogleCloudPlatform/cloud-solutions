@@ -1,3 +1,6 @@
+> [!NOTE]
+> This repository/project is archived and now maintained by anantdamle at: https://github.com/anantdamle/dataproc-trino-autoscaler
+
 # Autoscaler for Trino on Dataproc
 
 Summary: Autoscaler for Trino on Dataproc
