@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/compute v1.19.1
 	cloud.google.com/go/container v1.15.0
 	cloud.google.com/go/monitoring v1.13.0
-	github.com/golang/glog v1.1.0
+	github.com/golang/glog v1.2.4
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/rs/cors v1.8.3
 	golang.org/x/oauth2 v0.7.0
