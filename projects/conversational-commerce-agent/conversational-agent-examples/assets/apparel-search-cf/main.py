@@ -31,6 +31,8 @@ import os
 import random
 import tomllib
 import uuid
+import logging
+import random
 
 from datetime import datetime, timedelta
 
@@ -139,7 +141,6 @@ user_info = {
     "contact_number": "416-555-6704",
     "email": "poetry_reader456@gmail.com",
 }
-
 
 @app.post("/search")
 def search():
@@ -631,15 +632,29 @@ def search_filter():
         with telemetry.tool_context_manager(_USER_AGENT):
             response = client.search(search_request)
             res = MessageToDict(response._pb)
+
         # extract products based on the offset index from the returned products
         if(start_index > len(res["results"])-1):
             return flask.jsonify({"message": "No more products available to show"})
 
         num_products = 3    # number of products to display in the UI
+
+        # b/405944679
+        # In our use case, top 3 products always been returned
+        # Add a random start index so different product are returned
+        if "offset" in request_json:
+            start_index = request_json['offset']
+        else:
+            start_index = 0
+
+        if len(res["results"]) <= num_products:
+            start_index = 0
+        elif start_index == 0:
+            start_index = random.randint(0, len(res["results"])- 1 - num_products)
         end_index = start_index + num_products
         end_index = end_index if len(res["results"]) > end_index else len(res["results"])
         products = res["results"][start_index:end_index]
-
+        app.logger.debug("RAW RESULTS: %s", res["results"])
         # remove unnecessary fields from product's data
         data = get_minimal_payload(products)
         app.logger.debug("RESULT: %s", data)
