@@ -1,3 +1,6 @@
+> [!NOTE]
+> This repository/project is archived and now maintained by anantdamle at: https://github.com/anantdamle/dataproc-trino-autoscaler
+
 # Autoscaler for Trino on Dataproc
 
 [Apache Hadoop](https://hadoop.apache.org/) is an open-source software framework
