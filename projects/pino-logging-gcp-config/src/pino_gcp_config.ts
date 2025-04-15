@@ -177,7 +177,11 @@ class GcpLoggingPino {
     // eg for a Date.now()=1713024754120
     // (seconds-secondsRounded)*1000 => 119.99988555908203
     const millis = Math.round((seconds - secondsRounded) * 1000);
-    return `,"timestamp":{"seconds":${secondsRounded},"nanos":${millis}000000}`;
+    if (millis !== 0) {
+      return `,"timestamp":{"seconds":${secondsRounded},"nanos":${millis}000000}`;
+    } else {
+      return `,"timestamp":{"seconds":${secondsRounded},"nanos":0}`;
+    }
   }
 
   /**

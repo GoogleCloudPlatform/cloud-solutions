@@ -151,5 +151,14 @@ describe('Pino config', () => {
         ',"timestamp":{"seconds":1713024754,"nanos":123000000}'
       );
     });
+
+    it('adds a timestamp as seconds:nanos JSON fragment when nanos is 0', () => {
+      jasmine.clock().mockDate(new Date('2024-04-13T16:12:34.000Z'));
+      const timestampGenerator = config.timestamp as () => string;
+
+      expect(timestampGenerator()).toEqual(
+        ',"timestamp":{"seconds":1713024754,"nanos":0}'
+      );
+    });
   });
 });
