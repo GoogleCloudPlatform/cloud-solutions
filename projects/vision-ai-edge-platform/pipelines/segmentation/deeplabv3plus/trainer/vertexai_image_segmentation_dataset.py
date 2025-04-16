@@ -163,7 +163,9 @@ class VertexAIImageSegmentationDataset(tfds.core.GeneratorBasedBuilder):
         #TODO: Turn into tf.function
         def create_mask(image, polygons, classes):
             size = tuple(image.shape[:-1])
-            class_masks = [Image.new('L', size) for c in self.dataset_classes]
+            height, width = size
+            class_masks = [Image.new('L', (width, height))
+                           for c in self.dataset_classes]
             class_draws = [ImageDraw.Draw(mask) for mask in class_masks]
 
             #TODO: consider cv2.drawContours()
@@ -173,24 +175,23 @@ class VertexAIImageSegmentationDataset(tfds.core.GeneratorBasedBuilder):
                 tupled_xy = [(t[0], t[1]) for t in scaled_xy]
                 class_draws[class_id].polygon(tupled_xy, fill = 255)
 
+            #concatenate class masks
             mask_img = tf.concat([
                 tf.cast(tf.keras.utils.img_to_array(mask), np.uint8)
                 for mask in class_masks[1:]], axis=-1)
 
             #calculate background class channel
-            mask_img = tf.concat([
-                tf.expand_dims(
+            bg = tf.expand_dims(
                     tf.math.scalar_mul(
                         255,
                         tf.cast(tf.reduce_sum(mask_img, axis=-1) == 0,
                                 dtype=np.uint8)),
-                    axis=-1),
+                    axis=-1)
+
+            mask_img = tf.concat([
+                bg,
                 mask_img
             ], axis=-1)
-
-            mask_img = tf.cast(
-                tf.reshape(mask_img, (*size, len(self.dataset_classes))),
-                np.uint8)
 
             return mask_img
 
