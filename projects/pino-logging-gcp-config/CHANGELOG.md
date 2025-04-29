@@ -1,6 +1,13 @@
 # Changelog
 <!-- markdownlint-disable -->
 
+## [1.0.3](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.2...pino-logging-gcp-config-v1.0.3) (2025-04-29)
+
+
+### Bug Fixes
+
+* format nanos correctly if nanos is 0 ([#163](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/163)) ([19acc84](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/19acc8438b5f433ab3b8b82bec6741d1920a23f6))
+
 ## [1.0.2](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.1...pino-logging-gcp-config-v1.0.2) (2024-11-18)
 
 
