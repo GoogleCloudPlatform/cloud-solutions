@@ -17,7 +17,7 @@
 
 ## Description: Run unit tests in this directory isolated in a docker container.
 
-FROM node:22.15.0-slim
+FROM node:22.15.1-slim
 ARG PROJECT_SUBDIRECTORY
 WORKDIR "${PROJECT_SUBDIRECTORY}"
 ENTRYPOINT [ "/bin/sh", "-e", "-x", "-c" ]
