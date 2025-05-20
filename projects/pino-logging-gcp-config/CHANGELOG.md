@@ -6,7 +6,6 @@
 
 ### Bug Fixes
 
-* wrong `logging.googleapis.com/trace` format ([#177](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/177)) ([0a630b6](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/0a630b646da0af802f756168eb1ca0de51209eb4))
 * wrong `logging.googleapis.com/trace` format ([#177](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/177)) ([782211a](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/782211a58e22447cf61be8edf789d2cad0471649))
 
 ## [1.0.3](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.2...pino-logging-gcp-config-v1.0.3) (2025-04-29)
