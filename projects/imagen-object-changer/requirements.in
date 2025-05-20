@@ -1,6 +1,0 @@
-google-cloud-aiplatform==1.46.0
-google-cloud-vision==3.7.2
-numpy==1.26.4
-opencv-python==4.9.0.80
-pillow==10.3.0
-requests==2.31.0

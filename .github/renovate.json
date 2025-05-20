@@ -178,13 +178,6 @@
     },
     {
       "matchFileNames": [
-        "projects/gke-optimization/**"
-      ],
-      "groupName": "gke-optimization",
-      "commitMessagePrefix": "chore(deps): [gke-optimization]"
-    },
-    {
-      "matchFileNames": [
         "projects/hive-bigquery-connector-demo/**"
       ],
       "groupName": "hive-bigquery-connector-demo",
@@ -203,20 +196,6 @@
       ],
       "groupName": "hpa-recommender",
       "commitMessagePrefix": "chore(deps): [hpa-recommender]"
-    },
-    {
-      "matchFileNames": [
-        "projects/imagen-object-changer/**"
-      ],
-      "groupName": "imagen-object-changer",
-      "commitMessagePrefix": "chore(deps): [imagen-object-changer]"
-    },
-    {
-      "matchFileNames": [
-        "projects/imagen-voice-captioning/**"
-      ],
-      "groupName": "imagen-voice-captioning",
-      "commitMessagePrefix": "chore(deps): [imagen-voice-captioning]"
     },
     {
       "matchFileNames": [
@@ -276,13 +255,6 @@
     },
     {
       "matchFileNames": [
-        "projects/sa-tools/gke-optimization/**"
-      ],
-      "groupName": "sa-tools-gke-optimization",
-      "commitMessagePrefix": "chore(deps): [sa-tools-gke-optimization]"
-    },
-    {
-      "matchFileNames": [
         "projects/sa-tools/perf-benchmark/**"
       ],
       "groupName": "sa-tools-perf-benchmark",
@@ -294,13 +266,6 @@
       ],
       "groupName": "sa-tools-performance-testing",
       "commitMessagePrefix": "chore(deps): [sa-tools-performance-testing]"
-    },
-    {
-      "matchFileNames": [
-        "projects/serve-llm-app-using-gke/**"
-      ],
-      "groupName": "serve-llm-app-using-gke",
-      "commitMessagePrefix": "chore(deps): [serve-llm-app-using-gke]"
     },
     {
       "matchFileNames": [
