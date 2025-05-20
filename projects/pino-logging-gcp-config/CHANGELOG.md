@@ -1,6 +1,13 @@
 # Changelog
 <!-- markdownlint-disable -->
 
+## [1.0.4](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.3...pino-logging-gcp-config-v1.0.4) (2025-05-20)
+
+
+### Bug Fixes
+
+* wrong `logging.googleapis.com/trace` format ([#177](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/177)) ([782211a](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/782211a58e22447cf61be8edf789d2cad0471649))
+
 ## [1.0.3](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.2...pino-logging-gcp-config-v1.0.3) (2025-04-29)
 
 
