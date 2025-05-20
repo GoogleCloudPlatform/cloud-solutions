@@ -128,7 +128,7 @@ describe('Pino config', () => {
       expect(formattedLog['logging.googleapis.com/spanId']).toBeUndefined();
     });
 
-    it('should replace span and trace properties when not present', () => {
+    it('should replace span and trace properties when present', () => {
       const formattedLog = formatLogObject({
         message: 'hello',
         trace_id: 'trace:12345',
@@ -159,6 +159,46 @@ describe('Pino config', () => {
       expect(timestampGenerator()).toEqual(
         ',"timestamp":{"seconds":1713024754,"nanos":0}'
       );
+    });
+  });
+});
+
+describe('Pino config with traceGoogleCloudProjectId', () => {
+  const config = createGcpLoggingPinoConfig({
+    serviceContext,
+    traceGoogleCloudProjectId: 'test-project',
+  });
+
+  describe('log formatter', () => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+    const formatLogObject = config.formatters?.log!;
+    const TEST_DATE = new Date('2024-04-13T16:12:34.123Z');
+
+    beforeEach(() => {
+      jasmine.clock().install();
+      jasmine.clock().mockDate(TEST_DATE);
+    });
+
+    afterEach(() => {
+      jasmine.clock().uninstall();
+    });
+
+    it('should replace span and trace properties when present', () => {
+      const formattedLog = formatLogObject({
+        message: 'hello',
+        trace_id: 'trace:12345',
+        span_id: 'span:23456',
+        trace_flags: 1,
+      });
+
+      expect(formattedLog['logging.googleapis.com/trace_sampled']).toBeTrue();
+      expect(formattedLog['logging.googleapis.com/trace']).toBe(
+        'projects/test-project/traces/trace:12345'
+      );
+      expect(formattedLog['logging.googleapis.com/spanId']).toBe('span:23456');
+      expect(formattedLog.trace_id).toBeUndefined();
+      expect(formattedLog.span_id).toBeUndefined();
+      expect(formattedLog.trace_flags).toBeUndefined();
     });
   });
 });

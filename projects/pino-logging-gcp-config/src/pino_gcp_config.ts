@@ -76,8 +76,17 @@ export interface GCPLoggingPinoOptions {
   serviceContext?: ServiceContext;
 
   /**
+   * Optional Google Cloud project ID to be used for composing the
+   * 'logging.googleapis.com/trace' field.
+   *
+   * If not specified, the project ID will be auto-detected from the
+   * environment.
+   */
+  traceGoogleCloudProjectId?: string;
+
+  /**
    * Optional GoogleAuth - used to override defaults when detecting
-   * ServiceContext from the environment.
+   * ServiceContext and project ID from the environment.
    */
   auth?: gax.GoogleAuth;
 }
@@ -88,8 +97,37 @@ export interface GCPLoggingPinoOptions {
  */
 class GcpLoggingPino {
   serviceContext: ServiceContext | null = null;
+  traceGoogleCloudProjectId: string | null = null;
+  auth: gax.GoogleAuth | undefined;
+  cachedLoggingClient: Logging | null = null;
 
   constructor(options?: GCPLoggingPinoOptions) {
+    this.auth = options?.auth;
+
+    this.initializeOptionsAsync(options).then(
+      () => {
+        this.outputDiagnosticEntry();
+      },
+      () => {
+        // Ignore any errors raised by initializeOptionsAsync.
+        // Errors can occur if not running in a GCP environment.
+      }
+    );
+  }
+
+  /**
+   * Resolves and initializes the configuration options for the logger.
+   *
+   * This function sets up the `serviceContext` and `traceGoogleCloudProjectId`
+   * properties for the logger. It uses the provided options or attempts to
+   * auto-detect values from the environment if they are not specified.
+   *
+   * @param options Configuration options for GCP logging.
+   *
+   * @throws {Error} If `serviceContext.service` is provided but is not a valid
+   * string or is empty.
+   */
+  async initializeOptionsAsync(options?: GCPLoggingPinoOptions) {
     if (options?.serviceContext) {
       if (
         typeof options.serviceContext?.service !== 'string' ||
@@ -98,28 +136,36 @@ class GcpLoggingPino {
         throw new Error('options.serviceContext.service must be specified.');
       }
       this.serviceContext = {...options.serviceContext};
-      this.outputDiagnosticEntry();
     } else {
-      // Use the Cloud Logging libraries to retrieve the ServiceContext
-      // automatically from the environment.
-      //
-      // This requires initialising a Cloud Logger, then using
-      // detectServiceContext to asynchronously return the ServiceContext
-      const cloudLog = new Logging({auth: options?.auth}).logSync(
-        NODEJS_GCP_PINO_LIBRARY_NAME
-      );
-
-      detectServiceContext(cloudLog.logging.auth).then(
-        serviceContext => {
-          this.serviceContext = serviceContext;
-          this.outputDiagnosticEntry();
-        },
-        () => {
-          // Ignore any errors raised by detectServiceContext.
-          // Errors can occur if not running in a GCP environment.
-        }
-      );
+      // Using detectServiceContext to asynchronously return the ServiceContext
+      const cloudLog = this.getLoggingClient();
+      const serviceContext = await detectServiceContext(cloudLog.auth);
+      this.serviceContext = serviceContext;
     }
+
+    if (options?.traceGoogleCloudProjectId) {
+      this.traceGoogleCloudProjectId = options.traceGoogleCloudProjectId;
+    } else {
+      // Using the GoogleAuth to get the projectId from the environment.
+      const cloudLog = this.getLoggingClient();
+      const projectId = await cloudLog.auth.getProjectId();
+      this.traceGoogleCloudProjectId = projectId;
+    }
+  }
+
+  /**
+   * Retrieves the cached Logging client instance or creates a new one if it
+   * does not exist. It can be used to retrieve the ServiceContext and project
+   * ID automatically from the environment.
+   *
+   * @returns The Logging client instance, either cached or newly created.
+   */
+  getLoggingClient() {
+    if (!this.cachedLoggingClient) {
+      this.cachedLoggingClient = new Logging({auth: this.auth});
+      this.auth = this.cachedLoggingClient.auth;
+    }
+    return this.cachedLoggingClient;
   }
 
   /**
@@ -217,7 +263,9 @@ class GcpLoggingPino {
     // @see https://cloud.google.com/logging/docs/structured-logging#special-payload-fields
     // @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#trace-context-fields
     if ((entry.trace_id as string | undefined)?.length) {
-      entry['logging.googleapis.com/trace'] = entry.trace_id;
+      entry['logging.googleapis.com/trace'] = this.traceGoogleCloudProjectId
+        ? `projects/${this.traceGoogleCloudProjectId}/traces/${entry.trace_id}`
+        : entry.trace_id;
       delete entry.trace_id;
     }
     if ((entry.span_id as string | undefined)?.length) {
