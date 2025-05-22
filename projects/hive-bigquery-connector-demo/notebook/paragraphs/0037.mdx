@@ -1,8 +1,0 @@
-## Write data
-
-Until now you've used pre-existing BigQuery tables, some native and some external, based on GCS data. You've also used a Hive table based on GCS data (as a replacement for HDFS), without the involvement of BigQuery. You've also seen how these tables can work together.
-Now let's create an internal table in Hive, that is backed up in BigQuery as a storage layer. This means that the Hive-BigQuery-Connector will create a table on both Hive and BigQuery and connect them. The Hive table is again registered in the metastore, but all the data is stored on BigQuery.
-You will then also insert data into table, and you could watch the same data on both the Hive side and the BigQuery side.
-**Keep in mind**: Dropping internal tables WILL DROP THE BIGQUERY TABLE AS WELL AS THE HIVE TABLE!!
-This is not the case for external tables.
-Now, to setup this table, you will have to do a small trick. You will have to create an external table on top of GCS, and then the internal table. This is because `LOAD DATA` statements are not working for non-native tables.

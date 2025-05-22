@@ -1,1 +1,0 @@
-!gsutil ls gs://<WAREHOUSE_BUCKET>/data/events/* | tail -n 10

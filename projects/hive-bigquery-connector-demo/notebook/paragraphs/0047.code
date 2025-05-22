@@ -1,6 +1,0 @@
-%%sql
-SELECT id, user_id, sequence_number, session_id, created_at, ip_address, city, state, postal_code, browser, traffic_source, uri --, event_type, created_date
-FROM events
-WHERE created_date = '2023-11-01'
-ORDER BY RAND()
-LIMIT 20

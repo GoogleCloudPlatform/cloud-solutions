@@ -1,2 +1,0 @@
-# Make a copy of this file, and remove the `.template` suffix. Then, update these variables
-gcp_project = ""

@@ -1,3 +1,0 @@
-tables = pandas.read_sql('SHOW TABLES', hive_engine)
-for index, table in tables.iterrows():
-    hive.execute(f'DROP TABLE {table["tab_name"]}')
