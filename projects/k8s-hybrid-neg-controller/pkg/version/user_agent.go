@@ -20,6 +20,7 @@ import (
 
 const (
 	// userAgentFormatString is used with both the k8s and Compute Engine clients.
+	// Formats to cloud-solutions/k8s-hybrid-neg-controller-v999.
 	userAgentFormatString = "cloud-solutions/k8s-hybrid-neg-controller-%s"
 )
 

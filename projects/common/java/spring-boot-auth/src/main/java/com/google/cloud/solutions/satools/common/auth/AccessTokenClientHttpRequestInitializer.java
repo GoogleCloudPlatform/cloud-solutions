@@ -24,6 +24,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestInitializer;
 
+// this is a utility library, so asset tracking is not necessary
+// cloud-solutions/not-tracked-v0.0.0
+
 /** Appends the OAuth AccessToken as request header "AUTHORIZATION". */
 public final class AccessTokenClientHttpRequestInitializer implements ClientHttpRequestInitializer {
 
