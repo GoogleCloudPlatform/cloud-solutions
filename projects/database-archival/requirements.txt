@@ -160,9 +160,9 @@ apache-airflow-providers-common-io==1.4.0 \
     --hash=sha256:415c1b9ba57e0451fcfd3e4f020c589f5ed778b4a034bf0946c87e9b920e4b5d \
     --hash=sha256:66e8c285a0ec070adad3d9293fa2c27f35d728aa8e0d1d0219a788c1d70b8b8c
     # via apache-airflow
-apache-airflow-providers-common-sql==1.16.0 \
-    --hash=sha256:380738275f2d0db73cb1f282d706890e92aea71bfe8fa8eec4c32293c9575b10 \
-    --hash=sha256:559beb12f5f37169188ea5805b18a0389fb780e27fe90939ec1b34e9b459dd39
+apache-airflow-providers-common-sql==1.24.1 \
+    --hash=sha256:43723f76816f1c3d3fdafdf449a8fa67e67eb93551aa5705c96e1123ae15bca1 \
+    --hash=sha256:ce36740997fea216c103204b01d1fcdac2e856d0f3e4ac6cc8b5e9da3e8881ba
     # via
     #   apache-airflow
     #   apache-airflow-providers-google
