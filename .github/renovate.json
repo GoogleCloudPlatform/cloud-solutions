@@ -192,6 +192,13 @@
     },
     {
       "matchFileNames": [
+        "projects/nvidia-omniverse-on-google-cloud/**"
+      ],
+      "groupName": "nvidia-omniverse-on-google-cloud",
+      "commitMessagePrefix": "chore(deps): [nvidia-omniverse-on-google-cloud]"
+    },
+    {
+      "matchFileNames": [
         "projects/pino-logging-gcp-config/**"
       ],
       "groupName": "pino-logging-gcp-config",
