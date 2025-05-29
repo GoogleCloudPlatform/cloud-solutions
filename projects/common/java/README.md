@@ -1,26 +1,7 @@
 # Java Commons
 
-This folder contains reusable Java components:
+Update **2025-05-29**:
 
-*   `utils` Utility functions, e.g. handling Proto and Json.
-*   `spring-boot-auth` Spring Bean to extract Google Access token from Request
-    header and allow inspecting approve scopes and principal email address.
-*   `objectify-testing` JUnit5 test extensions for unit-testing `Objectify` and
-    `Datastore` operations.
-*   `testing` Utilities and extensions for helping with writing better tests.
-
-## Using common components
-
-1.  Add to your `settings.gradle`
-
-    ```groovy
-    includeBuild("path/to/common/java-common")
-    ```
-
-1.  Use appropriate module in your `build.gradle`: Example to use utils and
-    testing module:
-
-    ```groovy
-    implementation "com.google.cloud.solutions.satools.common:utils"
-    testImplementation "com.google.cloud.solutions.satools.common:testing"
-    ```
+This project has been archived. You can still access the code by browsing the
+repository at
+[commit f7ecb0e](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/f7ecb0edddf8bb140896407a1f885bc62d3ba54e/projects/common/java)
