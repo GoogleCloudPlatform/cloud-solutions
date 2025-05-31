@@ -15,7 +15,7 @@
 
 # buildtest.dockerfile is only used for ci.
 
-FROM python:3.8.18 as base
+FROM python:3.10.12 as base
 
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
