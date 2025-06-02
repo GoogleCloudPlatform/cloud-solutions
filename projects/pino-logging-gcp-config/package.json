@@ -28,7 +28,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jasmine": "^5.1.8",
-    "@types/node": "^22.15.18",
+    "@types/node": "^22.15.29",
     "jasmine": "^5.7.1",
     "jasmine-console-reporter": "^3.1.0",
     "typescript": "^5.8.3"
@@ -37,7 +37,7 @@
     "@google-cloud/logging": "^11.2.0",
     "eventid": "^2.0.1",
     "google-gax": "^4.6.1",
-    "pino": "^9.6.0"
+    "pino": "^9.7.0"
   },
   "engines": {
     "node": ">=16.20.2"
