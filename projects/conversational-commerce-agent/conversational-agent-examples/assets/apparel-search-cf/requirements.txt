@@ -255,9 +255,9 @@ flask==3.1.0 \
     #   firebase-functions
     #   flask-cors
     #   functions-framework
-flask-cors==5.0.0 \
-    --hash=sha256:5aadb4b950c4e93745034594d9f3ea6591f734bb3662e16e255ffbf5e89c88ef \
-    --hash=sha256:b9e307d082a9261c100d8fb0ba909eec6a228ed1b60a8315fd85f783d61910bc
+flask-cors==6.0.0 \
+    --hash=sha256:4592c1570246bf7beee96b74bc0adbbfcb1b0318f6ba05c412e8909eceec3393 \
+    --hash=sha256:6332073356452343a8ccddbfec7befdc3fdd040141fe776ec9b94c262f058657
     # via firebase-functions
 functions-framework==3.8.2 \
     --hash=sha256:109bcdca01244067052a605536b44d042903b3805d093cd32e343ba5affffc90 \
