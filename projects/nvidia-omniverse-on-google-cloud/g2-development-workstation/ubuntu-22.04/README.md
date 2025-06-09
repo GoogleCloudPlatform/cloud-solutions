@@ -48,3 +48,7 @@ a VM, and you already created one.
 Note: Chrome Remote Desktop (CRD) doesn't support hardware acceleration, so you
 might experience suboptimal performance if you use CRD to connect to the NVIDIA
 Omniverse workstation.
+
+## What's next
+
+-   [Deploy NVIDIA Omniverse Kit Streaming applications on Google Cloud](../../kit-app-streaming/README.md).
