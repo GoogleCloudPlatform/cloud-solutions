@@ -10,6 +10,15 @@ following NVIDIA Omniverse development workstations:
 
 -   [NVIDIA Omniverse development workstation: G2 machine family (L4 GPUs), Ubuntu 22.04](./g2-development-workstation/ubuntu-22.04/README.md)
 
+## NVIDIA Isaac development workstations
+
+To develop NVIDIA Isaac applications on Google Cloud, you deploy one of the
+following NVIDIA Isaac development workstations:
+
+-   Provision and configure a development workstation for NVIDIA Isaac Lab and
+    NVIDIA Isaac Sim using
+    [NVIDIA Isaac Automator](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/cloud_installation.html).
+
 ## NVIDIA Omniverse Kit App Streaming
 
 For more information, see

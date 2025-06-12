@@ -28,7 +28,8 @@ following:
     projects/nvidia-omniverse-on-google-cloud/g2-development-workstation/ubuntu-22.04/setup-workstation.sh/setup-workstation.sh
     ```
 
-    The `setup-workstation.sh` script does the following:
+    The `setup-workstation.sh` script does the following to the workstation for
+    NVIDIA Omniverse application development:
 
     -   Verify that NVIDIA drivers are installed
     -   Install dependencies
@@ -45,9 +46,9 @@ starting from the _Install HP Anyware software_ section. Ignore the steps prior
 to the _Install HP Anyware software_ section because they guide you in creating
 a VM, and you already created one.
 
-Note: Chrome Remote Desktop (CRD) doesn't support hardware acceleration, so you
-might experience suboptimal performance if you use CRD to connect to the NVIDIA
-Omniverse workstation.
+Note: If you use Chrome Remote Desktop (CRD) to connect to the development
+workstation remote desktop, you might experience suboptimal performance because
+CRD doesn't support hardware acceleration.
 
 ## What's next
 
