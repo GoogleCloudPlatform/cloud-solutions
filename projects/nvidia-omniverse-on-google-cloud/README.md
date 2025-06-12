@@ -19,6 +19,11 @@ following NVIDIA Isaac development workstations:
     NVIDIA Isaac Sim using
     [NVIDIA Isaac Automator](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/cloud_installation.html).
 
+## Provision and configure a Google Kubernetes Engine platform for NVIDIA Omniverse applications
+
+To deploy NVIDIA Omniverse applications,
+[provision and configure a Google Kubernetes Engine (GKE) cluster](./gke-base-platform/README.md).
+
 ## NVIDIA Omniverse Kit App Streaming
 
 For more information, see
