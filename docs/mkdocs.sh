@@ -79,8 +79,8 @@ for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
     #
     # Use find with included and excluded file and dir patterns, dirs and
     # pass to cp --parent to copy with paths.
-    INCLUDED_FILES_ARGS=(-name "*.md" -o -name "*.png" -o -name "*.jpg" -o -name "*.svg")
-    EXCLUDED_FILES_ARGS=(-iname "CHANGELOG*" -o -iname "LICENCE*" -o -iname "CONTRIBUTING*")
+    INCLUDED_FILES_ARGS=(-name "*.md" -o -name "*.png" -o -name "*.jpg" -o -name "*.svg" -o -name ".pages")
+    EXCLUDED_FILES_ARGS=(-iname "CHANGELOG*" -o -iname "LICENSE*" -o -iname "CONTRIBUTING*")
     EXCLUDED_DIRS_ARGS=(-path "*/node_modules/*" -o -path "*/build/*" -o -path "*/venv/*")
     find "${PROJECT_DIRNAME}" \
       \( "${INCLUDED_FILES_ARGS[@]}" \) \
