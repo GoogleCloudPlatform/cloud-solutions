@@ -1,4 +1,4 @@
-# NVIDIA Omniverse on Google Cloud
+# Overview
 
 This project contains assets to develop and deploy NVIDIA Omniverse applications
 on Google Cloud.
