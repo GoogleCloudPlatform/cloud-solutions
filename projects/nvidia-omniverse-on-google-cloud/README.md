@@ -28,3 +28,8 @@ To deploy NVIDIA Omniverse applications,
 
 For more information, see
 [Deploy NVIDIA Omniverse Kit App Streaming applications on Google Cloud](./kit-app-streaming/README.md).
+
+## NVIDIA Omniverse Farm
+
+For more information, see
+[Deploy NVIDIA Omniverse Farm on Google Cloud](./omniverse-farm/README.md).

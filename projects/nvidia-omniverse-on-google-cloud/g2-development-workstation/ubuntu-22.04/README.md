@@ -4,6 +4,9 @@ This NVIDIA Omniverse development workstation is based on the
 [Google Cloud Compute Engine G2 machine family](https://cloud.google.com/compute/docs/gpus#l4-gpus).
 A VM based on the G2 machine family includes one to eigth NVIDIA L4 GPUs.
 
+_G2 machine are not officially supported by NVIDIA for NVIDIA Omniverse
+development_
+
 To deploy a NVIDIA Omniverse development workstation on Google Cloud, you do the
 following:
 
