@@ -1,6 +1,18 @@
 # Changelog
 <!-- markdownlint-disable -->
 
+## [1.0.6](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.4...pino-logging-gcp-config-v1.0.6) (2025-06-19)
+
+
+### Bug Fixes
+
+* **deps:** update npm brace-expansion [SECURITY] ([2b89645](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/2b89645aee6532234218950dfbcd8e8340b4b6df))
+* **pino-logging-gcp-config:** log mutates input ([#192](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/192)) ([1e9fbbd](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/1e9fbbdb461a92339d8a5649c613e9e07972cb07))
+
+## 1.0.5 (2025-05-18)
+
+### Invalid release
+
 ## [1.0.4](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.3...pino-logging-gcp-config-v1.0.4) (2025-05-20)
 
 
