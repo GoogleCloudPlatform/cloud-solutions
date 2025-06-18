@@ -255,14 +255,13 @@ class GcpLoggingPino {
    * * Adds serviceContext
    * * Adds sequential insertId to preserve logging order.
    */
-  formatLogObject(input: Record<string, unknown>): Record<string, unknown> {
+  formatLogObject(entry: Record<string, unknown>): Record<string, unknown> {
     // OpenTelemetry adds properties trace_id, span_id, trace_flags. If these
     // are present, not null and not blank, convert them to the property keys
     // specified by GCP logging.
     //
     // @see https://cloud.google.com/logging/docs/structured-logging#special-payload-fields
     // @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#trace-context-fields
-    const entry = {...input}
     if ((entry.trace_id as string | undefined)?.length) {
       entry['logging.googleapis.com/trace'] = this.traceGoogleCloudProjectId
         ? `projects/${this.traceGoogleCloudProjectId}/traces/${entry.trace_id}`

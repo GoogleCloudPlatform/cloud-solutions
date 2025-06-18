@@ -144,13 +144,6 @@ describe('Pino config', () => {
       expect(formattedLog.trace_flags).toBeUndefined();
     });
 
-    it('should not mutate input', () => {
-      const input = {}
-      formatLogObject(input);
-
-      expect(input).toEqual({});
-    });
-
     it('adds a timestamp as seconds:nanos JSON fragment', () => {
       const timestampGenerator = config.timestamp as () => string;
 
