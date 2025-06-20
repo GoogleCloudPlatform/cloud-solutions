@@ -1,0 +1,17 @@
+# Python
+.venv/
+__pycache__/
+deploy.sh
+
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars
+
+# Dev
+.config*.toml
+config-network.toml
+config.toml
+const.js
+temp/

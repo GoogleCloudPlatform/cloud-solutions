@@ -1,0 +1,235 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+[gcp]
+GCP_PROJECT_ID = "${GCP_PROJECT_ID}"
+BQ_DATASET_ID = "${BQ_DATASET_ID}"
+GCS_BUCKET = "${GCS_BUCKET}"
+
+[user_profiles]
+USER_PROFILE_001 = """
+<user_profile>
+Name: John Doe
+Role: Network and Security Field Engineer
+
+Objective: Monitor network activity and check if there is new threats.
+</user_profile>
+"""
+
+[prompts]
+PROMPT_GENERATE_QUESTIONS_BY_DATASET = """
+<dataset>
+{DATASET}
+</dataset>
+
+<tasks>
+1. Given the user's profile and the table schema, come out 3 question this user should ask to determine his actions to fullfil his role responsibilities.
+    Note: Always exclude outliners.
+2. Respond in JSON array of string.
+3. DO NOT EXPLAIN.
+</tasks>
+"""
+
+DATA_ACCESS_AGENT_DESCRIPTION = """
+You are a Business Analytics and BigQuery Expert.
+You create reports to answer user's questions about the business of the retail sale.
+"""
+
+DATA_ACCESS_AGENT_INSTRUCTION = """
+<system>
+You are a Business Analytics and BigQuery Expert.
+You fetch data from BigQuery dataset using tools.
+</system>
+
+<tasks>
+1. Based on the user's request, use tool (get_sql_query) to get SQL query,
+then use tool (execute_bq_query) to fetch data from BigQuery dataset.
+2. Use tool (get_user_profile) to get the user's profile
+3. Based on the data and user profile, generate 3 questions (in json array of string) the user should ask to start plan his next actions.
+2. Use tool (generate_final_response) to generate final responses to the user.
+</tasks>
+
+<remember>
+1. review the instructions given to you, think careful before respond.
+</remember>
+"""
+
+[sql]
+
+NETWORK_FIND_SIMILAR_RECORDS = """
+SELECT
+    PARSE_DATETIME('%m/%d/%Y %H:%M', Time) AS Actual_Time, Protocol, Flag, SeddAddress, ExpAddress, Port, Prediction,
+    `Event Description`, `Application Layer Data`, `User-Agent`, Geolocation
+FROM
+    `kalschi-npc-001.zero_day_logs.logs`
+WHERE
+    `Event Description` = 'Malicious Request'
+    AND Protocol = 'TCP'
+    AND Flag = 'SYN'
+    AND Port = 443
+    AND Prediction = 'Attack Detected'
+ORDER BY Actual_Time DESC
+LIMIT 20;
+"""
+
+NETWORK_THREATS_ACTIVITY_IN_LAST_30_DAYS = """
+select family, count(1),DATE(PARSE_DATETIME('%m/%d/%Y %H:%M', Time)) as Log_Time
+from `{GCP_PROJECT_ID}.{BQ_DATASET_ID}`
+group by family, Log_Time
+order by Log_Time desc
+limit 30
+"""
+
+NETWORK_THREATS_COUNTS = """
+with temp as (
+  SELECT
+    PARSE_DATETIME('%m/%d/%Y %H:%M', Time) AS Actual_Time,
+    Family,
+    COUNT(*) AS threat_count
+  FROM
+    `{GCP_PROJECT_ID}.{BQ_DATASET_ID}`
+  GROUP BY
+    Family,
+    Time
+  ORDER BY
+    Actual_Time DESC
+)
+select Family, count(threat_count) AS threat_count from temp group by Family;
+"""
+
+NETWORK_LOGS_SCHEMA = """
+--- Dataset: ddos_logs ---
+Location: us-central1
+Description: N/A
+Created: 2025-05-28T01:49:18.236000+00:00
+Last Modified: 2025-05-28T01:49:18.236000+00:00
+------------------------------
+
+--- Tables in this dataset and their detailed schemas ---
+
+  Table: logs
+    Schema:
+      - Name: SRC_ADD
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: DES_ADD
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_ID
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: FROM_NODE
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: TO_NODE
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_TYPE
+        Type: STRING
+        Mode: NULLABLE
+        Description: Packet Type, must be one of tcp,cbr,ping,ack
+      - Name: PKT_SIZE
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: FLAGS
+        Type: STRING
+        Mode: NULLABLE
+        Description: N/A
+      - Name: FID
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: SEQ_NUMBER
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: NUMBER_OF_PKT
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: NUMBER_OF_BYTE
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: NODE_NAME_FROM
+        Type: BYTES
+        Mode: NULLABLE
+        Description: N/A
+      - Name: NODE_NAME_TO
+        Type: BYTES
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_IN
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_OUT
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_R
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_DELAY_NODE
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_RATE
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: BYTE_RATE
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_AVG_SIZE
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: UTILIZATION
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_DELAY
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_SEND_TIME
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_RESEVED_TIME
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: FIRST_PKT_SENT
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: LAST_PKT_RESEVED
+        Type: FLOAT
+        Mode: NULLABLE
+        Description: N/A
+      - Name: PKT_CLASS
+        Type: STRING
+        Mode: NULLABLE
+        Description: Packet Class, must be one of SIDDOS,UDP-Flood,HTTP-FLOOD,Normal,Smurf
+"""

@@ -1,0 +1,22 @@
+{
+  "extends": "../../../config/lint/.eslintrc.json",
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "env": {
+        "browser": true,
+        "node": false
+      },
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "n/no-unsupported-features/node-builtins": "off",
+        "@typescript-eslint/no-unused-vars": "warn"
+      }
+    }
+  ]
+}
