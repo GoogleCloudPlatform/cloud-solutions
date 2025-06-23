@@ -294,6 +294,13 @@
       ],
       "groupName": "vision-ai-edge-platform",
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]"
+    },
+    {
+      "matchFileNames": [
+        "projects/contextual-ai/**"
+      ],
+      "groupName": "contextual-ai",
+      "commitMessagePrefix": "chore(deps): [contextual-ai]"
     }
   ]
 }

@@ -14,7 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+export USER_AGENT
 export CURRENT_DIR
+
+USER_AGENT="cloud-solutions/contextual-ai-for-isv-1.0.0"
 CURRENT_DIR=$(pwd)
 
 echo "Deploying Backend API..."
