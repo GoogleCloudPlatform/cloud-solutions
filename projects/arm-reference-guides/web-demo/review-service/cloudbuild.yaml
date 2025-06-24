@@ -1,0 +1,18 @@
+steps:
+  - name: "maven:3.8.6-openjdk-18"
+    args: ["mvn", "install", "-DskipTests"]
+  - name: "docker:27.2.0-dind"
+    args: ["buildx", "create", "--use"]
+  - name: "docker:27.2.0-dind"
+    args:
+      [
+        "buildx",
+        "build",
+        "--platform=linux/arm64,linux/amd64",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/review-service:latest",
+        "--push",
+        ".",
+      ]
+options:
+  machineType: "E2_HIGHCPU_8"

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2025 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header-links}"></head>
+<body>
+    <nav th:replace="~{fragments :: navbar}"></nav>
+    <div class="container">
+        <div th:if="${serviceError}" class="alert alert-danger" role="alert" th:text="${serviceError}"></div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 th:text="${listTitle}" class="mb-0">Books</h2>
+            <a th:href="@{/books/new}" class="btn btn-success">Add New Book</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="book : ${bookPage.content}">
+                    <td><a th:href="@{/book/{isbn}(isbn=${book.isbn})}" th:text="${book.isbn}"></a></td>
+                    <td th:text="${book.title}"></td>
+                    <td th:text="${book.author}"></td>
+                    <td th:text="${book.publicationYear}"></td>
+                    <td>
+                        <form th:action="@{/book/delete/{isbn}(isbn=${book.isbn})}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Pagination" th:if="${bookPage.totalPages > 1}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${bookPage.first} ? 'disabled'">
+                    <a class="page-link" th:href="@{/books(page=0, size=${bookPage.size})}">First</a>
+                </li>
+                <li class="page-item" th:classappend="${bookPage.first} ? 'disabled'">
+                    <a class="page-link" th:href="@{/books(page=${bookPage.number - 1}, size=${bookPage.size})}">Previous</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Page [[${bookPage.number + 1}]] of [[${bookPage.totalPages}]]</a>
+                </li>
+                <li class="page-item" th:classappend="${bookPage.last} ? 'disabled'">
+                    <a class="page-link" th:href="@{/books(page=${bookPage.number + 1}, size=${bookPage.size})}">Next</a>
+                </li>
+                <li class="page-item" th:classappend="${bookPage.last} ? 'disabled'">
+                    <a class="page-link" th:href="@{/books(page=${bookPage.totalPages - 1}, size=${bookPage.size})}">Last</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

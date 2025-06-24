@@ -1,0 +1,87 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arm-book-catalog-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: arm-book-catalog-service
+  template:
+    metadata:
+      labels:
+        app: arm-book-catalog-service
+    spec:
+      containers:
+        - name: arm-book-catalog-app
+          image: ${CATALOG_CONTAINER_IMAGE_URL}
+          ports:
+            - containerPort: 8080
+          # --- Liveness and Readiness Probes for Health Checking ---
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: "1"
+              memory: 512Mi
+          # --- Environment Variables ---
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: ""
+            # Static values for service discovery within the cluster
+            - name: DB_HOST
+              value: "arm-postgres-svc" # DNS name of your in-cluster Postgres Service
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "postgres"
+            - name: REDIS_HOST
+              value: "arm-redis-svc-master" # DNS name of your in-cluster Redis Service
+            - name: REDIS_PORT
+              value: "6379"
+            # Values pulled from our Kubernetes Secret
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: book-catalog-secrets
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: book-catalog-secrets
+                  key: DB_PASSWORD
+      tolerations:
+        - key: "deploy" # Replace with your taint key
+          operator: "Equal"
+          value: "arm64-workloads" # Replace with your taint value
+          effect: "NoSchedule" # Replace with your taint effect
+      nodeSelector:
+        cloud.google.com/machine-family: c4a
+        deploy: arm64-workloads

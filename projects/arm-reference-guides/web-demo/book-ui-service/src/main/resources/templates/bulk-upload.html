@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2025 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header-links}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <h2>Bulk Data Upload</h2>
+    <p>Upload CSV files to add multiple records at once.</p>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <hr/>
+
+    <div class="card my-4">
+        <h5 class="card-header">Upload Books CSV</h5>
+        <div class="card-body">
+            <p class="card-text">CSV format: <code>isbn,title,author,publicationYear,genre</code> (header row is optional)</p>
+            <form method="POST" th:action="@{/upload/books}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input class="form-control" type="file" name="file" accept=".csv" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Books</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card my-4">
+        <h5 class="card-header">Upload Reviews CSV</h5>
+        <div class="card-body">
+            <p class="card-text">CSV format: <code>bookIsbn,reviewerName,rating,reviewText</code> (header row is optional)</p>
+            <form method="POST" th:action="@{/upload/reviews}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input class="form-control" type="file" name="file" accept=".csv" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Reviews</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card my-4">
+        <h5 class="card-header">Upload Popular Books CSV</h5>
+        <div class="card-body">
+            <p class="card-text">CSV format: <code>isbn</code> (a single column of ISBNs, header row is optional)</p>
+            <form method="POST" th:action="@{/upload/popular}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input class="form-control" type="file" name="file" accept=".csv" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Popular ISBNs</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card my-4 border-danger">
+        <h5 class="card-header bg-danger text-white">Admin Actions</h5>
+        <div class="card-body">
+            <p class="card-text">These actions perform potentially destructive operations.</p>
+            <form method="POST" th:action="@{/cleanup/reviews}" class="d-inline">
+                <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete all of the test reviews? This cannot be undone.')">
+                    Cleanup Test Reviews
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

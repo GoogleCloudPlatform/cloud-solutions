@@ -1,0 +1,60 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: k6.io/v1alpha1
+kind: TestRun
+metadata:
+  name: arm-k6-postgres-writes-test
+spec:
+  parallelism: 1
+  script:
+    configMap:
+      name: k6-postgres-writes
+      file: postgres-writes.js
+  arguments: ""
+  runner:
+    image: ${K6_CONTAINER_IMAGE_URL}
+    tolerations:
+      - key: "loadtester" # Replace with your taint key
+        operator: "Equal"
+        value: "k6-loadtester" # Replace with your taint value
+        effect: "NoSchedule" # Replace with your taint effect
+    nodeSelector:
+      loadtester: k6-loadtester
+      cloud.google.com/machine-family: c4a
+    resources:
+      limits:
+        cpu: "1"
+        memory: 4Gi
+      requests:
+        cpu: "1"
+        memory: 2Gi
+    env:
+      - name: DB_HOST
+        value: "arm-postgres-svc" # DNS name of your in-cluster Postgres Service
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_NAME
+        value: "postgres"
+      # Values pulled from our Kubernetes Secret
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            name: book-catalog-secrets
+            key: DB_USER
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: book-catalog-secrets
+            key: DB_PASSWORD
