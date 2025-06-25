@@ -97,3 +97,4 @@ validation:
 
 exclude_docs: |
   alloydb-autoscaler/
+  common/java/
