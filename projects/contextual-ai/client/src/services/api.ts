@@ -126,7 +126,6 @@ export class ApiService {
     offset: number = 0,
     hours?: number
   ): Promise<ApiResponse<ConversationListResponse>> {
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const params = new URLSearchParams({
       limit: limit.toString(),
       offset: offset.toString(),

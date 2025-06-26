@@ -31,7 +31,6 @@ class ChatApiService {
     hours?: number
   ): Promise<ConversationListResponse> {
     try {
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       const params = new URLSearchParams({
         limit: limit.toString(),
         offset: offset.toString(),

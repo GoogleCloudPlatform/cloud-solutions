@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20 AS builder
 
 # Set working directory
 WORKDIR /app
@@ -31,7 +31,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM nginx:alpine
+FROM nginx:1.29.0
 
 # Copy built files to nginx
 COPY --from=builder /app/build /usr/share/nginx/html

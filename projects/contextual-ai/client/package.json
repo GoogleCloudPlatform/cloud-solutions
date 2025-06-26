@@ -40,6 +40,9 @@
   "overrides": {
     "eslint-plugin-react": "^7.34.1"
   },
+  "engines": {
+    "node": ">=10"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
