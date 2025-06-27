@@ -21,7 +21,7 @@ ENV JAVA_HOME=/opt/java/openjdk
 COPY --from=eclipse-temurin:17-jdk $JAVA_HOME $JAVA_HOME
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
-ARG PROJECT_SUBDIRECTORY
+ARG PROJECT_SUBDIRECTORY=/app
 WORKDIR "$PROJECT_SUBDIRECTORY"
 
 ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]

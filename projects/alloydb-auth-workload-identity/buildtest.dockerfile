@@ -14,13 +14,13 @@
 
 FROM python:3
 
-ARG PROJECT_SUBDIRECTORY
+ARG PROJECT_SUBDIRECTORY=/app
 ENV PROJECT_SUBDIRECTORY=$PROJECT_SUBDIRECTORY
 WORKDIR ${PROJECT_SUBDIRECTORY}/src/python
 ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
 CMD [ " \
-    python3 -m venv .venv && \
-    source .venv/bin/activate && \
-    python3 -m pip install --require-hashes -r requirements.txt && \
-    python3 -m unittest discover -s . -p '*_test.py'               \
+  python3 -m venv .venv && \
+  source .venv/bin/activate && \
+  python3 -m pip install --require-hashes -r requirements.txt && \
+  python3 -m unittest discover -s . -p '*_test.py'               \
   " ]
