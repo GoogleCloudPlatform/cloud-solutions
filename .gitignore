@@ -1,5 +1,6 @@
 #Terraform temp files
 **/.terraform/
+terraform.tfstate*
 ### JS Proto ###
 **/.protojs_generated/
 ### JS ###
