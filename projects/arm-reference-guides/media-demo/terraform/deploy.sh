@@ -36,8 +36,7 @@ terraform -chdir="${TERRAFORM_DIR}/initialize" init -force-copy -migrate-state &
 rm "${TERRAFORM_DIR}/initialize/tfplan"
 
 for terraservice in "${terraservices[@]}"; do
-  echo "Current directory: $(pwd)" &&
-    terraform -chdir="${TERRAFORM_DIR}/${terraservice}" init -force-copy -migrate-state &&
+  terraform -chdir="${TERRAFORM_DIR}/${terraservice}" init -force-copy -migrate-state &&
     terraform -chdir="${TERRAFORM_DIR}/${terraservice}" plan -input=false -out=tfplan &&
     terraform -chdir="${TERRAFORM_DIR}/${terraservice}" apply -input=false tfplan || exit 1
   rm "${TERRAFORM_DIR}/${terraservice}/tfplan"

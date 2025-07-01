@@ -23,12 +23,6 @@ variable "terraform_project_id" {
   type        = string
 }
 
-variable "terraform_write_tfvars" {
-  default     = true
-  description = "Write the configured values to the tfvars configuration files."
-  type        = string
-}
-
 variable "terraform_bucket_location" {
   default     = "us-central1"
   description = "Location where to create the Cloud Storage bucket to save Terraform state."

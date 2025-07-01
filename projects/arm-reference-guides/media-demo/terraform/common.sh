@@ -27,6 +27,7 @@ declare -a terraservices
 # shellcheck disable=SC2034 # Var used in other scripts
 terraservices=(
   initialize
+  networking
 )
 
 get_terraform_output() {

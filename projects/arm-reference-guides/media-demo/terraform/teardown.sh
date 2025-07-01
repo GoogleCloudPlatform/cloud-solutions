@@ -35,7 +35,7 @@ for ((i = ${#terraservices[@]} - 1; i >= 0; i--)); do
     continue
   fi
   terraform -chdir="${TERRAFORM_DIR}/${terraservice}" init &&
-    terraform -chdir="${TERRAFORM_DIR}/${terraservice}" destroy -input=false || exit 1
+    terraform -chdir="${TERRAFORM_DIR}/${terraservice}" destroy -auto-approve || exit 1
 done
 
 rm -rf "${TERRAFORM_DIR}/initialize/backend.tf"
@@ -48,7 +48,7 @@ fi
 # Quote the globbing expression because we don't want to expand it with the
 # shell
 gcloud storage rm -r "gs://${terraform_bucket_name}/*"
-terraform -chdir="${TERRAFORM_DIR}/initialize" destroy -input=false || exit 1
+terraform -chdir="${TERRAFORM_DIR}/initialize" destroy -auto-approve || exit 1
 
 rm -rf \
   "${TERRAFORM_DIR}/initialize/.terraform/" \

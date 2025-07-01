@@ -13,8 +13,9 @@
 # limitations under the License.
 
 locals {
-  base_directory   = "${path.module}/../../"
-  backend_template = "${path.module}/templates/terraform/backend.tf.tftpl"
+  base_directory      = "${path.module}/../../"
+  terraform_directory = "${local.base_directory}/terraform"
+  backend_template    = "${path.module}/templates/terraform/backend.tf.tftpl"
 
   core_backend_directories = toset([for _, version_file in local.core_versions_files : trimprefix(trimsuffix(version_file, "/versions.tf"), "../")])
   core_versions_files      = flatten([for _, file in flatten(fileset(local.base_directory, "terraform/**/versions.tf")) : file])
@@ -35,37 +36,37 @@ resource "local_file" "core_backend_tf" {
   filename        = "${local.base_directory}/${each.key}/backend.tf"
 }
 
-# resource "local_file" "shared_config_initialize_auto_tfvars" {
-#   for_each = toset(var.terraform_write_tfvars ? ["write"] : [])
+resource "local_file" "shared_config_initialize_auto_tfvars" {
+  for_each = toset([
+    "${local.shared_config_folder}/initialize.auto.tfvars",
+    "${local.terraform_directory}/networking/initialize.auto.tfvars",
+  ])
 
-#   content = provider::terraform::encode_tfvars(
-#     {
-#     }
-#   )
-#   file_permission = "0644"
-#   filename        = "${local.shared_config_folder}/initialize.auto.tfvars"
-# }
+  content = provider::terraform::encode_tfvars(
+    {
+      region = var.region
+    }
+  )
+  file_permission = "0644"
+  filename        = each.value
+}
 
-# resource "local_file" "shared_config_networking_auto_tfvars" {
-#   for_each = toset(var.terraform_write_tfvars ? ["write"] : [])
+resource "local_file" "shared_config_networking_auto_tfvars" {
+  for_each = toset([
+    "${local.terraform_directory}/networking/networking.auto.tfvars",
+  ])
 
-#   content = provider::terraform::encode_tfvars(
-#     {
-#       dynamic_routing_mode = var.dynamic_routing_mode
-#       nat_gateway_name     = var.nat_gateway_name
-#       network_name         = var.network_name
-#       router_name          = var.router_name
-#       subnet_cidr_range    = var.subnet_cidr_range
-#       subnetwork_name      = var.subnetwork_name
-#     }
-#   )
-#   file_permission = "0644"
-#   filename        = "${local.shared_config_folder}/networking.auto.tfvars"
-# }
+  content = provider::terraform::encode_tfvars(
+    {
+      project_id               = var.platform_default_project_id
+      unique_identifier_prefix = local.unique_identifier_prefix
+    }
+  )
+  file_permission = "0644"
+  filename        = each.value
+}
 
 resource "local_file" "shared_config_platform_auto_tfvars" {
-  for_each = toset(var.terraform_write_tfvars ? ["write"] : [])
-
   content = provider::terraform::encode_tfvars(
     {
       platform_default_project_id = var.platform_default_project_id
@@ -78,12 +79,9 @@ resource "local_file" "shared_config_platform_auto_tfvars" {
 }
 
 resource "local_file" "shared_config_terraform_auto_tfvars" {
-  for_each = toset(var.terraform_write_tfvars ? ["write"] : [])
-
   content = provider::terraform::encode_tfvars(
     {
-      terraform_project_id   = var.terraform_project_id
-      terraform_write_tfvars = var.terraform_write_tfvars
+      terraform_project_id = var.terraform_project_id
     }
   )
   file_permission = "0644"
