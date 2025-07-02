@@ -39,12 +39,27 @@ resource "local_file" "core_backend_tf" {
 resource "local_file" "shared_config_initialize_auto_tfvars" {
   for_each = toset([
     "${local.shared_config_folder}/initialize.auto.tfvars",
-    "${local.terraform_directory}/networking/initialize.auto.tfvars",
   ])
 
   content = provider::terraform::encode_tfvars(
     {
       region = var.region
+    }
+  )
+  file_permission = "0644"
+  filename        = each.value
+}
+
+resource "local_file" "shared_config_container_cluster_auto_tfvars" {
+  for_each = toset([
+    "${local.terraform_directory}/container-cluster/container-cluster.auto.tfvars",
+  ])
+
+  content = provider::terraform::encode_tfvars(
+    {
+      region                   = var.region
+      project_id               = var.platform_default_project_id
+      unique_identifier_prefix = local.unique_identifier_prefix
     }
   )
   file_permission = "0644"
@@ -59,6 +74,7 @@ resource "local_file" "shared_config_networking_auto_tfvars" {
   content = provider::terraform::encode_tfvars(
     {
       project_id               = var.platform_default_project_id
+      region                   = var.region
       unique_identifier_prefix = local.unique_identifier_prefix
     }
   )

@@ -14,8 +14,6 @@
 # limitations under the License.
 
 resource "google_compute_network" "vpc" {
-  count = var.network_name != null ? 0 : 1
-
   auto_create_subnetworks = false
   name                    = local.network_name
   project                 = google_project_service.compute_googleapis_com.project
@@ -30,8 +28,6 @@ data "google_compute_network" "vpc" {
 }
 
 resource "google_compute_subnetwork" "region" {
-  count = var.subnetwork_name != null ? 0 : 1
-
   ip_cidr_range            = var.subnet_cidr_range
   name                     = local.subnetwork_name
   network                  = data.google_compute_network.vpc.id

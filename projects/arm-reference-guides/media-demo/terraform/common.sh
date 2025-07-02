@@ -30,6 +30,7 @@ terraservices=(
   storage
   pubsub
   networking
+  container-cluster
 )
 
 get_terraform_output() {
