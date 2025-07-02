@@ -28,6 +28,7 @@ declare -a terraservices
 terraservices=(
   initialize
   storage
+  pubsub
   networking
 )
 

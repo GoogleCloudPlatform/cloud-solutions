@@ -25,7 +25,7 @@ locals {
   }
 }
 
-resource "google_storage_bucket" "cloud_storage_buckets" {
+resource "google_storage_bucket" "media_cloud_storage_buckets" {
   for_each = local.cloud_storage_buckets
 
   force_destroy               = each.value.force_destroy
