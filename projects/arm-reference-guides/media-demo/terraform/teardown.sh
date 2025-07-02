@@ -36,6 +36,13 @@ for ((i = ${#terraservices[@]} - 1; i >= 0; i--)); do
   fi
   terraform -chdir="${TERRAFORM_DIR}/${terraservice}" init &&
     terraform -chdir="${TERRAFORM_DIR}/${terraservice}" destroy -auto-approve || exit 1
+
+  rm -rf \
+    "${TERRAFORM_DIR}/${terraservice}/.terraform/" \
+    "${TERRAFORM_DIR}/${terraservice}"/terraform.tfstate*
+
+  git restore \
+    "${TERRAFORM_DIR}/${terraservice}/*.auto.tfvars"
 done
 
 rm -rf "${TERRAFORM_DIR}/initialize/backend.tf"

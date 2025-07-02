@@ -78,6 +78,22 @@ resource "local_file" "shared_config_platform_auto_tfvars" {
   filename        = "${local.shared_config_folder}/platform.auto.tfvars"
 }
 
+resource "local_file" "shared_config_storage_auto_tfvars" {
+  for_each = toset([
+    "${local.terraform_directory}/storage/storage.auto.tfvars",
+  ])
+
+  content = provider::terraform::encode_tfvars(
+    {
+      region                   = var.region
+      project_id               = var.platform_default_project_id
+      unique_identifier_prefix = local.unique_identifier_prefix
+    }
+  )
+  file_permission = "0644"
+  filename        = each.value
+}
+
 resource "local_file" "shared_config_terraform_auto_tfvars" {
   content = provider::terraform::encode_tfvars(
     {
