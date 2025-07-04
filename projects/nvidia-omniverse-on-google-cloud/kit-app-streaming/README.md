@@ -25,5 +25,5 @@ To deploy NVIDIA Omniverse Kit Streaming applications on the GKE cluster, see
 
 ## What's next
 
--   Develop NVIDIA Omniverse applications on
-    [NVIDIA Omniverse development workstations on Google Cloud](../README.md#nvidia-omniverse-development-workstations).
+-   Develop NVIDIA RTX applications on
+    [NVIDIA RTX Virtual Workstations on Google Cloud](../README.md#nvidia-rtx-virtual-workstations).

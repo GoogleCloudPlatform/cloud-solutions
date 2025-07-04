@@ -1,13 +1,13 @@
-# NVIDIA Omniverse development workstation: G2 machine family (L4 GPUs), Ubuntu 22.04
+# NVIDIA RTX Virtual Workstation: G2 machine family (L4 GPUs), Ubuntu 22.04
 
-This NVIDIA Omniverse development workstation is based on the
+This NVIDIA RTX Virtual Workstation is based on the
 [Google Cloud Compute Engine G2 machine family](https://cloud.google.com/compute/docs/gpus#l4-gpus).
 A VM based on the G2 machine family includes one to eigth NVIDIA L4 GPUs.
 
 _G2 machine are not officially supported by NVIDIA for NVIDIA Omniverse
 development_
 
-To deploy a NVIDIA Omniverse development workstation on Google Cloud, you do the
+To deploy a NVIDIA RTX Virtual Workstation on Google Cloud, you do the
 following:
 
 1.  Deploy an NVIDIA RTX Virtual Workstation (Ubuntu 22.04) in your project from
@@ -40,10 +40,10 @@ following:
     -   Install NVIDIA Container Toolkit
     -   Install the desktop environment
 
-## Connect to the NVIDIA Omniverse development workstation remote desktop
+## Connect to the NVIDIA RTX Virtual Workstation remote desktop
 
-To connect to the NVIDIA Omniverse development workstation remote desktop,
-follow the instructions in
+To connect to the NVIDIA RTX Virtual Workstation remote desktop, follow the
+instructions in
 [Create a virtual Windows workstation](https://cloud.google.com/compute/docs/virtual-workstation/linux#install_hp_anyware_software)
 starting from the _Install HP Anyware software_ section. Ignore the steps prior
 to the _Install HP Anyware software_ section because they guide you in creating
