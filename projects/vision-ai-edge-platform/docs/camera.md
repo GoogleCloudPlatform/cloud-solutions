@@ -4,8 +4,8 @@
 
 This tutorial describes how you can deploy an example application that
 integrates cameras with vision-based ML models. You can deploy the example as a
-standalone application or as a component of the
-[Vision AI Edge solution][PLATFORM_URL].
+standalone application or as a component of the [Vision AI Edge
+solution][PLATFORM_URL].
 
 The solution walks you through the following steps:
 
@@ -23,8 +23,7 @@ The solution walks you through the following steps:
 
 ## Costs
 
-This tutorial uses billable components of Google Cloud, including the
-following:
+This tutorial uses billable components of Google Cloud, including the following:
 
 -   [Cloud Storage](https://cloud.google.com/storage/pricing)
 -   [Cloud Pub/Sub](https://cloud.google.com/pubsub/pricing)
@@ -43,8 +42,8 @@ This tutorial assumes that you already have a
 ### Create a Google Cloud project
 
 1.  Go to the [Cloud Console](https://console.cloud.google.com).
-1.  Click the project selector in the upper-left corner and select
-    **New Project**.
+1.  Click the project selector in the upper-left corner and select **New
+    Project**.
 1.  Give the project a name and click **Create**.
 1.  Click the project selector again and select your new project.
 
@@ -59,21 +58,23 @@ Make sure you're using one of the following camera types:
 
 ## Installation
 
-You can deploy this solution either as part of the
-[Vision AI Edge solution][PLATFORM_URL], or as a standalone component.
+You can deploy this solution either as part of the [Vision AI Edge
+solution][PLATFORM_URL], or as a standalone component.
 
 ### Installation as part of Vision AI Edge solution
 
 If you wish to deploy the complete Vision AI Edge solution, please refer to its
 [documentation][PLATFORM_URL] as the primary guide.
 
-[PLATFORM_URL]: https://googlecloudplatform.github.io/cloud-solutions/vision-ai-edge-platform/
+[PLATFORM_URL]:
+    https://googlecloudplatform.github.io/cloud-solutions/vision-ai-edge-platform/
 
 ### Standalone Installation
 
 To deploy the camera client, do the following steps:
 
 1.  On your local development machine, install the following tools:
+
     -   [Google Cloud SDK](https://cloud.google.com/sdk/install)
     -   [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
     -   [python3](https://www.python.org/downloads/)
@@ -92,20 +93,20 @@ To deploy the camera client, do the following steps:
     PROJECT_ID=$(gcloud info --format='value(config.project)')
     ```
 
-1.  Clone the repository and change to its directory.
+1.  Clone the cloud-solutions repository, and change to the working directory to
+    the camera client directory.
 
     ```sh
-    git clone https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/vision-ai-edge-camera-client \
-    && cd projects/vision-ai-edge-camera-client
+    git clone https://github.com/GoogleCloudPlatform/cloud-solutions \
+    && cd projects/vision-ai-edge-platform/camera-client
     ```
 
-    !!! note
-        It is recommended to use
-        [venv](https://docs.python.org/3/library/venv.html) or
-        [pyenv virtualenv](https://github.com/pyenv/pyenv-virtualenv) to create an
-        isolated environment for this application and its imported modules. Please
-        refer to the links in this step for more information on virtual
-        environments.
+    !!! note It is recommended to use
+    [venv](https://docs.python.org/3/library/venv.html) or
+    [pyenv virtualenv](https://github.com/pyenv/pyenv-virtualenv) to create an
+    isolated environment for this application and its imported modules. Please
+    refer to the links in this step for more information on virtual
+    environments.
 
 1.  Install dependencies:
 
@@ -133,29 +134,28 @@ To deploy the camera client, do the following steps:
 1.  Run the camera client as a pod.
 
     If you have deployed the camera client as part of the Vision AI Edge
-    solution that solution deployes the camera client pods into Kubernetes.
-    To run the camera client as a standalone container, you can execute:
+    solution that solution deployes the camera client pods into Kubernetes. To
+    run the camera client as a standalone container, you can execute:
 
     ```sh
     docker run -it --entrypoint /bin/bash camera-integration
     ```
 
-    The above command runs the camera client and opens a shell in the pod
-    for executing the steps in the next chapters. You should see a prompt
-    similar to this:
+    The above command runs the camera client and opens a shell in the pod for
+    executing the steps in the next chapters. You should see a prompt similar to
+    this:
 
     ```sh
     root@cdf43a9a0213:/opt/app#
     ```
 
-    !!! note
-        The rest of the documentation assumes that the camera client is
-        deployed as part of Vision AI Edge solution. The command examples in the
-        following chapters use `kubectl` for Kubernetes. If you use this solution
-        standalone, you can use equivalent `docker` commands instead.
+    !!! note The rest of the documentation assumes that the camera client is
+    deployed as part of Vision AI Edge solution. The command examples in the
+    following chapters use `kubectl` for Kubernetes. If you use this solution
+    standalone, you can use equivalent `docker` commands instead.
 
-    In the next chapter, we connect to a camera as the data source. Use
-    the chapter that matches your camera's connectivity protocol.
+    In the next chapter, we connect to a camera as the data source. Use the
+    chapter that matches your camera's connectivity protocol.
 
 1.  Print the camera client's command-line switches:
 
@@ -207,18 +207,18 @@ To deploy the camera client, do the following steps:
 ### Connect Genicam cameras
 
 If you are using a camera that supports the
-[Genicam standard](https://www.emva.org/standards-technology/genicam/), do
-the following:
+[Genicam standard](https://www.emva.org/standards-technology/genicam/), do the
+following:
 
 Ensure that the Genicam camera is connected to the same subnet as your host
 computer, using a gigabit ethernet PoE (Power over Ethernet) cable.
 
-To communicate with the camera, you need to have its
-[GenTL producer file][GenTL_URL], with a `.cti` file ending, and the file
-should be compiled for Linux x86-64. To use your camera’s GenTL producer file,
-place it in a directory on the server that the pod can access. The directory
-should be mounted in a persistent volume. This is done automatically by the
-Vision AI Edge solution deployment.
+To communicate with the camera, you need to have its [GenTL producer
+file][GenTL_URL], with a `.cti` file ending, and the file should be compiled for
+Linux x86-64. To use your camera’s GenTL producer file, place it in a directory
+on the server that the pod can access. The directory should be mounted in a
+persistent volume. This is done automatically by the Vision AI Edge solution
+deployment.
 
 [GenTL_URL]: https://www.emva.org/wp-content/uploads/GenICam_GenTL_1_5.pdf
 
@@ -228,8 +228,8 @@ Now that you have the GenTL producer file, you can scan for Genicam-based
 cameras on the local network segment.
 
 1.  Connect your camera to the same LAN segment as the server, using its Power
-over Ethernet (PoE) cable with a LAN cable from the same switch as the server.
-Ensure that the camera is powered on.
+    over Ethernet (PoE) cable with a LAN cable from the same switch as the
+    server. Ensure that the camera is powered on.
 
 1.  Inside the container shell, run the following command to scan for camera:
 
@@ -252,19 +252,19 @@ that if the command lists 2 cameras for example, the first listed camera is
 `--address 0` and the second camera is `--address 1`.
 
 The camera client can currently only connect to one camera at a time. See the
-chapter called "Using multiple cameras with dedicated ML models" on how to
-scale the solution with multiple cameras and ML models.
+chapter called "Using multiple cameras with dedicated ML models" on how to scale
+the solution with multiple cameras and ML models.
 
 #### Connect to the camera and read its runtime configuration
 
 In this section you connect to the camera, read its current runtime
 configuration (GenTL node tree), and output it to a configuration file that you
-can edit. Later on, you can write the edited, desired configurations back to
-the camera. The mode switch `--mode none` instructs the utility not to take
-any images with the camera.
+can edit. Later on, you can write the edited, desired configurations back to the
+camera. The mode switch `--mode none` instructs the utility not to take any
+images with the camera.
 
 1.  Query the camera configurations and output them to a file (replace the
-`device_id` and `getnl` path with your own values).
+    `device_id` and `getnl` path with your own values).
 
     ```sh
     python3 camera_client.py \
@@ -302,8 +302,8 @@ any images with the camera.
     ```
 
 At this point, the camera is connected and ready to use. Optionally, you can
-continue reading to understand how to manage the configuration of a
-Genicam camera:
+continue reading to understand how to manage the configuration of a Genicam
+camera:
 
 #### Manage the configuration of Genicam cameras
 
@@ -371,8 +371,7 @@ At this point you can start to collect images for training in the next section.
 
 #### Prepare your camera
 
-Install and configure your IP camera using its management tools and ensure
-that:
+Install and configure your IP camera using its management tools and ensure that:
 
 1.  You have enabled ONVIF for remote management and discovery.
 1.  The camera provides at least one RTSP stream URL.
@@ -389,15 +388,14 @@ that:
 
 1.  Scan the local LAN segment for any ONVIF-enabled cameras.
 
-    !!! note
-        The network scan uses the WSDiscovery protocol, which sends
-        broadcast messages to discover devices. Next the utility tries to query all
-        found ONVIF cameras, using the ONVIF protocol, and get their RTSP stream
-        addresses.
+    !!! note The network scan uses the WSDiscovery protocol, which sends
+    broadcast messages to discover devices. Next the utility tries to query all
+    found ONVIF cameras, using the ONVIF protocol, and get their RTSP stream
+    addresses.
 
-    If your camera has access control enabled using a username/password
-    pair, you need to provide these credentials to enable the ONVIF query for
-    RTSP streams information.
+    If your camera has access control enabled using a username/password pair,
+    you need to provide these credentials to enable the ONVIF query for RTSP
+    streams information.
 
     -   For unauthenticated cameras, run:
 
@@ -432,9 +430,9 @@ At this point you can start to collect images for training in the next section.
 
 You can't discover simple RTSP cameras automatically.
 
-If your IP camera does not support ONVIF, you need to find its RTSP
-addresses manually, including a username/password pair if authentication is
-enabled. Use the RTSP stream information in the next chapters.
+If your IP camera does not support ONVIF, you need to find its RTSP addresses
+manually, including a username/password pair if authentication is enabled. Use
+the RTSP stream information in the next chapters.
 
 At this point you can start to collect images for training in the next section.
 
@@ -446,13 +444,13 @@ USB port on the host server.
 In practice, the software scans the linux OS for video devices from
 `/dev/video0` until `/dev/video9`, i.e the first 10 connected USB devices.
 
-If a device exists, the utility tries to open the device as a camera. If
-this works, it’s reported as an available camera.
+If a device exists, the utility tries to open the device as a camera. If this
+works, it’s reported as an available camera.
 
 #### Scan for USB cameras
 
-1.  On the *server host OS side*, use the `v2l4` tool to check if the camera is
-connected and detected.
+1.  On the _server host OS side_, use the `v2l4` tool to check if the camera is
+    connected and detected.
 
     ```sh
     sudo apt-get install v4l-utils \
@@ -468,9 +466,8 @@ connected and detected.
       /dev/media0
     ```
 
-    !!! note
-        Depending on your server, you might have to reboot with the USB
-        camera connected. In some instances, hot plug does not work correctly.
+    !!! note Depending on your server, you might have to reboot with the USB
+    camera connected. In some instances, hot plug does not work correctly.
 
 1.  Open a shell to the camera client pod.
 
@@ -500,8 +497,8 @@ Optionally, you can continue reading to understand how to manage the
 configuration of a USB camera:
 
 1.  Query the camera's current runtime configurations and output them to an
-editable text file (replace the device address with your value, usually
-`/dev/video0`).
+    editable text file (replace the device address with your value, usually
+    `/dev/video0`).
 
     ```sh
     python3 camera_client.py \
@@ -535,7 +532,7 @@ editable text file (replace the device address with your value, usually
     ```
 
 1.  To change a configuration parameter value, edit the generated configuration
-file.
+    file.
 
     ```sh
     vi /var/lib/viai/camera-config/current.cfg
@@ -566,16 +563,15 @@ At this point you can start to collect images for training in the next section.
 ### Use image files as a data source
 
 The camera client can also use image files as the source data for ML inference.
-This can be useful if the camera system is external to this server, and the
-two cannot be integrated directly.
+This can be useful if the camera system is external to this server, and the two
+cannot be integrated directly.
 
-In this scenario, a local integration is required to take images on the
-external camera system and then copy the image files to the server hosting
-this solution.
+In this scenario, a local integration is required to take images on the external
+camera system and then copy the image files to the server hosting this solution.
 
 Note that the image files need to be on a filesystem that is accessible to the
-camera client container. In practice, the best place to copy the images is
-the kubernetes volume mounted as `/var/lib/viai/camera-data` in the pod.
+camera client container. In practice, the best place to copy the images is the
+kubernetes volume mounted as `/var/lib/viai/camera-data` in the pod.
 
 When you have transferred an image, you can use it as the inference source
 'camera' following these steps:
@@ -587,8 +583,8 @@ When you have transferred an image, you can use it as the inference source
     ```
 
 1.  Run the camera client, using the image file copied earlier as the data
-    source. In this example, the ML model is hosted at the address exported
-    as `$ML_HOST`. See the next chapters to learn more about running ML models.
+    source. In this example, the ML model is hosted at the address exported as
+    `$ML_HOST`. See the next chapters to learn more about running ML models.
 
     ```sh
     export ML_HOST=<ml-model-address>
@@ -606,57 +602,56 @@ When you have transferred an image, you can use it as the inference source
     ```
 
     The switches `--ml`, `--ml_host`, `--ml_port` and `--client_cfg_file` are
-    explained in the chapters that follow. The above example is just to show
-    how to use files instead of a real camera, with `--protocol file` and
-    the `-address <file_path>` switches.
+    explained in the chapters that follow. The above example is just to show how
+    to use files instead of a real camera, with `--protocol file` and the
+    `-address <file_path>` switches.
 
 At this point you can start to collect images for training in the next section.
 
 ## Collect and upload training images
 
 This chapter discusses collecting training images for defect detection models.
-However, the general principles are the same for other types of vision-based
-ML models' training.
+However, the general principles are the same for other types of vision-based ML
+models' training.
 
 ### Collect training images
 
 To create a custom ML model we need to collect training images forrom your
-particular use case. The images are acquired from the camera and written on
-disk on the edge server, from where they are uploaded to Google Cloud Storage.
-Once the images are in GCS, they can be used as source data for training
-pipelines.
+particular use case. The images are acquired from the camera and written on disk
+on the edge server, from where they are uploaded to Google Cloud Storage. Once
+the images are in GCS, they can be used as source data for training pipelines.
 
 #### Prepare to collect the training images
 
-This step is highly use-case specific. You create an appropriate
-environment where you can use the camera connected to the edge server to take
-images of both normal, and abnormal situations for the products to be inspected.
+This step is highly use-case specific. You create an appropriate environment
+where you can use the camera connected to the edge server to take images of both
+normal, and abnormal situations for the products to be inspected.
 
 Here are some general principles:
 
--   Set up a controlled test environment which minimizes external influences such
-as ambient light affecting the camera exposure.
+-   Set up a controlled test environment which minimizes external influences
+    such as ambient light affecting the camera exposure.
 -   Place the camera in its intended position. Take single shots to verify that
-the camera can fully see the objects to be inspected and not much extra space
-beyond them, to maximize the number of pixels covering the objects.
-   Adjust the camera exposure, focus, focal length etc parameters and lock
-them in place, to avoid auto-adjustments changing the settings between shots.
+    the camera can fully see the objects to be inspected and not much extra
+    space beyond them, to maximize the number of pixels covering the objects.
+    Adjust the camera exposure, focus, focal length etc parameters and lock them
+    in place, to avoid auto-adjustments changing the settings between shots.
 -   Ensure that the camera does not move or shake when taking pictures.
 -   Ensure that the objects do not move, or move too fast when taking the
-images, resulting in motion blur or rolling shutter effects.
--   Setup consistent, even lighting and eliminate variable ambient light
-sources such as open windows nearby.
+    images, resulting in motion blur or rolling shutter effects.
+-   Setup consistent, even lighting and eliminate variable ambient light sources
+    such as open windows nearby.
 
 #### Upload training images
 
 Use the following commands to collect examples of ‘normal’ images and
 ‘defective’ images. Training the model with a large number of examples may lead
-to better results. The quality of these images have a dramatic effect in
-the accuracy of the ML model. Take your time to generate the best training
-dataset possible.
+to better results. The quality of these images have a dramatic effect in the
+accuracy of the ML model. Take your time to generate the best training dataset
+possible.
 
-1.  On the *edge server*, create a folder called, for example, `model1` with
-two sub-folders called `normal` and `defect`:
+1.  On the _edge server_, create a folder called, for example, `model1` with two
+    sub-folders called `normal` and `defect`:
 
     ```sh
     sudo mkdir -p /var/lib/viai/camera-data/model1/normal
@@ -672,13 +667,13 @@ two sub-folders called `normal` and `defect`:
 1.  Use the camera client to generate the images for the `normal` label.
 
     Run the camera client in interactive mode, with switch:
-    `--mode interactive`. In this mode, the utility takes a new image
-    every time you press 'enter'.
+    `--mode interactive`. In this mode, the utility takes a new image every time
+    you press 'enter'.
 
     Generate examples by running:
 
-    -   USB example - replace `--protocol` to match your camera and DEVICE
-    with your video device, for example `/dev/video0`.
+    -   USB example - replace `--protocol` to match your camera and DEVICE with
+        your video device, for example `/dev/video0`.
 
     ```sh
     python3 camera_client.py \
@@ -698,8 +693,8 @@ two sub-folders called `normal` and `defect`:
 
 #### Crop the camera images
 
-Optimally, the object that you inspect should fill most of the camera frame.
-The best way to achieve this is with camera positioning and lenses. But if
+Optimally, the object that you inspect should fill most of the camera frame. The
+best way to achieve this is with camera positioning and lenses. But if
 necessary, you can also use the crop feature of the camera client application.
 
 To use the crop feature, add all of the following command-line parameters:
@@ -709,10 +704,9 @@ To use the crop feature, add all of the following command-line parameters:
 In the above example, the utility crops the raw camera frame at coordinates
 `(0,0),(320,200)`, resulting in a 320x200 output image.
 
-!!! note
-    If you specify both image crop, and image resize arguments, crop takes
-    place first, and then the cropped image is resized to the desired final
-    resolution.
+!!! note If you specify both image crop, and image resize arguments, crop takes
+place first, and then the cropped image is resized to the desired final
+resolution.
 
 #### Upload the training images to Google Cloud
 
@@ -743,16 +737,15 @@ Upload the two folders of training images to Google Cloud Storage:
 At this point the training dataset is ready to be used by your Vertex AI model
 training pipelines.
 
-!!! note
-    Training the models is outside the scope of this Camera client solution.
-    If you are running the larger Vision AI Edge solution, refer to its chapters
-    on how to train ML models.
+!!! note Training the models is outside the scope of this Camera client
+solution. If you are running the larger Vision AI Edge solution, refer to its
+chapters on how to train ML models.
 
 ## Run the trained ML model at the edge
 
-The ML model should be running as a web service in the local network
-accessible to the camera client. The camera client can HTTP POST the camera
-frames to the model.
+The ML model should be running as a web service in the local network accessible
+to the camera client. The camera client can HTTP POST the camera frames to the
+model.
 
 Deploying the trained ML model is outside the scope of this camera client
 solution. If you are running the larger Vision AI Edge solution, refer to its
@@ -762,15 +755,15 @@ chapters on how to deploy the ML models to the edge.
 
 ### Prepare an ML model configuration file
 
-Each ML model web service has a different URL format, as well as an
-expected JSON payload format. To support different models, the camera client
-has a configuration file that contains these model-specific configurations.
+Each ML model web service has a different URL format, as well as an expected
+JSON payload format. To support different models, the camera client has a
+configuration file that contains these model-specific configurations.
 
 1.  Prepare a configuration file e.g client.cfg:
 
     ```sh
     vi client.cfg
-    ````
+    ```
 
     It's best to store this configuration file in a folder that is part of a
     persistent volume. The Vision AI Edge solution provides this automatically,
@@ -791,15 +784,15 @@ has a configuration file that contains these model-specific configurations.
     -   `hostname`: value of switch `--ml_host`.
     -   `port`: value of switch `--ml_port`.
     -   `encoded_string`: base64-encoded camera frame payload. Prepared
-    automatically by the camera client during camera frame processing.
+        automatically by the camera client during camera frame processing.
 
     The rest of the values; URI path and JSON request body, you should format
     according to the specific ML model's input expectations.
 
 ### Inference with frames from a camera
 
-To acquire live images from the camera and feed them to the ML model to
-obtain an inference, run the following steps:
+To acquire live images from the camera and feed them to the ML model to obtain
+an inference, run the following steps:
 
 1.  Open a shell in the camera client pod.
 
@@ -810,8 +803,8 @@ obtain an inference, run the following steps:
 1.  Execute the camera client to request a single image from the camera, and
     pass that to the ML model container.
 
-    This example is using a USB camera. Use the --protocol switch to match
-    your camera.
+    This example is using a USB camera. Use the --protocol switch to match your
+    camera.
 
     ```sh
     export ML_HOST=host
@@ -846,26 +839,23 @@ obtain an inference, run the following steps:
 
 ### Trigger inference with an MQTT command
 
-You can use MQTT messages to trigger running inference.
-The main use case for this is to have an inspection station, which notices
-that an object is on the conveyor belt, using sensors. When the object
-to be inspected is in front of the camera, this external system can send an
-MQTT message to the camera client to trigger the camera and visual inspection
-of the image.
+You can use MQTT messages to trigger running inference. The main use case for
+this is to have an inspection station, which notices that an object is on the
+conveyor belt, using sensors. When the object to be inspected is in front of the
+camera, this external system can send an MQTT message to the camera client to
+trigger the camera and visual inspection of the image.
 
 Another use case is to have an external physical system with push buttons, to
 let human operators easily trigger taking an image and running inference.
 Pressing the button can send MQTT messages to control this application.
 
 The utility listens for MQTT commands in topic such as: `vai/commands`. It
-publishes MQTT results to another topic such as: `vai/results`.
-Currently, the following MQTT payload commands have been implemented:
-`get_frame`, `exit` and `quit` (both exit and quit close the utility
-gracefully).
+publishes MQTT results to another topic such as: `vai/results`. Currently, the
+following MQTT payload commands have been implemented: `get_frame`, `exit` and
+`quit` (both exit and quit close the utility gracefully).
 
 1.  Start the utility in daemon mode, with both listening for commands over
-    MQTT, as well as publishing the ML inference results in another MQTT
-    topic:
+    MQTT, as well as publishing the ML inference results in another MQTT topic:
 
     ```sh
     export ML_HOST=ml-model
@@ -898,15 +888,13 @@ gracefully).
 
 1.  On a second console window, subscribe to the MQTT inference results.
 
-    !!! note
-        This requires installing the mosquitto MQTT client.
+    !!! note This requires installing the mosquitto MQTT client.
 
     ```sh
     mosquitto_sub -h ${MQTT_HOST} -t vai/results
     ```
 
-1.  On a third console window, publish the trigger message to the camera
-    client:
+1.  On a third console window, publish the trigger message to the camera client:
 
     ```sh
     mosquitto_pub -h ${MQTT_HOST}-t vai/commands -m get_frame
@@ -943,17 +931,16 @@ gracefully).
 
 ### Send inference results to MQTT for local actions
 
-The solution supports forwarding the ML inference results to an MQTT topic.
-For convenience, the Vision AI Edge solution runs a mosquitto broker service,
-which you can use to inform local systems of the visual inspection results.
+The solution supports forwarding the ML inference results to an MQTT topic. For
+convenience, the Vision AI Edge solution runs a mosquitto broker service, which
+you can use to inform local systems of the visual inspection results.
 
-!!! note
-    This method is used to integrate the camera client, or Vision AI Edge
-    solution, with Google Cloud's Manufacturing Data Engine (MDE). Follow this
-    chapter to forward inference results to the MQTT results topic. Then
-    configure MDE Connect or Litmus to pick up the inference results payloads
-    as data points. The camera client forwards the ML model payload as-is,
-    without transforming the content.
+!!! note This method is used to integrate the camera client, or Vision AI Edge
+solution, with Google Cloud's Manufacturing Data Engine (MDE). Follow this
+chapter to forward inference results to the MQTT results topic. Then configure
+MDE Connect or Litmus to pick up the inference results payloads as data points.
+The camera client forwards the ML model payload as-is, without transforming the
+content.
 
 To start publishing ML inference results to the local MQTT topic, add the
 following switches to the camera app:
@@ -966,8 +953,8 @@ following switches to the camera app:
 ### Use multiple cameras with dedicated ML models
 
 In some situations, you may need to inspect multiple angles or faces of the
-product. In practice this means connecting multiple cameras to the solution,
-and running inspection on them simultaneously or separately per-camera.
+product. In practice this means connecting multiple cameras to the solution, and
+running inspection on them simultaneously or separately per-camera.
 
 This section shows how to configure such a multi-cam scenario.
 
@@ -992,15 +979,13 @@ inference results in a common message queue and/or in BigQuery.
 
 Follow the steps below to deploy a multi-cam setup:
 
-1.  Deploy the first camera, first camera client application and first ML
-    model.
+1.  Deploy the first camera, first camera client application and first ML model.
 
     Follow all the previous sections from Connecting cameras until Triggering
-    inspection remotely with an MQTT command as per normal.
-    After completing all the steps, you now have 1 camera, with 1 client
-    application, 1 ML model deployed for that camera, and you are able to
-    trigger inspection with the first camera using MQTT. The first camera is
-    now done.
+    inspection remotely with an MQTT command as per normal. After completing all
+    the steps, you now have 1 camera, with 1 client application, 1 ML model
+    deployed for that camera, and you are able to trigger inspection with the
+    first camera using MQTT. The first camera is now done.
 
 1.  Deploy the second camera client pod.
 
@@ -1013,7 +998,7 @@ Follow the steps below to deploy a multi-cam setup:
         ```
 
     1.  Edit the `name`, `app` and `claimName` values in the second client YAML
-    files to be non-conflicting. For example, add ‘2’ to the values.
+        files to be non-conflicting. For example, add ‘2’ to the values.
 
     1.  Deploy the second camera client.
 
@@ -1022,7 +1007,7 @@ Follow the steps below to deploy a multi-cam setup:
         ```
 
     1.  Monitor the deployment to make sure all the components are running
-    correctly.
+        correctly.
 
         ```sh
         watch -n 2 kubectl -n ${NAMESPACE} get pods
@@ -1038,17 +1023,17 @@ Follow the steps below to deploy a multi-cam setup:
         server directly.
 
     1.  Follow the same steps as before with camera 1 to achieve the following:
+
         -   Connect and configure camera client 2 for camera 2.
         -   Collect training images with camera 2.
         -   Train a new ML model for camera 2.
         -   Deploy the camera 2 model to the server.
         -   Test the new ML model 2 with camera 2 using client 2.
 
-        !!! note
-            Please export the second ML model with CPU acceleration. At the
-            moment, the scaling works with either all models running on the CPU,
-            or with one model using the NVIDIA GPU, and the other model(s) using
-            the CPU.
+        !!! note Please export the second ML model with CPU acceleration. At the
+        moment, the scaling works with either all models running on the CPU, or
+        with one model using the NVIDIA GPU, and the other model(s) using the
+        CPU.
 
     At this stage, you should have now 2 camera client pods running, as well as
     2 ML model deployments and services running.
@@ -1072,9 +1057,9 @@ Follow the steps below to deploy a multi-cam setup:
         camera-2-integration-6fcc7b4b5c-6hzv6          1/1     Running   0              107m
         ```
 
-        Take note of the names of the pods for the camera clients.
-        In the example above, they are: `camera-1-integration-856b878856-8f7js`
-        and `camera-2-integration-6fcc7b4b5c-6hzv6`.
+        Take note of the names of the pods for the camera clients. In the
+        example above, they are: `camera-1-integration-856b878856-8f7js` and
+        `camera-2-integration-6fcc7b4b5c-6hzv6`.
 
     1.  Check that both deployments are running.
 
@@ -1128,9 +1113,9 @@ MQTT commands topic, e.g `vai/commands` and are triggered simultaneously.
 
 1.  In the shell of camera 1, start the app in daemon mode.
 
-    In this example, the app is using camera 1 (USB in this example),
-    calling ML model 1, listens for MQTT triggers for starting inspection,
-    and posts the inference results to MQTT.
+    In this example, the app is using camera 1 (USB in this example), calling ML
+    model 1, listens for MQTT triggers for starting inspection, and posts the
+    inference results to MQTT.
 
     ```sh
     python3 camera_client.py \
@@ -1150,10 +1135,9 @@ MQTT commands topic, e.g `vai/commands` and are triggered simultaneously.
 
 1.  In the shell of camera 2, start the app in daemon mode.
 
-    In this example, the app is using camera 2 (RTSP in this example),
-    calling ML model 2, listens for the same MQTT trigger message as client
-    1, and also posts its inference results to the same MQTT topic as
-    client 1.
+    In this example, the app is using camera 2 (RTSP in this example), calling
+    ML model 2, listens for the same MQTT trigger message as client 1, and also
+    posts its inference results to the same MQTT topic as client 1.
 
     ```sh
     python3 camera_client.py \
@@ -1171,22 +1155,22 @@ MQTT commands topic, e.g `vai/commands` and are triggered simultaneously.
     --client_cfg_file client.cfg
     ```
 
-1.  In a new console window, start monitoring the MQTT inference results
-topic (The IP address is the external IP of the `mosquitto` service).
+1.  In a new console window, start monitoring the MQTT inference results topic
+    (The IP address is the external IP of the `mosquitto` service).
 
     ```sh
     mosquitto_sub -h 192.168.1.24 -t vai/results
     ```
 
-1.  In another window, send the inspection trigger MQTT message to both
-camera clients simultaneously.
+1.  In another window, send the inspection trigger MQTT message to both camera
+    clients simultaneously.
 
     ```sh
     mosquitto_pub -h 192.168.1.24 -t vai/commands -m get_frame
     ```
 
-    If everything is configured correctly, *both* camera client windows
-    should display something similar to:
+    If everything is configured correctly, _both_ camera client windows should
+    display something similar to:
 
     ```text
     MQTT command received: get_frame
@@ -1195,7 +1179,7 @@ camera clients simultaneously.
     Local MQTT transmit complete
     ```
 
-    And the mosquitto_sub window should display *two* inspection results:
+    And the mosquitto_sub window should display _two_ inspection results:
 
     ```text
     {"predictionResult":.."annotationSpecDisplayName": "defect"}]}]}, "predictionLatency": "0.024179821s"}
@@ -1206,19 +1190,18 @@ camera clients simultaneously.
 
 The previous chapter shows how to use MQTT to trigger, or quit ALL camera
 clients. Additionally, we can use the `device_id` parameter, configured
-separately for each camera client, to command them separately. The main use
-case is to specify which camera to trigger, or which ML model to use, for
-inference.
+separately for each camera client, to command them separately. The main use case
+is to specify which camera to trigger, or which ML model to use, for inference.
 
 Each camera client listens also on a sub-topic, by adding `/<device_ID>` to the
 MQTT commands topic. So if the general commands topic is: `vai/commands`, and
-this camera client is configured with device_id: `bicycle_anomaly`, this
-camera client listens also on: `vai/commands/bicycle_anomaly`. And conversely,
-no other camera client listens on that subtopic.
+this camera client is configured with device_id: `bicycle_anomaly`, this camera
+client listens also on: `vai/commands/bicycle_anomaly`. And conversely, no other
+camera client listens on that subtopic.
 
 To run the camera client with the correct arguments, use a command such as the
-following. Here, the value of `--device_id` is the key for triggering only
-this particular camera client:
+following. Here, the value of `--device_id` is the key for triggering only this
+particular camera client:
 
 ```sh
 python3 camera_client.py \
@@ -1237,8 +1220,7 @@ python3 camera_client.py \
 ```
 
 To trigger only that specific camera client, send this message:
-`mosquitto_pub -h localhost -p 1883 -t vai/commands/bicycle_anomaly -m
-"get_frame"`.
+`mosquitto_pub -h localhost -p 1883 -t vai/commands/bicycle_anomaly -m "get_frame"`.
 
 ### Launch physical actions based on inference results
 
@@ -1256,16 +1238,16 @@ trained ML models against a large set of images. In batch processing mode, the
 flow is as follows:
 
 -   The user prepares a set of images to run inference against. These are
-typically images saved from the camera earlier, with known labels - i.e,
-known to be good and known to be defective examples.
+    typically images saved from the camera earlier, with known labels - i.e,
+    known to be good and known to be defective examples.
 -   The user stores the images on the edge server, in a directory that the
-camera client can access.
+    camera client can access.
 -   The user runs the camera client in batch mode against the root directory
-that contains the images.
+    that contains the images.
 -   The application finds all image files inside the directory and its
-subdirectories.
+    subdirectories.
 -   The application forwards each image in turn to the ML model and gets the
-inference results.
+    inference results.
 -   Optionally, the inference results can be forwarded to an MQTT message queue.
 
 The following steps run batch mode inference against a set of images:
@@ -1327,8 +1309,8 @@ The following steps run batch mode inference against a set of images:
     and in the second host `mosquitto_sub` window, you should start receiving
     the ML model inference result JSON records.
 
-    You can redirect the results to a text file on the second host, by
-    modifying the `mosquitto_sub` command as follows:
+    You can redirect the results to a text file on the second host, by modifying
+    the `mosquitto_sub` command as follows:
 
     ```sh
     mosquitto_sub -h 192.168.1.24 -t vai/results >> good_batch_model-version-xyz.txt
@@ -1343,14 +1325,13 @@ compare ML model performance across versions and time.
 The example backend consists of the following pre-configured services:
 
 -   Cloud Pub/Sub for receiving ML inference results. The payload is the JSON
-results from the ML model container, with additional metadata:
-    -   Camera device ID.
-    -   Timestamp of the ML inference execution in RFC3339 format.
-    -   File ID of the inference. This ID can be used to match the ML inference.
+    results from the ML model container, with additional metadata: - Camera
+    device ID. - Timestamp of the ML inference execution in RFC3339 format. -
+    File ID of the inference. This ID can be used to match the ML inference.
     results row in BigQuery with the image filenames generated by the camera
     client - if the client was configured to write, or upload images as files.
 -   Cloud Function, subscribed to the Pub/Sub messages and write them to
-BigQuery.
+    BigQuery.
 -   BigQuery dataset as destination table for the ML inference results.
 
 To use the inference results cloud backend, add the following flags to the
@@ -1383,8 +1364,8 @@ python3 camera_client.py \
 --ml_port ${ML_PORT} --pubsub results --project_id ${PROJECT_ID} --count 1
 ```
 
-The command output should now contain the following lines, showing the
-inference results transmission to Pub/Sub:
+The command output should now contain the following lines, showing the inference
+results transmission to Pub/Sub:
 
 ```text
 Passing camera images to the ML model container
@@ -1414,8 +1395,8 @@ and exists normally with code `0`. In case of an error, the error is displayed,
 the log output is `False`, and the utility exit code is `1`.
 
 To execute the healthcheck, just add the command-line argument `--health_check`
-to the utility. You also need to pass valid arguments for the target
-camera, i.e camera protocol and address.
+to the utility. You also need to pass valid arguments for the target camera, i.e
+camera protocol and address.
 
 Example command:
 
@@ -1449,10 +1430,10 @@ in this tutorial, you can delete the project.
 
 -   If you used an existing project, you'll also delete any other work you've
     done in the project.
--   You can't reuse the project ID of a deleted project. If you created a
-custom project ID that you plan to use in the future, delete the resources
-inside the project instead. This ensures that URLs that use the project ID,
-such an an `appspot.com` URL, remain available.
+-   You can't reuse the project ID of a deleted project. If you created a custom
+    project ID that you plan to use in the future, delete the resources inside
+    the project instead. This ensures that URLs that use the project ID, such an
+    an `appspot.com` URL, remain available.
 
 To delete a project, do the following:
 
@@ -1460,17 +1441,19 @@ To delete a project, do the following:
     [Projects page](https://console.cloud.google.com/iam-admin/projects).
 1.  In the project list, select the project you want to delete and click
     **Delete project**.
-1.  In the dialog, type the project ID, and then click **Shut down** to
-    delete the project.
+1.  In the dialog, type the project ID, and then click **Shut down** to delete
+    the project.
 
-[delete-project]: https://storage.googleapis.com/gcp-community/tutorials/sigfox-gw/delete-project.png
+[delete-project]:
+    https://storage.googleapis.com/gcp-community/tutorials/sigfox-gw/delete-project.png
+
 ![deleting the project][delete-project]
 
 ## What's next
 
 -   Learn more about
-[AI on Google Cloud](https://cloud.google.com/solutions/ai/)
+    [AI on Google Cloud](https://cloud.google.com/solutions/ai/)
 -   Learn more about
-[Cloud developer tools](https://cloud.google.com/products/tools)
+    [Cloud developer tools](https://cloud.google.com/products/tools)
 -   Try out other Google Cloud features for yourself. Have a look at our
-[tutorials](https://cloud.google.com/docs/tutorials).
+    [tutorials](https://cloud.google.com/docs/tutorials).

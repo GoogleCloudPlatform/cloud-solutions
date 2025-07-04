@@ -283,13 +283,6 @@
     },
     {
       "matchFileNames": [
-        "projects/vision-ai-edge-camera-client/**"
-      ],
-      "groupName": "vision-ai-edge-camera-client",
-      "commitMessagePrefix": "chore(deps): [vision-ai-edge-camera-client]"
-    },
-    {
-      "matchFileNames": [
         "projects/vision-ai-edge-platform/**"
       ],
       "groupName": "vision-ai-edge-platform",
