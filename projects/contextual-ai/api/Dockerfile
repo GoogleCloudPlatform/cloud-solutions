@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     gcc \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir --require-hashes -r requirements.txt
 
 # Copy application code
 COPY . .
