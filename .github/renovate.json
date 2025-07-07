@@ -12,8 +12,8 @@
     "minimumReleaseAge": "3 days"
   },
   "pip-compile": {
-    "fileMatch": [
-      "(^|/)requirements\\.txt$"
+    "managerFilePatterns": [
+      "/(^|/)requirements\\.txt$/"
     ]
   },
   "docker-compose": {
@@ -31,11 +31,11 @@
     {
       "customType": "regex",
       "description": "Update _VERSION variables in Dockerfiles, shell scripts, and files in the ci-tasks directory",
-      "fileMatch": [
-        "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
-        "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$",
-        "(^|/).*\\.sh$",
-        "ci-tasks/.*$"
+      "managerFilePatterns": [
+        "/(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$/",
+        "/(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$/",
+        "/(^|/).*\\.sh$/",
+        "/ci-tasks/.*$/"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s(?:ENV|ARG)?\\s*.+?_VERSION=\"?(?<currentValue>.+?)\"?\\s"
