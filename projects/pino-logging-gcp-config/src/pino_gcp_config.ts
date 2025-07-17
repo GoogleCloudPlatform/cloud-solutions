@@ -325,7 +325,16 @@ class GcpLoggingPino {
       formatters: {
         ...formattersMixin,
         level: GcpLoggingPino.pinoLevelToGcpSeverity,
-        log: (entry: Record<string, unknown>) => this.formatLogObject(entry),
+        log: (entry: Record<string, unknown>) => {
+          const formattedEntry = this.formatLogObject(entry);
+
+          // If a formattersMixin.log function is provided, call it with the
+          if (formattersMixin?.log) {
+            return formattersMixin.log(formattedEntry);
+          } else {
+            return formattedEntry;
+          }
+        },
       },
       timestamp: () => GcpLoggingPino.getGcpLoggingTimestamp(),
     };

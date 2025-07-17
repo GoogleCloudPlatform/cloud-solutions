@@ -151,6 +151,25 @@ describe('Pino config', () => {
       expect(input).toEqual({});
     });
 
+    it("should call user-defined formatter.log after GCP formatting", () => {
+      const userLog = jasmine.createSpy("userLog");
+      const configWithUserLog = createGcpLoggingPinoConfig(
+        { serviceContext },
+        {
+          formatters: {
+            log: userLog,
+          },
+        }
+      );
+      const logObj = { foo: "bar" };
+      configWithUserLog.formatters?.log?.(logObj);
+      expect(userLog).toHaveBeenCalled();
+      const calledWith = userLog.calls.mostRecent().args[0];
+      expect(calledWith.foo).toBe("bar");
+      expect(calledWith.serviceContext).toEqual(serviceContext);
+      expect(calledWith["logging.googleapis.com/insertId"]).toBeDefined();
+    });
+
     it('adds a timestamp as seconds:nanos JSON fragment', () => {
       const timestampGenerator = config.timestamp as () => string;
 
