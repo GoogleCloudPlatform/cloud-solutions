@@ -5,10 +5,10 @@ This library contains the code to generate a Pino configuration which outputs
 
 This can be used with any Google Cloud service that captures logs written to
 stdout (such as Cloud Run, Cloud Run Functions and Google Kubernetes Engine
-workloads), so that the logging is formatted correctly in [Google Cloud
-Logging](https://cloud.google.com/logging/docs). This then alllows filtering by
-log level, the ability to include structured data in the logs, and reporting of
-errors with stack traces to
+workloads), so that the logging is formatted correctly in
+[Google Cloud Logging](https://cloud.google.com/logging/docs). This then alllows
+filtering by log level, the ability to include structured data in the logs, and
+reporting of errors with stack traces to
 [Google Cloud Error Reporting](https://cloud.google.com/error-reporting/docs)
 
 ## Features
@@ -27,9 +27,10 @@ errors with stack traces to
 -   Includes a
     [ServiceContext](https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext)
     object in the logs for Google Cloud Error Reporting.
--   Maps the OpenTelemetry properties `span_id`, `trace_id`, `trace_flags` to
-    the equivalent
+-   Maps the OpenTelemetry properties `span_id`, `trace_id`, `trace_flags` to the
+    equivalent
     [Google Cloud Logging fields](https://cloud.google.com/logging/docs/structured-logging#structured_logging_special_fields).
+-   User-defined `formatters.log` is always executed as-is, before GCP formatting.
 
 ## Example usage
 
@@ -182,7 +183,7 @@ log properties)
 
 ![Screenshot from Cloud Logging](images/logging-screenshot.png)
 
-The Error with the stack trace will also show up in Cloud Error Reporting,
-with the Service name and version specified in the ServiceContext.
+The Error with the stack trace will also show up in Cloud Error Reporting, with
+the Service name and version specified in the ServiceContext.
 
 ![Screenshot from Cloud Error Reporting](images/error-reporting-screenshot.png)
