@@ -4,7 +4,7 @@
         {
             "customType": "regex",
             "description": "Update _VERSION variables in Dockerfiles, shell scripts, and files in the ci-tasks directory",
-            "fileMatch": [
+            "managerFilePatterns": [
                 "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
                 "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$",
                 "(^|/)*.sh",

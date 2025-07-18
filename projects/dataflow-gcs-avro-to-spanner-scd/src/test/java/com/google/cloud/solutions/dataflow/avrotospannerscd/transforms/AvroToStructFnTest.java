@@ -148,7 +148,8 @@ final class AvroToStructFnTest {
                     new Schema.Parser()
                         .parse(
                             """
-                            {"type": "int", "logicalType": "date"}"""),
+                            {"type": "int", "logicalType": "date"}\
+                            """),
                     7499),
                 /* expectedStruct= */ createStructWithField(
                     Value.date(Date.fromYearMonthDay(1990, 7, 14))),
@@ -165,7 +166,8 @@ final class AvroToStructFnTest {
                                 "logicalType": "decimal",
                                 "precision": 7,
                                 "scale": 6
-                            }"""),
+                            }\
+                            """),
                     ByteArray.copyFrom(
                         new Conversions.DecimalConversion()
                             .toBytes(
@@ -178,7 +180,8 @@ final class AvroToStructFnTest {
                                             "logicalType": "decimal",
                                             "precision": 7,
                                             "scale": 6
-                                        }"""),
+                                        }\
+                                        """),
                                 LogicalTypes.fromSchema(
                                     new Schema.Parser()
                                         .parse(
@@ -188,7 +191,8 @@ final class AvroToStructFnTest {
                                                 "logicalType": "decimal",
                                                 "precision": 7,
                                                 "scale": 6
-                                            }"""))))),
+                                            }\
+                                            """))))),
                 /* expectedStruct= */ createStructWithField(
                     Value.numeric(BigDecimal.valueOf(3141592, 6))),
               })
@@ -204,7 +208,8 @@ final class AvroToStructFnTest {
                                 "logicalType": "decimal",
                                 "precision": 7,
                                 "scale": 6
-                            }"""),
+                            }\
+                            """),
                     ByteArray.copyFrom(
                             new Conversions.DecimalConversion()
                                 .toBytes(
@@ -217,7 +222,8 @@ final class AvroToStructFnTest {
                                                 "logicalType": "decimal",
                                                 "precision": 7,
                                                 "scale": 6
-                                            }"""),
+                                            }\
+                                            """),
                                     LogicalTypes.fromSchema(
                                         new Schema.Parser()
                                             .parse(
@@ -227,7 +233,8 @@ final class AvroToStructFnTest {
                                                     "logicalType": "decimal",
                                                     "precision": 7,
                                                     "scale": 6
-                                                }"""))))
+                                                }\
+                                                """))))
                         .toByteArray()),
                 /* expectedStruct= */ createStructWithField(
                     Value.numeric(BigDecimal.valueOf(3141592, 6))),
@@ -244,7 +251,8 @@ final class AvroToStructFnTest {
                                 "logicalType": "decimal",
                                 "precision": 7,
                                 "scale": 6
-                            }"""),
+                            }\
+                            """),
                     ByteBuffer.wrap(
                         ByteArray.copyFrom(
                                 new Conversions.DecimalConversion()
@@ -258,7 +266,8 @@ final class AvroToStructFnTest {
                                                     "logicalType": "decimal",
                                                     "precision": 7,
                                                     "scale": 6
-                                                }"""),
+                                                }\
+                                                """),
                                         LogicalTypes.fromSchema(
                                             new Schema.Parser()
                                                 .parse(
@@ -268,7 +277,8 @@ final class AvroToStructFnTest {
                                                         "logicalType": "decimal",
                                                         "precision": 7,
                                                         "scale": 6
-                                                    }"""))))
+                                                    }\
+                                                    """))))
                             .toByteArray())),
                 /* expectedStruct= */ createStructWithField(
                     Value.numeric(BigDecimal.valueOf(3141592, 6))),
@@ -280,7 +290,8 @@ final class AvroToStructFnTest {
                     new Schema.Parser()
                         .parse(
                             """
-                            {"type": "long", "logicalType": "local-timestamp-millis"}"""),
+                            {"type": "long", "logicalType": "local-timestamp-millis"}\
+                            """),
                     647917261000L),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(Timestamp.ofTimeMicroseconds(647917261000000L))),
@@ -292,7 +303,8 @@ final class AvroToStructFnTest {
                     new Schema.Parser()
                         .parse(
                             """
-                            {"type": "long", "logicalType": "local-timestamp-millis"}"""),
+                            {"type": "long", "logicalType": "local-timestamp-millis"}\
+                            """),
                     647917261000L),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(Timestamp.ofTimeMicroseconds(647917261000000L))),
@@ -304,7 +316,8 @@ final class AvroToStructFnTest {
                     new Schema.Parser()
                         .parse(
                             """
-                            {"type": "long", "logicalType": "local-timestamp-micros"}"""),
+                            {"type": "long", "logicalType": "local-timestamp-micros"}\
+                            """),
                     647917261000000L),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(Timestamp.ofTimeMicroseconds(647917261000000L))),
@@ -316,7 +329,8 @@ final class AvroToStructFnTest {
                     new Schema.Parser()
                         .parse(
                             """
-                            {"type": "long", "logicalType": "timestamp-micros"}"""),
+                            {"type": "long", "logicalType": "timestamp-micros"}\
+                            """),
                     647917261000000L),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(Timestamp.ofTimeMicroseconds(647917261000000L))),
@@ -440,7 +454,8 @@ final class AvroToStructFnTest {
                         new Schema.Parser()
                             .parse(
                                 """
-                                {"type": "int", "logicalType": "date"}""")),
+                                {"type": "int", "logicalType": "date"}\
+                                """)),
                     NullValues.NULL_INT32),
                 /* expectedStruct= */ createStructWithField(Value.date(NullValues.NULL_DATE)),
               })
@@ -453,7 +468,8 @@ final class AvroToStructFnTest {
                         new Schema.Parser()
                             .parse(
                                 """
-                                {"type": "int", "logicalType": "date"}""")),
+                                {"type": "int", "logicalType": "date"}\
+                                """)),
                     7499),
                 /* expectedStruct= */ createStructWithField(
                     Value.date(Date.fromYearMonthDay(1990, 7, 14))),
@@ -472,7 +488,8 @@ final class AvroToStructFnTest {
                                     "logicalType": "decimal",
                                     "precision": 7,
                                     "scale": 6
-                                }""")),
+                                }\
+                                """)),
                     NullValues.NULL_BYTES),
                 /* expectedStruct= */ createStructWithField(Value.numeric(NullValues.NULL_NUMERIC)),
               })
@@ -490,7 +507,8 @@ final class AvroToStructFnTest {
                                     "logicalType": "decimal",
                                     "precision": 7,
                                     "scale": 6
-                                }""")),
+                                }\
+                                """)),
                     ByteArray.copyFrom(
                         new Conversions.DecimalConversion()
                             .toBytes(
@@ -503,7 +521,8 @@ final class AvroToStructFnTest {
                                             "logicalType": "decimal",
                                             "precision": 7,
                                             "scale": 6
-                                        }"""),
+                                        }\
+                                        """),
                                 LogicalTypes.fromSchema(
                                     new Schema.Parser()
                                         .parse(
@@ -513,7 +532,8 @@ final class AvroToStructFnTest {
                                                 "logicalType": "decimal",
                                                 "precision": 7,
                                                 "scale": 6
-                                            }"""))))),
+                                            }\
+                                            """))))),
                 /* expectedStruct= */ createStructWithField(
                     Value.numeric(BigDecimal.valueOf(3141592, 6))),
               })
@@ -529,7 +549,8 @@ final class AvroToStructFnTest {
                                 {
                                     "type": "long",
                                     "logicalType": "local-timestamp-millis"
-                                }""")),
+                                }\
+                                """)),
                     NullValues.NULL_INT64),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(NullValues.NULL_TIMESTAMP)),
@@ -546,7 +567,8 @@ final class AvroToStructFnTest {
                                 {
                                     "type": "long",
                                     "logicalType": "local-timestamp-millis"
-                                }""")),
+                                }\
+                                """)),
                     647917261000L),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(Timestamp.ofTimeMicroseconds(647917261000000L))),
@@ -563,7 +585,8 @@ final class AvroToStructFnTest {
                                 {
                                     "type": "long",
                                     "logicalType": "timestamp-millis"
-                                }""")),
+                                }\
+                                """)),
                     NullValues.NULL_INT64),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(NullValues.NULL_TIMESTAMP)),
@@ -580,7 +603,8 @@ final class AvroToStructFnTest {
                                 {
                                     "type": "long",
                                     "logicalType": "timestamp-millis"
-                                }""")),
+                                }\
+                                """)),
                     647917261000L),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(Timestamp.ofTimeMicroseconds(647917261000000L))),
@@ -597,7 +621,8 @@ final class AvroToStructFnTest {
                                 {
                                     "type": "long",
                                     "logicalType": "local-timestamp-micros"
-                                }""")),
+                                }\
+                                """)),
                     NullValues.NULL_INT64),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(NullValues.NULL_TIMESTAMP)),
@@ -614,7 +639,8 @@ final class AvroToStructFnTest {
                                 {
                                     "type": "long",
                                     "logicalType": "local-timestamp-micros"
-                                }""")),
+                                }\
+                                """)),
                     647917261000000L),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(Timestamp.ofTimeMicroseconds(647917261000000L))),
@@ -631,7 +657,8 @@ final class AvroToStructFnTest {
                                 {
                                     "type": "long",
                                     "logicalType": "timestamp-micros"
-                                }""")),
+                                }\
+                                """)),
                     NullValues.NULL_INT64),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(NullValues.NULL_TIMESTAMP)),
@@ -648,7 +675,8 @@ final class AvroToStructFnTest {
                                 {
                                     "type": "long",
                                     "logicalType": "timestamp-micros"
-                                }""")),
+                                }\
+                                """)),
                     647917261000000L),
                 /* expectedStruct= */ createStructWithField(
                     Value.timestamp(Timestamp.ofTimeMicroseconds(647917261000000L))),
@@ -705,7 +733,8 @@ final class AvroToStructFnTest {
                             {
                                 "type": "long",
                                 "logicalType": "time-micros"
-                            }"""),
+                            }\
+                            """),
                     647917261000000L),
                 /* expectedErrorMessage= */ ""
                     + "Avro logical field type time-micros on column testField is not supported.",
@@ -744,7 +773,8 @@ final class AvroToStructFnTest {
                                 "logicalType": "decimal",
                                 "precision": 7,
                                 "scale": 6
-                            }"""),
+                            }\
+                            """),
                     // Using BigDecimal, but any non bytes-like type should throw this exception.
                     BigDecimal.valueOf(3141592L, 6)),
                 /* expectedErrorMessage= */ "Unexpected value for decimal: ",
