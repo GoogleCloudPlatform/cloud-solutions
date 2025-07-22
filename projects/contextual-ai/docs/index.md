@@ -1,9 +1,9 @@
-# Overview
+# Contextual AI
 
 This document describes steps to deploy the solution.
 
 For detailed architecture diagram and flows, please refer to
-[this document](./docs/architecture.md).
+[this document](./architecture.md).
 
 ## Setup the solution
 
@@ -54,7 +54,19 @@ terraform apply -var="project_id=$(gcloud config get-value project)" \
     --auto-approve
 ```
 
--   Upload Cloud Run source codes.
+-   Update `config.toml`.
+
+Copy `api/config-template.toml` to `api/config.toml`
+and update the configuration
+
+```toml
+[gcp]
+GCP_PROJECT_ID = "<PROJECT_ID>"
+ECOMMERCE_DATASET_ID = "ecommerce_data"
+ECOMMERCE_DATASET_ID = "<PROJECT_ID>-widget-bucket"
+```
+
+-   Deploy the solution.
 
 ```shell
 

@@ -14,7 +14,7 @@
 
 [gcp]
 GCP_PROJECT_ID = "${GCP_PROJECT_ID}"
-BQ_DATASET_ID = "${BQ_DATASET_ID}"
+ECOMMERCE_DATASET_ID = "ecommerce_data"
 GCS_BUCKET = "${GCS_BUCKET}"
 
 [user_profiles]

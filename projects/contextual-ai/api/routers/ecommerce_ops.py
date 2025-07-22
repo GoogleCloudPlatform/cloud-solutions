@@ -33,7 +33,7 @@ with open("config.toml", "rb") as f:
     config = tomllib.load(f)
 
 GCP_PROJECT_ID = config["gcp"]["GCP_PROJECT_ID"]
-ECOMMERCE_DATASET_ID = config["gcp"]["ECOMMENERCE_DATASET_ID"]
+ECOMMERCE_DATASET_ID = config["gcp"]["ECOMMERCE_DATASET_ID"]
 
 router = APIRouter()
 

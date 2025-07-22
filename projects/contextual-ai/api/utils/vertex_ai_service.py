@@ -44,7 +44,7 @@ class VertexAIService:
         )
 
         # Set the model name from your working example
-        self.model_name = "gemini-2.5-pro-preview-06-05"
+        self.model_name = "gemini-2.5-pro"
         print(f"Vertex AI client initialized with model: {self.model_name}")
 
         print(
