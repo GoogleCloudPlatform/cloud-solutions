@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Send, Bot, Paperclip, MoreVertical, ChevronLeft, ChevronRight, Zap } from 'lucide-react';
+import { Send, Bot, Paperclip, MoreVertical, ChevronLeft, ChevronRight, Zap, Trash2 } from 'lucide-react';
 import ChatService from '@/services/chatService';
 import ChatApiService from '@/services/chatApiService';
 import FollowUpAnalysisService from '@/services/followUpAnalysis';
@@ -37,8 +37,10 @@ export function ChatPanel({ isCollapsed, onToggleCollapse, externalThinking = fa
   const [inputValue, setInputValue] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const [useBackendApi] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const messagesContainerRef = React.useRef<HTMLDivElement>(null);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const prevMessageCountRef = React.useRef(0);
 
@@ -101,6 +103,36 @@ export function ChatPanel({ isCollapsed, onToggleCollapse, externalThinking = fa
     }
   }, [messages, isCurrentlyThinking, isAtBottom]);
 
+  // Handle dropdown outside clicks
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showDropdown]);
+
+  const handleClearMessages = async () => {
+    try {
+      if (useBackendApi) {
+        // Clear messages via backend API
+        await ChatApiService.clearAllConversations();
+      } else {
+        // Clear local chat service
+        ChatService.clearAll();
+      }
+      setMessages([]);
+      setShowDropdown(false);
+    } catch (error) {
+      console.error('Failed to clear messages:', error);
+    }
+  };
+
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
@@ -108,25 +140,71 @@ export function ChatPanel({ isCollapsed, onToggleCollapse, externalThinking = fa
     setInputValue('');
 
     if (useBackendApi) {
-      // Use backend API
+      // Use backend API with streaming
       setIsThinking(true);
 
       try {
-        const response = await ChatApiService.sendMessage({
-          content: userMessage
-        });
-        console.log('Message sent successfully:', response);
-        // Polling will automatically update the UI with new messages
+        // Add user message to local state immediately
+        const userMsgId = `user-${Date.now()}`;
+        const userMsg: ChatMessage = {
+          id: userMsgId,
+          content: userMessage,
+          sender: 'user',
+          timestamp: new Date().toISOString()
+        };
+        setMessages(prev => [...prev, userMsg]);
+
+        // Add placeholder for AI response
+        const aiMsgId = `ai-${Date.now()}`;
+        const aiMsg: ChatMessage = {
+          id: aiMsgId,
+          content: '',
+          sender: 'assistant',
+          timestamp: new Date().toISOString()
+        };
+        setMessages(prev => [...prev, aiMsg]);
+
+        let streamedContent = '';
+
+        await ChatApiService.sendMessageStream(
+          { content: userMessage },
+          // onChunk
+          (chunk: string) => {
+            streamedContent += chunk;
+            setMessages(prev => prev.map(msg =>
+              msg.id === aiMsgId ? { ...msg, content: streamedContent } : msg
+            ));
+          },
+          // onComplete
+          () => {
+            setIsThinking(false);
+            console.log('Streaming completed');
+          },
+          // onError
+          (error: string) => {
+            console.error('Streaming error:', error);
+            setMessages(prev => prev.map(msg =>
+              msg.id === aiMsgId ? {
+                ...msg,
+                content: "I apologize, " +
+                  "but I'm having trouble processing your request right now." +
+                  " Please try again later."
+              } : msg
+            ));
+            setIsThinking(false);
+          }
+        );
       } catch (error) {
         console.error('Failed to send message via API:', error);
 
         // Fallback to local service
         const conversationId = await ChatService.addChatMessage(userMessage);
-        const fallbackResponse = "I apologize, but I'm having trouble connecting to the AI service right now. Please try again later.";
+        const fallbackResponse = "I apologize, " +
+          "but I'm having trouble connecting to the AI service right now. " +
+          "Please try again later.";
         if (conversationId) {
           ChatService.addAIResponse(conversationId, fallbackResponse);
         }
-      } finally {
         setIsThinking(false);
       }
     } else {
@@ -151,7 +229,10 @@ export function ChatPanel({ isCollapsed, onToggleCollapse, externalThinking = fa
           console.error('Failed to generate AI response:', error);
 
           // Fallback response
-          const fallbackResponse = "I apologize, but I'm having trouble processing your request right now. Please try asking again or click on a chart for analysis.";
+          const fallbackResponse = "I apologize, but I'm having" +
+            " trouble processing your " +
+            "request right now. Please try asking again or click on" +
+            " a chart for analysis.";
           if (conversationId) {
             ChatService.addAIResponse(conversationId, fallbackResponse);
           }
@@ -185,14 +266,11 @@ export function ChatPanel({ isCollapsed, onToggleCollapse, externalThinking = fa
         </div>
 
         {/* Collapsed Chat Icon - Scrollable area */}
-        <div className="flex-1 flex flex-col items-center justify-center space-y-4 p-2">
+        <div className="flex-1 flex flex-col items-center justify-center space-y-4 p-2 overflow-hidden">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Bot className="h-4 w-4 text-primary-foreground" />
           </div>
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-          <Badge className="writing-mode-vertical-rl text-orientation-mixed transform rotate-180 text-xs px-1 py-2">
-            AI Chat
-          </Badge>
         </div>
 
         {/* Message Count - Fixed at bottom */}
@@ -228,9 +306,29 @@ export function ChatPanel({ isCollapsed, onToggleCollapse, externalThinking = fa
             <Button variant="ghost" size="icon" onClick={onToggleCollapse}>
               <ChevronRight className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
+            <div className="relative" ref={dropdownRef}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+
+              {showDropdown && (
+                <div className="absolute right-0 top-full mt-1 w-48 bg-background border border-border rounded-md shadow-lg z-50">
+                  <div className="py-1">
+                    <button
+                      onClick={handleClearMessages}
+                      className="flex items-center w-full px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Clear Messages
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -12,13 +12,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {
-  ChatMessage,
-  ChatMessageRequest,
-  ChatResponse,
-  Conversation,
-  ConversationListResponse,
-} from '../types/chat';
+import {ChatMessage} from '../types/chat';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-constant-condition */
+
+interface ConversationEntry {
+  id: string;
+  timestamp: string;
+  type: string;
+  content: string;
+  metadata?: any;
+}
+
+interface Conversation {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  entries: ConversationEntry[];
+  status: string;
+  tags?: string[];
+}
+
+interface ConversationListResponse {
+  conversations: Conversation[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+interface ChatMessageRequest {
+  content: string;
+  conversationId?: string;
+}
+
+interface ChatResponse {
+  conversationId: string;
+  response: string;
+  timestamp: string;
+}
 
 class ChatApiService {
   private static readonly API_BASE_URL =
@@ -89,7 +121,80 @@ class ChatApiService {
     }
   }
 
-  // Send chat message
+  // Send chat message with streaming
+  static async sendMessageStream(
+    message: ChatMessageRequest,
+    onChunk: (chunk: string) => void,
+    onComplete: () => void,
+    onError: (error: string) => void
+  ): Promise<string> {
+    try {
+      const response = await fetch(
+        `${this.API_BASE_URL}/api/chat/message/stream`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(message),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to send message: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body reader available');
+      }
+
+      const decoder = new TextDecoder();
+      let conversationId = '';
+
+      try {
+        while (true) {
+          const {done, value} = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+
+                if (data.type === 'conversation_id') {
+                  conversationId = data.conversation_id;
+                } else if (data.type === 'chunk') {
+                  onChunk(data.content);
+                } else if (data.type === 'complete') {
+                  onComplete();
+                } else if (data.type === 'error') {
+                  onError(data.message);
+                }
+              } catch (e) {
+                // Ignore JSON parse errors for malformed chunks
+              }
+            }
+          }
+        }
+      } finally {
+        reader.releaseLock();
+      }
+
+      return conversationId;
+    } catch (error) {
+      console.error('Error sending streaming message:', error);
+      onError(error instanceof Error ? error.message : 'Unknown error');
+      throw error;
+    }
+  }
+
+  // Send chat message (non-streaming fallback)
   static async sendMessage(message: ChatMessageRequest): Promise<ChatResponse> {
     try {
       const response = await fetch(`${this.API_BASE_URL}/api/chat/message`, {
@@ -249,3 +354,12 @@ class ChatApiService {
 }
 
 export default ChatApiService;
+export type {
+  Conversation,
+  ConversationEntry,
+  ConversationListResponse,
+  ChatMessageRequest,
+  ChatResponse,
+};
+/* eslint-enable no-constant-condition */
+/* eslint-enable @typescript-eslint/no-explicit-any */

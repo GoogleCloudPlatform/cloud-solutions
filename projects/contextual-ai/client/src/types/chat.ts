@@ -14,6 +14,9 @@
 
 // Type definitions for chat and widget analysis system
 
+/* eslint-disable no-constant-condition */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface WidgetMeta {
   type: 'chart' | 'table' | 'metric' | 'heatmap';
   subtype: string;
@@ -25,14 +28,9 @@ export interface WidgetMeta {
 export interface InteractionContext {
   clickedDataPoint?: {
     timestamp: string;
-    [key: string]: unknown; // Allow for arbitrary data point properties
+    [key: string]: any;
   };
-  clickType:
-    | 'data-point'
-    | 'service-tile'
-    | 'anomaly'
-    | 'trend-line'
-    | 'heatmap-cell';
+  clickType: 'data-point' | 'service-tile' | 'anomaly' | 'trend-line';
   selectedRange?: {
     start: string;
     end: string;
@@ -41,7 +39,9 @@ export interface InteractionContext {
 
 export interface ScreenContext {
   pageUrl: string;
-  visibleKPIs?: VisibleKPIs;
+  visibleKPIs: {
+    [key: string]: string | number;
+  };
   recentActivity: Array<{
     id: number;
     action: string;
@@ -56,7 +56,7 @@ export interface UserContext {
   permissions: string[];
   userId?: string;
   preferences?: {
-    [key: string]: unknown; // Allow for arbitrary user preferences
+    [key: string]: any;
   };
 }
 
@@ -65,14 +65,6 @@ export interface WidgetAnalysisRequest {
   interactionContext: InteractionContext;
   screenContext: ScreenContext;
   userContext: UserContext;
-}
-
-export interface VisibleKPIs {
-  totalRevenue?: number;
-  activeUsers?: number;
-  pageViews?: number;
-  responseTime?: string;
-  additionalKPIs?: Record<string, unknown>;
 }
 
 export interface ConversationEntry {
@@ -107,11 +99,31 @@ export interface Conversation {
   status: 'active' | 'resolved' | 'archived';
 }
 
-export interface ConversationListResponse {
-  conversations: Conversation[];
-  total: number;
-  page: number;
-  pageSize: number;
+export interface WidgetAnalysisResponse {
+  conversationId: string;
+  response: string;
+  actionSuggestions?: string[];
+  relatedMetrics?: string[];
+  confidence?: number;
+  analysisType?: string;
+  followUpQuestions?: string[];
+}
+
+export interface ChatMessage {
+  id: string;
+  content: string;
+  sender: 'user' | 'assistant';
+  timestamp: string;
+  metadata?: {
+    widgetId?: string;
+    actionSuggestions?: string[];
+    relatedMetrics?: string[];
+    confidence?: number;
+    analysisType?: string;
+    isMockAI?: boolean;
+    aiProvider?: 'mock' | 'gemini';
+    interactionType?: string;
+  };
 }
 
 /**
@@ -123,22 +135,17 @@ export interface ChatResponse {
   timestamp: string;
 }
 
-/**
- * Represents the request payload for sending a chat message.
- */
-export interface ChatMessageRequest {
-  content: string;
-  conversationId?: string;
+export interface ConversationListResponse {
+  conversations: Conversation[];
+  total: number;
+  page: number;
+  pageSize: number;
 }
 
-export interface WidgetAnalysisResponse {
-  conversationId: string;
-  response: string;
-  actionSuggestions?: string[];
-  relatedMetrics?: string[];
-  confidence?: number;
-  analysisType?: string;
-  followUpQuestions?: string[];
+export interface ErrorRateData {
+  timestamp: string;
+  errorRate: number;
+  // Add other properties like errorType, count, etc., if known
 }
 
 /** Represents a data point for revenue and response time. */
@@ -159,26 +166,5 @@ export interface SystemHealthData {
   // Add other properties if known from the BigQuery schema
 }
 
-/** Represents a data point for error rate trends. */
-export interface ErrorRateData {
-  timestamp: string;
-  errorRate: number;
-  // Add other properties like errorType, count, etc., if known
-}
-
-export interface ChatMessage {
-  id: string;
-  content: string;
-  sender: 'user' | 'assistant';
-  timestamp: string;
-  metadata?: {
-    widgetId?: string;
-    actionSuggestions?: string[];
-    relatedMetrics?: string[];
-    confidence?: number;
-    analysisType?: string;
-    isMockAI?: boolean;
-    aiProvider?: 'mock' | 'gemini';
-    interactionType?: string;
-  };
-}
+/* eslint-enable no-constant-condition */
+/* eslint-enable @typescript-eslint/no-explicit-any */

@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[gcp]
-GCP_PROJECT_ID = "${GCP_PROJECT_ID}"
-ECOMMERCE_DATASET_ID = "ecommerce_data"
-GCS_BUCKET = "${GCS_BUCKET}"
-
 [user_profiles]
 USER_PROFILE_001 = """
 <user_profile>

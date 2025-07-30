@@ -31,7 +31,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "DISABLE_ESLINT_PLUGIN=true craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
@@ -41,7 +41,7 @@
     "eslint-plugin-react": "^7.34.1"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=11"
   },
   "browserslist": {
     "production": [

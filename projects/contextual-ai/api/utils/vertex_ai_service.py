@@ -44,7 +44,7 @@ class VertexAIService:
         )
 
         # Set the model name from your working example
-        self.model_name = "gemini-2.5-pro"
+        self.model_name = "gemini-2.0-flash"
         print(f"Vertex AI client initialized with model: {self.model_name}")
 
         print(
@@ -71,7 +71,7 @@ class VertexAIService:
         config = types.GenerateContentConfig(
             temperature=0.7,
             top_p=0.9,
-            max_output_tokens=2048,
+            max_output_tokens=1024,  # Reduced for faster responses
             response_mime_type="application/json",
         )
 
@@ -144,8 +144,8 @@ INTERACTION:
             ):
                 prompt += f"  - Response Time: {point.responseTime}ms\n"
             if hasattr(point, "data") and point.data:
-                dp = json.dumps(point.data, indent=2)
-                prompt += f"  - Additional Data: {dp}\n"
+                data_text = json.dumps(point.data, indent=2)
+                prompt += f"  - Additional Data: {data_text}\n"
 
         prompt += f"""
 DASHBOARD CONTEXT:
@@ -170,34 +170,120 @@ DASHBOARD CONTEXT:
                     f"{screen.visibleKPIs.responseTime}\n"
                 )
 
-        prompt += f"""
+        prompt += """
 ANALYSIS REQUIREMENTS:
-1. Provide specific, actionable analysis based on the data point and context
-2. Identify any performance issues, anomalies, or opportunities
-3. Give 3-5 concrete recommendations appropriate for a {user.role}
-4. Suggest related metrics that should be monitored
-5. Keep analysis concise but insightful (2-3 sentences max)
-6. Focus on operational impact and business implications
+1. MUST reference specific numbers from the dashboard data
+(revenue, users, response times, etc.)
+2. Calculate business impact using actual metrics provided
+3. Give 3-5 concrete recommendations based on the real data,
+not generic advice
+4. Connect technical issues to business metrics shown on this dashboard
+5. Keep analysis concise but data-driven (2-3 sentences max)
+6. Example: "With your current revenue of $X and Y active users,
+this Z% error rate likely impacts..."
 
 RESPONSE FORMAT:
 Please respond with a JSON object in this exact format:
 {{
-"response": "Your technical analysis here focusing on operational insights...",
-"actionSuggestions": [
-    "Specific action 1", "Specific action 2", "Specific action 3"
-],
-"relatedMetrics": [
-    "Related metric 1", "Related metric 2", "Related metric 3"
-],
-"confidence": 0.85
+  "response": "Your technical analysis here focusing on operational insights",
+  "actionSuggestions": [
+      "Specific action 1",
+      "Specific action 2",
+      "Specific action 3"
+    ],
+  "relatedMetrics": [
+      "Related metric 1",
+      "Related metric 2",
+      "Related metric 3"
+  ],
+  "confidence": 0.85
 }}
 
 Ensure the JSON is valid and properly formatted.
 """
         return prompt
 
+    def _build_simple_analysis_prompt(
+        self, request: WidgetAnalysisRequest
+    ) -> str:
+        """Build a simple prompt for streaming widget analysis."""
+
+        widget = request.widgetMeta
+        interaction = request.interactionContext
+        user = request.userContext
+
+        prompt = f"""
+You are an expert DevOps engineer analyzing IT operations data.
+
+Widget: {widget.title}
+User clicked on data point from {widget.dataSource}
+User role: {user.role}
+
+IMPORTANT: Base your analysis on the SPECIFIC data from this dashboard,
+not generic advice.
+
+Provide a concise technical analysis (2-3 sentences) that:
+1. References the specific metrics and context from this dashboard
+2. Gives immediate actionable recommendations based on actual data
+3. Explains business impact using the real numbers provided
+
+Be specific and data-driven for a {user.role}."""
+
+        if interaction.clickedDataPoint:
+            point = interaction.clickedDataPoint
+            prompt += "\n\nData Point Details:"
+            if hasattr(point, "timestamp") and point.timestamp:
+                prompt += f"\n- Timestamp: {point.timestamp}"
+            if hasattr(point, "revenue") and point.revenue is not None:
+                prompt += f"\n- Revenue: ${point.revenue:,.0f}"
+            if (
+                hasattr(point, "responseTime")
+                and point.responseTime is not None
+            ):
+                prompt += f"\n- Response Time: {point.responseTime}ms"
+            if hasattr(point, "data") and point.data:
+                for key, value in point.data.items():
+                    if key not in ["timestamp", "revenue", "responseTime"]:
+                        prompt += (
+                            f"\n- {key.replace("_", " ").title()}: {value}"
+                        )
+
+        return prompt
+
+    def generate_follow_up_response_stream(
+        self, message: str, conversation_id: str # pylint: disable=unused-argument
+    ):
+        """Generate a follow-up response to user messages using Vertex AI."""
+
+        prompt = f"""
+You are a DevOps expert helping with IT operations dashboard analysis.
+
+User question: "{message}"
+
+Provide a helpful, concise technical response (1-2 sentences)
+with actionable DevOps guidance."""
+
+        # Create content for the new API
+        contents = [
+            types.Content(
+                role="user", parts=[types.Part.from_text(text=prompt)]
+            )
+        ]
+
+        # Configure generation settings
+        config = types.GenerateContentConfig(
+            temperature=0.7,
+            top_p=0.9,
+            max_output_tokens=1024,  # Reduced for faster responses
+        )
+
+        # Generate streaming response using Vertex AI
+        return self.client.models.generate_content_stream(
+            model=self.model_name, contents=contents, config=config
+        )
+
     def generate_follow_up_response(
-        self, message: str, conversation_id: str  # pylint: disable=unused-argument
+        self, message: str, conversation_id: str # pylint: disable=unused-argument
     ) -> str:
         """Generate a follow-up response to user messages using Vertex AI."""
 
@@ -221,7 +307,7 @@ with actionable DevOps guidance."""
         config = types.GenerateContentConfig(
             temperature=0.7,
             top_p=0.9,
-            max_output_tokens=2048,  # Match widget analysis
+            max_output_tokens=2048,  # match widget analysis
         )
 
         # Generate response using Vertex AI

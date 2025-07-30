@@ -36,7 +36,7 @@ iam.googleapis.com
 ```
 
 -   Ensure Organization Policy allows unauthenticated requests. Allow the
-    following policies.
+  following policies.
 
     -   `constraints/iam.allowedPolicyMemberDomains`
     -   `constraints/gcp.resourceLocations`
@@ -52,18 +52,6 @@ terraform init
 terraform apply -var="project_id=$(gcloud config get-value project)" \
     -var="region=${GOOGLE_CLOUD_LOCATION}" \
     --auto-approve
-```
-
--   Update `config.toml`.
-
-Copy `api/config-template.toml` to `api/config.toml`
-and update the configuration
-
-```toml
-[gcp]
-GCP_PROJECT_ID = "<PROJECT_ID>"
-ECOMMERCE_DATASET_ID = "ecommerce_data"
-ECOMMERCE_DATASET_ID = "<PROJECT_ID>-widget-bucket"
 ```
 
 -   Deploy the solution.

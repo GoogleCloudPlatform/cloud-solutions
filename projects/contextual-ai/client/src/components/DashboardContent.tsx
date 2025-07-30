@@ -39,6 +39,9 @@ interface DashboardContentProps {
   onAnalysisEnd?: () => void;
 }
 
+// Add a global flag to prevent multiple simultaneous analyses
+let isAnalyzing = false;
+
 const dashboardStats = [
   {
     title: 'Total Revenue',
@@ -90,7 +93,15 @@ export function DashboardContent({ activeItem, onAnalysisStart, onAnalysisEnd }:
 
     onAnalysisStart?.();
     try {
-      const result = await WidgetAnalysisService.analyzeRevenueResponseChart(dataPoint);
+      // Pass the real dashboard KPIs to the AI
+      const currentKPIs = {
+        totalRevenue: 45231,
+        activeUsers: 2345,
+        pageViews: 54321,
+        responseTime: '1.2s'
+      };
+
+      const result = await WidgetAnalysisService.analyzeRevenueResponseChart(dataPoint, currentKPIs);
       if (result) {
         console.log('Analysis result:', result);
 
@@ -117,7 +128,15 @@ export function DashboardContent({ activeItem, onAnalysisStart, onAnalysisEnd }:
 
     onAnalysisStart?.();
     try {
-      const result = await WidgetAnalysisService.analyzeSystemHealthHeatmap(service);
+      // Pass the real dashboard KPIs to the AI
+      const currentKPIs = {
+        totalRevenue: 45231,
+        activeUsers: 2345,
+        pageViews: 54321,
+        responseTime: '1.2s'
+      };
+
+      const result = await WidgetAnalysisService.analyzeSystemHealthHeatmap(service, currentKPIs);
       if (result) {
         console.log('Analysis result:', result);
 
@@ -142,18 +161,36 @@ export function DashboardContent({ activeItem, onAnalysisStart, onAnalysisEnd }:
   }) => {
     console.log('Error Rate analysis requested:', dataPoint);
 
+    // Prevent multiple simultaneous analyses
+    if (isAnalyzing) {
+      console.log('Analysis already in progress, ignoring click');
+      return;
+    }
+
+    isAnalyzing = true;
     onAnalysisStart?.();
+
     try {
-      const result = await WidgetAnalysisService.analyzeErrorRateChart(dataPoint);
+      console.log('Starting error rate analysis for:', dataPoint);
+
+      // Pass the real dashboard KPIs to the AI
+      const currentKPIs = {
+        totalRevenue: 45231,
+        activeUsers: 2345,
+        pageViews: 54321,
+        responseTime: '1.2s'
+      };
+
+      const result = await WidgetAnalysisService.analyzeErrorRateChart(dataPoint, currentKPIs);
       if (result) {
         console.log('Analysis result:', result);
-
         // The backend API has already created the conversation
         // The chat UI will automatically refresh via polling
       }
     } catch (error) {
       console.error('Widget analysis failed:', error);
     } finally {
+      isAnalyzing = false;
       onAnalysisEnd?.();
     }
   }, [onAnalysisStart, onAnalysisEnd]);

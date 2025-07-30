@@ -1,4 +1,4 @@
-# Contextual AI Dashboard - React Client
+# Contextual AI Dashboard -   React Client
 
 A modern React dashboard application built with TypeScript, Tailwind CSS, and
 shadcn/ui components featuring a professional layout with top header, left
@@ -32,24 +32,22 @@ npm start
 ```
 
 -   **Open your browser:** Navigate to
-    [http://localhost:3000](http://localhost:3000) to view the dashboard.
+  [http://localhost:3000](http://localhost:3000) to view the dashboard.
 
 ## 🎨 Dashboard Features
 
 ### Layout Components
 
--   **📍 Top Header**: Search bar, notifications, settings, chat toggle, and
-    user profile
+-   **📍 Top Header**: Search bar, notifications, settings, chat toggle, and user
+  profile
 -   **📂 Left Sidebar**: Navigation menu with icons, badges, and upgrade prompt
 -   **📊 Main Content**: Dynamic content area that changes based on navigation
-    selection
--   **💬 Chat Drawer**: AI assistant chat interface that slides in from the
-    right
+  selection
+-   **💬 Chat Drawer**: AI assistant chat interface that slides in from the right
 
 ### Dashboard Sections
 
--   **Dashboard**: Overview with stats, charts, recent activity, and quick
-    actions
+-   **Dashboard**: Overview with stats, charts, recent activity, and quick actions
 -   **Analytics**: Data visualization and metrics (placeholder)
 -   **Data Sources**: Data management interface (placeholder)
 -   **AI Models**: Machine learning model management (placeholder)
@@ -80,12 +78,12 @@ npm start
 
 ### Key Components
 
--   `Header.tsx` - Top navigation with search, notifications, and user profile
--   `Sidebar.tsx` - Left navigation menu with route management
--   `DashboardContent.tsx` - Main content area with section routing
--   `ChatDrawer.tsx` - AI chat interface with message history
--   `ui/` - shadcn/ui component library (Button, Card, Sheet, Input, Avatar,
-    Badge)
+-   `Header.tsx` -   Top navigation with search, notifications, and user profile
+-   `Sidebar.tsx` -   Left navigation menu with route management
+-   `DashboardContent.tsx` -   Main content area with section routing
+-   `ChatDrawer.tsx` -   AI chat interface with message history
+-   `ui/` -   shadcn/ui component library (Button, Card, Sheet, Input, Avatar,
+  Badge)
 
 ## 🛠️ Available Scripts
 
@@ -233,7 +231,7 @@ The dashboard uses a comprehensive design system with CSS variables:
 
 -   **Spacing**: Consistent `space-y-6`, `gap-6` patterns
 -   **Grid**: Responsive grid layouts with
-    `grid-cols-1 md:grid-cols-2 lg:grid-cols-4`
+  `grid-cols-1 md:grid-cols-2 lg:grid-cols-4`
 -   **Flexbox**: `flex`, `items-center`, `justify-between` for component layouts
 
 ## 📱 Responsive Design

@@ -13,8 +13,8 @@ credentials are not configured. You'll see:
 ### Mock AI Indicators
 
 -   🤖 **[MOCK AI]** prefix in all responses
--   ⚠️ **Orange warning banner** in chat UI: "Mock AI Response - Add Vertex AI
-    access for real AI analysis"
+-   ⚠️ **Orange warning banner** in chat UI: "Mock AI Response -   Add Vertex AI
+  access for real AI analysis"
 -   **Mock AI badge** on chat messages
 -   **Conversation tags** include "mock-ai"
 -   **Metadata indicators**: `"isMockAI": true, "aiProvider": "mock"`
@@ -41,7 +41,7 @@ proper service account permissions.
 Create a `.env` file in the `/api` directory:
 
 ```bash
-cd /Users/cgrant/dev/contextual-ai/api
+cd contextual-ai/api
 cp .env.example .env
 ```
 
@@ -76,13 +76,13 @@ python test_server.py
 ### With Live Vertex AI
 
 -   **Enterprise-grade AI** powered by Gemini models on Google Cloud
--   **Default credential authentication** - no API keys to manage
+-   **Default credential authentication** -   no API keys to manage
 -   **Dynamic AI-generated insights** based on actual data patterns
 -   **Contextual analysis** that adapts to different scenarios
 -   **Intelligent action recommendations** tailored to specific issues
 -   **Follow-up conversations** that understand context
 -   **Green "Vertex AI" badges** instead of orange "Mock AI" badges
--   **No mock AI indicators** - clean professional responses
+-   **No mock AI indicators** -   clean professional responses
 
 ## Example API Behavior
 
@@ -105,10 +105,10 @@ python test_server.py
 ### Follow-up Chat with Vertex AI
 
 -   User:How can we prevent this in the future?|
--   Vertex AI:To prevent payment timeout issues, implement,implement
-    auto-scaling for your payment service based on transaction volume, add
-    circuit breakers to gracefully handle failures, and consider using a
-    distributed payment queue system to buffer high-traffic periods.
+-   Vertex AI:To prevent payment timeout issues, implement,implement auto-scaling
+  for your payment service based on transaction volume, add circuit breakers to
+  gracefully handle failures, and consider using a distributed payment queue
+  system to buffer high-traffic periods.
 
 ## Architecture
 
@@ -118,27 +118,26 @@ Widget Click → Backend API → Vertex AI (Gemini) → Contextual Analysis → 
 
 ## API Endpoints Using Vertex AI
 
--   `POST /api/chat/analyze-widget` - Widget analysis with Vertex AI Gemini
-    models
--   `POST /api/chat/message` - Follow-up conversations with Vertex AI
--   `GET /api/chat/conversations` - Retrieve AI-generated conversations
+-   `POST /api/chat/analyze-widget` -   Widget analysis with Vertex AI Gemini models
+-   `POST /api/chat/message` -   Follow-up conversations with Vertex AI
+-   `GET /api/chat/conversations` -   Retrieve AI-generated conversations
 
 ## Benefits of Vertex AI
 
 ### Enterprise Features
 
--   **Default Credentials** - Uses Google Cloud service accounts, no API keys
--   **Enterprise Security** - Integrated with IAM and VPC controls
--   **Scalability** - Automatically handles scaling and load balancing
--   **Compliance** - SOC 2, ISO 27001, HIPAA compliant
--   **Cost Control** - Integrated with Google Cloud billing and quotas
+-   **Default Credentials** -   Uses Google Cloud service accounts, no API keys
+-   **Enterprise Security** -   Integrated with IAM and VPC controls
+-   **Scalability** -   Automatically handles scaling and load balancing
+-   **Compliance** -   SOC 2, ISO 27001, HIPAA compliant
+-   **Cost Control** -   Integrated with Google Cloud billing and quotas
 
 ### Technical Advantages
 
--   **Lower Latency** - Regional deployment reduces response times
--   **Better Integration** - Native integration with Google Cloud services
--   **Advanced Models** - Access to latest Gemini models and features
--   **Monitoring** - Built-in logging and monitoring via Cloud Console
+-   **Lower Latency** -   Regional deployment reduces response times
+-   **Better Integration** -   Native integration with Google Cloud services
+-   **Advanced Models** -   Access to latest Gemini models and features
+-   **Monitoring** -   Built-in logging and monitoring via Cloud Console
 
 ## Cost Considerations
 

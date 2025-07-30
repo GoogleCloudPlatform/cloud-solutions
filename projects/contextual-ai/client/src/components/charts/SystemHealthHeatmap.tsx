@@ -186,12 +186,12 @@ const SystemHealthHeatmap: React.FC<SystemHealthHeatmapProps> = ({ onServiceClic
             className={`border-2 rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-md ${getStatusColor(service.status)}`}
             onClick={() => onServiceClick?.(service)}
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
+            <div className="mb-3">
+              <div className="flex items-center space-x-2 mb-2">
                 {getStatusIcon(service.status)}
                 <h4 className="font-semibold">{service.displayName}</h4>
               </div>
-              <span className="text-xs px-2 py-1 rounded-full bg-white bg-opacity-50">
+              <span className="text-xs px-2 py-1 rounded-full bg-white bg-opacity-50 inline-block">
                 {service.status.toUpperCase()}
               </span>
             </div>

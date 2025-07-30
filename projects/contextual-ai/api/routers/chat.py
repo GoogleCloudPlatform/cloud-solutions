@@ -21,8 +21,11 @@ store for managing conversations.
 
 
 import logging
+import json
+
 from typing import Optional
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 from models.chat import (
     WidgetAnalysisRequest,
     WidgetAnalysisResponse,
@@ -92,10 +95,114 @@ async def analyze_widget(
         )
         return analysis_response
 
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         logger.error("Error analyzing widget: %s", str(e))
         raise HTTPException(
             status_code=500, detail=f"Failed to analyze widget: {str(e)}"
+        ) from e
+
+
+@router.post("/analyze-widget/stream", tags=["chat"])
+async def analyze_widget_stream(request: WidgetAnalysisRequest):
+    """
+    Analyze widget interaction with streaming response.
+    """
+    try:
+        logger.info(
+            "Processing streaming widget analysis: %s", request.widgetMeta.title
+        )
+
+        # Create conversation entry immediately
+        conversation_id = conversation_store.add_widget_analysis(
+            f"Analyzing {request.widgetMeta.title}", request.dict()
+        )
+
+        # Get Vertex AI service
+        vertex_service = get_vertex_service()
+
+        def generate_stream():
+            try:
+                # Send initial data with conversation ID
+                text_yield = json.dumps(
+                    {
+                        "type": "conversation_id",
+                        "conversation_id": conversation_id
+                    }
+                )
+                yield f"data: {text_yield}\n\n"
+
+                # Send the analyzed data first
+                data_summary = "📊 **Data Point Analysis**\n"
+                if (
+                    hasattr(request.interactionContext, "clickedDataPoint")
+                    and request.interactionContext.clickedDataPoint
+                ):
+                    point = request.interactionContext.clickedDataPoint
+                    if hasattr(point, "timestamp") and point.timestamp:
+                        data_summary += f"• Time: {point.timestamp}\n"
+                    if hasattr(point, "revenue") and point.revenue is not None:
+                        data_summary += f"• Revenue: ${point.revenue:,.0f}\n"
+                    if (
+                        hasattr(point, "responseTime")
+                        and point.responseTime is not None
+                    ):
+                        data_summary += (
+                            f"• Response Time: {point.responseTime}ms\n"
+                        )
+                    if hasattr(point, "data") and point.data:
+                        for key, value in point.data.items():
+                            if key not in [
+                                "timestamp",
+                                "revenue",
+                                "responseTime",
+                            ]:
+                                data_summary += f"• {key.replace("_", " ").title()}: {value}\n" # pylint: disable=line-too-long
+
+                yield f"data: {json.dumps({"type": "data_summary", "content": data_summary})}\n\n" # pylint: disable=line-too-long
+
+                # Now generate AI analysis using streaming
+                analysis_chunks = []
+                for chunk in vertex_service.generate_widget_analysis_stream(
+                    request
+                ):
+                    if (
+                        chunk.candidates
+                        and chunk.candidates[0].content
+                        and chunk.candidates[0].content.parts
+                    ):
+                        chunk_text = chunk.candidates[0].content.parts[0].text
+                        analysis_chunks.append(chunk_text)
+                        yield f"data: {json.dumps({"type": "analysis_chunk", "content": chunk_text})}\n\n" # pylint: disable=line-too-long
+
+                # Save complete analysis to conversation
+                full_analysis = "".join(analysis_chunks)
+                if full_analysis.strip():
+                    conversation_store.add_ai_response(
+                        conversation_id, full_analysis
+                    )
+
+                # Send completion signal
+                yield f"data: {json.dumps({"type": "complete"})}\n\n"
+
+            except Exception as e: # pylint: disable=broad-exception-caught
+                logger.error("Error in streaming widget analysis: %s", {str(e)})
+                yield f"data: {json.dumps({"type": "error", "message": str(e)})}\n\n" # pylint: disable=line-too-long
+
+        return StreamingResponse(
+            generate_stream(),
+            media_type="text/plain",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "Access-Control-Allow-Origin": "*",
+            },
+        )
+
+    except Exception as e: # pylint: disable=broad-exception-caught
+        logger.error("Error processing streaming widget analysis: %s", str(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to process streaming message: {str(e)}"
         ) from e
 
 
@@ -136,10 +243,80 @@ async def send_chat_message(message: ChatMessage) -> ChatResponse:
         logger.info("Generated response for conversation %s", conversation_id)
         return response
 
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         logger.error("Error processing chat message: %s", str(e))
         raise HTTPException(
             status_code=500, detail=f"Failed to process message: {str(e)}"
+        ) from e
+
+
+@router.post("/message/stream", tags=["chat"])
+async def send_chat_message_stream(message: ChatMessage):
+    """
+    Send a chat message and get a streaming AI response.
+    """
+    try:
+        logger.info(
+            "Processing streaming chat message: %s...", message.content[:100]
+        )
+
+        # Add user message to conversation
+        conversation_id = (
+            message.conversationId
+            or conversation_store.add_chat_message(message.content)
+        )
+
+        # Generate streaming AI response using Vertex AI
+        vertex_service = get_vertex_service()
+
+        def generate_stream():
+            try:
+                # Send initial data with conversation ID
+                yield f"data: {json.dumps({"type": "conversation_id", "conversation_id": conversation_id})}\n\n" # pylint: disable=line-too-long
+
+                response_chunks = []
+                for chunk in vertex_service.generate_follow_up_response_stream(
+                    message.content, conversation_id
+                ):
+                    if (
+                        chunk.candidates
+                        and chunk.candidates[0].content
+                        and chunk.candidates[0].content.parts
+                    ):
+                        chunk_text = chunk.candidates[0].content.parts[0].text
+                        response_chunks.append(chunk_text)
+                        # Send chunk to client
+                        yield f"data: {json.dumps({"type": "chunk", "content": chunk_text})}\n\n" # pylint: disable=line-too-long
+
+                # Combine all chunks and save to conversation
+                full_response = "".join(response_chunks)
+                if full_response.strip():
+                    conversation_store.add_ai_response(
+                        conversation_id, full_response
+                    )
+
+                # Send completion signal
+                yield f"data: {json.dumps({"type": "complete"})}\n\n"
+
+            except Exception as e: # pylint: disable=broad-exception-caught
+                logger.error("Error in streaming response: %s", str(e))
+                yield f"data: {json.dumps({"type": "error", "message": str(e)})}\n\n" # pylint: disable=line-too-long
+
+        return StreamingResponse(
+            generate_stream(),
+            media_type="text/plain",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "Access-Control-Allow-Origin": "*",
+            },
+        )
+
+    except Exception as e: # pylint: disable=broad-exception-caught
+        logger.error("Error processing streaming chat message: %s", str(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to process streaming message: {str(e)}"
         ) from e
 
 
@@ -163,7 +340,7 @@ async def get_conversation(conversation_id: str) -> Conversation:
 
     except HTTPException:
         raise
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         logger.error(
             "Error retrieving conversation {conversation_id}: %s", str(e)
         )
@@ -206,8 +383,8 @@ async def get_conversations(
             pageSize=limit,
         )
 
-    except Exception as e:
-        logger.error("Error retrieving conversations: {str(e)}")
+    except Exception as e: # pylint: disable=broad-exception-caught
+        logger.error("Error retrieving conversations: %s", str(e))
         raise HTTPException(
             status_code=500,
             detail=f"Failed to retrieve conversations: {str(e)}",
@@ -233,7 +410,7 @@ async def resolve_conversation(conversation_id: str):
 
     except HTTPException:
         raise
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         logger.error(
             "Error resolving conversation %s: %s", conversation_id, str(e)
         )
@@ -251,7 +428,7 @@ async def clear_all_conversations():
         conversation_store.clear_all()
         return {"message": "All conversations cleared"}
 
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         logger.error("Error clearing conversations: %s", str(e))
         raise HTTPException(
             status_code=500, detail=f"Failed to clear conversations: {str(e)}"

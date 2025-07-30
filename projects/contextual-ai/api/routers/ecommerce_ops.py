@@ -743,7 +743,9 @@ async def get_dashboard_summary():
         "latest_metrics": latest_data[0] if latest_data else {},
         "service_health": services_data,
         "daily_trends": trends_data,
-        "status": "operational"
-        if latest_data and latest_data[0]["avg_response_time_ms"] < 1000
-        else "degraded",
+        "status": (
+            "operational"
+            if latest_data and latest_data[0]["avg_response_time_ms"] < 1000
+            else "degraded"
+        ),
     }

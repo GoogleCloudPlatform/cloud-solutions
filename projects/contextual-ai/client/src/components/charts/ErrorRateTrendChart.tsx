@@ -155,8 +155,8 @@ const ErrorRateTrendChart: React.FC<ErrorRateTrendChartProps> = ({ onAnomalyClic
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
-      mode: 'index' as const,
-      intersect: false,
+      mode: 'point' as const,
+      intersect: true,
     },
     plugins: {
       title: {
@@ -177,28 +177,7 @@ const ErrorRateTrendChart: React.FC<ErrorRateTrendChartProps> = ({ onAnomalyClic
         }
       },
       tooltip: {
-        callbacks: {
-          afterBody: (context: any) => {
-            const index = context[0].dataIndex;
-            const point = data[index];
-            const lines = [];
-
-            lines.push(`Total Requests: ${point.totalRequests.toLocaleString()}`);
-            lines.push(`Error Count: ${point.errors.toLocaleString()}`);
-
-            if (point.incident) {
-              lines.push('');
-              lines.push(`Incident: ${point.incident}`);
-            }
-
-            if (point.isAnomaly) {
-              lines.push('');
-              lines.push('⚠️ Anomaly detected - click for AI analysis');
-            }
-
-            return lines;
-          }
-        }
+        enabled: false
       }
     },
     onClick: (event: any, elements: any) => {
@@ -280,7 +259,7 @@ const ErrorRateTrendChart: React.FC<ErrorRateTrendChartProps> = ({ onAnomalyClic
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-lg border border-gray-200 p-6 relative">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <span className="text-sm text-gray-600">Current Error Rate:</span>
@@ -295,6 +274,7 @@ const ErrorRateTrendChart: React.FC<ErrorRateTrendChartProps> = ({ onAnomalyClic
           </div>
         )}
       </div>
+
       <div className="h-64">
         <Line data={chartData} options={options} />
       </div>
@@ -311,6 +291,7 @@ const ErrorRateTrendChart: React.FC<ErrorRateTrendChartProps> = ({ onAnomalyClic
           </div>
         </div>
       )}
+
       <div className="mt-4 text-sm text-gray-600">
         <p>Click on anomaly points (larger dots) to get AI insights about error spikes</p>
       </div>

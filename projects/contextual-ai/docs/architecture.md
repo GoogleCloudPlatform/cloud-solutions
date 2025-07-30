@@ -20,7 +20,7 @@ The following diagram illustrates current architecture.
 -   Widget sends the specific data point and the question to Agent API.
 
 -   Agent use tools to fetch relevant data when required, and generate an answer
-    to the question.
+  to the question.
 
 -   Agent API repond with the final results.
 
@@ -30,11 +30,10 @@ The following diagram illustrates current architecture.
 
 -   Widget calls to Agent API with a pre-defined question.
 
--   Agent API generates a SQL query based on the user's profile and the
-    question.
+-   Agent API generates a SQL query based on the user's profile and the question.
 
 -   Agent Use tools to fetch relevant data when required, and generate follow up
-    questions.
+  questions.
 
 -   Agent API repond with the final results.
 
@@ -45,7 +44,7 @@ The following diagram illustrates current architecture.
 -   Widget sends the specific data point and the question to Agent API.
 
 -   Agent use tools to fetch relevant data when required, and generate an answer
-    to the question.
+  to the question.
 
 -   Agent API repond with the final results.
 

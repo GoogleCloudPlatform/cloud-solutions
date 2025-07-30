@@ -267,7 +267,9 @@ directly impacting revenue."""
         )
 
     @staticmethod
-    def generate_follow_up_response(message: str, conversation_id: str) -> str:  # pylint: disable=unused-argument
+    def generate_follow_up_response(
+        message: str, conversation_id: str # pylint: disable=unused-argument
+    ) -> str:
         """Generate a follow-up response to user messages."""
 
         message_lower = message.lower()

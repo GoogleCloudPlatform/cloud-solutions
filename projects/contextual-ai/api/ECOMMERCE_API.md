@@ -150,8 +150,7 @@ Automatically detect incident periods based on performance and business metrics.
 
 **Parameters:**
 
--   `response_time_threshold` (float, default=1500): Response time threshold
-    (ms)
+-   `response_time_threshold` (float, default=1500): Response time threshold (ms)
 -   `error_rate_threshold` (float, default=5.0): Error rate threshold (%)
 -   `revenue_drop_threshold` (float, default=30.0): Revenue drop threshold (%)
 

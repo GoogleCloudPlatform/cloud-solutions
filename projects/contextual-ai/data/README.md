@@ -15,28 +15,28 @@ demonstrate correlations between system health and business metrics.
 -   **system_performance** (721 records)
 
     -   `timestamp`, `avg_response_time_ms`, `error_rate_percent`,
-        `requests_per_second`
+      `requests_per_second`
     -   System-level performance metrics
 
 -   **user_activity** (721 records)
 
     -   `timestamp`, `active_users`, `page_views`, `bounce_rate_percent`,
-        `conversion_rate_percent`
+      `conversion_rate_percent`
     -   User behavior and engagement metrics
 
 -   **infrastructure_health** (2,884 records)
 
     -   `timestamp`, `service_name`, `cpu_percent`, `memory_percent`,
-        `api_response_time_ms`
+      `api_response_time_ms`
     -   Per-service infrastructure metrics for 4 microservices
 
 ## 📈 Business Patterns Built In
 
 ### Daily Patterns
 
--   **Low overnight** (10 PM - 6 AM): 30% of baseline traffic
+-   **Low overnight** (10 PM -   6 AM): 30% of baseline traffic
 -   **Morning ramp-up** (7-10 AM): Gradual increase
--   **Lunch peak** (11 AM - 1 PM): 120% of baseline
+-   **Lunch peak** (11 AM -   1 PM): 120% of baseline
 -   **Afternoon dip** (2-4 PM): 90% of baseline
 -   **Evening peak** (5-8 PM): 140% of baseline
 -   **Late evening** (9-10 PM): 80% of baseline
@@ -73,7 +73,7 @@ demonstrate correlations between system health and business metrics.
 
 ### 3. Flash Sale Event
 
-**When**: Day 21, 10:00 AM - 2:00 PM (4 hours) **Impact**:
+**When**: Day 21, 10:00 AM -   2:00 PM (4 hours) **Impact**:
 
 -   Revenue spikes 350% (successful sale)
 -   Traffic increases 420%
@@ -154,7 +154,7 @@ python import_to_bigquery.py
 ### Sample Queries
 
 ```sql
--- Revenue impact during incidents
+--   Revenue impact during incidents
 SELECT
   timestamp,
   hourly_revenue,
@@ -165,7 +165,7 @@ JOIN system_performance s ON r.timestamp = s.timestamp
 WHERE avg_response_time_ms > 2000
 ORDER BY timestamp;
 
--- Service performance during flash sale
+--   Service performance during flash sale
 SELECT
   timestamp,
   service_name,
@@ -177,7 +177,7 @@ WHERE timestamp BETWEEN '2024-05-XX 10:00:00' AND '2024-05-XX 14:00:00'
   AND service_name = 'recommendation-engine'
 ORDER BY timestamp;
 
--- User behavior correlation with system health
+--   User behavior correlation with system health
 SELECT
   u.timestamp,
   active_users,

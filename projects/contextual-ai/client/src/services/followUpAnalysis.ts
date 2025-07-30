@@ -52,7 +52,6 @@ export class FollowUpAnalysisService {
   private static generateContextualResponse(
     userMessage: string,
     originalAnalysis: ConversationEntry
-    // conversation: Conversation // This parameter was unused
   ): string {
     const widgetId = originalAnalysis.metadata?.widgetId;
 

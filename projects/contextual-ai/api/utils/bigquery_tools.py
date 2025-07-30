@@ -18,6 +18,7 @@ from utils.const import SOLUTION_TAG
 from google.api_core.client_info import ClientInfo
 from google.cloud import bigquery
 
+
 def execute_bq_query(sql_query: str) -> list[dict]:
     """
     Executes a SQL query against a BigQuery dataset
@@ -30,9 +31,7 @@ def execute_bq_query(sql_query: str) -> list[dict]:
         keys are column names, or an empty list if an error
         occurs or no results.
     """
-    client = bigquery.Client(
-        client_info=ClientInfo(user_agent=SOLUTION_TAG)
-    )
+    client = bigquery.Client(client_info=ClientInfo(user_agent=SOLUTION_TAG))
 
     if "```" in sql_query:
         sql_query = sql_query.lstrip("```sql").rstrip("```")

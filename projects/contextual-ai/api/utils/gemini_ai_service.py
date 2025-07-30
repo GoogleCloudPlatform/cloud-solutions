@@ -203,7 +203,9 @@ Keep your response conversational but professional.
             )
 
     def _generate_fallback_response(
-        self, request: WidgetAnalysisRequest, error: str  # pylint: disable=unused-argument
+        self,
+        request: WidgetAnalysisRequest,
+        error: str,  # pylint: disable=unused-argument
     ) -> WidgetAnalysisResponse:
         """Generate fallback response when Gemini API fails."""
 
