@@ -1,18 +1,6 @@
 # Changelog
 <!-- markdownlint-disable -->
 
-## [1.1.0](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.6...pino-logging-gcp-config-v1.1.0) (2025-08-05)
-
-
-### Features
-
-* Support user-defined formatter.log after GCP formatting ([#200](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/200)) ([9fa3d97](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/9fa3d97b5823be0df4ba74703427fb417adb95d9))
-
-
-### Bug Fixes
-
-* **deps:** update form-data to fix vulnerability ([98970c8](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/98970c86b20cce5cf54aba02ced71e4042d21ec2))
-
 ## [1.0.6](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.4...pino-logging-gcp-config-v1.0.6) (2025-06-19)
 
 
