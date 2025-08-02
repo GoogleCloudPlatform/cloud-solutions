@@ -28,8 +28,9 @@ errors with stack traces to
     [ServiceContext](https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext)
     object in the logs for Google Cloud Error Reporting.
 -   Maps the OpenTelemetry properties `span_id`, `trace_id`, `trace_flags` to
-    the equivalent
-    [Google Cloud Logging fields](https://cloud.google.com/logging/docs/structured-logging#structured_logging_special_fields).
+  the equivalent
+  [Google Cloud Logging fields](https://cloud.google.com/logging/docs/structured-logging#structured_logging_special_fields).
+-   User-defined `formatters.log` is always executed as-is, before GCP formatting.
 
 ## Example usage
 
