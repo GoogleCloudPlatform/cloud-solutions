@@ -36,10 +36,10 @@
   "dependencies": {
     "@google-cloud/logging": "^11.2.0",
     "eventid": "^2.0.1",
-    "google-gax": "^4.6.1",
+    "google-gax": "^5.0.1",
     "pino": "^9.7.0"
   },
   "engines": {
-    "node": ">=16.20.2"
+    "node": ">=22.18.0"
   }
 }
