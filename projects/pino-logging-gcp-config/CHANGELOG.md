@@ -6,7 +6,6 @@
 
 ### Features
 
-* Support user-defined formatter ([#200](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/200)) ([57ecbf4](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/57ecbf464739b1e55671247a96d1775ce7c2e6c2))
 * Support user-defined formatter.log after GCP formatting ([#200](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/200)) ([9fa3d97](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/9fa3d97b5823be0df4ba74703427fb417adb95d9))
 
 
