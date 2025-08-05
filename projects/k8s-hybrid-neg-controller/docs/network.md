@@ -8,16 +8,16 @@ between your
 [VPC network on Google Cloud](https://cloud.google.com/vpc/docs/vpc), and your
 network on-prem or on other clouds for routing the following types of traffic:
 
--   Routing of both data plane traffic and health check probes to your Pod
-    endpoints on-prem or on other clouds.
+- Routing of both data plane traffic and health check probes to your Pod
+  endpoints on-prem or on other clouds.
 
--   For Cloud Service Mesh: Routing of requests between your workloads running
-    on Google Cloud, e.g., Pods in your GKE clusters, and Pods of your
-    Kubernetes clusters running on-prem or on other clouds.
+- For Cloud Service Mesh: Routing of requests between your workloads running on
+  Google Cloud, e.g., Pods in your GKE clusters, and Pods of your Kubernetes
+  clusters running on-prem or on other clouds.
 
--   Routing of requests from `k8s-hybrid-neg-controller` Pods to the Compute
-    Engine API endpoint (`compute.googleapis.com:443`), as described in
-    [Private Google Access for on-premises hosts](https://cloud.google.com/vpc/docs/private-google-access-hybrid).
+- Routing of requests from `k8s-hybrid-neg-controller` Pods to the Compute
+  Engine API endpoint (`compute.googleapis.com:443`), as described in
+  [Private Google Access for on-premises hosts](https://cloud.google.com/vpc/docs/private-google-access-hybrid).
 
 If your `k8s-hybrid-neg-controller` Pods have internet connectivity, they can
 connect to the Compute Engine API endpoint via the public internet, instead of
@@ -35,17 +35,17 @@ The following guides describe how to create connections between your VPC network
 in Google Cloud and your network on-prem or on other clouds, using Cloud VPN and
 Cloud Interconnect:
 
--   [Create HA VPN connections between Google Cloud and AWS](https://cloud.google.com/network-connectivity/docs/vpn/tutorials/create-ha-vpn-connections-google-cloud-aws)
+- [Create HA VPN connections between Google Cloud and AWS](https://cloud.google.com/network-connectivity/docs/vpn/tutorials/create-ha-vpn-connections-google-cloud-aws)
 
--   [Connect HA VPN to AWS peer gateways](https://cloud.google.com/network-connectivity/docs/vpn/how-to/connect-ha-vpn-aws-peer-gateway)
+- [Connect HA VPN to AWS peer gateways](https://cloud.google.com/network-connectivity/docs/vpn/how-to/connect-ha-vpn-aws-peer-gateway)
 
--   [Create HA VPN connections between Google Cloud and Azure](https://cloud.google.com/network-connectivity/docs/vpn/tutorials/create-ha-vpn-connections-google-cloud-azure)
+- [Create HA VPN connections between Google Cloud and Azure](https://cloud.google.com/network-connectivity/docs/vpn/tutorials/create-ha-vpn-connections-google-cloud-azure)
 
--   [Create an HA VPN gateway to a peer VPN gateway](https://cloud.google.com/network-connectivity/docs/vpn/how-to/creating-ha-vpn)
+- [Create an HA VPN gateway to a peer VPN gateway](https://cloud.google.com/network-connectivity/docs/vpn/how-to/creating-ha-vpn)
 
--   [HA VPN over Cloud Interconnect overview](https://cloud.google.com/network-connectivity/docs/interconnect/concepts/ha-vpn-interconnect)
+- [HA VPN over Cloud Interconnect overview](https://cloud.google.com/network-connectivity/docs/interconnect/concepts/ha-vpn-interconnect)
 
--   [Create VLAN attachments for Dedicated Interconnect](https://cloud.google.com/network-connectivity/docs/interconnect/how-to/dedicated/creating-vlan-attachments)
+- [Create VLAN attachments for Dedicated Interconnect](https://cloud.google.com/network-connectivity/docs/interconnect/how-to/dedicated/creating-vlan-attachments)
 
 We recommend that you use a high availability connection, such as
 [HA VPN](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview#ha-vpn).
@@ -59,47 +59,47 @@ and configurations for different levels of availability.
 [Health check probes](https://cloud.google.com/load-balancing/docs/health-check-concepts)
 can originate from the following sources:
 
--   From Google's
-    [health checking mechanism](https://cloud.google.com/load-balancing/docs/health-check-concepts).
-    These
-    [centralized health checks](https://cloud.google.com/load-balancing/docs/negs/brid-neg-concepts#google-health-checks)
-    originate from
-    [Google Cloud probers](https://cloud.google.com/load-balancing/docs/health-check-concepts#ip-ranges).
+- From Google's
+  [health checking mechanism](https://cloud.google.com/load-balancing/docs/health-check-concepts).
+  These
+  [centralized health checks](https://cloud.google.com/load-balancing/docs/negs/brid-neg-concepts#google-health-checks)
+  originate from
+  [Google Cloud probers](https://cloud.google.com/load-balancing/docs/health-check-concepts#ip-ranges).
 
 Centralized health checks are used by the following load balancers:
 
--   [Global external Application Load Balancers](https://cloud.google.com/load-balancing/docs/https)
+- [Global external Application Load Balancers](https://cloud.google.com/load-balancing/docs/https)
 
--   [Classic Application Load Balancers](https://cloud.google.com/load-balancing/docs/https)
+- [Classic Application Load Balancers](https://cloud.google.com/load-balancing/docs/https)
 
--   [Global external proxy Network Load Balancers](https://cloud.google.com/load-balancing/docs/tcp)
+- [Global external proxy Network Load Balancers](https://cloud.google.com/load-balancing/docs/tcp)
 
--   [Classic proxy Network Load Balancers](https://cloud.google.com/load-balancing/docs/tcp)
+- [Classic proxy Network Load Balancers](https://cloud.google.com/load-balancing/docs/tcp)
 
--   From Envoy proxy software operated by Google. These
-    [distributed Envoy health checks](https://cloud.google.com/load-balancing/docs/negs/hybrid-neg-concepts#envoy-health-checks)
-    originate from Google-operated Envoy proxy instances running in the
-    [proxy-only subnets](https://cloud.google.com/load-balancing/docs/proxy-only-subnets)
-    of your VPC networks.
+- From Envoy proxy software operated by Google. These
+  [distributed Envoy health checks](https://cloud.google.com/load-balancing/docs/negs/hybrid-neg-concepts#envoy-health-checks)
+  originate from Google-operated Envoy proxy instances running in the
+  [proxy-only subnets](https://cloud.google.com/load-balancing/docs/proxy-only-subnets)
+  of your VPC networks.
 
 Distributed Envoy health checks are used by the following load balancers:
 
--   [Regional external Application Load Balancers](https://cloud.google.com/load-balancing/docs/https)
+- [Regional external Application Load Balancers](https://cloud.google.com/load-balancing/docs/https)
 
--   [Cross-region and regional internal Application Load Balancers](https://cloud.google.com/load-balancing/docs/-internal)
+- [Cross-region and regional internal Application Load Balancers](https://cloud.google.com/load-balancing/docs/-internal)
 
--   [Regional external proxy Network Load Balancers](https://cloud.google.com/load-balancing/docs/tcp)
+- [Regional external proxy Network Load Balancers](https://cloud.google.com/load-balancing/docs/tcp)
 
--   [Cross-region and regional internal proxy Network Load Balancers](https://cloud.google.com/load-balancing/cs/tcp/internal-proxy)
+- [Cross-region and regional internal proxy Network Load Balancers](https://cloud.google.com/load-balancing/cs/tcp/internal-proxy)
 
--   From Envoy proxy software that you operate. If you use Cloud Service Mesh,
-    these
-    [distributed Envoy health checks](https://cloud.google.com/load-balancing/docs/negs/brid-neg-concepts#envoy-health-checks)
-    originate from Envoy proxy instances running as your
-    [mesh ingress gateways](https://cloud.google.com/service-mesh/docs/service-routing/set-up-ingress-gateway),
-    and as
-    [sidecar proxies](https://cloud.google.com/service-mesh/docs/service-routing/set-up-envoy-http-mesh)
-    of your client workloads.
+- From Envoy proxy software that you operate. If you use Cloud Service Mesh,
+  these
+  [distributed Envoy health checks](https://cloud.google.com/load-balancing/docs/negs/brid-neg-concepts#envoy-health-checks)
+  originate from Envoy proxy instances running as your
+  [mesh ingress gateways](https://cloud.google.com/service-mesh/docs/service-routing/set-up-ingress-gateway),
+  and as
+  [sidecar proxies](https://cloud.google.com/service-mesh/docs/service-routing/set-up-envoy-http-mesh)
+  of your client workloads.
 
 ## Advertising routes
 
@@ -107,10 +107,9 @@ As part of setting up hybrid connectivity between your VPC network on Google
 Cloud and your network on-prem or on another cloud, you must ensure that the
 necessary routes are advertised.
 
--   For load balancers using centralized health checks: The IP ranges used by
-    Google's health check probers (`35.191.0.0/16` and `130.211.0.0/22`) must
-    be
-    [advertised to your network on-prem or on another cloud](https://cloud.google.com/network-connectivity/docs/router/how-to/advertising-custom-ip).
+- For load balancers using centralized health checks: The IP ranges used by
+  Google's health check probers (`35.191.0.0/16` and `130.211.0.0/22`) must be
+  [advertised to your network on-prem or on another cloud](https://cloud.google.com/network-connectivity/docs/router/how-to/advertising-custom-ip).
 
     This `gcloud` command advertises the IP ranges of Google's centralized
     health check probers on your Cloud Router:
@@ -123,10 +122,9 @@ necessary routes are advertised.
       --project <PROJECT_ID>
     ```
 
--   For load balancers using distributed Envoy health checks: The IP range of
-    the
-    [proxy-only subnet](https://cloud.google.com/load-balancing/docs/proxy-only-subnets)
-    of your VPC network on Google Cloud, in the same region as the Cloud Router.
+- For load balancers using distributed Envoy health checks: The IP range of the
+  [proxy-only subnet](https://cloud.google.com/load-balancing/docs/proxy-only-subnets)
+  of your VPC network on Google Cloud, in the same region as the Cloud Router.
 
     Use this `gcloud` command to view details of your proxy-only subnets,
     including their IP ranges:
@@ -139,8 +137,8 @@ necessary routes are advertised.
       --project <PROJECT_ID>
     ```
 
-    This `gcloud` command advertises the IP ranges of your proxy-only subnet
-    on your Cloud Router:
+    This `gcloud` command advertises the IP ranges of your proxy-only subnet on
+    your Cloud Router:
 
     ```shell
     gcloud compute routers update-bgp-peer <CLOUD_ROUTER_NAME> \
@@ -152,12 +150,11 @@ necessary routes are advertised.
 
     If your VPC network on Google Cloud has both a proxy-only subnet with
     purpose `REGIONAL_MANAGED_PROXY` _and_ a proxy-only subnet with purpose
-    `GLOBAL_MANAGED_PROXY`, advertise the IP range of the proxy-only subnet
-    that
+    `GLOBAL_MANAGED_PROXY`, advertise the IP range of the proxy-only subnet that
     [corresponds to the load balancer](https://cloud.google.com/load-balancing/docs/proxy-only-subnets#envoy-lb)
     that you want to use with your hybrid NEGs.
 
--   For Cloud Service Mesh: You need to advertise _both_ of the following:
+- For Cloud Service Mesh: You need to advertise _both_ of the following:
 
     1.  The Pod IP ranges of your GKE clusters on Google Cloud to your network
         on-prem or on another cloud.
@@ -274,9 +271,8 @@ ranges of your GKE cluster nodes.
 
 If all endpoints in the hybrid NEGs are unhealthy:
 
--   Verify that the BGP routing mode of your VPC network on Google Cloud is
-    set to
-    [global dynamic routing mode](https://cloud.google.com/network-connectivity/docs/router/concepts/learned-routes).
+- Verify that the BGP routing mode of your VPC network on Google Cloud is set to
+  [global dynamic routing mode](https://cloud.google.com/network-connectivity/docs/router/concepts/learned-routes).
 
     You can
     [view and change your VPC network's dynamic routing mode](https://cloud.google.com/network-connectivity/docs/router/how-to/configuring-routing-mode).
@@ -284,28 +280,28 @@ If all endpoints in the hybrid NEGs are unhealthy:
     Learn more about
     [routing in Google Cloud](https://cloud.google.com/vpc/docs/routes).
 
--   Verify that the Cloud Router is advertising the correct IP ranges to the
-    network on-prem or on another cloud.
+- Verify that the Cloud Router is advertising the correct IP ranges to the
+  network on-prem or on another cloud.
 
-    For Cloud Load Balancing, depending on the load balancer used, the IP
-    ranges to be advertised are either the IP ranges used by Google's
+    For Cloud Load Balancing, depending on the load balancer used, the IP ranges
+    to be advertised are either the IP ranges used by Google's
     [centralized health check](https://cloud.google.com/load-balancing/docs/negs/hybrid-neg-concepts#google-health-checks)
     probes, or the IP range of your
     [proxy-only subnet](https://cloud.google.com/load-balancing/docs/proxy-only-subnets)
     in the same region as the hybrid NEGs.
 
     For Cloud Service Mesh, the IP ranges to be advertised are the IP ranges
-    used by your workloads running on Google Cloud that need to connect to
-    your workloads running on-prem or on another cloud. For instance, if your
+    used by your workloads running on Google Cloud that need to connect to your
+    workloads running on-prem or on another cloud. For instance, if your
     workloads on Google Cloud run in Google Kubernetes Engine (GKE) clusters,
     advertise the Pod IP ranges of your GKE clusters.
 
--   Verify that there is no route within your VPC network on Google Cloud that
-    overlaps with the destination range. If there is overlap, subnet routes
-    take precedence over hybrid connectivity.
+- Verify that there is no route within your VPC network on Google Cloud that
+  overlaps with the destination range. If there is overlap, subnet routes take
+  precedence over hybrid connectivity.
 
--   Verify that there is no firewall in your network on-prem or on another
-    cloud that blocks traffic from Google Cloud on the advertised IP ranges.
+- Verify that there is no firewall in your network on-prem or on another cloud
+  that blocks traffic from Google Cloud on the advertised IP ranges.
 
     For additional details, see the hybrid NEG
     [network connectivity requirements](https://cloud.google.com/load-balancing/docs/negs/hybrid-neg-concepts#network_connectivity_requirements),

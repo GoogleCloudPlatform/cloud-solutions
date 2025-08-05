@@ -7,9 +7,9 @@ compose the Vision AI Edge service with Vision AI Edge Camera Client. Vision AI
 Edge platform provides edge model deploy, cloud model training, data analytics
 features using Google Cloud services, such as Vertex AI, BigQuery.
 
-Also this solution works with [Manufacturing Data Engine and Manufacturing
-Connect](https://cloud.google.com/solutions/manufacturing-data-engine) to extend
-it's capability for Manufacturing use cases.
+Also this solution works with
+[Manufacturing Data Engine and Manufacturing Connect](https://cloud.google.com/solutions/manufacturing-data-engine)
+to extend it's capability for Manufacturing use cases.
 
 ## Architecture
 
@@ -30,9 +30,10 @@ When the training images are ready, Data Scientist or Data Engineer can use the
 Vertex AI Pipeline start the training job. At this point user can use
 pre-provide pipeline examples as below list or can build a custom pipeline.
 
--   Auto ML Vision - Classification for Anomaly Inspection
--   (WIP) Auto ML Vision - Object detection for Cosmetic Inspection
--   (WIP) Custom Pipeline (DeepLabV3+) - Semantic Segmentation for Cosmetic Inspection
+- Auto ML Vision - Classification for Anomaly Inspection
+- (WIP) Auto ML Vision - Object detection for Cosmetic Inspection
+- (WIP) Custom Pipeline (DeepLabV3+) - Semantic Segmentation for Cosmetic
+  Inspection
 
 After the training job has completed, the result of the model will be saved in
 the GCS bucket or Vertex ML Model Registry for next steps.

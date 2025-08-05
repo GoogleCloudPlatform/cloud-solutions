@@ -2,9 +2,9 @@
 
 ## Get Data
 
--   data api: https://contextual-ai-apis-629547945257.us-central1.run.app/
+- data api: https://contextual-ai-apis-629547945257.us-central1.run.app/
 
--   sample curl:
+- sample curl:
 
 ```shell
 curl -X 'POST' \
@@ -17,7 +17,7 @@ curl -X 'POST' \
 }'
 ```
 
--   sample request:
+- sample request:
 
 ```json
 {
@@ -26,7 +26,7 @@ curl -X 'POST' \
 }
 ```
 
--   sample response:
+- sample response:
 
 ```json
 {
@@ -80,9 +80,9 @@ curl -X 'POST' \
 
 ## Talk with Agent
 
--   Create a session
+- Create a session
 
-    -   Request
+    - Request
 
         ```shell
         curl -X 'POST' \
@@ -94,7 +94,7 @@ curl -X 'POST' \
         }'
         ```
 
-    -   Response:
+    - Response:
 
         ```json
         {
@@ -109,9 +109,9 @@ curl -X 'POST' \
         }
         ```
 
--   Send Request
+- Send Request
 
-    -   Curl
+    - Curl
 
         ```shell
         curl -X 'POST' \
@@ -134,7 +134,7 @@ curl -X 'POST' \
         }'
         ```
 
-    -   Request Body
+    - Request Body
 
         ```json
         {
@@ -153,7 +153,7 @@ curl -X 'POST' \
         }
         ```
 
-    -   Sample Response
+    - Sample Response
 
         ```json
         [

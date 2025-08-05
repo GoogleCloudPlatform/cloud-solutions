@@ -34,11 +34,11 @@ following:
     The `setup-workstation.sh` script does the following to the workstation for
     NVIDIA Omniverse application development:
 
-    -   Verify that NVIDIA drivers are installed
-    -   Install dependencies
-    -   Install Docker
-    -   Install NVIDIA Container Toolkit
-    -   Install the desktop environment
+    - Verify that NVIDIA drivers are installed
+    - Install dependencies
+    - Install Docker
+    - Install NVIDIA Container Toolkit
+    - Install the desktop environment
 
 ## Connect to the NVIDIA RTX Virtual Workstation remote desktop
 
@@ -55,4 +55,4 @@ CRD doesn't support hardware acceleration.
 
 ## What's next
 
--   [Deploy NVIDIA Omniverse Kit Streaming applications on Google Cloud](../../kit-app-streaming/README.md).
+- [Deploy NVIDIA Omniverse Kit Streaming applications on Google Cloud](../../kit-app-streaming/README.md).

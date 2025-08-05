@@ -13,5 +13,5 @@ found at the
 > archive at
 > [commit#3fd544](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/3fd5449825f23b0493b9cc67211843eb3b3b82a2/projects/sa-tools/)
 >
-> -   Performance Testing
-> -   Perfkit Benchmarking
+> - Performance Testing
+> - Perfkit Benchmarking

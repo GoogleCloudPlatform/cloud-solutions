@@ -8,7 +8,7 @@ the controller.
 
 In this document, you use the following billable components of Google Cloud:
 
--   [Compute Engine](https://cloud.google.com/compute/all-pricing)
+- [Compute Engine](https://cloud.google.com/compute/all-pricing)
 
 To generate a cost estimate based on your projected usage, use the
 [pricing calculator](https://cloud.google.com/products/calculator). New Google
@@ -67,19 +67,18 @@ information, see [Clean up](#clean-up).
 
     To create `kind` Kubernetes clusters, you need _one_ of the following:
 
-    -   [Podman](https://podman.io/docs/installation), or
-    -   [Docker Engine](https://docs.docker.com/engine/install/) (Linux only),
-        or
-    -   [Docker Desktop](https://docs.docker.com/desktop/).
+    - [Podman](https://podman.io/docs/installation), or
+    - [Docker Engine](https://docs.docker.com/engine/install/) (Linux only), or
+    - [Docker Desktop](https://docs.docker.com/desktop/).
 
 1.  Install the [`jq`](https://jqlang.github.io/jq/download/) command-line tool.
 
 1.  To build the binary and the container image for the controller, install
     _all_ of the following:
 
-    -   [Go v1.23.0 or later](https://go.dev/dl/)
-    -   [Kustomize v4.5.5 or later](https://kubectl.docs.kubernetes.io/installation/kustomize/)
-    -   [Skaffold v2.10.1 or later](https://skaffold.dev/docs/install/)
+    - [Go v1.23.0 or later](https://go.dev/dl/)
+    - [Kustomize v4.5.5 or later](https://kubectl.docs.kubernetes.io/installation/kustomize/)
+    - [Skaffold v2.10.1 or later](https://skaffold.dev/docs/install/)
 
 1.  Clone the Git repository and navigate to the directory
     `projects/k8s-hybrid-neg-controller`.

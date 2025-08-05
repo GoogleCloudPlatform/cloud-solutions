@@ -7,8 +7,8 @@ The following instructions are for developers only.
 In order to work with this repository, you would need to have the following
 environment installed:
 
-*   Java 21
-*   Gradle 8.10.2
+- Java 21
+- Gradle 8.10.2
 
 ## Steps to test the template
 

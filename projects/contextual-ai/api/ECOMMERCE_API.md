@@ -14,11 +14,11 @@ average order value.
 
 **Parameters:**
 
--   `page` (int, default=1): Page number (1-indexed)
--   `page_size` (int, default=20, max=100): Records per page
--   `start_date` (string, optional): Start date (YYYY-MM-DD format)
--   `end_date` (string, optional): End date (YYYY-MM-DD format)
--   `min_revenue` (float, optional): Minimum hourly revenue filter
+- `page` (int, default=1): Page number (1-indexed)
+- `page_size` (int, default=20, max=100): Records per page
+- `start_date` (string, optional): Start date (YYYY-MM-DD format)
+- `end_date` (string, optional): End date (YYYY-MM-DD format)
+- `min_revenue` (float, optional): Minimum hourly revenue filter
 
 **Example:**
 
@@ -51,8 +51,8 @@ Get revenue trends with daily/hourly aggregations.
 
 **Parameters:**
 
--   `aggregation` (string, default="daily"): "hourly" or "daily"
--   `days` (int, default=7, max=30): Number of days to analyze
+- `aggregation` (string, default="daily"): "hourly" or "daily"
+- `days` (int, default=7, max=30): Number of days to analyze
 
 **Example:**
 
@@ -69,10 +69,10 @@ requests per second.
 
 **Parameters:**
 
--   `page` (int, default=1): Page number
--   `page_size` (int, default=20, max=100): Records per page
--   `min_response_time` (float, optional): Minimum response time filter (ms)
--   `min_error_rate` (float, optional): Minimum error rate filter (%)
+- `page` (int, default=1): Page number
+- `page_size` (int, default=20, max=100): Records per page
+- `min_response_time` (float, optional): Minimum response time filter (ms)
+- `min_error_rate` (float, optional): Minimum error rate filter (%)
 
 **Example:**
 
@@ -89,9 +89,9 @@ conversion rate.
 
 **Parameters:**
 
--   `page` (int, default=1): Page number
--   `page_size` (int, default=20, max=100): Records per page
--   `min_users` (int, optional): Minimum active users filter
+- `page` (int, default=1): Page number
+- `page_size` (int, default=20, max=100): Records per page
+- `min_users` (int, optional): Minimum active users filter
 
 **Example:**
 
@@ -107,11 +107,11 @@ Get infrastructure health metrics for all services.
 
 **Parameters:**
 
--   `page` (int, default=1): Page number
--   `page_size` (int, default=50, max=200): Records per page
--   `service_name` (string, optional): Filter by service name
--   `min_cpu` (float, optional): Minimum CPU usage filter (%)
--   `min_memory` (float, optional): Minimum memory usage filter (%)
+- `page` (int, default=1): Page number
+- `page_size` (int, default=50, max=200): Records per page
+- `service_name` (string, optional): Filter by service name
+- `min_cpu` (float, optional): Minimum CPU usage filter (%)
+- `min_memory` (float, optional): Minimum memory usage filter (%)
 
 **Example:**
 
@@ -150,9 +150,9 @@ Automatically detect incident periods based on performance and business metrics.
 
 **Parameters:**
 
--   `response_time_threshold` (float, default=1500): Response time threshold (ms)
--   `error_rate_threshold` (float, default=5.0): Error rate threshold (%)
--   `revenue_drop_threshold` (float, default=30.0): Revenue drop threshold (%)
+- `response_time_threshold` (float, default=1500): Response time threshold (ms)
+- `error_rate_threshold` (float, default=5.0): Error rate threshold (%)
+- `revenue_drop_threshold` (float, default=30.0): Revenue drop threshold (%)
 
 **Example:**
 
@@ -195,8 +195,8 @@ Analyze correlations between system performance and business metrics.
 
 **Parameters:**
 
--   `start_date` (string, optional): Start date for analysis (YYYY-MM-DD)
--   `end_date` (string, optional): End date for analysis (YYYY-MM-DD)
+- `start_date` (string, optional): Start date for analysis (YYYY-MM-DD)
+- `end_date` (string, optional): End date for analysis (YYYY-MM-DD)
 
 **Example:**
 
@@ -250,23 +250,23 @@ curl "https://contextual-ai-apis-ieejvgvenq-uc.a.run.app/ecommerce_ops/dashboard
 
 ### Services Monitored
 
--   **web-frontend**: Main application frontend
--   **payment-api**: Payment processing service
--   **inventory-service**: Product inventory management
--   **recommendation-engine**: Product recommendations
+- **web-frontend**: Main application frontend
+- **payment-api**: Payment processing service
+- **inventory-service**: Product inventory management
+- **recommendation-engine**: Product recommendations
 
 ### Metric Types
 
--   **Revenue Metrics**: Business performance indicators
--   **System Performance**: Technical performance metrics
--   **User Activity**: User behavior and engagement
--   **Infrastructure Health**: Service-level resource utilization
+- **Revenue Metrics**: Business performance indicators
+- **System Performance**: Technical performance metrics
+- **User Activity**: User behavior and engagement
+- **Infrastructure Health**: Service-level resource utilization
 
 ### Incident Severity Levels
 
--   **critical**: Response time ≥ 3000ms OR error rate ≥ 10%
--   **high**: Response time ≥ 1500ms OR error rate ≥ 5%
--   **medium**: Moderate performance degradation
+- **critical**: Response time ≥ 3000ms OR error rate ≥ 10%
+- **high**: Response time ≥ 1500ms OR error rate ≥ 5%
+- **medium**: Moderate performance degradation
 
 ## Use Cases
 
@@ -311,11 +311,11 @@ curl "/ecommerce_ops/revenue?min_revenue=80000"
 
 ## Integration Notes
 
--   All endpoints support CORS for frontend integration
--   Timestamps are in ISO 8601 format (UTC)
--   Pagination follows consistent pattern across endpoints
--   Error responses include detailed error messages
--   All endpoints are unauthenticated for demo purposes
+- All endpoints support CORS for frontend integration
+- Timestamps are in ISO 8601 format (UTC)
+- Pagination follows consistent pattern across endpoints
+- Error responses include detailed error messages
+- All endpoints are unauthenticated for demo purposes
 
 ## FastAPI Documentation
 

@@ -12,20 +12,20 @@ Spanner from a staged
 
 The Dataflow pipeline supports the following SCD Types:
 
-*   **SCD Type 1**: updates existing row if the primary key exists, or inserts a
-    new row otherwise.
+- **SCD Type 1**: updates existing row if the primary key exists, or inserts a
+  new row otherwise.
 
-*   **SCD Type 2**: updates existing row's end date to the current timestamp if
-    the primary key exists, and inserts a new row with null end date and start
-    date with the current timestamp if the column is passed.
+- **SCD Type 2**: updates existing row's end date to the current timestamp if
+  the primary key exists, and inserts a new row with null end date and start
+  date with the current timestamp if the column is passed.
 
 Follow the [deployment guide](deployment.md) to build, run and test the Dataflow
 pipeline.
 
 ## Background and motivation
 
-There are other Dataflow templates for loading data from Avro to Cloud
-Spanner like
+There are other Dataflow templates for loading data from Avro to Cloud Spanner
+like
 [this Google-provided template](https://cloud.google.com/dataflow/docs/guides/templates/provided/avro-to-cloud-spanner).
 
 This pipeline differs from the existing Dataflow templates in the following way:

@@ -11,21 +11,20 @@ Terraform.
 [Forwarder component](../../../../src/alloydb-autoscaler/forwarder/README.md) ·
 **Terraform configuration**
 
-**Cloud Run functions** ·
-[Google Kubernetes Engine](../../gke/README.md)
+**Cloud Run functions** · [Google Kubernetes Engine](../../gke/README.md)
 
 [Per-Project](../per-project/README.md) · **Centralized** ·
 [Distributed](../distributed/README.md)
 
 ## Table of Contents
 
--   [Table of Contents](#table-of-contents)
--   [Overview](#overview)
--   [Architecture](#architecture)
-    -   [Pros](#pros)
-    -   [Cons](#cons)
--   [Before you begin](#before-you-begin)
--   [Configuring your Application project](#configuring-your-application-project)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Architecture](#architecture)
+    - [Pros](#pros)
+    - [Cons](#cons)
+- [Before you begin](#before-you-begin)
+- [Configuring your Application project](#configuring-your-application-project)
 
 ## Overview
 
@@ -50,21 +49,21 @@ The centralized deployment has the following pros and cons:
 
 ### Pros
 
--   **Configuration and infrastructure**: The scheduler parameters and the
-    Autoscaler infrastructure is controlled by a single team. This may desirable
-    on highly regulated industries.
--   **Maintenance**: Maintenance and setup is expected to require less effort
-    overall when compared to single project deployment.
--   **Policies and audit**: Best practices across teams might be easier to
-    specify and enact. Audits might be easier to execute.
+- **Configuration and infrastructure**: The scheduler parameters and the
+  Autoscaler infrastructure is controlled by a single team. This may desirable
+  on highly regulated industries.
+- **Maintenance**: Maintenance and setup is expected to require less effort
+  overall when compared to single project deployment.
+- **Policies and audit**: Best practices across teams might be easier to specify
+  and enact. Audits might be easier to execute.
 
 ### Cons
 
--   **Configuration**: any change to the Autoscaler parameters needs to go
-    through the centralized team, even though the team requesting the change
-    owns the AlloyDB instance.
--   **Risk**: the centralized team itself may become a single point of failure
-    even if the infrastructure is designed with high availability in mind.
+- **Configuration**: any change to the Autoscaler parameters needs to go through
+  the centralized team, even though the team requesting the change owns the
+  AlloyDB instance.
+- **Risk**: the centralized team itself may become a single point of failure
+  even if the infrastructure is designed with high availability in mind.
 
 ## Before you begin
 

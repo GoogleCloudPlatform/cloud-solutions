@@ -48,14 +48,13 @@ gracefully exit before removing the VM from the cluster.
 
 This solution provides the following benefits.
 
--   Improved performance and scalability: By automatically scaling the Trino
-    cluster up and down based on demand this solution can help to improve the
-    performance and scalability of Trino workloads.
+- Improved performance and scalability: By automatically scaling the Trino
+  cluster up and down based on demand this solution can help to improve the
+  performance and scalability of Trino workloads.
 
--   Improved reliability: By automatically scaling the Trino cluster up and
-    down, this solution can help to improve the reliability of Trino workloads
-    by ensuring that there are always enough resources available to execute
-    queries.
+- Improved reliability: By automatically scaling the Trino cluster up and down,
+  this solution can help to improve the reliability of Trino workloads by
+  ensuring that there are always enough resources available to execute queries.
 
 This document is intended for audiences that need to run Trino on Dataproc and
 want to take advantage of autoscaling to improve performance and optimize costs.
@@ -81,46 +80,46 @@ taken.
 
 ## Limitations
 
--   Autoscaling is achieved solely through secondary worker pool resizing. \
-    (Secondary worker pool is you configured in Dataproc cluster)
+- Autoscaling is achieved solely through secondary worker pool resizing. \
+   (Secondary worker pool is you configured in Dataproc cluster)
 
--   Autoscaling of Dataproc for Trino workloads occurs based on overall cluster
-    CPU utilization metrics collected from Cloud Monitoring.
+- Autoscaling of Dataproc for Trino workloads occurs based on overall cluster
+  CPU utilization metrics collected from Cloud Monitoring.
 
--   Cloud Monitoring metrics may not be current and can have latencies.
+- Cloud Monitoring metrics may not be current and can have latencies.
 
--   Trino Coordinator does not redistribute existing jobs when adding new
-    workers, existing jobs continue to run on bound workers.
+- Trino Coordinator does not redistribute existing jobs when adding new workers,
+  existing jobs continue to run on bound workers.
 
--   Autoscaling application runs on the coordinator node and autoscaling needs
-    to be disabled in Dataproc.
+- Autoscaling application runs on the coordinator node and autoscaling needs to
+  be disabled in Dataproc.
 
 ## Configuration Details
 
 Set the `config.textproto` parameters for the autoscaler:
 
-Parameter                          | Description                                                                                    | Sample Value
----------------------------------- | ---------------------------------------------------------------------------------------------- | ------------
-`cpu_threshold_high`               | The CPU utilization threshold above which the cluster will be scaled up                        | `0.4`
-`cpu_threshold_low`                | The CPU utilization threshold below which the cluster will be scaled down                      | `0.2`
-`max_instances`                    | The maximum number of secondary nodes in the cluster                                           | `10`
-`min_instances`                    | The minimum number of secondary nodes in the cluster                                           | `0`
-`cluster_expand_logic`             | The number of nodes to add when the cluster is scaled up                                       | `5`
-`cluster_shrink_logic`             | The number of nodes to remove when the cluster is scaled down                                  | `2`
-`trino_graceful_shutdown_duration` | The time to wait for Trino workers to gracefully shut down before a node is removed            | `[2m,60m] PT2M`
-`polling_duration`                 | The interval at which Dataproc polls the Monitoring API to collect cluster utilization metrics | `PT2M`
-`cooldown_duration`                | The time to wait after a cluster action of expand/shrink has been executed                     | `PT5M`
+| Parameter                          | Description                                                                                    | Sample Value    |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------- | --------------- |
+| `cpu_threshold_high`               | The CPU utilization threshold above which the cluster will be scaled up                        | `0.4`           |
+| `cpu_threshold_low`                | The CPU utilization threshold below which the cluster will be scaled down                      | `0.2`           |
+| `max_instances`                    | The maximum number of secondary nodes in the cluster                                           | `10`            |
+| `min_instances`                    | The minimum number of secondary nodes in the cluster                                           | `0`             |
+| `cluster_expand_logic`             | The number of nodes to add when the cluster is scaled up                                       | `5`             |
+| `cluster_shrink_logic`             | The number of nodes to remove when the cluster is scaled down                                  | `2`             |
+| `trino_graceful_shutdown_duration` | The time to wait for Trino workers to gracefully shut down before a node is removed            | `[2m,60m] PT2M` |
+| `polling_duration`                 | The interval at which Dataproc polls the Monitoring API to collect cluster utilization metrics | `PT2M`          |
+| `cooldown_duration`                | The time to wait after a cluster action of expand/shrink has been executed                     | `PT5M`          |
 
 Set the parameters to be passed to the terraform script:
 
-`Parameter`                        | Sample Value
----------------------------------- | -----------------------------------
-`project_id`                       | E.g. `dataproc_trino12232`
-`region`                           | default: `"us-central1"`
-`zone`                             | default: `"us-central1-a"`
-`dataproc_staging_gcs_bucket_name` | default: `"null"`
-`dataproc_cluster_name`            | default: `"trino-dataproc-cluster"`
-`autoscaler_folder`                | default: `"trino-autoscaler"`
+| `Parameter`                        | Sample Value                        |
+| ---------------------------------- | ----------------------------------- |
+| `project_id`                       | E.g. `dataproc_trino12232`          |
+| `region`                           | default: `"us-central1"`            |
+| `zone`                             | default: `"us-central1-a"`          |
+| `dataproc_staging_gcs_bucket_name` | default: `"null"`                   |
+| `dataproc_cluster_name`            | default: `"trino-dataproc-cluster"` |
+| `autoscaler_folder`                | default: `"trino-autoscaler"`       |
 
 ## Deployment
 
@@ -134,12 +133,13 @@ instructions.
 Please follow the YouTube video for a demo and explaination:
 
 <!-- markdownlint-disable-next-line MD013 -->
+
 [![Dataproc Autoscaler for Trino](https://img.youtube.com/vi/MXzr7avTD5g/0.jpg)](https://www.youtube.com/watch?v=MXzr7avTD5g "Dataproc Autoscaler for Trino")
 
 ## What's next
 
--   Learn more about [Dataproc](https://cloud.google.com/dataproc)
--   Learn more about [Trino](https://trino.io)
+- Learn more about [Dataproc](https://cloud.google.com/dataproc)
+- Learn more about [Trino](https://trino.io)
 
 ## Disclaimer
 

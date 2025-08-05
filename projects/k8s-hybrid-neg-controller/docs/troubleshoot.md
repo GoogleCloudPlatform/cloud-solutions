@@ -11,4 +11,4 @@ kubectl logs \
 
 You can also review the following documents:
 
--   [Troubleshooting applications deployed on Kubernetes](https://kubernetes.io/docs/tasks/debug/debug-application/)
+- [Troubleshooting applications deployed on Kubernetes](https://kubernetes.io/docs/tasks/debug/debug-application/)

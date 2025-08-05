@@ -6,23 +6,23 @@ pushing it to a private container image registry in Azure Container Registry.
 
 These instructions assume the following:
 
--   You have already created an AKS cluster.
+- You have already created an AKS cluster.
 
--   The
-    [OpenID Connect (OIDC) issuer feature](https://learn.microsoft.com/azure/aks/use-oidc-issuer)
-    is enabled on the AKS cluster.
+- The
+  [OpenID Connect (OIDC) issuer feature](https://learn.microsoft.com/azure/aks/use-oidc-issuer)
+  is enabled on the AKS cluster.
 
--   Workloads in the AKS cluster can reach the Compute Engine API endpoint
-    `compute.googleapis.com:443`, either via
-    [Private Google Access over hybrid connectivity](https://cloud.google.com/vpc/docs/configure-private-google-access-hybrid),
-    or via the public Internet.
+- Workloads in the AKS cluster can reach the Compute Engine API endpoint
+  `compute.googleapis.com:443`, either via
+  [Private Google Access over hybrid connectivity](https://cloud.google.com/vpc/docs/configure-private-google-access-hybrid),
+  or via the public Internet.
 
--   You have permissions to create the following resources in the AKS cluster:
-    `ClusterRole`, `ClusterRoleBinding`, `Namespace`, `Role`, `RoleBinding`,
-    `ServiceAccount`, `ConfigMap`, `Deployment`, and `Service`.
+- You have permissions to create the following resources in the AKS cluster:
+  `ClusterRole`, `ClusterRoleBinding`, `Namespace`, `Role`, `RoleBinding`,
+  `ServiceAccount`, `ConfigMap`, `Deployment`, and `Service`.
 
--   Your current `kubectl` context points to the AKS cluster. You can view the
-    details of your current `kubectl` context:
+- Your current `kubectl` context points to the AKS cluster. You can view the
+  details of your current `kubectl` context:
 
 ```shell
 kubectl config view --minify
@@ -32,7 +32,7 @@ kubectl config view --minify
 
 In this document, you use the following billable components of Google Cloud:
 
--   [Compute Engine](https://cloud.google.com/compute/all-pricing)
+- [Compute Engine](https://cloud.google.com/compute/all-pricing)
 
 To generate a cost estimate based on your projected usage, use the
 [pricing calculator](https://cloud.google.com/products/calculator). New Google
@@ -87,9 +87,9 @@ information, see [Clean up](#clean-up).
 1.  To build the container image for the controller and render the Kubernetes
     manifests, install _all_ of the following:
 
-    -   [Go v1.23.0 or later](https://go.dev/dl/)
-    -   [Kustomize v4.5.5 or later](https://kubectl.docs.kubernetes.io/installation/kustomize/)
-    -   [Skaffold v2.10.1 or later](https://skaffold.dev/docs/install/)
+    - [Go v1.23.0 or later](https://go.dev/dl/)
+    - [Kustomize v4.5.5 or later](https://kubectl.docs.kubernetes.io/installation/kustomize/)
+    - [Skaffold v2.10.1 or later](https://skaffold.dev/docs/install/)
 
 1.  To configure authentication to Azure Container Registry, install the
     [`crane`](https://github.com/google/go-containerregistry/blob/main/cmd/crane/README.md#crane)

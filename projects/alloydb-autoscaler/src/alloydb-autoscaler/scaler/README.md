@@ -4,29 +4,28 @@
 
 Automatically increase or reduce the size of an AlloyDB read pool instance.
 
-[Home](../../../README.md) ·
-[Scaler component](../scaler/README.md) ·
+[Home](../../../README.md) · [Scaler component](../scaler/README.md) ·
 [Poller component](../poller/README.md) ·
 [Forwarder component](../forwarder/README.md) ·
 [Terraform configuration](../../../terraform/README.md)
 
 ## Table of Contents
 
--   [Table of Contents](#table-of-contents)
--   [Overview](#overview)
--   [Scaling parameters](#scaling-parameters)
--   [Scaling profiles](#scaling-profiles)
--   [Scaling rules](#scaling-rules)
--   [Scaling methods](#scaling-methods)
--   [Scaling adjustments](#scaling-adjustments)
--   [Downstream messaging](#downstream-messaging)
--   [Troubleshooting](#troubleshooting)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Scaling parameters](#scaling-parameters)
+- [Scaling profiles](#scaling-profiles)
+- [Scaling rules](#scaling-rules)
+- [Scaling methods](#scaling-methods)
+- [Scaling adjustments](#scaling-adjustments)
+- [Downstream messaging](#downstream-messaging)
+- [Troubleshooting](#troubleshooting)
 
 ## Overview
 
 The Scaler component receives a message from the Poller component that includes
-the configuration parameters and the utilization metrics for a single
-AlloyDB read pool instance. It compares the metric values with the recommended
+the configuration parameters and the utilization metrics for a single AlloyDB
+read pool instance. It compares the metric values with the recommended
 thresholds and determines whether the instance should be scaled, the number of
 nodes to which it should be scaled, and adjusts the number of nodes in the read
 pool accordingly.
@@ -104,16 +103,15 @@ A scaling profile consists of a combination of scaling rules that, when grouped
 together, define the metrics that will be evaluated to reach a scaling decsion.
 One of the following scaling profiles may be provided:
 
--   `DEFAULT`
--   `CUSTOM` (see section [custom-scaling](#custom-scaling))
+- `DEFAULT`
+- `CUSTOM` (see section [custom-scaling](#custom-scaling))
 
 The `DEFAULT` profile includes rules for scaling on CPU as well as connection
 utilization. Please see the following section for more details on how these
 [scaling rules](#scaling-rules) are evaluated.
 
 You can create a new scaling profile by copying one of the existing scaling
-profiles in the
-[profiles directory](./scaling-profiles/profiles.ts) and
+profiles in the [profiles directory](./scaling-profiles/profiles.ts) and
 adapting it to suit your needs. This profile will be loaded if you specify its
 name using the `scalingProfile` parameter in your configuration.
 
@@ -230,28 +228,26 @@ Autoscaler. Thorough testing is recommended.
 
 The Scaler component supports two scaling methods out of the box:
 
--   [STEPWISE](../../autoscaler-core/scaler/scaling-methods/stepwise-method.ts):
-    This is the default method used by the Scaler. It suggests adding or
-    removing nodes using a fixed step amount defined by the parameter
-    `stepSize`.
+- [STEPWISE](../../autoscaler-core/scaler/scaling-methods/stepwise-method.ts):
+  This is the default method used by the Scaler. It suggests adding or removing
+  nodes using a fixed step amount defined by the parameter `stepSize`.
 
--   [DIRECT](../../autoscaler-core/scaler/scaling-methods/direct-method.ts):
-    This method suggests scaling to the number of nodes specified by the
-    `maxSize` parameter. It does NOT take in account the current utilization
-    metrics. It is useful to scale an instance in preparation for a batch job
-    and and to scale it back after the job is finished.
+- [DIRECT](../../autoscaler-core/scaler/scaling-methods/direct-method.ts): This
+  method suggests scaling to the number of nodes specified by the `maxSize`
+  parameter. It does NOT take in account the current utilization metrics. It is
+  useful to scale an instance in preparation for a batch job and and to scale it
+  back after the job is finished.
 
--   [LINEAR](../../autoscaler-core/scaler/scaling-methods/linear-method.ts):
-    This method suggests scaling to the number of nodes calculated with a simple
-    linear cross-multiplication between the threshold metric and its current
-    utilization. In other words, the new number of nodes divided by the current
-    number of nodes is equal to the scaling metric value divided by the scaling
-    metric threshold value. Using this method, the new number of nodes is
-    [directly proportional][directly-proportional] to the current resource
-    utilization and the threshold. The proposed change size can be limited using
-    `scaleInLimit` and `scaleOutLimit`, where the variation in the node count in
-    a single iteration will not exceed by these limits when scaling in or out
-    respectively.
+- [LINEAR](../../autoscaler-core/scaler/scaling-methods/linear-method.ts): This
+  method suggests scaling to the number of nodes calculated with a simple linear
+  cross-multiplication between the threshold metric and its current utilization.
+  In other words, the new number of nodes divided by the current number of nodes
+  is equal to the scaling metric value divided by the scaling metric threshold
+  value. Using this method, the new number of nodes is [directly
+  proportional][directly-proportional] to the current resource utilization and
+  the threshold. The proposed change size can be limited using `scaleInLimit`
+  and `scaleOutLimit`, where the variation in the node count in a single
+  iteration will not exceed by these limits when scaling in or out respectively.
 
 The selected scaling method will produce a suggested size to which the cluster
 should be scaled. This suggested size then undergoes some final checks and may
@@ -280,9 +276,9 @@ A downstream application is a system that receives information from the
 Autoscaler.
 
 When certain events happens, the Autoscaler can publish messages to a PubSub
-topic. Downstream applications can
-[create a subscription][pub-sub-create-subscription] to that topic and
-[pull the messages][pub-sub-receive] to process them further.
+topic. Downstream applications can [create a
+subscription][pub-sub-create-subscription] to that topic and [pull the
+messages][pub-sub-receive] to process them further.
 
 This feature is disabled by default. To enable it, specify
 `projects/${projectId}/topics/downstream-topic` as the value of the
@@ -319,22 +315,22 @@ The following is an example of a message published by the Autoscaler.
 
 Notable attributes are:
 
--   **message.attributes.event:** the name of the event for which this message
-    was triggered. The Autoscaler publishes a message when it scales a
-    AlloyDB read pool. The name of that event is `'SCALING'`. You can define
-    [custom messages](#custom-messages) for your own event types.
--   **message.attributes.googclient_schemaname:** the
-    [Pub/Sub schema][pub-sub-schema] defining the format that the data field
-    must follow. The schema represents the contract between the message producer
-    (Autoscaler) and the message consumers (downstream applications). Pub/Sub
-    enforces the format. The default schema is defined as a Protocol Buffer in
-    the file [downstream.schema.proto](../schema/downstream_event.proto).
--   **message.attributes.googclient_schemaencoding:** consumers will receive the
-    data in the messages encoded as Base64 containing JSON.
--   **message.publishTime:** timestamp when the message was published
--   **message.data:** the message payload encoded as Base64 containing a JSON
-    string. In the example, the [decoded][base-64-decode] string contains the
-    following data:
+- **message.attributes.event:** the name of the event for which this message was
+  triggered. The Autoscaler publishes a message when it scales a AlloyDB read
+  pool. The name of that event is `'SCALING'`. You can define
+  [custom messages](#custom-messages) for your own event types.
+- **message.attributes.googclient_schemaname:** the [Pub/Sub
+  schema][pub-sub-schema] defining the format that the data field must follow.
+  The schema represents the contract between the message producer (Autoscaler)
+  and the message consumers (downstream applications). Pub/Sub enforces the
+  format. The default schema is defined as a Protocol Buffer in the file
+  [downstream.schema.proto](../schema/downstream_event.proto).
+- **message.attributes.googclient_schemaencoding:** consumers will receive the
+  data in the messages encoded as Base64 containing JSON.
+- **message.publishTime:** timestamp when the message was published
+- **message.data:** the message payload encoded as Base64 containing a JSON
+  string. In the example, the [decoded][base-64-decode] string contains the
+  following data:
 
 ```json
 {
@@ -379,21 +375,21 @@ Before defining a custom message, consider if your use case can be solved by
 [log-based metrics][log-based-metrics].
 
 The AlloyDB Autoscaler produces verbose structured logging for all its actions.
-These logs can be used through log-based metrics to create
-[charts and alerts in Cloud Monitoring][charts-and-alerts]. In turn, alerts can
-be notified through several different [channels][notification-channels]
-including Pub/Sub, and managed through [incidents][alert-incidents].
+These logs can be used through log-based metrics to create [charts and alerts in
+Cloud Monitoring][charts-and-alerts]. In turn, alerts can be notified through
+several different [channels][notification-channels] including Pub/Sub, and
+managed through [incidents][alert-incidents].
 
 If your use case can be better solved by a custom downstream message, then this
 section explains how to define one, which implies modifying the Scaler code.
 
 To publish a new event as a downstream message:
 
--   Choose a unique name for your event. The convention is an all-caps
-    alphanumeric + underscores ID with a verb. e.g. `'SCALING'`
--   Call the Scaler function `publishDownstreamEvent`. For an example, look at
-    the [Scaler](../../autoscaler-core/scaler/scaler-builder.ts)
-    `ScalerFunctionBuilder` class method.
+- Choose a unique name for your event. The convention is an all-caps
+  alphanumeric + underscores ID with a verb. e.g. `'SCALING'`
+- Call the Scaler function `publishDownstreamEvent`. For an example, look at the
+  [Scaler](../../autoscaler-core/scaler/scaler-builder.ts)
+  `ScalerFunctionBuilder` class method.
 
 In case you need to add fields to the message payload:
 
@@ -432,16 +428,16 @@ Unable to retrieve metrics for projects/[PROJECT_ID]/locations/us-central1/clust
 Error: 7 PERMISSION_DENIED: Permission monitoring.timeSeries.list denied (or the resource may not exist).
 ```
 
--   Service account is missing permissions
-    -   `poller-sa@{PROJECT_ID}.gserviceaccount.com` for Cloud Run functions, or
-    -   `scaler-sa@{PROJECT_ID}.gserviceaccount.com` for Kubernetes deployment
-        requires
-        -   `alloydb.instances.get`,
-        -   `alloydb.instances.list`,
-        -   `monitoring.timeSeries.list`
--   [GKE Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
-    is not correctly configured
--   Incorrectly configured AlloyDB project, cluster or instance ID
+- Service account is missing permissions
+    - `poller-sa@{PROJECT_ID}.gserviceaccount.com` for Cloud Run functions, or
+    - `scaler-sa@{PROJECT_ID}.gserviceaccount.com` for Kubernetes deployment
+      requires
+        - `alloydb.instances.get`,
+        - `alloydb.instances.list`,
+        - `monitoring.timeSeries.list`
+- [GKE Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
+  is not correctly configured
+- Incorrectly configured AlloyDB project, cluster or instance ID
 
 ### Scaler cannot access state database
 
@@ -454,11 +450,11 @@ Error: 7 PERMISSION_DENIED:
 Caller is missing IAM permission spanner.sessions.create on resource projects/[PROJECT_ID]/instances/[SPANNER_STATE_INSTANCE]/databases/alloydb-autoscaler-state.
 ```
 
--   Scaler service account is missing permissions to Spanner or Firestore.
-    -   `scaler-sa@{PROJECT_ID}.gserviceaccount.com`
--   Incorrect Spanner or Firestore details in configuration file.
--   [GKE Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
-    is not correctly configured.
+- Scaler service account is missing permissions to Spanner or Firestore.
+    - `scaler-sa@{PROJECT_ID}.gserviceaccount.com`
+- Incorrect Spanner or Firestore details in configuration file.
+- [GKE Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
+  is not correctly configured.
 
 ### Spanner state store results in an error
 
@@ -468,7 +464,7 @@ For example:
 Error: 5 NOT_FOUND: Database not found: projects/[PROJECT_ID]/instances/[SPANNER_STATE_INSTANCE]/databases/alloydb-autoscaler-state
 ```
 
--   State database is missing from Spanner state instance.
+- State database is missing from Spanner state instance.
 
 ### Scaler cannot scale AlloyDB read pool instance(s)
 
@@ -477,28 +473,28 @@ Unsuccessful scaling attempt: Error: 7 PERMISSION_DENIED:
 Permission 'alloydb.instances.update' denied on 'projects/[PROJECT_ID]/locations/us-central1/clusters/[ALLOYDB_CLUSTER_ID]/instances/[ALLOYDB_INSTANCE_ID]'.
 ```
 
--   Scaler service account is missing `alloydb.instances.update` permissions to
-    the AlloyDB instance.
-    -   `scaler-sa@{PROJECT_ID}.gserviceaccount.com`
--   Incorrect AlloyDB instance specified in configuration file.
--   [GKE Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
-    is not correctly configured
+- Scaler service account is missing `alloydb.instances.update` permissions to
+  the AlloyDB instance.
+    - `scaler-sa@{PROJECT_ID}.gserviceaccount.com`
+- Incorrect AlloyDB instance specified in configuration file.
+- [GKE Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
+  is not correctly configured
 
 ### Latency Spikes when Scaling in
 
--   The amount of compute capacity removed from the instance might be too large.
-    -   Use the `scaleInLimit` parameter, when using `LINEAR` scaling method.
-    -   Use the `stepSize` parameter, when using `STEPWISE` scaling method.
-    -   Increase the `scaleInCoolingMinutes.`
-    -   Set a larger `minSize` for the instance.
+- The amount of compute capacity removed from the instance might be too large.
+    - Use the `scaleInLimit` parameter, when using `LINEAR` scaling method.
+    - Use the `stepSize` parameter, when using `STEPWISE` scaling method.
+    - Increase the `scaleInCoolingMinutes.`
+    - Set a larger `minSize` for the instance.
 
 See the documentation on the [Poller parameters][autoscaler-poller-parameters]
 for further details.
 
 ### Autoscaler is too reactive or not reactive enough
 
--   The "sweet spot" between thresholds is too narrow or too wide.
-    -   Adjust the `thresholds` for the scaling profile.
+- The "sweet spot" between thresholds is too narrow or too wide.
+    - Adjust the `thresholds` for the scaling profile.
 
 <!-- LINKS: https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 

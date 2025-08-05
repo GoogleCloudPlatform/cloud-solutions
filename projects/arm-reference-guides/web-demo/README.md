@@ -4,11 +4,11 @@
 
 To deploy this demo, you need:
 
--   A Google Cloud project.
--   An account that has the `owner` role on that Google Cloud project.
--   To know the external IP that the client you will access the demo from
-    appears as, you can check a site like
-    [Whatis MyIPAddress](https://whatismyipaddress.com/) to find it out.
+- A Google Cloud project.
+- An account that has the `owner` role on that Google Cloud project.
+- To know the external IP that the client you will access the demo from appears
+  as, you can check a site like
+  [Whatis MyIPAddress](https://whatismyipaddress.com/) to find it out.
 
 ## Prepare the environment
 
@@ -38,10 +38,10 @@ To deploy this demo, you need:
 
     Where:
 
-    -   `<CLIENT_IP>` is the external IP of your demo client machine.
-    -   `<PROJECT_ID>` is the ID of your Google Cloud project.
-    -   `<REGION>` is the location where to provision cloud resources. Example:
-        `us-central1`
+    - `<CLIENT_IP>` is the external IP of your demo client machine.
+    - `<PROJECT_ID>` is the ID of your Google Cloud project.
+    - `<REGION>` is the location where to provision cloud resources. Example:
+      `us-central1`
 
 1.  Clone this repository:
 

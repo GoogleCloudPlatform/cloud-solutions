@@ -11,13 +11,13 @@ An open source tool to autoscale AlloyDB read pool instances.
 
 ## Table of Contents
 
--   [Table of Contents](#table-of-contents)
--   [Overview](#overview)
--   [Architecture](#architecture)
--   [Deployment](#deployment)
--   [Configuration](#configuration)
--   [Licensing](#licensing)
--   [Contributing](#contributing)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Deployment](#deployment)
+- [Configuration](#configuration)
+- [Licensing](#licensing)
+- [Contributing](#contributing)
 
 ## Overview
 
@@ -46,15 +46,15 @@ interaction flow:
 
 1.  The Autoscaler consists of two main decoupled components:
 
-    -   [The Poller component][autoscaler-poller]
-    -   [The Scaler component][autoscaler-scaler]
+    - [The Poller component][autoscaler-poller]
+    - [The Scaler component][autoscaler-scaler]
 
     These can be deployed to [Cloud Run functions][cloud-functions] and
     configured so that the Autoscaler runs according to a user-defined schedule.
 
-1.  At the specified time and frequency, the Poller component queries the
-    [Cloud Monitoring][cloud-monitoring] API to retrieve the utilization metrics
-    for each AlloyDB instance.
+1.  At the specified time and frequency, the Poller component queries the [Cloud
+    Monitoring][cloud-monitoring] API to retrieve the utilization metrics for
+    each AlloyDB instance.
 
 1.  For each instance, the Poller component pushes one message to the Scaler
     component. The payload contains the utilization metrics for the specific
@@ -76,8 +76,8 @@ auditing.
 To deploy the Autoscaler, decide which of the following strategies is best
 adjusted to fulfill your technical and operational needs:
 
--   [Deployment to Cloud Run functions](terraform/alloydb-autoscaler/cloud-functions/README.md)
--   [Deployment to Google Kubernetes Engine (GKE)](terraform/alloydb-autoscaler/gke/README.md)
+- [Deployment to Cloud Run functions](terraform/alloydb-autoscaler/cloud-functions/README.md)
+- [Deployment to Google Kubernetes Engine (GKE)](terraform/alloydb-autoscaler/gke/README.md)
 
 In both of the above cases, the Google Cloud Platform resources are deployed
 using Terraform. Please see the [Terraform instructions](terraform/README.md)
@@ -133,8 +133,8 @@ Please note that this is not an officially supported Google product.
 
 ## Contributing
 
--   [Contributing guidelines][contributing-guidelines]
--   [Code of conduct][code-of-conduct]
+- [Contributing guidelines][contributing-guidelines]
+- [Code of conduct][code-of-conduct]
 
 <!-- LINKS: https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
@@ -149,4 +149,5 @@ Please note that this is not an officially supported Google product.
     https://cloud.google.com/alloydb/docs/instance-read-pool-create
 [contributing-guidelines]: ./contributing.md
 [alloydb-instance]: https://cloud.google.com/alloydb/docs/overview
-[single-project-deployment]: ./terraform/alloydb-autoscaler/cloud-functions/per-project/README.md
+[single-project-deployment]:
+    ./terraform/alloydb-autoscaler/cloud-functions/per-project/README.md

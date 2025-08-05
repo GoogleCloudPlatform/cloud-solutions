@@ -30,14 +30,14 @@ When moving data between the database and BigQuery, or within BigQuery, there is
 a risk of data loss or data corruption (such as interrupted transfers, data
 type, encoding or localization compatibility).
 
-*   Data loss could occur in cases where (1) the data is accidentally removed
-    from BigQuery after it has been deleted from the source database, or (2)
-    where the data was not successfully copied to BigQuery and it gets deleted
-    from the source database.
+- Data loss could occur in cases where (1) the data is accidentally removed from
+  BigQuery after it has been deleted from the source database, or (2) where the
+  data was not successfully copied to BigQuery and it gets deleted from the
+  source database.
 
-*   Data corruption could occur in cases where (1) there is a misconfiguration
-    in the Datastream, which leads to the wrong BigQuery data, or (2) where
-    errors may occur in the copy of the data due to bugs or system issues.
+- Data corruption could occur in cases where (1) there is a misconfiguration in
+  the Datastream, which leads to the wrong BigQuery data, or (2) where errors
+  may occur in the copy of the data due to bugs or system issues.
 
 The system is designed to be robust, but errors and accidents (e.g. someone
 accidentally dropping the BigQuery tables or a partitiion) can still happen.
@@ -48,17 +48,17 @@ If there are DR needs, consider alternative systems such as replicas, backups
 and point in time recovery. Consider these practices also for the archived data
 in BigQuery.
 
-*   [AlloyDB DR](https://cloud.google.com/alloydb/docs/backup/overview)
+- [AlloyDB DR](https://cloud.google.com/alloydb/docs/backup/overview)
 
-*   [BigQuery DR](https://cloud.google.com/bigquery/docs/managed-disaster-recovery)
+- [BigQuery DR](https://cloud.google.com/bigquery/docs/managed-disaster-recovery)
 
-*   [Cloud SQL for MySQL DR](https://cloud.google.com/sql/docs/mysql/intro-to-cloud-sql-disaster-recovery)
+- [Cloud SQL for MySQL DR](https://cloud.google.com/sql/docs/mysql/intro-to-cloud-sql-disaster-recovery)
 
-*   [Cloud SQL for PostgreSQL DR](https://cloud.google.com/sql/docs/postgres/intro-to-cloud-sql-disaster-recovery)
+- [Cloud SQL for PostgreSQL DR](https://cloud.google.com/sql/docs/postgres/intro-to-cloud-sql-disaster-recovery)
 
-*   [Cloud SQL for SQL Server DR](https://cloud.google.com/sql/docs/sqlserver/intro-to-cloud-sql-disaster-recovery)
+- [Cloud SQL for SQL Server DR](https://cloud.google.com/sql/docs/sqlserver/intro-to-cloud-sql-disaster-recovery)
 
-*   [Spanner DR](https://cloud.google.com/spanner/docs/backup/disaster-recovery-overview)
+- [Spanner DR](https://cloud.google.com/spanner/docs/backup/disaster-recovery-overview)
 
 If there are regulatory needs for which this data needs to be archived, consider
 additional precautions to the aforementioned ones like archiving the data to
@@ -71,23 +71,23 @@ there are alternatives that you may want to consider before proceeding with data
 archival. Some of these changes not only may lead to better gains in
 performance, but also do not carry risks of data loss.
 
-*   [Performance monitoring for AlloyDB](https://cloud.google.com/alloydb/docs/monitor-instance)
+- [Performance monitoring for AlloyDB](https://cloud.google.com/alloydb/docs/monitor-instance)
 
-*   [Best practices](https://cloud.google.com/sql/docs/mysql/best-practices) and
-    [performance optimization tips](https://cloud.google.com/mysql/optimization)
-    for Cloud SQL for MySQL
+- [Best practices](https://cloud.google.com/sql/docs/mysql/best-practices) and
+  [performance optimization tips](https://cloud.google.com/mysql/optimization)
+  for Cloud SQL for MySQL
 
-*   [Best practices](https://cloud.google.com/sql/docs/postgres/best-practices)
-    and
-    [improve performance](https://cloud.google.com/sql/docs/postgres/recommender-enterprise-plus)
-    for Cloud SQL for PostgreSQL.
+- [Best practices](https://cloud.google.com/sql/docs/postgres/best-practices)
+  and
+  [improve performance](https://cloud.google.com/sql/docs/postgres/recommender-enterprise-plus)
+  for Cloud SQL for PostgreSQL.
 
-*   [Best practices](https://cloud.google.com/sql/docs/sqlserver/best-practices)
-    and
-    [performance analysis and query tuning](https://cloud.google.com/blog/products/databases/sql-server-performance-analysis-and-query-tuning)
-    for Cloud SQL for SQL Server
+- [Best practices](https://cloud.google.com/sql/docs/sqlserver/best-practices)
+  and
+  [performance analysis and query tuning](https://cloud.google.com/blog/products/databases/sql-server-performance-analysis-and-query-tuning)
+  for Cloud SQL for SQL Server
 
-*   [SQL best practices for Spanner](https://cloud.google.com/spanner/docs/sql-best-practices)
+- [SQL best practices for Spanner](https://cloud.google.com/spanner/docs/sql-best-practices)
 
 ## Schema evolution
 

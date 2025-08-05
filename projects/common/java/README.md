@@ -2,12 +2,12 @@
 
 This folder contains reusable Java components:
 
-*   `utils` Utility functions, e.g. handling Proto and Json.
-*   `spring-boot-auth` Spring Bean to extract Google Access token from Request
-    header and allow inspecting approve scopes and principal email address.
-*   `objectify-testing` JUnit5 test extensions for unit-testing `Objectify` and
-    `Datastore` operations.
-*   `testing` Utilities and extensions for helping with writing better tests.
+- `utils` Utility functions, e.g. handling Proto and Json.
+- `spring-boot-auth` Spring Bean to extract Google Access token from Request
+  header and allow inspecting approve scopes and principal email address.
+- `objectify-testing` JUnit5 test extensions for unit-testing `Objectify` and
+  `Datastore` operations.
+- `testing` Utilities and extensions for helping with writing better tests.
 
 ## Using common components
 

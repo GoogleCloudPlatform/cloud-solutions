@@ -12,8 +12,8 @@ command.
 A limitation of this approach is the complexity that arises when you need to
 delete a very large number of files:
 
--   You might need to spread the operation across multiple machines
--   You might need to retry on failures
+- You might need to spread the operation across multiple machines
+- You might need to retry on failures
 
 In cases when there are hundreds of thousands or more objects to delete, if you
 have the list of URIs (or some logic) to remove in a database, BigQuery remote
@@ -28,15 +28,15 @@ bulk-deletes objects and gives the option to stores the results in a table.
 Brief introduction to a few of the Google Cloud services that are referenced
 here:
 
--   [Cloud Storage](https://cloud.google.com/storage) is a managed service for
-    Object storage that can be used for storing unstructured data.
--   [BigQuery](https://cloud.google.com/bigquery) is a fully managed, data
-    analytics platform that enables multi-engine, multi-format SQL driven data
-    processing. BigQuery supports
-    [remote functions](https://cloud.google.com/bigquery/docs/remote-functions)
-    that allow writing a user-defined processing logic as Cloud Run or Cloud
-    Function services.
--   [Cloud Run](https://cloud.google.com/run)
+- [Cloud Storage](https://cloud.google.com/storage) is a managed service for
+  Object storage that can be used for storing unstructured data.
+- [BigQuery](https://cloud.google.com/bigquery) is a fully managed, data
+  analytics platform that enables multi-engine, multi-format SQL driven data
+  processing. BigQuery supports
+  [remote functions](https://cloud.google.com/bigquery/docs/remote-functions)
+  that allow writing a user-defined processing logic as Cloud Run or Cloud
+  Function services.
+- [Cloud Run](https://cloud.google.com/run)
 
 ## Architecture
 
@@ -58,19 +58,19 @@ before calling the remote functions and stitches the responses back.
 
 ## Objectives
 
--   Deploy the Bulk delete remote function to Cloud Run
--   Run a Demo SQL query in BigQuery to delete a small list of object URIs from
-    Cloud Storage
--   Verify that the files are deleted from the Cloud Storage bucket.
+- Deploy the Bulk delete remote function to Cloud Run
+- Run a Demo SQL query in BigQuery to delete a small list of object URIs from
+  Cloud Storage
+- Verify that the files are deleted from the Cloud Storage bucket.
 
 ## Costs
 
 This tutorial uses billable components of Google Cloud, including the following:
 
--   [Cloud Build](https://cloud.google.com/build/pricing)
--   [BigQuery](https://cloud.google.com/bigquery/pricing)
--   [Cloud Storage](https://cloud.google.com/storage/pricing)
--   [Cloud Run](https://cloud.google.com/run/pricing)
+- [Cloud Build](https://cloud.google.com/build/pricing)
+- [BigQuery](https://cloud.google.com/bigquery/pricing)
+- [Cloud Storage](https://cloud.google.com/storage/pricing)
+- [Cloud Run](https://cloud.google.com/run/pricing)
 
 Use the [pricing calculator](https://cloud.google.com/products/calculator) to
 generate a cost estimate based on your projected usage.
@@ -130,10 +130,10 @@ a new project for this tutorial.
 
     The Terraform script creates:
 
-    -   A BigQuery remote function that accepts a list of Cloud Storage Object
-        URIs to delete. You can call the remote function as follows:
-    -   Cloud Run service that hosts the remote function
-    -   Cloud Storage bucket with a single file named `file1`
+    - A BigQuery remote function that accepts a list of Cloud Storage Object
+      URIs to delete. You can call the remote function as follows:
+    - Cloud Run service that hosts the remote function
+    - Cloud Storage bucket with a single file named `file1`
 
     ```bash
     terraform init && terraform apply -var-file="example.tfvars"
@@ -160,10 +160,10 @@ WITH
 
 The command should produce following output:
 
-filename | delete_status
--------- | -------------
-file1    | Completed
-file2    | Not Found
+| filename | delete_status |
+| -------- | ------------- |
+| file1    | Completed     |
+| file2    | Not Found     |
 
 ## Troubleshooting
 
@@ -176,13 +176,13 @@ function.
 
 **Caution:** Deleting a project has the following effects:
 
--   Everything in the project is deleted. If you used an existing project for
-    this tutorial, when you delete it, you also delete any other work you've
-    done in the project.
--   Custom project IDs are lost. When you created this project, you might have
-    created a custom project ID that you want to use in the future. To preserve
-    the URLs that use the project ID, such as an appspot.com URL, delete
-    selected resources inside the project instead of deleting the whole project.
+- Everything in the project is deleted. If you used an existing project for this
+  tutorial, when you delete it, you also delete any other work you've done in
+  the project.
+- Custom project IDs are lost. When you created this project, you might have
+  created a custom project ID that you want to use in the future. To preserve
+  the URLs that use the project ID, such as an appspot.com URL, delete selected
+  resources inside the project instead of deleting the whole project.
 
 If you plan to explore multiple tutorials and quickstarts, reusing projects can
 help you avoid exceeding project quota limits.

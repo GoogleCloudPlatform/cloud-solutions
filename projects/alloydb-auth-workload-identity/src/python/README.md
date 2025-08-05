@@ -1,7 +1,7 @@
 # SQLAlchemy Auth GCP Service Account
 
-A helper that authenticates SQLAlchemy to AlloyDB using
-GCP's Service Account access token.
+A helper that authenticates SQLAlchemy to AlloyDB using GCP's Service Account
+access token.
 
 ## Installation
 

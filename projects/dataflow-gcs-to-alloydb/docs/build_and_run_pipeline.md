@@ -4,10 +4,10 @@
 
 This tutorial uses billable components of Google Cloud, including the following:
 
-*   [Cloud Storage](https://cloud.google.com/storage/pricing)
-*   [Dataflow](https://cloud.google.com/dataflow/pricing)
-*   [AlloyDB](https://cloud.google.com/alloydb/pricing)
-*   [Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
+- [Cloud Storage](https://cloud.google.com/storage/pricing)
+- [Dataflow](https://cloud.google.com/dataflow/pricing)
+- [AlloyDB](https://cloud.google.com/alloydb/pricing)
+- [Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
 
 When you finish the tasks that are described in this document, you can avoid
 continued billing by deleting the resources that you created.
@@ -60,27 +60,27 @@ continued billing by deleting the resources that you created.
 
     The variables mean the following:
 
-    *   `PROJECT_ID` is the project id where the Artifact Registry repository
-        was created and where the Dataflow job will run.
+    - `PROJECT_ID` is the project id where the Artifact Registry repository was
+      created and where the Dataflow job will run.
 
-    *   `REGION` is the region where the resources will run.
+    - `REGION` is the region where the resources will run.
 
-    *   `REPOSITORY_NAME` is in the Artifact Repository repository name where
-        the image will be created.
+    - `REPOSITORY_NAME` is in the Artifact Repository repository name where the
+      image will be created.
 
-    *   `BUCKET_NAME` is the name of the Google Cloud Storage bucket that will
-        be used to store the data files and temporary Dataflow data.
+    - `BUCKET_NAME` is the name of the Google Cloud Storage bucket that will be
+      used to store the data files and temporary Dataflow data.
 
-    *   `DATAFLOW_JOB_NAME` is a custom job name to identify the template run.
+    - `DATAFLOW_JOB_NAME` is a custom job name to identify the template run.
 
-    *   `ALLOYDB_CLUSTER_NAME` is the name of the AlloyDB cluster that will be
-        created and to which data will be uploaded.
+    - `ALLOYDB_CLUSTER_NAME` is the name of the AlloyDB cluster that will be
+      created and to which data will be uploaded.
 
-    *   `ALLOYDB_INSTANCE_NAME` is the name of the (primary) instance within the
-        AlloyDB cluster. Leave the variable as is to name it the same as the
-        cluster name with `-instance` added after it.
+    - `ALLOYDB_INSTANCE_NAME` is the name of the (primary) instance within the
+      AlloyDB cluster. Leave the variable as is to name it the same as the
+      cluster name with `-instance` added after it.
 
-    *   `ALLOYDB_PASSWORD` is password for the AlloyDB instance.
+    - `ALLOYDB_PASSWORD` is password for the AlloyDB instance.
 
 1.  Set the project id.
 

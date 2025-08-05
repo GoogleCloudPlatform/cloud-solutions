@@ -16,11 +16,11 @@ Set up the Autoscaler using Terraform configuration files
 
 ## Table of Contents
 
--   [Table of Contents](#table-of-contents)
--   [Overview](#overview)
--   [Architecture](#architecture)
--   [Deployment](#deployment)
--   [Monitoring](#monitoring)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Deployment](#deployment)
+- [Monitoring](#monitoring)
 
 ## Overview
 
@@ -81,25 +81,23 @@ auditing.
 The Autoscaler can be deployed following three different strategies. Choose the
 one that is best adjusted to fulfill your technical and operational needs.
 
--   [Per-Project deployment](./per-project/README.md): all the components of the
-    Autoscaler reside in the same project as your AlloyDB instances.
-    This deployment is ideal for independent teams who want to self manage the
-    configuration and infrastructure of their own Autoscalers. It is also a good
-    entry point for testing the Autoscaler capabilities.
+- [Per-Project deployment](./per-project/README.md): all the components of the
+  Autoscaler reside in the same project as your AlloyDB instances. This
+  deployment is ideal for independent teams who want to self manage the
+  configuration and infrastructure of their own Autoscalers. It is also a good
+  entry point for testing the Autoscaler capabilities.
 
--   [Centralized deployment](./centralized/README.md): a slight departure from
-    the pre-project deployment, where all the components of the AlloyDB
-    Autoscaler reside in the same project, but the AlloyDB instances may be
-    located in different projects. This deployment is suited for a team managing
-    the configuration and infrastructure of several Autoscalers in a central
-    place.
+- [Centralized deployment](./centralized/README.md): a slight departure from the
+  pre-project deployment, where all the components of the AlloyDB Autoscaler
+  reside in the same project, but the AlloyDB instances may be located in
+  different projects. This deployment is suited for a team managing the
+  configuration and infrastructure of several Autoscalers in a central place.
 
--   [Distributed deployment](./distributed/README.md): all the components of the
-    Autoscaler reside in a single project, with the exception of Cloud
-    Scheduler. This deployment is a hybrid where teams who own the AlloyDB
-    instances want to manage only the Autoscaler configuration parameters for
-    their instances, but the rest of the Autoscaler infrastructure is managed by
-    a central team.
+- [Distributed deployment](./distributed/README.md): all the components of the
+  Autoscaler reside in a single project, with the exception of Cloud Scheduler.
+  This deployment is a hybrid where teams who own the AlloyDB instances want to
+  manage only the Autoscaler configuration parameters for their instances, but
+  the rest of the Autoscaler infrastructure is managed by a central team.
 
 ## Configuration
 
@@ -176,6 +174,8 @@ creation of a dashboard to show relevant AlloyDB metrics.
 [cloud-monitoring]: https://cloud.google.com/monitoring
 [cloud-scheduler]: https://cloud.google.com/scheduler
 [cloud-scheduler-console]: https://console.cloud.google.com/cloudscheduler
-[cloud-scheduler-lifecycle]: ../../../terraform/autoscaler-core/modules/autoscaler-scheduler/main.tf
+[cloud-scheduler-lifecycle]:
+    ../../../terraform/autoscaler-core/modules/autoscaler-scheduler/main.tf
 [json]: https://www.json.org/
-[scaling-methods]: ../../../src/alloydb-autoscaler/scaler/README.md#scaling-methods
+[scaling-methods]:
+    ../../../src/alloydb-autoscaler/scaler/README.md#scaling-methods

@@ -10,10 +10,10 @@ building and running the controller.
 
 In this document, you use the following billable components of Google Cloud:
 
--   [Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
--   [Cloud NAT](https://cloud.google.com/nat/pricing)
--   [Compute Engine](https://cloud.google.com/compute/all-pricing)
--   [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/pricing)
+- [Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
+- [Cloud NAT](https://cloud.google.com/nat/pricing)
+- [Compute Engine](https://cloud.google.com/compute/all-pricing)
+- [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/pricing)
 
 To generate a cost estimate based on your projected usage, use the
 [pricing calculator](https://cloud.google.com/products/calculator). New Google
@@ -45,9 +45,9 @@ information, see [Clean up](#clean-up).
 1.  To build the binary and the container image for the controller, install
     _all_ of the following:
 
-    -   [Go v1.23.0 or later](https://go.dev/dl/)
-    -   [Kustomize v4.5.5 or later](https://kubectl.docs.kubernetes.io/installation/kustomize/)
-    -   [Skaffold v2.10.1 or later](https://skaffold.dev/docs/install/)
+    - [Go v1.23.0 or later](https://go.dev/dl/)
+    - [Kustomize v4.5.5 or later](https://kubectl.docs.kubernetes.io/installation/kustomize/)
+    - [Skaffold v2.10.1 or later](https://skaffold.dev/docs/install/)
 
 1.  Set the Google Cloud project you want to use:
 
@@ -113,20 +113,20 @@ information, see [Clean up](#clean-up).
 
     Note the following about the environment variables:
 
-    -   `REGION`: the
-        [Compute Engine region](https://cloud.google.com/compute/docs/regions-zones)
-        where you have or will create your GKE cluster..
-    -   `AR_LOCATION`: an
-        [Artifact Registry location](https://cloud.google.com/artifact-registry/docs/repositories/repo-locations).
-        In order to reduce network cost, you can use the region that you will
-        use for your GKE cluster. If you have GKE clusters in multiple regions,
-        you may consider using a multi-region location such as `us`.
-    -   `AR_REPOSITORY`: the repository name. You can use a different name if
-        you like.
-    -   `PROJECT_ID`: the project ID of your
-        [Google Cloud project](https://cloud.google.com/resource-manager/docs/creating-managing-projects).
-    -   `PROJECT_NUMBER`: the automatically generate project number of your
-        [Google Cloud project](https://cloud.google.com/resource-manager/docs/creating-managing-projects).
+    - `REGION`: the
+      [Compute Engine region](https://cloud.google.com/compute/docs/regions-zones)
+      where you have or will create your GKE cluster..
+    - `AR_LOCATION`: an
+      [Artifact Registry location](https://cloud.google.com/artifact-registry/docs/repositories/repo-locations).
+      In order to reduce network cost, you can use the region that you will use
+      for your GKE cluster. If you have GKE clusters in multiple regions, you
+      may consider using a multi-region location such as `us`.
+    - `AR_REPOSITORY`: the repository name. You can use a different name if you
+      like.
+    - `PROJECT_ID`: the project ID of your
+      [Google Cloud project](https://cloud.google.com/resource-manager/docs/creating-managing-projects).
+    - `PROJECT_NUMBER`: the automatically generate project number of your
+      [Google Cloud project](https://cloud.google.com/resource-manager/docs/creating-managing-projects).
 
 1.  Create a container image repository in Artifact Registry:
 

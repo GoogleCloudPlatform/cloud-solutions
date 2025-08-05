@@ -12,11 +12,11 @@ Spanner from a staged
 
 The Dataflow pipeline supports the following SCD Types:
 
-*   **SCD Type 1**: updates existing row if the primary key exists, or inserts a
-    new row otherwise.
+- **SCD Type 1**: updates existing row if the primary key exists, or inserts a
+  new row otherwise.
 
-*   **SCD Type 2**: updates existing row's end date to the current timestamp if
-    the primary key exists, and inserts a new row with null end date and start
-    date with the current timestamp if the column is passed.
+- **SCD Type 2**: updates existing row's end date to the current timestamp if
+  the primary key exists, and inserts a new row with null end date and start
+  date with the current timestamp if the column is passed.
 
 For more details, [check the documentation](./docs/index.md).

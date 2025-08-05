@@ -10,37 +10,37 @@ routed directly to the Pod endpoints.
 
 Cloud Load Balancing use cases:
 
--   [Global external load balancing](#global-external-load-balancing) across
-    workloads deployed to multiple regions on Google Cloud and on-prem or on
-    other clouds.
+- [Global external load balancing](#global-external-load-balancing) across
+  workloads deployed to multiple regions on Google Cloud and on-prem or on other
+  clouds.
 
--   [Regional external load balancing](#regional-external-load-balancing) across
-    workloads deployed to multiple Kubernetes clusters in the same region on
-    Google Cloud and on-prem or on other clouds.
+- [Regional external load balancing](#regional-external-load-balancing) across
+  workloads deployed to multiple Kubernetes clusters in the same region on
+  Google Cloud and on-prem or on other clouds.
 
--   [Cross-region internal load balancing](#cross-region-internal-load-balancing)
-    across workloads deployed to multiple regions on Google Cloud and on-prem or
-    on other clouds.
+- [Cross-region internal load balancing](#cross-region-internal-load-balancing)
+  across workloads deployed to multiple regions on Google Cloud and on-prem or
+  on other clouds.
 
--   [Regional internal load balancing](#regional-internal-load-balancing) across
-    workloads deployed to multiple Kubernetes clusters in the same region on
-    Google Cloud and on-prem or on other clouds.
+- [Regional internal load balancing](#regional-internal-load-balancing) across
+  workloads deployed to multiple Kubernetes clusters in the same region on
+  Google Cloud and on-prem or on other clouds.
 
 Cloud Service Mesh use cases:
 
--   [Traffic routing](#cloud-service-mesh-traffic-routing) by header/metadata
-    matching, or percentage-based traffic splitting, across workloads deployed
-    to multiple regions or multiple Kubernetes clusters on Google Cloud and
-    on-prem or on other clouds.
+- [Traffic routing](#cloud-service-mesh-traffic-routing) by header/metadata
+  matching, or percentage-based traffic splitting, across workloads deployed to
+  multiple regions or multiple Kubernetes clusters on Google Cloud and on-prem
+  or on other clouds.
 
--   [Locality-aware load balancing](#cloud-service-mesh-locality-aware-load-balancing)
-    across workloads deployed to multiple regions or multiple Kubernetes
-    clusters on Google Cloud and on-prem or on other clouds.
+- [Locality-aware load balancing](#cloud-service-mesh-locality-aware-load-balancing)
+  across workloads deployed to multiple regions or multiple Kubernetes clusters
+  on Google Cloud and on-prem or on other clouds.
 
--   Traffic routing, traffic splitting, and locality-aware load balancing across
-    [workloads deployed to multiple Kubernetes clusters running outside Google Cloud](#cloud-service-mesh-off-google-cloud).
-    The workloads can span on-prem and other clouds, multiple regions, and
-    multiple Kubernetes clusters.
+- Traffic routing, traffic splitting, and locality-aware load balancing across
+  [workloads deployed to multiple Kubernetes clusters running outside Google Cloud](#cloud-service-mesh-off-google-cloud).
+  The workloads can span on-prem and other clouds, multiple regions, and
+  multiple Kubernetes clusters.
 
 ## Global external load balancing
 

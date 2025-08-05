@@ -11,7 +11,6 @@ body {
   overflow: hidden;
 }
 
-
 df-messenger {
   display: block;
   flex-grow: 1;
@@ -24,14 +23,14 @@ df-messenger {
   box-sizing: border-box;
 
   /* Make images bigger and add circular border */
-    .df-messenger-message-user img {
-      width: 100px;
-      /* Set your desired width */
-      height: 100px;
-      /* Set your desired height */
-      border-radius: 50%;
-      /* Make it circular */
-      border: 2px solid #000;
-      /* Add a border */
-    }
+  .df-messenger-message-user img {
+    width: 100px;
+    /* Set your desired width */
+    height: 100px;
+    /* Set your desired height */
+    border-radius: 50%;
+    /* Make it circular */
+    border: 2px solid #000;
+    /* Add a border */
+  }
 }

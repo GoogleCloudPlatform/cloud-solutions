@@ -23,8 +23,8 @@ and Xcom to perform deeper analyses.
 Additionally, for any data that will be pruned, we produce two tables: a
 snapshots table, and a metadata table.
 
-The snapshots table is identified with the date where the snapshot was taken
-and the Composer run id. This allows linking the BigQuery data directly with a
+The snapshots table is identified with the date where the snapshot was taken and
+the Composer run id. This allows linking the BigQuery data directly with a
 specific run to allow for any auditing and administrative actions.
 
 Similarly, the metadata table is also identified with the date and run id.

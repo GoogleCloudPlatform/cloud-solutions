@@ -4,9 +4,9 @@ This document explains how to build the controller manager container image.
 
 1.  Install the following tools:
 
-    -   [Go](https://golang.org/doc/install) v1.23 or later
-    -   [Skaffold](https://skaffold.dev/docs/install/#standalone-binary)
-        v2.10.1 or later
+    - [Go](https://golang.org/doc/install) v1.23 or later
+    - [Skaffold](https://skaffold.dev/docs/install/#standalone-binary) v2.10.1
+      or later
 
 1.  Clone the Git repository and navigate to the directory
     `projects/k8s-hybrid-neg-controller`.
@@ -51,11 +51,11 @@ skaffold build --cache-artifacts=false --push --default-repo $AR_LOCATION-docker
 
 In the command above, replace the following:
 
--   `$AR_LOCATION`: the
-    [location of your Artifact Registry repository](https://cloud.google.com/artifact-registry/docs/repositories/repo-locations).
--   `$PROJECT_ID`: the project ID of your
-    [Google Cloud project](https://cloud.google.com/resource-manager/docs/creating-managing-projects).
--   `$AR_REPOSITORY`: the name of your Artifact Registry repository name.
+- `$AR_LOCATION`: the
+  [location of your Artifact Registry repository](https://cloud.google.com/artifact-registry/docs/repositories/repo-locations).
+- `$PROJECT_ID`: the project ID of your
+  [Google Cloud project](https://cloud.google.com/resource-manager/docs/creating-managing-projects).
+- `$AR_REPOSITORY`: the name of your Artifact Registry repository name.
 
 ### Amazon Elastic Container Registry
 

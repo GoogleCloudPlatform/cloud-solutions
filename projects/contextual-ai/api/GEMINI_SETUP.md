@@ -12,12 +12,12 @@ credentials are not configured. You'll see:
 
 ### Mock AI Indicators
 
--   🤖 **[MOCK AI]** prefix in all responses
--   ⚠️ **Orange warning banner** in chat UI: "Mock AI Response -   Add Vertex AI
+- 🤖 **[MOCK AI]** prefix in all responses
+- ⚠️ **Orange warning banner** in chat UI: "Mock AI Response - Add Vertex AI
   access for real AI analysis"
--   **Mock AI badge** on chat messages
--   **Conversation tags** include "mock-ai"
--   **Metadata indicators**: `"isMockAI": true, "aiProvider": "mock"`
+- **Mock AI badge** on chat messages
+- **Conversation tags** include "mock-ai"
+- **Metadata indicators**: `"isMockAI": true, "aiProvider": "mock"`
 
 ## To Enable Live Vertex AI Calls
 
@@ -67,22 +67,22 @@ python test_server.py
 
 ### Current Mock AI Responses
 
--   🤖 **[MOCK AI]** prefix in all responses
--   Context-aware responses based on widget data
--   Predefined action suggestions
--   Clear visual indicators in chat UI
--   Orange warning banners and badges
+- 🤖 **[MOCK AI]** prefix in all responses
+- Context-aware responses based on widget data
+- Predefined action suggestions
+- Clear visual indicators in chat UI
+- Orange warning banners and badges
 
 ### With Live Vertex AI
 
--   **Enterprise-grade AI** powered by Gemini models on Google Cloud
--   **Default credential authentication** -   no API keys to manage
--   **Dynamic AI-generated insights** based on actual data patterns
--   **Contextual analysis** that adapts to different scenarios
--   **Intelligent action recommendations** tailored to specific issues
--   **Follow-up conversations** that understand context
--   **Green "Vertex AI" badges** instead of orange "Mock AI" badges
--   **No mock AI indicators** -   clean professional responses
+- **Enterprise-grade AI** powered by Gemini models on Google Cloud
+- **Default credential authentication** - no API keys to manage
+- **Dynamic AI-generated insights** based on actual data patterns
+- **Contextual analysis** that adapts to different scenarios
+- **Intelligent action recommendations** tailored to specific issues
+- **Follow-up conversations** that understand context
+- **Green "Vertex AI" badges** instead of orange "Mock AI" badges
+- **No mock AI indicators** - clean professional responses
 
 ## Example API Behavior
 
@@ -104,8 +104,8 @@ python test_server.py
 
 ### Follow-up Chat with Vertex AI
 
--   User:How can we prevent this in the future?|
--   Vertex AI:To prevent payment timeout issues, implement,implement auto-scaling
+- User:How can we prevent this in the future?|
+- Vertex AI:To prevent payment timeout issues, implement,implement auto-scaling
   for your payment service based on transaction volume, add circuit breakers to
   gracefully handle failures, and consider using a distributed payment queue
   system to buffer high-traffic periods.
@@ -118,33 +118,33 @@ Widget Click → Backend API → Vertex AI (Gemini) → Contextual Analysis → 
 
 ## API Endpoints Using Vertex AI
 
--   `POST /api/chat/analyze-widget` -   Widget analysis with Vertex AI Gemini models
--   `POST /api/chat/message` -   Follow-up conversations with Vertex AI
--   `GET /api/chat/conversations` -   Retrieve AI-generated conversations
+- `POST /api/chat/analyze-widget` - Widget analysis with Vertex AI Gemini models
+- `POST /api/chat/message` - Follow-up conversations with Vertex AI
+- `GET /api/chat/conversations` - Retrieve AI-generated conversations
 
 ## Benefits of Vertex AI
 
 ### Enterprise Features
 
--   **Default Credentials** -   Uses Google Cloud service accounts, no API keys
--   **Enterprise Security** -   Integrated with IAM and VPC controls
--   **Scalability** -   Automatically handles scaling and load balancing
--   **Compliance** -   SOC 2, ISO 27001, HIPAA compliant
--   **Cost Control** -   Integrated with Google Cloud billing and quotas
+- **Default Credentials** - Uses Google Cloud service accounts, no API keys
+- **Enterprise Security** - Integrated with IAM and VPC controls
+- **Scalability** - Automatically handles scaling and load balancing
+- **Compliance** - SOC 2, ISO 27001, HIPAA compliant
+- **Cost Control** - Integrated with Google Cloud billing and quotas
 
 ### Technical Advantages
 
--   **Lower Latency** -   Regional deployment reduces response times
--   **Better Integration** -   Native integration with Google Cloud services
--   **Advanced Models** -   Access to latest Gemini models and features
--   **Monitoring** -   Built-in logging and monitoring via Cloud Console
+- **Lower Latency** - Regional deployment reduces response times
+- **Better Integration** - Native integration with Google Cloud services
+- **Advanced Models** - Access to latest Gemini models and features
+- **Monitoring** - Built-in logging and monitoring via Cloud Console
 
 ## Cost Considerations
 
--   Vertex AI has usage-based pricing (typically more cost-effective than API)
--   Regional deployment can reduce data egress costs
--   Integrated with Google Cloud billing and budgets
--   Fallback mode ensures system works even without credentials
+- Vertex AI has usage-based pricing (typically more cost-effective than API)
+- Regional deployment can reduce data egress costs
+- Integrated with Google Cloud billing and budgets
+- Fallback mode ensures system works even without credentials
 
 ## Security & Authentication
 
@@ -156,12 +156,12 @@ gcloud auth application-default login
 
 ### For Cloud Run
 
--   Uses service account attached to Cloud Run instance
--   No credentials stored in code or environment variables
--   Follows Google Cloud security best practices
--   IAM permissions control access to Vertex AI
+- Uses service account attached to Cloud Run instance
+- No credentials stored in code or environment variables
+- Follows Google Cloud security best practices
+- IAM permissions control access to Vertex AI
 
 ### Required Permissions
 
--   `aiplatform.endpoints.predict`
--   `aiplatform.models.predict`
+- `aiplatform.endpoints.predict`
+- `aiplatform.models.predict`

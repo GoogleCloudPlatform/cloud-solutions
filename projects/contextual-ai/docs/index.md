@@ -9,7 +9,7 @@ For detailed architecture diagram and flows, please refer to
 
 To setup the solution, follow these steps:
 
--   Configure default Google Cloud Project and Region.
+- Configure default Google Cloud Project and Region.
 
 ```shell
 export GOOGLE_CLOUD_PROJECT="YOUR PROJECT"
@@ -20,7 +20,7 @@ gcloud config set project $GOOGLE_CLOUD_PROJECT
 
 ```
 
--   Enable Required Services.
+- Enable Required Services.
 
 ```shell
 gcloud services enable aiplatform.googleapis.com \
@@ -35,13 +35,13 @@ iam.googleapis.com
 
 ```
 
--   Ensure Organization Policy allows unauthenticated requests. Allow the
+- Ensure Organization Policy allows unauthenticated requests. Allow the
   following policies.
 
-    -   `constraints/iam.allowedPolicyMemberDomains`
-    -   `constraints/gcp.resourceLocations`
+    - `constraints/iam.allowedPolicyMemberDomains`
+    - `constraints/gcp.resourceLocations`
 
--   Provision cloud resources.
+- Provision cloud resources.
 
 ```shell
 export CURRENT_DIR=$(pwd)
@@ -54,7 +54,7 @@ terraform apply -var="project_id=$(gcloud config get-value project)" \
     --auto-approve
 ```
 
--   Deploy the solution.
+- Deploy the solution.
 
 ```shell
 
@@ -66,7 +66,7 @@ gcloud config set gcloudignore/enabled true
 
 ```
 
--   Generate Data
+- Generate Data
 
 ```bash
 cd ${CURRENT_DIR}/data
@@ -76,7 +76,7 @@ pip install pandas numpy
 python generate_ecommerce_data.py
 ```
 
--   Import to BigQuery
+- Import to BigQuery
 
 ```bash
 pip install google-cloud-bigquery

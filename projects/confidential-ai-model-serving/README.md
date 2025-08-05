@@ -19,10 +19,10 @@ The following diagram illustrates the solution architecture:
 This solution architecture takes advantage of Google Cloud's confidential
 computing and networking capabilities:
 
--   The workload that processes end-user data is deployed on
-    [Confidential VMs](https://cloud.google.com/confidential-computing/confidential-vm/docs/confidential-vm-overview)
-    in a
-    [Confidential Space trusted execution environment.](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-overview)
+- The workload that processes end-user data is deployed on
+  [Confidential VMs](https://cloud.google.com/confidential-computing/confidential-vm/docs/confidential-vm-overview)
+  in a
+  [Confidential Space trusted execution environment.](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-overview)
 
     Running the workload on Confidential VMs helps ensure that the user's data
     can not only be encrypted at rest or in transit, but also during processing.
@@ -44,10 +44,9 @@ computing and networking capabilities:
     find and inspect the precise version of the workload, and determine for
     themselves whether they deem the workload trustworthy to handle their data.
 
--   All communication between the end user's device and the workload is
-    end-to-end encrypted, using key material that is bound to the workload
-    attestation statement, and thus to a specific workload version and
-    infrastructure.
+- All communication between the end user's device and the workload is end-to-end
+  encrypted, using key material that is bound to the workload attestation
+  statement, and thus to a specific workload version and infrastructure.
 
     Going beyond the protections provided by TLS, binding the key material to
     the workload's attestation statement helps ensure that only the workload
@@ -59,51 +58,50 @@ computing and networking capabilities:
     end-to-end encrypted communication channels by letting clients discover
     available VMs and forwarding messages.
 
--   The messages exchanged between the user's device and the workload are routed
-    in a way that lets the client introduce randomness and obfuscate their
-    identity while making it difficult for operators to determine whether
-    messages originated from the same or different clients.
--   Optionally, connections between the client and the broker service can be
-    routed through a third-party operated HTTP gateway that hides the client's
-    network location and address from the broker service, further obscuring the
-    user's identity.
+- The messages exchanged between the user's device and the workload are routed
+  in a way that lets the client introduce randomness and obfuscate their
+  identity while making it difficult for operators to determine whether messages
+  originated from the same or different clients.
+- Optionally, connections between the client and the broker service can be
+  routed through a third-party operated HTTP gateway that hides the client's
+  network location and address from the broker service, further obscuring the
+  user's identity.
 
 The example solution architecture helps you develop applications that might need
 to satisfy privacy requirements such as the following:
 
--   User data is only used for the purpose of fulfilling the user's request and
-    not retained, copied, or used for other purposes.
--   User data is not accessible to Google staff.
--   User data is not accessible to the operator, i.e. the party that runs the
-    workload.
--   Inference requests can't be trivially linked to a user's identity, their
-    device, or location.
--   The operator can't trivially determine whether two inference requests
-    originated from the same user.
+- User data is only used for the purpose of fulfilling the user's request and
+  not retained, copied, or used for other purposes.
+- User data is not accessible to Google staff.
+- User data is not accessible to the operator, i.e. the party that runs the
+  workload.
+- Inference requests can't be trivially linked to a user's identity, their
+  device, or location.
+- The operator can't trivially determine whether two inference requests
+  originated from the same user.
 
 ## Implementation
 
 This repository contains example code for the following components:
 
--   A workload proxy, intended to run alongside the data-processing workload in
-    the trusted execution environment. Implemented using Java and
-    [Tink](https://developers.google.com/tink), the workload proxy manages the
-    coordination with the broker.
--   A broker service, intended to run on Cloud Run. Also implemented using Java
-    and Tink, the broker coordinates the communication between clients and
-    workload instances.
--   An example command line client.
--   A Terraform module to deploy all components in a single Google Cloud
-    project.
+- A workload proxy, intended to run alongside the data-processing workload in
+  the trusted execution environment. Implemented using Java and
+  [Tink](https://developers.google.com/tink), the workload proxy manages the
+  coordination with the broker.
+- A broker service, intended to run on Cloud Run. Also implemented using Java
+  and Tink, the broker coordinates the communication between clients and
+  workload instances.
+- An example command line client.
+- A Terraform module to deploy all components in a single Google Cloud project.
 
 The code is intended as an example and doesn't address certain requirements that
 you might need to consider for a production application, including the
 following:
 
--   Access control: You might need to restrict the users and devices that are
-    allowed to use the system to offload data processing.
--   Quota charging: To manage costs, you might need to impose a quota on how
-    many requests each user or device is allowed to issue per unit of time.
+- Access control: You might need to restrict the users and devices that are
+  allowed to use the system to offload data processing.
+- Quota charging: To manage costs, you might need to impose a quota on how many
+  requests each user or device is allowed to issue per unit of time.
 
 The following sections describe how the components of this solution architecture
 interact, and how they help enable end-to-end encrypted communication.
@@ -191,18 +189,17 @@ A decoded attestation token looks similar to the following:
 The attestation token plays a crucial role in the communication between the
 client, the broker, and the workload:
 
--   The token's signature and `aud` claim let clients verify the authenticity of
-    a token. A successful signature check confirms that the token is running in
-    Confidential Space.
--   The `dbgstat` claim lets the client verify that the workload is not running
-    in
-    [Debug mode](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-images#types_of_images).
--   `secboot`, `submods` and
-    [other claims](https://cloud.google.com/confidential-computing/confidential-space/docs/reference/token-claims)
-    let clients verify that the workload is running a known the container image
-    version on a confidential VM.
--   The `eat_nonce` claim provides the request encryption key that lets clients
-    encrypt messages that only the workload can decrypt.
+- The token's signature and `aud` claim let clients verify the authenticity of a
+  token. A successful signature check confirms that the token is running in
+  Confidential Space.
+- The `dbgstat` claim lets the client verify that the workload is not running in
+  [Debug mode](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-images#types_of_images).
+- `secboot`, `submods` and
+  [other claims](https://cloud.google.com/confidential-computing/confidential-space/docs/reference/token-claims)
+  let clients verify that the workload is running a known the container image
+  version on a confidential VM.
+- The `eat_nonce` claim provides the request encryption key that lets clients
+  encrypt messages that only the workload can decrypt.
 
 Because attestation tokens expire after 1 hour, the workload periodically
 refreshes its guest attribute by repeating steps 2-3.
@@ -212,13 +209,13 @@ refreshes its guest attribute by repeating steps 2-3.
 All messages exchanged between a client and a workload are end-to-end encrypted
 using HPKE:
 
--   Request messages sent from the client to the workload use the workload's
-    request encryption key as the recipient public key. The client obtains
-    workload's request encryption key from the respective workload's attestation
-    token.
--   Response messages sent from the workload back to the client use the client's
-    public key as recipient public key. Clients embed their public key in the
-    encrypted request message.
+- Request messages sent from the client to the workload use the workload's
+  request encryption key as the recipient public key. The client obtains
+  workload's request encryption key from the respective workload's attestation
+  token.
+- Response messages sent from the workload back to the client use the client's
+  public key as recipient public key. Clients embed their public key in the
+  encrypted request message.
 
 Each workload instance uses a different request encryption key pair. When
 encrypting a request message, a client therefore needs to target a specific
@@ -295,7 +292,7 @@ selected workload instance is no longer available.
 
 ## Next steps
 
--   [Deploy the solution on Google Cloud by using Terraform](terraform/README.md).
--   Take a look at the code.
--   Learn more about
-    [Confidential Space](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-overview).
+- [Deploy the solution on Google Cloud by using Terraform](terraform/README.md).
+- Take a look at the code.
+- Learn more about
+  [Confidential Space](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-overview).

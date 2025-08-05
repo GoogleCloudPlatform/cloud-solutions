@@ -10,9 +10,9 @@ Terraform.
 
 In this document, you use the following billable components of Google Cloud:
 
--   [Compute Engine virtual machine (VM) instances](https://cloud.google.com/compute/all-pricing)
--   [Cloud run](https://cloud.google.com/run/pricing)
--   [Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
+- [Compute Engine virtual machine (VM) instances](https://cloud.google.com/compute/all-pricing)
+- [Cloud run](https://cloud.google.com/run/pricing)
+- [Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
 
 ## Before you begin
 
@@ -148,13 +148,13 @@ To verify that the deployment was successful, run the test client application:
     Enter a question>
     ```
 
-    -   The line `Waiting for workload instances to become available` indicates
-        that the Confidential Space VM hasn't registered with the broker yet,
-        and that the client is waiting for this process to complete.
-    -   The table shows the Confidential Space VM instances that are available
-        to handle requests.
-    -   The `Prod` column indicates if the respective instance uses the
-        [**Production** image](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-images#types_of_images).
+    - The line `Waiting for workload instances to become available` indicates
+      that the Confidential Space VM hasn't registered with the broker yet, and
+      that the client is waiting for this process to complete.
+    - The table shows the Confidential Space VM instances that are available to
+      handle requests.
+    - The `Prod` column indicates if the respective instance uses the
+      [**Production** image](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-images#types_of_images).
 
         The client refuses to interact with instances that use the **Debug**
         image unless you specify the `--debug` command line flag.
@@ -178,7 +178,7 @@ To verify that the deployment was successful, run the test client application:
 
 ## What's next
 
--   Review Cloud Logging logs to follow the interaction between the client,
-    broker, and workload instances.
--   Learn more about
-    [Confidential Space](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-overview).
+- Review Cloud Logging logs to follow the interaction between the client,
+  broker, and workload instances.
+- Learn more about
+  [Confidential Space](https://cloud.google.com/confidential-computing/confidential-space/docs/confidential-space-overview).

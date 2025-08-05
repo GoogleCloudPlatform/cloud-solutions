@@ -122,15 +122,14 @@ Beam's Direct Runner.
 
     The variables mean the following:
 
-*   `BUCKET_NAME` is the name of the Google Cloud Storage bucket that will be
-    used to read the data files.
+- `BUCKET_NAME` is the name of the Google Cloud Storage bucket that will be used
+  to read the data files.
 
-*   `ALLOYDB_IP` is the IP or hostname for the AlloyDB instance. Your machine
-    needs to be able to access this IP. You may need to use a
-    [Public IP](https://cloud.google.com/alloydb/docs/connect-public-ip) for
-    this.
+- `ALLOYDB_IP` is the IP or hostname for the AlloyDB instance. Your machine
+  needs to be able to access this IP. You may need to use a
+  [Public IP](https://cloud.google.com/alloydb/docs/connect-public-ip) for this.
 
-*   `ALLOYDB_PASSWORD` is password for the AlloyDB instance.
+- `ALLOYDB_PASSWORD` is password for the AlloyDB instance.
 
 1.  Install the `requirements.txt`. (Optional) Consider using a virtual
     environment.

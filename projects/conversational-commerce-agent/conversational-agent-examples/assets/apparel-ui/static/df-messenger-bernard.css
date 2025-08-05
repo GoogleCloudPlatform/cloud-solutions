@@ -7,7 +7,7 @@ df-messenger {
   /*--df-messenger-font-family: "Arial Rounded MT", sans-serif;*/
   --df-messenger-actor-image-size: 27px;
 
-    /* Titlebar. */
+  /* Titlebar. */
   --df-messenger-titlebar-background: var(--df-messenger-primary-color);
   --df-messenger-titlebar-title-align: left;
   --df-messenger-titlebar-title-font-size: 0px;
@@ -48,7 +48,8 @@ df-messenger {
   --df-messenger-input-box-border: 1px solid var(--df-messenger-border-color);
   --df-messenger-input-box-border-radius: 999px;
   --df-messenger-input-box-padding: 16px 32px;
-  --df-messenger-input-box-focus-border: 2px solid var(--df-messenger-primary-color);
+  --df-messenger-input-box-focus-border: 2px solid
+    var(--df-messenger-primary-color);
   --df-messenger-input-box-focus-padding: 15px 31px;
   --df-messenger-send-icon-offset-y: 2px;
 
@@ -72,13 +73,20 @@ df-messenger {
   --df-messenger-table-header-padding: 12px 16px;
   --df-messenger-table-header-font-size: 14px;
   --df-messenger-table-header-font-weight: 500;
-  --df-messenger-table-header-border-top: 1px solid var(--df-messenger-table-border-color);
-  --df-messenger-table-header-border-bottom: 1px solid var(--df-messenger-table-border-color);
-  --df-messenger-table-header-border-left-first: 1px solid var(--df-messenger-table-border-color);
-  --df-messenger-table-header-border-right-last: 1px solid var(--df-messenger-table-border-color);
-  --df-messenger-table-border-bottom: 1px solid var(--df-messenger-table-border-color);
-  --df-messenger-table-border-left-first: 1px solid var(--df-messenger-table-border-color);
-  --df-messenger-table-border-right-last: 1px solid var(--df-messenger-table-border-color);
+  --df-messenger-table-header-border-top: 1px solid
+    var(--df-messenger-table-border-color);
+  --df-messenger-table-header-border-bottom: 1px solid
+    var(--df-messenger-table-border-color);
+  --df-messenger-table-header-border-left-first: 1px solid
+    var(--df-messenger-table-border-color);
+  --df-messenger-table-header-border-right-last: 1px solid
+    var(--df-messenger-table-border-color);
+  --df-messenger-table-border-bottom: 1px solid
+    var(--df-messenger-table-border-color);
+  --df-messenger-table-border-left-first: 1px solid
+    var(--df-messenger-table-border-color);
+  --df-messenger-table-border-right-last: 1px solid
+    var(--df-messenger-table-border-color);
 
   /* Card. */
   --df-messenger-card-box-shadow: none;
@@ -119,14 +127,21 @@ df-messenger {
   --df-messenger-message-rich-feedback-spacing: 16px;
   --df-messenger-message-rich-feedback-chips-spacing: 24px;
   --df-messenger-message-rich-feedback-chips-background: rgb(255, 255, 255);
-  --df-messenger-message-rich-feedback-chips-background-active: rgba(68, 71, 70, 0.12);
+  --df-messenger-message-rich-feedback-chips-background-active: rgba(
+    68,
+    71,
+    70,
+    0.12
+  );
   --df-messenger-message-rich-feedback-chip-font-color: rgb(68, 71, 70);
   --df-messenger-message-rich-feedback-chips-font-color-active: rgb(68, 71, 70);
   --df-messenger-message-rich-feedback-submit-align: flex-start;
   --df-messenger-message-rich-feedback-submit-font-color: rgb(68, 71, 70);
   --df-messenger-message-rich-feedback-block-separator-display: block;
   --df-messenger-message-rich-feedback-block-separator-padding-offset: -16px;
-  --df-messenger-message-feedback-icon-font-color-active: var(--df-messenger-primary-color);
+  --df-messenger-message-feedback-icon-font-color-active: var(
+    --df-messenger-primary-color
+  );
 
   /* Actors. */
   /*--df-messenger-message-user-actor-order: row;*/

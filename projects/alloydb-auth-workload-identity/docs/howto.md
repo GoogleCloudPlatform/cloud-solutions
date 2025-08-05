@@ -17,11 +17,11 @@ gcloud --project "$PROJECT_ID" create "$GCP_SA_NAME"
 
 ### Grant roles to this service account
 
-To make the service account capable of authenticate to the AlloyDB instances,
-it needs these Roles:
+To make the service account capable of authenticate to the AlloyDB instances, it
+needs these Roles:
 
--   `roles/serviceusage.serviceUsageConsumer`
--   `roles/alloydb.databaseUser`
+- `roles/serviceusage.serviceUsageConsumer`
+- `roles/alloydb.databaseUser`
 
 You can do this by running the following commands:
 
@@ -37,7 +37,8 @@ gcloud add-iam-policy-binding "$PROJECT_ID" \
 
 ### Grant GCP service account access to the Kubernetes Service Account {#grant-gcp-service-account-access-to-the-kubernetes-service-account}
 
-You can follow the guidance of [workload-identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
+You can follow the guidance of
+[workload-identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
 to grant the GCP service account you've just created to a kubernetes service
 account.
 
@@ -74,8 +75,9 @@ gcloud --project "$PROJECT_ID" alloydb instances update\
 
 ### Create an AlloyDB user for the IAM service account
 
-According to the [Manage IAM authentication in AlloyDB](https://cloud.google.com/alloydb/docs/manage-iam-authn)
-document,  you can create a user in the AlloyDB bound to a GCP service account.
+According to the
+[Manage IAM authentication in AlloyDB](https://cloud.google.com/alloydb/docs/manage-iam-authn)
+document, you can create a user in the AlloyDB bound to a GCP service account.
 
 To do so, run the following command
 
@@ -89,7 +91,7 @@ gcloud --project $PROJECT_ID alloydb users \
   --db-roles=$ALLOYDB_ROLES
 ```
 
-Note that all IAM\_TYPE users in AlloyDB have the name of this form
+Note that all IAM_TYPE users in AlloyDB have the name of this form
 `<sa_name>@<project_id>.iam`.
 
 ## Authenticate your application from GKE to AlloyDB
@@ -112,12 +114,12 @@ gcloud --project "$PROJECT_ID" container clusters update "$CLUSTER_NAME" \
 
 ```
 
-#### Enable GKE\_METADATA for the node-pools
+#### Enable GKE_METADATA for the node-pools
 
-You also need to let the node-pools in your cluster provide "GKE\_METADATA".
+You also need to let the node-pools in your cluster provide "GKE_METADATA".
 
-You can check if a certain node-pool has already enabled "GKE\_METADATA"
-by using the following command:
+You can check if a certain node-pool has already enabled "GKE_METADATA" by using
+the following command:
 
 ```bash
 gcloud --project "$PROJECT_ID" container node-pools describe \
@@ -127,7 +129,7 @@ gcloud --project "$PROJECT_ID" container node-pools describe \
 
 ```
 
-if the node-pool has "GKE\_METADATA", you should see
+if the node-pool has "GKE_METADATA", you should see
 
 ```text
     mode: GKE_METADATA
@@ -135,8 +137,8 @@ if the node-pool has "GKE\_METADATA", you should see
 
 in the output of the above command.
 
-If not, for each of the node-pools in your cluster you want
-"GKE\_METADATA", run the following:
+If not, for each of the node-pools in your cluster you want "GKE_METADATA", run
+the following:
 
 ```bash
 gcloud --project "$PROJECT_ID" container node-pools update \
@@ -152,10 +154,13 @@ gcloud --project "$PROJECT_ID" container node-pools update \
 Modify and apply the following manifest to your GKE cluster. You need to change
 these:
 
--   Replace `$K8S_NAMESPACE` with value of K8S\_NAMESPACE in this [step](#grant-gcp-service-account-access-to-the-kubernetes-service-account)
--   Replace `$K8S_SA` with value of K8S\_SA in this [step](#grant-gcp-service-account-access-to-the-kubernetes-service-account)
--   Replace `$GCP_SA_NAME` with value GCP\_SA\_NAME in this [step](#create-a-gcp-service-account)
--   Replace `$PROJECT_ID` with your project id
+- Replace `$K8S_NAMESPACE` with value of K8S_NAMESPACE in this
+  [step](#grant-gcp-service-account-access-to-the-kubernetes-service-account)
+- Replace `$K8S_SA` with value of K8S_SA in this
+  [step](#grant-gcp-service-account-access-to-the-kubernetes-service-account)
+- Replace `$GCP_SA_NAME` with value GCP_SA_NAME in this
+  [step](#create-a-gcp-service-account)
+- Replace `$PROJECT_ID` with your project id
 
 ```yaml
 apiVersion: v1
@@ -170,25 +175,24 @@ metadata:
 
 Note that this service account has two annotations:
 
--   `iam.gke.io/gcp-service-account` this binds the Kubernetes Service Account
-    to the GCP service account
--   `iam.gke.io/scopes-override` This This specifies the OAuth scopes that are
-    granted to the access token for the service account. The scope:
-    `https://www.googleapis.com/auth/alloydb.login` is required for connecting
-    to AlloyDB, this is documented in the this
-    [Connect using an IAM account | AlloyDB for PostgreSQL | Google Cloud](https://cloud.google.com/alloydb/docs/connect-iam#procedure)
+- `iam.gke.io/gcp-service-account` this binds the Kubernetes Service Account to
+  the GCP service account
+- `iam.gke.io/scopes-override` This This specifies the OAuth scopes that are
+  granted to the access token for the service account. The scope:
+  `https://www.googleapis.com/auth/alloydb.login` is required for connecting to
+  AlloyDB, this is documented in the this
+  [Connect using an IAM account | AlloyDB for PostgreSQL | Google Cloud](https://cloud.google.com/alloydb/docs/connect-iam#procedure)
 
 ### Inside the pods
 
 To make your application authenticate to AlloyDB, you will need to get the
 username and password. Instead of storing the credentials in a secret or using
-the "auth\_proxy", you can make your application connect to AlloyDB directly.
+the "auth_proxy", you can make your application connect to AlloyDB directly.
 
 Here is how to get the username and password.
 
--   Get the username
-    You can use the following command in the pod to set the environment variable
-    PGUSER for your application.
+- Get the username You can use the following command in the pod to set the
+  environment variable PGUSER for your application.
 
 ```bash
 PGUSER=$(curl -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/email|sed 's/\.gserviceaccount.com//')
@@ -196,11 +200,10 @@ export PGUSER
 
 ```
 
--   Get the password
-    You can use the following command in the pod to set the environment variable
-    PGPASSWORD for your application. *Note* This method only fetches the token
-    once, you need to fetch token eachtime when your application makes new
-    connection to the database.
+- Get the password You can use the following command in the pod to set the
+  environment variable PGPASSWORD for your application. _Note_ This method only
+  fetches the token once, you need to fetch token eachtime when your application
+  makes new connection to the database.
 
 ```bash
 PGPASSWORD=$(curl -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token|jq -r .access_token)
@@ -208,7 +211,7 @@ export PGPASSWORD
 ```
 
 You can put the above commands in your application start-up command. Or you can
-integrate the equivalent logic in your application. *Caution* Be mindful of the
+integrate the equivalent logic in your application. _Caution_ Be mindful of the
 risks of storing secrets in environment variables. Some execution environments
 or the use of some frameworks can result in the contents of environment
 variables being sent to logs.

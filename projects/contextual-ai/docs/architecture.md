@@ -8,55 +8,55 @@ The following diagram illustrates current architecture.
 
 ### Widgets that with derterminstic SQL query
 
--   Widget calls to Data Access API to fetch data.
+- Widget calls to Data Access API to fetch data.
 
     1.1 (**Optional**) Data Access API calls to Gemini to generate follow up
     questions, based on the user's profile and dataset.
 
--   Widget renders the dataset and questions.
+- Widget renders the dataset and questions.
 
--   User double click into the data point.
+- User double click into the data point.
 
--   Widget sends the specific data point and the question to Agent API.
+- Widget sends the specific data point and the question to Agent API.
 
--   Agent use tools to fetch relevant data when required, and generate an answer
+- Agent use tools to fetch relevant data when required, and generate an answer
   to the question.
 
--   Agent API repond with the final results.
+- Agent API repond with the final results.
 
--   Widget renders the results.
+- Widget renders the results.
 
 ### Widgets requires dynamic SQL query (for example, Natural Language to SQL)
 
--   Widget calls to Agent API with a pre-defined question.
+- Widget calls to Agent API with a pre-defined question.
 
--   Agent API generates a SQL query based on the user's profile and the question.
+- Agent API generates a SQL query based on the user's profile and the question.
 
--   Agent Use tools to fetch relevant data when required, and generate follow up
+- Agent Use tools to fetch relevant data when required, and generate follow up
   questions.
 
--   Agent API repond with the final results.
+- Agent API repond with the final results.
 
--   Widget renders the dataset and follow up questions..
+- Widget renders the dataset and follow up questions..
 
--   User double click into the data point.
+- User double click into the data point.
 
--   Widget sends the specific data point and the question to Agent API.
+- Widget sends the specific data point and the question to Agent API.
 
--   Agent use tools to fetch relevant data when required, and generate an answer
+- Agent use tools to fetch relevant data when required, and generate an answer
   to the question.
 
--   Agent API repond with the final results.
+- Agent API repond with the final results.
 
--   Widget renders the results.
+- Widget renders the results.
 
 ## Search Widget
 
--   User inputs search query.
+- User inputs search query.
 
--   Widget sends the search query to Vertex AI Search App.
+- Widget sends the search query to Vertex AI Search App.
 
--   Widget display the search results and summary.
+- Widget display the search results and summary.
 
 ![img](./img/architecture.png)
 

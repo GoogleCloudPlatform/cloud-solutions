@@ -17,13 +17,13 @@ For detailed architecture diagram and flows, please refer to
 
 ### Key Features
 
--   **Deterministic Widgets**: Widgets that fetch data using pre-defined SQL
+- **Deterministic Widgets**: Widgets that fetch data using pre-defined SQL
   queries via a Data Access API.
--   **Dynamic Widgets**: Widgets that use an Agent API to generate SQL queries
+- **Dynamic Widgets**: Widgets that use an Agent API to generate SQL queries
   from natural language, allowing for free-form data exploration.
--   **AI-Powered Analysis**: Users can select data points and ask questions. An AI
+- **AI-Powered Analysis**: Users can select data points and ask questions. An AI
   agent fetches relevant data, analyzes it, and provides answers.
--   **Search Integration**: A search widget integrates with Vertex AI Search to
+- **Search Integration**: A search widget integrates with Vertex AI Search to
   provide search and summarization capabilities.
 
 ## Deploy the solution

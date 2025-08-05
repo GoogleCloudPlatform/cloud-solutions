@@ -11,28 +11,27 @@ Terraform.
 [Forwarder component](../../../../src/alloydb-autoscaler/forwarder/README.md) ·
 **Terraform configuration**
 
-**Cloud Run functions** ·
-[Google Kubernetes Engine](../../gke/README.md)
+**Cloud Run functions** · [Google Kubernetes Engine](../../gke/README.md)
 
 [Per-Project](../per-project/README.md) ·
 [Centralized](../centralized/README.md) · **Distributed**
 
 ## Table of Contents
 
--   [Table of Contents](#table-of-contents)
--   [Overview](#overview)
--   [Architecture](#architecture)
-    -   [Pros](#pros)
-    -   [Cons](#cons)
--   [Before you begin](#before-you-begin)
--   [Preparing the Autoscaler Project](#preparing-the-autoscaler-project)
-    -   [Using Firestore for Autoscaler state](#using-firestore-for-autoscaler-state)
-    -   [Using Spanner for Autoscaler state](#using-spanner-for-autoscaler-state)
-    -   [Deploying the Autoscaler](#deploying-the-autoscaler)
--   [Preparing the Application Project](#preparing-the-application-project)
-    -   [Deploying the Autoscaler](#deploying-the-autoscaler)
-    -   [Authorize the Forwarder function to publish to the Poller topic](#authorize-the-forwarder-function-to-publish-to-the-poller-topic)
--   [Verifying your deployment](#verifying-your-deployment)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Architecture](#architecture)
+    - [Pros](#pros)
+    - [Cons](#cons)
+- [Before you begin](#before-you-begin)
+- [Preparing the Autoscaler Project](#preparing-the-autoscaler-project)
+    - [Using Firestore for Autoscaler state](#using-firestore-for-autoscaler-state)
+    - [Using Spanner for Autoscaler state](#using-spanner-for-autoscaler-state)
+    - [Deploying the Autoscaler](#deploying-the-autoscaler)
+- [Preparing the Application Project](#preparing-the-application-project)
+    - [Deploying the Autoscaler](#deploying-the-autoscaler)
+    - [Authorize the Forwarder function to publish to the Poller topic](#authorize-the-forwarder-function-to-publish-to-the-poller-topic)
+- [Verifying your deployment](#verifying-your-deployment)
 
 ## Overview
 
@@ -65,19 +64,19 @@ The distributed deployment has the following pros and cons:
 
 ### Pros
 
--   **Configuration and infrastructure**: application teams are in control of
-    their config and schedules
--   **Maintenance**: Scaler infrastructure is centralized, reducing up-keep
-    overhead
--   **Policies and audit**: Best practices across teams might be easier to
-    specify and enact. Audits might be easier to execute.
+- **Configuration and infrastructure**: application teams are in control of
+  their config and schedules
+- **Maintenance**: Scaler infrastructure is centralized, reducing up-keep
+  overhead
+- **Policies and audit**: Best practices across teams might be easier to specify
+  and enact. Audits might be easier to execute.
 
 ### Cons
 
--   **Configuration**: application teams need to provide service accounts to
-    write to the polling topic.
--   **Risk**: the centralized team itself may become a single point of failure
-    even if the infrastructure is designed with high availability in mind.
+- **Configuration**: application teams need to provide service accounts to write
+  to the polling topic.
+- **Risk**: the centralized team itself may become a single point of failure
+  even if the infrastructure is designed with high availability in mind.
 
 ## Before you begin
 
@@ -260,10 +259,10 @@ Autoscaler infrastructure, with the exception of Cloud Scheduler, lives.
     terraform apply -parallelism=2
     ```
 
-    -   If you are running this command in Cloud Shell and encounter errors of
-        the form "`Error: cannot assign requested address`", this is a [known
-        issue][provider-issue] in the Terraform Google provider, please retry
-        with -parallelism=1.
+    - If you are running this command in Cloud Shell and encounter errors of the
+      form "`Error: cannot assign requested address`", this is a [known
+      issue][provider-issue] in the Terraform Google provider, please retry with
+      -parallelism=1.
 
 ## Preparing the Application Project
 
@@ -380,10 +379,10 @@ topic and function in the project where the AlloyDB instances live.
     terraform apply -parallelism=2
     ```
 
-    -   If you are running this command in Cloud Shell and encounter errors of
-        the form "`Error: cannot assign requested address`", this is a [known
-        issue][provider-issue] in the Terraform Google provider, please retry
-        with -parallelism=1
+    - If you are running this command in Cloud Shell and encounter errors of the
+      form "`Error: cannot assign requested address`", this is a [known
+      issue][provider-issue] in the Terraform Google provider, please retry with
+      -parallelism=1
 
 ### Authorize the Forwarder function to publish to the Poller topic
 

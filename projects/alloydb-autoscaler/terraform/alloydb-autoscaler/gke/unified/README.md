@@ -10,8 +10,8 @@ Set up the Autoscaler using Google Kubernetes Engine and Terraform
 [Forwarder component](../../../../src/alloydb-autoscaler/forwarder/README.md) ·
 **Terraform configuration**
 
-[Cloud Run functions](../../cloud-functions/README.md) ·
-**Google Kubernetes Engine**
+[Cloud Run functions](../../cloud-functions/README.md) · **Google Kubernetes
+Engine**
 
 ## Overview
 

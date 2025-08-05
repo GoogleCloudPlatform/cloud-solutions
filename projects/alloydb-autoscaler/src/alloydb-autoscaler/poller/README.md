@@ -4,27 +4,27 @@
 
 Retrieve metrics for one or more AlloyDB instances.
 
-[Home](../../../README.md) · [Scaler component](../scaler/README.md) ·
-**Poller component** · [Forwarder component](../forwarder/README.md) ·
+[Home](../../../README.md) · [Scaler component](../scaler/README.md) · **Poller
+component** · [Forwarder component](../forwarder/README.md) ·
 [Terraform configuration](../../../terraform/README.md)
 
 ## Table of Contents
 
--   [Table of Contents](#table-of-contents)
--   [Overview](#overview)
--   [Configuration parameters](#configuration-parameters)
-    -   [Required](#required)
-    -   [Optional](#optional)
--   [State Database](#state-database)
--   [Example JSON configuration for Cloud Run functions](#example-json-configuration-for-cloud-run-functions)
--   [Example YAML ConfigMap for Kubernetes deployment](#example-yaml-configmap-for-kubernetes-deployment)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Configuration parameters](#configuration-parameters)
+    - [Required](#required)
+    - [Optional](#optional)
+- [State Database](#state-database)
+- [Example JSON configuration for Cloud Run functions](#example-json-configuration-for-cloud-run-functions)
+- [Example YAML ConfigMap for Kubernetes deployment](#example-yaml-configmap-for-kubernetes-deployment)
 
 ## Overview
 
 The Poller component takes an array of AlloyDB instances and obtains load
-metrics for each of them from [Cloud Monitoring][cloud-monitoring]. This
-array may come from the payload of a Cloud PubSub message or from configuration
-held in a [Kubernetes ConfigMap][configmap], depending on configuration.
+metrics for each of them from [Cloud Monitoring][cloud-monitoring]. This array
+may come from the payload of a Cloud PubSub message or from configuration held
+in a [Kubernetes ConfigMap][configmap], depending on configuration.
 
 Then for each AlloyDB instance it publishes a message via the specified Cloud
 PubSub topic or via API call (in a Kubernetes configuration), which includes the
@@ -67,22 +67,22 @@ loaded by the Kubernetes Cron job.
 
 ### Optional
 
-| Key                      | Default Value    | Description                                                                                                                                                                                                                                                        |
-| ------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `units`                  | `NODES`         | Specifies the units for capacity. Currently `NODES` is the only valid unit.                                                                                                                                                                                       |
-| `minSize`                | 1                | Minimum number of nodes to which the instance can be scaled IN.                                                                                                                                                                                |
-| `maxSize`                | 10               | Maximum number of nodes to which the instance can be scaled OUT.                                                                                                                                                                               |
-| `scalingMethod`          | `STEPWISE`       | Scaling method that should be used. Options are: `STEPWISE`, `DIRECT` and `LINEAR`. See the [scaling methods section][autoscaler-scaler-methods] in the Scaler component page for more information.                                                                |
-| `scalingProfile`         | `DEFAULT` | Scaling profiles that should be used. Options are: `DEFAULT` or `CUSTOM`. See the [scaling profiles section][autoscaler-scaling-profiles] in the Scaler component page for more information.                                              |
-| `scalingRules`           | `undefined`      | Scaling rules to be used when the `CUSTOM` scaling profile is supplied. See the [scaling profiles section][autoscaler-scaling-profiles] in the Scaler component page for more information.                                                                         |
-| `stepSize`               | 1                | Number of nodes that should be added or removed when scaling with the `STEPWISE` method.                                                                                                                                                                          |
-| `scaleInLimit`           | `undefined`      | Maximum number of nodes that can be removed on a single step when scaling with the `LINEAR` method. If `undefined` or `0`, it will not limit the number of nodes.                                                                                                |
-| `scaleOutLimit`          | `undefined`      | Maximum number of nodes that can be added on a single step when scaling with the `LINEAR` method. If `undefined` or `0`, it will not limit the number of nodes.                                                                                                  |
-| `scaleOutCoolingMinutes` | 10               | Minutes to wait after scaling IN or OUT before a scale OUT event can be processed.                                                                                                                                                                                 |
-| `scaleInCoolingMinutes`  | 20               | Minutes to wait after scaling IN or OUT before a scale IN event can be processed.                                                                                                                                                                                  |
-| `stateProjectId`         | `${projectId}`   | The project ID where the Autoscaler state will be persisted. By default it is persisted using [Cloud Firestore][cloud-firestore] in the same project as the AlloyDB instance.                                                                          |
-| `stateDatabase`          | Object           | An Object that can override the database for managing the state of the Autoscaler. The default database is Firestore. Refer to the [state database](#state-database) for details.                                                                                  |
-| `downstreamPubSubTopic`  | `undefined`      | Set this parameter to `projects/${projectId}/topics/downstream-topic` if you want the the Autoscaler to publish events that can be consumed by downstream applications. See [Downstream messaging](../scaler/README.md#downstream-messaging) for more information. |
+| Key                      | Default Value  | Description                                                                                                                                                                                                                                                        |
+| ------------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `units`                  | `NODES`        | Specifies the units for capacity. Currently `NODES` is the only valid unit.                                                                                                                                                                                        |
+| `minSize`                | 1              | Minimum number of nodes to which the instance can be scaled IN.                                                                                                                                                                                                    |
+| `maxSize`                | 10             | Maximum number of nodes to which the instance can be scaled OUT.                                                                                                                                                                                                   |
+| `scalingMethod`          | `STEPWISE`     | Scaling method that should be used. Options are: `STEPWISE`, `DIRECT` and `LINEAR`. See the [scaling methods section][autoscaler-scaler-methods] in the Scaler component page for more information.                                                                |
+| `scalingProfile`         | `DEFAULT`      | Scaling profiles that should be used. Options are: `DEFAULT` or `CUSTOM`. See the [scaling profiles section][autoscaler-scaling-profiles] in the Scaler component page for more information.                                                                       |
+| `scalingRules`           | `undefined`    | Scaling rules to be used when the `CUSTOM` scaling profile is supplied. See the [scaling profiles section][autoscaler-scaling-profiles] in the Scaler component page for more information.                                                                         |
+| `stepSize`               | 1              | Number of nodes that should be added or removed when scaling with the `STEPWISE` method.                                                                                                                                                                           |
+| `scaleInLimit`           | `undefined`    | Maximum number of nodes that can be removed on a single step when scaling with the `LINEAR` method. If `undefined` or `0`, it will not limit the number of nodes.                                                                                                  |
+| `scaleOutLimit`          | `undefined`    | Maximum number of nodes that can be added on a single step when scaling with the `LINEAR` method. If `undefined` or `0`, it will not limit the number of nodes.                                                                                                    |
+| `scaleOutCoolingMinutes` | 10             | Minutes to wait after scaling IN or OUT before a scale OUT event can be processed.                                                                                                                                                                                 |
+| `scaleInCoolingMinutes`  | 20             | Minutes to wait after scaling IN or OUT before a scale IN event can be processed.                                                                                                                                                                                  |
+| `stateProjectId`         | `${projectId}` | The project ID where the Autoscaler state will be persisted. By default it is persisted using [Cloud Firestore][cloud-firestore] in the same project as the AlloyDB instance.                                                                                      |
+| `stateDatabase`          | Object         | An Object that can override the database for managing the state of the Autoscaler. The default database is Firestore. Refer to the [state database](#state-database) for details.                                                                                  |
+| `downstreamPubSubTopic`  | `undefined`    | Set this parameter to `projects/${projectId}/topics/downstream-topic` if you want the the Autoscaler to publish events that can be consumed by downstream applications. See [Downstream messaging](../scaler/README.md#downstream-messaging) for more information. |
 
 ## Metrics
 
@@ -93,9 +93,9 @@ and includes rules for scaling based on these.
 The Autoscaler monitors the workload of an instance by polling the time series
 of the following:
 
--   `alloydb.googleapis.com/instance/cpu/maximum_utilization`
--   `alloydb.googleapis.com/instance/cpu/average_utilization`
--   `alloydb.googleapis.com/instance/postgres/total_connections / alloydb.googleapis.com/instance/postgres/connections_limit`
+- `alloydb.googleapis.com/instance/cpu/maximum_utilization`
+- `alloydb.googleapis.com/instance/cpu/average_utilization`
+- `alloydb.googleapis.com/instance/postgres/total_connections / alloydb.googleapis.com/instance/postgres/connections_limit`
 
 Google recommends initially using the provided metrics and rules unchanged.
 However, in some cases you may want to define custom rules based on metrics in

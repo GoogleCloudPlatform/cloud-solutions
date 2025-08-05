@@ -7,15 +7,14 @@ Streamlit.
 
 Subscriber behaviour:
 
-*   Subscriptions will be created on demand. This is to allow scaling across
-    multiple processes. It is expected to only pull newly published data in the
-    general case.
-*   There is a configurable fixed buffer of messages it retains. Clients will
-    receive all messages back in time up to this buffer size.
-*   Each client session will receive messages as fast as possible
-    asynchronously.
-*   Only one subscription is shared (for the subscription) across all user
-    sessions in a single proces.
+- Subscriptions will be created on demand. This is to allow scaling across
+  multiple processes. It is expected to only pull newly published data in the
+  general case.
+- There is a configurable fixed buffer of messages it retains. Clients will
+  receive all messages back in time up to this buffer size.
+- Each client session will receive messages as fast as possible asynchronously.
+- Only one subscription is shared (for the subscription) across all user
+  sessions in a single proces.
 
 Note that asyncio isn't officially supported by Streamlit (see
 [this](https://github.com/streamlit/streamlit/issues/8488)), but this use of it

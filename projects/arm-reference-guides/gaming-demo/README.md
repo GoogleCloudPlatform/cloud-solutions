@@ -4,8 +4,8 @@
 
 To deploy this demo, you need:
 
--   A Google Cloud project.
--   An account that has the `owner` role on that Google Cloud project.
+- A Google Cloud project.
+- An account that has the `owner` role on that Google Cloud project.
 
 ## Prepare the environment
 
@@ -27,9 +27,9 @@ To deploy this demo, you need:
 
     Where:
 
-    -   `<PROJECT_ID>` is the ID of your Google Cloud project.
-    -   `<LOCATION>` is the location where to provision cloud resources.
-        Example: `us-central1`
+    - `<PROJECT_ID>` is the ID of your Google Cloud project.
+    - `<LOCATION>` is the location where to provision cloud resources. Example:
+      `us-central1`
 
 1.  Clone this repository:
 

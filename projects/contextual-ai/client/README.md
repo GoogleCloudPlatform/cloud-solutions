@@ -1,4 +1,4 @@
-# Contextual AI Dashboard -   React Client
+# Contextual AI Dashboard - React Client
 
 A modern React dashboard application built with TypeScript, Tailwind CSS, and
 shadcn/ui components featuring a professional layout with top header, left
@@ -8,81 +8,81 @@ sidebar navigation, and AI chat integration.
 
 ### Prerequisites
 
--   Node.js 16.x or higher
--   npm or yarn package manager
+- Node.js 16.x or higher
+- npm or yarn package manager
 
 ### Installation & Setup
 
--   **Navigate to the client directory:**
+- **Navigate to the client directory:**
 
 ```bash
 cd client
 ```
 
--   **Install dependencies:**
+- **Install dependencies:**
 
 ```bash
 npm install
 ```
 
--   **Start the development server:**
+- **Start the development server:**
 
 ```bash
 npm start
 ```
 
--   **Open your browser:** Navigate to
+- **Open your browser:** Navigate to
   [http://localhost:3000](http://localhost:3000) to view the dashboard.
 
 ## 🎨 Dashboard Features
 
 ### Layout Components
 
--   **📍 Top Header**: Search bar, notifications, settings, chat toggle, and user
+- **📍 Top Header**: Search bar, notifications, settings, chat toggle, and user
   profile
--   **📂 Left Sidebar**: Navigation menu with icons, badges, and upgrade prompt
--   **📊 Main Content**: Dynamic content area that changes based on navigation
+- **📂 Left Sidebar**: Navigation menu with icons, badges, and upgrade prompt
+- **📊 Main Content**: Dynamic content area that changes based on navigation
   selection
--   **💬 Chat Drawer**: AI assistant chat interface that slides in from the right
+- **💬 Chat Drawer**: AI assistant chat interface that slides in from the right
 
 ### Dashboard Sections
 
--   **Dashboard**: Overview with stats, charts, recent activity, and quick actions
--   **Analytics**: Data visualization and metrics (placeholder)
--   **Data Sources**: Data management interface (placeholder)
--   **AI Models**: Machine learning model management (placeholder)
--   **Monitoring**: System monitoring and health checks (placeholder)
--   **Automation**: Workflow automation tools (placeholder)
--   **Reports**: Report generation and management (placeholder)
--   **Users**: User management interface (placeholder)
--   **Settings**: Application settings (placeholder)
+- **Dashboard**: Overview with stats, charts, recent activity, and quick actions
+- **Analytics**: Data visualization and metrics (placeholder)
+- **Data Sources**: Data management interface (placeholder)
+- **AI Models**: Machine learning model management (placeholder)
+- **Monitoring**: System monitoring and health checks (placeholder)
+- **Automation**: Workflow automation tools (placeholder)
+- **Reports**: Report generation and management (placeholder)
+- **Users**: User management interface (placeholder)
+- **Settings**: Application settings (placeholder)
 
 ### Interactive Features
 
--   ✅ Responsive navigation with active state highlighting
--   ✅ Real-time chat interface with message history
--   ✅ Notification badges and system status indicators
--   ✅ Quick action buttons and system health monitoring
--   ✅ Dark/light mode support (built into shadcn/ui)
+- ✅ Responsive navigation with active state highlighting
+- ✅ Real-time chat interface with message history
+- ✅ Notification badges and system status indicators
+- ✅ Quick action buttons and system health monitoring
+- ✅ Dark/light mode support (built into shadcn/ui)
 
 ## 📦 What's Included
 
 ### Tech Stack
 
--   ⚛️ **React 18** with TypeScript
--   🎨 **Tailwind CSS** for styling
--   🧩 **shadcn/ui** component library
--   🎯 **Lucide React** for beautiful icons
--   🛠️ **CRACO** for configuration overrides
--   📦 **Path aliases** (@/ imports)
+- ⚛️ **React 18** with TypeScript
+- 🎨 **Tailwind CSS** for styling
+- 🧩 **shadcn/ui** component library
+- 🎯 **Lucide React** for beautiful icons
+- 🛠️ **CRACO** for configuration overrides
+- 📦 **Path aliases** (@/ imports)
 
 ### Key Components
 
--   `Header.tsx` -   Top navigation with search, notifications, and user profile
--   `Sidebar.tsx` -   Left navigation menu with route management
--   `DashboardContent.tsx` -   Main content area with section routing
--   `ChatDrawer.tsx` -   AI chat interface with message history
--   `ui/` -   shadcn/ui component library (Button, Card, Sheet, Input, Avatar,
+- `Header.tsx` - Top navigation with search, notifications, and user profile
+- `Sidebar.tsx` - Left navigation menu with route management
+- `DashboardContent.tsx` - Main content area with section routing
+- `ChatDrawer.tsx` - AI chat interface with message history
+- `ui/` - shadcn/ui component library (Button, Card, Sheet, Input, Avatar,
   Badge)
 
 ## 🛠️ Available Scripts
@@ -185,20 +185,20 @@ const [chatOpen, setChatOpen] = useState(false);
 
 To add a new section to the dashboard:
 
--   **Add to navigation** in `Sidebar.tsx`:
+- **Add to navigation** in `Sidebar.tsx`:
 
 ```tsx
 { id: 'new-section', label: 'New Section', icon: <Icon className="h-4 w-4" /> }
 ```
 
--   **Add route handling** in `DashboardContent.tsx`:
+- **Add route handling** in `DashboardContent.tsx`:
 
 ```tsx
 case 'new-section':
   return renderNewSection();
 ```
 
--   **Create content component**:
+- **Create content component**:
 
 ```tsx
 const renderNewSection = () => (
@@ -221,44 +221,44 @@ The dashboard uses a comprehensive design system with CSS variables:
 
 ### Color System
 
--   **Background**: `bg-background`, `bg-card`, `bg-muted`
--   **Text**: `text-foreground`, `text-muted-foreground`
--   **Interactive**: `text-primary`, `text-secondary`
--   **Status**: `text-destructive`, badges with custom colors
--   **Borders**: `border-border`, `border-input`
+- **Background**: `bg-background`, `bg-card`, `bg-muted`
+- **Text**: `text-foreground`, `text-muted-foreground`
+- **Interactive**: `text-primary`, `text-secondary`
+- **Status**: `text-destructive`, badges with custom colors
+- **Borders**: `border-border`, `border-input`
 
 ### Layout Classes
 
--   **Spacing**: Consistent `space-y-6`, `gap-6` patterns
--   **Grid**: Responsive grid layouts with
+- **Spacing**: Consistent `space-y-6`, `gap-6` patterns
+- **Grid**: Responsive grid layouts with
   `grid-cols-1 md:grid-cols-2 lg:grid-cols-4`
--   **Flexbox**: `flex`, `items-center`, `justify-between` for component layouts
+- **Flexbox**: `flex`, `items-center`, `justify-between` for component layouts
 
 ## 📱 Responsive Design
 
 The dashboard is fully responsive with breakpoints:
 
--   **Mobile**: Single column layout, collapsible navigation
--   **Tablet**: Two-column grids, condensed header
--   **Desktop**: Full layout with all components visible
+- **Mobile**: Single column layout, collapsible navigation
+- **Tablet**: Two-column grids, condensed header
+- **Desktop**: Full layout with all components visible
 
 ## 🧪 Demo Features
 
 The dashboard includes demo data and functionality:
 
--   Sample dashboard statistics with trend indicators
--   Mock chat messages with AI responses
--   System status indicators and recent activity feeds
--   Quick action buttons and navigation badges
+- Sample dashboard statistics with trend indicators
+- Mock chat messages with AI responses
+- System status indicators and recent activity feeds
+- Quick action buttons and navigation badges
 
 ## 📚 Resources
 
--   [React Documentation](https://reactjs.org/)
--   [TypeScript Handbook](https://www.typescriptlang.org/docs/)
--   [Tailwind CSS Documentation](https://tailwindcss.com/docs)
--   [shadcn/ui Documentation](https://ui.shadcn.com/)
--   [Lucide React Icons](https://lucide.dev/)
--   [CRACO Documentation](https://craco.js.org/)
+- [React Documentation](https://reactjs.org/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [shadcn/ui Documentation](https://ui.shadcn.com/)
+- [Lucide React Icons](https://lucide.dev/)
+- [CRACO Documentation](https://craco.js.org/)
 
 ## 📝 License
 

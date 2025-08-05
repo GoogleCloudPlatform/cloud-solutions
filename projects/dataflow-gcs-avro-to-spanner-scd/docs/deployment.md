@@ -10,10 +10,10 @@ a Cloud Spanner database using one of the supported SCD Types.
 
 This solution uses billable components of Google Cloud, including the following:
 
-*   [Dataflow](https://cloud.google.com/dataflow/pricing)
-*   [Cloud Storage](https://cloud.google.com/storage/pricing)
-*   [Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
-*   [Cloud Spanner](https://cloud.google.com/spanner/pricing)
+- [Dataflow](https://cloud.google.com/dataflow/pricing)
+- [Cloud Storage](https://cloud.google.com/storage/pricing)
+- [Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
+- [Cloud Spanner](https://cloud.google.com/spanner/pricing)
 
 Consider
 [cleaning up the resources](https://cloud.google.com/dataflow/docs/guides/templates/using-flex-templates#clean-up)
@@ -53,15 +53,15 @@ when they are no longer needed.
 
 This tutorial assumes that you already have:
 
-*   Avro files uploaded to a Google Cloud Storage bucket that you want to insert
-    to your database.
+- Avro files uploaded to a Google Cloud Storage bucket that you want to insert
+  to your database.
 
-*   A
-    [Cloud Spanner instance](https://cloud.google.com/spanner/docs/create-manage-instances),
-    with a
-    [database](https://cloud.google.com/spanner/docs/create-manage-databases#console)
-    and [tables created](https://cloud.google.com/spanner/docs/named-schemas),
-    where the Avro data will be inserted or updated.
+- A
+  [Cloud Spanner instance](https://cloud.google.com/spanner/docs/create-manage-instances),
+  with a
+  [database](https://cloud.google.com/spanner/docs/create-manage-databases#console)
+  and [tables created](https://cloud.google.com/spanner/docs/named-schemas),
+  where the Avro data will be inserted or updated.
 
 Please set them up before proceeding ahead. Consider using the files under
 `src/test/resources/AvroToSpannerScdPipelineITTest` if you do not have a

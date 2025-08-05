@@ -1,6 +1,6 @@
 # [![Google Cloud](common/images/google-cloud-lockup.svg){style="height: 77.5px;"}](https://cloud.google.com)
 
-----
+---
 
 This repository contains various tools, demos and reference architectures from
 the Google Cloud Solutions Architects team that can help you build solutions on
@@ -15,14 +15,11 @@ licensed.
 
 Other solutions from the Google Cloud Solutions team can be found at:
 
-*   [![Google Cloud Icon
-    ](common/images/super-cloud.svg){style="width:1em; height:1em"}
-    Google Cloud Solutions](https://cloud.google.com/solutions)
+- [![Google Cloud Icon
+  ](common/images/super-cloud.svg){style="width:1em; height:1em"} Google Cloud Solutions](https://cloud.google.com/solutions)
 
-*   [![Google Cloud Solutions Center Icon
-    ](common/images/solutions-center.png){style="width:1em; height:1em"}
-    Google Cloud Solutions Center](https://solutions.cloud.google.com/)
+- [![Google Cloud Solutions Center Icon
+  ](common/images/solutions-center.png){style="width:1em; height:1em"} Google Cloud Solutions Center](https://solutions.cloud.google.com/)
 
-*   [![Google Cloud Icon
-    ](common/images/super-cloud.svg){style="width:1em; height:1em"}
-    Google Cloud Architecture Center](https://cloud.google.com/architecture)
+- [![Google Cloud Icon
+  ](common/images/super-cloud.svg){style="width:1em; height:1em"} Google Cloud Architecture Center](https://cloud.google.com/architecture)

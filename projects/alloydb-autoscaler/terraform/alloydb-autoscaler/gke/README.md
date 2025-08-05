@@ -10,25 +10,25 @@ Set up the Autoscaler using Google Kubernetes Engine and Terraform
 [Forwarder component](../../../src/alloydb-autoscaler/forwarder/README.md) ·
 **Terraform configuration**
 
-[Cloud Run functions](../cloud-functions/README.md) ·
-**Google Kubernetes Engine**
+[Cloud Run functions](../cloud-functions/README.md) · **Google Kubernetes
+Engine**
 
 ## Table of Contents
 
--   [Table of Contents](#table-of-contents)
--   [Overview](#overview)
--   [Architecture](#architecture)
-    -   [Pros](#pros)
-    -   [Cons](#cons)
--   [Before you begin](#before-you-begin)
--   [Preparing the Autoscaler Project](#preparing-the-autoscaler-project)
-    -   [Using Firestore for Autoscaler state](#using-firestore-for-autoscaler-state)
-    -   [Using Spanner for Autoscaler state](#using-spanner-for-autoscaler-state)
--   [Creating Autoscaler infrastructure](#creating-autoscaler-infrastructure)
--   [Building the Autoscaler](#building-the-autoscaler)
--   [Deploying the Autoscaler](#deploying-the-autoscaler)
--   [Metrics in GKE deployment](#metrics-in-gke-deployment)
--   [Troubleshooting](#troubleshooting)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Architecture](#architecture)
+    - [Pros](#pros)
+    - [Cons](#cons)
+- [Before you begin](#before-you-begin)
+- [Preparing the Autoscaler Project](#preparing-the-autoscaler-project)
+    - [Using Firestore for Autoscaler state](#using-firestore-for-autoscaler-state)
+    - [Using Spanner for Autoscaler state](#using-spanner-for-autoscaler-state)
+- [Creating Autoscaler infrastructure](#creating-autoscaler-infrastructure)
+- [Building the Autoscaler](#building-the-autoscaler)
+- [Deploying the Autoscaler](#deploying-the-autoscaler)
+- [Metrics in GKE deployment](#metrics-in-gke-deployment)
+- [Troubleshooting](#troubleshooting)
 
 ## Overview
 
@@ -81,26 +81,25 @@ The GKE deployment has the following pros and cons:
 
 ### Pros
 
--   **Kubernetes-based**: For teams that may not be able to use Google Cloud
-    services such as [Cloud Run functions][cloud-functions], this design enables
-    the use of the Autoscaler.
--   **Configuration**: The control over scheduler parameters belongs to the team
-    that owns the AlloyDB instance, therefore the team has the highest degree of
-    freedom to adapt the Autoscaler to its needs.
--   **Infrastructure**: This design establishes a clear boundary of
-    responsibility and security over the Autoscaler infrastructure because the
-    Autoscaler infrastructure.
+- **Kubernetes-based**: For teams that may not be able to use Google Cloud
+  services such as [Cloud Run functions][cloud-functions], this design enables
+  the use of the Autoscaler.
+- **Configuration**: The control over scheduler parameters belongs to the team
+  that owns the AlloyDB instance, therefore the team has the highest degree of
+  freedom to adapt the Autoscaler to its needs.
+- **Infrastructure**: This design establishes a clear boundary of responsibility
+  and security over the Autoscaler infrastructure because the Autoscaler
+  infrastructure.
 
 ### Cons
 
--   **Infrastructure**: In contrast to the [Cloud Run
-    functions][cloud-functions] design, some long-lived infrastructure and
-    services are required.
--   **Maintenance**: with each team being responsible for the Autoscaler
-    configuration and infrastructure it may become difficult to make sure that
-    all Autoscalers across the company follow the same update guidelines.
--   **Audit**: because of the high level of control by each team, a centralized
-    audit may become more complex.
+- **Infrastructure**: In contrast to the [Cloud Run functions][cloud-functions]
+  design, some long-lived infrastructure and services are required.
+- **Maintenance**: with each team being responsible for the Autoscaler
+  configuration and infrastructure it may become difficult to make sure that all
+  Autoscalers across the company follow the same update guidelines.
+- **Audit**: because of the high level of control by each team, a centralized
+  audit may become more complex.
 
 The Poller and Scaler components are be deployed as a single pod, which runs as
 a Kubernetes cron job. This means there are no long-running components.

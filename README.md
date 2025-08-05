@@ -1,8 +1,8 @@
 # Google Cloud solutions
 
 This repository contains open source projects that combine multiple Google Cloud
-services to solve common technical challenges in areas such as
-application modernization, data analytics, and security.
+services to solve common technical challenges in areas such as application
+modernization, data analytics, and security.
 
 [![Explore solutions](docs/common/images/explore.png)](https://googlecloudplatform.github.io/cloud-solutions/)
 
@@ -16,7 +16,8 @@ project, or if you would like to contribute to an existing project, see
 
 ---
 
-_The projects in this repository are not an officially supported Google products._
+_The projects in this repository are not an officially supported Google
+products._
 
 _All files in this repository are under the
 [Apache License, Version 2.0](LICENSE) unless noted otherwise._

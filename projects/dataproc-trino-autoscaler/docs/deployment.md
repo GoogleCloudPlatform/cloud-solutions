@@ -4,19 +4,19 @@ This document describes a method to run a demo deployment of the tool.
 
 ## Objectives
 
--   Deploy autoscaler application
--   Run a Demo job for autoscaling Dataproc workers for the Trino workloads
--   Verify autoscaling of worker nodes in the monitoring and Trino dashboard
+- Deploy autoscaler application
+- Run a Demo job for autoscaling Dataproc workers for the Trino workloads
+- Verify autoscaling of worker nodes in the monitoring and Trino dashboard
 
 ## Costs
 
 This tutorial uses billable components of Google Cloud, including the following:
 
--   [Dataproc](https://cloud.google.com/dataproc/pricing)
--   [Cloud Build](https://cloud.google.com/build/pricing)
--   [Bigquery](https://cloud.google.com/bigquery/pricing)
--   [Cloud Storage](https://cloud.google.com/storage/pricing)
--   [Cloud Monitoring](https://cloud.google.com/stackdriver/pricing)
+- [Dataproc](https://cloud.google.com/dataproc/pricing)
+- [Cloud Build](https://cloud.google.com/build/pricing)
+- [Bigquery](https://cloud.google.com/bigquery/pricing)
+- [Cloud Storage](https://cloud.google.com/storage/pricing)
+- [Cloud Monitoring](https://cloud.google.com/stackdriver/pricing)
 
 Use the [pricing calculator](https://cloud.google.com/products/calculator) to
 generate a cost estimate based on your projected usage.
@@ -110,11 +110,11 @@ master node as a daemon process.
     gcloud compute scp <JAR_FILE_PATH> <CONFIG_FILE_PATH> <MASTER_NODE_NAME>:~/.
     ```
 
-    Variable           | Description
-    ------------------ | ---------------------------------------------------
-    `JAR_FILE_PATH`    | full path to the JAR file on your local machine.
-    `CONFIG_FILE_PATH` | full path to the config file on your local machine.
-    `MASTER_NODE_NAME` | name of the master node in the Dataproc cluster.
+    | Variable           | Description                                         |
+    | ------------------ | --------------------------------------------------- |
+    | `JAR_FILE_PATH`    | full path to the JAR file on your local machine.    |
+    | `CONFIG_FILE_PATH` | full path to the config file on your local machine. |
+    | `MASTER_NODE_NAME` | name of the master node in the Dataproc cluster.    |
 
 1.  Invoke the autoscaler application using:
 
@@ -139,27 +139,24 @@ To install autoscaler as a systemd daemon follow the steps:
     directory `TRINO_AUTO_SCALER_SERVICE_FOLDER`.
 1.  The service file contains the following configuration:
 
-    -   The description of the service: `Trino Autoscaler Service`
-    -   The dependencies of the service: `trino.service`
-    -   The command to start the service: `#!bash java -jar
-        ${TRINO_AUTOSCALE_FOLDER}/trino_autoscaler.jar
-        ${TRINO_AUTOSCALE_FOLDER/config.textproto`
-    -   The command to stop the service: `#!bash /bin/kill -15 \${MAINPID}` The
-        restart policy for the service: `always`. The standard output and
-        standard error logs for the service: `/var/log/trino_autoscaler.log`.
-        Changes the permissions of the service file `trino_autoscaler.service`
-        to allow read, write, and execute permissions for all users.
-    -   The code `#!bash if [[ "{ROLE}" == 'Master' ]];` then checks the value
-        of the environment variable ROLE. If the value of the variable is
-        Master, then the `#!bash setup_trino_autoscaler()` function is executed.
-        This ensures that the Trino autoscaler is only set up on the master
-        node.
-    -   The code systemctl daemon-reload reloads the systemd daemon
-        configuration. This ensures that the systemd daemon is aware of the new
-        service file trino_autoscaler.service.
-    -   When you are using a port other than 8060 for Trino,
-        add the port number with a space after `config.textproto`
-        on the `ExecStart` command.
+    - The description of the service: `Trino Autoscaler Service`
+    - The dependencies of the service: `trino.service`
+    - The command to start the service:
+      `#!bash java -jar   ${TRINO_AUTOSCALE_FOLDER}/trino_autoscaler.jar   ${TRINO_AUTOSCALE_FOLDER/config.textproto`
+    - The command to stop the service: `#!bash /bin/kill -15 \${MAINPID}` The
+      restart policy for the service: `always`. The standard output and standard
+      error logs for the service: `/var/log/trino_autoscaler.log`. Changes the
+      permissions of the service file `trino_autoscaler.service` to allow read,
+      write, and execute permissions for all users.
+    - The code `#!bash if [[ "{ROLE}" == 'Master' ]];` then checks the value of
+      the environment variable ROLE. If the value of the variable is Master,
+      then the `#!bash setup_trino_autoscaler()` function is executed. This
+      ensures that the Trino autoscaler is only set up on the master node.
+    - The code systemctl daemon-reload reloads the systemd daemon configuration.
+      This ensures that the systemd daemon is aware of the new service file
+      trino_autoscaler.service.
+    - When you are using a port other than 8060 for Trino, add the port number
+      with a space after `config.textproto` on the `ExecStart` command.
 
     ```bash
     TRINO_AUTO_SCALER_SERVICE_FOLDER="/usr/lib/systemd/system/"

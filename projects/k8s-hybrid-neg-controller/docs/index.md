@@ -28,23 +28,22 @@ but instead of creating zonal
 
 Example use cases for this controller include the following:
 
--   Use an external or internal layer 7
-    [Application Load Balancer](https://cloud.google.com/load-balancing/docs/application-load-balancer)
-    or layer 4
-    [proxy Network Load Balancer](https://cloud.google.com/load-balancing/docs/proxy-network-load-balancer)
-    on Google Cloud to load balance traffic across backends running in
-    Kubernetes clusters on both Google Cloud and on-prem or on other clouds.
+- Use an external or internal layer 7
+  [Application Load Balancer](https://cloud.google.com/load-balancing/docs/application-load-balancer)
+  or layer 4
+  [proxy Network Load Balancer](https://cloud.google.com/load-balancing/docs/proxy-network-load-balancer)
+  on Google Cloud to load balance traffic across backends running in Kubernetes
+  clusters on both Google Cloud and on-prem or on other clouds.
 
--   Enable client-side traffic splitting, routing, and load balancing of
-    internal (east-west) traffic across backends running in Kubernetes clusters
-    on both Google Cloud and on-prem or on other clouds, with direct Pod-to-Pod
-    communication.
-    This is made possible by using the managed control plane of
-    [Cloud Service Mesh](https://cloud.google.com/service-mesh/docs/overview),
-    configured using the
-    [service routing APIs](https://cloud.google.com/service-mesh/docs/service-routing/service-routing-overview).
-    The Kubernetes clusters do _not_ need to run an in-cluster service mesh
-    control plane for the workloads to be part of the service mesh.
+- Enable client-side traffic splitting, routing, and load balancing of internal
+  (east-west) traffic across backends running in Kubernetes clusters on both
+  Google Cloud and on-prem or on other clouds, with direct Pod-to-Pod
+  communication. This is made possible by using the managed control plane of
+  [Cloud Service Mesh](https://cloud.google.com/service-mesh/docs/overview),
+  configured using the
+  [service routing APIs](https://cloud.google.com/service-mesh/docs/service-routing/service-routing-overview).
+  The Kubernetes clusters do _not_ need to run an in-cluster service mesh
+  control plane for the workloads to be part of the service mesh.
 
 For further details on these and other use cases, see the document on
 [use cases](use-cases.md).
@@ -81,10 +80,10 @@ When running off-Google Cloud, the following configuration values must be set.
 
 Set the
 [project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects)
-of the Google Cloud project where the controller creates network endpoint
-groups (NEGs) either as an environment variable (`env`) called
-`PROJECT_ID`, or by adding the `project-id` flag as a container argument
-(`args`) in the Pod spec of the controller manager.
+of the Google Cloud project where the controller creates network endpoint groups
+(NEGs) either as an environment variable (`env`) called `PROJECT_ID`, or by
+adding the `project-id` flag as a container argument (`args`) in the Pod spec of
+the controller manager.
 
 If both the `project-id` flag and the `PROJECT_ID` environment variable are set,
 the flag value takes precedence.
@@ -92,14 +91,13 @@ the flag value takes precedence.
 ### VPC network name
 
 Set the name of the
-[Virtual Private Cloud (VPC) network](https://cloud.google.com/vpc/docs/vpc)
-on Google Cloud where the controller creates network endpoint groups (NEGs),
-either as an environment variable (`env`) called
-`NETWORK`, or by adding the `network` flag as a container argument
-(`args`) in the Pod spec of the controller manager.
+[Virtual Private Cloud (VPC) network](https://cloud.google.com/vpc/docs/vpc) on
+Google Cloud where the controller creates network endpoint groups (NEGs), either
+as an environment variable (`env`) called `NETWORK`, or by adding the `network`
+flag as a container argument (`args`) in the Pod spec of the controller manager.
 
-If both the `network` flag and the `NETWORK` environment variable are set,
-the flag value takes precedence.
+If both the `network` flag and the `NETWORK` environment variable are set, the
+flag value takes precedence.
 
 If you do not provide a VPC network name, the controller uses the name
 `default`.
@@ -108,28 +106,25 @@ If you do not provide a VPC network name, the controller uses the name
 
 The controller requires zone mappings from the
 [Kubernetes cluster Node zones](https://kubernetes.io/docs/reference/labels-annotations-taints/#topologykubernetesiozone)
-to
-[Compute Engine zones](https://cloud.google.com/compute/docs/regions-zones/).
+to [Compute Engine zones](https://cloud.google.com/compute/docs/regions-zones/).
 
-When the controller discovers an endpoint, the zone of the endpoint's
-cluster Node is mapped to a Compute Engine zone before the endpoint is
-attached to a NEG.
+When the controller discovers an endpoint, the zone of the endpoint's cluster
+Node is mapped to a Compute Engine zone before the endpoint is attached to a
+NEG.
 
 Set the zone mapping by doing one of the following:
 
-1.  Add the `zone-mapping` flag as a container argument (`args`) in the
-    Pod spec of the controller manager.
+1.  Add the `zone-mapping` flag as a container argument (`args`) in the Pod spec
+    of the controller manager.
 
-1.  Add the `ZONE_MAPPING` environment variable (`env`) in the Pod spec of
-    the controller manager. See
-    `../k8s/components/zone-mapping-flag-kind.yaml`
-    for an example on how to do this.
+1.  Add the `ZONE_MAPPING` environment variable (`env`) in the Pod spec of the
+    controller manager. See `../k8s/components/zone-mapping-flag-kind.yaml` for
+    an example on how to do this.
 
-For example, if you run the controller on a Kubernetes cluster in another
-cloud provider with Nodes in zones of the `eu-west-2` region, you can map
-the Kubernetes cluster's Node zones to Compute Engine zones in the
-`europe-west2` region by adding this zone mapping as a flag or environment
-variable:
+For example, if you run the controller on a Kubernetes cluster in another cloud
+provider with Nodes in zones of the `eu-west-2` region, you can map the
+Kubernetes cluster's Node zones to Compute Engine zones in the `europe-west2`
+region by adding this zone mapping as a flag or environment variable:
 
 ```shell
 eu-west-2a=europe-west2-a,eu-west-2b=europe-west2-b,eu-west-2c=europe-west2-c
@@ -151,22 +146,21 @@ Additional configuration flags and environment variables are available, see the
 
 The following deployment documents are available:
 
--   [Deploying to an Amazon Elastic Kubernetes Service (EKS) cluster](deploy-eks.md).
-    This document also covers how to build and push the container image to an
-    Amazon Elastic Container Registry (ECR) repository.
+- [Deploying to an Amazon Elastic Kubernetes Service (EKS) cluster](deploy-eks.md).
+  This document also covers how to build and push the container image to an
+  Amazon Elastic Container Registry (ECR) repository.
 
--   [Deploying to an Azure Kubernetes Service (AKS) cluster](deploy-aks.md).
-    This document also covers how to build and push the container image to a
-    private container registry in Azure Container Registry.
+- [Deploying to an Azure Kubernetes Service (AKS) cluster](deploy-aks.md). This
+  document also covers how to build and push the container image to a private
+  container registry in Azure Container Registry.
 
--   [Deploying to a GKE cluster](deploy-gke.md). Some use cases, such as
-    client-side cross-cloud load balancing using Cloud Service Mesh, specify
-    that `k8s-hybrid-neg-controller` is deployed on GKE clusters on Google
-    Cloud.
+- [Deploying to a GKE cluster](deploy-gke.md). Some use cases, such as
+  client-side cross-cloud load balancing using Cloud Service Mesh, specify that
+  `k8s-hybrid-neg-controller` is deployed on GKE clusters on Google Cloud.
 
--   [Deploying to a local `kind` Kubernetes cluster](deploy-kind.md). A local
-    `kind` Kubernetes cluster can be used for development and to experiment with
-    the controller.
+- [Deploying to a local `kind` Kubernetes cluster](deploy-kind.md). A local
+  `kind` Kubernetes cluster can be used for development and to experiment with
+  the controller.
 
 ## Using the controller
 

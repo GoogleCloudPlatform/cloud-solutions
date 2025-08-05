@@ -87,12 +87,12 @@ command.
 1.  [Create a Google Cloud project](https://cloud.google.com/resource-manager/docs/creating-managing-projects#creating_a_project).
 
 1.  [Make sure that billing is enabled](https://cloud.google.com/billing/docs/how-to/modify-project#confirm_billing_is_enabled_on_a_project)
-   for your Google Cloud project.
+    for your Google Cloud project.
 
 1.  [Open Cloud Shell](https://cloud.google.com/shell/docs/using-cloud-shell#start_a_new_session).
-    A Cloud Shell session opens and displays a command-line
-    prompt. Cloud Shell is a shell environment with the Cloud SDK already
-    installed. It can take a few seconds for the session to initialize.
+    A Cloud Shell session opens and displays a command-line prompt. Cloud Shell
+    is a shell environment with the Cloud SDK already installed. It can take a
+    few seconds for the session to initialize.
 
 1.  In Cloud Shell, clone the source repository and go to the directory for this
     tutorial:
@@ -101,13 +101,14 @@ command.
     git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git
     ```
 
-In this tutorial, we use [psql](https://www.postgresql.org/docs/current/app-psql.html)
-to interact with the database cluster. The psql client is already installed
-on the HAProxy node instance.
+In this tutorial, we use
+[psql](https://www.postgresql.org/docs/current/app-psql.html) to interact with
+the database cluster. The psql client is already installed on the HAProxy node
+instance.
 
-One alternative is pgAdmin. pgAdmin is a popular,open-source administration
-and development platform for PostgreSQL that provides a graphical interface
-which simplifies the process of managing PostgreSQL databases.
+One alternative is pgAdmin. pgAdmin is a popular,open-source administration and
+development platform for PostgreSQL that provides a graphical interface which
+simplifies the process of managing PostgreSQL databases.
 
 ### Deploy the solution
 
@@ -118,12 +119,12 @@ cd cloud-solutions/projects/alloydbomni-ha-patroni-etcd-creation/terraform && \
 terraform init
 ```
 
-Run the Terraform script to create all resources:
-The Terraform script creates and configures:
+Run the Terraform script to create all resources: The Terraform script creates
+and configures:
 
--   three nodes for your etcd cluster
--   three nodes for your Patroni cluster
--   one node for HAProxy
+- three nodes for your etcd cluster
+- three nodes for your Patroni cluster
+- one node for HAProxy
 
 You can set values for your project_id, region, zones, and some settings for
 your Patroni cluster such as cluster name, Postgres superuser, replication
@@ -264,17 +265,17 @@ section in Patroni's documentation.
 ## Test your HA setup
 
 Ensuring the reliability and robustness of your HA Patroni setup is crucial for
-maintaining continuous database operations and minimizing downtime. This
-section provides a comprehensive guide to testing your Patroni cluster, covering
-various failure scenarios, replication consistency, and failover mechanisms.
+maintaining continuous database operations and minimizing downtime. This section
+provides a comprehensive guide to testing your Patroni cluster, covering various
+failure scenarios, replication consistency, and failover mechanisms.
 
 Follow the steps outlined below to validate the integrity and performance of
 your HA Patroni configuration.
 
 ### Test your Patroni setup
 
-Connect to any of your patroni instances (patroni1, patroni2 or patroni3)
-and navigate to the AlloyDB Omni patroni folder:
+Connect to any of your patroni instances (patroni1, patroni2 or patroni3) and
+navigate to the AlloyDB Omni patroni folder:
 
 ```bash
 cd /alloydb/
@@ -286,8 +287,8 @@ Run the docker compose logs command to inspect the patroni logs:
 docker compose logs alloydbomni-patroni
 ```
 
-Notice the last entries, they should reflect information about the patroni
-node. You should see something similar to:
+Notice the last entries, they should reflect information about the patroni node.
+You should see something similar to:
 
 ```text
 alloydb-patroni        | 2024-06-12 15:10:29,020 INFO: no action. I am (patroni1), the leader with the lock
@@ -347,10 +348,10 @@ alloydb-patroni1 is the leader of the cluster:
 > `sudo apt-get install jq -y`
 
 Calling the Patroni HTTP API endpoint on a Patroni node exposes various details
-about the state and configuration of that particular PostgreSQL instance
-managed by Patroni, including cluster state information, timeline and WAL
-information, and health checks indicating whether the nodes and cluster are up
-and running correctly.
+about the state and configuration of that particular PostgreSQL instance managed
+by Patroni, including cluster state information, timeline and WAL information,
+and health checks indicating whether the nodes and cluster are up and running
+correctly.
 
 ### Test your HAProxy setup
 
@@ -362,23 +363,23 @@ sudo watch 'echo "show stat" | socat unix-connect:/var/run/haproxy/admin.sock st
 
 You should see something resembling the below table:
 
-| pxname            | svname     | smax | slim | stot | bin   | bout    | status | rate_max | check_status | cli_abrt | lastsess |
-|-------------------|------------|------|------|------|-------|---------|--------|----------|--------------|----------|----------|
-| stats             | FRONTEND   | 4    | 100  | 6    | 16618 | 1178088 | OPEN   | 2        |              |          |          |
-| stats             | BACKEND    | 0    | 10   | 0    | 16618 | 1178088 | UP     | 0        |              | 0        | 7753     |
-| postgres_primary  | FRONTEND   | 4    | 100  | 5    | 842   | 0       | OPEN   | 3        |              |          |          |
-| postgres_primary  | patroni1   | 2    | 100  | 4    | 589   | 0       | UP     | 3        | L7OK         | 0        | 9771     |
-| postgres_primary  | patroni2   | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
-| postgres_primary  | patroni3   | 1    | 100  | 1    | 253   | 0       | DOWN   | 1        | L7STS        | 0        | 9979     |
-| postgres_primary  | BACKEND    | 2    | 10   | 5    | 842   | 0       | UP     | 3        |              | 0        | 9771     |
-| postgres_replicas | FRONTEND   | 0    | 100  | 0    | 0     | 0       | OPEN   | 0        |              |          |          |
-| postgres_replicas | patroni1   | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
-| postgres_replicas | patroni2   | 0    | 100  | 0    | 0     | 0       | UP     | 0        | L7OK         | 0        | -1       |
-| postgres_replicas | patroni3   | 0    | 100  | 0    | 0     | 0       | UP     | 0        | L7OK         | 0        | -1       |
-| postgres_replicas | BACKEND    | 0    | 10   | 0    | 0     | 0       | UP     | 0        |              | 0        | -1       |
+| pxname            | svname   | smax | slim | stot | bin   | bout    | status | rate_max | check_status | cli_abrt | lastsess |
+| ----------------- | -------- | ---- | ---- | ---- | ----- | ------- | ------ | -------- | ------------ | -------- | -------- |
+| stats             | FRONTEND | 4    | 100  | 6    | 16618 | 1178088 | OPEN   | 2        |              |          |          |
+| stats             | BACKEND  | 0    | 10   | 0    | 16618 | 1178088 | UP     | 0        |              | 0        | 7753     |
+| postgres_primary  | FRONTEND | 4    | 100  | 5    | 842   | 0       | OPEN   | 3        |              |          |          |
+| postgres_primary  | patroni1 | 2    | 100  | 4    | 589   | 0       | UP     | 3        | L7OK         | 0        | 9771     |
+| postgres_primary  | patroni2 | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
+| postgres_primary  | patroni3 | 1    | 100  | 1    | 253   | 0       | DOWN   | 1        | L7STS        | 0        | 9979     |
+| postgres_primary  | BACKEND  | 2    | 10   | 5    | 842   | 0       | UP     | 3        |              | 0        | 9771     |
+| postgres_replicas | FRONTEND | 0    | 100  | 0    | 0     | 0       | OPEN   | 0        |              |          |          |
+| postgres_replicas | patroni1 | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
+| postgres_replicas | patroni2 | 0    | 100  | 0    | 0     | 0       | UP     | 0        | L7OK         | 0        | -1       |
+| postgres_replicas | patroni3 | 0    | 100  | 0    | 0     | 0       | UP     | 0        | L7OK         | 0        | -1       |
+| postgres_replicas | BACKEND  | 0    | 10   | 0    | 0     | 0       | UP     | 0        |              | 0        | -1       |
 
-Alternatively, on any machine with a working browser and network connectivity
-to your HAProxy node, go to the following address using the browser:
+Alternatively, on any machine with a working browser and network connectivity to
+your HAProxy node, go to the following address using the browser:
 
 ```text
 http://<haproxy-node>:7000
@@ -388,9 +389,9 @@ You should see something resembling the below screenshot:
 
 ![view of a HAProxy dashboard showing one primary AlloyDB Omni node and two AlloyDB Omni standby nodes](HaProxy-1.svg "HAProxy dashboard showing one primary AlloyDB Omni node and two AlloyDB Omni standby nodes")
 
-The HAProxy dashboard provides real-time information about load balancing
-and server status. For example, the LastChk column shows the result of the
-most recent health check for each server (e.g., L7OK/200, L7STS/503).
+The HAProxy dashboard provides real-time information about load balancing and
+server status. For example, the LastChk column shows the result of the most
+recent health check for each server (e.g., L7OK/200, L7STS/503).
 
 The `postgres_primary` section lists different possible AlloyDB Omni primary
 servers (patroni1, patroni2, patroni3). The table in this section has columns
@@ -399,9 +400,9 @@ warnings, and server status. The only primary server UP (green) is patroni1.
 
 Similar to the `postgres_primary` section, the `postgres_replicas` table lists
 all the potential replica servers (patroni1, patroni2, patroni3) with their
-respective stats. Notice how patroni1 is down in this section as it's a
-primary server, indicated by a red background, while patroni2 and patroni3
-are UP because they are replica servers.
+respective stats. Notice how patroni1 is down in this section as it's a primary
+server, indicated by a red background, while patroni2 and patroni3 are UP
+because they are replica servers.
 
 Go to your HAProxy node and use the psql client to connect to your cluster:
 
@@ -409,13 +410,13 @@ Go to your HAProxy node and use the psql client to connect to your cluster:
 psql -h localhost -p 5000 -U postgres
 ```
 
-Provide the password for the postgres super user. If it was self-generated,
-you can find it in the `patroni.yml` config file, located on any Patroni node
-in the `/alloydb/config/patroni.yml` file.
+Provide the password for the postgres super user. If it was self-generated, you
+can find it in the `patroni.yml` config file, located on any Patroni node in the
+`/alloydb/config/patroni.yml` file.
 
 Optionally, you can connect to the HAProxy server from a pgAdmin client and
-perform some queries to check the replication stats in your cluster. From
-the pgAdmin client,
+perform some queries to check the replication stats in your cluster. From the
+pgAdmin client,
 [connect to your HAProxy node](https://www.pgadmin.org/docs/pgadmin4/development/connect_to_server.html).
 
 Use the hostname of your HAProxy node and 5000 for the port.
@@ -431,8 +432,8 @@ FROM
 
 You should see something similar:
 
-| pid |    usename     | application_name | client_addr |   state   | sync_state |
-|-----|----------------|------------------|-------------|-----------|------------|
+| pid | usename        | application_name | client_addr | state     | sync_state |
+| --- | -------------- | ---------------- | ----------- | --------- | ---------- |
 | 188 | alloydbreplica | patroni2         | 10.0.1.4    | streaming | sync       |
 | 684 | alloydbreplica | patroni3         | 10.0.1.7    | streaming | sync       |
 
@@ -441,11 +442,10 @@ from patroni1.
 
 ### Test the automatic failover operation
 
-In your three-node cluster, simulate an outage on the primary node. You
-can either stop the Patroni service on the primary node to simulate an
-outage or enforce some firewall rules to stop communication to that node.
-In this guide, we will simulate an outage by stopping the attached-running
-Patroni container.
+In your three-node cluster, simulate an outage on the primary node. You can
+either stop the Patroni service on the primary node to simulate an outage or
+enforce some firewall rules to stop communication to that node. In this guide,
+we will simulate an outage by stopping the attached-running Patroni container.
 
 Navigate to the alloydb folder on your primary node:
 
@@ -470,50 +470,49 @@ root@patroni1:/alloydbomni-patroni# docker compose down
 
 Notice how failover takes place:
 
-| pxname            | svname     | smax | slim | stot | bin   | bout    | status | rate_max | check_status | cli_abrt | lastsess |
-|-------------------|------------|------|------|------|-------|---------|--------|----------|--------------|----------|----------|
-| stats             | FRONTEND   | 4    | 100  | 6    | 16618 | 1178088 | OPEN   | 2        |              |          |          |
-| stats             | BACKEND    | 0    | 10   | 0    | 16618 | 1178088 | UP     | 0        |              | 0        | 8058     |
-| postgres_primary  | FRONTEND   | 4    | 100  | 5    | 842   | 0       | OPEN   | 3        |              |          |          |
-| postgres_primary  | patroni1   | 2    | 100  | 4    | 589   | 0       | DOWN   | 3        | L4CON        | 0        | 10076    |
-| postgres_primary  | patroni2   | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
-| postgres_primary  | patroni3   | 1    | 100  | 1    | 253   | 0       | UP     | 1        | L7OK         | 0        | 10284    |
-| postgres_primary  | BACKEND    | 2    | 10   | 5    | 842   | 0       | UP     | 3        |              | 0        | 10076    |
-| postgres_replicas | FRONTEND   | 0    | 100  | 0    | 0     | 0       | OPEN   | 0        |              |          |          |
-| postgres_replicas | patroni1   | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L4CON        | 0        | -1       |
-| postgres_replicas | patroni2   | 0    | 100  | 0    | 0     | 0       | UP     | 0        | L7OK         | 0        | -1       |
-| postgres_replicas | patroni3   | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
-| postgres_replicas | BACKEND    | 0    | 10   | 0    | 0     | 0       | UP     | 0        |              | 0        | -1       |
+| pxname            | svname   | smax | slim | stot | bin   | bout    | status | rate_max | check_status | cli_abrt | lastsess |
+| ----------------- | -------- | ---- | ---- | ---- | ----- | ------- | ------ | -------- | ------------ | -------- | -------- |
+| stats             | FRONTEND | 4    | 100  | 6    | 16618 | 1178088 | OPEN   | 2        |              |          |          |
+| stats             | BACKEND  | 0    | 10   | 0    | 16618 | 1178088 | UP     | 0        |              | 0        | 8058     |
+| postgres_primary  | FRONTEND | 4    | 100  | 5    | 842   | 0       | OPEN   | 3        |              |          |          |
+| postgres_primary  | patroni1 | 2    | 100  | 4    | 589   | 0       | DOWN   | 3        | L4CON        | 0        | 10076    |
+| postgres_primary  | patroni2 | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
+| postgres_primary  | patroni3 | 1    | 100  | 1    | 253   | 0       | UP     | 1        | L7OK         | 0        | 10284    |
+| postgres_primary  | BACKEND  | 2    | 10   | 5    | 842   | 0       | UP     | 3        |              | 0        | 10076    |
+| postgres_replicas | FRONTEND | 0    | 100  | 0    | 0     | 0       | OPEN   | 0        |              |          |          |
+| postgres_replicas | patroni1 | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L4CON        | 0        | -1       |
+| postgres_replicas | patroni2 | 0    | 100  | 0    | 0     | 0       | UP     | 0        | L7OK         | 0        | -1       |
+| postgres_replicas | patroni3 | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
+| postgres_replicas | BACKEND  | 0    | 10   | 0    | 0     | 0       | UP     | 0        |              | 0        | -1       |
 
 Alternatively, refresh the HAProxy dashboard in the browser:
 
 ![view of a HAProxy dashboard after an outage and failover, showing one primary AlloyDB Omni node and only one AlloyDB Omni standby node](HaProxy-2.svg "HAProxy dashboard after an outage and failover, showing one primary AlloyDB Omni node and only one AlloyDB Omni standby node")
 
-Notice how the patroni3 instance in the `postgres_primary` is now UP because
-it became the new primary and patroni2 is the only remaining replica from
-the `postgres_replicas` section. The previous primary, patroni1, is down in
-both sections and as expected, the health checks for it are failing.
+Notice how the patroni3 instance in the `postgres_primary` is now UP because it
+became the new primary and patroni2 is the only remaining replica from the
+`postgres_replicas` section. The previous primary, patroni1, is down in both
+sections and as expected, the health checks for it are failing.
 
-Patroni performs and manages the failover through a combination of
-monitoring, consensus, and automated orchestration. As soon as the primary
-node fails to renew its lease within a specified timeout, or if it reports
-a failure, the other nodes in the cluster recognize this condition through
-the consensus system.
+Patroni performs and manages the failover through a combination of monitoring,
+consensus, and automated orchestration. As soon as the primary node fails to
+renew its lease within a specified timeout, or if it reports a failure, the
+other nodes in the cluster recognize this condition through the consensus
+system.
 
-The remaining nodes coordinate to select the most suitable replica to
-promote as the new primary. Once a candidate replica is selected, Patroni
-promotes this node to primary by applying the necessary changes, such as
-updating the PostgreSQL configuration and replaying any outstanding WAL
-records.
+The remaining nodes coordinate to select the most suitable replica to promote as
+the new primary. Once a candidate replica is selected, Patroni promotes this
+node to primary by applying the necessary changes, such as updating the
+PostgreSQL configuration and replaying any outstanding WAL records.
 
-Then, the new primary node updates the consensus system with its status and
-the other replicas reconfigure themselves to follow the new primary,
-including switching their replication source and potentially catching up
-with any new transactions. HAProxy detects the new primary and redirects
-client connections accordingly, ensuring minimal disruption.
+Then, the new primary node updates the consensus system with its status and the
+other replicas reconfigure themselves to follow the new primary, including
+switching their replication source and potentially catching up with any new
+transactions. HAProxy detects the new primary and redirects client connections
+accordingly, ensuring minimal disruption.
 
-Run the following query in the psql client on the HAProxy node to check
-the replication stats in your cluster after failover:
+Run the following query in the psql client on the HAProxy node to check the
+replication stats in your cluster after failover:
 
 ```sql
 SELECT
@@ -524,30 +523,30 @@ FROM
 
 You should see something similar:
 
-| pid |    usename     | application_name | client_addr |   state   | sync_state |
-|-----|----------------|------------------|-------------|-----------|------------|
+| pid | usename        | application_name | client_addr | state     | sync_state |
+| --- | -------------- | ---------------- | ----------- | --------- | ---------- |
 | 234 | alloydbreplica | patroni2         | 10.0.1.4    | streaming | sync       |
 
-Notice how patroni2 is now the only replica remaining, following the new
-primary patroni3.
+Notice how patroni2 is now the only replica remaining, following the new primary
+patroni3.
 
 Your three node cluster can survive one more outage. If you stop the current
 primary node (patroni3), another failover will take place:
 
-| pxname            | svname     | smax | slim | stot | bin   | bout    | status | rate_max | check_status | cli_abrt | lastsess |
-|-------------------|------------|------|------|------|-------|---------|--------|----------|--------------|----------|----------|
-| stats             | FRONTEND   | 4    | 100  | 8    | 21610 | 1533915 | OPEN   | 2        |              |          |          |
-| stats             | BACKEND    | 0    | 10   | 0    | 21610 | 1533915 | UP     | 0        |              | 0        | 5        |
-| postgres_primary  | FRONTEND   | 4    | 100  | 5    | 842   | 0       | OPEN   | 3        |              |          |          |
-| postgres_primary  | patroni1   | 2    | 100  | 4    | 589   | 0       | DOWN   | 3        | L4CON        | 0        | 10243    |
-| postgres_primary  | patroni2   | 0    | 100  | 0    | 0     | 0       | UP     | 0        | L7OK         | 0        | -1       |
-| postgres_primary  | patroni3   | 1    | 100  | 1    | 253   | 0       | DOWN   | 1        | L4CON        | 0        | 10451    |
-| postgres_primary  | BACKEND    | 2    | 10   | 5    | 842   | 0       | UP     | 3        |              | 0        | 10243    |
-| postgres_replicas | FRONTEND   | 0    | 100  | 0    | 0     | 0       | OPEN   | 0        |              |          |          |
-| postgres_replicas | patroni1   | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L4CON        | 0        | -1       |
-| postgres_replicas | patroni2   | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
-| postgres_replicas | patroni3   | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L4CON        | 0        | -1       |
-| postgres_replicas | BACKEND    | 0    | 10   | 0    | 0     | 0       | DOWN   | 0        |              | 0        | -1       |
+| pxname            | svname   | smax | slim | stot | bin   | bout    | status | rate_max | check_status | cli_abrt | lastsess |
+| ----------------- | -------- | ---- | ---- | ---- | ----- | ------- | ------ | -------- | ------------ | -------- | -------- |
+| stats             | FRONTEND | 4    | 100  | 8    | 21610 | 1533915 | OPEN   | 2        |              |          |          |
+| stats             | BACKEND  | 0    | 10   | 0    | 21610 | 1533915 | UP     | 0        |              | 0        | 5        |
+| postgres_primary  | FRONTEND | 4    | 100  | 5    | 842   | 0       | OPEN   | 3        |              |          |          |
+| postgres_primary  | patroni1 | 2    | 100  | 4    | 589   | 0       | DOWN   | 3        | L4CON        | 0        | 10243    |
+| postgres_primary  | patroni2 | 0    | 100  | 0    | 0     | 0       | UP     | 0        | L7OK         | 0        | -1       |
+| postgres_primary  | patroni3 | 1    | 100  | 1    | 253   | 0       | DOWN   | 1        | L4CON        | 0        | 10451    |
+| postgres_primary  | BACKEND  | 2    | 10   | 5    | 842   | 0       | UP     | 3        |              | 0        | 10243    |
+| postgres_replicas | FRONTEND | 0    | 100  | 0    | 0     | 0       | OPEN   | 0        |              |          |          |
+| postgres_replicas | patroni1 | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L4CON        | 0        | -1       |
+| postgres_replicas | patroni2 | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L7STS        | 0        | -1       |
+| postgres_replicas | patroni3 | 0    | 100  | 0    | 0     | 0       | DOWN   | 0        | L4CON        | 0        | -1       |
+| postgres_replicas | BACKEND  | 0    | 10   | 0    | 0     | 0       | DOWN   | 0        |              | 0        | -1       |
 
 Alternatively, refresh the HAProxy dashboard in the browser:
 
@@ -560,13 +559,13 @@ current primary in the cluster has no replicas.
 
 ## Fallback considerations
 
-Fallback is the process to reinstate the former source node after a failover
-has occurred. Automatic fallback is generally not recommended in a HA
-database cluster due to several critical concerns. For example: incomplete
-recovery, risk of split-brain scenarios, and replication lag.
+Fallback is the process to reinstate the former source node after a failover has
+occurred. Automatic fallback is generally not recommended in a HA database
+cluster due to several critical concerns. For example: incomplete recovery, risk
+of split-brain scenarios, and replication lag.
 
-In your Patroni cluster, if you bring up the two nodes for which you
-simulated an outage, they will rejoin the cluster as standby replicas:
+In your Patroni cluster, if you bring up the two nodes for which you simulated
+an outage, they will rejoin the cluster as standby replicas:
 
 ```bash
 cd /alloydb/
@@ -575,21 +574,21 @@ sudo docker compose up -d
 
 ![view of a HAProxy dashboard showing the one remaining primary AlloyDB Omni node and two recovered AlloyDB Omni standby nodes](HaProxy-4.svg "HAProxy dashboard showing the one remaining primary AlloyDB Omni node and two recovered AlloyDB Oni standby nodes")
 
-Notice how now patroni1 and patroni3 are replicating from the current
-primary patroni2.
+Notice how now patroni1 and patroni3 are replicating from the current primary
+patroni2.
 
-| pid |    usename     | application_name | client_addr |   state   | sync_state |
-|-----|----------------|------------------|-------------|-----------|------------|
-| 268 | alloydbreplica | patroni1         | 10.0.1.2    | streaming | sync      |
-| 279 | alloydbreplica | patroni3         | 10.0.1.7    | streaming | sync      |
+| pid | usename        | application_name | client_addr | state     | sync_state |
+| --- | -------------- | ---------------- | ----------- | --------- | ---------- |
+| 268 | alloydbreplica | patroni1         | 10.0.1.2    | streaming | sync       |
+| 279 | alloydbreplica | patroni3         | 10.0.1.7    | streaming | sync       |
 
-If you want to manually fall back to your initial primary patroni1 from
-the current patroni2 leader, you can do that by using the
-[Patroni REST API](https://patroni.readthedocs.io/en/latest/rest_api.html).
-To fall back to patroni1, you perform a
+If you want to manually fall back to your initial primary patroni1 from the
+current patroni2 leader, you can do that by using the
+[Patroni REST API](https://patroni.readthedocs.io/en/latest/rest_api.html). To
+fall back to patroni1, you perform a
 [switchover](https://patroni.readthedocs.io/en/latest/rest_api.html#switchover)
-request from any machine that has network connectivity to the cluster to
-the current leader (patroni2):
+request from any machine that has network connectivity to the cluster to the
+current leader (patroni2):
 
 ```bash
 curl -s http://alloydb-patroni2:8008/switchover -XPOST -d '{"leader":"patroni2", "candidate":"patroni1"}'
@@ -601,6 +600,6 @@ You should see the confirmation message:
 Successfully switched over to "patroni1"
 ```
 
-By opting for manual fallback, you can ensure a more reliable, consistent,
-and thoroughly verified recovery process, maintaining the integrity and
-availability of your database systems.
+By opting for manual fallback, you can ensure a more reliable, consistent, and
+thoroughly verified recovery process, maintaining the integrity and availability
+of your database systems.

@@ -108,44 +108,44 @@ See the following tutorials on using hybrid NEGs with Google Cloud products.
 
 ### External Application Load Balancer
 
--   [Set up a global external Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/https/setting-up-ext-global-https-hybrid)
--   [Set up a classic Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/https/setting-up-ext-https-hybrid)
--   [Set up a regional external Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/https/setting-up-reg-ext-https-hybrid)
+- [Set up a global external Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/https/setting-up-ext-global-https-hybrid)
+- [Set up a classic Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/https/setting-up-ext-https-hybrid)
+- [Set up a regional external Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/https/setting-up-reg-ext-https-hybrid)
 
 ### Internal Application Load Balancer
 
--   [Set up a regional internal Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/l7-internal/setting-up-int-https-hybrid)
--   [Set up a cross-region internal Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/l7-internal/setting-up-int-https-hybrid)
+- [Set up a regional internal Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/l7-internal/setting-up-int-https-hybrid)
+- [Set up a cross-region internal Application Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/l7-internal/setting-up-int-https-hybrid)
 
 ### External proxy Network Load Balancer
 
--   [Set up a regional external proxy Network Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/tcp/set-up-ext-reg-tcp-proxy-hybrid)
+- [Set up a regional external proxy Network Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/tcp/set-up-ext-reg-tcp-proxy-hybrid)
 
 ### Internal proxy Network Load Balancer
 
--   [Set up a regional internal proxy Network Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/tcp/set-up-int-tcp-proxy-hybrid)
--   [Set up a cross-region internal proxy Network Load Balancer with zonal and hybrid connectivity](https://cloud.google.com/load-balancing/docs/tcp/setup-cross-reg-proxy-hybrid)
+- [Set up a regional internal proxy Network Load Balancer with hybrid connectivity](https://cloud.google.com/load-balancing/docs/tcp/set-up-int-tcp-proxy-hybrid)
+- [Set up a cross-region internal proxy Network Load Balancer with zonal and hybrid connectivity](https://cloud.google.com/load-balancing/docs/tcp/setup-cross-reg-proxy-hybrid)
 
 ### Cloud Service Mesh with managed Traffic Director control plane
 
--   [Service Routing APIs overview: Architecture and resources](https://cloud.google.com/service-mesh/docs/service-routing/service-routing-overview#architecture-resources)
--   [Service Routing APIs for proxyless gRPC services overview: Architecture and resources](https://cloud.google.com/service-mesh/docs/service-routing/proxyless-overview#architecture-resources)
+- [Service Routing APIs overview: Architecture and resources](https://cloud.google.com/service-mesh/docs/service-routing/service-routing-overview#architecture-resources)
+- [Service Routing APIs for proxyless gRPC services overview: Architecture and resources](https://cloud.google.com/service-mesh/docs/service-routing/proxyless-overview#architecture-resources)
 
 ## Deleting hybrid NEGs
 
 You can delete hybrid NEGs created by `k8s-hybrid-neg-controller` in any of
 these ways:
 
--   Delete the Kubernetes Service that has the
-    `solutions.cloud.google.com/hybrid-neg` annotation.
+- Delete the Kubernetes Service that has the
+  `solutions.cloud.google.com/hybrid-neg` annotation.
 
--   Remove the `solutions.cloud.google.com/hybrid-neg` annotation from the
-    Kubernetes Service.
+- Remove the `solutions.cloud.google.com/hybrid-neg` annotation from the
+  Kubernetes Service.
 
--   Remove the `exposed_port` dictionary entries in the
-    `solutions.cloud.google.com/hybrid-neg` annotation on the Kubernetes
-    Service. For example, you can delete all hybrid NEGs of a Service by
-    changing the annotation to look like this:
+- Remove the `exposed_port` dictionary entries in the
+  `solutions.cloud.google.com/hybrid-neg` annotation on the Kubernetes Service.
+  For example, you can delete all hybrid NEGs of a Service by changing the
+  annotation to look like this:
 
 ```yaml
 solutions.cloud.google.com/hybrid-neg: '{"exposed_ports": {}}'
@@ -164,12 +164,12 @@ the section below on [preventing leaked NEGs](#preventing-leaked-negs).
 You are responsible for managing the lifecycle of hybrid NEGs. You could leak
 NEGs in these ways:
 
--   When you delete a Kubernetes Service or remove the
-    `solutions.cloud.google.com/hybrid-neg` annotation from a Kubernetes
-    Service, any associated NEGs that are referenced by a backend service won't
-    be deleted. Remove the NEGs from the backend service to allow NEG deletion.
+- When you delete a Kubernetes Service or remove the
+  `solutions.cloud.google.com/hybrid-neg` annotation from a Kubernetes Service,
+  any associated NEGs that are referenced by a backend service won't be deleted.
+  Remove the NEGs from the backend service to allow NEG deletion.
 
--   When a Kubernetes cluster is deleted, NEGs are not deleted.
+- When a Kubernetes cluster is deleted, NEGs are not deleted.
 
 Follow the instructions in the section above on
 [deleting hybrid NEGs](#deleting-hybrid-negs) above to prevent leaked NEGs.

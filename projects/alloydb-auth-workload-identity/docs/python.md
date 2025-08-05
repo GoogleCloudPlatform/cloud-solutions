@@ -10,9 +10,9 @@ that a new connection is made. The hook can be installed on "Engine" objects
 created by the `create_engile` method of SQLAlchemy.
 
 The Helper installs a hook wich generates `user` and `password` information for
-making new PostgreSQL connection from the GKE Metadata server. The `user`
-comes from the email attribute of the Service Account and the `password` comes
-from the `access_token` of the Service Account.
+making new PostgreSQL connection from the GKE Metadata server. The `user` comes
+from the email attribute of the Service Account and the `password` comes from
+the `access_token` of the Service Account.
 
 ## Installation
 
@@ -25,8 +25,8 @@ git+https://github.com/GoogleCloudPlatform/cloud-solutions.git#subdirectory=proj
 
 ## Usage
 
-After creating the engine using `create_engine`, run
-`setup_gcp_auth_hook` to register the hook to the engine.
+After creating the engine using `create_engine`, run `setup_gcp_auth_hook` to
+register the hook to the engine.
 
 For example:
 

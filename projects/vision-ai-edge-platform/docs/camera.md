@@ -9,13 +9,13 @@ solution][PLATFORM_URL].
 
 The solution walks you through the following steps:
 
--   Install the camera client application.
--   Discover or configures cameras using different protocols.
--   Trigger inference with messages or user action.
--   Forward camera frames to the ML models.
--   Provide inference results on local network.
--   Collect training images for model training.
--   Optionally stream inference results to BigQuery.
+- Install the camera client application.
+- Discover or configures cameras using different protocols.
+- Trigger inference with messages or user action.
+- Forward camera frames to the ML models.
+- Provide inference results on local network.
+- Collect training images for model training.
+- Optionally stream inference results to BigQuery.
 
 ## Architecture diagram
 
@@ -25,11 +25,11 @@ The solution walks you through the following steps:
 
 This tutorial uses billable components of Google Cloud, including the following:
 
--   [Cloud Storage](https://cloud.google.com/storage/pricing)
--   [Cloud Pub/Sub](https://cloud.google.com/pubsub/pricing)
--   [Cloud Run Functions](https://cloud.google.com/functions/pricing-1stgen)
--   [BigQuery](https://cloud.google.com/bigquery/pricing)
--   [Vertex AI](https://cloud.google.com/vertex-ai/pricing)
+- [Cloud Storage](https://cloud.google.com/storage/pricing)
+- [Cloud Pub/Sub](https://cloud.google.com/pubsub/pricing)
+- [Cloud Run Functions](https://cloud.google.com/functions/pricing-1stgen)
+- [BigQuery](https://cloud.google.com/bigquery/pricing)
+- [Vertex AI](https://cloud.google.com/vertex-ai/pricing)
 
 Use the [pricing calculator](https://cloud.google.com/products/calculator) to
 generate a cost estimate based on your projected usage.
@@ -51,10 +51,10 @@ This tutorial assumes that you already have a
 
 Make sure you're using one of the following camera types:
 
--   Genicam / GigE Vision IP cameras.
--   RTSP with ONVIF support, or simple RTSP IP cameras.
--   USB cameras.
--   File, as in using image files as source data.
+- Genicam / GigE Vision IP cameras.
+- RTSP with ONVIF support, or simple RTSP IP cameras.
+- USB cameras.
+- File, as in using image files as source data.
 
 ## Installation
 
@@ -75,11 +75,11 @@ To deploy the camera client, do the following steps:
 
 1.  On your local development machine, install the following tools:
 
-    -   [Google Cloud SDK](https://cloud.google.com/sdk/install)
-    -   [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-    -   [python3](https://www.python.org/downloads/)
-    -   [pip](https://pip.pypa.io/en/stable/installation/)
-    -   [docker](https://docs.docker.com/engine/install/)
+    - [Google Cloud SDK](https://cloud.google.com/sdk/install)
+    - [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+    - [python3](https://www.python.org/downloads/)
+    - [pip](https://pip.pypa.io/en/stable/installation/)
+    - [docker](https://docs.docker.com/engine/install/)
 
 1.  Configure `gcloud` to use your new Google Cloud project:
 
@@ -397,13 +397,13 @@ Install and configure your IP camera using its management tools and ensure that:
     you need to provide these credentials to enable the ONVIF query for RTSP
     streams information.
 
-    -   For unauthenticated cameras, run:
+    - For unauthenticated cameras, run:
 
         ```sh
         python3 camera_client.py --protocol onvif --scan
         ```
 
-    -   For cameras with authentication enabled, run:
+    - For cameras with authentication enabled, run:
 
         ```sh
         python3 camera_client.py \
@@ -629,18 +629,18 @@ normal, and abnormal situations for the products to be inspected.
 
 Here are some general principles:
 
--   Set up a controlled test environment which minimizes external influences
-    such as ambient light affecting the camera exposure.
--   Place the camera in its intended position. Take single shots to verify that
-    the camera can fully see the objects to be inspected and not much extra
-    space beyond them, to maximize the number of pixels covering the objects.
-    Adjust the camera exposure, focus, focal length etc parameters and lock them
-    in place, to avoid auto-adjustments changing the settings between shots.
--   Ensure that the camera does not move or shake when taking pictures.
--   Ensure that the objects do not move, or move too fast when taking the
-    images, resulting in motion blur or rolling shutter effects.
--   Setup consistent, even lighting and eliminate variable ambient light sources
-    such as open windows nearby.
+- Set up a controlled test environment which minimizes external influences such
+  as ambient light affecting the camera exposure.
+- Place the camera in its intended position. Take single shots to verify that
+  the camera can fully see the objects to be inspected and not much extra space
+  beyond them, to maximize the number of pixels covering the objects. Adjust the
+  camera exposure, focus, focal length etc parameters and lock them in place, to
+  avoid auto-adjustments changing the settings between shots.
+- Ensure that the camera does not move or shake when taking pictures.
+- Ensure that the objects do not move, or move too fast when taking the images,
+  resulting in motion blur or rolling shutter effects.
+- Setup consistent, even lighting and eliminate variable ambient light sources
+  such as open windows nearby.
 
 #### Upload training images
 
@@ -672,8 +672,8 @@ possible.
 
     Generate examples by running:
 
-    -   USB example - replace `--protocol` to match your camera and DEVICE with
-        your video device, for example `/dev/video0`.
+    - USB example - replace `--protocol` to match your camera and DEVICE with
+      your video device, for example `/dev/video0`.
 
     ```sh
     python3 camera_client.py \
@@ -781,10 +781,10 @@ configuration file that contains these model-specific configurations.
     The camera client application replaces the following tags with their actual
     runtime values:
 
-    -   `hostname`: value of switch `--ml_host`.
-    -   `port`: value of switch `--ml_port`.
-    -   `encoded_string`: base64-encoded camera frame payload. Prepared
-        automatically by the camera client during camera frame processing.
+    - `hostname`: value of switch `--ml_host`.
+    - `port`: value of switch `--ml_port`.
+    - `encoded_string`: base64-encoded camera frame payload. Prepared
+      automatically by the camera client during camera frame processing.
 
     The rest of the values; URI path and JSON request body, you should format
     according to the specific ML model's input expectations.
@@ -825,10 +825,10 @@ an inference, run the following steps:
 
     Where:
 
-    -   `ML_HOST` is the resolvable hostname of your ML service.
-    -   `ML_PORT` is the listening port of your ML service.
-    -   `ADDRESS` is the address of the camera.
-    -   `DEVICE_ID` is the device ID of the camera, any string to identify it.
+    - `ML_HOST` is the resolvable hostname of your ML service.
+    - `ML_PORT` is the listening port of your ML service.
+    - `ADDRESS` is the address of the camera.
+    - `DEVICE_ID` is the device ID of the camera, any string to identify it.
 
     You should see the inference results, which look similar to:
 
@@ -945,10 +945,10 @@ content.
 To start publishing ML inference results to the local MQTT topic, add the
 following switches to the camera app:
 
--   `--mqtt` when set, enables publishing ML inference results JSON to MQTT.
--   `--mqtt_host` the hostname or IP address where the MQTT broker runs.
--   `--mqtt_port` the MQTT broker service port. Default: 1883.
--   `--mqtt_topic_results` the topic to post inference results to.
+- `--mqtt` when set, enables publishing ML inference results JSON to MQTT.
+- `--mqtt_host` the hostname or IP address where the MQTT broker runs.
+- `--mqtt_port` the MQTT broker service port. Default: 1883.
+- `--mqtt_topic_results` the topic to post inference results to.
 
 ### Use multiple cameras with dedicated ML models
 
@@ -970,9 +970,9 @@ simultaneously, and collect all inference results.
 
 In other words, you have a 1:1:1 mapping running on the edge server:
 
--   Camera 1 is connected to camera client 1 which uses ML model 1.
--   Camera 2 is connected to camera client 2 which uses ML model 2.
--   and so on, if more simultaneous camera angles are needed.
+- Camera 1 is connected to camera client 1 which uses ML model 1.
+- Camera 2 is connected to camera client 2 which uses ML model 2.
+- and so on, if more simultaneous camera angles are needed.
 
 Then you trigger all the cameras at the same time and collect all their
 inference results in a common message queue and/or in BigQuery.
@@ -1024,11 +1024,11 @@ Follow the steps below to deploy a multi-cam setup:
 
     1.  Follow the same steps as before with camera 1 to achieve the following:
 
-        -   Connect and configure camera client 2 for camera 2.
-        -   Collect training images with camera 2.
-        -   Train a new ML model for camera 2.
-        -   Deploy the camera 2 model to the server.
-        -   Test the new ML model 2 with camera 2 using client 2.
+        - Connect and configure camera client 2 for camera 2.
+        - Collect training images with camera 2.
+        - Train a new ML model for camera 2.
+        - Deploy the camera 2 model to the server.
+        - Test the new ML model 2 with camera 2 using client 2.
 
         !!! note Please export the second ML model with CPU acceleration. At the
         moment, the scaling works with either all models running on the CPU, or
@@ -1179,7 +1179,7 @@ MQTT commands topic, e.g `vai/commands` and are triggered simultaneously.
     Local MQTT transmit complete
     ```
 
-    And the mosquitto_sub window should display _two_ inspection results:
+    And the mosquitto*sub window should display \_two* inspection results:
 
     ```text
     {"predictionResult":.."annotationSpecDisplayName": "defect"}]}]}, "predictionLatency": "0.024179821s"}
@@ -1237,18 +1237,18 @@ The client application also supports batch processing, as a handy way to test
 trained ML models against a large set of images. In batch processing mode, the
 flow is as follows:
 
--   The user prepares a set of images to run inference against. These are
-    typically images saved from the camera earlier, with known labels - i.e,
-    known to be good and known to be defective examples.
--   The user stores the images on the edge server, in a directory that the
-    camera client can access.
--   The user runs the camera client in batch mode against the root directory
-    that contains the images.
--   The application finds all image files inside the directory and its
-    subdirectories.
--   The application forwards each image in turn to the ML model and gets the
-    inference results.
--   Optionally, the inference results can be forwarded to an MQTT message queue.
+- The user prepares a set of images to run inference against. These are
+  typically images saved from the camera earlier, with known labels - i.e, known
+  to be good and known to be defective examples.
+- The user stores the images on the edge server, in a directory that the camera
+  client can access.
+- The user runs the camera client in batch mode against the root directory that
+  contains the images.
+- The application finds all image files inside the directory and its
+  subdirectories.
+- The application forwards each image in turn to the ML model and gets the
+  inference results.
+- Optionally, the inference results can be forwarded to an MQTT message queue.
 
 The following steps run batch mode inference against a set of images:
 
@@ -1324,21 +1324,20 @@ compare ML model performance across versions and time.
 
 The example backend consists of the following pre-configured services:
 
--   Cloud Pub/Sub for receiving ML inference results. The payload is the JSON
-    results from the ML model container, with additional metadata: - Camera
-    device ID. - Timestamp of the ML inference execution in RFC3339 format. -
-    File ID of the inference. This ID can be used to match the ML inference.
-    results row in BigQuery with the image filenames generated by the camera
-    client - if the client was configured to write, or upload images as files.
--   Cloud Function, subscribed to the Pub/Sub messages and write them to
-    BigQuery.
--   BigQuery dataset as destination table for the ML inference results.
+- Cloud Pub/Sub for receiving ML inference results. The payload is the JSON
+  results from the ML model container, with additional metadata: - Camera device
+  ID. - Timestamp of the ML inference execution in RFC3339 format. - File ID of
+  the inference. This ID can be used to match the ML inference. results row in
+  BigQuery with the image filenames generated by the camera client - if the
+  client was configured to write, or upload images as files.
+- Cloud Function, subscribed to the Pub/Sub messages and write them to BigQuery.
+- BigQuery dataset as destination table for the ML inference results.
 
 To use the inference results cloud backend, add the following flags to the
 camera integration app:
 
--   `--pubsub results` activates streaming the ML results JSON to Pub/Sub.
--   `--project_id` the GCP project ID where the backend was deployed.
+- `--pubsub results` activates streaming the ML results JSON to Pub/Sub.
+- `--project_id` the GCP project ID where the backend was deployed.
 
 To run the camera client with the Pub/Sub streaming option, open a shell in the
 camera client pod:
@@ -1376,10 +1375,9 @@ Closing camera connection and exiting
 
 You can observe the payloads by monitoring:
 
--   [Cloud Pub/Sub subscription][PUBSUB_URL]: `camera-integration-telemetry`
--   [Cloud Functions function][FUNCTIONS_URL]:
-    `pubsub_bigquery_inference_results`
--   [BigQuery table][BQ_URL]: `viai_edge.inference_results`
+- [Cloud Pub/Sub subscription][PUBSUB_URL]: `camera-integration-telemetry`
+- [Cloud Functions function][FUNCTIONS_URL]: `pubsub_bigquery_inference_results`
+- [BigQuery table][BQ_URL]: `viai_edge.inference_results`
 
 [PUBSUB_URL]: https://console.cloud.google.com/cloudpubsub/
 [FUNCTIONS_URL]: https://console.cloud.google.com/functions
@@ -1428,12 +1426,12 @@ in this tutorial, you can delete the project.
 
 **Caution**: Deleting a project has the following consequences:
 
--   If you used an existing project, you'll also delete any other work you've
-    done in the project.
--   You can't reuse the project ID of a deleted project. If you created a custom
-    project ID that you plan to use in the future, delete the resources inside
-    the project instead. This ensures that URLs that use the project ID, such an
-    an `appspot.com` URL, remain available.
+- If you used an existing project, you'll also delete any other work you've done
+  in the project.
+- You can't reuse the project ID of a deleted project. If you created a custom
+  project ID that you plan to use in the future, delete the resources inside the
+  project instead. This ensures that URLs that use the project ID, such an an
+  `appspot.com` URL, remain available.
 
 To delete a project, do the following:
 
@@ -1451,9 +1449,8 @@ To delete a project, do the following:
 
 ## What's next
 
--   Learn more about
-    [AI on Google Cloud](https://cloud.google.com/solutions/ai/)
--   Learn more about
-    [Cloud developer tools](https://cloud.google.com/products/tools)
--   Try out other Google Cloud features for yourself. Have a look at our
-    [tutorials](https://cloud.google.com/docs/tutorials).
+- Learn more about [AI on Google Cloud](https://cloud.google.com/solutions/ai/)
+- Learn more about
+  [Cloud developer tools](https://cloud.google.com/products/tools)
+- Try out other Google Cloud features for yourself. Have a look at our
+  [tutorials](https://cloud.google.com/docs/tutorials).
