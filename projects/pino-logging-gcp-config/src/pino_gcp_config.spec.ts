@@ -151,6 +151,29 @@ describe('Pino config', () => {
       expect(input).toEqual({});
     });
 
+    it('should call user-defined formatter.log before GCP formatting', () => {
+      // userLog will add a custom property, which should be present in the final GCP-formatted log
+      const userLog = jasmine.createSpy('userLog').and.callFake((entry) => {
+        return { ...entry, custom: 'user' };
+      });
+      const configWithUserLog = createGcpLoggingPinoConfig(
+        { serviceContext },
+        {
+          formatters: {
+            log: userLog,
+          },
+        }
+      );
+      const logObj = { foo: 'bar' };
+      const result = configWithUserLog.formatters!.log!(logObj);
+      expect(userLog).toHaveBeenCalled();
+      expect(result).toBeDefined();
+      expect(result.foo).toBe('bar');
+      expect(result.custom).toBe('user');
+      expect(result.serviceContext).toEqual(serviceContext);
+      expect(result['logging.googleapis.com/insertId']).toBeDefined();
+    });
+
     it('adds a timestamp as seconds:nanos JSON fragment', () => {
       const timestampGenerator = config.timestamp as () => string;
 
