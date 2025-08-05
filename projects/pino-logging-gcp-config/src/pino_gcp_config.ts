@@ -42,7 +42,7 @@ const eventId = new EventId();
  * See
  * https://github.com/googleapis/release-please/blob/main/docs/customizing.md#updating-arbitrary-files
  */
-const NODEJS_GCP_PINO_LIBRARY_VERSION = '1.0.6'; // {x-release-please-version}
+const NODEJS_GCP_PINO_LIBRARY_VERSION = '1.1.0'; // {x-release-please-version}
 const NODEJS_GCP_PINO_LIBRARY_NAME = 'nodejs-gcppino';
 
 const PINO_TO_GCP_LOG_LEVELS = Object.freeze(
@@ -325,14 +325,7 @@ class GcpLoggingPino {
       formatters: {
         ...formattersMixin,
         level: GcpLoggingPino.pinoLevelToGcpSeverity,
-        log: (entry: Record<string, unknown>) => {
-          // If a formattersMixin.log function is provided, call it first to allow user preprocessing
-          const preprocessedEntry = formattersMixin?.log
-            ? formattersMixin.log(entry)
-            : entry;
-
-          return this.formatLogObject(preprocessedEntry);
-        },
+        log: (entry: Record<string, unknown>) => this.formatLogObject(entry),
       },
       timestamp: () => GcpLoggingPino.getGcpLoggingTimestamp(),
     };
