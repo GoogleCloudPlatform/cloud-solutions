@@ -101,6 +101,13 @@
     },
     {
       "matchFileNames": [
+        "projects/confidential-ai-model-serving/**"
+      ],
+      "groupName": "confidential-ai-model-serving",
+      "commitMessagePrefix": "chore(deps): [confidential-ai-model-serving]"
+    },
+     {
+      "matchFileNames": [
         "projects/conversational-commerce-agent/**"
       ],
       "groupName": "conversational-commerce-agent",
