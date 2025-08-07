@@ -1,0 +1,5 @@
+title: Migrate from Azure to Google Cloud
+
+nav:
+  - "Get started": README.md
+  - "Migrate from Azure VMs to Compute Engine": migrate-from-azure-vms-compute-engine.md
