@@ -72,6 +72,11 @@
       "commitMessagePrefix": "chore(deps): [arm-reference-guides]"
     },
     {
+      "matchFileNames": ["projects/bss-ai-agent-infra/**"],
+      "groupName": "bss-ai-agent-infra",
+      "commitMessagePrefix": "chore(deps): [bss-ai-agent-infra]"
+    },
+    {
       "matchFileNames": ["projects/bulk-delete-gcs-files-fn/**"],
       "groupName": "bulk-delete-gcs-files-fn",
       "commitMessagePrefix": "chore(deps): [bulk-delete-gcs-files-fn]"
@@ -85,6 +90,11 @@
       "matchFileNames": ["projects/confidential-ai-model-serving/**"],
       "groupName": "confidential-ai-model-serving",
       "commitMessagePrefix": "chore(deps): [confidential-ai-model-serving]"
+    },
+    {
+      "matchFileNames": ["projects/contextual-ai/**"],
+      "groupName": "contextual-ai",
+      "commitMessagePrefix": "chore(deps): [contextual-ai]"
     },
     {
       "matchFileNames": ["projects/conversational-commerce-agent/**"],
@@ -150,6 +160,11 @@
       "matchFileNames": ["projects/log-scoping-tool/**"],
       "groupName": "log-scoping-tool",
       "commitMessagePrefix": "chore(deps): [log-scoping-tool]"
+    },
+    {
+      "matchFileNames": ["projects/migrate-from-azure-to-google-cloud/**"],
+      "groupName": "migrate-from-azure-to-gcp",
+      "commitMessagePrefix": "chore(deps): [migrate-from-azure-to-google-cloud]"
     },
     {
       "matchFileNames": ["projects/nvidia-omniverse-on-google-cloud/**"],
@@ -220,16 +235,6 @@
       "matchFileNames": ["projects/vision-ai-edge-platform/**"],
       "groupName": "vision-ai-edge-platform",
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]"
-    },
-    {
-      "matchFileNames": ["projects/contextual-ai/**"],
-      "groupName": "contextual-ai",
-      "commitMessagePrefix": "chore(deps): [contextual-ai]"
-    },
-    {
-      "matchFileNames": ["projects/migrate-from-azure-to-google-cloud/**"],
-      "groupName": "migrate-from-azure-to-gcp",
-      "commitMessagePrefix": "chore(deps): [migrate-from-azure-to-google-cloud]"
     }
   ]
 }
