@@ -2,4 +2,6 @@ title: Migrate from Azure to Google Cloud
 
 nav:
   - "Get started": README.md
-  - "Migrate from Azure VMs to Compute Engine": migrate-from-azure-vms-compute-engine.md
+  - "Migrate from Azure VMs to Compute Engine": migrate-from-azure-vms-to-compute-engine.md
+  - "Migrate from AKS to GKE": migrate-from-aks-to-gke.md
+  - "Migrate from Azure Blob Storage to Cloud Storage": migrate-from-azure-blob-storage-to-cloud-storage.md

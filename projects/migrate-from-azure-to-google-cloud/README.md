@@ -30,10 +30,10 @@ your migration.
 This series provides guidance about the following migration journeys:
 
 - **From Azure compute services to Google Cloud**:
-    - [Migrate from Azure Virtual Machines to Compute Engine](./migrate-from-azure-vms-compute-engine.md)
+    - [Migrate from Azure Virtual Machines to Compute Engine](./migrate-from-azure-vms-to-compute-engine.md)
     - [Migrate from Azure Kubernetes Service to Google Kubernetes Engine](./migrate-from-aks-to-gke.md)
 - **From Azure data storage services to Google Cloud**:
-    - Migrate from Azure Blob Storage to Cloud Storage
+    - [Migrate from Azure Blob Storage to Cloud Storage](./migrate-from-azure-blob-storage-to-cloud-storage.md)
 - **From Azure database services to Google Cloud**
     - Migrate from Azure SQL Managed Instance to Cloud SQL for SQL Server
     - Migrate from Azure SQL Database to Cloud SQL for SQL Server

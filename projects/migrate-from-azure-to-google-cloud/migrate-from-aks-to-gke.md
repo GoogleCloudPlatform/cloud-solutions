@@ -999,7 +999,7 @@ by adopting one of the following approaches:
 
 For more information about migrating Azure Virtual Machines instances to Compute
 Engine, see
-[Migrate from Azure Virtual Machines to Compute Engine](./migrate-from-azure-vms-compute-engine.md).
+[Migrate from Azure Virtual Machines to Compute Engine](./migrate-from-azure-vms-to-compute-engine.md).
 
 For more information about migrating from Azure Blob Storage to Cloud Storage,
 see
