@@ -1294,7 +1294,7 @@ For more information, see
 
 ## Contributors
 
-Autohors:
+Authors:
 
 - [Marco Ferrari](https://www.linkedin.com/in/ferrarimark) | Cloud Solutions
   Architect

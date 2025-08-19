@@ -416,10 +416,11 @@ and
 
 ## Contributors
 
-Autohor: Ido Flatow | Cloud Solutions Architect
+Author: Ido Flatow | Cloud Solutions Architect
 
 Other contributors:
 
 - [Marco Ferrari](https://www.linkedin.com/in/ferrarimark) | Cloud Solutions
   Architect
-- Alex Carciu | Cloud Solutions Architect
+- [Alex Carciu](https://www.linkedin.com/in/alex-carciu) | Cloud Solutions
+  Architect

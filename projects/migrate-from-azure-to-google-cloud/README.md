@@ -35,11 +35,11 @@ This series provides guidance about the following migration journeys:
 - **From Azure data storage services to Google Cloud**:
     - [Migrate from Azure Blob Storage to Cloud Storage](./migrate-from-azure-blob-storage-to-cloud-storage.md)
 - **From Azure database services to Google Cloud**
-    - Migrate from Azure SQL Managed Instance to Cloud SQL for SQL Server
-    - Migrate from Azure SQL Database to Cloud SQL for SQL Server
-    - Migrate from Azure Database for MySQL to Cloud SQL for MySQL
-    - Migrate from Azure Database for PostgreSQL to Cloud SQL for PostgreSQL and
-      AlloyDB for PostgreSQL
+    - [Migrate from Azure SQL Managed Instance to Cloud SQL for SQL Server](./migrate-azure-sql-managed-instance-to-cloud-sql-sql-server.md)
+    - [Migrate from Azure SQL Database to Cloud SQL for SQL Server](./migrate-azure-sql-database-to-cloud-sql-sql-server.md)
+    - [Migrate from Azure Database for MySQL to Cloud SQL for MySQL](./migrate-azure-database-mysql-to-cloud-sql-mysql.md)
+    - [Migrate from Azure Database for PostgreSQL to Cloud SQL for PostgreSQL and AlloyDB for PostgreSQL](./migrate-azure-database-postgresql-to-cloud-sql-and-alloydb-postgresql.md)
+    - [Migrate SQL Server to Cloud SQL for PostgreSQL and AlloyDB for PostgreSQL](./migrate-sql-server-to-cloud-sql-and-alloydb-postgresql.md)
 
 ## What's next
 
@@ -54,5 +54,5 @@ This series provides guidance about the following migration journeys:
 
 ## Contributors
 
-Autohor: [Marco Ferrari](https://www.linkedin.com/in/ferrarimark) | Cloud
+Author: [Marco Ferrari](https://www.linkedin.com/in/ferrarimark) | Cloud
 Solutions Architect

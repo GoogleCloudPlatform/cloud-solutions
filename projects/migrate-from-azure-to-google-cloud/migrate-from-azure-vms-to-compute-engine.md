@@ -578,12 +578,13 @@ and
 
 ## Contributors
 
-Autohor: [Marco Ferrari](https://www.linkedin.com/in/ferrarimark) | Cloud
+Author: [Marco Ferrari](https://www.linkedin.com/in/ferrarimark) | Cloud
 Solutions Architect
 
 Other contributors:
 
 - Oshri Abutbul
 - Ayelet Wald
-- Alex Carciu
+- [Alex Carciu](https://www.linkedin.com/in/alex-carciu) | Cloud Solutions
+  Architect
 - Ido Flatow

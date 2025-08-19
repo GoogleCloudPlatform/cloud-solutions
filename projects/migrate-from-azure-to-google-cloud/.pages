@@ -5,3 +5,9 @@ nav:
   - "Migrate from Azure VMs to Compute Engine": migrate-from-azure-vms-to-compute-engine.md
   - "Migrate from AKS to GKE": migrate-from-aks-to-gke.md
   - "Migrate from Azure Blob Storage to Cloud Storage": migrate-from-azure-blob-storage-to-cloud-storage.md
+  - "Database Migrations":
+    - "Migrate Azure SQL Managed Instance to Cloud SQL for SQL Server": migrate-azure-sql-managed-instance-to-cloud-sql-sql-server.md
+    - "Migrate Azure SQL Database to Cloud SQL for SQL Server": migrate-azure-sql-database-to-cloud-sql-sql-server.md
+    - "Migrate Azure Database for MySQL to Cloud SQL for MySQL": migrate-azure-database-mysql-to-cloud-sql-mysql.md
+    - "Migrate Azure Database for PostgreSQL to Cloud SQL and AlloyDB for PostgreSQL": migrate-azure-database-postgresql-to-cloud-sql-and-alloydb-postgresql.md
+    - "Migrate SQL Server to Cloud SQL for PostgreSQL and AlloyDB for PostgreSQL": migrate-sql-server-to-cloud-sql-and-alloydb-postgresql.md
