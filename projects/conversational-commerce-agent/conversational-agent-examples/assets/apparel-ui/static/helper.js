@@ -12,76 +12,85 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* eslint-disable */
-
 // listen to df-response
 window.addEventListener('df-response-received', (event) => {
   event.preventDefault(); // Dialogflow Messenger won't handle the responses.
 
   // check if flow's responses is available
-  let flowPayloads = extractFlowPayloads(event.detail.raw);
+  const flowPayloads = extractFlowPayloads(event.detail.raw);
 
   // check if generative responses is available
-  let genResponses = extractGenerativeResponses(event.detail.raw);
+  const genResponses = extractGenerativeResponses(event.detail.raw);
 
-  if(genResponses){
+  if (genResponses) {
     try {
       const dfMessenger = document.querySelector('df-messenger');
-      for(const res of genResponses) {
-        if(res.hasOwnProperty("agentUtterance")){
+      for (const res of genResponses) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (res.hasOwnProperty('agentUtterance')) {
           dfMessenger.renderCustomText(res.agentUtterance.text, true);
-        } else if(res.hasOwnProperty("toolUse")) {
-          let customPayload = extractCustomPayload(res.toolUse);
-          if(customPayload) {
+          // eslint-disable-next-line no-prototype-builtins
+        } else if (res.hasOwnProperty('toolUse')) {
+          const customPayload = extractCustomPayload(res.toolUse);
+          if (customPayload) {
             dfMessenger.renderCustomCard(customPayload[0]);
           }
-        } else if(res && res.flowInvocation && res.flowInvocation.flowState == "OUTPUT_STATE_OK") {
+        } else if (res &&
+          res.flowInvocation &&
+          res.flowInvocation.flowState == 'OUTPUT_STATE_OK') {
           for (const flowPayload of flowPayloads) {
-              dfMessenger.renderCustomCard(flowPayload.payload.richContent[0]);
+            dfMessenger.renderCustomCard(flowPayload.payload.richContent[0]);
           }
         }
       }
-    } catch(err) {
-      console.log("error in generative response: ", err);
+    } catch (err) {
+      console.log('error in generative response: ', err);
     }
   }
 });
 
 function extractCustomPayload(dfTool) {
   try {
-      if (dfTool.outputActionParameters && dfTool.outputActionParameters["200"] && dfTool.outputActionParameters["200"].payload && dfTool.outputActionParameters["200"].payload.richContent) {
-          return dfTool.outputActionParameters["200"].payload.richContent
-      }
-      else {
-          return false
-      }
+    if (dfTool.outputActionParameters &&
+      dfTool.outputActionParameters['200'] &&
+      dfTool.outputActionParameters['200'].payload &&
+      dfTool.outputActionParameters['200'].payload.richContent) {
+      return dfTool.outputActionParameters['200'].payload.richContent;
+    } else {
+      return false;
+    }
   } catch (err) {
-      console.log("error in tool response: ", err);
+    console.log('error in tool response: ', err);
   }
 }
 
 function extractGenerativeResponses(dfResponse) {
   try {
-      let dfActions = dfResponse.queryResult.generativeInfo.actionTracingInfo.actions;
-      let filteredActions = dfActions.filter(action => !action.hasOwnProperty("userUtterance"));
+    // eslint-disable-next-line max-len
+    const dfActions = dfResponse.queryResult.generativeInfo.actionTracingInfo.actions;
+    // eslint-disable-next-line max-len,no-prototype-builtins
+    const filteredActions = dfActions.filter((action) => !action.hasOwnProperty('userUtterance'));
 
-      if(filteredActions.length > 0) return filteredActions;
+    if (filteredActions.length > 0) return filteredActions;
 
-      return false;
+    return false;
+    // eslint-disable-next-line no-unused-vars
   } catch (err) {
-      return false;
+    return false;
   }
 }
 
 function extractFlowPayloads(dfResponse) {
   try {
-      let flowResponses = dfResponse.queryResult.responseMessages;
-      let flowPayloads = flowResponses.filter(response => response.hasOwnProperty("payload"));
+    const flowResponses = dfResponse.queryResult.responseMessages;
+    // eslint-disable-next-line max-len,no-prototype-builtins
+    const flowPayloads = flowResponses.filter((response) => response.hasOwnProperty('payload'));
 
-      if(flowPayloads.length > 0) return flowPayloads;
+    if (flowPayloads.length > 0) return flowPayloads;
 
-      return false;
+    return false;
+    // eslint-disable-next-line no-unused-vars
   } catch (err) {
-      return false;
+    return false;
   }
 }

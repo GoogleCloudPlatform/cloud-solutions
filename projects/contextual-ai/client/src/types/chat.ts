@@ -14,9 +14,6 @@
 
 // Type definitions for chat and widget analysis system
 
-/* eslint-disable no-constant-condition */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export interface WidgetMeta {
   type: 'chart' | 'table' | 'metric' | 'heatmap';
   subtype: string;
@@ -28,6 +25,7 @@ export interface WidgetMeta {
 export interface InteractionContext {
   clickedDataPoint?: {
     timestamp: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
   clickType: 'data-point' | 'service-tile' | 'anomaly' | 'trend-line';
@@ -56,6 +54,7 @@ export interface UserContext {
   permissions: string[];
   userId?: string;
   preferences?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
 }
@@ -165,6 +164,3 @@ export interface SystemHealthData {
   responseTime: number;
   // Add other properties if known from the BigQuery schema
 }
-
-/* eslint-enable no-constant-condition */
-/* eslint-enable @typescript-eslint/no-explicit-any */

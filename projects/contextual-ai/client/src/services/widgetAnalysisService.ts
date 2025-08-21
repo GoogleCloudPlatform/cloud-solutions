@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* eslint-disable no-constant-condition */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 interface DataPoint {
   timestamp: string;
   revenue: number;
@@ -33,6 +30,7 @@ interface ClickedDataPoint {
   timestamp: string;
   revenue?: number;
   responseTime?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: Record<string, any>;
 }
 
@@ -47,6 +45,7 @@ interface VisibleKPIs {
   activeUsers?: number;
   pageViews?: number;
   responseTime?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   additionalKPIs?: Record<string, any>;
 }
 
@@ -140,7 +139,7 @@ class WidgetAnalysisService {
                 } else if (data.type === 'error') {
                   onError(data.message);
                 }
-              } catch (e) {
+              } catch {
                 // Ignore JSON parse errors for malformed chunks
               }
             }
@@ -279,6 +278,7 @@ class WidgetAnalysisService {
   }
 
   static async analyzeErrorRateChart(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataPoint: any,
     visibleKPIs?: VisibleKPIs
   ): Promise<WidgetAnalysisResponse> {
@@ -315,6 +315,7 @@ class WidgetAnalysisService {
   }
 
   static async analyzeErrorRateChartStream(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataPoint: any,
     onDataSummary: (summary: string) => void,
     onAnalysisChunk: (chunk: string) => void,
@@ -361,6 +362,7 @@ class WidgetAnalysisService {
   }
 
   static async analyzeSystemHealthHeatmap(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataPoint: any,
     visibleKPIs?: VisibleKPIs
   ): Promise<WidgetAnalysisResponse> {
@@ -400,6 +402,7 @@ class WidgetAnalysisService {
     widgetTitle: string,
     widgetType: string,
     widgetSubtype: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataPoint: any,
     visibleKPIs?: VisibleKPIs
   ): Promise<WidgetAnalysisResponse> {
@@ -451,5 +454,3 @@ export type {
   DataPoint,
   VisibleKPIs,
 };
-/* eslint-enable no-constant-condition */
-/* eslint-enable @typescript-eslint/no-explicit-any */

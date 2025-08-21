@@ -224,7 +224,7 @@ export class PollerFunctionBuilder
         POLLER_COUNTER_DEFINITION_MAP.POLLING_SUCCESS.counterName
       );
       return instanceWithData;
-    } catch (e) {
+    } catch {
       this.counterManager.incrementCounter(
         POLLER_COUNTER_DEFINITION_MAP.POLLING_FAILED.counterName
       );

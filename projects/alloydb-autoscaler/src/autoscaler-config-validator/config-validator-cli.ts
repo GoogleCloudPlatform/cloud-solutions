@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-// eslint-disable-next-line n/no-unpublished-import
 import * as yaml from 'js-yaml';
 import * as fs from 'node:fs';
 import {

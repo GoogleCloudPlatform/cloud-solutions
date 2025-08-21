@@ -65,11 +65,7 @@ export class PubSubMessenger {
    * @param pubSubTopic Topic to which to publish message.
    * @param message Protobuf message to publish.
    */
-  async postPubSubProtoMessage(
-    pubSubTopic: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    message: protobuf.Message
-  ) {
+  async postPubSubProtoMessage(pubSubTopic: string, message: protobuf.Message) {
     const payload = JSON.stringify(message.toJSON());
     return this.postPubSubMessage(pubSubTopic, payload);
   }

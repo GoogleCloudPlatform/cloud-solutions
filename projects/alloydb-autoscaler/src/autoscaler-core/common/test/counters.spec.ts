@@ -317,9 +317,9 @@ function createFakeTelemetryWithMeter(
   return new FakeTelemetryProvider(meterProvider);
 }
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 class FakeMeterProvider implements MeterProvider {
   constructor(private meter: Meter) {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getMeter(name: string, version?: string, options?: MeterOptions): Meter {
     return this.meter;
   }
@@ -330,6 +330,7 @@ class FakeTelemetryProvider implements IOpenTelemetryMeterProvider {
   async getMeterProvider(): Promise<MeterProvider> {
     return this.meterProvider;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setTryFlushIsEnabled(isTryFlushEnabled: boolean): void {}
   async tryFlush(): Promise<void> {}
 }
@@ -337,43 +338,57 @@ class FakeTelemetryProvider implements IOpenTelemetryMeterProvider {
 /** Fake empty implementation of Meter. Methods will be mocked. */
 class FakeMeter implements Meter {
   createCounter<AttributesTypes extends Attributes>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     name: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: MetricOptions
   ): Counter<AttributesTypes> {
     return new FakeCounter();
   }
   createGauge<AttributesTypes extends Attributes>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     name: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: MetricOptions
   ): Gauge<AttributesTypes> {
     return new FakeGauge();
   }
   createHistogram<AttributesTypes extends Attributes>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     name: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: MetricOptions
   ): Histogram<AttributesTypes> {
     return new FakeHistogram();
   }
   createObservableCounter<AttributesTypes extends Attributes>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     name: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: MetricOptions
   ): ObservableCounter<AttributesTypes> {
     return new FakeObservableCounter();
   }
   createObservableGauge<AttributesTypes extends Attributes>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     name: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: MetricOptions
   ): ObservableGauge<AttributesTypes> {
     return new FakeObservableGauge();
   }
   createObservableUpDownCounter<AttributesTypes extends Attributes>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     name: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: MetricOptions
   ): ObservableUpDownCounter<AttributesTypes> {
     return new FakeObservableUpDownCounter();
   }
   createUpDownCounter<AttributesTypes extends Attributes>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     name: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: MetricOptions
   ): UpDownCounter<AttributesTypes> {
     return new FakeUpDownCounter();
@@ -381,61 +396,82 @@ class FakeMeter implements Meter {
   addBatchObservableCallback<
     AttributesTypes extends MetricAttributes = Attributes,
   >(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     callback: BatchObservableCallback<AttributesTypes>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     observables: Observable<AttributesTypes>[]
   ): void {}
   removeBatchObservableCallback<
     AttributesTypes extends MetricAttributes = Attributes,
   >(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     callback: BatchObservableCallback<AttributesTypes>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     observables: Observable<AttributesTypes>[]
   ): void {}
 }
 
 class FakeCounter implements Counter {
   add(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     attributes?: Attributes | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     context?: Context
   ): void {}
 }
 
 class FakeGauge implements Gauge {
   record(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     attributes?: Attributes | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     context?: Context
   ): void {}
 }
 
 class FakeHistogram implements Histogram {
   record(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     attributes?: Attributes | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     context?: Context
   ): void {}
 }
 
 class FakeObservableCounter implements ObservableCounter {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addCallback(callback: ObservableCallback<Attributes>): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeCallback(callback: ObservableCallback<Attributes>): void {}
 }
 
 class FakeObservableGauge implements ObservableGauge {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addCallback(callback: ObservableCallback<Attributes>): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeCallback(callback: ObservableCallback<Attributes>): void {}
 }
 
 class FakeObservableUpDownCounter implements ObservableUpDownCounter {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addCallback(callback: ObservableCallback<Attributes>): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeCallback(callback: ObservableCallback<Attributes>): void {}
 }
 
 class FakeUpDownCounter implements UpDownCounter {
   add(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     attributes?: Attributes | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     context?: Context
   ): void {}
 }
-/* eslint-enable @typescript-eslint/no-unused-vars */

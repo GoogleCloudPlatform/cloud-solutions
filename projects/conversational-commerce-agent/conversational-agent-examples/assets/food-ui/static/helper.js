@@ -12,30 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* eslint-disable */
-
 // listen to df-response
 window.addEventListener('df-response-received', (event) => {
-  event.preventDefault();  // Dialogflow Messenger won't handle the responses.
+  event.preventDefault(); // Dialogflow Messenger won't handle the responses.
   // check if flow's responses is available
-  let flowPayloads = extractFlowPayloads(event.detail.raw);
+  const flowPayloads = extractFlowPayloads(event.detail.raw);
 
   // check if generative responses is available
-  let genResponses = extractGenerativeResponses(event.detail.raw);
+  const genResponses = extractGenerativeResponses(event.detail.raw);
 
   if (genResponses) {
     try {
       const dfMessenger = document.querySelector('df-messenger');
       for (const res of genResponses) {
+        // eslint-disable-next-line no-prototype-builtins
         if (res.hasOwnProperty('agentUtterance')) {
           dfMessenger.renderCustomText(res.agentUtterance.text, true);
+          // eslint-disable-next-line no-prototype-builtins
         } else if (res.hasOwnProperty('toolUse')) {
-          let customPayload = extractCustomPayload(res.toolUse);
+          const customPayload = extractCustomPayload(res.toolUse);
           if (customPayload) {
             dfMessenger.renderCustomCard(customPayload[0]);
           }
         } else if (
-            res && res.flowInvocation &&
+          res && res.flowInvocation &&
             res.flowInvocation.flowState == 'OUTPUT_STATE_OK') {
           for (const flowPayload of flowPayloads) {
             dfMessenger.renderCustomCard(flowPayload.payload.richContent[0]);
@@ -50,6 +50,7 @@ window.addEventListener('df-response-received', (event) => {
   if (flowPayloads) {
     try {
       const dfMessenger = document.querySelector('df-messenger');
+      // eslint-disable-next-line no-unused-vars
       for (const res of flowPayloads) {
         for (const flowPayload of flowPayloads) {
           dfMessenger.renderCustomCard(flowPayload.payload.richContent[0]);
@@ -66,12 +67,12 @@ function extractCustomPayload(dfTool) {
     if (dfTool.outputActionParameters && dfTool.outputActionParameters['200'] &&
         dfTool.outputActionParameters['200'].payload &&
         dfTool.outputActionParameters['200'].payload.richContent) {
-      var richContent =
+      const richContent =
           dfTool.outputActionParameters['200'].payload.richContent;
       console.log(richContent);
       return richContent;
     } else {
-      return false
+      return false;
     }
   } catch (err) {
     console.log('error in tool response: ', err);
@@ -80,14 +81,15 @@ function extractCustomPayload(dfTool) {
 
 function extractGenerativeResponses(dfResponse) {
   try {
-    let dfActions =
-        dfResponse.queryResult.generativeInfo.actionTracingInfo.actions;
-    let filteredActions =
-        dfActions.filter(action => !action.hasOwnProperty('userUtterance'));
+    const dfActions =
+      dfResponse.queryResult.generativeInfo.actionTracingInfo.actions;
+    // eslint-disable-next-line max-len,no-prototype-builtins
+    const filteredActions = dfActions.filter((action) => !action.hasOwnProperty('userUtterance'));
 
     if (filteredActions.length > 0) return filteredActions;
 
     return false;
+    // eslint-disable-next-line no-unused-vars
   } catch (err) {
     return false;
   }
@@ -95,12 +97,13 @@ function extractGenerativeResponses(dfResponse) {
 
 function extractFlowPayloads(dfResponse) {
   try {
-    let flowResponses = dfResponse.queryResult.responseMessages;
-    let flowPayloads =
-        flowResponses.filter(response => response.hasOwnProperty('payload'));
+    const flowResponses = dfResponse.queryResult.responseMessages;
+    // eslint-disable-next-line max-len,no-prototype-builtins
+    const flowPayloads = flowResponses.filter((response) => response.hasOwnProperty('payload'));
     if (flowPayloads.length > 0) return flowPayloads;
 
     return false;
+    // eslint-disable-next-line no-unused-vars
   } catch (err) {
     return false;
   }

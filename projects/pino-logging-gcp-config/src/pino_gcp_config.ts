@@ -186,7 +186,6 @@ class GcpLoggingPino {
     if (!isInfoAdded || entries.length === 0) {
       return;
     }
-    pino.version;
     // Create a temp pino logger instance just to log this diagnostic entry.
     pino
       .pino({

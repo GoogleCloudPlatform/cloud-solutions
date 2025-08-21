@@ -13,14 +13,13 @@
 // limitations under the License.
 
 import {ChatMessage} from '../types/chat';
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-constant-condition */
 
 interface ConversationEntry {
   id: string;
   timestamp: string;
   type: string;
   content: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: any;
 }
 
@@ -176,7 +175,7 @@ class ChatApiService {
                 } else if (data.type === 'error') {
                   onError(data.message);
                 }
-              } catch (e) {
+              } catch {
                 // Ignore JSON parse errors for malformed chunks
               }
             }
@@ -361,5 +360,3 @@ export type {
   ChatMessageRequest,
   ChatResponse,
 };
-/* eslint-enable no-constant-condition */
-/* eslint-enable @typescript-eslint/no-explicit-any */
