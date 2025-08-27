@@ -70,7 +70,11 @@ curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dear
 
 sudo apt-get update
 
-sudo DEBIAN_FRONTEND=noninteractive apt-get --yes install nvidia-container-toolkit
+sudo DEBIAN_FRONTEND=noninteractive apt-get --yes install \
+  nvidia-container-toolkit \
+  nvidia-container-toolkit-base \
+  libnvidia-container-tools \
+  libnvidia-container1
 
 sudo nvidia-ctk runtime configure --runtime=docker
 

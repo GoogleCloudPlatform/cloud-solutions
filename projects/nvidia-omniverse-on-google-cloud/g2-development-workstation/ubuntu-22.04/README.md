@@ -28,12 +28,11 @@ following:
 1.  Run the `setup-workstation.sh` script on the NVIDIA RTX Virtual Workstation:
 
     ```bash
-    projects/nvidia-omniverse-on-google-cloud/g2-development-workstation/ubuntu-22.04/setup-workstation.sh/setup-workstation.sh
+    projects/nvidia-omniverse-on-google-cloud/g2-development-workstation/ubuntu-22.04/setup-workstation.sh
     ```
 
     The `setup-workstation.sh` script does the following to the workstation for
     NVIDIA Omniverse application development:
-
     - Verify that NVIDIA drivers are installed
     - Install dependencies
     - Install Docker
