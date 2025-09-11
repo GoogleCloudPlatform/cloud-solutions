@@ -89,6 +89,17 @@ export interface GCPLoggingPinoOptions {
    * ServiceContext and project ID from the environment.
    */
   auth?: gax.GoogleAuth;
+
+  /**
+   * Optional pino destination stream to be used for any
+   * diagnostic messages.
+   */
+  pinoDestinationStream?: pino.DestinationStream;
+
+  /**
+   * Prevent the diagnostic log message from being emitted.
+   */
+  inihibitDiagnosticMessage?: boolean;
 }
 
 /**
@@ -98,21 +109,37 @@ export interface GCPLoggingPinoOptions {
 class GcpLoggingPino {
   serviceContext: ServiceContext | null = null;
   traceGoogleCloudProjectId: string | null = null;
-  auth: gax.GoogleAuth | undefined;
-  cachedLoggingClient: Logging | null = null;
+  pendingInit: Promise<void> | null = null;
+  pinoLoggerOptions: pino.LoggerOptions;
 
-  constructor(options?: GCPLoggingPinoOptions) {
-    this.auth = options?.auth;
-
-    this.initializeOptionsAsync(options).then(
-      () => {
-        this.outputDiagnosticEntry();
-      },
-      () => {
-        // Ignore any errors raised by initializeOptionsAsync.
-        // Errors can occur if not running in a GCP environment.
+  constructor(
+    options?: GCPLoggingPinoOptions,
+    pinoLoggerOptionsMixin?: pino.LoggerOptions
+  ) {
+    if (options?.serviceContext) {
+      if (
+        typeof options.serviceContext?.service !== 'string' ||
+        !options.serviceContext?.service?.length
+      ) {
+        throw new Error('options.serviceContext.service must be specified.');
       }
-    );
+    }
+
+    this.pinoLoggerOptions = this.buidPinoLoggerOptions(pinoLoggerOptionsMixin);
+
+    const promises = this.initializeOptions(options);
+    if (!options?.inihibitDiagnosticMessage) {
+      if (promises.length > 0) {
+        // Some async actions pending, wait for them then log diagnostic.
+        const pinoDestinationStream = options?.pinoDestinationStream;
+        this.pendingInit = Promise.all(promises).then(() => {
+          this.outputDiagnosticEntry(pinoDestinationStream);
+        });
+      } else {
+        // no async options pending, directly log diagnostic.
+        this.outputDiagnosticEntry(options?.pinoDestinationStream);
+      }
+    }
   }
 
   /**
@@ -123,49 +150,54 @@ class GcpLoggingPino {
    * auto-detect values from the environment if they are not specified.
    *
    * @param options Configuration options for GCP logging.
-   *
-   * @throws {Error} If `serviceContext.service` is provided but is not a valid
-   * string or is empty.
+   * @return an array of promises for async init actions.
    */
-  async initializeOptionsAsync(options?: GCPLoggingPinoOptions) {
+  initializeOptions(options?: GCPLoggingPinoOptions): Promise<void>[] {
+    let auth = options?.auth;
+    const promises: Array<Promise<void>> = [];
+
     if (options?.serviceContext) {
-      if (
-        typeof options.serviceContext?.service !== 'string' ||
-        !options.serviceContext?.service?.length
-      ) {
-        throw new Error('options.serviceContext.service must be specified.');
-      }
       this.serviceContext = {...options.serviceContext};
     } else {
-      // Using detectServiceContext to asynchronously return the ServiceContext
-      const cloudLog = this.getLoggingClient();
-      const serviceContext = await detectServiceContext(cloudLog.auth);
-      this.serviceContext = serviceContext;
+      if (!auth) {
+        // Get default auth via logging library.
+        auth = new Logging().auth;
+      }
+      promises.push(
+        // Use detectServiceContext to asynchronously return the ServiceContext
+        detectServiceContext(auth!).then(
+          serviceContext => {
+            this.serviceContext = serviceContext;
+          },
+          () => {} // ignore any raised errors.
+        )
+      );
     }
 
-    if (options?.traceGoogleCloudProjectId) {
-      this.traceGoogleCloudProjectId = options.traceGoogleCloudProjectId;
+    if (
+      options?.traceGoogleCloudProjectId !== undefined &&
+      options?.traceGoogleCloudProjectId !== null
+    ) {
+      if (options?.traceGoogleCloudProjectId.length > 0) {
+        // empty string keeps project ID as null
+        this.traceGoogleCloudProjectId = options.traceGoogleCloudProjectId;
+      }
     } else {
-      // Using the GoogleAuth to get the projectId from the environment.
-      const cloudLog = this.getLoggingClient();
-      const projectId = await cloudLog.auth.getProjectId();
-      this.traceGoogleCloudProjectId = projectId;
+      if (!auth) {
+        // Get default auth from logging library.
+        auth = new Logging().auth;
+      }
+      promises.push(
+        // Using GoogleAuth to get the projectId from the environment.
+        auth!.getProjectId().then(
+          projectId => {
+            this.traceGoogleCloudProjectId = projectId;
+          },
+          () => {} // ignore any raised errors.
+        )
+      );
     }
-  }
-
-  /**
-   * Retrieves the cached Logging client instance or creates a new one if it
-   * does not exist. It can be used to retrieve the ServiceContext and project
-   * ID automatically from the environment.
-   *
-   * @returns The Logging client instance, either cached or newly created.
-   */
-  getLoggingClient() {
-    if (!this.cachedLoggingClient) {
-      this.cachedLoggingClient = new Logging({auth: this.auth});
-      this.auth = this.cachedLoggingClient.auth;
-    }
-    return this.cachedLoggingClient;
+    return promises;
   }
 
   /**
@@ -175,26 +207,33 @@ class GcpLoggingPino {
    * Note that it is not possible for this package to perform API level logging
    * with a line of the form cloud-solutions/pino-logging-gcp-config-v1.0.0
    */
-  outputDiagnosticEntry() {
-    const diagEntry = createDiagnosticEntry(
-      NODEJS_GCP_PINO_LIBRARY_NAME,
-      NODEJS_GCP_PINO_LIBRARY_VERSION
-    );
-    diagEntry.data[DIAGNOSTIC_INFO_KEY].runtime = process.version;
+  outputDiagnosticEntry(pinoDestinationStream?: pino.DestinationStream) {
+    try {
+      const diagEntry = createDiagnosticEntry(
+        NODEJS_GCP_PINO_LIBRARY_NAME,
+        NODEJS_GCP_PINO_LIBRARY_VERSION
+      );
+      diagEntry.data[DIAGNOSTIC_INFO_KEY].runtime = process.version;
 
-    const [entries, isInfoAdded] = populateInstrumentationInfo(diagEntry);
-    if (!isInfoAdded || entries.length === 0) {
-      return;
+      const [entries, isInfoAdded] = populateInstrumentationInfo(diagEntry);
+      if (!isInfoAdded || entries.length === 0) {
+        return;
+      }
+      // Create a temp pino logger instance just to log this diagnostic entry.
+      pino
+        .pino(
+          {
+            ...this.pinoLoggerOptions,
+            level: 'info',
+          },
+          pinoDestinationStream
+        )
+        .info({
+          ...diagEntry.data,
+        });
+    } catch {
+      // ignore any errors.
     }
-    // Create a temp pino logger instance just to log this diagnostic entry.
-    pino
-      .pino({
-        level: 'info',
-        ...this.getPinoLoggerOptions(),
-      })
-      .info({
-        ...diagEntry.data,
-      });
   }
 
   /**
@@ -313,7 +352,7 @@ class GcpLoggingPino {
   /**
    * Creates a pino.LoggerOptions configured for GCP structured logging.
    */
-  getPinoLoggerOptions(
+  buidPinoLoggerOptions(
     pinoOptionsMixin?: pino.LoggerOptions
   ): pino.LoggerOptions {
     const formattersMixin = pinoOptionsMixin?.formatters;
@@ -343,8 +382,11 @@ class GcpLoggingPino {
  * JSON records compatible with
  * {@link https://cloud.google.com/logging/docs/structured-logging|Google Cloud structured Logging}.
  *
- * @param pinoLoggerOptions Additional Pino Logger settings that will be added to
+ * @param pinoLoggerOptionsMixin Additional Pino Logger settings that will be added to
  * the returned value.
+ *
+ * @throws {Error} If `serviceContext.service` is provided but is not a valid
+ * string or is empty.
  *
  * @example
  *      const logger = pino.pino(
@@ -367,11 +409,12 @@ class GcpLoggingPino {
  */
 export function createGcpLoggingPinoConfig(
   options?: GCPLoggingPinoOptions,
-  pinoLoggerOptions?: pino.LoggerOptions
+  pinoLoggerOptionsMixin?: pino.LoggerOptions
 ): pino.LoggerOptions {
-  return new GcpLoggingPino(options).getPinoLoggerOptions(pinoLoggerOptions);
+  return new GcpLoggingPino(options, pinoLoggerOptionsMixin).pinoLoggerOptions;
 }
 
 export const TEST_ONLY = {
   PINO_TO_GCP_LOG_LEVELS,
+  GcpLoggingPino,
 };
