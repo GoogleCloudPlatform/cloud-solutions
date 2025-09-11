@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "npm run compile",
     "test": "jasmine --config=jasmine.json",
-    "test:fancy": "jasmine --reporter=jasmine-console-reporter --config=jasmine.json",
+    "test:fancy": "npm run compile; jasmine --reporter=jasmine-console-reporter --config=jasmine.json --verbose",
     "compile": "tsc",
     "pretest": "npm run compile"
   },
