@@ -1,5 +1,5 @@
 uvicorn==0.35.0
-fastapi==0.115.14
+fastapi==0.116.1
 dotenv==0.9.9
 google-cloud==0.34.0
 google-cloud-storage==2.19.0
