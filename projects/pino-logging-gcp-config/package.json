@@ -27,19 +27,18 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/jasmine": "^5.1.8",
-    "@types/node": "^22.17.0",
-    "jasmine": "^5.9.0",
+    "@types/jasmine": "^5.1.9",
+    "@types/node": "^18.19.124",
+    "jasmine": "^5.10.0",
     "jasmine-console-reporter": "^3.1.0",
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@google-cloud/logging": "^11.2.0",
+    "@google-cloud/logging": "^11.2.1",
     "eventid": "^2.0.1",
-    "google-gax": "^4.6.1",
-    "pino": "^9.7.0"
+    "pino": "^9.9.5"
   },
   "engines": {
-    "node": ">=16.20.2"
+    "node": ">=18"
   }
 }

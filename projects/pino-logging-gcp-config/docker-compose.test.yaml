@@ -1,0 +1,66 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Docker compose set of services to run the tests sequentially using
+# Node 18, 20, 22, 24 LTS versions.
+#
+
+services:
+  node_18_tests:
+    container_name: node_18_tests
+    image: node:18.20.8-slim
+    working_dir: /the-repo/projects/pino-logging-gcp-config
+    entrypoint: ["/bin/bash", "-e", "-x", "-c"]
+    command:
+      - "npm ci --engine-strict=true && npm audit && npm test"
+    volumes:
+      - ${THE_REPO_ROOT}:/the-repo
+  node_20_tests:
+    container_name: node_20_tests
+    image: node:20.19.5-slim
+    working_dir: /the-repo/projects/pino-logging-gcp-config
+    entrypoint: ["/bin/bash", "-e", "-x", "-c"]
+    command:
+      - "npm ci --engine-strict=true && npm audit && npm test"
+    volumes:
+      - ${THE_REPO_ROOT}:/the-repo
+    depends_on:
+      node_18_tests:
+        condition: service_completed_successfully
+
+  node_22_tests:
+    container_name: node_22_tests
+    image: node:22.19.0-slim
+    working_dir: /the-repo/projects/pino-logging-gcp-config
+    entrypoint: ["/bin/bash", "-e", "-x", "-c"]
+    command:
+      - "npm ci --engine-strict=true && npm audit && npm test"
+    volumes:
+      - ${THE_REPO_ROOT}:/the-repo
+    depends_on:
+      node_20_tests:
+        condition: service_completed_successfully
+
+  node_24_tests:
+    container_name: node_24_tests
+    image: node:24.8.0-slim
+    working_dir: /the-repo/projects/pino-logging-gcp-config
+    entrypoint: ["/bin/bash", "-e", "-x", "-c"]
+    command:
+      - "npm ci --engine-strict=true && npm audit && npm test"
+    volumes:
+      - ${THE_REPO_ROOT}:/the-repo
+    depends_on:
+      node_22_tests:
+        condition: service_completed_successfully
