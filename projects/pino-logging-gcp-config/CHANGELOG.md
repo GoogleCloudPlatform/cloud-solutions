@@ -2,6 +2,18 @@
 
 <!-- markdownlint-disable -->
 
+## [1.2.0](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.1.0...pino-logging-gcp-config-v1.2.0) (2025-09-12)
+
+
+### Features
+
+* Improvements to logging diagnostic message ([b86a528](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/b86a528dae879df63947b1a3226bf9ec50f584f8)), closes [#212](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/212)
+
+
+### Bug Fixes
+
+* **deps:** Update dependencies and run tests on all node LTS versions ([982b98d](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/982b98d598bbbee09492349db1519c8ca99665c2))
+
 ## [1.1.0](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.0.6...pino-logging-gcp-config-v1.1.0) (2025-08-05)
 
 
