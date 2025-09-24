@@ -41,7 +41,7 @@ services:
 
   node_22_tests:
     container_name: node_22_tests
-    image: node:22.19.0-slim
+    image: node:22.20.0-slim
     working_dir: /the-repo/projects/pino-logging-gcp-config
     entrypoint: ["/bin/bash", "-e", "-x", "-c"]
     command:
