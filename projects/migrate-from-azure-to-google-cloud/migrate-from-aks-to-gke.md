@@ -11,13 +11,6 @@ GKE is a Google-managed Kubernetes service that you can use to deploy and
 operate containerized applications at scale using Google's infrastructure, and
 provides features that help you manage your Kubernetes environment, such as:
 
-- Two modes of operation: GKE Standard and GKE Autopilot. With GKE Standard, you
-  manage the underlying infrastructure and the configuration of each node in
-  your GKE cluster. With GKE Autopilot, GKE manages the underlying
-  infrastructure such as node configuration, autoscaling, auto-upgrades,
-  baseline security and network configuration. For more information about GKE
-  modes of operation, see
-  [Choose a GKE mode of operation](https://cloud.google.com/kubernetes-engine/docs/concepts/choose-cluster-mode).
 - [Industry-unique service level agreement for Pods](https://cloud.google.com/kubernetes-engine/sla)
   when using GKE Autopilot in multiple zones.
 - Automated node pool creation and deletion with
