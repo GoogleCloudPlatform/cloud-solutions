@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Build stage
-FROM node:20 AS builder
+FROM node:22 AS builder
 
 # Set working directory
 WORKDIR /app
