@@ -61,7 +61,7 @@ gs://google-cloud-aiplatform/schema/dataset/annotation/image_segmentation_1.0.0.
 You may copy the schema file to a local folder as follows:
 
 ```bash
-gsutil cp gs://google-cloud-aiplatform/schema/dataset/annotation/image_segmentation_1.0.0.yaml ./
+gcloud storage cp gs://google-cloud-aiplatform/schema/dataset/annotation/image_segmentation_1.0.0.yaml ./
 ```
 
 The annotation file needs to be placed in a Cloud Storage bucket and refer to
