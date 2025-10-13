@@ -142,7 +142,7 @@ from Cloud Shell:
 1.  Upload the example file in the Cloud Storage bucket:
 
     ```sh
-    gsutil cp random.txt "gs://${SOURCE_CLOUD_STORAGE_BUCKET_NAME}/random.txt"
+    gcloud storage cp random.txt "gs://${SOURCE_CLOUD_STORAGE_BUCKET_NAME}/random.txt"
     ```
 
 1.  View the log entries related to the event processing service:
