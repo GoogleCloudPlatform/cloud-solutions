@@ -52,6 +52,11 @@
       "commitMessagePrefix": "chore(deps): [ungrouped-projects]"
     },
     {
+      "matchFileNames": ["projects/ai/**"],
+      "groupName": "ai",
+      "commitMessagePrefix": "chore(deps): [ai]"
+    },
+    {
       "matchFileNames": ["projects/alloydb-auth-workload-identity/**"],
       "groupName": "alloydb-auth-workload-identity",
       "commitMessagePrefix": "chore(deps): [alloydb-auth-workload-identity]"
