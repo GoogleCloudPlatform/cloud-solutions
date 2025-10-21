@@ -17,15 +17,6 @@
 #
 
 services:
-  node_18_tests:
-    container_name: node_18_tests
-    image: node:18.20.8-slim
-    working_dir: /the-repo/projects/pino-logging-gcp-config
-    entrypoint: ["/bin/bash", "-e", "-x", "-c"]
-    command:
-      - "npm ci --engine-strict=true && npm audit && npm test"
-    volumes:
-      - ${THE_REPO_ROOT}:/the-repo
   node_20_tests:
     container_name: node_20_tests
     image: node:20.19.5-slim
@@ -35,13 +26,10 @@ services:
       - "npm ci --engine-strict=true && npm audit && npm test"
     volumes:
       - ${THE_REPO_ROOT}:/the-repo
-    depends_on:
-      node_18_tests:
-        condition: service_completed_successfully
 
   node_22_tests:
     container_name: node_22_tests
-    image: node:22.21.1-slim
+    image: node:22.19.0-slim
     working_dir: /the-repo/projects/pino-logging-gcp-config
     entrypoint: ["/bin/bash", "-e", "-x", "-c"]
     command:
@@ -54,7 +42,7 @@ services:
 
   node_24_tests:
     container_name: node_24_tests
-    image: node:24.11.1-slim
+    image: node:24.8.0-slim
     working_dir: /the-repo/projects/pino-logging-gcp-config
     entrypoint: ["/bin/bash", "-e", "-x", "-c"]
     command:
