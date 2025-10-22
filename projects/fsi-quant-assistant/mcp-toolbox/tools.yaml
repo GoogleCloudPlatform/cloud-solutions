@@ -1,0 +1,140 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+sources:
+  my-bq-source:
+    kind: bigquery
+    project: servidio-test-a
+
+tools:
+  list_all_watchlist_symbols:
+    kind: bigquery-sql
+    source: my-bq-source
+    statement: |
+      SELECT
+       record_id,
+       symbol,
+       exchange,
+       added_on,
+       target_price,
+       notes
+      FROM
+        `analyst_demo`.`watchlist`
+    description: |
+      Use this tool to get a comprehensive list of all stock symbols currently on the user's watchlist, along with their details.
+
+  search_watchlist_for_symbol:
+    kind: bigquery-sql
+    source: my-bq-source
+    statement: |
+      SELECT
+       record_id,
+       symbol,
+       exchange,
+       added_on,
+       target_price,
+       notes
+      FROM
+        `analyst_demo`.`watchlist`
+      WHERE
+       UPPER(symbol) = UPPER(@symbol)
+    description: |
+      Use this tool to find a specific stock symbol on the user's watchlist and retrieve its details.
+    parameters:
+      - name: symbol
+        type: string
+        description: The stock symbol
+
+  add_symbol_to_watchlist:
+    kind: bigquery-sql
+    source: my-bq-source
+    statement: |
+      INSERT INTO `analyst_demo`.`watchlist` (record_id, symbol, exchange, added_on, target_price, notes)
+      VALUES(GENERATE_UUID(), UPPER(@symbol), UPPER(@exchange), CURRENT_TIMESTAMP(), CAST(@target_price AS NUMERIC), @notes)
+    description: |
+      Use this tool to add a new stock symbol to the user's watchlist. This is useful for creating a new watchlist entry.
+    parameters:
+      - name: symbol
+        type: string
+        description: The stock symbol
+        required: true
+      - name: exchange
+        type: string
+        description: The exchange on which the stock is listed
+        required: true
+      - name: target_price
+        type: float
+        description: The target price
+        required: false
+        default: 0
+      - name: notes
+        type: string
+        description: The user notes
+        required: false
+        default: N/A
+
+  update_existing_symbol_on_watchlist:
+    kind: bigquery-sql
+    source: my-bq-source
+    statement: |
+      UPDATE `analyst_demo`.`watchlist`
+      SET added_on = CURRENT_TIMESTAMP(), target_price = CAST(@target_price AS NUMERIC), notes = @notes
+      WHERE UPPER(symbol) = UPPER(@symbol) AND UPPER(exchange) = UPPER(@exchange)
+    description: |
+      Use this tool to update the details of an existing stock symbol on the user's watchlist, such as the target price or notes.
+    parameters:
+      - name: symbol
+        type: string
+        description: The stock symbol
+        required: true
+      - name: exchange
+        type: string
+        description: The exchange on which the stock is listed
+        required: true
+      - name: target_price
+        type: float
+        description: The target price
+        required: false
+        default: 0
+      - name: notes
+        type: string
+        description: The user notes
+        required: false
+        default: N/A
+
+  remove_symbol_from_watchlist:
+    kind: bigquery-sql
+    source: my-bq-source
+    statement: |
+      DELETE FROM `analyst_demo`.`watchlist`
+      WHERE UPPER(symbol) = UPPER(@symbol) and UPPER(exchange) = UPPER(@exchange)
+    description: |
+      Use this tool to permanently remove a stock symbol from the user's watchlist.
+    parameters:
+      - name: symbol
+        type: string
+        description: The stock symbol
+        required: true
+      - name: exchange
+        type: string
+        description: The exchange on which the stock is listed
+        required: true
+
+toolsets:
+  my_bq_toolset:
+    - list_all_watchlist_symbols
+    - search_watchlist_for_symbol
+    - add_symbol_to_watchlist
+    - update_existing_symbol_on_watchlist
+    - remove_symbol_from_watchlist

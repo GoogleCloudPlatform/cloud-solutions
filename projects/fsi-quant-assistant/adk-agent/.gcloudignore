@@ -1,0 +1,19 @@
+# Always ignore the gcloud configuration files
+.gcloudignore
+.git
+.gitignore
+.dockerignore
+
+# Directories you do not need in the build environment
+.venv
+node_modules/
+__pycache__/
+.idea
+
+# Sensitive local files that should NEVER be uploaded
+.env
+
+.DS_Store
+sessions.db
+
+tests/

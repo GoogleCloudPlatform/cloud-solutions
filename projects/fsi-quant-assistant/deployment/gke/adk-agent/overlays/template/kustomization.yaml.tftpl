@@ -1,0 +1,34 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base
+namespace: adk-agent-demo
+images:
+- name: adk-repo/adk-agent
+  newName: ${region}-docker.pkg.dev/${project_id}/adk-repo/adk-agent
+  newTag: latest
+configMapGenerator:
+- name: adk-agent-config
+  literals:
+  - project_id=${project_id}
+  - location=${region}
+  - tools_url=http://toolbox-service.mcp-toolbox-demo.svc.cluster.local:5000
+  - sentiment_model_api_base_url=http://gemma-vllm-service.gemma-gke-demo.svc.cluster.local/v1
+secretGenerator:
+- name: finnhub-api-key
+  literals:
+  - key=${finnhub_api_key}

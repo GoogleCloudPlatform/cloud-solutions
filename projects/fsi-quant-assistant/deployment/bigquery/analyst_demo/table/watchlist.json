@@ -1,0 +1,32 @@
+[
+  {
+    "name": "record_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "symbol",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "exchange",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "added_on",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "target_price",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "notes",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]

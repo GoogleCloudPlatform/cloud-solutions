@@ -1,0 +1,3 @@
+project_id = "your-project-id"
+hugging_face_api_token = "your-hugging-face-api-token"
+finnhub_api_key = "your-finnhub-api-key"

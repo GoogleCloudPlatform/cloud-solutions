@@ -1,0 +1,28 @@
+[project]
+name = "financial-analyst"
+version = "0.0.1"
+description = "AI-driven analyst"
+authors = [
+    { name = "Mark Servidio", email = "mservidio@google.com" }
+]
+license = "Apache License 2.0"
+# readme = "README.md"
+
+[tool.poetry.dependencies]
+google-adk = "^1.14.1"
+toolbox-core = "^0.5.2"
+python = ">=3.10,<3.12"
+finnhub-python = "^2.4.24"
+#google-auth-oauthlib = "^1.2.2"
+google-cloud-secret-manager = "^2.24.0"
+timesfm = {extras = ["torch"], version = "^1.3.0"}
+torch-xla = { version = "^2.8.1", markers = "sys_platform == 'linux'" }
+litellm = "^1.77.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+pytest-asyncio = "^1.1.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
