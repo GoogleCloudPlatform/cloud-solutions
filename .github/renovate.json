@@ -142,6 +142,11 @@
       "commitMessagePrefix": "chore(deps): [dataproc-trino-autoscaler]"
     },
     {
+      "matchFileNames": ["projects/fsi-quant-assistant/**"],
+      "groupName": "fsi-quant-assistant",
+      "commitMessagePrefix": "chore(deps): [fsi-quant-assistant]"
+    },
+    {
       "matchFileNames": ["projects/hive-bigquery-connector-demo/**"],
       "groupName": "hive-bigquery-connector-demo",
       "commitMessagePrefix": "chore(deps): [hive-bigquery-connector-demo]"
