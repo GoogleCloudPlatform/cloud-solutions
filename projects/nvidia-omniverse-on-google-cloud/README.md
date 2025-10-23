@@ -3,12 +3,23 @@
 This project contains assets to develop and deploy NVIDIA Omniverse applications
 on Google Cloud.
 
-## NVIDIA RTX Virtual Workstations
+## NVIDIA Omniverse Workstations
 
-To develop NVIDIA RTX applications on Google Cloud, you deploy one of the
+To develop NVIDIA Omniverse applications on Google Cloud, you deploy one of the
 following virtual workstations on Compute Engine:
 
-- [NVIDIA RTX Virtual Workstation: G2 machine family (L4 GPUs), Ubuntu 22.04](./g2-development-workstation/ubuntu-22.04/README.md)
+- [NVIDIA Omniverse Development Workstation (Linux)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-development-workstation-linux)
+- [NVIDIA Omniverse Development Workstation (Windows)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-development-workstation-windows)
+- [NVIDIA Omniverse Enterprise Workstation (Linux)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-enterprise-workstation-linux)
+- [NVIDIA Omniverse Enterprise Workstation (Windows)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-enterprise-workstation-windows)
+
+## NVIDIA Isaac Sim workstations
+
+To develop NVIDIA Isaac Sim applications on Google Cloud, you deploy one of the
+following virtual workstations on Compute Engine:
+
+- [NVIDIA Isaac Sim Development Workstation (Linux)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-isaac-sim-development-workstation-linux)
+- [NVIDIA Isaac Sim Development Workstation (Windows)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-isaac-sim-development-workstation-windows)
 
 ## NVIDIA Isaac development workstations
 
@@ -33,3 +44,10 @@ For more information, see
 
 For more information, see
 [Deploy NVIDIA Omniverse Farm on Google Cloud](./omniverse-farm/README.md).
+
+## NVIDIA RTX Virtual Workstations
+
+To develop NVIDIA RTX applications on Google Cloud, you deploy one of the
+following virtual workstations on Compute Engine:
+
+- [NVIDIA RTX Virtual Workstation: G2 machine family (L4 GPUs), Ubuntu 22.04](./g2-development-workstation/ubuntu-22.04/README.md)
