@@ -21,15 +21,14 @@ basic health check endpoint.
 """
 
 
-import os
-import uvicorn
 import logging
+import os
 
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from routers.ecommerce_ops import router as ecommerce_ops_router
 from routers.chat import router as chat_router
+from routers.ecommerce_ops import router as ecommerce_ops_router
 
 ALLOWED_ORIGINS = [
     "*",

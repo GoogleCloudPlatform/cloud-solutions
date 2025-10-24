@@ -22,8 +22,8 @@ import json
 import logging
 import os
 import re
-import requests
 
+import requests
 
 logging.basicConfig(level=logging.INFO)
 

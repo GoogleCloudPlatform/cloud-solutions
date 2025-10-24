@@ -25,28 +25,22 @@ and render in a div.
 Configure the GCF to use a service account which has Retail Editor Role
 """
 
-import flask
-import google.auth
+import logging
 import os
 import random
 import tomllib
 import uuid
-import logging
-import random
-
 from datetime import datetime, timedelta
 
+import flask
+import google.auth
 from firebase_admin import db, initialize_app
 from firebase_functions import https_fn
 from flask import request
-
-from google.cloud import firestore
-from google.cloud import retail_v2
-from google.cloud.aiplatform import telemetry
-
-from google.protobuf.json_format import MessageToDict
 from google.api_core.gapic_v1.client_info import ClientInfo
-
+from google.cloud import firestore, retail_v2
+from google.cloud.aiplatform import telemetry
+from google.protobuf.json_format import MessageToDict
 from utils import shopping_cart
 
 _USER_AGENT = "cloud-solutions/conversational-shopping-agent-v0.0.1"

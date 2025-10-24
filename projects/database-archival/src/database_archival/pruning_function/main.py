@@ -15,11 +15,14 @@
 """Deletes data from the database. Acts as entrypoint for Cloud Function."""
 
 import logging
+
 import flask
 import functions_framework
-from database_archival.pruning_function.workflow import bigquery
-from database_archival.pruning_function.workflow import database
-from database_archival.pruning_function.workflow import config_parser
+from database_archival.pruning_function.workflow import (
+    bigquery,
+    config_parser,
+    database,
+)
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -14,24 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import argparse
-from datetime import datetime
-from google.cloud import aiplatform
-import keras
-import keras_cv
 import logging
 import os
+from datetime import datetime
+
+import keras
+import keras_cv
 import tensorflow as tf
 import tensorflow_datasets as tfds
-
-from dataset import build_datasets
-from model import SegmentationLosses, build_model
 import utilities
-
+from dataset import build_datasets
+from google.cloud import aiplatform
+from model import SegmentationLosses, build_model
 
 os.environ['KERAS_BACKEND'] = 'tensorflow'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'

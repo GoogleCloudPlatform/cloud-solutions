@@ -27,8 +27,7 @@ This is separated from dag_archive_and_prune for two reasons:
 
 import airflow
 from airflow.utils.dates import days_ago
-from database_archival.dag import config
-from database_archival.dag import dag_archive_and_prune
+from database_archival.dag import config, dag_archive_and_prune
 
 dag = airflow.DAG(
     dag_id=config.DAG_NAME,

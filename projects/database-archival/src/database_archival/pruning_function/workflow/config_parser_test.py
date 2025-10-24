@@ -14,15 +14,16 @@
 
 """Tests for config_parser."""
 
-import unittest
 import json
+import unittest
+from typing import Any, Mapping, Optional
+
 import flask
 import werkzeug
 from absl.testing import parameterized
 from database_archival.common.models import database
 from database_archival.pruning_function.models import config_model
 from database_archival.pruning_function.workflow import config_parser
-from typing import Any, Mapping, Optional
 
 
 def _create_request_with_data(

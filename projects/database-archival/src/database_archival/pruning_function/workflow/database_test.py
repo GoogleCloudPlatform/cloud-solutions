@@ -16,17 +16,13 @@
 
 import unittest
 from unittest import mock
-from absl.testing import parameterized
 
-from testcontainers import mysql
-from testcontainers import postgres
-from testcontainers import mssql
 import sqlalchemy
-from sqlalchemy import orm
-
+from absl.testing import parameterized
 from database_archival.common.models import database as database_model
 from database_archival.pruning_function.workflow import database
-
+from sqlalchemy import orm
+from testcontainers import mssql, mysql, postgres
 
 _BASE_CALL_PARAMS = {
     'database_type': database.database.DatabaseType.ALLOYDB,

@@ -15,8 +15,9 @@
 """Tests for task_namer."""
 
 import unittest
-from database_archival.dag.utils import task_namer
+
 from absl.testing import parameterized
+from database_archival.dag.utils import task_namer
 
 
 class TestTaskNamer(parameterized.TestCase):

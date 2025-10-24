@@ -18,8 +18,8 @@ Update Search for Retail product attribute configurations.
 
 import argparse
 import logging
-
 from collections.abc import MutableMapping
+
 from google.cloud import retail_v2
 from google.cloud.retail_v2.types import AttributesConfig, CatalogAttribute
 

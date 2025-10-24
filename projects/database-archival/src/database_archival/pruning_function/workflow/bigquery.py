@@ -14,11 +14,11 @@
 
 """Provides access to BigQuery to get primary keys to prune."""
 
-from google.cloud import bigquery
-from database_archival.common.utils import bigquery_utils
-from database_archival.common.utils import config_validator
-from database_archival.common.models import database
 from typing import Iterable
+
+from database_archival.common.models import database
+from database_archival.common.utils import bigquery_utils, config_validator
+from google.cloud import bigquery
 
 
 def get_primary_keys_to_prune_from_bigquery(

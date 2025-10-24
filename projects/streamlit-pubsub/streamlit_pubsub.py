@@ -25,13 +25,11 @@ import datetime
 import threading
 import uuid
 
+import streamlit as st
 from google import pubsub_v1
 from google.api_core.gapic_v1.client_info import ClientInfo
 from google.cloud import pubsub
-from google.protobuf import duration_pb2
-from google.protobuf import timestamp_pb2
-import streamlit as st
-
+from google.protobuf import duration_pb2, timestamp_pb2
 
 logger = st.logger.get_logger(__name__)
 

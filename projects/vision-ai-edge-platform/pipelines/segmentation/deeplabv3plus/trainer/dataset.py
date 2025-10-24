@@ -15,9 +15,8 @@ limitations under the License.
 """
 from functools import partial
 
-import tensorflow as tf
 import keras_cv
-
+import tensorflow as tf
 from vertexai_image_segmentation_dataset import VertexAIImageSegmentationDataset
 
 

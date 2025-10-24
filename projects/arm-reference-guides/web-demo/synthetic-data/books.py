@@ -15,8 +15,8 @@
 # pylint: disable=missing-module-docstring
 
 import csv
-import random
 import datetime
+import random
 
 # --- Configuration ---
 NUM_ENTRIES = 10000

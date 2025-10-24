@@ -14,22 +14,17 @@
 
 """Tests for main pruning function."""
 
-import json
 import collections
-import flask
-import sqlalchemy
-from sqlalchemy import orm
-
+import json
 import unittest
 from unittest import mock
+
+import flask
+import sqlalchemy
 from absl.testing import parameterized
-from testcontainers import mysql
-from testcontainers import postgres
-from testcontainers import mssql
-
-
 from database_archival.pruning_function import main
-
+from sqlalchemy import orm
+from testcontainers import mssql, mysql, postgres
 
 # Represents fake results returned from database query.
 _FakeResults = collections.namedtuple('FakeResults', ['rowcount'])

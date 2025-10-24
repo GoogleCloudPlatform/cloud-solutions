@@ -20,6 +20,7 @@ response messages.
 import logging
 import os
 
+
 def shopping_cart(request_json):
     """
     Construct Dialogflow Rich response message for

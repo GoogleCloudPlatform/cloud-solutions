@@ -16,11 +16,11 @@
 
 import json
 import unittest
+
+from absl.testing import parameterized
 from database_archival.common.models import database
 from database_archival.dag.models import config_model
 from database_archival.dag.utils import config_parser
-from absl.testing import parameterized
-
 
 _BASE_CONFIG_WITHOUT_PRUNE = {
     'bigquery_location': 'asia-southeast1',

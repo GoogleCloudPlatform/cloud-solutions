@@ -16,11 +16,9 @@
 
 import unittest
 
+from absl.testing import parameterized
 from database_archival.common.models import database
 from database_archival.pruning_function.models import config_model
-
-from absl.testing import parameterized
-
 
 _BASE_CONFIG = {
     'bigquery_location': 'asia-southeast1',

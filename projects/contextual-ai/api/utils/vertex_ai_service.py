@@ -15,14 +15,14 @@
 """This module provides a service for
 interacting with the Google Vertex AI API."""
 
-import os
 import json
+import os
 import re
-from typing import Dict, Any
-from models.chat import WidgetAnalysisRequest, WidgetAnalysisResponse
+from typing import Any, Dict
 
 from google import genai
 from google.genai import types
+from models.chat import WidgetAnalysisRequest, WidgetAnalysisResponse
 
 
 class VertexAIService:

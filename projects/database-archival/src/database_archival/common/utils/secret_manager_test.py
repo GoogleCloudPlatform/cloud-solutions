@@ -16,8 +16,8 @@
 
 import unittest
 from unittest import mock
-from absl.testing import absltest
 
+from absl.testing import absltest
 from database_archival.common.utils import secret_manager
 
 

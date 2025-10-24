@@ -17,6 +17,7 @@ including a mock service for testing."""
 
 import random
 from datetime import datetime
+
 from models.chat import WidgetAnalysisRequest, WidgetAnalysisResponse
 
 

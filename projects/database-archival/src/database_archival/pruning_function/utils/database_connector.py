@@ -14,15 +14,15 @@
 
 """Provides connections to the database(s)."""
 
+from typing import Callable, Optional
+
 import frozendict
 import sqlalchemy
-from google.cloud.sql import connector as sql_connector
-from google.cloud.alloydb import connector as alloydb_connector
 from database_archival.common import config
 from database_archival.common.models import database
 from database_archival.common.utils import secret_manager
-from typing import Callable, Optional
-
+from google.cloud.alloydb import connector as alloydb_connector
+from google.cloud.sql import connector as sql_connector
 
 # Mapping between the DatabaseType and their drivers.
 _DRIVER_MAPPING = {

@@ -19,9 +19,10 @@ This module defines the data structures used for various metrics and analyses
 within the Ecommerce Operations monitoring and analysis system.
 """
 
-from pydantic import BaseModel, Field
-from typing import List, Dict, Any
 from datetime import datetime
+from typing import Any, Dict, List
+
+from pydantic import BaseModel, Field
 
 # --- Pydantic Models for Ecommerce Operations ---
 

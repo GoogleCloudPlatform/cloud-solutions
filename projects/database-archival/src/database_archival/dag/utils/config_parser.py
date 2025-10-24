@@ -17,10 +17,9 @@
 import json
 import re
 
+from database_archival.dag.models import config_model
 from google.api_core import client_info
 from google.cloud import storage
-from database_archival.dag.models import config_model
-
 
 _ERROR_MESSAGE_INVALID_GCS_PATH = (
     'Config file should be on Google Cloud Storage with the format: '

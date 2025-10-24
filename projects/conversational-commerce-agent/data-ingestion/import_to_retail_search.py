@@ -23,7 +23,8 @@ import os
 import time
 
 from google.cloud import retail_v2, storage
-from google.cloud.retail_v2.types import GcsSource, ImportErrorsConfig as ErrorsConfig
+from google.cloud.retail_v2.types import GcsSource
+from google.cloud.retail_v2.types import ImportErrorsConfig as ErrorsConfig
 
 logging.basicConfig(level=logging.INFO)
 

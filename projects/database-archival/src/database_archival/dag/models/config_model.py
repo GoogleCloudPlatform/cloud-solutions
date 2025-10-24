@@ -14,9 +14,10 @@
 
 """Provides the TableConfig syntax for the DAG."""
 
-from database_archival.common.utils import config_validator
-from database_archival.common.models import database
 from typing import Any, Iterable, Optional
+
+from database_archival.common.models import database
+from database_archival.common.utils import config_validator
 
 
 def _assert_value_is_set_but_prune_is_false(field_value: Any, field_name: str):

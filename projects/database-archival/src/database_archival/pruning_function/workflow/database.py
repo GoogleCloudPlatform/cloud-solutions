@@ -15,13 +15,12 @@
 """Connects to database to delete the data during pruning stage."""
 
 import logging
-import sqlalchemy
-from sqlalchemy import orm
-
-from database_archival.common.models import database
-from database_archival.pruning_function.utils import database_connector
 from typing import Iterable, Optional
 
+import sqlalchemy
+from database_archival.common.models import database
+from database_archival.pruning_function.utils import database_connector
+from sqlalchemy import orm
 
 _LOGGER = logging.getLogger(__name__)
 

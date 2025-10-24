@@ -14,16 +14,14 @@
 
 """Provides tasks to perform data pruning preparation."""
 
-from airflow.decorators import task
-from airflow.decorators import task_group
+from airflow.decorators import task, task_group
 from airflow.operators import python as airflow_operators
-from airflow.providers.google.cloud.operators import bigquery
 from airflow.providers.google.cloud.hooks import bigquery as bigquery_hook
+from airflow.providers.google.cloud.operators import bigquery
 from database_archival.common.models import database
 from database_archival.common.utils import bigquery_utils
 from database_archival.dag.tasks import data_archiving
 from database_archival.dag.utils import task_namer
-
 
 TASK_GROUP_NAME = 'batch_primary_keys_to_delete'
 TASK_NAME_GET_CONFIG = 'get_batch_primary_keys_job_config'

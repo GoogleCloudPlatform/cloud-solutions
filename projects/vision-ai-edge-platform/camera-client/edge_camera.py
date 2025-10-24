@@ -56,12 +56,12 @@ import warnings
 
 import cameras_pb2
 import cv2
-from harvesters.core import Harvester
 import numpy as np
 import onvif
 import PIL
-from PIL import Image
 import wsdiscovery
+from harvesters.core import Harvester
+from PIL import Image
 from wsdiscovery.discovery import ThreadedWSDiscovery as WSDiscovery
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)

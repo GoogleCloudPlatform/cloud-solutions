@@ -16,19 +16,18 @@
 
 import enum
 import time
-from airflow.decorators import task
-from airflow.decorators import task_group
+from typing import Iterable, Optional
+
+from airflow.decorators import task, task_group
 from airflow.models import expandinput
 from airflow.operators import python as airflow_operators
 from airflow.providers.google.cloud.operators import bigquery
 from airflow.providers.google.common.utils import id_token_credentials
-from google.auth.transport import requests
 from database_archival.common.models import database
+from database_archival.dag import config
 from database_archival.dag.tasks import data_pruning_preparation
 from database_archival.dag.utils import task_namer
-from database_archival.dag import config
-from typing import Iterable, Optional
-
+from google.auth.transport import requests
 
 TASK_GROUP_NAME = 'delete_data_from_database'
 TASK_NAME_GET_BATCHES = 'get_batches_for_loop'

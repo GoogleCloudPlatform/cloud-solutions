@@ -15,15 +15,13 @@
 """Tests database_connector module."""
 
 import unittest
+from typing import Callable
 from unittest import mock
-from absl.testing import parameterized
 
 import sqlalchemy
-from typing import Callable
-
+from absl.testing import parameterized
 from database_archival.common.models import database
 from database_archival.pruning_function.utils import database_connector
-
 
 _BASE_CALL_PARAMS = {
     'database_type': database.DatabaseType.ALLOYDB,

@@ -24,9 +24,8 @@ import tomllib
 from typing import Optional
 
 from fastapi import APIRouter, Query
-
-from utils.bigquery_tools import execute_bq_query
 from models.ecommerce_ops import MetricsResponse
+from utils.bigquery_tools import execute_bq_query
 
 # Load configuration
 with open("config.toml", "rb") as f:

@@ -16,8 +16,9 @@
 
 import unittest
 from unittest import mock
-from database_archival.pruning_function.workflow import bigquery
+
 from absl.testing import parameterized
+from database_archival.pruning_function.workflow import bigquery
 
 
 class TestBigQuery(parameterized.TestCase):

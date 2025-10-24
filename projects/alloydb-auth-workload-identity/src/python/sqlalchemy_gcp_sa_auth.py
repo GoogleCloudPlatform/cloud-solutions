@@ -23,11 +23,12 @@ Example:
 
 """
 import json
-from typing import Any, Dict, Tuple, Optional
+from typing import Any, Dict, Optional, Tuple
 from urllib import request
+
 from sqlalchemy import Engine, event
-from sqlalchemy.pool import ConnectionPoolEntry
 from sqlalchemy.engine.interfaces import DBAPIConnection, Dialect
+from sqlalchemy.pool import ConnectionPoolEntry
 
 USER_AGENT = "cloud-solutions/alloydb-auth-workload-identity-v0.0.1"
 

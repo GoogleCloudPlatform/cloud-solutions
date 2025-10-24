@@ -15,8 +15,9 @@
 """Tests for bigquery_utils."""
 
 import unittest
-from database_archival.common.utils import bigquery_utils
+
 from absl.testing import parameterized
+from database_archival.common.utils import bigquery_utils
 
 
 class TestBigQueryUtils(parameterized.TestCase):

@@ -15,15 +15,14 @@
 """Tests the GCS to AlloyDB Dataflow template."""
 
 import datetime
-from typing import Sequence
 import unittest
+from typing import Sequence
 from unittest import mock
 
-from absl.testing import parameterized
 import dataflow_gcs_to_alloydb
 import sqlalchemy
+from absl.testing import parameterized
 from testcontainers import postgres
-
 
 _TEST_POSTGRES_CONTAINER = 'postgres:15'
 _POSTGRES_INTERNAL_PORT = 5432

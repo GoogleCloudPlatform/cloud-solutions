@@ -16,14 +16,12 @@
 
 import unittest
 from unittest import mock
+
 from absl.testing import parameterized
-
 from airflow.utils import task_group
-
 from database_archival.dag.models import config_model
 from database_archival.dag.tasks import table_workflow
 from database_archival.dag.testing import base_test
-
 
 _DAG_TEST_CONFIG_WITHOUT_PRUNE = config_model.TableConfig(
     bigquery_location='asia-southeast1',

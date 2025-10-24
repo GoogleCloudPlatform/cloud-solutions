@@ -17,10 +17,9 @@
 import unittest
 from unittest import mock
 
+from database_archival.dag import dag_archive_and_prune
 from database_archival.dag.models import config_model
 from database_archival.dag.testing import base_test
-from database_archival.dag import dag_archive_and_prune
-
 
 _DAG_TEST_CONFIG = [
     config_model.TableConfig(

@@ -14,9 +14,9 @@
 
 """Utility functions for interacting with Google BigQuery."""
 
-from utils.const import SOLUTION_TAG
 from google.api_core.client_info import ClientInfo
 from google.cloud import bigquery
+from utils.const import SOLUTION_TAG
 
 
 def execute_bq_query(sql_query: str) -> list[dict]:

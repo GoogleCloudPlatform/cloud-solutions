@@ -23,14 +23,12 @@ from typing import Iterable, Mapping, Tuple
 
 import apache_beam as beam
 import apache_beam.dataframe.convert as dataframe_convert
-from apache_beam.io import avroio
-from apache_beam.io import jdbc
-from apache_beam.options import pipeline_options
-from apache_beam.io.gcp import gcsio
-from google.cloud import storage
-from google.api_core.client_info import ClientInfo
 import pandas
-
+from apache_beam.io import avroio, jdbc
+from apache_beam.io.gcp import gcsio
+from apache_beam.options import pipeline_options
+from google.api_core.client_info import ClientInfo
+from google.cloud import storage
 
 # Used to format some data as CSV without interfering with the data.
 _CUSTOM_DELIMITER = ';;;;'

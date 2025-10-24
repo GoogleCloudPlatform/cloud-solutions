@@ -18,6 +18,7 @@ Currently, only the Buffer class has tests.
 
 
 import unittest
+
 from streamlit_pubsub import Buffer
 
 

@@ -15,6 +15,7 @@
 """Basic configuration for the Archival and Pruning DAG."""
 
 import os
+
 from database_archival.common import config
 
 # Name of the DAG.

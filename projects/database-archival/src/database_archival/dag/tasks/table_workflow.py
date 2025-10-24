@@ -15,10 +15,12 @@
 """Provides the tasks performed for each table to archive and/or prune data."""
 
 from airflow.utils import task_group
-from database_archival.dag.tasks import data_archiving
-from database_archival.dag.tasks import data_pruning
-from database_archival.dag.tasks import data_pruning_preparation
 from database_archival.dag.models import config_model
+from database_archival.dag.tasks import (
+    data_archiving,
+    data_pruning,
+    data_pruning_preparation,
+)
 from database_archival.dag.utils import task_namer
 
 

@@ -40,6 +40,7 @@ import time
 import warnings
 
 import construct
+import edge_camera
 import numpy as np
 import paho.mqtt.client as mqtt
 import puremagic
@@ -47,8 +48,6 @@ import requests
 from google.api_core.gapic_v1 import client_info
 from google.cloud import pubsub_v1
 from rfc3339 import rfc3339
-
-import edge_camera
 
 _SOLUTION_USER_AGENT = "cloud-solutions/vision-ai-edge-camera-client-v1"
 

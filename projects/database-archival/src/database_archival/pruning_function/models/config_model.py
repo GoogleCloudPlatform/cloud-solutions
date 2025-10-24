@@ -14,9 +14,10 @@
 
 """Provides TablePruneConfig to get configuration for database pruning."""
 
-from database_archival.common.utils import config_validator
-from database_archival.common.models import database
 from typing import Optional
+
+from database_archival.common.models import database
+from database_archival.common.utils import config_validator
 
 
 class TablePruneConfig:

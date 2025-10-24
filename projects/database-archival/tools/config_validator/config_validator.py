@@ -21,15 +21,14 @@ JSON will pass the validation, the DAG will be created successfully, but the run
 will fail on runtime.
 """
 
+import argparse
 import json
 import logging
 import os
 import sys
-import argparse
-
-from database_archival.dag.models import config_model
 from typing import Iterable, Optional
 
+from database_archival.dag.models import config_model
 
 _LOGGER = logging.getLogger(__name__)
 

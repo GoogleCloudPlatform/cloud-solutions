@@ -15,13 +15,13 @@
 """Provides tasks to perform data archival (copy) within BigQuery."""
 
 import datetime
-from airflow.decorators import task
-from airflow.decorators import task_group
+from typing import Mapping, Optional
+
+from airflow.decorators import task, task_group
 from airflow.operators import python as airflow_operators
 from airflow.providers.google.cloud.operators import bigquery
-from database_archival.common.utils import bigquery_utils
 from database_archival.common.models import database
-from typing import Mapping, Optional
+from database_archival.common.utils import bigquery_utils
 
 TASK_GROUP_NAME = 'copy_data_to_archive'
 TASK_NAME_GET_CONFIG = 'get_copy_data_job_configuration'

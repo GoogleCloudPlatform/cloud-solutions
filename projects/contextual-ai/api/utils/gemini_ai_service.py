@@ -16,12 +16,12 @@
 interacting with the Google Gemini API."""
 
 
-import google.generativeai as genai
-import os
 import json
+import os
 import re
+from typing import Any, Dict
 
-from typing import Dict, Any
+import google.generativeai as genai
 from models.chat import WidgetAnalysisRequest, WidgetAnalysisResponse
 
 

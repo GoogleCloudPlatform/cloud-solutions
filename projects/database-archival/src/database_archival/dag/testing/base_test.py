@@ -15,19 +15,16 @@
 """Provides a base test framework for testing DAG tasks."""
 
 import datetime
-import pendulum
+from typing import Any, Mapping, Optional
 
 import airflow
-from airflow import models
-from airflow import settings
-from airflow.decorators import task
-from airflow.decorators import task_group
+import pendulum
+from absl.testing import parameterized
+from airflow import models, settings
+from airflow.decorators import task, task_group
 from airflow.operators import python as airflow_operators
 from airflow.utils import state
 from airflow.utils import types as dag_types
-
-from absl.testing import parameterized
-from typing import Any, Mapping, Optional
 
 
 class DagTestCase(parameterized.TestCase):

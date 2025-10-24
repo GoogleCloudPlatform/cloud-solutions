@@ -18,10 +18,8 @@
 import unittest
 from unittest import mock
 
-from airflow.decorators import task
-from airflow.decorators import task_group
+from airflow.decorators import task, task_group
 from airflow.operators import python as airflow_operators
-
 from database_archival.dag.tasks import data_pruning_preparation
 from database_archival.dag.testing import base_test
 

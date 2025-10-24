@@ -14,16 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import json
-import numpy as np
 import os
-from PIL import Image, ImageDraw
+
+import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
+from PIL import Image, ImageDraw
 from tensorflow_datasets import features as tfds_features
 
 _CITATION = 'Michael Menzel, Google'

@@ -14,8 +14,9 @@
 
 """In-memory conversation storage for demo purposes."""
 
-from typing import Dict, List, Optional
 from datetime import datetime, timedelta
+from typing import Dict, List, Optional
+
 from models.chat import Conversation, ConversationEntry, WidgetAnalysisResponse
 
 

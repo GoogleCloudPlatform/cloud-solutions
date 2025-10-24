@@ -21,10 +21,11 @@ Creates story-driven data with clear incidents and
 business impact correlations.
 """
 
-import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
 import random
+from datetime import datetime, timedelta
+
+import numpy as np
+import pandas as pd
 
 # Set random seed for reproducible data
 np.random.seed(42)

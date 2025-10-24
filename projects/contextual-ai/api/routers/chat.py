@@ -20,22 +20,22 @@ store for managing conversations.
 """
 
 
-import logging
 import json
-
+import logging
 from typing import Optional
+
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from models.chat import (
-    WidgetAnalysisRequest,
-    WidgetAnalysisResponse,
     ChatMessage,
     ChatResponse,
     Conversation,
     ConversationListResponse,
+    WidgetAnalysisRequest,
+    WidgetAnalysisResponse,
 )
-from utils.vertex_ai_service import get_vertex_service
 from utils.conversation_store import conversation_store
+from utils.vertex_ai_service import get_vertex_service
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

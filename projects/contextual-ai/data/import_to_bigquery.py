@@ -19,9 +19,10 @@ Import ecommerce demo data to BigQuery.
 Creates tables and loads the generated CSV data.
 """
 
+import os
+
 import pandas as pd
 from google.cloud import bigquery
-import os
 
 # Configuration
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")

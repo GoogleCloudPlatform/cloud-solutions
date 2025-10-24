@@ -54,8 +54,8 @@ from unittest import mock
 
 import cv2
 import edge_camera as e_c
-from PIL import Image
 import pytest
+from PIL import Image
 
 
 def test_print_without_eol():

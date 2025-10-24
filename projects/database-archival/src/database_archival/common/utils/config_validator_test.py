@@ -16,8 +16,9 @@
 
 import enum
 import unittest
-from database_archival.common.utils import config_validator
+
 from absl.testing import parameterized
+from database_archival.common.utils import config_validator
 
 
 class EnumForTest(enum.Enum):

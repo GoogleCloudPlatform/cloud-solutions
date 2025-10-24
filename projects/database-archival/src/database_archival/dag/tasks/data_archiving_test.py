@@ -16,11 +16,10 @@
 
 import unittest
 from unittest import mock
-from absl.testing import parameterized
 
+from absl.testing import parameterized
 from airflow.decorators import task
 from airflow.operators import python as airflow_operators
-
 from database_archival.common.models import database
 from database_archival.dag.tasks import data_archiving
 from database_archival.dag.testing import base_test

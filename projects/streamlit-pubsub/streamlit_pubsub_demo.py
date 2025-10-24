@@ -24,9 +24,7 @@ import datetime
 import json
 
 import streamlit as st
-
-from streamlit_pubsub import get_publisher
-from streamlit_pubsub import get_subscriber
+from streamlit_pubsub import get_publisher, get_subscriber
 
 
 def get_args():

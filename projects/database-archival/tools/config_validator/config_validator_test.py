@@ -17,9 +17,9 @@
 import os
 import unittest
 from unittest import mock
-from absl.testing import parameterized
 
 import config_validator
+from absl.testing import parameterized
 
 
 class TestConfigModel(parameterized.TestCase):
