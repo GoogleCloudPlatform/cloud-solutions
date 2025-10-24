@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.4
+#       jupytext_version: 1.18.1
 #   kernelspec:
 #     display_name: .venv
 #     language: python
@@ -43,7 +43,7 @@
 # %%
 PROJECT_ID = "YOUR-PROJECT-ID"
 LOCATION = "us-central1"
-BUCKET_URI= f"gs://vision-ai-edge-{PROJECT_ID}"
+BUCKET_URI = f"gs://vision-ai-edge-{PROJECT_ID}"
 
 # %% [markdown]
 # Enable Google Cloud Service APIs required.
@@ -64,7 +64,9 @@ BUCKET_URI= f"gs://vision-ai-edge-{PROJECT_ID}"
 
 # %%
 SERVICE_ACCOUNT_NAME = "vision-ai-edge"
-SERVICE_ACCOUNT_EMAIL = SERVICE_ACCOUNT_NAME + "@" + PROJECT_ID + ".iam.gserviceaccount.com"
+SERVICE_ACCOUNT_EMAIL = (
+    SERVICE_ACCOUNT_NAME + "@" + PROJECT_ID + ".iam.gserviceaccount.com"
+)
 
 # ! gcloud iam service-accounts create {SERVICE_ACCOUNT_NAME} --display-name="Vision AI Edge Service Account"
 
@@ -82,8 +84,8 @@ SERVICE_ACCOUNT_EMAIL = SERVICE_ACCOUNT_NAME + "@" + PROJECT_ID + ".iam.gservice
 # Create a bike-pedals folder and decompress the bike-pedals.zip file inside of the folder.
 
 # %%
-DATASET_URL="https://storage.googleapis.com/solutions-public-assets/vision-ai-edge-platform/bike-pedals.zip"
-DATASET_NAME="bike-pedals"
+DATASET_URL = "https://storage.googleapis.com/solutions-public-assets/vision-ai-edge-platform/bike-pedals.zip"
+DATASET_NAME = "bike-pedals"
 
 # ! wget -qN {DATASET_URL}
 # ! unzip -qn {DATASET_NAME}.zip -d {DATASET_NAME}
@@ -92,7 +94,7 @@ DATASET_NAME="bike-pedals"
 # Generate input-files.jsonl from template file.
 
 # %%
-BUCKET_URI_SED=BUCKET_URI.replace('/', '\\/')
+BUCKET_URI_SED=BUCKET_URI.replace('/', '\/')
 
 # ! sed 's/<<BUCKET_URI>>/{BUCKET_URI_SED}/g' \
 #     ./{DATASET_NAME}/input-files-template.jsonl > \
@@ -117,9 +119,11 @@ import kfp
 from kfp import compiler
 
 PIPELINE_ROOT = f"{BUCKET_URI}/pipeline_root/flowers"
-aip.init(project=PROJECT_ID, 
-         staging_bucket=BUCKET_URI,
-         service_account=SERVICE_ACCOUNT_EMAIL)
+aip.init(
+    project=PROJECT_ID,
+    staging_bucket=BUCKET_URI,
+    service_account=SERVICE_ACCOUNT_EMAIL,
+)
 
 
 # %% [markdown]
@@ -128,10 +132,10 @@ aip.init(project=PROJECT_ID,
 # %%
 @kfp.dsl.pipeline(name="anomaly-detection-bike-pedals-v1")
 def pipeline(project: str = PROJECT_ID, region: str = LOCATION):
-    from google_cloud_pipeline_components.v1.automl.training_job import \
-        AutoMLImageTrainingJobRunOp
-    from google_cloud_pipeline_components.v1.dataset import \
-        ImageDatasetCreateOp
+    from google_cloud_pipeline_components.v1.automl.training_job import (
+        AutoMLImageTrainingJobRunOp,
+    )
+    from google_cloud_pipeline_components.v1.dataset import ImageDatasetCreateOp
 
     ds_op = ImageDatasetCreateOp(
         project=project,
@@ -169,7 +173,9 @@ compiler.Compiler().compile(
 import random
 import string
 
-random_suffix = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(16))
+random_suffix = "".join(
+    random.choice(string.ascii_lowercase + string.digits) for _ in range(16)
+)
 
 DISPLAY_NAME = "vi_anomaly_pedal_" + random_suffix
 
