@@ -50,4 +50,8 @@ For more information, see
 To develop NVIDIA RTX applications on Google Cloud, you deploy one of the
 following virtual workstations on Compute Engine:
 
+- [NVIDIA Omniverse Development Workstation (Linux)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-development-workstation-linux)
+- [NVIDIA Omniverse Development Workstation (Windows)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-development-workstation-windows)
+- [NVIDIA Omniverse Enterprise Workstation (Linux)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-enterprise-workstation-linux)
+- [NVIDIA Omniverse Enterprise Workstation (Windows)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-enterprise-workstation-windows)
 - [NVIDIA RTX Virtual Workstation: G2 machine family (L4 GPUs), Ubuntu 22.04](./g2-development-workstation/ubuntu-22.04/README.md)
