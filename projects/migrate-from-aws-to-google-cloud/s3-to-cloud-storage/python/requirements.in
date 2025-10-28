@@ -1,0 +1,5 @@
+boto3
+google-genai
+google-generativeai
+pandas
+rich
