@@ -172,6 +172,11 @@
       "commitMessagePrefix": "chore(deps): [log-scoping-tool]"
     },
     {
+      "matchFileNames": ["projects/migrate-from-aws-to-google-cloud/**"],
+      "groupName": "migrate-from-aws-to-google-cloud",
+      "commitMessagePrefix": "chore(deps): [migrate-from-aws-to-google-cloud]"
+    },
+    {
       "matchFileNames": ["projects/migrate-from-azure-to-google-cloud/**"],
       "groupName": "migrate-from-azure-to-gcp",
       "commitMessagePrefix": "chore(deps): [migrate-from-azure-to-google-cloud]"
