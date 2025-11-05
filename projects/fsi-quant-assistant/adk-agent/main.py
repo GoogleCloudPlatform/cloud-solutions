@@ -14,13 +14,13 @@
 
 """Main entry point for the FastAPI application."""
 
+import logging
 import os
 import sys
 
 import uvicorn
 from fastapi import FastAPI
 from google.adk.cli.fast_api import get_fast_api_app
-import logging
 
 _SOLUTION_USER_AGENT = "cloud-solutions/fsi-quant-assistant-v0.0.1"
 

@@ -17,10 +17,9 @@
 import textwrap
 
 import pytest
+from financial_analyst.agent import root_agent
 from google.adk.runners import InMemoryRunner
 from google.genai.types import Part, UserContent
-
-from financial_analyst.agent import root_agent
 
 pytest_plugins = ("pytest_asyncio",)
 

@@ -16,10 +16,9 @@
 
 import os
 
+from financial_analyst.utils import is_env_flag_enabled
 from google.adk.agents import Agent
 from toolbox_core import ToolboxSyncClient, auth_methods
-
-from financial_analyst.utils import is_env_flag_enabled
 
 URL = os.getenv("TOOLS_URL")
 if is_env_flag_enabled("USE_GOOGLE_AUTH_TOKEN_PROVIDER"):

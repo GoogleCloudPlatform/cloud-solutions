@@ -14,4 +14,4 @@
 
 """news agent"""
 
-from .agent import news_analyst_agent, is_finnhub_api_key_defined
+from .agent import is_finnhub_api_key_defined, news_analyst_agent

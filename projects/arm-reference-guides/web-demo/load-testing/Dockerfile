@@ -7,11 +7,11 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 ENV CGO_ENABLED=1
-RUN go install go.k6.io/xk6/cmd/xk6@latest \
+RUN go install go.k6.io/xk6/cmd/xk6@v1.2.3 \
   && xk6 build \
-  --with github.com/grafana/xk6-sql@latest \
-  --with github.com/grafana/xk6-sql-driver-postgres@latest \
-  --with github.com/grafana/xk6-redis
+  --with github.com/grafana/xk6-sql@v1.0.5 \
+  --with github.com/grafana/xk6-sql-driver-postgres@v0.1.1 \
+  --with github.com/grafana/xk6-redis@v0.3.4
 
 FROM alpine:3.22
 

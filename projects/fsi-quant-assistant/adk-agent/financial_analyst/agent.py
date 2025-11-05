@@ -22,8 +22,8 @@ from .sub_agents.data_analyst import data_analyst_agent
 from .sub_agents.execution_analyst import execution_analyst_agent
 from .sub_agents.forecasting_agent import forecasting_agent
 from .sub_agents.news_analyst import (
-    news_analyst_agent,
     is_finnhub_api_key_defined,
+    news_analyst_agent,
 )
 from .sub_agents.risk_analyst import risk_analyst_agent
 from .sub_agents.sentiment_analyst import sentiment_agent

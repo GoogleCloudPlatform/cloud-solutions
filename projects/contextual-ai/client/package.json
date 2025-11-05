@@ -44,7 +44,7 @@
     "lint:fix": "eslint . --fix"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=21"
   },
   "browserslist": {
     "production": [
