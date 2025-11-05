@@ -26,7 +26,6 @@ SCRIPT_DIR=$(dirname "${SCRIPT}")
 DOCS_DIR="${SCRIPT_DIR}"
 PROJECTS_DIR=$(realpath "${SCRIPT_DIR}/../projects")
 BUILD_DIR="${DOCS_DIR}/build"
-VENV_DIR="${BUILD_DIR}/venv"
 
 #
 # The script creates a temporary build directory that uses
@@ -55,7 +54,7 @@ fi
 # directories
 
 echo "Initializing docs build folder at: ${BUILD_DIR}/docs"
-rm -rf "${BUILD_DIR}"
+rm -rf "${BUILD_DIR}/docs" "${BUILD_DIR}/site"
 mkdir -p "${BUILD_DIR}/docs"
 
 ## Setup common files and folders
@@ -97,14 +96,34 @@ cd "${DOCS_DIR}"
 [[ -e "${BUILD_DIR}/docs/user-guide" ]] &&
   mv "${BUILD_DIR}/docs/user-guide" "${BUILD_DIR}/docs/aaa-user-guide"
 
-# Create Python venv.
-echo "Initialize Python venv at: ${VENV_DIR}"
-python3 -m venv "${VENV_DIR}"
+# Check/setup python venv.
+# * We could already be in a venv
+#   (when run by 03-mkdocs-check)
+# * Or there could already be a reusable local venv in known location
+#   (when running locally)
+# * Or there is none and we have to create one.
+#   (when running locally for the first time, or when in github actions)
+#
+# Check if we are already in a venv?
+# Checking for the VIRTUAL_ENV variable is not foolproof (a venv
+# can be used without activation), in the context of where this script is run,
+# it is a good enough check.
+#
+if [[ -z "${VIRTUAL_ENV:-}" || ! -x "${VIRTUAL_ENV}/bin/python3" ]]; then
+  # No, check for an existing local venv:
+  VENV_DIR="${DOCS_DIR}/../kokoro/.venv"
+  if [[ ! -x "${VENV_DIR}/bin/python3" ]]; then
+    # No - proably running in Github Actions, create a new local one.
+    VENV_DIR="${BUILD_DIR}/venv"
+    echo "Initialize Python venv at: ${VENV_DIR}"
+    python3 -m venv "${VENV_DIR}"
+  fi
+  # shellcheck disable=SC1091 # do not follow
+  source "${VENV_DIR}/bin/activate"
+fi
 
 ## Activate python virtual environment to install and launch mkdocs
-# shellcheck source=/dev/null
-source "${VENV_DIR}/bin/activate"
-echo "Installing python requirements: ${VENV_DIR}"
+echo "Installing python requirements to ${VIRTUAL_ENV}"
 pip3 install \
   --quiet \
   --exists-action i \
