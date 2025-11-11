@@ -127,7 +127,8 @@ To deploy this demo, you need:
     ```bash
     gcloud container clusters get-credentials "${GKE_CLUSTER_NAME}" \
     --location="${LOCATION}" \
-    --project="${PROJECT_ID}"
+    --project="${PROJECT_ID}" \
+    --dns-endpoint
     ```
 
 ## Build the multi-arch container images
