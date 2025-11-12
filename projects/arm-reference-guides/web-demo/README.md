@@ -133,6 +133,9 @@ To deploy this demo, you need:
 
 ## Build the multi-arch container images
 
+*Note, add the ```--machine-type=e2-highcpu-8``` option to the
+below commands to speed up build times if applicable*
+
 1.  Build the catalog service container image for both the `arm64` and `amd64`
     architecture, and push it to the registry:
 
@@ -141,8 +144,7 @@ To deploy this demo, you need:
       --config=projects/arm-reference-guides/web-demo/book-catalog-service/cloudbuild.yaml projects/arm-reference-guides/web-demo/book-catalog-service \
       --project "${PROJECT_ID}" \
       --region "${LOCATION}" \
-      --substitutions=_LOCATION="${LOCATION}",_REPOSITORY="${CONTAINER_IMAGE_REPOSITORY_NAME}" \
-      --machine-type=e2-highcpu-8
+      --substitutions=_LOCATION="${LOCATION}",_REPOSITORY="${CONTAINER_IMAGE_REPOSITORY_NAME}"
     ```
 
 1.  Build the review service container image for both the `arm64` and `amd64`
@@ -153,8 +155,7 @@ To deploy this demo, you need:
       --config=projects/arm-reference-guides/web-demo/review-service/cloudbuild.yaml projects/arm-reference-guides/web-demo/review-service \
       --project "${PROJECT_ID}" \
       --region "${LOCATION}" \
-      --substitutions=_LOCATION="${LOCATION}",_REPOSITORY="${CONTAINER_IMAGE_REPOSITORY_NAME}" \
-      --machine-type=e2-highcpu-8
+      --substitutions=_LOCATION="${LOCATION}",_REPOSITORY="${CONTAINER_IMAGE_REPOSITORY_NAME}"
     ```
 
 1.  Build the ui service container image for both the `arm64` and `amd64`
@@ -165,23 +166,8 @@ To deploy this demo, you need:
       --config=projects/arm-reference-guides/web-demo/book-ui-service/cloudbuild.yaml projects/arm-reference-guides/web-demo/book-ui-service \
       --project "${PROJECT_ID}" \
       --region "${LOCATION}" \
-      --substitutions=_LOCATION="${LOCATION}",_REPOSITORY="${CONTAINER_IMAGE_REPOSITORY_NAME}" \
-      --machine-type=e2-highcpu-8
+      --substitutions=_LOCATION="${LOCATION}",_REPOSITORY="${CONTAINER_IMAGE_REPOSITORY_NAME}"
     ```
-
-1.  Build the custom k6 container image for both the `arm64` and `amd64`
-    architecture, and push it to the registry:
-
-    ```bash
-    gcloud builds submit \
-      --config=projects/arm-reference-guides/web-demo/load-testing/cloudbuild.yaml projects/arm-reference-guides/web-demo/load-testing \
-      --project "${PROJECT_ID}" \
-      --region "${LOCATION}" \
-      --substitutions=_LOCATION="${LOCATION}",_REPOSITORY="${CONTAINER_IMAGE_REPOSITORY_NAME}" \
-      --machine-type=e2-highcpu-8
-    ```
-
-`This k6 image can take a while to build, around 15 minutes`
 
 ## Deploy services
 
@@ -198,13 +184,6 @@ To deploy this demo, you need:
     helm repo add bitnami https://charts.bitnami.com/bitnami
     helm repo add grafana https://grafana.github.io/helm-charts
     helm repo update
-    ```
-
-1.  Install an Arm based K6:
-
-    ```bash
-    helm install arm-k6-operator \
-      --values projects/arm-reference-guides/web-demo/k8s-manifests/autopilot/arm-k6-operator-helm-values.yaml
     ```
 
 1.  Install an Arm based postgresql :
@@ -345,6 +324,29 @@ aarch64 for Arm, and x64 for x64.
     the three dot menu in CloudShell. In your browser navigate to the bulk
     upload section of each stack and upload the three files. Once complete, you
     can navigate through the application and see it in action.
+
+## Optional load testing
+
+1.  Build the custom k6 container image for both the `arm64` and `amd64`
+    architecture, and push it to the registry:
+
+    ```bash
+    gcloud builds submit \
+      --config=projects/arm-reference-guides/web-demo/load-testing/cloudbuild.yaml projects/arm-reference-guides/web-demo/load-testing \
+      --project "${PROJECT_ID}" \
+      --region "${LOCATION}" \
+      --substitutions=_LOCATION="${LOCATION}",_REPOSITORY="${CONTAINER_IMAGE_REPOSITORY_NAME}" \
+      --machine-type=e2-highcpu-8
+    ```
+
+`This k6 image can take a while to build, around 15 minutes`
+
+1.  Install an Arm based K6:
+
+    ```bash
+    helm install arm-k6-operator \
+      --values projects/arm-reference-guides/web-demo/k8s-manifests/autopilot/arm-k6-operator-helm-values.yaml
+    ```
 
 ## Destroying the demo
 
