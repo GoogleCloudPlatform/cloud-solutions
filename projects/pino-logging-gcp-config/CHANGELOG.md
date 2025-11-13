@@ -2,6 +2,14 @@
 
 <!-- markdownlint-disable -->
 
+## [1.3.0](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.2.0...pino-logging-gcp-config-v1.3.0) (2025-11-13)
+
+
+### Features
+
+* **pino-logging-gcp-config:** support pino v10 ([#222](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/222)) ([832b1ea](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/832b1ea764371163c6006bd6874569e8e71603d5))
+* Require Pino v10.x and Node v20+ ([59ef495](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/59ef49505db6f95c0d76234a26f96032bbf141a3))
+
 ## [1.2.0](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.1.0...pino-logging-gcp-config-v1.2.0) (2025-09-12)
 
 
