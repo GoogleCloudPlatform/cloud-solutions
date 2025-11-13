@@ -223,7 +223,6 @@ In addition to the artifact type, consider how you complete the following tasks:
   artifact registry in your source environment, you need to make the artifacts
   available in your Google Cloud environment. You can do so by employing
   strategies like the following:
-
     - **Establish a communication channel between the environments**: Make the
       artifacts in your source environment reachable from the target Google
       Cloud environment.
@@ -327,7 +326,6 @@ data migration strategy as follows:
 1.  Perform data validation and consistency checks to compare data in the Azure
     Blob Storage against the copied data in the Cloud Storage bucket.
 1.  Refactor workloads to use Cloud Storage instead of Azure Blob Storage.
-
     - For workloads that support both Azure Blob Storage and Cloud Storage as
       inputs and/or outputs \- Change the data source to Cloud Storage, and
       apply any required changes, such as how the workload authenticates to
@@ -357,7 +355,6 @@ Azure network egress costs and your Azure Blob Storage costs. For example,
 consider the following options to transfer data:
 
 - Across the public internet.
-- By using an interconnect link.
 - By using
   [Azure CDN](https://learn.microsoft.com/en-us/azure/cdn/cdn-storage-custom-domain-https).
 - By using
