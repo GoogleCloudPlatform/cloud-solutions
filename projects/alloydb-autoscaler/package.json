@@ -35,7 +35,7 @@
     "eventid": "^2.0.1",
     "express": "^4.21.1",
     "googleapis": "^144.0.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "json-rules-engine": "^7.3.1",
     "lodash": "^4.17.21",
     "pino": "^9.5.0",
