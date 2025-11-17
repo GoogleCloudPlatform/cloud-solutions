@@ -1,0 +1,77 @@
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
+
+# Python
+__pycache__/
+*./__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+.installed.cfg
+*.egg
+.venv
+venv/
+.uv/
+./include*
+
+# Next.js
+.next/
+out/
+node_modules/
+.DS_Store
+*.pem
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vercel
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+.DS_Store
+
+# Local Netlify folder
+.netlify
+
+# Coverage reports
+coverage/
+.coverage
+htmlcov/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# Coverage reports
+raw-data/
+
+
+# Virtual environment (root level only)
+/bin/
+/lib/
+/lib64
+/share/
+/include/
+/pyvenv.cfg
+/images/

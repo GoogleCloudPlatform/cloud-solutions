@@ -1,0 +1,10 @@
+# --- Core External Dependencies for Gen AI Workflow ---
+
+# Third-party libraries
+pandas==2.2.2
+Pillow==11.1.0
+
+# Google Generative AI and Vertex AI SDKs
+google-genai==1.45.0
+google-cloud-storage==2.19.0
+google-cloud-aiplatform==1.74.0
