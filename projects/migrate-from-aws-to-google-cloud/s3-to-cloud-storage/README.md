@@ -1,9 +1,10 @@
-# S3 to Cloud Storage Migration Demo and Inventory
+# Gemini-powered Amazon S3 to Cloud Storage migration recommendations
 
 This document describes the high-level architecture of the Python application
 used to generate Amazon S3 inventory reports for migration. The application has
 a core function for fetching inventory data and an optional function for
-enriching this data with contextual information from the Cloud Architect Center
+enriching this data with contextual information from the Google Cloud
+Architecture Center
 [Migrate from Amazon S3 to Cloud Storage](https://cloud.google.com/architecture/migrate-amazon-s3-to-cloud-storage).
 
 ## Architecture
@@ -25,9 +26,10 @@ recommendation step to be included or skipped based on user configuration.
       storage class, last modified date).
 
 1.  **Python Application (Core Logic)**
-    - **S3 Interaction (`utils.py`):** Uses the `boto3` library to communicate
-      with the AWS SDK. It lists all buckets and their configurations, and for a
-      specified bucket, lists all objects and their versions.
+    - **Amazon S3 Interaction (`utils.py`):** Uses the `boto3` library to
+      communicate with the AWS SDK. It lists all buckets and their
+      configurations, and for a specified bucket, lists all objects and their
+      versions.
     - **Web Content Fetching (`web_fetch.py`):** Before generating
       recommendations, the application fetches external guidance from a Google
       Cloud Architecture Center URL using the `requests` library. This provides
@@ -52,14 +54,14 @@ recommendation step to be included or skipped based on user configuration.
 
 ### Implementation Details
 
-| Component          | Technology/Tool            | Interaction/Purpose                                 |
-| :----------------- | :------------------------- | :-------------------------------------------------- |
-| S3 Inventory       | Python (`boto3`, `pandas`) | Lists buckets/objects, gets configs, creates CSVs.  |
-| Web Context        | Python (`requests`)        | Fetches migration guide from Google Cloud URL.      |
-| AI Recommendations | Python (`google-genai`)    | Generates migration plan using Gemini on Vertex AI. |
-| CLI Interface      | Python (`argparse`)        | Provides a command-line flag to skip AI features.   |
-| Console Output     | Python (`rich`)            | Prints AI recommendations as formatted markdown.    |
-| Configuration      | Python (`config.py`)       | Manages Gemini model name, prompt, and context URL. |
+| Component           | Technology/Tool            | Interaction/Purpose                                 |
+| :------------------ | :------------------------- | :-------------------------------------------------- |
+| Amazon S3 Inventory | Python (`boto3`, `pandas`) | Lists buckets/objects, gets configs, creates CSVs.  |
+| Web Context         | Python (`requests`)        | Fetches migration guide from Google Cloud URL.      |
+| AI Recommendations  | Python (`google-genai`)    | Generates migration plan using Gemini on Vertex AI. |
+| CLI Interface       | Python (`argparse`)        | Provides a command-line flag to skip AI features.   |
+| Console Output      | Python (`rich`)            | Prints AI recommendations as formatted markdown.    |
+| Configuration       | Python (`config.py`)       | Manages Gemini model name, prompt, and context URL. |
 
 ## Sourcing & Context
 
@@ -72,10 +74,10 @@ This script focuses on the **Assess** phase of the cloud migration framework:
 ### Key Inventory Data Points
 
 The Gemini recommendations leverage the following key data points to create a
-plan for migrating S3 artifacts :
+plan for migrating Amazon S3 artifacts :
 
 - **Server-side encryption** and **IAM** settings.
-- **Cost allocation tags** and **S3 Object Lock**.
+- **Cost allocation tags** and **Amazon S3 Object Lock**.
 - **Object versioning** and **Intelligent-Tiering**.
 - **Aggregate statistics** like object size and count, which are used to
   estimate time and cost.
@@ -85,10 +87,10 @@ plan for migrating S3 artifacts :
 This solution uses billable services from both AWS and Google Cloud. Please be
 aware of the following potential costs:
 
-- **AWS S3 CLI/Python SDK Calls:** The scripts and tools use S3 API calls like
+- **AWS CLI/Python SDK Calls:** The scripts and tools use S3 API calls like
   `ListAllMyBuckets`, `ListBucket`, `CreateBucket`, `PutObject`, etc. While
   these are relatively low-cost, they are billable. Review the
-  [AWS S3 Pricing page](https://aws.amazon.com/s3/pricing/) for details on
+  [Amazon S3 Pricing page](https://aws.amazon.com/s3/pricing/) for details on
   **Request and Data Retrieval** pricing.
 - **Google Gemini Python SDK Calls (Vertex AI):** The inventory script can call
   the Gemini API to generate migration recommendations. This is a billable
@@ -180,10 +182,10 @@ First, ensure you have the AWS CLI installed and configured.
     Provide your AWS Access Key ID, Secret Access Key, and default region using
     a role with the minimum defined roles listed above.
 
-### (Optional) Create S3 Bucket and Upload Sample Files
+### (Optional) Create Amazon S3 Bucket and Upload Sample Files
 
-The `scripts/setup-s3-demo.sh` script will create an S3 bucket, generate sample
-files, and upload them.
+The `scripts/setup-s3-demo.sh` script will create an Amazon S3 bucket, generate
+sample files, and upload them.
 
 1.  Navigate to the `scripts` directory:
 
