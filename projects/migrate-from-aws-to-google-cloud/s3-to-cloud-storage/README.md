@@ -7,6 +7,15 @@ enriching this data with contextual information from the Google Cloud
 Architecture Center
 [Migrate from Amazon S3 to Cloud Storage](https://cloud.google.com/architecture/migrate-amazon-s3-to-cloud-storage).
 
+## Execution Flow
+
+The sequence diagram below illustrates the end-to-end
+execution flow of the application. It visualizes how the script orchestrates
+interactions between the local environment, the AWS S3 CLI for data gathering,
+and Google Vertex AI for generating migration insights.
+
+![sequence diagram](image/sequence-diagram.png)
+
 ## Component Breakdown
 
 The Python application is designed with modularity, allowing the optional AI
