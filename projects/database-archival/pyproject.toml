@@ -22,7 +22,7 @@ dependencies = [
   "functions-framework==3.8.1",
   "google-cloud-alloydb-connector==1.6.0",
   "google-cloud-logging==3.11.2",
-  "pg8000==1.31.2",
+  "pg8000==1.31.5",
   "pymysql==1.1.1",
   # Leave version blank of these packages for compatibility with apache-airflow.
   "google-cloud-bigquery",
