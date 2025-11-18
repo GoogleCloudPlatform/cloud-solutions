@@ -7,12 +7,6 @@ enriching this data with contextual information from the Google Cloud
 Architecture Center
 [Migrate from Amazon S3 to Cloud Storage](https://cloud.google.com/architecture/migrate-amazon-s3-to-cloud-storage).
 
-## Architecture
-
-The diagram below visualizes the components and the flow of the application. The
-optional functionality is clearly marked with a dotted line.
-![application architect](image/architectures.png)
-
 ## Component Breakdown
 
 The Python application is designed with modularity, allowing the optional AI
