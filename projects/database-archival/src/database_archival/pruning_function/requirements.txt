@@ -945,9 +945,9 @@ packaging==24.1 \
     #   deprecation
     #   google-cloud-bigquery
     #   gunicorn
-pg8000==1.31.2 \
-    --hash=sha256:1ea46cf09d8eca07fe7eaadefd7951e37bee7fabe675df164f1a572ffb300876 \
-    --hash=sha256:436c771ede71af4d4c22ba867a30add0bc5c942d7ab27fadbb6934a487ecc8f6
+pg8000==1.31.5 \
+    --hash=sha256:0af2c1926b153307639868d2ee5cef6cd3a7d07448e12736989b10e1d491e201 \
+    --hash=sha256:46ebb03be52b7a77c03c725c79da2ca281d6e8f59577ca66b17c9009618cae78
     # via -r requirements.in
 proto-plus==1.24.0 \
     --hash=sha256:30b72a5ecafe4406b0d339db35b56c4059064e69227b8c3bda7462397f966445 \
