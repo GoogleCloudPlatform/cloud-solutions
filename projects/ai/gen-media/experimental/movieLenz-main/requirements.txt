@@ -6,7 +6,7 @@ alembic==1.16.5
 annotated-types==0.7.0
 anyio==4.10.0
 attrs==25.3.0
-Authlib==1.6.3
+Authlib==1.6.5
 cachetools==5.5.2
 certifi==2025.8.3
 cffi==1.17.1
