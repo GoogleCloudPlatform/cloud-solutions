@@ -1,12 +1,12 @@
 # UVQ PyTorch Implementation
 
-To test the pytorch implementation, `cd` into the `uvq_pytorch` directory.
+To test the pytorch implementation, `cd` into the `movielenz-main` directory.
 Download an example video. E.g.
 [Gaming_1080P-0ce6_orig.mp4](https://storage.googleapis.com/ugc-dataset/vp9_compressed_videos/Gaming_1080P-0ce6_orig.mp4)
 Then run:
 
 ```bash
-python inference.py Gaming_1080P-0ce6_orig.mp4 20
+python -m uvq_pytorch.inference Gaming_1080P-0ce6_orig.mp4 20
 ```
 
 first argument being the name of the file and the second one the length of the

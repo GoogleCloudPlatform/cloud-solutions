@@ -15,7 +15,7 @@
 """UVQ (pytorch) inference entry point."""
 
 # Run using:
-# python3 uvq_pytorch/inference.py <path_to_video> <video_length_in_seconds>
+# python -m uvq_pytorch.inference <path_to_video> <video_length_in_seconds>
 # [--output <path_to_output_file>] [--transpose]
 import argparse
 import os
