@@ -6,6 +6,7 @@
     ":docker",
     ":enableVulnerabilityAlertsWithLabel(SECURITY)"
   ],
+  "osvVulnerabilityAlerts": true,
   "dependencyDashboardApproval": true,
   "rangeStrategy": "bump",
   "npm": {
