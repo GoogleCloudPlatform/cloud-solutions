@@ -142,6 +142,11 @@
       "commitMessagePrefix": "chore(deps): [dataproc-trino-autoscaler]"
     },
     {
+      "matchFileNames": ["projects/dotnet-modernization-demo/**"],
+      "groupName": "dotnet-modernization-demo",
+      "commitMessagePrefix": "chore(deps): [dotnet-modernization-demo]"
+    },
+    {
       "matchFileNames": ["projects/fsi-quant-assistant/**"],
       "groupName": "fsi-quant-assistant",
       "commitMessagePrefix": "chore(deps): [fsi-quant-assistant]"
