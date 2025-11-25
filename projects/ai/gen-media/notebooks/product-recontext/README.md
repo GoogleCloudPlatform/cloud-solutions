@@ -1,5 +1,9 @@
 # Product Recontext
 
+## Author
+
+Layolin Jesudhass
+
 ## Overview
 
 Product Recontext is a project designed to provide contextual understanding and
@@ -120,10 +124,7 @@ Contributions are welcome! Please follow these steps:
 
 ## Support
 
-For questions and support:
-
-- Create an issue in the repository
-- Contact the development team
+For questions and support, please refer to the project documentation.
 
 ## License
 
@@ -132,20 +133,8 @@ details.
 
 ## Changelog
 
-### Version 0.1.0 (Initial Release)
+### Version 1.0 (Initial Release)
 
 - Basic product context analysis
 - Core data processing pipeline
 - Initial API implementation
-
-## Roadmap
-
-- Enhanced context analysis algorithms
-- Additional data source integrations
-- Performance optimizations
-- Extended API capabilities
-
-## Acknowledgments
-
-- Google Cloud Solutions team
-- Contributors and maintainers

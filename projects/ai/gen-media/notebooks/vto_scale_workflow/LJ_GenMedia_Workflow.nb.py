@@ -47,7 +47,7 @@ limitations under the License.
 # *   Import Google Cloud libraries for interacting with Google Cloud Storage (storage) and Vertex AI (PredictionServiceClient).
 # *   Import Google Generative AI SDK components (google.genai, types) to interface with Gemini and Veo models.
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 70, "status": "ok", "timestamp": 1762901816301, "user": {"displayName": "", "userId": ""}, "user_tz": 360} id="FMZAhY8DuYTC" outputId="401d1f06-d53b-4d15-87ea-4e3c1b0da5d3"
+# %% id="FMZAhY8DuYTC"
 # Imports
 import base64
 import concurrent.futures
@@ -104,12 +104,12 @@ print("Imports complete.")
 #
 #
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 252, "status": "ok", "timestamp": 1762905919075, "user": {"displayName": "", "userId": ""}, "user_tz": 360} id="RFIBaIo8uZyl" outputId="7314afca-755c-4339-b611-02de1a4b620b"
+# %% id="RFIBaIo8uZyl"
 # Global Configuration, UPDATE FOR ANY MODEL CHANGES
 # --- Project & Location Settings ---
 # Ensure these match your environment
 os.environ["GOOGLE_CLOUD_PROJECT"] = (
-    "consumer-genai-experiments"  # update your project
+    "PROJECT_ID"  # update your project
 )
 os.environ["GOOGLE_CLOUD_LOCATION"] = "us-central1"  # update your location
 
@@ -118,7 +118,7 @@ LOCATION = os.environ.get("GOOGLE_CLOUD_LOCATION")
 GENAI_LOCATION = "us-central1"  # or "global" depending on availability
 
 # --- Storage Configuration ---
-BUCKET_NAME = "lj-revolve"  # Standardized bucket name , update your bucket name
+BUCKET_NAME = "BUCKET_NAME_PLACEHOLDER"  # Standardized bucket name , update your bucket name
 
 # GCS Paths/Prefixes -> The process will create the subsequent file and folder structure
 CSV_OBJECT_NAME = "Model_Creation.csv"
@@ -169,7 +169,7 @@ print(f"Configuration Set: Project={PROJECT_ID}, Bucket={BUCKET_NAME}")
 #
 # - Upload the Model_Creation.csv file containing the generated prompts to GCS.
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 8277, "status": "ok", "timestamp": 1762898879112, "user": {"displayName": "", "userId": ""}, "user_tz": 360} id="T0wg6bkpuZ1-" outputId="8509f4ff-868f-49ff-d5d5-ca0c0950d32e"
+# %% id="T0wg6bkpuZ1-"
 # ===== Diversity Parameters and Template =====
 DIVERSITY_INSTRUCTIONS = """
 Ethnicity: African American, Afro-Caribbean, East African, West African, East Asian, South Asian, Southeast Asian, Middle Eastern,
@@ -285,7 +285,7 @@ upload_csv_text_to_gcs(csv_text)
 #
 # - Display the generated images directly in the notebook.
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 422} executionInfo={"elapsed": 36686, "status": "ok", "timestamp": 1762900736807, "user": {"displayName": "", "userId": ""}, "user_tz": 360} id="I6qEl-MguZ4T" outputId="14d2c1a8-d0aa-4334-9be2-19db9cf2fe33"
+# %% id="I6qEl-MguZ4T"
 PROMPT_COLUMN = "Description"
 IDENTIFIER_COLUMNS = ["Title"]
 
@@ -444,7 +444,7 @@ except Exception as e:
 #
 # - Call the Vertex AI VTO Model  for each pair, generating a defined number of candidate try-on images (VTO_VARIATIONS = 4).
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 143830, "status": "ok", "timestamp": 1762903486466, "user": {"displayName": "", "userId": ""}, "user_tz": 360} id="rjJd-Kq2uZ90" outputId="c3e83277-0580-4623-d2de-81af96495a3b"
+# %% id="rjJd-Kq2uZ90"
 # Helper Functions
 
 
@@ -595,7 +595,7 @@ print(f"[DONE] Outputs in: gs://{BUCKET_NAME}/{VTO_OUTPUT_PREFIX}")
 #
 # - The winning image for each model/outfit combination is copied to the final GCS folder (Dress/4tryon/final).
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 46548, "status": "ok", "timestamp": 1762907120568, "user": {"displayName": "", "userId": ""}, "user_tz": 360} id="SehmdW6_x_q9" outputId="f69ad072-410f-4d0f-bdca-380213988c6d"
+# %% id="SehmdW6_x_q9"
 print("[START] AI Critique")
 
 bucket = storage_client.bucket(BUCKET_NAME)
@@ -831,7 +831,7 @@ else:
 #
 # - The generated short video clips are uploaded to the final motion GCS prefix (Dress/4tryon/final_motion).
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 370669, "status": "ok", "timestamp": 1762904449987, "user": {"displayName": "", "userId": ""}, "user_tz": 360} id="CboQHX_JywYl" outputId="bf4c85d6-acc3-4d3e-dfa8-7dbc6a550a80"
+# %% id="CboQHX_JywYl"
 VIDEO_PROMPT = (
     "Create a smooth video of the model walking a fashion runway wearing this outfit. "
     "Show natural fabric motion to highlight flow, drape, and texture. "

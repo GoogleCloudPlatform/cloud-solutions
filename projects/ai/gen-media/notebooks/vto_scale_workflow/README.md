@@ -4,6 +4,10 @@ A comprehensive, end-to-end pipeline for generating diverse, photorealistic
 Virtual Try-On (VTO) images and motion videos using Google's Generative AI
 models on Vertex AI.
 
+## Author
+
+Layolin Jesudhass
+
 ## Overview
 
 This project demonstrates a scalable workflow for fashion e-commerce
@@ -269,5 +273,3 @@ For issues related to:
 
 Created on 11/12/2025 using Google's suite of Generative AI models on Vertex AI
 platform.
-
-### Author: Layolin Jesudhass
