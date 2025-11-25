@@ -1,4 +1,3 @@
-# python:3.11 (remove build-essential install)
 FROM python:3.11-slim
 WORKDIR /app
 
@@ -9,11 +8,21 @@ ENV POETRY_NO_INTERACTION=1 \
 
 # Install build-essential using apt-get
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential && \
+    apt-get install -y --no-install-recommends build-essential curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Poetry using pip
-RUN pip install --no-cache-dir poetry==2.2.1
+# Set strict env variables for the installer
+ENV POETRY_VERSION=2.2.1
+ENV POETRY_HOME=/opt/poetry
+
+# Set shell to bash with pipefail for safe piping
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Install using the official script
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# Add poetry to your PATH
+ENV PATH="$POETRY_HOME/bin:$PATH"
 
 # Copy only the dependency file first to leverage Docker's layer caching
 # This layer will only be rebuilt if these files change.
@@ -35,14 +44,6 @@ USER myuser
 # Set the PATH for the new user
 ENV PATH="/home/myuser/.local/bin:$PATH" \
     PORT=8080
-
-# Copy the model download script as 'myuser'
-COPY --chown=myuser:myuser download_model.py .
-
-# Run the Python script to download and cache the model.
-# The cache will be created in /home/myuser/.cache/huggingface
-# with the correct user ownership.
-# RUN python download_model.py
 
 # Copy the rest of your application code
 COPY --chown=myuser:myuser . .
