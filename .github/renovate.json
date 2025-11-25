@@ -88,6 +88,11 @@
       "commitMessagePrefix": "chore(deps): [bss-ai-agent-infra]"
     },
     {
+      "matchFileNames": ["projects/build-with-gemini-demo/**"],
+      "groupName": "build-with-gemini-demo",
+      "commitMessagePrefix": "chore(deps): [build-with-gemini-demo]"
+    },
+    {
       "matchFileNames": ["projects/bulk-delete-gcs-files-fn/**"],
       "groupName": "bulk-delete-gcs-files-fn",
       "commitMessagePrefix": "chore(deps): [bulk-delete-gcs-files-fn]"
