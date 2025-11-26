@@ -92,10 +92,6 @@ done
 
 cd "${DOCS_DIR}"
 
-# Ensure user-guide is top of the nav list
-[[ -e "${BUILD_DIR}/docs/user-guide" ]] &&
-  mv "${BUILD_DIR}/docs/user-guide" "${BUILD_DIR}/docs/aaa-user-guide"
-
 # Check/setup python venv.
 # * We could already be in a venv
 #   (when run by 03-mkdocs-check)
