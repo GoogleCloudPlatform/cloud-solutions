@@ -66,7 +66,7 @@ ln -sf "${DOCS_DIR}/stylesheets" "${BUILD_DIR}/docs/stylesheets"
 for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
   PROJECT_DIRNAME="$(basename "$CURRENT_PROJECT_DIR")"
   if [[ -e "${CURRENT_PROJECT_DIR}/docs/index.md" || -e "${CURRENT_PROJECT_DIR}/docs/README.md" ]]; then
-    # Use docs dir for documentation
+    echo "Using docs dir for ${PROJECT_DIRNAME}"
     ln -s "${CURRENT_PROJECT_DIR}/docs" "${BUILD_DIR}/docs/${PROJECT_DIRNAME}"
   elif [[ -f "${CURRENT_PROJECT_DIR}/README.md" ]]; then
     echo "Using README.md for ${PROJECT_DIRNAME}"
