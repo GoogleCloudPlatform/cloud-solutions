@@ -1,0 +1,6 @@
+title: Gemini-powered .NET modernization demo
+
+nav:
+  - "Get started": "README.md"
+  - "Gemini prompt": "modernization-prompt.md"
+  - "Sample modernization report": "dotnet-modernization-demo/dotnet-migration-sample-modernized/MODERNIZATION/"

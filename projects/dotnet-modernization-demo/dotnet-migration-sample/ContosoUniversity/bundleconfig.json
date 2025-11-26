@@ -1,0 +1,28 @@
+[
+  {
+    "outputFileName": "wwwroot/css/styles.css",
+    "inputFiles": ["Content/**/!(*.min).css"]
+  },
+  {
+    "outputFileName": "wwwroot/js/jquery.js",
+    "inputFiles": [
+      "Scripts/third_party/jquery-1.10.2.js",
+      "Scripts/third_party/jquery-1.10.2.intellisense.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/jqueryval.js",
+    "inputFiles": ["Scripts/third_party/jquery.validate.js"]
+  },
+  {
+    "outputFileName": "wwwroot/js/bs-bundle.js",
+    "inputFiles": [
+      "Scripts/third_party/bootstrap.js",
+      "Scripts/third_party/respond.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/modernizr.js",
+    "inputFiles": ["Scripts/third_party/modernizr-2.6.2.js"]
+  }
+]
