@@ -48,13 +48,19 @@ To deploy this demo, you need:
 
     ```bash
     git clone https://github.com/GoogleCloudPlatform/cloud-solutions && \
-    cd cloud-solutions/projects/dotnet-modernization-demo
+    cd cloud-solutions
     ```
 
 ## Run the Migration Center App Modernization Assessment
 
 To generate a Migration Center App Modernization Assessment report, you do the
 following:
+
+1.  Set the working directory:
+
+    ```bash
+    cd "$(git rev-parse --show-toplevel)/projects/dotnet-modernization-demo"
+    ```
 
 1.  Generate the report:
 
@@ -105,7 +111,7 @@ To run the example modernized application locally, you do the following:
 1.  Change the working directory to the .NET application directory:
 
     ```bash
-    cd dotnet-migration-sample-modernized
+    cd "$(git rev-parse --show-toplevel)/projects/dotnet-modernization-demo/dotnet-migration-sample-modernized"
     ```
 
 1.  Run the application using Docker Compose:
@@ -202,7 +208,7 @@ Registry repository you created. Cloud Build uses the `Dockerfile` in your
 project root.
 
 ```bash
-cd dotnet-migration-sample-modernized
+cd "$(git rev-parse --show-toplevel)/projects/dotnet-modernization-demo/dotnet-migration-sample-modernized"
 gcloud builds submit --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/contoso-university:latest .
 ```
 

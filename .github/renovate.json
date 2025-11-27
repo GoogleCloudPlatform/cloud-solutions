@@ -188,6 +188,11 @@
       "commitMessagePrefix": "chore(deps): [migrate-from-azure-to-google-cloud]"
     },
     {
+      "matchFileNames": ["projects/mmb-hero-demo/**"],
+      "groupName": "mmb-hero-demo",
+      "commitMessagePrefix": "chore(deps): [mmb-hero-demo]"
+    },
+    {
       "matchFileNames": ["projects/nvidia-omniverse-on-google-cloud/**"],
       "groupName": "nvidia-omniverse-on-google-cloud",
       "commitMessagePrefix": "chore(deps): [nvidia-omniverse-on-google-cloud]"
