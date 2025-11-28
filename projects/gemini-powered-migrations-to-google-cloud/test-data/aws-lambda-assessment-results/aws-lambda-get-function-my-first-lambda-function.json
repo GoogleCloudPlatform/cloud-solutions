@@ -1,0 +1,26 @@
+{
+  "Configuration": {
+    "FunctionName": "my-first-lambda-function",
+    "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:my-first-lambda-function",
+    "Runtime": "python3.9",
+    "Role": "arn:aws:iam::123456789012:role/lambda-ex",
+    "Handler": "lambda_function.lambda_handler",
+    "CodeSize": 1064,
+    "Description": "My first Lambda function",
+    "Timeout": 30,
+    "MemorySize": 128,
+    "LastModified": "2023-11-28T10:00:00.000+0000",
+    "CodeSha256": "hK5X7x0Z2Y4B6C8D1E3F5A7B9C0D2E4F6A8B0C1D2E3F4A5B6C7D8E9F0A1B2C3D",
+    "Version": "$LATEST",
+    "TracingConfig": {
+      "Mode": "PassThrough"
+    },
+    "RevisionId": "f9a1b2c3-d4e5-6f7a-8b9c-0d1e2f3a4b5c",
+    "State": "Active",
+    "LastUpdateStatus": "Successful"
+  },
+  "Code": {
+    "RepositoryType": "S3",
+    "Location": "https://prod-04-2022-tasks.s3.us-east-1.amazonaws.com/snapshots/123456789012/my-first-lambda-function-f9a1b2c3-d4e5-6f7a-8b9c-0d1e2f3a4b5c?versionId=..."
+  }
+}

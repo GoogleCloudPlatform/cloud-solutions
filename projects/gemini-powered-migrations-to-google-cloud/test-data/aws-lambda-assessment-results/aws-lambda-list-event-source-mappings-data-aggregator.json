@@ -1,0 +1,14 @@
+{
+  "EventSourceMappings": [
+    {
+      "UUID": "abcdefab-cdef-abcd-efab-cdefabcdef12",
+      "BatchSize": 10,
+      "EventSourceArn": "arn:aws:kinesis:ap-southeast-2:123456789012:stream/data-stream",
+      "FunctionArn": "arn:aws:lambda:ap-southeast-2:123456789012:function:data-aggregator",
+      "LastModified": "2023-11-25T20:00:00.000+0000",
+      "State": "Enabled",
+      "StateTransitionReason": "User action",
+      "StartingPosition": "LATEST"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "FunctionName": "api-gateway-authorizer",
+  "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:api-gateway-authorizer",
+  "Runtime": "nodejs16.x",
+  "Role": "arn:aws:iam::123456789012:role/apigw-auth-role",
+  "Handler": "auth.handler",
+  "CodeSize": 1536,
+  "Description": "Custom authorizer for API Gateway",
+  "Timeout": 30,
+  "MemorySize": 128,
+  "LastModified": "2023-11-28T09:00:00.000+0000",
+  "CodeSha256": "pQ9R8S7T6U5V4W3X2Y1Z0A9B8C7D6E5F4G3H2I1J0K9L8M7N6O5P4Q3R2S1T0U9V",
+  "Version": "$LATEST",
+  "TracingConfig": {
+    "Mode": "PassThrough"
+  },
+  "RevisionId": "b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e",
+  "State": "Active",
+  "LastUpdateStatus": "Successful",
+  "PackageType": "Zip"
+}

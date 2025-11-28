@@ -1,0 +1,43 @@
+2023-10-25 10:30:00    5.8 GiB contracts/MSA-vendor-corp.pdf
+2024-01-18 15:00:00    9.2 GiB litigation/case-file-2023-0123.zip
+2023-12-01 11:30:00    3.1 GiB intellectual-property/patent-app-US-987654.docx
+2024-02-22 14:00:00    7.5 GiB compliance/gdpr-audit-2024.xlsx
+2023-11-05 12:00:00    4.9 GiB corporate-records/board-meeting-minutes-2023.pdf
+2024-03-08 16:00:00    11.3 GiB discovery/ediscovery-data-set-A.zip
+2023-09-20 10:00:00    2.8 GiB policies/terms-of-service-v3.html
+2024-02-12 13:30:00    8.1 GiB real-estate/lease-agreement-hq.pdf
+2023-10-30 17:00:00    6.7 GiB mergers-acquisitions/due-diligence-project-X.zip
+2024-01-28 11:00:00    4.2 GiB legal-research/case-law-summaries.docx
+2024-03-10 10:20:30    12.3 GiB my-document.txt
+2024-05-22 16:15:00   530.5 MiB image.jpg
+2024-06-01 08:00:10     7.7 GiB my-folder/sub-document.pdf
+2024-06-15 14:00:05     9.8 GiB my-folder/another-image.png
+2023-01-12 14:23:11     1.2 GiB documents/report-final.docx
+2022-11-01 09:15:42     3.5 GiB backups/database-backup-20221101.zip
+2024-02-28 18:05:00   450.2 MiB images/company-logo.png
+2023-07-19 11:45:33    23.1 MiB src/main/app.py
+2021-05-03 22:10:10     5.6 GiB videos/product-demo.mp4
+2024-01-15 13:00:00   800.0 MiB logs/access.log
+2023-09-21 10:20:30    12.3 GiB documents/project-plan.pdf
+2022-08-10 16:15:00   530.5 MiB images/team-photo.jpg
+2024-04-01 08:00:10     7.7 GiB src/test/utils.js
+2023-06-15 14:00:05     9.8 GiB audio/background-music.mp3
+2022-03-20 19:30:00     2.1 GiB backups/website-files.tar.gz
+2024-03-10 10:20:30    12.3 GiB my-document.txt
+2024-05-22 16:15:00   530.5 MiB image.jpg
+2024-06-01 08:00:10     7.7 GiB my-folder/sub-document.pdf
+2024-06-15 14:00:05     9.8 GiB my-folder/another-image.png
+2023-01-12 14:23:11     1.2 GiB documents/report-final.docx
+2022-11-01 09:15:42     3.5 GiB backups/database-backup-20221101.zip
+2024-02-28 18:05:00   450.2 MiB images/company-logo.png
+2023-07-19 11:45:33    23.1 MiB src/main/app.py
+2021-05-03 22:10:10     5.6 GiB videos/product-demo.mp4
+2024-01-15 13:00:00   800.0 MiB logs/access.log
+2023-09-21 10:20:30    12.3 GiB documents/project-plan.pdf
+2022-08-10 16:15:00   530.5 MiB images/team-photo.jpg
+2024-04-01 08:00:10     7.7 GiB src/test/utils.js
+2023-06-15 14:00:05     9.8 GiB audio/background-music.mp3
+2022-03-20 19:30:00     2.1 GiB backups/website-files.tar.gz
+
+Total Objects: 54
+Total Size: 720.0 GiB

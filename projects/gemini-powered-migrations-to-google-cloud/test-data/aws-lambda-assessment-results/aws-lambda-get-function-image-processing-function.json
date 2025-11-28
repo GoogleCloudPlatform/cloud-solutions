@@ -1,0 +1,27 @@
+{
+  "Configuration": {
+    "FunctionName": "image-processing-function",
+    "FunctionArn": "arn:aws:lambda:us-west-2:123456789012:function:image-processing-function",
+    "Runtime": "nodejs18.x",
+    "Role": "arn:aws:iam::123456789012:role/image-processor-role",
+    "Handler": "index.handler",
+    "CodeSize": 5120,
+    "Description": "Processes uploaded images",
+    "Timeout": 60,
+    "MemorySize": 256,
+    "LastModified": "2023-11-27T15:30:00.000+0000",
+    "CodeSha256": "gL1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4J5K6L7M8N9O0P1Q",
+    "Version": "$LATEST",
+    "TracingConfig": {
+      "Mode": "Active"
+    },
+    "RevisionId": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+    "State": "Active",
+    "LastUpdateStatus": "Successful",
+    "PackageType": "Zip"
+  },
+  "Code": {
+    "RepositoryType": "S3",
+    "Location": "https://prod-04-2022-tasks.s3.us-west-2.amazonaws.com/snapshots/123456789012/image-processing-function-a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d?versionId=..."
+  }
+}

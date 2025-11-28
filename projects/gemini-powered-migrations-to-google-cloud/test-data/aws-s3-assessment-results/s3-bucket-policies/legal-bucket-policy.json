@@ -1,0 +1,3 @@
+{
+  "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"AllowLawyersFullAccess\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:role/lawyers\"]},\"Action\":\"s3:*\",\"Resource\":\"arn:aws:s3:::legal-bucket/*\"},{\"Sid\":\"AllowParalegalsReadWriteContracts\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:role/paralegals\"]},\"Action\":[\"s3:GetObject\",\"s3:PutObject\"],\"Resource\":\"arn:aws:s3:::legal-bucket/contracts/*\"},{\"Sid\":\"DenyAccessToLitigation\",\"Effect\":\"Deny\",\"Principal\":{\"AWS\":\"arn:aws:iam::123456789012:role/paralegals\"},\"Action\":\"s3:*\",\"Resource\":\"arn:aws:s3:::legal-bucket/litigation/*\"}]}"
+}

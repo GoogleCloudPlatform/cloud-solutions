@@ -1,0 +1,21 @@
+{
+  "FunctionName": "webhook-processor",
+  "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:webhook-processor",
+  "Runtime": "nodejs18.x",
+  "Role": "arn:aws:iam::123456789012:role/webhook-role",
+  "Handler": "webhook.handler",
+  "CodeSize": 1800,
+  "Description": "Processes incoming webhooks",
+  "Timeout": 45,
+  "MemorySize": 192,
+  "LastModified": "2023-11-28T11:30:00.000+0000",
+  "CodeSha256": "qR1S2T3U4V5W6X7Y8Z9A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T9U0V1W",
+  "Version": "$LATEST",
+  "TracingConfig": {
+    "Mode": "Active"
+  },
+  "RevisionId": "d8e7f6a5-b4c3-2d1e-0f9a-8b7c6d5e4f3a",
+  "State": "Active",
+  "LastUpdateStatus": "Successful",
+  "PackageType": "Zip"
+}

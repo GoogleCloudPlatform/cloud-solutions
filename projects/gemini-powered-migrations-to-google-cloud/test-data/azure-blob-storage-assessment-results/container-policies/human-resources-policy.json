@@ -1,0 +1,22 @@
+{
+  "bypass": "AzureServices",
+  "defaultAction": "Deny",
+  "ipRules": [
+    {
+      "action": "Allow",
+      "ipAddressOrRange": "203.0.113.12"
+    },
+    {
+      "action": "Allow",
+      "ipAddressOrRange": "198.51.100.0/26"
+    }
+  ],
+  "resourceAccessRules": [],
+  "virtualNetworkRules": [
+    {
+      "action": "Allow",
+      "id": "/subscriptions/0000.../resourceGroups/myRG/providers/Microsoft.Network/virtualNetworks/myVNet/subnets/humanResourcesSubnet",
+      "state": "Succeeded"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"default\",\"Statement\":[{\"Sid\":\"AllowExecutionFromKinesis\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"kinesis.amazonaws.com\"},\"Action\":\"lambda:InvokeFunction\",\"Resource\":\"arn:aws:lambda:ap-southeast-2:123456789012:function:data-aggregator\",\"Condition\":{\"ArnLike\":{\"AWS:SourceArn\":\"arn:aws:kinesis:ap-southeast-2:123456789012:stream/data-stream\"}}}]}",
+  "RevisionId": "f5a4b3c2-d1e0-9f8a-7b6c-5d4e3f2a1b0c"
+}

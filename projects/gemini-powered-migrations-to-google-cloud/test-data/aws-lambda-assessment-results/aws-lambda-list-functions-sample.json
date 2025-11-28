@@ -1,0 +1,213 @@
+{
+  "Functions": [
+    {
+      "FunctionName": "my-first-lambda-function",
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:my-first-lambda-function",
+      "Runtime": "python3.9",
+      "Role": "arn:aws:iam::123456789012:role/lambda-ex",
+      "Handler": "lambda_function.lambda_handler",
+      "CodeSize": 1064,
+      "Description": "My first Lambda function",
+      "Timeout": 30,
+      "MemorySize": 128,
+      "LastModified": "2023-11-28T10:00:00.000+0000",
+      "CodeSha256": "hK5X7x0Z2Y4B6C8D1E3F5A7B9C0D2E4F6A8B0C1D2E3F4A5B6C7D8E9F0A1B2C3D",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "PassThrough"
+      },
+      "RevisionId": "f9a1b2c3-d4e5-6f7a-8b9c-0d1e2f3a4b5c",
+      "State": "Active",
+      "LastUpdateStatus": "Successful"
+    },
+    {
+      "FunctionName": "image-processing-function",
+      "FunctionArn": "arn:aws:lambda:us-west-2:123456789012:function:image-processing-function",
+      "Runtime": "nodejs18.x",
+      "Role": "arn:aws:iam::123456789012:role/image-processor-role",
+      "Handler": "index.handler",
+      "CodeSize": 5120,
+      "Description": "Processes uploaded images",
+      "Timeout": 60,
+      "MemorySize": 256,
+      "LastModified": "2023-11-27T15:30:00.000+0000",
+      "CodeSha256": "gL1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4J5K6L7M8N9O0P1Q",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "Active"
+      },
+      "RevisionId": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    },
+    {
+      "FunctionName": "user-auth-service",
+      "FunctionArn": "arn:aws:lambda:eu-central-1:123456789012:function:user-auth-service",
+      "Runtime": "java11",
+      "Role": "arn:aws:iam::123456789012:role/auth-lambda-role",
+      "Handler": "com.example.AuthHandler::handleRequest",
+      "CodeSize": 20480,
+      "Description": "Handles user authentication requests",
+      "Timeout": 90,
+      "MemorySize": 512,
+      "LastModified": "2023-11-26T08:15:00.000+0000",
+      "CodeSha256": "hJ2K4L6M8N0P2R4T6V8X0Z2A4C6E8G0I2K4M6O8Q0S2U4W6Y8Z0A2C4E6G8I0K2M",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "PassThrough"
+      },
+      "RevisionId": "e1f2g3h4-i5j6-7k8l-9m0n-1o2p3q4r5s6t",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    },
+    {
+      "FunctionName": "data-aggregator",
+      "FunctionArn": "arn:aws:lambda:ap-southeast-2:123456789012:function:data-aggregator",
+      "Runtime": "go1.x",
+      "Role": "arn:aws:iam::123456789012:role/aggregator-role",
+      "Handler": "main",
+      "CodeSize": 3072,
+      "Description": "Aggregates data from various sources",
+      "Timeout": 120,
+      "MemorySize": 256,
+      "LastModified": "2023-11-25T20:00:00.000+0000",
+      "CodeSha256": "aB1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "Active"
+      },
+      "RevisionId": "f5a4b3c2-d1e0-9f8a-7b6c-5d4e3f2a1b0c",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    },
+    {
+      "FunctionName": "api-gateway-authorizer",
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:api-gateway-authorizer",
+      "Runtime": "nodejs16.x",
+      "Role": "arn:aws:iam::123456789012:role/apigw-auth-role",
+      "Handler": "auth.handler",
+      "CodeSize": 1536,
+      "Description": "Custom authorizer for API Gateway",
+      "Timeout": 30,
+      "MemorySize": 128,
+      "LastModified": "2023-11-28T09:00:00.000+0000",
+      "CodeSha256": "pQ9R8S7T6U5V4W3X2Y1Z0A9B8C7D6E5F4G3H2I1J0K9L8M7N6O5P4Q3R2S1T0U9V",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "PassThrough"
+      },
+      "RevisionId": "b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    },
+    {
+      "FunctionName": "scheduled-backup-task",
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:scheduled-backup-task",
+      "Runtime": "python3.8",
+      "Role": "arn:aws:iam::123456789012:role/backup-lambda-role",
+      "Handler": "backup_script.handler",
+      "CodeSize": 2048,
+      "Description": "Performs daily database backups",
+      "Timeout": 300,
+      "MemorySize": 256,
+      "LastModified": "2023-11-27T23:00:00.000+0000",
+      "CodeSha256": "xY0Z1A2B3C4D5E6F7G8H9I0J1K2L3M4N5O6P7Q8R9S0T1U2V3W4X5Y6Z7A8B9C0D",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "PassThrough"
+      },
+      "RevisionId": "c7d6e5f4-a3b2-1c0d-e9f8-7a6b5c4d3e2f",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    },
+    {
+      "FunctionName": "webhook-processor",
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:webhook-processor",
+      "Runtime": "nodejs18.x",
+      "Role": "arn:aws:iam::123456789012:role/webhook-role",
+      "Handler": "webhook.handler",
+      "CodeSize": 1800,
+      "Description": "Processes incoming webhooks",
+      "Timeout": 45,
+      "MemorySize": 192,
+      "LastModified": "2023-11-28T11:30:00.000+0000",
+      "CodeSha256": "qR1S2T3U4V5W6X7Y8Z9A0B1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T9U0V1W",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "Active"
+      },
+      "RevisionId": "d8e7f6a5-b4c3-2d1e-0f9a-8b7c6d5e4f3a",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    },
+    {
+      "FunctionName": "iot-data-ingestor",
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:iot-data-ingestor",
+      "Runtime": "python3.9",
+      "Role": "arn:aws:iam::123456789012:role/iot-lambda-role",
+      "Handler": "iot_ingestor.handler",
+      "CodeSize": 4096,
+      "Description": "Ingests data from IoT devices",
+      "Timeout": 60,
+      "MemorySize": 256,
+      "LastModified": "2023-11-28T07:45:00.000+0000",
+      "CodeSha256": "kL0M1N2O3P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2I3J4K5L6M7N8O9P0Q",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "PassThrough"
+      },
+      "RevisionId": "f9a1b2c3-d4e5-6f7a-8b9c-0d1e2f3a4b5d",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    },
+    {
+      "FunctionName": "file-conversion-service",
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:file-conversion-service",
+      "Runtime": "dotnet6",
+      "Role": "arn:aws:iam::123456789012:role/conversion-lambda-role",
+      "Handler": "Function::Function.Handler::HandleRequest",
+      "CodeSize": 8192,
+      "Description": "Converts various file formats",
+      "Timeout": 180,
+      "MemorySize": 512,
+      "LastModified": "2023-11-27T18:00:00.000+0000",
+      "CodeSha256": "vW0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8P9Q0R1S2T3U4V5W6X7Y8Z9A0B",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "Active"
+      },
+      "RevisionId": "e1f2g3h4-i5j6-7k8l-9m0n-1o2p3q4r5s6u",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    },
+    {
+      "FunctionName": "metrics-publisher",
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:metrics-publisher",
+      "Runtime": "python3.9",
+      "Role": "arn:aws:iam::123456789012:role/metrics-role",
+      "Handler": "metrics.handler",
+      "CodeSize": 1024,
+      "Description": "Publishes custom metrics to CloudWatch",
+      "Timeout": 30,
+      "MemorySize": 128,
+      "LastModified": "2023-11-28T12:00:00.000+0000",
+      "CodeSha256": "tU0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4J5K6L7M8N9O0P1Q2R3S4T5U6V7W8X9Y0Z",
+      "Version": "$LATEST",
+      "TracingConfig": {
+        "Mode": "PassThrough"
+      },
+      "RevisionId": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6f",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Zip"
+    }
+  ]
+}

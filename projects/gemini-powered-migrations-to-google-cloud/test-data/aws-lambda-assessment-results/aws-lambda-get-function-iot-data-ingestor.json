@@ -1,0 +1,27 @@
+{
+  "Configuration": {
+    "FunctionName": "iot-data-ingestor",
+    "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:iot-data-ingestor",
+    "Runtime": "python3.9",
+    "Role": "arn:aws:iam::123456789012:role/iot-lambda-role",
+    "Handler": "iot_ingestor.handler",
+    "CodeSize": 4096,
+    "Description": "Ingests data from IoT devices",
+    "Timeout": 60,
+    "MemorySize": 256,
+    "LastModified": "2023-11-28T07:45:00.000+0000",
+    "CodeSha256": "kL0M1N2O3P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2I3J4K5L6M7N8O9P0Q",
+    "Version": "$LATEST",
+    "TracingConfig": {
+      "Mode": "PassThrough"
+    },
+    "RevisionId": "f9a1b2c3-d4e5-6f7a-8b9c-0d1e2f3a4b5d",
+    "State": "Active",
+    "LastUpdateStatus": "Successful",
+    "PackageType": "Zip"
+  },
+  "Code": {
+    "RepositoryType": "S3",
+    "Location": "https://prod-04-2022-tasks.s3.us-east-1.amazonaws.com/snapshots/123456789012/iot-data-ingestor-f9a1b2c3-d4e5-6f7a-8b9c-0d1e2f3a4b5d?versionId=..."
+  }
+}

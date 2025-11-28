@@ -1,0 +1,21 @@
+{
+  "FunctionName": "file-conversion-service",
+  "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:file-conversion-service",
+  "Runtime": "dotnet6",
+  "Role": "arn:aws:iam::123456789012:role/conversion-lambda-role",
+  "Handler": "Function::Function.Handler::HandleRequest",
+  "CodeSize": 8192,
+  "Description": "Converts various file formats",
+  "Timeout": 180,
+  "MemorySize": 512,
+  "LastModified": "2023-11-27T18:00:00.000+0000",
+  "CodeSha256": "vW0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8P9Q0R1S2T3U4V5W6X7Y8Z9A0B",
+  "Version": "$LATEST",
+  "TracingConfig": {
+    "Mode": "Active"
+  },
+  "RevisionId": "e1f2g3h4-i5j6-7k8l-9m0n-1o2p3q4r5s6u",
+  "State": "Active",
+  "LastUpdateStatus": "Successful",
+  "PackageType": "Zip"
+}

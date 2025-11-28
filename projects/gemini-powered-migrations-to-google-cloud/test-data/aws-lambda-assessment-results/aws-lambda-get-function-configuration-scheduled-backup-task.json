@@ -1,0 +1,21 @@
+{
+  "FunctionName": "scheduled-backup-task",
+  "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:scheduled-backup-task",
+  "Runtime": "python3.8",
+  "Role": "arn:aws:iam::123456789012:role/backup-lambda-role",
+  "Handler": "backup_script.handler",
+  "CodeSize": 2048,
+  "Description": "Performs daily database backups",
+  "Timeout": 300,
+  "MemorySize": 256,
+  "LastModified": "2023-11-27T23:00:00.000+0000",
+  "CodeSha256": "xY0Z1A2B3C4D5E6F7G8H9I0J1K2L3M4N5O6P7Q8R9S0T1U2V3W4X5Y6Z7A8B9C0D",
+  "Version": "$LATEST",
+  "TracingConfig": {
+    "Mode": "PassThrough"
+  },
+  "RevisionId": "c7d6e5f4-a3b2-1c0d-e9f8-7a6b5c4d3e2f",
+  "State": "Active",
+  "LastUpdateStatus": "Successful",
+  "PackageType": "Zip"
+}

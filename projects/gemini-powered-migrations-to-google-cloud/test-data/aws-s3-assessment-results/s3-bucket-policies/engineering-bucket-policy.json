@@ -1,0 +1,3 @@
+{
+  "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"AllowSoftwareEngineersReadWrite\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:role/software-engineers\"]},\"Action\":[\"s3:GetObject\",\"s3:PutObject\",\"s3:DeleteObject\"],\"Resource\":\"arn:aws:s3:::engineering-bucket/source-code/*\"},{\"Sid\":\"AllowDevOpsFullAccess\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:role/devops\"]},\"Action\":\"s3:*\",\"Resource\":\"arn:aws:s3:::engineering-bucket/*\"},{\"Sid\":\"AllowQualityAssuranceRead\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:role/quality-assurance\"]},\"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::engineering-bucket/build-artifacts/*\"}]}"
+}

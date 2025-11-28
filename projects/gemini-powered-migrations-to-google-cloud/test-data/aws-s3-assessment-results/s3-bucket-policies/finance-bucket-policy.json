@@ -1,0 +1,3 @@
+{
+  "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"AllowFinancialAnalystsRead\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:role/financial-analysts\"]},\"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::finance-bucket/financial-reports/*\"},{\"Sid\":\"AllowAccountantsReadWrite\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:role/accountants\"]},\"Action\":[\"s3:GetObject\",\"s3:PutObject\"],\"Resource\":\"arn:aws:s3:::finance-bucket/invoices/*\"},{\"Sid\":\"AllowAuditorsReadOnly\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:role/auditors\"]},\"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::finance-bucket/audits/*\"}]}"
+}

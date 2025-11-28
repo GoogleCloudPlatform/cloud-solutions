@@ -1,0 +1,27 @@
+{
+  "Configuration": {
+    "FunctionName": "data-aggregator",
+    "FunctionArn": "arn:aws:lambda:ap-southeast-2:123456789012:function:data-aggregator",
+    "Runtime": "go1.x",
+    "Role": "arn:aws:iam::123456789012:role/aggregator-role",
+    "Handler": "main",
+    "CodeSize": 3072,
+    "Description": "Aggregates data from various sources",
+    "Timeout": 120,
+    "MemorySize": 256,
+    "LastModified": "2023-11-25T20:00:00.000+0000",
+    "CodeSha256": "aB1C2D3E4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5A6B7C8D9E0F1G",
+    "Version": "$LATEST",
+    "TracingConfig": {
+      "Mode": "Active"
+    },
+    "RevisionId": "f5a4b3c2-d1e0-9f8a-7b6c-5d4e3f2a1b0c",
+    "State": "Active",
+    "LastUpdateStatus": "Successful",
+    "PackageType": "Zip"
+  },
+  "Code": {
+    "RepositoryType": "S3",
+    "Location": "https://prod-04-2022-tasks.s3.ap-southeast-2.amazonaws.com/snapshots/123456789012/data-aggregator-f5a4b3c2-d1e0-9f8a-7b6c-5d4e3f2a1b0c?versionId=..."
+  }
+}

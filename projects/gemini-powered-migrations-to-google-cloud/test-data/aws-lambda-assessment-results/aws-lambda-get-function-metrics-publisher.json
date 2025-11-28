@@ -1,0 +1,27 @@
+{
+  "Configuration": {
+    "FunctionName": "metrics-publisher",
+    "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:metrics-publisher",
+    "Runtime": "python3.9",
+    "Role": "arn:aws:iam::123456789012:role/metrics-role",
+    "Handler": "metrics.handler",
+    "CodeSize": 1024,
+    "Description": "Publishes custom metrics to CloudWatch",
+    "Timeout": 30,
+    "MemorySize": 128,
+    "LastModified": "2023-11-28T12:00:00.000+0000",
+    "CodeSha256": "tU0V1W2X3Y4Z5A6B7C8D9E0F1G2H3I4J5K6L7M8N9O0P1Q2R3S4T5U6V7W8X9Y0Z",
+    "Version": "$LATEST",
+    "TracingConfig": {
+      "Mode": "PassThrough"
+    },
+    "RevisionId": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6f",
+    "State": "Active",
+    "LastUpdateStatus": "Successful",
+    "PackageType": "Zip"
+  },
+  "Code": {
+    "RepositoryType": "S3",
+    "Location": "https://prod-04-2022-tasks.s3.us-east-1.amazonaws.com/snapshots/123456789012/metrics-publisher-a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6f?versionId=..."
+  }
+}

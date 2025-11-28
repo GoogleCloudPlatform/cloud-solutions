@@ -1,0 +1,21 @@
+{
+  "FunctionName": "user-auth-service",
+  "FunctionArn": "arn:aws:lambda:eu-central-1:123456789012:function:user-auth-service",
+  "Runtime": "java11",
+  "Role": "arn:aws:iam::123456789012:role/auth-lambda-role",
+  "Handler": "com.example.AuthHandler::handleRequest",
+  "CodeSize": 20480,
+  "Description": "Handles user authentication requests",
+  "Timeout": 90,
+  "MemorySize": 512,
+  "LastModified": "2023-11-26T08:15:00.000+0000",
+  "CodeSha256": "hJ2K4L6M8N0P2R4T6V8X0Z2A4C6E8G0I2K4M6O8Q0S2U4W6Y8Z0A2C4E6G8I0K2M",
+  "Version": "$LATEST",
+  "TracingConfig": {
+    "Mode": "PassThrough"
+  },
+  "RevisionId": "e1f2g3h4-i5j6-7k8l-9m0n-1o2p3q4r5s6t",
+  "State": "Active",
+  "LastUpdateStatus": "Successful",
+  "PackageType": "Zip"
+}
