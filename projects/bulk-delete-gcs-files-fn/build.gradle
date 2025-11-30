@@ -53,7 +53,7 @@ dependencies {
 
     // Commons library deps
     implementation "com.google.guava:guava:33.0.0-jre"
-    implementation "org.apache.commons:commons-lang3:3.13.0"
+    implementation "org.apache.commons:commons-lang3:3.18.0"
 
     // Logging framework
     implementation "com.google.flogger:flogger:${floggerVersion}"
