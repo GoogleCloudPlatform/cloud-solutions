@@ -17,7 +17,7 @@
 apache-beam = "2.59.0"
 autovalue = "1.11.0"
 flogger = "0.8"
-protobuf = "3.25.3"
+protobuf = "3.25.5"
 truth = "1.4.2"
 spotless-plugin = "6.25.0"
 protobuf-plugin = "0.9.4"
