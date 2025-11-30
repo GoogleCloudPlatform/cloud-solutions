@@ -36,7 +36,7 @@ auto-value-annotations = { group = "com.google.auto.value", name = "auto-value-a
 
 # Kafka
 kafka = { group = "org.apache.kafka", name = "kafka_2.13", version ="3.8.1" }
-kafka-client = { group = "org.apache.kafka", name = "kafka-clients", version ="3.8.1" }
+kafka-client = { group = "org.apache.kafka", name = "kafka-clients", version ="3.9.1" }
 testcontainers-kafka = { group = "org.testcontainers", name = "kafka", version = "1.20.3" }
 
 # Commons
