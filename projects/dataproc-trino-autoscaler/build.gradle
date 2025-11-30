@@ -36,7 +36,7 @@ dependencies {
     compileOnly "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
     annotationProcessor "com.google.auto.value:auto-value:${autoValueVersion}"
     implementation "com.google.api.grpc:proto-google-common-protos:2.32.0"
-    implementation "org.apache.commons:commons-lang3:3.14.0"
+    implementation "org.apache.commons:commons-lang3:3.18.0"
     implementation "com.google.guava:guava:33.0.0-jre"
 
     // Logging framework
