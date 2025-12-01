@@ -53,6 +53,11 @@
       "commitMessagePrefix": "chore(deps): [ungrouped-projects]"
     },
     {
+      "matchFileNames": ["projects/aaa-user-guide/**"],
+      "groupName": "aaa-user-guide",
+      "commitMessagePrefix": "chore(deps): [aaa-user-guide]"
+    },
+    {
       "matchFileNames": ["projects/ai/**"],
       "groupName": "ai",
       "commitMessagePrefix": "chore(deps): [ai]"
@@ -258,11 +263,6 @@
       "matchFileNames": ["projects/unified-secops/**"],
       "groupName": "unified-secops",
       "commitMessagePrefix": "chore(deps): [unified-secops]"
-    },
-    {
-      "matchFileNames": ["projects/user-guide/**"],
-      "groupName": "user-guide",
-      "commitMessagePrefix": "chore(deps): [user-guide]"
     },
     {
       "matchFileNames": ["projects/vision-ai-edge-platform/**"],
