@@ -2,13 +2,13 @@
 
 ## Bucket Analysis Summary
 
-| Bucket Name            | Region           | Total Size | Object Sizes          | File Types                               | Permissions Complexity              | Notes                                                                                  |
-| ---------------------- | ---------------- | ---------- | --------------------- | ---------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------- |
-| engineering-bucket     | `us-east-1`      | 880.0 GiB  | ✅ Mix of GiB and MiB | ✅ Diverse (code, docs, vm images, logs) | Medium (Role-based)                 | ✅ Excellent candidate. In the target region with diverse data and permissions.        |
-| finance-bucket         | `eu-central-1`   | 650.0 GiB  | GiB range             | Financial documents (.xlsx, .pdf, .csv)  | Medium                              | ❌ Not in the target region.                                                           |
-| human-resources-bucket | `ap-southeast-2` | 550.0 GiB  | GiB range             | HR documents (.csv, .zip, .pdf)          | High (Deny policies)                | ❌ Not in the target region. Good candidate for testing complex `Deny` policies later. |
-| legal-bucket           | `sa-east-1`      | 720.0 GiB  | GiB range             | Legal documents (.pdf, .zip, .docx)      | High (Deny policies)                | ❌ Not in the target region. Good candidate for testing complex `Deny` policies later. |
-| marketing-bucket       | `us-west-2`      | 750.0 GiB  | Mix of GiB and MiB    | Marketing materials (.jpg, .pdf, .mp4)   | High (Public, Deny, Specific Roles) | ⚠️ Good candidate for testing complex permissions, but not in the target region.       |
+| Bucket Name            | Region           | Total Size | Object Sizes       | File Types                              | Permissions Complexity              | Notes                                                                               |
+| ---------------------- | ---------------- | ---------- | ------------------ | --------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
+| engineering-bucket     | `us-east-1`      | 880.0 GiB  | Mix of GiB and MiB | Diverse (code, docs, vm images, logs)   | Medium (Role-based)                 | Excellent candidate. In the target region with diverse data and permissions.        |
+| finance-bucket         | `eu-central-1`   | 650.0 GiB  | GiB range          | Financial documents (.xlsx, .pdf, .csv) | Medium                              | Not in the target region.                                                           |
+| human-resources-bucket | `ap-southeast-2` | 550.0 GiB  | GiB range          | HR documents (.csv, .zip, .pdf)         | High (Deny policies)                | Not in the target region. Good candidate for testing complex `Deny` policies later. |
+| legal-bucket           | `sa-east-1`      | 720.0 GiB  | GiB range          | Legal documents (.pdf, .zip, .docx)     | High (Deny policies)                | Not in the target region. Good candidate for testing complex `Deny` policies later. |
+| marketing-bucket       | `us-west-2`      | 750.0 GiB  | Mix of GiB and MiB | Marketing materials (.jpg, .pdf, .mp4)  | High (Public, Deny, Specific Roles) | Good candidate for testing complex permissions, but not in the target region.       |
 
 ## Recommendations for POC Migration
 

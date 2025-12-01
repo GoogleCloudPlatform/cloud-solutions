@@ -2,15 +2,15 @@
 
 ## Container Analysis Summary
 
-| Container Name  | Region          | Total Size | Blob Sizes           | Blob Count | File Types                          | Permissions Complexity | Notes                                                            |
-| --------------- | --------------- | ---------- | -------------------- | ---------- | ----------------------------------- | ---------------------- | ---------------------------------------------------------------- |
-| finance         | `eastus2`       | ~41.2 GB   | ✅ Mix (KB to 100MB) | 4,285      | ✅ Backups (.bak), SQL, XML, Docs   | High (Net Rules)       | ✅ Strongest candidate. Good size mix and region alignment.      |
-| engineering     | `eastus`        | ~1.02 GB   | Mostly Small (KB/MB) | 4,525      | Dev artifacts (.whl, .parquet, .js) | High (Net Rules)       | ✅ Good secondary. Excellent for small-file performance testing. |
-| human-resources | `centralus`     | N/A        | Mix                  | 4,150      | Docs                                | High                   | ❌ Wrong Region.                                                 |
-| legal           | `centralus`     | N/A        | Mix                  | 3,980      | Legal Docs                          | High                   | ❌ Wrong Region.                                                 |
-| marketing       | `canadaeast`    | N/A        | Mix                  | 3,860      | Marketing Assets                    | High                   | ❌ Wrong Region.                                                 |
-| product         | `canadacentral` | N/A        | Mix                  | 3,894      | Product Specs                       | High                   | ❌ Wrong Region.                                                 |
-| sales           | `canadacentral` | N/A        | Mix                  | 4,247      | Sales Data                          | High                   | ❌ Wrong Region.                                                 |
+| Container Name  | Region          | Total Size | Blob Sizes           | Blob Count | File Types                          | Permissions Complexity | Notes                                                         |
+| --------------- | --------------- | ---------- | -------------------- | ---------- | ----------------------------------- | ---------------------- | ------------------------------------------------------------- |
+| finance         | `eastus2`       | ~41.2 GB   | Mix (KB to 100MB)    | 4,285      | Backups (.bak), SQL, XML, Docs      | High (Net Rules)       | Strongest candidate. Good size mix and region alignment.      |
+| engineering     | `eastus`        | ~1.02 GB   | Mostly Small (KB/MB) | 4,525      | Dev artifacts (.whl, .parquet, .js) | High (Net Rules)       | Good secondary. Excellent for small-file performance testing. |
+| human-resources | `centralus`     | N/A        | Mix                  | 4,150      | Docs                                | High                   | Wrong Region.                                                 |
+| legal           | `centralus`     | N/A        | Mix                  | 3,980      | Legal Docs                          | High                   | Wrong Region.                                                 |
+| marketing       | `canadaeast`    | N/A        | Mix                  | 3,860      | Marketing Assets                    | High                   | Wrong Region.                                                 |
+| product         | `canadacentral` | N/A        | Mix                  | 3,894      | Product Specs                       | High                   | Wrong Region.                                                 |
+| sales           | `canadacentral` | N/A        | Mix                  | 4,247      | Sales Data                          | High                   | Wrong Region.                                                 |
 
 ## Recommendations for proof of concept migration
 

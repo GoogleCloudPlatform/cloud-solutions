@@ -4,16 +4,16 @@
 
 | AWS Lambda Function Name  | Critical production system | Code size | Trigger type          | Programming language | External dependencies | Notes                                                                                   |
 | ------------------------- | -------------------------- | --------- | --------------------- | -------------------- | --------------------- | --------------------------------------------------------------------------------------- |
-| my-first-lambda-function  | ❌ No                      | 1064      | API Gateway (HTTP)    | python3.9            | No Layers             | Good for testing the basic migration process, but not a representative workload.        |
-| image-processing-function | ❔ Maybe                   | 5120      | S3                    | nodejs18.x           | No Layers             | Triggered by S3 events, would require setting up Cloud Storage triggers.                |
-| user-auth-service         | ✅ Yes                     | 20480     | API Gateway (HTTP)    | java11               | No Layers             | Critical production system, not suitable for a PoC.                                     |
-| data-aggregator           | ❔ Maybe                   | 3072      | Kinesis               | go1.x                | No Layers             | Triggered by Kinesis stream, would require mapping to a Google Cloud streaming service. |
-| api-gateway-authorizer    | ✅ Yes                     | 1536      | API Gateway (HTTP)    | nodejs16.x           | No Layers             | Good candidate, but focused on authorization logic.                                     |
-| scheduled-backup-task     | ✅ Yes                     | 2048      | EventBridge (assumed) | python3.8            | No Layers             | Critical production task, not suitable for a PoC. Triggered by scheduled events.        |
-| webhook-processor         | ❌ No                      | 1800      | API Gateway (HTTP)    | nodejs18.x           | No Layers             | ✅ Excellent candidate. HTTP-triggered, non-critical, and representative workload.      |
-| iot-data-ingestor         | ❔ Maybe                   | 4096      | IoT Rule (assumed)    | python3.9            | No Layers             | Proprietary trigger (IoT Rule) makes it a complex candidate for a PoC.                  |
-| file-conversion-service   | ❔ Maybe                   | 8192      | S3                    | dotnet6              | No Layers             | Triggered by S3 events, would require setting up Cloud Storage triggers.                |
-| metrics-publisher         | ❔ Maybe                   | 1024      | EventBridge (assumed) | python3.9            | No Layers             | Triggered by scheduled events.                                                          |
+| my-first-lambda-function  | No                         | 1064      | API Gateway (HTTP)    | python3.9            | No Layers             | Good for testing the basic migration process, but not a representative workload.        |
+| image-processing-function | Maybe                      | 5120      | S3                    | nodejs18.x           | No Layers             | Triggered by S3 events, would require setting up Cloud Storage triggers.                |
+| user-auth-service         | Yes                        | 20480     | API Gateway (HTTP)    | java11               | No Layers             | Critical production system, not suitable for a PoC.                                     |
+| data-aggregator           | Maybe                      | 3072      | Kinesis               | go1.x                | No Layers             | Triggered by Kinesis stream, would require mapping to a Google Cloud streaming service. |
+| api-gateway-authorizer    | Yes                        | 1536      | API Gateway (HTTP)    | nodejs16.x           | No Layers             | Good candidate, but focused on authorization logic.                                     |
+| scheduled-backup-task     | Yes                        | 2048      | EventBridge (assumed) | python3.8            | No Layers             | Critical production task, not suitable for a PoC. Triggered by scheduled events.        |
+| webhook-processor         | No                         | 1800      | API Gateway (HTTP)    | nodejs18.x           | No Layers             | Excellent candidate. HTTP-triggered, non-critical, and representative workload.         |
+| iot-data-ingestor         | Maybe                      | 4096      | IoT Rule (assumed)    | python3.9            | No Layers             | Proprietary trigger (IoT Rule) makes it a complex candidate for a PoC.                  |
+| file-conversion-service   | Maybe                      | 8192      | S3                    | dotnet6              | No Layers             | Triggered by S3 events, would require setting up Cloud Storage triggers.                |
+| metrics-publisher         | Maybe                      | 1024      | EventBridge (assumed) | python3.9            | No Layers             | Triggered by scheduled events.                                                          |
 
 ## Recommendations for proof of concept migration
 
