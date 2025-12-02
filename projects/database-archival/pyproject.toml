@@ -24,12 +24,11 @@ dependencies = [
   "google-cloud-logging==3.11.2",
   "pg8000==1.31.5",
   "pymysql==1.1.1",
-  # Leave version blank of these packages for compatibility with apache-airflow.
-  "google-cloud-bigquery",
-  "Flask",
-  "sqlalchemy",
-  "sqlalchemy-pytds",
-  "Werkzeug",
+  "google-cloud-bigquery==3.20.1",
+  "Flask==2.2.5",
+  "sqlalchemy==2.5.1",
+  "sqlalchemy-pytds==0.3.5",
+  "Werkzeug==3.1.4",
 
   # Testing.
   "absl-py==2.1.0",
