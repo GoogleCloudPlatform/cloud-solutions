@@ -89,7 +89,7 @@ Mako==1.3.10
 MarkupSafe==3.0.2
 matplotlib==3.10.0
 matplotlib-inline==0.2.1
-mcp==1.13.1
+mcp==1.23.0
 mediapy==1.2.1
 moviepy==2.2.1
 mpmath==1.3.0
