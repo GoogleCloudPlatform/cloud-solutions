@@ -83,6 +83,11 @@
       "commitMessagePrefix": "chore(deps): [arm-reference-guides]"
     },
     {
+      "matchFileNames": ["projects/awt/**"],
+      "groupName": "awt",
+      "commitMessagePrefix": "chore(deps): [awt]"
+    },
+    {
       "matchFileNames": ["projects/bss-ai-agent-infra/**"],
       "groupName": "bss-ai-agent-infra",
       "commitMessagePrefix": "chore(deps): [bss-ai-agent-infra]"
