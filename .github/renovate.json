@@ -58,6 +58,11 @@
       "commitMessagePrefix": "chore(deps): [aaa-user-guide]"
     },
     {
+      "matchFileNames": ["projects/agentic-customer-engagement-fsi-demo/**"],
+      "groupName": "agentic-customer-engagement-fsi-demo",
+      "commitMessagePrefix": "chore(deps): [agentic-customer-engagement-fsi-demo]"
+    },
+    {
       "matchFileNames": ["projects/ai/**"],
       "groupName": "ai",
       "commitMessagePrefix": "chore(deps): [ai]"
