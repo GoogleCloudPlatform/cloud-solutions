@@ -21,10 +21,13 @@ ARG PROJECT_SUBDIRECTORY=/app
 ENV PROJECT_SUBDIRECTORY=$PROJECT_SUBDIRECTORY
 WORKDIR ${PROJECT_SUBDIRECTORY}
 
-COPY ../../../../requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
+COPY requirements.txt ./
+RUN python3 -m pip install \
+  --no-cache-dir \
+  --require-hashes \
+  -r requirements.txt
 
 ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
-CMD [ "python3 -m unittest discover -s tests -p 'test_*.py'" ]
+CMD [ " \
+  python3 -m unittest discover -s . -p 'test*.py' \
+  " ]

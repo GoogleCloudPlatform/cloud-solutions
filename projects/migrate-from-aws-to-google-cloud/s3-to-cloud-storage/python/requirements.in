@@ -1,5 +1,5 @@
-boto3
-google-genai
-google-generativeai
-pandas
-rich
+boto3==1.40.65
+google-genai==1.48.0
+google-generativeai==0.8.5
+pandas==2.3.3
+rich==14.2.0
