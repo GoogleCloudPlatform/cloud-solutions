@@ -26,19 +26,19 @@ This series provides guidance about the following migration journeys:
 
 - **From AWS compute services to Google Cloud**
     - [Migrate from Amazon EC2 to Compute Engine](https://cloud.google.com/architecture/migrate-amazon-ec2-to-compute-engine)
-    - [Migrate VMware VMs to your Google Cloud VMware Engine private cloud](https://cloud.google.com/architecture/vmware-engine/docs/workloads/howto-migrate-workloads)
+    - [Migrate VMware VMs to your Google Cloud VMware Engine private cloud](https://docs.cloud.google.com/vmware-engine/docs/workloads/howto-migrate-workloads)
     - [Migrate from Amazon Elastic Kubernetes Service (Amazon EKS) Google Kubernetes Engine](https://cloud.google.com/architecture/migrate-amazon-eks-to-gke)
     - [Migrate from AWS Lambda to Cloud Run](https://cloud.google.com/architecture/migrate-aws-lambda-to-cloudrun)
 - **From AWS data storage services to Google Cloud**
     - [Migrate from Amazon S3 to Cloud Storage](https://cloud.google.com/architecture/migrate-amazon-s3-to-cloud-storage)
 - **From AWS database services to Google Cloud**
-    - [Migrate from Amazon RDS and Amazon Aurora for MySQL to MySQL to Cloud SQL for MySQL](https://cloud.google.com/architecture/architecture/migrate-aws-rds-to-sql-mysql)
+    - [Migrate from Amazon RDS and Amazon Aurora for MySQL to MySQL to Cloud SQL for MySQL](https://docs.cloud.google.com/architecture/migrate-aws-rds-to-sql-mysql)
     - [Migrate from Amazon RDS and Amazon Aurora for PostgreSQL to Cloud SQL for PostgreSQL and AlloyDB for PostgreSQL](https://cloud.google.com/architecture/migrate-aws-rds-aurora-to-postgresql)
-    - [Migrate from Amazon RDS for SQL Server to Cloud SQL for SQL Server](https://cloud.google.com/architecture/architecture/migrate-aws-rds-to-clouhttps://cloud.google.com/architecturedsql-for-sqlserver)
-    - [Migrate from Amazon DynamoDB to Spanner](https://cloud.google.com/architecture/spanner/docs/migrating-dynamodb-to-cloud-spanner)
-    - [Migrate from Amazon DynamoDB to Bigtable](https://cloud.google.com/architecture/bigtable/docs/dynamodb-users)
+    - [Migrate from Amazon RDS for SQL Server to Cloud SQL for SQL Server](https://docs.cloud.google.com/architecture/migrate-aws-rds-to-cloudsql-for-sqlserver)
+    - [Migrate from Amazon DynamoDB to Spanner](https://docs.cloud.google.com/spanner/docs/migrating-dynamodb-to-cloud-spanner)
+    - [Migrate from Amazon DynamoDB to Bigtable](https://docs.cloud.google.com/bigtable/docs/dynamodb-users)
 - **From AWS data analytics services to Google Cloud**
-    - [Amazon Redshift to {{bigquery_name_short}} migration](https://cloud.google.com/architecture/bigquery/docs/migration/redshift-overview)
+    - [Amazon Redshift to BigQuery migration](https://docs.cloud.google.com/bigquery/docs/migration/redshift-overview)
 
 ## What's next
 

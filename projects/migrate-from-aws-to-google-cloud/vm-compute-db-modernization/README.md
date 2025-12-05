@@ -429,8 +429,8 @@ Reboot the RDS instance to apply parameter group changes.
     put it in Maintenance Mode/Read-Only) to prevent data loss.
 
     Once the DB promotion is complete, you must update the application
-    configuration to point to the new Cloud SQL instance before restarting
-    the application.
+    configuration to point to the new Cloud SQL instance before restarting the
+    application.
 
 1.  Promote the Migration:
     - Monitor the job status.
@@ -613,7 +613,7 @@ Remove all resources created during this demo.
 1.  Destroy AWS resources:
 
     ```bash
-    terraform destroy -auto-approve
+    terraform destroy -var="aws_user=$AWS_USER" -auto-approve
     ```
 
 1.  Delete Google Cloud resources:
