@@ -166,6 +166,8 @@ These custom commands help you with planning and implementing ADK agents.
 You can find an example implementation of this agent in the
 `projects/build-with-gemini-demo/prototype-adk-agent-sample` directory.
 
+Stop ADK Web server before moving to the next section.
+
 ## Implement features with Gemini CLI
 
 This guide demonstrates how Gemini CLI accelerate feature development within the
@@ -345,6 +347,8 @@ rating to a menu service), and automatic JIRA updates.
     Update the JIRA user story status to Done, add a summary of the changes as a comment.
     ```
 
+Exit from Gemini CLI before moving to the next section.
+
 ## Automate GitHub Pull Requests reviews with Code Review Agent
 
 This section goes over the process of integrating and utilizing Gemini Code
@@ -410,7 +414,7 @@ Return to the Cloud Shell terminal and configure GitHub MCP Server:
 1.  Copy `menu-service` folder into the new project:
 
     ```bash
-    cp -r ~/cloud-solutions/build-with-gemini-demo/gemini-powered-development/menu-service .
+    cp -r ~/cloud-solutions/projects/build-with-gemini-demo/gemini-powered-development/menu-service .
     ```
 
 1.  Set environment variable in the terminal:
@@ -432,6 +436,8 @@ Return to the Cloud Shell terminal and configure GitHub MCP Server:
     ```
 
     Review and approve tools that Gemini CLI requires to complete this task.
+
+Exit from Gemini CLI before moving to the next section.
 
 ### Pull Request Review
 
