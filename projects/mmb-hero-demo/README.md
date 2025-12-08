@@ -917,7 +917,6 @@ In addition to the [requirements](#requirements), you also need the following to
 follow this chapter:
 
 - A Google Cloud project with the `Owner` role.
-- JIRA/Confluence project
 - GitHub account and repository
 - Gemini CLI: Installed and configured. For installation instructions, visit
   [geminicli.com](https://geminicli.com/docs/get-started/deployment/).
@@ -999,7 +998,7 @@ These custom commands help you in both planning and implementing ADK agents.
 1.  Send prompt to create implementation plan:
 
     ```text
-    /plan:new Build a customer support ADK agent that allows users to look up the full details of any ticket using its ID and also provide the ability to return a summary for any selected ticket. Generate 20 sample tickets (each with an ID, title, and description) and use them as an in-memory db.
+    /plan:new Build a customer support ADK agent that allows users to look up the full details of any ticket using its ID and also provide the ability to return a summary for any selected ticket. For summary requests return ticket description. Generate 20 sample tickets (each with an an integer based ID, title, and description) and use them as an in-memory db.
     ```
 
     Review generated plan and request implementation. You can find an example
@@ -1061,78 +1060,14 @@ Stop ADK Web server before moving to the next section.
 
 ### Implement features with Gemini CLI
 
-This guide demonstrates how Gemini CLI accelerate feature development within the
-SDLC. Using Model Context Protocol (MCP) servers, it brings requirements from
-external systems(eg. JIRA, Confluence) into Gemini chat for efficient planning,
-review, and implementation. The workflow covers setup, code generation (adding
-rating to a menu service), and automatic JIRA updates.
+This guide demonstrates how Gemini CLI accelerates feature development within
+the Software Development Lifecycle (SDLC). By leveraging context files and
+natural language prompts, Gemini CLI seamlessly integrates feature requirements
+into the development environment, facilitating efficient planning, review, and
+implementation. The workflow covers initial setup, autonomous code generation
+(specifically, adding a rating feature to a menu service).
 
-#### Prerequisites
-
-1.  For this demo you need to have JIRA and Confluence projects configured.
-    [Sign up](https://www.atlassian.com/try/cloud/signup?bundle=jira-software&edition=free&editionIntent=free).
-
-1.  Create Atlassian API token:
-
-    You will use `API Token Authentication` to configure Atlassian MCP server.
-    [Additional details](https://github.com/sooperset/mcp-atlassian?tab=readme-ov-file#quick-start-guide).
-
-    Go to
-    [API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
-
-    Click `Create API token`, give it a name and save the generated token to set
-    environment variables.
-
-1.  Create new Confluence page:
-
-    ```text
-    Title: Menu-Service: Rating capabilities
-
-    Update Menu-Service to allow users to add ratings for menu items that they order.
-
-    Required Test cases:
-
-    Rating must be an integer value from 1 to 5.
-    Can’t be null.
-    Can’t be empty.
-    Can’t be zero.
-    ```
-
-1.  Create new JIRA user story and assign it to yourself:
-
-    ```text
-    Title: Update Menu service
-
-    Update Menu service: 1. add new fields: description and rating to Menu entity 2. update other dependencies where Menu entity is used in the code, eg MenuResource. 3. Add unit tests for all methods, including new fields.
-
-    Link to Confluence page: https://YOUR-ORG.atlassian.net/wiki/spaces/SD/pages/87785484/Menu-Service+Rating+capabilities
-    ```
-
-#### Prepare the environment for Atlassian integration
-
-1.  Open
-    [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell).
-
-1.  Set environment variables:
-
-    ```bash
-    export USERNAME="your.email@company.com"
-    export JIRA_URL="https://your-company.atlassian.net"
-    export CONFLUENCE_URL="https://your-company.atlassian.net/wiki"
-    ```
-
-    Set value in secure manner, after running this command, paste the token
-    value and hit Enter:
-
-    ```bash
-    read -s ATLASSIAN_API_TOKEN
-    ```
-
-    Export environment variable:
-
-    ```bash
-    export ATLASSIAN_API_TOKEN
-    ```
+#### Setup directory
 
 1.  Change the working directory:
 
@@ -1140,16 +1075,13 @@ rating to a menu service), and automatic JIRA updates.
     cd "$(git rev-parse --show-toplevel)/projects/build-with-gemini-demo/gemini-powered-development/menu-service"
     ```
 
-1.  Review MCP servers configuration in `.gemini/settings.json` - no changes are
-    required for this step.
+#### Generating GEMINI.md file
 
-1.  Update JIRA/Confluence instance in `.gemini/GEMINI.md`:
-
-    ```text
-    JIRA/Confluence instance is your-instance-name.atlassian.net
-    ```
-
-#### Check MCP server configuration
+Context files are a effective way to provide instructional context to the Gemini
+model, eliminating the need to repeat instructions in every prompt. These files,
+which default to the name GEMINI.md, help you define a persona, provide coding
+style guides, or give project-specific instructions to ensure the Gemini's
+responses are accurate and meet your specific requirements.
 
 1.  Run Gemini CLI:
 
@@ -1157,15 +1089,30 @@ rating to a menu service), and automatic JIRA updates.
     gemini
     ```
 
-1.  List configured MCP servers and tools:
+1.  Send the prompt to analyze the project and create a tailored GEMINI.md file:
 
     ```text
-    /mcp
+    /init
     ```
 
-    The output confirms that the `mcp-atlassian` server is configured and ready.
+    Review generated GEMINI.md file.
+
+1.  Send the prompt to load generated file into the context:
+
+    ```text
+    /memory refresh
+    ```
 
 #### Codebase explanation
+
+An onboarding use case is perfect for Gemini CLI because it allows a new
+developer to quickly gain a deep understanding of an existing codebase without
+manual, time-consuming investigation. By running simple commands, a developer
+can prompt Gemini CLI to analyze the repository (using the codebase as context),
+generate high-level summaries of the architecture, explain specific files or
+functions, and create a tailored plan for their first task. This immediate,
+Gemini-powered codebase exploration accelerates time-to-productivity, making the
+new team member effective in minutes rather than days or weeks.
 
 1.  Send the prompt to help you learn the codebase:
 
@@ -1179,7 +1126,16 @@ rating to a menu service), and automatic JIRA updates.
     - Data Flow: Trace the path of a request from the entry point to the database and back.
     ```
 
-#### (Optional) If you did not configure JIRA and Confluence projects
+#### Plan feature implementation
+
+The Gemini CLI accelerates feature development by offering a "plan and
+implement" workflow. For a new feature, a developer can prompt the CLI, which
+then analyzes the codebase and user request to generate a detailed multi-step
+plan. This plan outlines the necessary code changes, new files, and
+modifications, serving as a blueprint. Once the developer approves the plan,
+they execute the implementation command, and the Gemini CLI autonomously carries
+out the planned tasks, significantly reducing the manual effort and accelerating
+requirements to code.
 
 1.  Send prompt with the task requirements:
 
@@ -1198,29 +1154,9 @@ rating to a menu service), and automatic JIRA updates.
     Can’t be zero.
     ```
 
-#### Bring requirements into the context of Gemini CLI session
-
-1.  Send prompt to list assigned JIRA tasks:
-
-    ```text
-    List my JIRA tasks, include name, status and description
-    ```
-
-1.  Send prompt to query context of linked Confluence page:
-
-    ```text
-    What's the context of the confluence page in my JIRA user story?
-    ```
-
-#### Start implementation
-
-1.  Send prompt to create an implementation plan:
-
-    ```text
-    Review the code and prepare the implementation plan. I will approve it before you can start implementation.
-    ```
-
     Review the plan and request to implement the changes.
+
+#### Start feature implementation
 
 1.  Send prompt to start the implementation:
 
@@ -1232,11 +1168,43 @@ rating to a menu service), and automatic JIRA updates.
     issues, for example test validation, multiple iterations might be required
     to fix and re-run until generated code is valid.
 
-1.  Send prompt to update JIRA user story:
+#### SRE Resilience & Availability Audit
+
+This prompt configures the Gemini CLI to act as a Senior Site Reliability
+Engineer, performing a specialized architectural audit that looks beyond
+standard linting to identify structural weaknesses capable of causing system
+outages. It proactively detects hidden risks like missing network timeouts,
+improper resource cleanup, and Single Points of Failure (SPOFs), while
+highlighting tight coupling that prevents graceful degradation. Beyond just
+identifying issues, it delivers actionable remediation strategies, offering
+concrete code refactoring examples and architectural patterns to immediately
+harden your system against runtime availability risks.
+
+1.  Send prompt to start the implementation:
 
     ```text
-    Update the JIRA user story status to Done, add a summary of the changes as a comment.
+    You are a Senior Site Reliability Engineer and System Architect. Analyze this codebase specifically for system resilience and availability.
+
+    Please provide a report covering the following three areas:
+
+    1. **Single Points of Failure (SPOF):**
+    * Identify architectural bottlenecks where the failure of one component (e.g., a specific database connection, a hardcoded external API, a monolithic function, or a singleton service) would bring down the entire application.
+    * Highlight tight coupling that prevents graceful degradation.
+
+    2. **Runtime Availability Risks:**
+    * Analyze the code for patterns that negatively impact uptime, such as:
+        * Missing or aggressive timeouts on network calls.
+        * Lack of retries or exponential backoff strategies.
+        * Synchronous blocking operations in the main execution path.
+        * Improper resource management (memory leaks, unclosed file handles/connections).
+        * Inadequate error handling (swallowing exceptions or crashing ungracefully).
+
+    3. **Remediation & Improvements:**
+    * For every issue identified, provide a specific architectural or code-level recommendation (e.g., implementing Circuit Breakers, introducing caching, decoupling services, or adding health checks).
+    * Provide brief code refactoring examples where applicable.
     ```
+
+    Review recommendations in the generated report.
 
 Exit from Gemini CLI before moving to the next section.
 

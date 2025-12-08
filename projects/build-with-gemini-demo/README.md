@@ -108,7 +108,7 @@ These custom commands help you with planning and implementing ADK agents.
 1.  Send prompt to create implementation plan:
 
     ```text
-    /plan:new Build a customer support ADK agent that allows users to look up the full details of any ticket using its ID and also provide the ability to return a summary for any selected ticket. Generate 20 sample tickets (each with an ID, title, and description) and use them as an in-memory db.
+    /plan:new Build a customer support ADK agent that allows users to look up the full details of any ticket using its ID and also provide the ability to return a summary for any selected ticket. For summary requests return ticket description. Generate 20 sample tickets (each with an an integer based ID, title, and description) and use them as an in-memory db.
     ```
 
     Review generated plan and request implementation. You can find an example
