@@ -27,7 +27,7 @@ To create a similar project:
 **Quick start:**
 
 ```bash
-uvx agent-starter-pack create my-agent-name -a agentic_rag -d agent_engine
+uvx agent-starter-pack create my-agent-name -a adk_base -d agent_engine
 ```
 
 <details>

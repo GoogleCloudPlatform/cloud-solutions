@@ -37,14 +37,12 @@ client = Client()
 # SPECIALIZED TOOLS
 # =========================================
 
-
-async def generate_creative_content(
-    prompt: str, tool_context: ToolContext
-) -> str:
-    """Generates a visual artifact (infographic, slide design) based on the prompt using Gemini 2.5 Flash Image.
+async def generate_image(prompt: str, tool_context: ToolContext) -> str:
+    """Generates an image based on the prompt using Gemini image generation.
 
     Args:
-        prompt: The text description of the image to generate.
+        prompt: A detailed text description of the image to generate. Be specific about
+                style, composition, colors, mood, and any other visual details.
         tool_context: The tool context for saving artifacts.
 
     Returns:
@@ -67,7 +65,7 @@ async def generate_creative_content(
     if not image_bytes:
         return "I'm sorry, I couldn't generate an image for that prompt."
 
-    filename = f"generated_content_{int(time.time() * 1000)}.png"
+    filename = f"generated_image_{int(time.time() * 1000)}.png"
 
     await tool_context.save_artifact(
         filename,
@@ -76,21 +74,39 @@ async def generate_creative_content(
 
     return f"Image generated successfully and saved as '{filename}'."
 
-
 # =========================================
 # AGENT DEFINITION
 # =========================================
 
-# --- Content Agent (Specialist) ---
-content_agent = Agent(
-    name="content_agent",
+# --- Creative Assistant Agent ---
+root_agent = Agent(
+    name="creative_assistant",
     model="gemini-3-pro-preview",
     instruction="""
-    You are a Creative Design Specialist.
-    Your ONLY job is to use `generate_creative_content` to create visuals (slides/infographics).
-    Be descriptive in your prompts to the image tool.
+    You are a friendly and helpful creative assistant. You can have natural conversations
+    with users and help them generate images of any kind.
+
+    When users want to create images, use the `generate_image` tool. You can generate:
+    - Artwork and illustrations (any style: realistic, cartoon, abstract, etc.)
+    - Photos and realistic scenes
+    - Logos and graphics
+    - Infographics and diagrams
+    - Character designs
+    - Landscapes and environments
+    - Product mockups
+    - And much more!
+
+    When generating images, craft detailed prompts that include:
+    - Subject and composition
+    - Style (e.g., photorealistic, watercolor, digital art, oil painting)
+    - Mood and lighting
+    - Colors and visual details
+    - Any specific artistic references if relevant
+
+    Be conversational and helpful. Ask clarifying questions if the user's request is vague.
+    After generating an image, offer to make adjustments or create variations if they'd like.
     """,
-    tools=[generate_creative_content],
+    tools=[generate_image],
 )
 
-app = App(root_agent=content_agent, name="content_app")
+app = App(root_agent=root_agent, name="app")
