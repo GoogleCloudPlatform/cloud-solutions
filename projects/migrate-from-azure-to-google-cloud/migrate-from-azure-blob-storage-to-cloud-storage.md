@@ -125,6 +125,70 @@ such as the following:
 - Azure developer tools
 - The Azure command-line interface
 
+To collect data points such as versioning, encryption, and lifecycle rules, you
+query the Azure Storage account properties. The following example shows how to
+use the [`az storage account blob-service-properties`](https://learn.microsoft.com/cli/azure/storage/account/blob-service-properties?view=azure-cli-latest)
+CLI to query the Azure Storage account properties, to determine if you need to
+enable object versioning or soft delete in Cloud Storage.
+
+``` bash
+AZURE_ACCOUNT = AZURE_ACCOUNT_NAME
+RESOURCE_GROUP = AZURE_RESOURCE_GROUP
+
+az storage account blob-service-properties show \
+  --account-name $AZURE_ACCOUNT \
+  --resource-group $RESOURCE_GROUP \
+  --query "{
+      VersioningEnabled: isVersioningEnabled,
+      SoftDeleteEnabled: deleteRetentionPolicy.enabled,
+      SoftDeleteDays: deleteRetentionPolicy.days,
+      ChangeFeedEnabled: changeFeed.enabled
+  }" \
+  --output table
+```
+
+Where:
+
+- AZURE_ACCOUNT_NAME is the name of the storage account.
+- AZURE_RESOURCE_GROUP is the name of the resource group.
+
+Other properties, such as identity, public network access, and encryption, can
+be found in the Azure Storage account properties, as shown in the following
+example:
+
+``` bash
+az storage account show \
+  --name $AZURE_ACCOUNT \
+  --resource-group $RESOURCE_GROUP \
+  --query "{
+      EncryptionType: encryption.services.blob.keyType,
+      IdentityType: identity.type,
+      PublicNetworkAccess: publicNetworkAccess,
+      MinimumTlsVersion: minimumTlsVersion
+  }" \
+  --output table
+```
+
+After you collect data about the Azure Storage accounts, you collect the list
+of all containers to migrate, and their properties. The
+following example uses the [ac storage container](https://learn.microsoft.com/cli/azure/storage/container?view=azure-cli-latest)
+CLI to list all containers, and extracts specific metadata for public access,
+immutability, and lease state:
+
+```bash
+az storage container list \
+  --account-name $AZURE_ACCOUNT \
+  --auth-mode login \
+  --query "[].{
+      Name: name,
+      PublicAccess: properties.publicAccess,
+      ImmutabilityPolicy: properties.hasImmutabilityPolicy,
+      LegalHold: properties.hasLegalHold,
+      LeaseState: properties.leaseState
+  }" \
+  --output table > container_inventory.txt
+```
+
 To help you avoid issues during the migration, and to help estimate the effort
 needed for the migration, we recommend that you evaluate how Azure Blob Storage
 account features map to similar Cloud Storage bucket features. The following
@@ -168,6 +232,21 @@ following for each object:
 - Blob object storage classes
 - Blob object archiving
 
+The following example shows how to use the [az storage blob](https://learn.microsoft.com/cli/azure/storage/blob?view=azure-cli-latest)
+CLI to query a specific container for a list of its objects, their size and
+storage tier. This inventory is essential for sizing, setting migration
+priorities, and validation (comparing source with destination counts) and
+sizing.
+
+```bash
+az storage blob list \
+  --account-name $AZURE_ACCOUNT \
+  --container-name $CONTAINER \
+  --auth-mode login \
+  --query "[].{Name:name, Size:properties.contentLength, Tier:properties.blobTier}" \
+  --output table > blob_inventory.txt
+```
+
 We also recommend that you gather data about your Azure Blob Storage objects to
 understand how often you and your workloads create, update, and delete Azure
 Blob Storage objects.
@@ -193,6 +272,18 @@ migration from Azure Blob Storage to Cloud Storage. For example, you can use a
 to change the permissions and expiration of shared access signatures (SAS) In
 Azure Blob Storage. In Google Cloud, you cannot change a signed URL after it is
 created.
+
+#### AI-assisted analysis & assessment of collected inventory data
+
+Generative AI can significantly accelerate the assessment and planning phases
+of your migration. By leveraging Gemini, you can analyze large inventories of
+Azure resources, to identify the best candidates for a Proof of Concept (PoC)
+or to generate complex migration manifests.
+ For more information, see [Gemini-powered migrations to Google Cloud](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/gemini-powered-migrations-to-google-cloud).
+
+For example, the [`/azure-blob-storage-poc-selection` Gemini CLI custom command](https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/gemini-powered-migrations-to-google-cloud/.gemini/commands/azure-blob-storage-poc-selection.toml)
+is designed to assist with selecting Azure Blob Storage containers for a
+proof-of-concept.
 
 ### Assess your deployment and operational processes
 
