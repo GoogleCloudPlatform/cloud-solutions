@@ -18,6 +18,8 @@ table.
 This concept is similar to BigTable's age-based
 [Garbage Collection](https://cloud.google.com/bigtable/docs/garbage-collection).
 
-Refer to detailed documentation in [docs/index.md](/docs/index.md).
+Update **2025-12-10**:
 
-Disclaimer: This is not an official Google product.
+This project has been archived. You can still access the code by browsing the
+repository at
+[commit 128f980](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/c68f74144cd399fed2493a8b2776cc876bf8711a/projects/database-archival)
