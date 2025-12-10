@@ -11,6 +11,8 @@ Please generate the code for the application using the following technologies:
 *   **Frontend:** HTML templates using Flask's `render_template` function.
 *   **Styling:** Bootstrap CSS for a clean and responsive user interface.
 
+**Create a new folder for the application.**
+
 The generated application should have the following:
 
 1.  **Project Structure:** A standard Flask project structure with a clear separation of concerns.
