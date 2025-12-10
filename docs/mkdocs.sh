@@ -121,10 +121,7 @@ fi
 ## Activate python virtual environment to install and launch mkdocs
 echo "Installing python requirements to ${VIRTUAL_ENV}"
 pip3 install \
-  --quiet \
-  --exists-action i \
   --require-hashes \
-  --require-virtualenv \
   -r "${SCRIPT_DIR}/requirements.txt"
 
 # Run mkdocs.
