@@ -2,3 +2,5 @@ title: Accelerate software development with Gemini
 
 nav:
   - "Accelerate software development with Gemini": "README.md"
+  - "Scanning and fixing security issues with Gemini CLI and Snyk": "build-with-gemini-demo/security-scan-fix/"
+  - "Automating UI tests with Playwright & Gemini CLI": "build-with-gemini-demo/automating-ui-tests/"
