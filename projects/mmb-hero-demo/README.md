@@ -1137,6 +1137,12 @@ they execute the implementation command, and the Gemini CLI autonomously carries
 out the planned tasks, significantly reducing the manual effort and accelerating
 requirements to code.
 
+For this demo, requirements are sent directly to the Gemini CLI.
+
+Alternatively, you can configure an Atlassian MCP server to pull requirements
+from JIRA/Confluence. Refer to this [page](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo#implement-features-with-gemini-cli)
+for detailed configuration steps.
+
 1.  Send prompt with the task requirements:
 
     ```text
