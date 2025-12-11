@@ -16,8 +16,13 @@ project, or if you would like to contribute to an existing project, see
 
 ---
 
-_The projects in this repository are not an officially supported Google
-products._
+## Note
 
-_All files in this repository are under the
-[Apache License, Version 2.0](LICENSE) unless noted otherwise._
+The projects in this repository are not officially supported Google products and
+are not eligible for the
+[Google Open Source Software Vulnerability Rewards Program](https://bughunters.google.com/open-source-security).
+
+## License
+
+All files in this repository are under the
+[Apache License, Version 2.0](LICENSE) unless noted otherwise.
