@@ -2,6 +2,13 @@
 
 <!-- markdownlint-disable -->
 
+## [1.3.1](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.0...pino-logging-gcp-config-v1.3.1) (2025-12-12)
+
+
+### Bug Fixes
+
+* **deps:** update deps to resolve vulnerability ([d8993e4](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/d8993e4d4b853714725990474918239dd74bdecb))
+
 ## [1.3.0](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.2.0...pino-logging-gcp-config-v1.3.0) (2025-11-13)
 
 
