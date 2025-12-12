@@ -35,7 +35,7 @@ auto-value = { group = "com.google.auto.value", name = "auto-value", version.ref
 auto-value-annotations = { group = "com.google.auto.value", name = "auto-value-annotations", version.ref = "autovalue"}
 
 # Kafka
-kafka = { group = "org.apache.kafka", name = "kafka_2.13", version ="3.8.1" }
+kafka = { group = "org.apache.kafka", name = "kafka_2.13", version ="3.9.1" }
 kafka-client = { group = "org.apache.kafka", name = "kafka-clients", version ="3.9.1" }
 testcontainers-kafka = { group = "org.testcontainers", name = "kafka", version = "1.20.3" }
 
