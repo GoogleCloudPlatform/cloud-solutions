@@ -47,10 +47,11 @@ technical_value: This demo highlights a sophisticated, multi-stage generative AI
   showcasing a powerful application of generative AI for complex creative tasks.
 
 # Demo Attribution
-owner: Tony
+owner: Tony DiGangi
+contributors: Isidro De Loera
 
 # Demo Assets
-demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/keyframe_storyboarding/gemini3_0_keyframe_storyboarding.ipynb
+demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/keyframe_storyboarding/README.md
 artifacts:
   - title: Code Repository
     type: code_repository

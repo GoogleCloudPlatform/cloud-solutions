@@ -39,7 +39,8 @@ technical_value:
   from Google Cloud Storage.
 
 # Demo Attribution
-owner: layolin
+owner: Layolin Jesudhass
+contributors: Isidro De Loera
 
 # Demo Assets
 demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/README.md
