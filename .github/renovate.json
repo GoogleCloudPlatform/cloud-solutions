@@ -20,12 +20,22 @@
   },
   "hostRules": [
     {
+      "timeout": 5000
+    },
+    {
+      "hostType": "github",
+      "timeout": 60000
+    },
+    {
       "enabled": false,
       "hostType": "docker",
       "matchHost": "https://gcr.io",
       "token": "dummy-to-avoid-renovate-errors"
     }
   ],
+  "cacheTtlOverride": {
+    "*": 720
+  },
   "customManagers": [
     {
       "customType": "regex",
