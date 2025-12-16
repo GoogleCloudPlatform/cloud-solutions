@@ -13,50 +13,101 @@
 # limitations under the License.
 
 # File Info
+
 file_type: demo
 
 # Demo Info
+
+# The type of demo.
+# Supported options:
+#    application
+#    blueprint
+#    cloud_console
+#    guided_doc
+#    presentation
+#    prototype
+#    video
 type: application
+
+# The name of the demo.
 title: Virtual Try-On Scale Workflow
-thumbnail_summary:
-  A comprehensive, end-to-end pipeline for generating diverse, photorealistic
-  Virtual Try-On (VTO) images and motion videos using Google's Generative AI
-  models on Vertex AI.
-purpose: This project demonstrates a scalable workflow for fashion e-commerce
-  applications that generates diverse digital models with various demographics,
-  performs high-fidelity virtual garment try-on, adds realistic motion to showcase
-  garments in runway-style videos, and processes inputs at scale from CSV files
-  using Google Cloud Storage.
-business_value: This solution enables fashion e-commerce businesses to showcase
-  their products on a diverse set of digital models, reducing the need for costly
-  and time-consuming photoshoots. It allows for rapid and scalable creation of
-  marketing assets, enhancing online customer experience and engagement.
-technical_value:
-  The demo showcases a multi-model AI pipeline on Vertex AI, utilizing
-  Gemini for orchestration and critique, another Gemini model for image generation,
-  Vertex AI Virtual Try-On for garment transfer, and Veo for video generation. The
-  architecture is designed for scalability with parallel processing and batch inputs
-  from Google Cloud Storage.
+
+# A short description of the demo.
+thumbnail_summary: A comprehensive, end-to-end pipeline for generating diverse, photorealistic Virtual Try-On (VTO) images and motion videos using Google's Generative AI models on Vertex AI.
+
+# [Optional] A summary of the demo's intention. Markdown supported.
+purpose: |
+  This project demonstrates a scalable workflow for fashion e-commerce applications that generates diverse digital models with various demographics, performs high-fidelity virtual garment try-on, adds realistic motion to showcase garments in runway-style videos, and processes inputs at scale from CSV files using Google Cloud Storage.
+
+  Key capabilities demonstrated:
+  * Generate diverse digital models with various demographics
+  * Perform high-fidelity virtual garment try-on
+  * Add realistic motion for runway-style videos
+  * Process batch inputs from CSV files at scale
+  * Leverage Google Cloud Storage for enterprise deployment
+
+# [Optional] A summary of the demo's business value. Markdown supported.
+business_value: |
+  This solution enables fashion e-commerce businesses to showcase their products on a diverse set of digital models, reducing the need for costly and time-consuming photoshoots.
+
+  Key benefits include:
+  * **Cost Savings:** Eliminate 90% of traditional photoshoot expenses
+  * **Speed to Market:** Create marketing assets in hours instead of weeks
+  * **Diversity & Inclusion:** Showcase products on models of all demographics
+  * **Scalability:** Process entire product catalogs automatically
+  * **Customer Engagement:** Increase conversion with personalized experiences
+  * **Global Reach:** Create region-specific marketing content instantly
+
+# [Optional] A summary of the demo's technical value. Markdown supported.
+technical_value: |
+  The demo showcases a multi-model AI pipeline on Vertex AI:
+  * **Multi-Model Orchestra:** Utilizes Gemini for orchestration and critique, specialized models for generation
+  * **Vertex AI Virtual Try-On:** Leverages Google's state-of-the-art garment transfer technology
+  * **Veo Integration:** Incorporates video generation for dynamic content
+  * **Parallel Processing:** Designed for scalability with batch processing capabilities
+  * **Cloud Storage Integration:** Enterprise-ready with GCS for input/output management
+  * **CSV-Based Automation:** Streamlined workflow for bulk processing
 
 # Demo Attribution
+
+# The Googler who owns this demo.
 owner: Layolin Jesudhass
-contributors: Isidro De Loera
+
+# [Optional] Googlers and Moma Teams that contributed to this demo.
+contributors:
+  - Isidro De Loera
 
 # Demo Assets
+
+# A link to instructions on how to use the demo.
 demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/README.md
+
+# [Optional] Assets belonging to the demo.
 artifacts:
+  # Title of the artifact. Must be unique.
   - title: Code Repository
-    type: code_repository
+    # Artifact Type.
+    type: code_repo
+    # Direct URL to the artifact.
     link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/tree/main/projects/ai/gen-media/notebooks/vto_scale_workflow
+
   - title: Jupyter Notebook
     type: colab
     link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/LJ_GenMedia_Workflow.ipynb
 
+# [Optional] Designate an asset as the demo's key asset.
+featured_artifact_title: Jupyter Notebook
+
 # Demo Metadata
+
+# Relevant industries.
 industries:
   - retail
   - media_entertainment
+
+# Products featured by the demo.
 products:
   - vertex_ai
   - cloud_storage
   - generative_ai_on_vertex_ai
+

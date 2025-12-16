@@ -13,55 +13,94 @@
 # limitations under the License.
 
 # File Info
+
 file_type: demo
 
 # Demo Info
+
+# The type of demo.
+# Supported options:
+#    application
+#    blueprint
+#    cloud_console
+#    guided_doc
+#    presentation
+#    prototype
+#    video
 type: application
+
+# The name of the demo.
 title: AI-Powered Product Image Re-contextualization
-thumbnail_summary:
-  A pipeline that uses generative AI to transform standard product photos
-  into realistic, contextualized lifestyle images for e-commerce.
-purpose:
-  This demo showcases an end-to-end workflow for automatically re-contextualizing
-  product images. It takes clean, studio-shot product photos from Google Cloud
-  Storage, uses a powerful generative AI model (Gemini) to place the product into
-  a new, appropriate, and realistic environment, and then uses another AI model
-  to evaluate the quality of the generated image across multiple dimensions like
-  product fidelity, scene realism, and aesthetic quality. The goal is to automate
-  the creation of high-quality lifestyle imagery for marketing and e-commerce at
-  scale.
-business_value:
-  Automates the costly and time-consuming process of lifestyle photoshoots,
-  enabling e-commerce businesses to quickly generate a wide variety of engaging,
-  high-quality marketing images. This can lead to increased customer engagement,
-  higher conversion rates, and a significant reduction in content creation costs.
-technical_value:
-  Demonstrates a scalable, multi-stage AI pipeline on Vertex AI. It
-  leverages parallel processing for both image generation and evaluation tasks.
-  The solution uses different Gemini models for specific tasks an advanced
-  model for image generation and a fast, cost-effective model for detailed, structured
-  evaluation of the output, showcasing a sophisticated, multi-modal AI application.
+
+# A short description of the demo.
+thumbnail_summary: A pipeline that uses generative AI to transform standard product photos into realistic, contextualized lifestyle images for e-commerce.
+
+# [Optional] A summary of the demo's intention. Markdown supported.
+purpose: |
+  This demo showcases an end-to-end workflow for automatically re-contextualizing product images. It takes clean, studio-shot product photos from Google Cloud Storage, uses a powerful generative AI model (Gemini) to place the product into a new, appropriate, and realistic environment, and then uses another AI model to evaluate the quality of the generated image across multiple dimensions like product fidelity, scene realism, and aesthetic quality.
+
+  The goal is to automate the creation of high-quality lifestyle imagery for marketing and e-commerce at scale.
+
+# [Optional] A summary of the demo's business value. Markdown supported.
+business_value: |
+  Automates the costly and time-consuming process of lifestyle photoshoots, enabling e-commerce businesses to quickly generate a wide variety of engaging, high-quality marketing images.
+
+  Key benefits include:
+  * **Reduced Costs:** Eliminate the need for expensive photoshoots and studio setups
+  * **Increased Speed:** Generate hundreds of variations in minutes instead of days
+  * **Enhanced Engagement:** Create diverse, contextual imagery that resonates with different customer segments
+  * **Higher Conversion Rates:** Lifestyle images have been proven to increase purchase intent
+  * **Scalability:** Process entire product catalogs automatically
+
+# [Optional] A summary of the demo's technical value. Markdown supported.
+technical_value: |
+  Demonstrates a scalable, multi-stage AI pipeline on Vertex AI:
+  * **Parallel Processing:** Leverages concurrent execution for both image generation and evaluation tasks
+  * **Multi-Model Architecture:** Uses different Gemini models optimized for specific tasks - an advanced model for image generation and a fast, cost-effective model for detailed evaluation
+  * **Structured Output:** Implements JSON-based evaluation metrics for systematic quality assessment
+  * **Cloud-Native Design:** Built on Google Cloud Storage and Vertex AI for enterprise-scale deployment
 
 # Demo Attribution
+
+# The Googler who owns this demo.
 owner: Layolin Jesudhass
-contributors: Isidro De Loera
+
+# [Optional] Googlers and Moma Teams that contributed to this demo.
+contributors:
+  - Isidro De Loera
 
 # Demo Assets
+
+# A link to instructions on how to use the demo.
 demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/product-recontext/README.md
+
+# [Optional] Assets belonging to the demo.
 artifacts:
+  # Title of the artifact. Must be unique.
   - title: Code Repository
-    type: code_repository
+    # Artifact Type.
+    type: code_repo
+    # Direct URL to the artifact.
     link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/tree/main/projects/ai/gen-media/notebooks/product-recontext
+
   - title: Jupyter Notebook
     type: colab
     link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/product-recontext/LJ_product_recontext.ipynb
 
+# [Optional] Designate an asset as the demo's key asset.
+featured_artifact_title: Jupyter Notebook
+
 # Demo Metadata
+
+# Relevant industries.
 industries:
   - retail
   - media_entertainment
+
+# Products featured by the demo.
 products:
   - vertex_ai
   - cloud_storage
   - generative_ai_on_vertex_ai
   - gemini_api
+

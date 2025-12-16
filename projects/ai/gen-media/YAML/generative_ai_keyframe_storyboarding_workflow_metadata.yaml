@@ -13,57 +13,98 @@
 # limitations under the License.
 
 # File Info
+
 file_type: demo
 
 # Demo Info
+
+# The type of demo.
+# Supported options:
+#    application
+#    blueprint
+#    cloud_console
+#    guided_doc
+#    presentation
+#    prototype
+#    video
 type: application
+
+# The name of the demo.
 title: Generative AI Keyframe Storyboarding Workflow
-thumbnail_summary:
-  Demonstrates a complete animation pre-production workflow using generative
-  AI to transform rough sketches into polished, production-ready keyframes and visual
-  assets.
-purpose:
-  This notebook showcases a 4-section progressive workflow for animation pre-production.
-  It guides users through transforming black-and-white sketches into full-color
-  concept art for characters and settings, generating production-quality keyframes
-  using various techniques (Zero-Shot, AI-assisted Scene Description, and Critique-based
-  Refinement), exploring cinematic variations with different camera angles and lighting,
-  and building a comprehensive scene reference library for storytelling and visual
-  development.
-business_value:
-  For animation studios and visual development artists, this workflow
-  dramatically accelerates the pre-production pipeline. It allows for the rapid
-  exploration of multiple design directions and cinematic shots in minutes rather
-  than days, reducing manual effort and costs. This enables creative teams to iterate
-  more freely, establish a strong visual style early on, and build a rich library
-  of assets for storyboarding, pitching, and production guidance, ultimately leading
-  to a more efficient and creative development process.
-technical_value: This demo highlights a sophisticated, multi-stage generative AI
-  pipeline on Vertex AI using Gemini models. It employs a progressive complexity
-  approach to prompt engineering, from simple zero-shot generation to a multi-step
-  critique-and-refinement loop that simulates a creative director's feedback. The
-  notebook also demonstrates efficient, parallel image generation using asynchronous
-  programming to create numerous visual variations (e.g., 12+ camera angles) quickly,
-  showcasing a powerful application of generative AI for complex creative tasks.
+
+# A short description of the demo.
+thumbnail_summary: Demonstrates a complete animation pre-production workflow using generative AI to transform rough sketches into polished, production-ready keyframes and visual assets.
+
+# [Optional] A summary of the demo's intention. Markdown supported.
+purpose: |
+  This notebook showcases a 4-section progressive workflow for animation pre-production. It guides users through transforming black-and-white sketches into full-color concept art for characters and settings, generating production-quality keyframes using various techniques (Zero-Shot, AI-assisted Scene Description, and Critique-based Refinement), exploring cinematic variations with different camera angles and lighting, and building a comprehensive scene reference library for storytelling and visual development.
+
+  Key learning objectives:
+  * Transform sketches into production-ready concept art
+  * Generate keyframes using multiple AI techniques
+  * Explore cinematic variations systematically
+  * Build comprehensive visual reference libraries
+
+# [Optional] A summary of the demo's business value. Markdown supported.
+business_value: |
+  For animation studios and visual development artists, this workflow dramatically accelerates the pre-production pipeline.
+
+  Key benefits include:
+  * **Speed to Market:** Reduce pre-production time from weeks to hours
+  * **Cost Reduction:** Minimize manual iteration and revision cycles
+  * **Creative Freedom:** Explore multiple design directions quickly
+  * **Early Visualization:** Establish visual style before expensive production begins
+  * **Client Satisfaction:** Present multiple options for rapid approval
+  * **Asset Reusability:** Build libraries for future projects
+
+# [Optional] A summary of the demo's technical value. Markdown supported.
+technical_value: |
+  This demo highlights a sophisticated, multi-stage generative AI pipeline on Vertex AI using Gemini models:
+  * **Progressive Complexity:** Employs incremental prompt engineering from simple zero-shot to multi-step critique loops
+  * **Creative Director Simulation:** Implements AI feedback loops that mimic professional creative review
+  * **Parallel Processing:** Demonstrates asynchronous image generation for creating 12+ variations simultaneously
+  * **Multi-Modal Integration:** Combines text and image inputs for contextual generation
+  * **Quality Control:** Built-in evaluation and refinement mechanisms
 
 # Demo Attribution
+
+# The Googler who owns this demo.
 owner: Tony DiGangi
-contributors: Isidro De Loera
+
+# [Optional] Googlers and Moma Teams that contributed to this demo.
+contributors:
+  - Isidro De Loera
 
 # Demo Assets
+
+# A link to instructions on how to use the demo.
 demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/keyframe_storyboarding/README.md
+
+# [Optional] Assets belonging to the demo.
 artifacts:
+  # Title of the artifact. Must be unique.
   - title: Code Repository
-    type: code_repository
+    # Artifact Type.
+    type: code_repo
+    # Direct URL to the artifact.
     link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/tree/main/projects/ai/gen-media/notebooks/keyframe_storyboarding
+
   - title: Jupyter Notebook
     type: colab
     link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/keyframe_storyboarding/gemini3_0_keyframe_storyboarding.ipynb
 
+# [Optional] Designate an asset as the demo's key asset.
+featured_artifact_title: Jupyter Notebook
+
 # Demo Metadata
+
+# Relevant industries.
 industries:
   - media_entertainment
+
+# Products featured by the demo.
 products:
   - vertex_ai
   - gemini_api
   - generative_ai_on_vertex_ai
+
