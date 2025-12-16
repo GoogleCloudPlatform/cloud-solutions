@@ -1,0 +1,61 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# File Info
+file_type: demo
+
+# Demo Info
+type: application
+title: Virtual Try-On Scale Workflow
+thumbnail_summary:
+  A comprehensive, end-to-end pipeline for generating diverse, photorealistic
+  Virtual Try-On (VTO) images and motion videos using Google's Generative AI
+  models on Vertex AI.
+purpose: This project demonstrates a scalable workflow for fashion e-commerce
+  applications that generates diverse digital models with various demographics,
+  performs high-fidelity virtual garment try-on, adds realistic motion to showcase
+  garments in runway-style videos, and processes inputs at scale from CSV files
+  using Google Cloud Storage.
+business_value: This solution enables fashion e-commerce businesses to showcase
+  their products on a diverse set of digital models, reducing the need for costly
+  and time-consuming photoshoots. It allows for rapid and scalable creation of
+  marketing assets, enhancing online customer experience and engagement.
+technical_value:
+  The demo showcases a multi-model AI pipeline on Vertex AI, utilizing
+  Gemini for orchestration and critique, another Gemini model for image generation,
+  Vertex AI Virtual Try-On for garment transfer, and Veo for video generation. The
+  architecture is designed for scalability with parallel processing and batch inputs
+  from Google Cloud Storage.
+
+# Demo Attribution
+owner: layolin
+
+# Demo Assets
+demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/README.md
+artifacts:
+  - title: Code Repository
+    type: code_repository
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/tree/main/projects/ai/gen-media/notebooks/vto_scale_workflow
+  - title: Jupyter Notebook
+    type: colab
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/LJ_GenMedia_Workflow.ipynb
+
+# Demo Metadata
+industries:
+  - retail
+  - media_entertainment
+products:
+  - vertex_ai
+  - cloud_storage
+  - generative_ai_on_vertex_ai

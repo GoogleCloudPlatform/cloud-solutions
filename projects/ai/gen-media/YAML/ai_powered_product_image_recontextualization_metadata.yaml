@@ -1,0 +1,66 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# File Info
+file_type: demo
+
+# Demo Info
+type: application
+title: AI-Powered Product Image Re-contextualization
+thumbnail_summary:
+  A pipeline that uses generative AI to transform standard product photos
+  into realistic, contextualized lifestyle images for e-commerce.
+purpose:
+  This demo showcases an end-to-end workflow for automatically re-contextualizing
+  product images. It takes clean, studio-shot product photos from Google Cloud
+  Storage, uses a powerful generative AI model (Gemini) to place the product into
+  a new, appropriate, and realistic environment, and then uses another AI model
+  to evaluate the quality of the generated image across multiple dimensions like
+  product fidelity, scene realism, and aesthetic quality. The goal is to automate
+  the creation of high-quality lifestyle imagery for marketing and e-commerce at
+  scale.
+business_value:
+  Automates the costly and time-consuming process of lifestyle photoshoots,
+  enabling e-commerce businesses to quickly generate a wide variety of engaging,
+  high-quality marketing images. This can lead to increased customer engagement,
+  higher conversion rates, and a significant reduction in content creation costs.
+technical_value:
+  Demonstrates a scalable, multi-stage AI pipeline on Vertex AI. It
+  leverages parallel processing for both image generation and evaluation tasks.
+  The solution uses different Gemini models for specific tasks an advanced
+  model for image generation and a fast, cost-effective model for detailed, structured
+  evaluation of the output, showcasing a sophisticated, multi-modal AI application.
+
+# Demo Attribution
+owner: layolin
+
+# Demo Assets
+demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/product-recontext/README.md
+artifacts:
+  - title: Code Repository
+    type: code_repository
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/tree/main/projects/ai/gen-media/notebooks/product-recontext
+  - title: Jupyter Notebook
+    type: colab
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/product-recontext/LJ_product_recontext.ipynb
+
+# Demo Metadata
+industries:
+  - retail
+  - media_entertainment
+products:
+  - vertex_ai
+  - cloud_storage
+  - generative_ai_on_vertex_ai
+  - gemini_api
