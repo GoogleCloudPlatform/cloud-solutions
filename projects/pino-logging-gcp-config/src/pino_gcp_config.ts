@@ -32,7 +32,11 @@ import {
   DIAGNOSTIC_INFO_KEY,
   populateInstrumentationInfo,
 } from '@google-cloud/logging/build/src/utils/instrumentation';
-import * as gax from 'google-gax';
+
+// For some reason eslint does not like imports only used in type definitions
+// https://github.com/eslint-community/eslint-plugin-n/issues/486
+// eslint-disable-next-line n/no-extraneous-import
+import {GoogleAuth} from 'google-gax';
 
 /** Monotonically increasing ID for insertId. */
 const eventId = new EventId();
@@ -88,7 +92,7 @@ export interface GCPLoggingPinoOptions {
    * Optional GoogleAuth - used to override defaults when detecting
    * ServiceContext and project ID from the environment.
    */
-  auth?: gax.GoogleAuth;
+  auth?: GoogleAuth;
 
   /**
    * Optional pino destination stream to be used for any
