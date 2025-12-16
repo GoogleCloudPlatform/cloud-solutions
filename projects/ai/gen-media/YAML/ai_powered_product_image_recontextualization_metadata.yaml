@@ -72,7 +72,7 @@ contributors:
 # Demo Assets
 
 # A link to instructions on how to use the demo.
-demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/product-recontext/README.md
+demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/product-recontext/README.md
 
 # [Optional] Assets belonging to the demo.
 artifacts:
@@ -81,11 +81,11 @@ artifacts:
     # Artifact Type.
     type: code_repo
     # Direct URL to the artifact.
-    link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/tree/main/projects/ai/gen-media/notebooks/product-recontext
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/ai/gen-media/notebooks/product-recontext
 
   - title: Jupyter Notebook
     type: colab
-    link: https://github.com/GoogleCloudPlatform/cloud-solutions-main/blob/main/projects/ai/gen-media/notebooks/product-recontext/LJ_product_recontext.ipynb
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/product-recontext/LJ_product_recontext.ipynb
 
 # [Optional] Designate an asset as the demo's key asset.
 featured_artifact_title: Jupyter Notebook
