@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Use Python 3.13 slim image
-FROM python:3.13-slim
+FROM python:3.13.7
 
 # Set working directory
 WORKDIR /app
@@ -23,11 +23,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    --no-install-recommends \
-    gcc \
-    && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir --require-hashes -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --require-hashes
 
 # Copy application code
 COPY . .

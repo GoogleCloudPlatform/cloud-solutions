@@ -14,4 +14,4 @@
 
 """Constants for the Contextual AI API."""
 
-SOLUTION_TAG = "cloud-solutions/contextual-ai-for-isv-1.0.0"
+SOLUTION_TAG = "cloud-solutions/contextual-ai-for-isv-v1.0.0"

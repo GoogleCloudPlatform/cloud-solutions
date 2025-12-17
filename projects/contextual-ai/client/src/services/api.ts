@@ -42,7 +42,7 @@ export class ApiService {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         headers: {
           'Content-Type': 'application/json',
-          'User-Agent': 'cloud-solutions/contextual-ai-for-isv-1.0.0',
+          'User-Agent': 'cloud-solutions/contextual-ai-for-isv-v1.0.0',
           ...options?.headers,
         },
         ...options,

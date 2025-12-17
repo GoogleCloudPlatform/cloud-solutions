@@ -13,7 +13,7 @@
 # limitations under the License.
 terraform {
   provider_meta "google" {
-    module_name = "cloud-solutions/contextual-ai-for-isv-1.0.0"
+    module_name = "cloud-solutions/contextual-ai-for-isv-v1.0.0"
   }
 }
 

@@ -17,7 +17,7 @@
 export USER_AGENT
 export CURRENT_DIR
 
-USER_AGENT="cloud-solutions/contextual-ai-for-isv-1.0.0"
+USER_AGENT="cloud-solutions/contextual-ai-for-isv-v1.0.0"
 CURRENT_DIR=$(pwd)
 
 echo "Deploying Backend API..."
