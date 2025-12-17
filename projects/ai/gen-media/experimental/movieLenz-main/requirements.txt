@@ -24,7 +24,7 @@ Deprecated==1.2.18
 docstring_parser==0.17.0
 executing==2.2.1
 fastapi==0.121.3
-filelock==3.20.0
+filelock==3.20.1
 fonttools==4.60.2
 frozenlist==1.7.0
 fsspec==2025.10.0
