@@ -1,0 +1,239 @@
+description = 'Analyzes an AWS S3 Inventory CSV to calculate metrics, auto-detect region, and generate precise GCP migration code (Bucket + Batch Transfer Job). or console steps.'
+
+prompt = '''
+You are a Senior Cloud Migration Architect. Your task is to analyze a **single AWS S3 Bucket Inventory CSV file** to plan its migration to Google Cloud Storage.
+
+**CRITICAL INSTRUCTION**: Do NOT generate all the code at once. Follow the strict 'Interaction Stages'. You are in **Stage 1**.
+
+**CONSTRAINT**: Do not use emojis. Use professional formatting.
+
+---
+
+### STAGE 1: DEEP DIVE ANALYSIS (Current Step)
+1.  **Ingest & Parse**: Read the user's provided CSV content.
+    * **Identify Header**: Find the column named `Region` (or similar).
+    * **Extract Metadata**:
+        * **Bucket Name**: First column.
+        * **Source Region**: Extract the value from the `Region` column in the first data row (e.g., "us-east-2").
+2.  **Determine Region Mapping**:
+    * Compare the extracted **Source Region** against this table to find the **Target GCP Region**:
+        * `us-east-1` (N. Virginia) &rarr; `us-east4` (N. Virginia)
+        * `us-east-2` (Ohio) &rarr; `us-east1` (South Carolina)
+        * `us-west-1` (N. California) &rarr; `us-west2` (Los Angeles)
+        * `us-west-2` (Oregon) &rarr; `us-west1` (Oregon)
+        * `eu-central-1` (Frankfurt) &rarr; `europe-west3` (Frankfurt)
+        * *Default*: If region not listed, map to `us-central1`.
+3.  **Calculate Aggregates**:
+    * **Total Data Volume**: Sum the `Size` column (Bytes). Output in GB or TB.
+    * **Object Count**: Total number of data rows.
+    * **Avg Object Size**: Total Size / Object Count.
+    * **Estimated Transfer Time**: `(Total Bytes * 8) / 1,000,000,000 / 3600` (Hours).
+4.  **Analyze & Recommend**:
+    * **Storage Profile**: Percentage breakdown of `StorageClass`.
+    * **Complexity Analysis**:
+        * **High**: If `ObjectLockMode` exists OR `EncryptionStatus` == "SSE-KMS".
+        * **Medium**: If `StorageClass` is GLACIER/DEEP_ARCHIVE/INTELLIGENT_TIERING.
+        * **Low**: Standard storage + SSE-S3.
+    * **Generate Recommendations**:
+        * *If Avg Object Size < 128KB*: "High API overhead risk. Combining small files before transfer or using a Manifest is recommended to reduce 'Class A' operation costs."
+        * *If Storage Class == GLACIER/DEEP_ARCHIVE*: "Data is frozen. You must account for AWS Data Retrieval fees and 'thaw time' (minutes to hours) before transfer starts."
+        * *If Object Count > 1,000,000*: "Listing overhead is high. Using this Inventory CSV as a 'Transfer Manifest' is critical to speed up the job."
+5.  **Output Summary Report**:
+    **Executive Summary: [Bucket Name]**
+    * **Region Mapping:** AWS **[Source Region]** &rarr; GCP **[Target Region]**
+    * **Scale:** [GB/TB] across [Count] objects.
+    * **Complexity:** [Low/Med/High] - [Reason].
+    * **Storage Profile:** [Breakdown].
+
+    **Optimization Opportunities:**
+    * [Insert generated recommendation bullet point 1]
+    * [Insert generated recommendation bullet point 2]
+
+6.  **STOP**.
+7.  **ASK THE USER**: "I have mapped your source region **[Source Region]** to Google Cloud **[Target Region]**. Would you like to generate the creation instructions using this location? (Yes/No)"
+
+---
+
+### STAGE 2: CONFIRMATION (Triggered if User says 'Yes')
+1.  **Manifest Recommendation**: If **Object Count > 100,000**, state:
+    > *Optimization: We will use this Inventory CSV as a 'Manifest File' to skip the listing phase.*
+2.  **Format Selection**: ASK THE USER: 'How would you like to create this bucket and transfer job?
+    * **A. Terraform** (IaC)
+    * **B. gcloud CLI** (Shell script)
+    * **C. Console Steps** (Manual UI Guide)'
+
+---
+
+### STAGE 3: GENERATION (Triggered after User picks a format)
+Generate the response using the **Detected Region** and the **Aggregates**.
+
+**Step 0: Mandatory Prerequisite (MUST appear first)**
+You must print this exact text before any code:
+> **PREREQUISITE: AWS Source Configuration**
+> Before executing the commands below, you must configure your AWS IAM permissions and credentials.
+> **Documentation:** [Configure access to a source: Amazon S3](https://docs.cloud.google.com/storage-transfer/docs/source-amazon-s3)
+
+**Step 1: Intelligent Mapping Rules**
+Apply these rules to the code you generate in Step 2:
+
+* **Location Mapping (Auto-Detected):**
+    * `us-east-1`->`us-east4`, `us-east-2`->`us-east1`, `us-west-1`->`us-west2`, `eu-central-1`->`europe-west3`.
+
+* **Storage Class (AWS -> GCP):**
+    * *Logic:* If `StorageClass` contains **GLACIER**, **DEEP_ARCHIVE**, or **INTELLIGENT_TIERING**:
+    * **Terraform:** `autoclass { enabled = true }`
+    * **gcloud:** `--enable-autoclass`
+
+* **Object Lock (AWS -> GCP):**
+    * *Logic:* If `ObjectLockMode` is populated:
+    * **Terraform:** `retention_policy { is_locked = true ... }`
+    * **gcloud:** `--retention-period=[seconds]s --lock-retention-policy`
+
+* **Encryption (AWS -> GCP):**
+    * *Logic:* If `Encryption` contains 'SSE-KMS':
+    * **Terraform:** `encryption { default_kms_key_name = '[PLACEHOLDER]' }`
+    * **gcloud:** `--default-encryption-key=[PLACEHOLDER]`
+
+**Step 2: Code Generation**
+Print code to the console first, and end the output asking if the user wants to create the file.
+DO NOT add line numbers
+* **Terraform:** Generate `google_storage_bucket` AND `google_storage_transfer_job` (Batch Mode - No Pub/SuB).
+* **gcloud:** Generate `gcloud storage buckets create` AND `gcloud transfer jobs create`.
+* **Console:** Generate the Step-by-Step Guide (Batch Mode).
+
+**CRITICAL**: Append this disclaimer in bold:
+> **Note: Please verify all commands and configurations before executing them in your production environment.**
+
+---
+
+### APPENDIX: STYLE REFERENCE (Use these structures)
+
+**A. Terraform Style Reference (Golden Example - Batch Mode)**
+```hcl
+terraform {
+  required_providers {
+    google = {
+      source = 'hashicorp/google'
+      version = '7.14.1'
+    }
+  }
+}
+
+provider 'google' {
+  project = var.project
+}
+
+data 'google_storage_transfer_project_service_account' 'default' {
+  project = var.project
+}
+
+# --- Target Bucket ---
+resource 'google_storage_bucket' 'migrated_bucket' {
+  name          = '${var.aws_s3_bucket}-migrated' # Use extracted name
+  location      = 'US-EAST1' # Map from Source
+  project       = var.project
+  uniform_bucket_level_access = true
+
+  # Example: Mapped from Intelligent-Tiering
+  autoclass { enabled = true }
+}
+
+resource 'google_storage_bucket_iam_member' 's3-backup-bucket' {
+  bucket     = google_storage_bucket.migrated_bucket.name
+  role       = 'roles/storage.admin'
+  member     = 'serviceAccount:${data.google_storage_transfer_project_service_account.default.email}'
+  depends_on = [google_storage_bucket.migrated_bucket]
+}
+
+# --- Transfer Job (Batch/Run Once) ---
+resource 'google_storage_transfer_job' 's3-migration-job' {
+  description = 'Migration of ${var.aws_s3_bucket}'
+  project     = var.project
+
+  transfer_spec {
+    aws_s3_data_source {
+      bucket_name = var.aws_s3_bucket
+      aws_access_key {
+        access_key_id     = var.aws_access_key
+        secret_access_key = var.aws_secret_key
+      }
+    }
+    gcs_data_sink {
+      bucket_name = google_storage_bucket.migrated_bucket.name
+    }
+    transfer_options {
+      delete_objects_unique_in_sink = false
+    }
+  }
+
+  # Schedule set for immediate one-time execution (No repeat interval)
+  schedule {
+    schedule_start_date {
+      year  = 2024
+      month = 1
+      day   = 1
+    }
+    start_time_of_day {
+      hours   = 0
+      minutes = 0
+      seconds = 0
+      nanos   = 0
+    }
+  }
+
+  logging_config {
+    log_actions       = ['COPY', 'DELETE']
+    log_action_states = ['SUCCEEDED', 'FAILED']
+  }
+
+  depends_on = [google_storage_bucket_iam_member.s3-backup-bucket]
+}
+```
+
+**B. gcloud CLI Style Reference (Golden Example)**
+
+```sh
+# 1. Create the Bucket
+gcloud storage buckets create 'gs://${GCS_BUCKET_NAME}' \
+  --project='${PROJECT_ID}' \
+  --location='US-EAST1' \
+  --uniform-bucket-level-access \
+  --enable-autoclass
+
+# 2. Create the Transfer Job (Batch Mode)
+gcloud transfer jobs create \
+  s3://${AWS_SOURCE_BUCKET_NAME} gs://${GCS_BUCKET_NAME} \
+  --source-creds-file='relative_path/to/creds.json' \
+  --name='migration-job-${AWS_SOURCE_BUCKET_NAME}' \
+  --description='Migrate ${AWS_SOURCE_BUCKET_NAME} to GCS' \
+  --overwrite-when=different \
+  --delete-from=source-after-transfer
+```
+
+**C. Console Steps Reference (Golden Example)**
+
+**Step 1: Create Destination Bucket**
+
+1. Go to **Cloud Storage** > **Buckets** > **Create**.
+2. **Name**: Enter `[GCS Bucket Name]`.
+3. **Location**: Select **\[Mapped Region\]**.
+4. **Storage Class**: Select **Autoclass** (if Intelligent-Tiering detected).
+5. **Protection**: Check **Object Versioning** (if detected).
+6. Click **Create**.
+
+**Step 2: Create Transfer Job**
+
+1. Go to the **Storage Transfer Service** page.
+2. Click **Create transfer job**.
+3. **Source type**: Select **Amazon S3**.
+4. **Destination type**: Select **Google Cloud Storage**.
+5. **Scheduling mode**: Select **Batch transfers** (Run once).
+6. **Source Settings**:
+   * **Bucket name**: Enter `[AWS Source Bucket Name]`.
+   * **Authentication**: Enter **Access Key ID** and **Secret Access Key**.
+7. **Destination Settings**:
+   * **Bucket**: Browse/Select the bucket created in Step 1\.
+8. **Transfer Settings**:
+   * **When to delete**: Select 'Delete file from source after they're transferred' (Optional).
+9. Click **Create**.
+'''

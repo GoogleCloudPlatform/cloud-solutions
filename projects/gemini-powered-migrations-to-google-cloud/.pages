@@ -3,6 +3,7 @@ title: Gemini-powered migrations to Google Cloud
 nav:
   - "Overview": "README.md"
   - Examples:
+      - "Amazon Lambda function selection plan": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-lambda-to-cloud-run-poc-plan/"
       - "Amazon S3 bucket selection": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-s3-poc-selection-us-east/"
+      - "Amazon S3 migration analysis": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-s3-migration-analysis/"
       - "Azure Blob Storage container selection": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/azure-blob-poc-selection-us-east/"
-      - "AWS Lambda function selection plan": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-lambda-to-cloud-run-poc-plan/"
