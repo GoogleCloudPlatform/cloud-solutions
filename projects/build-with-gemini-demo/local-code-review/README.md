@@ -1,4 +1,4 @@
-# Local Code Review with Gemini CLI
+# Interactive code reviews with Gemini CLI
 
 This guide provides a walkthrough for using the Gemini CLI Code Review extension
 to perform a review of local code changes. This extension offers a powerful,

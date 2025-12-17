@@ -2,8 +2,10 @@ title: Accelerate software development with Gemini
 
 nav:
   - "Accelerate software development with Gemini": "README.md"
-  - "Scanning and fixing security issues with Gemini CLI and Snyk": "build-with-gemini-demo/security-scan-fix/"
   - "Automating UI tests with Playwright & Gemini CLI": "build-with-gemini-demo/automating-ui-tests/"
-  - "Local Code Review with Gemini CLI": "build-with-gemini-demo/local-code-review/"
+  - "Automated code reviews with Gemini CLI": "build-with-gemini-demo/automated-code-reviews-with-gemini-cli/"
+  - "Interactive code reviews with Gemini CLI": "build-with-gemini-demo/local-code-review/"
   - "Implementing UI changes with Gemini CLI": "build-with-gemini-demo/ui-changes-implementation/"
   - "Parallel Feature Development with Gemini CLI": "build-with-gemini-demo/parallel-feature-development/"
+  - "Prototype with Gemini CLI": "build-with-gemini-demo/prototype-with-gemini-cli/"
+  - "Scanning and fixing security issues with Gemini CLI and Snyk": "build-with-gemini-demo/security-scan-fix/"
