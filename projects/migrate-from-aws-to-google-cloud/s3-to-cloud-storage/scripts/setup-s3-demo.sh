@@ -41,7 +41,6 @@ configure_environment() {
   echo "[INFO] Configuring environment..."
 
   TIMESTAMP=$(date +%s)
-  BUCKET_NAME="${BUCKET_PREFIX:-s3-migration-demo}-${TIMESTAMP}"
 
   REGION="${AWS_REGION:-us-east-1}"
 
@@ -278,7 +277,6 @@ main() {
   echo "╚════════════════════════════════════════════════════════════╝"
   echo ""
   echo "[SUCCESS] Bucket created: ${BUCKET_NAME}"
-  echo "[INFO] Next: ./get-s3-object-details.sh ${BUCKET_NAME} csv > migration-inventory.csv"
   echo ""
 }
 

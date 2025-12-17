@@ -1,5 +1,0 @@
-boto3>=1.42.6
-google-genai>=1.54.0
-google-generativeai>=0.8.5
-pandas>=2.3.3
-rich>=14.2.0

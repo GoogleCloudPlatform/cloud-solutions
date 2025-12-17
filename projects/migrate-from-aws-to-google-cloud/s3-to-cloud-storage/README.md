@@ -1,202 +1,108 @@
 # Gemini-powered Amazon S3 to Cloud Storage migration recommendations
 
-This document describes the high-level architecture of the Python application
-used to generate Amazon S3 inventory reports for migration. The application has
-a core function for fetching inventory data and an optional function for
-enriching this data with contextual information from the Google Cloud
-Architecture Center
-[Migrate from Amazon S3 to Cloud Storage](https://cloud.google.com/architecture/migrate-amazon-s3-to-cloud-storage).
-
-## Execution Flow
-
-The sequence diagram below illustrates the end-to-end
-execution flow of the application. It visualizes how the script orchestrates
-interactions between the local environment, the AWS S3 CLI for data gathering,
-and Google Vertex AI for generating migration insights.
-
-![sequence diagram](image/sequence-diagram.png)
-
-## Component Breakdown
-
-The Python application is designed with modularity, allowing the optional AI
-recommendation step to be included or skipped based on user configuration.
-
-1.  **Amazon S3 (Data Source)**
-    - **Role:** The primary data source. The application inventories S3 buckets
-      and their objects.
-    - **Data Points:** It gathers detailed configuration for each bucket (e.g.,
-      encryption, versioning, lifecycle rules) and for each object (e.g., size,
-      storage class, last modified date).
-
-1.  **Python Application (Core Logic)**
-    - **Amazon S3 Interaction (`utils.py`):** Uses the `boto3` library to
-      communicate with the AWS SDK. It lists all buckets and their
-      configurations, and for a specified bucket, lists all objects and their
-      versions.
-    - **Web Content Fetching (`web_fetch.py`):** Before generating
-      recommendations, the application fetches external guidance from a Google
-      Cloud Architecture Center URL using the `requests` library. This provides
-      up-to-date context for the migration recommendations.
-    - **AI Recommendation Engine (`gemini.py`):** This is an optional module,
-      skipped if the `--no-gemini-recommendations` flag is used. It uses the
-      `google-genai` library to connect to a Gemini model on Vertex AI. It sends
-      the collected S3 inventory data and the fetched web content to the model
-      to generate a migration plan.
-    - **Orchestration (`s3_inventory.py`):** The main script that coordinates
-      the entire process. It handles command-line arguments, calls the inventory
-      functions, fetches web context, and triggers the AI recommendation
-      generation.
-
-1.  **Outputs**
-    - **CSV Reports:** `bucket_inventory.csv` and
-      `object_inventory_{bucket_name}.csv`. These files contain the raw
-      inventory data and are always generated.
-    - **Markdown Report (`migration_recommendations.md`):** An optional,
-      AI-generated report that provides migration recommendations in a markdown
-      table.
-
-### Implementation Details
-
-| Component           | Technology/Tool            | Interaction/Purpose                                 |
-| :------------------ | :------------------------- | :-------------------------------------------------- |
-| Amazon S3 Inventory | Python (`boto3`, `pandas`) | Lists buckets/objects, gets configs, creates CSVs.  |
-| Web Context         | Python (`requests`)        | Fetches migration guide from Google Cloud URL.      |
-| AI Recommendations  | Python (`google-genai`)    | Generates migration plan using Gemini on Vertex AI. |
-| CLI Interface       | Python (`argparse`)        | Provides a command-line flag to skip AI features.   |
-| Console Output      | Python (`rich`)            | Prints AI recommendations as formatted markdown.    |
-| Configuration       | Python (`config.py`)       | Manages Gemini model name, prompt, and context URL. |
-
-## Sourcing & Context
-
-The guidance for this project is sourced from the Google Cloud Architecture
-Center document:
-[Migrate from Amazon S3 to Cloud Storage](https://cloud.google.com/architecture/migrate-amazon-s3-to-cloud-storage).
-
-This script focuses on the **Assess** phase of the cloud migration framework:
-
-### Key Inventory Data Points
-
-The Gemini recommendations leverage the following key data points to create a
-plan for migrating Amazon S3 artifacts :
-
-- **Server-side encryption** and **IAM** settings.
-- **Cost allocation tags** and **Amazon S3 Object Lock**.
-- **Object versioning** and **Intelligent-Tiering**.
-- **Aggregate statistics** like object size and count, which are used to
-  estimate time and cost.
-
-## Costs
-
-This solution uses billable services from both AWS and Google Cloud. Please be
-aware of the following potential costs:
-
-- **AWS CLI/Python SDK Calls:** The scripts and tools use S3 API calls like
-  `ListAllMyBuckets`, `ListBucket`, `CreateBucket`, `PutObject`, etc. While
-  these are relatively low-cost, they are billable. Review the
-  [Amazon S3 Pricing page](https://aws.amazon.com/s3/pricing/) for details on
-  **Request and Data Retrieval** pricing.
-- **Google Gemini Python SDK Calls (Vertex AI):** The inventory script can call
-  the Gemini API to generate migration recommendations. This is a billable
-  service on **Vertex AI**. Costs are typically based on the amount of data
-  (tokens) sent to and received from the model. Review the
-  [Vertex AI Pricing for Generative AI](https://cloud.google.com/vertex-ai/generative-ai/pricing)
-  to estimate costs based on your usage.
+This project provides a set of Gemini CLI custom commands to accelerate
+assessments and migration of workloads and data from Amazon Web Services (AWS)
+S3 to Google Cloud Storage. The Gemini CLI custom commands use Gemini to analyze
+data, identifying suitable resources for migration, and augmenting traditional
+assessments with AI.
 
 ## Prerequisites
 
 ### AWS Permissions
 
-The full demo setup and cleanup requires the permissions listed in the bullet
-points below.
+To run the inventory extraction script (`s3_inventory_generator.sh`) on your
+source bucket, your AWS User or Role requires the following **Read**
+permissions:
 
-If you only intend to run the `s3_inventory.py` script without the AI
-recommendations based on inventory data, you can use the following minimum
-permissions policy:
+- `s3:ListBucket` (and `s3:ListBucketVersions` or `s3:ListObjectVersions`)
+- `s3:GetBucketLocation`
+- `s3:GetBucket*` (e.g., `GetBucketPolicy`, `GetBucketTagging`,
+  `GetBucketEncryption`)
+- `s3:GetObject` (Required to read object metadata/headers)
+- `s3:GetObjectTagging`
 
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:ListAllMyBuckets",
-                "s3:GetBucketLocation",
-                "s3:ListBucket"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-```
+#### AWS Permissions for Demo Script
 
-### (Optional) Create Sample Bucket and Data
+This demo requires an S3 bucket with objects being setup in order to run the
+custom Gemini commands. This script contains a shell script `setup-s3-demo.sh`
+to create an AWS bucket with objects for demo purposes. Below, are the AWS
+permissions necessary to run `setup-s3-demo.sh`.
 
-The script found in the `s3-to-cloud-storage/scripts` files create AWS buckets
-and objects for demo purposes.
-
-- An AWS user account with permissions to create S3 buckets and manage IAM.
-  While an admin user is simplest for this demo, it is not recommended for
-  production environments. For a least-privilege setup, create an IAM policy
-  with the following permissions and attach it to your user or role:
+- **AWS Permissions:** An AWS user account with **Write** permissions to create
+  resources. Least-privilege policy example:
     - `s3:CreateBucket`
     - `s3:PutBucketTagging`
     - `s3:PutObject`
-    - `s3:ListBucket`
     - `s3:ListAllMyBuckets`
-    - `s3:GetBucketLocation`
-- An AWS Access Key ID and AWS Secret Access Key for your user to run the AWS
-  CLI.
 
-### Google Cloud
+### Google Cloud Permissions
 
-- A Google Cloud project.
-- The Google Cloud SDK (gcloud) or access to the Google Cloud Shell.
-- To create and manage Storage Transfer Service jobs, your user account needs
-  the `Storage Transfer Admin` role (`roles/storagetransfer.admin`).
-- To use the Gemini recommendation feature, your user account needs the
-  `Vertex AI User` role (`roles/aiplatform.user`).
+To execute the migration commands generated by Gemini (creating buckets and
+transfer jobs), ensure your Google Cloud User or Service Account has the
+**Owner** role (`roles/owner`) on the project.
 
-### Local Environment
+### Requirements
 
-- Python 3.6+
-- AWS CLI installed and configured.
+To effectively utilize these instructions, ensure the following are set up:
 
-## Setup
+- **Gemini CLI:** For installation instructions, visit
+  [Gemini CLI Deployment Guide](https://geminicli.com/docs/get-started/deployment/)
+- **AWS CLI:**
+  [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+    1.  Verify AWS CLI version:
 
-### Configure AWS CLI
+        ```sh
+        aws --version
+        ```
 
-First, ensure you have the AWS CLI installed and configured.
+    1.  Configure AWS Credentials:
 
-1.  [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+        ```sh
+        aws configure
+        ```
 
-1.  Verify AWS CLI version:
+        Provide your AWS Access Key ID, Secret Access Key, and default region.
 
-    ```sh
-    aws --version
-    ```
+## Project Setup
 
-1.  Configure AWS Credentials:
+Before running any scripts, you must install the Gemini CLI and clone this
+repository to access the necessary tools and scripts.
 
-    ```sh
-    aws configure
-    ```
-
-    Provide your AWS Access Key ID, Secret Access Key, and default region using
-    a role with the minimum defined roles listed above.
-
-### (Optional) Create Amazon S3 Bucket and Upload Sample Files
-
-The `scripts/setup-s3-demo.sh` script will create an Amazon S3 bucket, generate
-sample files, and upload them.
-
-1.  Navigate to the `scripts` directory:
+1.  **Clone the Repository**:
 
     ```sh
-    cd projects/migrate-from-aws-to-google-cloud/s3-to-cloud-storage/scripts
+    git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git
     ```
 
-1.  Set the environment variables:
+## Prepare Inventory Data
+
+You need an inventory file to run the analysis. Choose one of the following
+options to either generate live data from AWS or use a local sample file.
+
+To test the migration, you need an inventory file containing a list of objects.
+Use the table below to determine which option best fits your environment:
+
+| Option                | Use Case                                                                                    | Requirements                      |
+| :-------------------- | :------------------------------------------------------------------------------------------ | :-------------------------------- |
+| [Option A](#option-a) | **Full Demo Creation:** You want to generate a fresh AWS bucket with test data and scan it. | AWS Credentials                   |
+| [Option B](#option-b) | **Bring Your Own Bucket:** You already have an S3 bucket you want to analyze.               | AWS Credentials & Existing Bucket |
+| [Option C](#option-c) | **Quick Start / No AWS:** You do not have AWS access or want to use the provided mock data. | None                              |
+| [Option D](#option-d) | **Bring Your Own File:** You already have an S3 inventory CSV file generated.               | Existing Inventory CSV            |
+
+### Option A
+
+#### Create & Analyze a New Demo Bucket (Requires AWS Credentials)
+
+Use this option to create a new S3 bucket filled with generated data, and then
+scan it. This is best for a full end-to-end test.
+
+1.  Navigate to the project directory:
+
+    ```sh
+    cd cloud-solutions/projects/migrate-from-aws-to-google-cloud/s3-to-cloud-storage
+    ```
+
+1.  **Set Environment Variables:** Customize the following variables as needed:
 
     ```sh
     export BUCKET_NAME="mmb-$(date +%s)"
@@ -205,93 +111,136 @@ sample files, and upload them.
     export COST_CENTER_TAG="1234"
     ```
 
-1.  Run the script:
+1.  **Run the Setup Script:**
 
     ```sh
-    ./setup-s3-demo.sh
+    ./scripts/setup-s3-demo.sh
     ```
 
     When prompted, enter `yes` to approve the creation of AWS resources.
+    (Proceed to the **Inventory Data Generation** section below).
 
-### Install Python Requirements
-
-The inventory script has Python dependencies.
-
-1.  Navigate to the `python` directory:
+1.  **Run the Script:** Execute the script against the specific AWS bucket you
+    want to analyze (using the variable you exported earlier):
 
     ```sh
-    cd ../python
+    ./scripts/get_bucket_inventory.sh $BUCKET_NAME
     ```
 
-1.  Install the required libraries using pip:
+1.  **Verify Output & Export Variable:** The script will create a file named
+    `${BUCKET_NAME}_inventory.csv`. Run the following to export this file path
+    for the next step:
 
     ```sh
-    pip3 install virtualenv
-    python3 -m venv <your-env>
-    source <your-env>/bin/activate
-    pip3 install -r requirements.txt
+    export INVENTORY_FILE="${BUCKET_NAME}_inventory.csv"
     ```
 
-## Usage: S3 Inventory and Gemini Recommendations
+### Option B
 
-The `s3_inventory.py` script generates an inventory of your S3 buckets and
-objects.
+#### Generate Live AWS Data (Requires AWS Credentials)
 
-### Set Environment Variables
+Use this option if you already have an S3 bucket you want to use for this test.
 
-Set the following environment variables to configure the Gemini client:
-
-```sh
-export GOOGLE_PROJECT_ID="your-gcp-project-id"
-export GOOGLE_REGION="your-gcp-region"
-```
-
-### Run the script
-
-To run the script, execute the following command from within the `python`
-directory:
+1.  **Identify Your Bucket:** Export the name of your existing bucket:
 
 ```sh
-export REPORT_FILE_PATH=/path/to/reports
-python s3_inventory.py
+  export BUCKET_NAME="YOUR AWS BUCKET NAME"
 ```
 
-To run the script without generating Gemini recommendations (to avoid associated
-API costs), use the `--no-gemini-recommendations` flag:
+1.  **Run the Script:** Execute the script against the specific AWS bucket you
+    want to analyze (using the variable you exported earlier):
 
-```sh
-export REPORT_FILE_PATH=/path/to/reports
-python s3_inventory.py --no-gemini-recommendations
-```
+    ```sh
+    ./scripts/get_bucket_inventory.sh $BUCKET_NAME
+    ```
 
-The script generates CSV inventory files for your buckets and objects. If the
-`--no-gemini-recommendations` flag is not used, it will also generate a
-`migration_recommendations.md` file with an AI-powered summary.
+1.  **Verify Output & Export Variable:** The script will create a file named
+    `${BUCKET_NAME}_inventory.csv`. Run the following to export this file path
+    for the next step:
 
-## Configuration
+    ```sh
+    export INVENTORY_FILE="${BUCKET_NAME}_inventory.csv"
+    ```
 
-The `python/config.py` file contains the configuration for the Gemini API. You
-can modify this file to change the following settings:
+### Option C
 
-- `GEMINI_RECOMMENDATION_PROMPT`: The prompt template for generating Gemini
-  recommendations.
-- `GEMINI_MODEL`: The Gemini model to use for generating recommendations.
-- `GEMINI_USER_AGENT`: The user agent to use when making Gemini API calls.
-- `EXTERNAL_CONTEXT_URL`: The URL to fetch external context from for Gemini
-  recommendations.
+#### Use Sample Data (No AWS Environment Required)
+
+Use this option if you do not have an AWS environment. You will use a
+pre-generated sample inventory file.
+
+1.  **Set Environment Variables:**
+
+    ```sh
+    export INVENTORY_FILE="test-data/aws-s3-migration-analysis/SAMPLE-S3_inventory.csv"
+    ```
+
+### Option D
+
+#### Use Your Own Inventory File
+
+Use this option if you have already generated an inventory CSV file from your
+own S3 environment and want to use it for this analysis. If you need to generate
+this file, follow the instructions:
+[Build an inventory of your Amazon S3 buckets](https://docs.cloud.google.com/architecture/migrate-amazon-s3-to-cloud-storage#build_an_inventory_of_your_amazon_s3_buckets)
+
+1.  **Set Environment Variables:**
+
+    ```sh
+    export INVENTORY_FILE="PATH_TO_YOUR_INVENTORY_FILE"
+    ```
+
+## Run the Analysis (Gemini)
+
+Use a Gemini CLI custom command to analyze the object inventory of a Amazon S3
+bucket. The analysis calculates aggregate metrics, assesses migration
+complexity, and generates steps and code for setting up Storage Transfer Service
+to migrate the data to Cloud Storage:
+
+1.  Change the working directory:
+
+    ```bash
+    cd "$(git rev-parse --show-toplevel)/projects/gemini-powered-migrations-to-google-cloud"
+    ```
+
+1.  Run the inventory analysis command within the Gemini CLI:
+
+    ```bash
+    gemini
+    ```
+
+### Execution & Interactive Example
+
+1.  Start Gemini CLI and run the command:
+
+    ```sh
+    /aws-s3-migration-analysis analyze file ${INVENTORY_FILE}
+    ```
+
+    The tool will output a markdown report detailing migration recommendations.
+    [Click here to view a sample of the generated report](../../gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-s3-migration-analysis.md)
+
+Press `Ctrl + C` twice to exit Gemini CLI.
 
 ## Cleanup
 
-To clean up the AWS environment created by the `setup-s3-demo.sh` script, run
-the `cleanup-s3-demo.sh` script from the `scripts` directory.
+### AWS
+
+To delete the AWS bucket resources, run:
 
 ```sh
-
-cd projects/migrate-from-aws-to-google-cloud/s3-to-cloud-storage/scripts
-
-./cleanup-s3-demo.sh <your-bucket-name>
-
+ cd "$(git rev-parse --show-toplevel)/projects/migrate-from-aws-to-google-cloud/s3-to-cloud-storage/scripts/"
+ ./cleanup-aws-s3-demo.sh ${BUCKET_NAME}
 ```
 
 When prompted, enter `DELETE` to confirm the deletion of the S3 bucket and its
 contents.
+
+### Google Cloud
+
+To delete the Storage Bucket and Transfer job, run:
+
+```sh
+
+ ./cleanup-gcp-demo.sh <PROJECT_ID> <BUCKET_NAME> <JOB_NAME>
+```
