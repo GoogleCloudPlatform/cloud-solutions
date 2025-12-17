@@ -30,7 +30,7 @@ classifiers = [
     "License :: OSI Approved :: Apache License 2.0",
     "Operating System :: OS Independent",
 ]
-dependencies = ["sqlalchemy>=2.0,<=2.1"]
+dependencies = ["sqlalchemy==2.0.36"]
 
 [tool.setuptools]
 py-modules = ["sqlalchemy_gcp_sa_auth", "test_sqlalchemy_gcp_sa_auth"]

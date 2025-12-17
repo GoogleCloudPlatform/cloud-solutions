@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3
+FROM python:3.13
 
 ARG PROJECT_SUBDIRECTORY=/app
 ENV PROJECT_SUBDIRECTORY=$PROJECT_SUBDIRECTORY
