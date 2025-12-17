@@ -1,11 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":semanticCommits",
-    ":docker",
-    ":enableVulnerabilityAlertsWithLabel(SECURITY)"
-  ],
+  "extends": ["config:recommended", ":semanticCommits", ":docker"],
   "osvVulnerabilityAlerts": true,
   "dependencyDashboardApproval": true,
   "rangeStrategy": "bump",
@@ -27,6 +22,10 @@
       "timeout": 60000
     }
   ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["SECURITY", "p0"]
+  },
   "customManagers": [
     {
       "customType": "regex",
