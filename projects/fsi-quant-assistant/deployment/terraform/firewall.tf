@@ -16,7 +16,7 @@ resource "google_compute_firewall" "network_allow_ssh" {
   project     = var.project_id
   name        = "agent-vpc-network-allow-ssh"
   network     = google_compute_network.agent_cluster_vpc_network.id
-  description = "Creates firewall rule to allow ssh to the vm"
+  description = "Creates firewall rule to allow ssh to the vm via IAP"
   direction   = "INGRESS"
   allow {
     protocol = "tcp"

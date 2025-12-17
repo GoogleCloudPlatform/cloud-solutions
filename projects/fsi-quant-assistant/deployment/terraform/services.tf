@@ -39,20 +39,10 @@ resource "google_project_service" "secretmanager_googleapis_com" {
   disable_on_destroy = false
 }
 
-resource "google_project_service" "container_googleapis_com" {
-  service            = "container.googleapis.com"
-  disable_on_destroy = false
-}
-
 resource "google_project_service" "aiplatform_googleapis_com" {
   service            = "aiplatform.googleapis.com"
   disable_on_destroy = false
 }
-
-# resource "google_project_service" "beyondcorp_googleapis_com" {
-#   service            = "beyondcorp.googleapis.com"
-#   disable_on_destroy = false
-# }
 
 resource "google_project_service" "iap_googleapis_com" {
   service            = "iap.googleapis.com"
@@ -67,4 +57,37 @@ resource "google_project_service" "cloudresourcemanager_googleapis_com" {
 resource "google_project_service" "servicenetworking_googleapis_com" {
   service            = "servicenetworking.googleapis.com"
   disable_on_destroy = false
+}
+
+resource "google_project_service" "bigquery_googleapis_com" {
+  service            = "bigquery.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "containerscanning_googleapis_com" {
+  service            = "containerscanning.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "vpcaccess_googleapis_com" {
+  service            = "vpcaccess.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "telemetry_googleapis_com" {
+  service            = "telemetry.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "bigqueryconnection_googleapis_com" {
+  service            = "bigqueryconnection.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "bigquerydatatransfer_googleapis_com" {
+  service = "bigquerydatatransfer.googleapis.com"
+}
+
+resource "google_project_service" "alloydb_googleapis_com" {
+  service = "alloydb.googleapis.com"
 }

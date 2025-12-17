@@ -1,0 +1,70 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build-image"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        docker build \
+          --build-arg USE_JAX=${_USE_JAX} \
+          -t "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/${_ARTIFACT_NAME}:$${COMMIT_SHA:-local}" \
+          -t "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/${_ARTIFACT_NAME}:latest" \
+          .
+    dir: "forecast-service"
+
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push-image"
+    args:
+      [
+        "push",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/${_ARTIFACT_NAME}",
+        "--all-tags",
+      ]
+
+  - name: "google/cloud-sdk:alpine"
+    id: "trigger-deploy"
+    entrypoint: "sh"
+    env:
+      - "PROJECT_ID=${PROJECT_ID}"
+      - "REGION=${_REGION}"
+    args:
+      - "-exc"
+      - |
+        if [ "${_TRIGGER_DEPLOY}" = "true" ]; then
+          gcloud builds triggers run forecast-service-deploy \
+            --branch=main \
+            --region=${_REGION} \
+            --project=${PROJECT_ID} \
+            --substitutions _REGION=${_REGION},_MODEL_DISPLAY_NAME=${_MODEL_DISPLAY_NAME},_IMAGE_URI=${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/${_ARTIFACT_NAME}:$${COMMIT_SHA:-local},_USE_TPU=${_USE_JAX}
+        else
+          echo "Skipping deployment trigger because _TRIGGER_DEPLOY is not true"
+        fi
+
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/${_ARTIFACT_NAME}:latest"
+
+options:
+  pool:
+    name: "projects/${PROJECT_ID}/locations/${_REGION}/workerPools/build-pool"
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _REGION: "us-central1"
+  _MODEL_DISPLAY_NAME: "forecast-service-timesfm"
+  _ARTIFACT_NAME: "forecast-service"
+  _USE_JAX: "false"
+  _TRIGGER_DEPLOY: "false"

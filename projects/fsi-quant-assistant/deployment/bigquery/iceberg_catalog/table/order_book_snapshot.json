@@ -1,0 +1,37 @@
+[
+  {
+    "name": "snapshot_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "created",
+    "type": "DATETIME",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "symbol",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "side",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "price",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "quantity",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "order_count",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  }
+]

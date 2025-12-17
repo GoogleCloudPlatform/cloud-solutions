@@ -1,0 +1,52 @@
+[
+  {
+    "name": "ledger_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "created",
+    "type": "DATETIME",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "user_name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "symbol",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "bucket",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "amount",
+    "type": "NUMERIC",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "reason",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "description",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "ref_order_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "ref_fill_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  }
+]

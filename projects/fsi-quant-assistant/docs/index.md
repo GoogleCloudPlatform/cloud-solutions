@@ -1,4 +1,4 @@
-# FSI Quant Assistant
+# FSI Financial Assistant
 
 This demo showcases how customers can make natural language requests for
 sophisticated financial analysis. By combining real-time market data from open
@@ -8,10 +8,10 @@ using the TimesFM forecasting model.
 
 Here are the core functionalities that the repo provides:
 
-- **AI/Infrastructure**: Illustrating the use of AI and GKE infrastructure.
+- **AI/Infrastructure**: Illustrating the use of AI and GCP infrastructure.
 
 - **Deploying** and illustrating the performance and flexibility of open models
-  on GKE: Secure mechanisms for user login and access control.
+  on GCP.
 
 - **ADK**: Showing the ease of using Agent Development Kit (ADK) to build
   powerful financial solutions.
@@ -29,16 +29,15 @@ Here are the core functionalities that the repo provides:
 - Development environment with:
     - [Google Cloud SDK](https://cloud.google.com/sdk) (gcloud CLI)
     - [Terraform](https://www.terraform.io/) (version 1.0+)
-    - [kubectl](https://kubernetes.io/docs/tasks/tools/)
     - [git](https://git-scm.com/)
 - You can also use [Cloud Shell](https://shell.cloud.google.com) which comes
   preinstalled with all required tools.
 - Familiarity with:
-    - [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine)
     - [Terraform](https://www.terraform.io/)
-    - [Kubernetes](https://kubernetes.io/)
 
 ## Getting Started
+
+### Login, initialize terraform state buckets, and apply terraform
 
 ```bash
 # Log in with Application Default Credentials (ADC)
@@ -63,9 +62,8 @@ echo -n 'bucket = "'${BUCKET_NAME}'"' > environment/${TF_BACKEND}
 # Create TF vars file
 echo -n 'project_id = "'${GCP_PROJECT_ID}'"' > terraform.tfvars
 
-# Open up terraform.tfvars and add an entry for your hugging face api key and finnhub api key.
+# Open up terraform.tfvars and add an entry for your finnhub api key. You can get a finnhub api key at https://finnhub.io/.
 project_id = "[YOUR_PROJECT_ID]"
-hugging_face_api_token = "[YOUR_HUGGING_FACE_API_TOKEN]"
 finnhub_api_key = "[YOUR_FINNHUB_API_KEY]"
 
 gcloud services enable \
@@ -77,101 +75,105 @@ terraform plan -var-file ./terraform.tfvars -out=tfplan
 terraform apply tfplan
 
 REGION=$(terraform output -raw region)
-ADK_BUILDER_SERVICE_ACCOUNT_ID=$(terraform output -raw adk_builder_service_account_id)
+CLOUDBUILD_SERVICE_ACCOUNT_ID=$(terraform output -raw cloudbuild_service_account_id)
+ADK_STAGING_BUCKET=$(terraform output -raw adk_staging_bucket)
+```
 
-# Build and push the image for the adk agent application to artifact registry
-cd ../../adk-agent/
+### Create objects in AlloyDB instance
 
+<!-- markdownlint-disable MD013 -->
+```bash
+open -a "Google Chrome" "https://console.cloud.google.com/alloydb/locations/${REGION}/clusters/alloydb-cluster/studio?project=${GCP_PROJECT_ID}"
+```
+<!-- markdownlint-enable MD013 -->
+
+Login to the postgres database using IAM database authentication.
+Copy and paste in order the sql from:
+
+- deployment/postgres/exchange/create.sql
+- deployment/postgres/exchange/cron.sql
+
+into AlloyDB Studio and run it.
+
+### Deploy the services
+
+```bash
+cd ../../
+
+# Build and push the image for the forecast service to artifact registry
 gcloud builds submit \
-    --config=cloudbuild.yaml \
-    --substitutions=_REGION=${REGION},_PROJECT_ID=${GCP_PROJECT_ID} \
+    --config=./forecast-service/cloudbuild-publish.yaml \
+    --substitutions=_REGION=${REGION} \
     --project=${GCP_PROJECT_ID} \
-    --service-account=${ADK_BUILDER_SERVICE_ACCOUNT_ID} \
+    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
     --region=${REGION} \
     .
 
-cd ../deployment/gke/cloud_build
+IMAGE_URI=${REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/finance-bundle/forecast-service:latest
 
-# Create kube service account for adk agent
+# Deploy the forecast service to the model registry and deploy to vertex endpoint
+# The deployment to the vertex endpoint may take many minutes to complete.
 gcloud builds submit \
-    --config="create-service-account.yaml" \
-    --substitutions=_REGION=${REGION},_GCP_SERVICE_ACCOUNT=adk-agent,_KSA_SERVICE_ACCOUNT=adk-agent-ksa,_NAMESPACE=adk-agent-demo \
+    --config=./forecast-service/cloudbuild-deploy.yaml \
+    --substitutions=_REGION=${REGION},_IMAGE_URI=${IMAGE_URI} \
     --project=${GCP_PROJECT_ID} \
-    --service-account=${ADK_BUILDER_SERVICE_ACCOUNT_ID} \
-    --region=${REGION} \
-    --no-source
-
-# Create kube service account for mcp toolbox for databases
-gcloud builds submit \
-    --config="create-service-account.yaml" \
-    --substitutions=_REGION=${REGION},_GCP_SERVICE_ACCOUNT=toolbox-identity,_KSA_SERVICE_ACCOUNT=toolbox-identity-ksa,_NAMESPACE=mcp-toolbox-demo \
-    --project=${GCP_PROJECT_ID} \
-    --service-account=${ADK_BUILDER_SERVICE_ACCOUNT_ID} \
-    --region=${REGION} \
-    --no-source
-
-# Create kube service account for gemma agent
-gcloud builds submit \
-    --config="create-service-account.yaml" \
-    --substitutions=_REGION=${REGION},_GCP_SERVICE_ACCOUNT=gemma-agent,_KSA_SERVICE_ACCOUNT=gemma-agent-ksa,_NAMESPACE=gemma-gke-demo \
-    --project=${GCP_PROJECT_ID} \
-    --service-account=${ADK_BUILDER_SERVICE_ACCOUNT_ID} \
-    --region=${REGION} \
-    --no-source
-
-cd ../mcp-tools-for-databases/
-
-# Apply manifest for mcp toolbox for databases deployment
-gcloud builds submit \
-    --config=../cloud_build/deploy.yaml \
-    --substitutions=_REGION=${REGION} \
-    --project=${GCP_PROJECT_ID} \
-    --service-account=${ADK_BUILDER_SERVICE_ACCOUNT_ID} \
+    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
     --region=${REGION} \
     .
 
-cd ../adk-agent/
-
-# Apply manifest for adk agent deployment
+# Deploy the order service
 gcloud builds submit \
-    --config=../cloud_build/deploy.yaml \
+    --config=./order-service/cloudbuild-deploy.yaml \
     --substitutions=_REGION=${REGION} \
     --project=${GCP_PROJECT_ID} \
-    --service-account=${ADK_BUILDER_SERVICE_ACCOUNT_ID} \
+    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
     --region=${REGION} \
     .
 
-cd ../gemma/
+cd deployment/terraform
 
-# Apply manifest for gemma deployment
+# Update terraform.tfvars and set
+deploy_order_service = true
+
+# Run a plan and apply for the order service cloud run configuration to be applied
+terraform plan -var-file ./terraform.tfvars -out=tfplan
+terraform apply tfplan
+
+# Terraform will create a .env file for the adk agent
+# Deploy the adk agent to agent engine
+cd ../../
+
 gcloud builds submit \
-    --config=../cloud_build/deploy.yaml \
-    --substitutions=_REGION=${REGION} \
+    --config=./adk-agent/cloudbuild-deploy.yaml \
+    --substitutions=_REGION=${REGION},_STAGING_BUCKET=${ADK_STAGING_BUCKET} \
     --project=${GCP_PROJECT_ID} \
-    --service-account=${ADK_BUILDER_SERVICE_ACCOUNT_ID} \
+    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
     --region=${REGION} \
     .
 ```
 
-To update and roll the image used by the adk agent:
+## Clearing old versions
+
+To delete previous versions of the adk agent, run the following:
 
 ```bash
 gcloud builds submit \
-    --config=../cloud_build/rolling-deployment.yaml \
+    --config=./adk-agent/cloudbuild-clear-agents.yaml \
     --substitutions=_REGION=${REGION} \
     --project=${GCP_PROJECT_ID} \
-    --service-account=${ADK_BUILDER_SERVICE_ACCOUNT_ID} \
+    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
+    --region=${REGION} \
+    .
+```
+
+To delete previous versions of the forecast service, run the following:
+
+```bash
+gcloud builds submit \
+    --config=./forecast-service/cloudbuild-clear-models.yaml \
+    --substitutions=_REGION=${REGION} \
+    --project=${GCP_PROJECT_ID} \
+    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
     --region=${REGION} \
     --no-source
 ```
-
-To further configure, use the bastion host:
-
-```bash
-# SSH to compute instance
-gcloud compute ssh --zone "us-central1-c" "adk-agent-vpc-jump-instance" --tunnel-through-iap --project ${GCP_PROJECT_ID}
-```
-
-To install the dependencies required for managing the deployments using the
-compute instance see the install_tools script at
-/deployment/terraform/scripts/install_tools.sh.

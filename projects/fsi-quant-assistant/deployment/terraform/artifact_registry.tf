@@ -12,11 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_artifact_registry_repository" "adk_repo" {
-  repository_id = "adk-repo"
+resource "google_artifact_registry_repository" "finance_bundle" {
+  repository_id = "finance-bundle"
   location      = var.region
   format        = "DOCKER"
-  description   = "ADK repository"
+  description   = "Finance Bundle repository"
+
+  depends_on = [google_project_service.artifactregistry_googleapis_com]
+}
+
+resource "google_artifact_registry_repository" "cloud_run_source_repo" {
+  repository_id = "cloud-run-source-deploy"
+  location      = var.region
+  format        = "DOCKER"
+  description   = "Cloud Run Source Deployments"
 
   depends_on = [google_project_service.artifactregistry_googleapis_com]
 }

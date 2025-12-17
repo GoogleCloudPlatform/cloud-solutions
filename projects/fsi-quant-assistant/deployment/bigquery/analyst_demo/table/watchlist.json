@@ -5,12 +5,12 @@
     "mode": "REQUIRED"
   },
   {
-    "name": "symbol",
+    "name": "user_name",
     "type": "STRING",
     "mode": "REQUIRED"
   },
   {
-    "name": "exchange",
+    "name": "symbol",
     "type": "STRING",
     "mode": "REQUIRED"
   },

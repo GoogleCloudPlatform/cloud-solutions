@@ -13,21 +13,25 @@
 # limitations under the License.
 
 output "mcp_tools_for_databases_uri" {
-  value = var.deploy_mcp_toolbox_for_databases_to_cloud_run ? google_cloud_run_v2_service.toolbox[0].uri : "No instance created"
+  value = google_cloud_run_v2_service.toolbox.uri
 }
 
-output "project_id" {
-  value = var.project_id
+output "order_service_uri" {
+  value = var.deploy_order_service ? google_cloud_run_v2_service.order_service[0].uri : "No instance created"
+}
+
+output "cloudbuild_service_account_id" {
+  value = google_service_account.cloudbuild_service_account.id
+}
+
+output "current_user_email" {
+  value = data.google_client_openid_userinfo.me.email
 }
 
 output "region" {
   value = var.region
 }
 
-output "adk_builder_service_account_id" {
-  value = google_service_account.adk-builder.id
-}
-
-output "default_account" {
-  value = data.google_compute_default_service_account.default.email
+output "adk_staging_bucket" {
+  value = google_storage_bucket.adk_deploy.url
 }

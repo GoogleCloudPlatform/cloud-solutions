@@ -1,0 +1,85 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: "clear-old-models"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        echo "Starting cleanup for ${_MODEL_DISPLAY_NAME} in ${_REGION}..."
+
+        # 1. Get Endpoint ID
+        ENDPOINT_ID=$(gcloud ai endpoints list \
+          --region=${_REGION} \
+          --project=${PROJECT_ID} \
+          --filter="display_name=${_MODEL_DISPLAY_NAME}-endpoint" \
+          --format="value(name)" \
+          --limit=1)
+
+        if [ -z "$$ENDPOINT_ID" ]; then
+          echo "Endpoint not found. Nothing to clean up."
+          exit 0
+        fi
+
+        echo "Found Endpoint ID: $$ENDPOINT_ID"
+
+        # 2. Get deployed model IDs sorted by createTime descending (newest first)
+        # We use gcloud projection to sort the list within the resource
+        # Note: .sort() sorts ascending, so we take the last ones for "newest" or reverse it.
+        # However, gcloud projection 'reverse' might not be supported directly in all versions.
+        # Let's try a safer approach: Get ID and CreateTime, then sort in shell.
+
+        RAW_DATA=$(gcloud ai endpoints describe $$ENDPOINT_ID \
+          --region=${_REGION} \
+          --project=${PROJECT_ID} \
+          --format="json(deployedModels)")
+
+        # Use python one-liner for reliable sorting since gcloud projection can be finicky
+        SORTED_IDS=$(echo "$$RAW_DATA" | python3 -c "import sys, json; models = json.load(sys.stdin).get('deployedModels', []); models.sort(key=lambda x: x.get('createTime', ''), reverse=True); print(' '.join([m['id'] for m in models]))")
+
+        # Convert to array
+        IDS_ARRAY=($$SORTED_IDS)
+        TOTAL_MODELS=${#IDS_ARRAY[@]}
+
+        echo "Found $$TOTAL_MODELS deployed models."
+
+        KEEP_COUNT=${_KEEP_COUNT}
+
+        # 3. Loop through models and undeploy if index >= KEEP_COUNT
+        for (( i=0; i<TOTAL_MODELS; i++ )); do
+          MODEL_ID=${IDS_ARRAY[$i]}
+
+          if [ $i -lt $$KEEP_COUNT ]; then
+            echo "Keeping model $$MODEL_ID (Index $i, Newest)"
+          else
+            echo "Undeploying old model $$MODEL_ID (Index $i)"
+            gcloud ai endpoints undeploy-model $$ENDPOINT_ID \
+              --region=${_REGION} \
+              --project=${PROJECT_ID} \
+              --deployed-model-id=$$MODEL_ID \
+              --quiet
+          fi
+        done
+
+options:
+  pool:
+    name: "projects/${PROJECT_ID}/locations/${_REGION}/workerPools/build-pool"
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _REGION: "us-central1"
+  _MODEL_DISPLAY_NAME: "forecast-service-timesfm"
+  _KEEP_COUNT: "1"

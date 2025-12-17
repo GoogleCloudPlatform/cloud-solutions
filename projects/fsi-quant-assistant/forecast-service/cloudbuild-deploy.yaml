@@ -1,0 +1,123 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: "upload-model"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        MODEL_ID=$(gcloud ai models list --region=${_REGION} --project=${PROJECT_ID} --filter="display_name=${_MODEL_DISPLAY_NAME}" --format="value(name)" --limit=1)
+        if [ -n "$$MODEL_ID" ]; then
+          echo "Found existing model $$MODEL_ID, uploading new version..."
+          gcloud ai models upload \
+            --region=${_REGION} \
+            --parent-model=projects/${PROJECT_ID}/locations/${_REGION}/models/$$MODEL_ID \
+            --display-name=${_MODEL_DISPLAY_NAME} \
+            --version-aliases=default \
+            --container-image-uri=${_IMAGE_URI} \
+            --container-predict-route=/predict \
+            --container-health-route=/health \
+            --container-ports=8080 \
+            --project=${PROJECT_ID}
+        else
+          echo "No existing model found, uploading new model..."
+          gcloud ai models upload \
+            --region=${_REGION} \
+            --display-name=${_MODEL_DISPLAY_NAME} \
+            --container-image-uri=${_IMAGE_URI} \
+            --container-predict-route=/predict \
+            --container-health-route=/health \
+            --container-ports=8080 \
+            --project=${PROJECT_ID}
+        fi
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: "deploy-model"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        ENDPOINT_ID=$(gcloud ai endpoints list --region=${_REGION} --project=${PROJECT_ID} --filter="display_name=${_MODEL_DISPLAY_NAME}-endpoint" --format="value(name)" --limit=1)
+        MODEL_ID=$(gcloud ai models list --region=${_REGION} --project=${PROJECT_ID} --filter="display_name=${_MODEL_DISPLAY_NAME}" --format="value(name)" --limit=1)
+
+        if [ -z "$$ENDPOINT_ID" ]; then
+          echo "Error: Endpoint not found."
+          exit 1
+        fi
+
+        # Get currently deployed model IDs (semicolon separated) and convert to spaces
+        gcloud ai endpoints describe $$ENDPOINT_ID --region=${_REGION} --project=${PROJECT_ID} --format="value(deployedModels.id)" | tr ';' ' ' > old_models.txt
+
+        # Determine machine type based on _USE_TPU
+        if [ "${_USE_TPU}" = "true" ]; then
+          MACHINE_TYPE="${_TPU_MACHINE_TYPE}"
+        else
+          MACHINE_TYPE="${_MACHINE_TYPE}"
+        fi
+
+        # Construct deployment command
+        DEPLOY_ARGS=(gcloud ai endpoints deploy-model "$$ENDPOINT_ID" \
+          --region=${_REGION} \
+          --model=$$MODEL_ID \
+          --display-name=${_MODEL_DISPLAY_NAME} \
+          --machine-type=$$MACHINE_TYPE \
+          --min-replica-count=1 \
+          --traffic-split=0=100 \
+          --project=${PROJECT_ID})
+
+        # Add accelerator args if specified AND NOT using TPU
+        if [ "${_USE_TPU}" != "true" ] && [ -n "${_ACCELERATOR_TYPE}" ]; then
+           DEPLOY_ARGS+=(--accelerator=type=${_ACCELERATOR_TYPE},count=${_ACCELERATOR_COUNT})
+        fi
+
+        echo "Deploying model with args: $${DEPLOY_ARGS[@]}"
+        "$${DEPLOY_ARGS[@]}"
+
+  - name: "google/cloud-sdk:alpine"
+    id: "trigger-cleanup"
+    entrypoint: "sh"
+    env:
+      - "PROJECT_ID=${PROJECT_ID}"
+      - "REGION=${_REGION}"
+    args:
+      - "-exc"
+      - |
+        if [ "${_TRIGGER_CLEANUP}" = "true" ]; then
+          echo "Triggering cleanup of old models..."
+          gcloud builds triggers run forecast-service-clear-old-models \
+            --branch=main \
+            --region=${_REGION} \
+            --project=${PROJECT_ID} \
+            --substitutions _REGION=${_REGION},_MODEL_DISPLAY_NAME=${_MODEL_DISPLAY_NAME}
+        else
+          echo "Skipping cleanup trigger because _TRIGGER_CLEANUP is not true"
+        fi
+
+options:
+  pool:
+    name: "projects/${PROJECT_ID}/locations/${_REGION}/workerPools/build-pool"
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _REGION: "us-central1"
+  _MODEL_DISPLAY_NAME: "forecast-service-timesfm"
+  _IMAGE_URI: ""
+  _MACHINE_TYPE: "n1-standard-4"
+  _USE_TPU: "false"
+  _TPU_MACHINE_TYPE: "ct5lp-hightpu-1t"
+  _ACCELERATOR_TYPE: ""
+  _ACCELERATOR_COUNT: ""
+  _TRIGGER_CLEANUP: "false"

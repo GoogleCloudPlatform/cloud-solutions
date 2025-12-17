@@ -1,0 +1,17 @@
+BEGIN
+  DECLARE max_watermark INT64;
+
+  -- 1. Get the current max snapshot_id
+  SET max_watermark = (
+    SELECT COALESCE(MAX(snapshot_id), 0)
+    FROM `iceberg_catalog.order_book_snapshot`
+  );
+
+  -- 2. Construct and run the query dynamically
+  EXECUTE IMMEDIATE FORMAT("""
+    INSERT INTO `iceberg_catalog.order_book_snapshot`
+    SELECT * FROM EXTERNAL_QUERY("${project_id}.us-central1.alloydb_conn",
+      "SELECT * FROM exchange.order_book_snapshot WHERE snapshot_id > %d");
+  """, max_watermark);
+
+END;

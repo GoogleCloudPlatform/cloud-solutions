@@ -1,0 +1,17 @@
+BEGIN
+  DECLARE max_watermark INT64;
+
+  -- 1. Get the current max ledger_id
+  SET max_watermark = (
+    SELECT COALESCE(MAX(ledger_id), 0)
+    FROM `iceberg_catalog.money_movement`
+  );
+
+  -- 2. Construct and run the query dynamically
+  EXECUTE IMMEDIATE FORMAT("""
+    INSERT INTO `iceberg_catalog.money_movement`
+    SELECT * FROM EXTERNAL_QUERY("${project_id}.us-central1.alloydb_conn",
+      "SELECT * FROM exchange.v_money_movement WHERE ledger_id > %d");
+  """, max_watermark);
+
+END;

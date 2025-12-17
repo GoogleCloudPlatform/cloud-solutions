@@ -1,0 +1,85 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  - name: "ghcr.io/astral-sh/uv:python3.11-alpine"
+    dir: "adk-agent"
+    id: "export-uv-requirements"
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        # Run the uv export command
+        # The output is piped to a file in the workspace
+        echo "Running uv export to generate requirements file..."
+        uv export \
+          --no-hashes \
+          --no-header \
+          --no-dev \
+          --no-emit-project \
+          --no-annotate \
+          > ./financial_analyst/requirements.txt
+
+        echo "Generated requirements file contents:"
+        cat ./financial_analyst/requirements.txt
+        echo "Finished exporting requirements."
+  - name: "python:3.11-slim"
+    dir: "adk-agent"
+    id: "install-adk-and-deploy-agent"
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        # Install the required ADK library globally within the container
+        echo "Installing google-adk..."
+        pip install google-adk
+
+        # Execute the deployment command
+        echo "Starting ADK deployment..."
+        adk deploy agent_engine \
+          --project=${PROJECT_ID} \
+          --region=${_REGION} \
+          --staging_bucket=${_STAGING_BUCKET} \
+          --display_name="${_DISPLAY_NAME}" \
+          --trace_to_cloud \
+          --env_file="./financial_analyst/.agent.env" \
+          ./financial_analyst
+
+    timeout: "1800s" # 30 minutes
+
+  - name: "google/cloud-sdk:alpine"
+    id: "invoke-delete-old-agents"
+    entrypoint: "sh"
+    env:
+      - "PROJECT_ID=${PROJECT_ID}"
+      - "REGION=${_REGION}"
+    args:
+      - "-exc"
+      - |
+        if [ "${_TRIGGER_CLEANUP}" = "true" ]; then
+          gcloud builds triggers run clear-old-adk-agents --branch=main --region=${_REGION} --substitutions _DISPLAY_NAME=$_DISPLAY_NAME
+        else
+          echo "Skipping cleanup trigger because _TRIGGER_CLEANUP is not true"
+        fi
+
+options:
+  pool:
+    name: "projects/${PROJECT_ID}/locations/${_REGION}/workerPools/build-pool"
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _STAGING_BUCKET: "gs://finance-bundle-1001_adk-deploy"
+  _REGION: "us-central1"
+  _DISPLAY_NAME: "finance-bundle"
+  _TRIGGER_CLEANUP: "false"

@@ -63,11 +63,9 @@ async def healthz():
 
 
 if __name__ == "__main__":
-    # Use the PORT environment variable provided by Cloud Run,
-    # or defaulting to 8080
     uvicorn.run(
-        app,
+        "main:app",
         host="0.0.0.0",
-        port=int(os.environ.get("PORT", 8080)),
-        log_config=None,
+        port=int(os.environ.get("PORT", 8000)),
+        reload=True,
     )

@@ -19,7 +19,7 @@ from google.adk import Agent
 from . import prompt
 from .forecasting_tool import perform_forecast
 
-MODEL = "gemini-2.5-pro"
+MODEL = "gemini-2.5-flash"
 
 forecasting_agent = Agent(
     model=MODEL,

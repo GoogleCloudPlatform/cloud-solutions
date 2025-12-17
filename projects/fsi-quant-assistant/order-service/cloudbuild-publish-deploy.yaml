@@ -1,0 +1,60 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build-image"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        docker build \
+          -t "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/order-service:$${COMMIT_SHA:-local}" \
+          -t "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/order-service:latest" \
+          .
+    dir: "order-service"
+
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push-image"
+    args:
+      [
+        "push",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/order-service",
+        "--all-tags",
+      ]
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        if [ "${_TRIGGER_DEPLOY}" = "true" ]; then
+          gcloud run deploy order-service \
+            --image "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/order-service:$${COMMIT_SHA:-local}" \
+            --region "${_REGION}"
+        else
+          echo "Skipping deployment because _TRIGGER_DEPLOY is not true"
+        fi
+
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/finance-bundle/order-service:latest"
+
+options:
+  pool:
+    name: "projects/${PROJECT_ID}/locations/${_REGION}/workerPools/build-pool"
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _REGION: "us-central1"
+  _TRIGGER_DEPLOY: "false"

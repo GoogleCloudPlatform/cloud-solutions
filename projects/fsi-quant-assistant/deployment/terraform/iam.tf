@@ -24,9 +24,9 @@ resource "google_service_account" "toolbox-identity" {
   }
 }
 
-resource "google_service_account" "adk-agent" {
-  account_id   = "adk-agent"
-  display_name = "ADK Agent"
+resource "google_service_account" "order-service" {
+  account_id   = "order-service"
+  display_name = "Order Service"
 
   lifecycle {
     ignore_changes = [
@@ -36,9 +36,9 @@ resource "google_service_account" "adk-agent" {
   }
 }
 
-resource "google_service_account" "adk-builder" {
-  account_id   = "adk-builder"
-  display_name = "ADK Cloud Builder"
+resource "google_service_account" "cloudbuild_service_account" {
+  account_id   = "cloudbuild-sa"
+  display_name = "Cloud Build Service Account"
 
   lifecycle {
     ignore_changes = [
@@ -48,9 +48,9 @@ resource "google_service_account" "adk-builder" {
   }
 }
 
-resource "google_service_account" "gemma-agent" {
-  account_id   = "gemma-agent"
-  display_name = "Gemma Agent"
+resource "google_service_account" "reporting_service_account" {
+  account_id   = "reporting-sa"
+  display_name = "Reporting Service Account"
 
   lifecycle {
     ignore_changes = [
@@ -60,17 +60,15 @@ resource "google_service_account" "gemma-agent" {
   }
 }
 
-resource "google_service_account" "terraform-runner" {
-  account_id   = "terraform-runner"
-  display_name = "Terraform Runner"
-
-  lifecycle {
-    ignore_changes = [
-      description,
-      display_name
-    ]
-  }
+resource "google_project_service_identity" "vertex_ai_sa" {
+  provider = google-beta
+  project  = var.project_id
+  service  = "aiplatform.googleapis.com"
 }
 
 data "google_compute_default_service_account" "default" {
+}
+
+locals {
+  cloudbuild_service_account = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
 }

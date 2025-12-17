@@ -1,1 +1,4 @@
 toolbox
+
+# Ignore untemplated tools.yaml
+tools.yaml

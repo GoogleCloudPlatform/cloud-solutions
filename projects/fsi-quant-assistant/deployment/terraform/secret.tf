@@ -25,21 +25,77 @@ resource "google_secret_manager_secret" "tools" {
 resource "google_secret_manager_secret_version" "tools_version" {
   secret = google_secret_manager_secret.tools.id
   secret_data = templatefile("../../mcp-toolbox/tools.yaml.tftpl", {
-    project_id = var.project_id,
+    project_id       = var.project_id,
+    region           = var.region
+    alloydb_cluster  = google_alloydb_cluster.default.cluster_id
+    alloydb_instance = google_alloydb_instance.default.instance_id,
+    alloydb_database = "postgres",
+    alloydb_user     = google_alloydb_user.toolbox_iam_user.user_id
   })
 }
 
-resource "google_secret_manager_secret" "hugging_face_api_token" {
-  secret_id = "hf_api_token"
+data "google_secret_manager_regional_secret_version_access" "gitlab_api_token_secret" {
+  count      = var.deploy_cloud_build_triggers ? 1 : 0
+  secret     = "cloudbuild-gitlab-1762979946127-api-access-token"
+  location   = var.region
+  depends_on = [google_project_service.secretmanager_googleapis_com]
+}
 
-  replication {
-    auto {}
+data "google_secret_manager_regional_secret_version_access" "gitlab_read_token_secret" {
+  count      = var.deploy_cloud_build_triggers ? 1 : 0
+  secret     = "cloudbuild-gitlab-1762979946127-read-api-access-token"
+  location   = var.region
+  depends_on = [google_project_service.secretmanager_googleapis_com]
+}
+
+data "google_secret_manager_regional_secret_version_access" "gitlab_webhook_secret" {
+  count      = var.deploy_cloud_build_triggers ? 1 : 0
+  secret     = "cloudbuild-gitlab-1762979946127-webhook-secret"
+  location   = var.region
+  depends_on = [google_project_service.secretmanager_googleapis_com]
+}
+
+resource "google_secret_manager_regional_secret_iam_member" "gitlab_api_token_secret-secretAccessor" {
+  count     = var.deploy_cloud_build_triggers ? 1 : 0
+  secret_id = data.google_secret_manager_regional_secret_version_access.gitlab_api_token_secret[0].name
+  role      = "roles/secretmanager.secretAccessor"
+  member    = local.cloudbuild_service_account
+
+  lifecycle {
+    ignore_changes = [
+      secret_id
+    ]
   }
 
   depends_on = [google_project_service.secretmanager_googleapis_com]
 }
 
-resource "google_secret_manager_secret_version" "hugging_face_api_token_version" {
-  secret      = google_secret_manager_secret.hugging_face_api_token.id
-  secret_data = var.hugging_face_api_token
+resource "google_secret_manager_regional_secret_iam_member" "gitlab_read_token_secret-secretAccessor" {
+  count     = var.deploy_cloud_build_triggers ? 1 : 0
+  secret_id = data.google_secret_manager_regional_secret_version_access.gitlab_read_token_secret[0].name
+  role      = "roles/secretmanager.secretAccessor"
+  member    = local.cloudbuild_service_account
+
+  lifecycle {
+    ignore_changes = [
+      secret_id
+    ]
+  }
+
+  depends_on = [google_project_service.secretmanager_googleapis_com]
+}
+
+resource "google_secret_manager_regional_secret_iam_member" "gitlab_webhook_secret-secretAccessor" {
+  count     = var.deploy_cloud_build_triggers ? 1 : 0
+  secret_id = data.google_secret_manager_regional_secret_version_access.gitlab_webhook_secret[0].name
+  role      = "roles/secretmanager.secretAccessor"
+  member    = local.cloudbuild_service_account
+
+  lifecycle {
+    ignore_changes = [
+      secret_id
+    ]
+  }
+
+  depends_on = [google_project_service.secretmanager_googleapis_com]
 }

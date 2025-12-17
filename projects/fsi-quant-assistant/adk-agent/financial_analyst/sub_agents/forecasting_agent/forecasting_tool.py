@@ -16,145 +16,56 @@
 
 import logging
 import os
-import sys
-from typing import Any, List, Literal
+from typing import List
 
 import numpy as np
 import pandas as pd
-import timesfm
-import torch
+from google.cloud import aiplatform
 
-# Conditionally import torch_xla only on Linux
-_has_tpu = False
-if sys.platform == "linux":
-    try:
-        import torch_xla.core.xla_model as xm
-
-        # Check if an XLA device is actually available
-        if xm.xla_device():
-            _has_tpu = True
-            logging.debug("TPU found")
-        else:
-            logging.debug("TPU not found")
-    except (ImportError, RuntimeError):
-        # The import failed, so _has_tpu remains False
-        pass
-    except OSError:
-        # Handle potential exceptions during device check
-        pass
-
-MODEL_200M = "timesfm-1.0-200m-pytorch"
-MODEL_500M = "timesfm-2.0-500m-pytorch"
-
-
-def get_device() -> Literal["cpu", "gpu", "tpu"]:
-    """
-    Determines the available compute device.
-
-    Checks for TPU, then GPU (CUDA), and defaults to CPU.
-
-    :return: A literal string "cpu", "gpu", or "tpu".
-    """
-    # Check for TPU using the flag.
-    if _has_tpu:
-        return "tpu"
-
-    if torch.cuda.is_available():
-        return "gpu"
-
-    return "cpu"
+aiplatform.init(
+    project=os.getenv("GOOGLE_CLOUD_PROJECT"),
+    location=os.getenv("GOOGLE_CLOUD_LOCATION"),
+)
 
 
 def perform_forecast(
-    input_data: List[float], horizon_length: int = 7, context_frequency: int = 0
-) -> List[Any]:
+    historical_values: List[float],
+    horizon_length: int = 7,
+    context_frequency: int = 0,
+):
     """
-    Perform a forecast using the TimesFM model.
+    Generates a time-series forecast using the TimesFM model on Vertex AI.
 
-    This function loads the pre-trained TimesFM model and uses it to predict
-    the next `horizon_length` values based on the provided `input_data`.
+    Args:
+        historical_values: A list of numerical data points (floats/ints)
+            representing past history.
+        horizon_length: How many future time steps to predict (default is 5).
 
-    :param input_data: A list of historical data points.
-        The last `context_length` points will be used as
-        context for the forecast.
-    :param horizon_length: The number of future data points to predict.
-    :param context_frequency: The frequency of each context time series.
-    :return: A list containing the forecasted values.
+    Returns:
+        An array containing the forecast predictions.
     """
 
     logging.debug(
         "perform_forecast function called with parameters: "
         "input_data=%s, horizon_length=%s, context_frequency=%s",
-        input_data,
+        historical_values,
         horizon_length,
         context_frequency,
     )
 
-    forecast_context_length = len(
-        input_data
-    )  # The number of past data points to use as context.
+    endpoint_id = os.getenv("FORECAST_MODEL_ENDPOINT_ID")
+    endpoint = aiplatform.Endpoint(endpoint_name=endpoint_id)
 
-    model = os.getenv("MODEL_ID", "timesfm-2.0-500m-pytorch")
+    instances = [{"input": historical_values, "horizon": horizon_length}]
 
-    device = get_device()
-    logging.debug("device=%s, model=%s", device, model)
+    try:
+        response = endpoint.predict(instances=instances)
+        forecast_values = response.predictions
+        logging.debug("forecast_values=%s", forecast_values)
+        return forecast_values
 
-    # 1. Load the pre-trained TimesFM model
-    if model == MODEL_200M:
-        # The model is loaded onto the CPU.
-        # If a GPU is available, 'cpu' can be changed to 'cuda'.
-        tfm = timesfm.TimesFm(
-            hparams=timesfm.TimesFmHparams(
-                backend=device,
-                # per_core_batch_size=32,
-                horizon_len=horizon_length,
-                # input_patch_len=32,
-                # output_patch_len=128,
-                num_layers=20,
-                # model_dims=1280,
-                use_positional_embedding=False,
-            ),
-            checkpoint=timesfm.TimesFmCheckpoint(
-                huggingface_repo_id=f"google/{MODEL_200M}"
-            ),
-        )
-    elif model == MODEL_500M:
-        tfm = timesfm.TimesFm(
-            hparams=timesfm.TimesFmHparams(
-                backend=device,
-                per_core_batch_size=32,
-                horizon_len=horizon_length,
-                num_layers=50,
-                use_positional_embedding=False,
-            ),
-            checkpoint=timesfm.TimesFmCheckpoint(
-                huggingface_repo_id=f"google/{MODEL_500M}"
-            ),
-        )
-    else:
-        raise ValueError(
-            f"Unsupported or unknown MODEL_ID: {model}. "
-            "Please set the environment variable to a valid model."
-        )
-
-    # The context is the last `context_length` points of the input data.
-    context_data = np.array(input_data[-forecast_context_length:])
-
-    # 3. Set up the evaluation data format
-    forecast_input = [
-        context_data,
-        [context_frequency] * forecast_context_length,
-    ]
-
-    # 4. Run the forecast
-    point_forecast, _ = tfm.forecast(forecast_input)
-
-    # 5. Extract and return the forecast
-    forecast_values = point_forecast[0].tolist()
-
-    logging.debug("forecast_values=%s", forecast_values)
-
-    return forecast_values
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        return {"error": f"Failed to invoke Vertex AI endpoint: {str(e)}"}
 
 
 if __name__ == "__main__":
@@ -163,7 +74,7 @@ if __name__ == "__main__":
 
     # Define the context and horizon lengths for the forecast
     context_length = 21  # Use the last 21 days of data
-    horizon_days = 7  # Predict the next 14 days
+    horizon_days = 7  # Predict the next 7 days
 
     historical_dates = pd.to_datetime(
         pd.date_range(end="2025-07-29", periods=context_length, freq="D")
@@ -183,7 +94,7 @@ if __name__ == "__main__":
     )
 
     forecast_result = perform_forecast(
-        input_data=sample_input_data,
+        historical_values=sample_input_data,
         horizon_length=horizon_days,
     )
 

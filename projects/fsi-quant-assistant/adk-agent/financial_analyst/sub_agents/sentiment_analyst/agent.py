@@ -14,26 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
-from google.adk.agents import LlmAgent
-from google.adk.models.lite_llm import LiteLlm
+from google.adk import Agent
 
 from . import prompt
 
-api_base_url = os.getenv("SENTIMENT_MODEL_API_BASE_URL")
-print(f"The SENTIMENT_MODEL_API_BASE_URL is {api_base_url}")
+MODEL = "gemini-2.5-pro"
 
-model_name_at_endpoint = os.getenv(
-    "SENTIMENT_MODEL_NAME", "huggingface/google/gemma-3-1b-it"
-)
-print(f"The SENTIMENT_MODEL_NAME is {model_name_at_endpoint}")
-
-sentiment_agent = LlmAgent(
-    model=LiteLlm(
-        model=model_name_at_endpoint,
-        api_base=api_base_url,
-    ),
+sentiment_agent = Agent(
+    model=MODEL,
     name="sentiment_agent",
     instruction=prompt.SENTIMENT_ANALYST_PROMPT,
     output_key="sentiment_analysis_output",

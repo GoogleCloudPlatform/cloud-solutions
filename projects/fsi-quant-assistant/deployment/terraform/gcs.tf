@@ -22,3 +22,24 @@ resource "google_storage_bucket" "cloudbuild_logs" {
 data "google_storage_bucket" "tf_state_bucket" {
   name = "${var.project_id}-tf-state"
 }
+
+resource "google_storage_bucket" "adk_deploy" {
+  name                        = "${var.project_id}_adk-deploy"
+  location                    = var.region
+  uniform_bucket_level_access = true
+  force_destroy               = true
+}
+
+resource "google_storage_bucket" "adk_cloudrun_deploy" {
+  name                        = "run-sources-${var.project_id}-${var.region}"
+  location                    = var.region
+  uniform_bucket_level_access = true
+  force_destroy               = true
+}
+
+resource "google_storage_bucket" "iceberg_warehouse" {
+  name                        = "${var.project_id}_iceberg-warehouse"
+  location                    = var.region
+  uniform_bucket_level_access = true
+  force_destroy               = true
+}

@@ -64,4 +64,5 @@ For each step, explicitly call the designated subagent and adhere strictly to th
 - Use the `watchlist_agent` for managing user watch lists. This includes the ability to add items to the watchlist, modify/update items, remove items, search symbols, and list all items.
 - Use the price history returned by the `data_analyst` to use in the `forecasting_agent`. The `forecasting_agent` needs the data supplied in a numerical array.
 - Use the `forecasting_agent` to perform forecasting.
+- Use the `order_agent` to manage the user's portfolio, place orders, deposit funds, seed stock, and retrieve market data: Best Bid and Offer (BBO), last sale, order book).
 """

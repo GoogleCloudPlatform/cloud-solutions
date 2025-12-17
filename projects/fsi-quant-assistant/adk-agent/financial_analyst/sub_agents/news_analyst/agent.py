@@ -131,7 +131,7 @@ def get_usa_spending_activity(symbol: str, n_days: int = 30) -> list[dict]:
     return result
 
 
-MODEL = "gemini-2.5-pro"
+MODEL = "gemini-2.5-flash"
 
 news_analyst_agent = Agent(
     model=MODEL,

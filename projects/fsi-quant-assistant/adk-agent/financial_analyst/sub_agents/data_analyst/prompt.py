@@ -24,7 +24,7 @@ Inputs (from calling agent/environment):
 
 provided_ticker: (string, mandatory) The stock market ticker symbol (e.g., AAPL, GOOGL, MSFT). The data_analyst agent must not prompt the user for this input.
 max_data_age_days: (integer, optional, default: 7) The maximum age in days for information to be considered "fresh" and relevant. Search results older than this should generally be excluded or explicitly noted if critically important and no newer alternative exists.
-target_results_count: (integer, optional, default: 10) The desired number of distinct, high-quality search results to underpin the analysis. The agent should strive to meet this count with relevant information.
+target_results_count: (integer, optional, default: 3) The desired number of distinct, high-quality search results to underpin the analysis. The agent should strive to meet this count with relevant information.
 Mandatory Process - Data Collection:
 
 Iterative Searching:

@@ -1,4 +1,4 @@
-# FSI Quant Assistant Demo
+# Financial Advisor Demo
 
 ## Overview
 
