@@ -15,18 +15,6 @@ You generally only need to submit a CLA once, so if you've already submitted one
 (even if it was for a different project), you probably don't need to do it
 again.
 
-## Code reviews
-
-All submissions, including submissions by project members, require review. We
-use Code Review Workflow of the Gerrit Code Review System for this purpose.
-
-All changes should be submitted to
-<https://cloud-solutions.googlesource.com/the-repo-public> to get reviewed.
-
-Consult
-[Gerrit User Guide](https://gerrit-documentation.storage.googleapis.com/Documentation/3.8.1/intro-user.html#code-review)
-for more information on howto upload a change.
-
 ## Community Guidelines
 
 This project follows
