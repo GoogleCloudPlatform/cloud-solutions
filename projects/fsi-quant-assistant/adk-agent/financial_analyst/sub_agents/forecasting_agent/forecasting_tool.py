@@ -29,9 +29,9 @@ aiplatform.init(
 
 
 def perform_forecast(
-    historical_values: List[float],
-    horizon_length: int = 7,
-    context_frequency: int = 0,
+        historical_values: List[float],
+        horizon_length: int = 7,
+        context_frequency: int = 0,
 ):
     """
     Generates a time-series forecast using the TimesFM model on Vertex AI.
@@ -53,14 +53,14 @@ def perform_forecast(
         context_frequency,
     )
 
-    endpoint_id = os.getenv("FORECAST_MODEL_ENDPOINT_ID")
+    endpoint_id = os.getenv("TIMESFM_ENDPOINT_ID")
     endpoint = aiplatform.Endpoint(endpoint_name=endpoint_id)
 
     instances = [{"input": historical_values, "horizon": horizon_length}]
 
     try:
         response = endpoint.predict(instances=instances)
-        forecast_values = response.predictions
+        forecast_values = response.predictions[0]["point_forecast"]
         logging.debug("forecast_values=%s", forecast_values)
         return forecast_values
 

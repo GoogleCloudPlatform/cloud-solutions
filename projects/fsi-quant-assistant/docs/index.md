@@ -100,27 +100,6 @@ into AlloyDB Studio and run it.
 ```bash
 cd ../../
 
-# Build and push the image for the forecast service to artifact registry
-gcloud builds submit \
-    --config=./forecast-service/cloudbuild-publish.yaml \
-    --substitutions=_REGION=${REGION} \
-    --project=${GCP_PROJECT_ID} \
-    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
-    --region=${REGION} \
-    .
-
-IMAGE_URI=${REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/finance-bundle/forecast-service:latest
-
-# Deploy the forecast service to the model registry and deploy to vertex endpoint
-# The deployment to the vertex endpoint may take many minutes to complete.
-gcloud builds submit \
-    --config=./forecast-service/cloudbuild-deploy.yaml \
-    --substitutions=_REGION=${REGION},_IMAGE_URI=${IMAGE_URI} \
-    --project=${GCP_PROJECT_ID} \
-    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
-    --region=${REGION} \
-    .
-
 # Deploy the order service
 gcloud builds submit \
     --config=./order-service/cloudbuild-deploy.yaml \
@@ -164,16 +143,4 @@ gcloud builds submit \
     --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
     --region=${REGION} \
     .
-```
-
-To delete previous versions of the forecast service, run the following:
-
-```bash
-gcloud builds submit \
-    --config=./forecast-service/cloudbuild-clear-models.yaml \
-    --substitutions=_REGION=${REGION} \
-    --project=${GCP_PROJECT_ID} \
-    --service-account=${CLOUDBUILD_SERVICE_ACCOUNT_ID} \
-    --region=${REGION} \
-    --no-source
 ```

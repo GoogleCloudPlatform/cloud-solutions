@@ -14,4 +14,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .agent import sentiment_agent
+from .agent import sentiment_analyst_agent

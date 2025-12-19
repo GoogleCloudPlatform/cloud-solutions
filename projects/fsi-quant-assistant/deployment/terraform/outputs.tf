@@ -35,3 +35,7 @@ output "region" {
 output "adk_staging_bucket" {
   value = google_storage_bucket.adk_deploy.url
 }
+
+output "timesfm_endpoint_id" {
+  value = google_vertex_ai_endpoint_with_model_garden_deployment.timesfm_deployment.id
+}

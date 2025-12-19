@@ -12,16 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+resource "google_vertex_ai_endpoint_with_model_garden_deployment" "timesfm_deployment" {
+  location             = var.region
+  publisher_model_name = "publishers/google/models/timesfm@timesfm-v2"
 
+  model_config {
+    accept_eula = true
+  }
 
-resource "google_vertex_ai_endpoint" "timesfm_endpoint" {
-  name                       = "${var.forecast_model_display_name}-endpoint"
-  display_name               = "${var.forecast_model_display_name}-endpoint"
-  location                   = var.region
-  description                = "Endpoint for TimesFM Forecasting Service"
-  dedicated_endpoint_enabled = false
-}
-
-output "endpoint_id" {
-  value = google_vertex_ai_endpoint.timesfm_endpoint.name
+  deploy_config {
+    dedicated_resources {
+      machine_spec {
+        machine_type      = "g2-standard-8"
+        accelerator_type  = "NVIDIA_L4"
+        accelerator_count = 1
+      }
+      min_replica_count = 1
+    }
+  }
 }
