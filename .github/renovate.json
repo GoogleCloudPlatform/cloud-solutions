@@ -128,11 +128,6 @@
       "commitMessagePrefix": "chore(deps): [conversational-commerce-agent]"
     },
     {
-      "matchFileNames": ["projects/data-migration-validation-tool/**"],
-      "groupName": "data-migration-validation-tool",
-      "commitMessagePrefix": "chore(deps): [data-migration-validation-tool]"
-    },
-    {
       "matchFileNames": ["projects/database-archival/**"],
       "groupName": "database-archival",
       "commitMessagePrefix": "chore(deps): [database-archival]"
