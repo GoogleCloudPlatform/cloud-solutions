@@ -108,11 +108,6 @@
       "commitMessagePrefix": "chore(deps): [bulk-delete-gcs-files-fn]"
     },
     {
-      "matchFileNames": ["projects/common/**"],
-      "groupName": "common",
-      "commitMessagePrefix": "chore(deps): [common]"
-    },
-    {
       "matchFileNames": ["projects/confidential-ai-model-serving/**"],
       "groupName": "confidential-ai-model-serving",
       "commitMessagePrefix": "chore(deps): [confidential-ai-model-serving]"
