@@ -144,7 +144,7 @@ venv\Scripts\activate     # On Windows
 1.  Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install .
 ```
 
 1.  Configure environment variables:
@@ -477,7 +477,7 @@ movieLenz/
 ├── metrics.py                   # Evaluation metrics
 ├── metrics_factory.py           # Metrics creation
 ├── prompts.py                   # Prompt templates
-├── requirements.txt             # Python dependencies
+├── pyproject.toml               # Python dependencies and build config
 ├── README.md                    # This file
 ├── tests/
 │   ├── __init__.py
@@ -581,7 +581,7 @@ Key dependencies include:
 - **MoviePy**: Video manipulation
 - **ImageIO**: Image/video I/O
 
-See `requirements.txt` for the complete list.
+See `pyproject.toml` for the complete list.
 
 ## Error Handling
 
