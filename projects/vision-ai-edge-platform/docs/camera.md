@@ -730,7 +730,7 @@ Upload the two folders of training images to Google Cloud Storage:
 1.  Upload the directories of images to GCS.
 
     ```sh
-    gsutil -m rsync -r /var/lib/viai/camera-data/model1 \
+    gcloud storage rsync --recursive /var/lib/viai/camera-data/model1 \
     gs://<your_bucket>/model1/
     ```
 
