@@ -81,7 +81,7 @@ EOF
 
   provisioner "local-exec" {
     when    = destroy
-    command = "gsutil -m rm -rf ${self.triggers.jar_folder_url}"
+    command = "gcloud storage -m rm --recursive --continue-on-error ${self.triggers.jar_folder_url}"
   }
 }
 
