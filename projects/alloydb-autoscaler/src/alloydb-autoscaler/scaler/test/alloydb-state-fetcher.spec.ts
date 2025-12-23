@@ -22,6 +22,9 @@ import {AlloyDbStateFetcher} from '../alloydb-state-fetcher';
 import {StateData} from '../../../autoscaler-core/scaler/state-stores/state';
 import {CounterManager} from '../../../autoscaler-core/common/counters';
 import {alloydb_v1} from 'googleapis';
+// For some reason eslint does not like imports only used in type definitions
+// https://github.com/eslint-community/eslint-plugin-n/issues/486
+// eslint-disable-next-line n/no-extraneous-import
 import {MethodOptions, GaxiosPromise, GaxiosOptions} from 'googleapis-common';
 import {ScalingOperationReporter} from '../../../autoscaler-core/scaler/scaling-operation-reporter';
 import {silentLogger} from '../../../autoscaler-core/testing/testing-framework';
