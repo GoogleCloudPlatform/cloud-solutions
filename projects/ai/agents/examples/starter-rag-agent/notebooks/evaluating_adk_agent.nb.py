@@ -142,7 +142,7 @@ LOCATION = os.environ.get("GOOGLE_CLOUD_REGION", "us-central1")
 BUCKET_NAME = "[your-bucket-name]"  # @param {type: "string", placeholder: "[your-bucket-name]", isTemplate: true}
 BUCKET_URI = f"gs://{BUCKET_NAME}"
 
-# !gsutil mb -l {LOCATION} {BUCKET_URI}
+# !gcloud storage buckets create {BUCKET_URI} --location={LOCATION}
 
 os.environ["GOOGLE_CLOUD_PROJECT"] = PROJECT_ID
 os.environ["GOOGLE_CLOUD_LOCATION"] = LOCATION
