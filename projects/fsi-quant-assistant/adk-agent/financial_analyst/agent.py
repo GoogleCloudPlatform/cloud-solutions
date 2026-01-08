@@ -33,6 +33,7 @@ from .sub_agents.news_analyst import (
 )
 from .sub_agents.order_agent import order_agent
 from .sub_agents.risk_analyst import risk_analyst_agent
+from .sub_agents.sentiment_analyst import sentiment_analyst_agent
 from .sub_agents.trading_analyst import trading_analyst_agent
 from .sub_agents.watchlist_agent import watchlist_agent
 from .utils import is_env_flag_enabled
@@ -73,6 +74,7 @@ financial_coordinator = LlmAgent(
         AgentTool(agent=risk_analyst_agent),
         AgentTool(agent=forecasting_agent),
         AgentTool(agent=order_agent),
+        AgentTool(agent=sentiment_analyst_agent),
     ],
 )
 
