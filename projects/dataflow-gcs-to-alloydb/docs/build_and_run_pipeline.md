@@ -196,7 +196,7 @@ continued billing by deleting the resources that you created.
 1.  Upload a data file to the bucket. In this case, a CSV file will be used.
 
     ```bash
-    gsutil cp src/testdata/test1/data.csv gs://$BUCKET_NAME/dataflow-template/data.csv
+    gcloud storage cp src/testdata/test1/data.csv gs://$BUCKET_NAME/dataflow-template/data.csv
     ```
 
 ### Create an Artifact Registry repository
