@@ -47,7 +47,7 @@ if "google.colab" in sys.modules:
 
 # %% cellView="form" colab={"base_uri": "https://localhost:8080/"} id="I14kn32rxX5w" outputId="1b3f93f8-4fac-44be-8351-ccdeb7ae1e80"
 # @title Load Annotations
-# !gsutil cp $ANNOTATION_FILE .
+# ! gcloud storage cp $ANNOTATION_FILE .
 
 import json
 import os
@@ -85,4 +85,4 @@ with open("vertexai_segmentation_polygon.jsonl", "w") as of:
         json.dump(l, of)
         of.write("\n")
 
-# !gsutil cp 'vertexai_segmentation_polygon.jsonl' $TARGET_BUCKET
+# ! gcloud storage cp 'vertexai_segmentation_polygon.jsonl' $TARGET_BUCKET

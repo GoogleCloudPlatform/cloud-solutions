@@ -59,7 +59,7 @@ BUCKET_URI = f"gs://vision-ai-edge-{PROJECT_ID}"
 # Create a new Cloud Storage Bucket for dataset and training job.
 
 # %%
-# ! gsutil mb -l {LOCATION} {BUCKET_URI}
+# ! gcloud storage buckets create --location={LOCATION} {BUCKET_URI}
 
 # %% [markdown]
 # Create a service account for Vertex AI Pipeline.
@@ -72,9 +72,9 @@ SERVICE_ACCOUNT_EMAIL = (
 
 # ! gcloud iam service-accounts create {SERVICE_ACCOUNT_NAME} --display-name="Vision AI Edge Service Account"
 
-# ! gsutil iam ch serviceAccount:{SERVICE_ACCOUNT_EMAIL}:roles/storage.objectCreator $BUCKET_URI
+# ! gcloud storage buckets add-iam-policy-binding $BUCKET_URI --member=serviceAccount:{SERVICE_ACCOUNT} --role=roles/storage.objectCreator
 
-# ! gsutil iam ch serviceAccount:{SERVICE_ACCOUNT_EMAIL}:roles/storage.objectViewer $BUCKET_URI
+# ! gcloud storage buckets add-iam-policy-binding $BUCKET_URI --member=serviceAccount:{SERVICE_ACCOUNT} --role=roles/storage.objectViewer
 
 # ! gcloud projects add-iam-policy-binding {PROJECT_ID} --member="serviceAccount:{SERVICE_ACCOUNT_EMAIL}" --role="roles/aiplatform.user"
 
@@ -108,7 +108,7 @@ BUCKET_URI_SED=BUCKET_URI.replace('/', '\/')
 # Upload the bike-pedal folder to the GCS Bucket.
 
 # %%
-# ! gsutil -m cp -r {DATASET_NAME} {BUCKET_URI}
+# ! gcloud storage cp --recursive {DATASET_NAME} {BUCKET_URI}
 
 # %% [markdown]
 # ## Create a Vertex AI Dataset
