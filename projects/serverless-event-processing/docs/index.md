@@ -142,7 +142,7 @@ from Cloud Shell:
 1.  Upload the example file in the Cloud Storage bucket:
 
     ```sh
-    gsutil cp random.txt "gs://${SOURCE_CLOUD_STORAGE_BUCKET_NAME}/random.txt"
+    gcloud storage cp random.txt "gs://${SOURCE_CLOUD_STORAGE_BUCKET_NAME}/random.txt"
     ```
 
 1.  View the log entries related to the event processing service:
@@ -506,7 +506,6 @@ By starting with migrating result data, you:
   rest of the event-processing stack.
 - Simplify the refactoring of the event-processing workload by splitting the
   refactoring of the event-processing workload in two steps:
-
     1.  Refactor the AWS Lambda workload to store the results both in Amazon
         DynamoDB, Firestore, and Cloud Storage.
     1.  Once the migration proceeds, refactor the event-processing workload to
@@ -536,7 +535,6 @@ By starting with migrating the event-processing workload, you:
 
 - Simplify the refactoring of the event-processing workload by splitting the
   refactoring of the event-processing workload in two steps:
-
     1.  Refactor the AWS Lambda workload to migrate the event-processing
         workload to Cloud Run, but keep using Amazon S3 and Amazon SQS as
         sources, and Amazon DynamoDB to store results.
