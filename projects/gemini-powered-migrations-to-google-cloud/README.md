@@ -87,7 +87,8 @@ evaluation.
 1.  Configure the Gemini CLI custom commands in the
     `cloud-solutions/projects/gemini-powered-migrations-to-google-cloud`
     directory so that they are available as global user commands or project
-    commands.
+    commands. For more information about configuring Gemini CLI custom commands,
+    see [Custom commands](https://geminicli.com/docs/cli/custom-commands/).
 
 1.  Change the working directory to the directory where you stored the files you
     want to assess with Gemini CLI, such as inventory files from other cloud

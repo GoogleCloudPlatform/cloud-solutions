@@ -20,7 +20,6 @@ import sys
 from contextlib import asynccontextmanager
 from typing import Optional
 
-import numpy as np
 import timesfm
 import utils
 from dotenv import load_dotenv
@@ -113,11 +112,6 @@ class VertexPayload(BaseModel):
     parameters: Optional[dict] = {}
 
 
-class ForecastRequestOld(BaseModel):
-    input: list[float]
-    horizon: Optional[int] = 10
-
-
 @app.post("/predict")
 async def predict(payload: VertexPayload):
     logging.info("Received request: %s", payload)
@@ -129,25 +123,6 @@ async def predict(payload: VertexPayload):
         forecast_values = point_forecast[0].tolist()
         logging.info("forecast_values=%s", forecast_values)
         return {"predictions": forecast_values}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
-
-
-@app.post("/predict2")
-async def predict2(req: ForecastRequestOld):
-    logging.info("Received request: %s", req)
-    input_data = req.input
-    forecast_context_length = len(input_data)
-
-    try:
-        context_data = np.array(input_data[-forecast_context_length:])
-        forecast_input = [context_data]
-        point_forecast, _ = tfm.forecast(
-            horizon=req.horizon, inputs=forecast_input
-        )
-        forecast_values = point_forecast[0].tolist()
-        logging.info("forecast_values=%s", forecast_values)
-        return {"forecast": forecast_values}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 

@@ -18,11 +18,11 @@ from google.adk import Agent
 
 from . import prompt
 
-MODEL = "gemini-2.5-pro"
+MODEL = "gemini-2.5-flash"
 
-sentiment_agent = Agent(
+sentiment_analyst_agent = Agent(
     model=MODEL,
-    name="sentiment_agent",
+    name="sentiment_analyst_agent",
     instruction=prompt.SENTIMENT_ANALYST_PROMPT,
     output_key="sentiment_analysis_output",
 )

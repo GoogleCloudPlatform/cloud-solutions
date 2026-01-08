@@ -102,7 +102,8 @@ migrate to.
 The data that Migration Center provides might not fully capture the dimensions
 that you're interested in. In that case, you can integrate that data with the
 results from other data-collection mechanisms that you create that are based on
-Azure APIs, Azure developer tools, and the Azure command-line interface.
+Azure APIs, Azure developer tools, the Azure command-line interface,
+and [Azure Resource Inventory](https://github.com/microsoft/ARI).
 
 In addition to the data that you get from Migration Center, consider the
 following data points for each Azure VM that you want to migrate:
@@ -217,6 +218,22 @@ In addition to the artifact type, consider how you complete the following tasks:
   and configure resources. For example, you might be using
   [Terraform](https://www.terraform.io/) along with configuration management
   tools to provision and configure resources in your source environment.
+  If you are using Terraform, you can build your foundations and landing
+  zone on Google Cloud by using the following tools, depending on your
+  preferred starting point:
+
+    - **[Resources in the Google Cloud Terraform Provider](https://docs.cloud.google.com/docs/terraform/create-vm-instance)**:
+    Start from scratch using base building blocks.
+    - **[Terraform blueprints and modules for Google Cloud](https://docs.cloud.google.com/docs/terraform/blueprints/terraform-blueprints)**:
+    Start from a baseline of opinionated Terraform modules. Builds on top of
+    resources in the Google Cloud Terraform Provider.
+    - **[Enterprise Foundations Blueprint](https://docs.cloud.google.com/architecture/blueprints/security-foundations)**:
+    Start from an opinionated foundation and landing zones. Builds on top of
+    Terraform blueprints and modules for Google Cloud.
+    - **[Cloud Foundation Fabric](https://github.com/GoogleCloudPlatform/cloud-foundation-fabric)**:
+    Start from an opinionated foundation and landing zones. Cloud Foundation
+    Fabric is a standalone implementation that uses its own Terraform modules.
+    Builds on top of resources in the Google Cloud Terraform Provider.
 
 ## Plan and build your foundation
 
