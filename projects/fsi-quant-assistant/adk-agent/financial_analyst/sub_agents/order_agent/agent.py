@@ -172,12 +172,12 @@ def get_balances(user_name: str) -> list[dict]:
 
 
 def place_order(
-    user: str,
-    symbol: str,
-    side: str,
-    order_type: str,
-    size: int,
-    price: str = "",
+        user: str,
+        symbol: str,
+        side: str,
+        order_type: str,
+        size: int,
+        price: str = "",
 ) -> dict:
     """
     Place a new order.

@@ -159,8 +159,11 @@ cluster:
   pools, and nodes, and how you're using them. For example, you might be
   generating reports with detailed, label-based cost attribution.
 
-The following items that you assess in your inventory focus on the security of
-your infrastructure and Kubernetes clusters:
+#### Build the inventory of your Kubernetes Namespaces and security configuration objects
+
+After you complete the Kubernetes clusters inventory, build the inventory of
+your Namespaces and of the Kubernetes objects that you deployed to secure your
+AKS clusters:
 
 - **Namespaces**. If you use Kubernetes
   [Namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)
@@ -192,10 +195,9 @@ sure that your migration plan includes retiring these resources.
 
 #### Build the inventory of your Kubernetes workloads
 
-After you complete the Kubernetes clusters inventory and assess the security of
-your environment, build the inventory of the workloads deployed in those
-clusters. When evaluating your workloads, gather information about the following
-aspects:
+After you complete the Kubernetes Namespaces inventory, build the inventory of
+the workloads and Kubernetes objects deployed in those clusters. When evaluating
+your workloads, gather information about the following aspects:
 
 - **[Pods](https://kubernetes.io/docs/concepts/workloads/pods/pod/) and
   [controllers](https://kubernetes.io/docs/concepts/architecture/controller/)**.
@@ -332,6 +334,51 @@ supporting services and aspects in your infrastructure, such as the following:
 - **Backup**. Assess how you're backing up the configuration of your clusters
   and stateful workload data in your source environment.
 
+#### Tools to build the inventory and assess your source environment
+
+To gather the necessary data points about your AKS clusters and objects, use the
+following tools:
+
+- **AKS cluster discovery, nodes discovery and assessment**. To discover your
+  AKS clusters, we recommend that you use
+  [Kubernetes Cluster Discovery Tool](https://github.com/GoogleCloudPlatform/professional-services/tree/main/tools/k8s-discovery),
+  and that you refine the inventory with
+  [Azure Resource Manager](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/overview)
+  and [Azure Resource Inventory](https://github.com/microsoft/ARI).
+- **Kubernetes object inventory**. To build the inventory of the objects that
+  are deployed in your Kubernetes clusters, we recommend that you use
+  [Kubernetes Cluster Discovery Tool](https://github.com/GoogleCloudPlatform/professional-services/tree/main/tools/k8s-discovery).
+- **Kubernetes object assessment**. To assess your Kubernetes objects, we
+  recommend that you use [Gemini CLI](https://geminicli.com/). For example, you
+  can add the inventory files that list the Kubernetes objects in your clusters
+  to the Gemini CLI context and then prompt Gemini to help you assess those
+  objects. For more information, see
+  [Gemini-powered migrations to Google Cloud](https://googlecloudplatform.github.io/cloud-solutions/gemini-powered-migrations-to-google-cloud/).
+
+### Refine the inventory of your AKS clusters and workloads
+
+The data that inventory building tools provide might not fully capture the
+dimensions that you're interested in. In that case, you can integrate that data
+with the results from other data-collection mechanisms that you create that are
+based on Azure APIs, Azure developer tools, and the Azure command-line
+interface.
+
+In addition to the data that you get from these tools, consider the following
+data points for each AKS cluster that you want to migrate:
+
+- Consider AKS-specific aspects and features, including the following:
+    - Microsoft Entra integration
+    - Azure Linux nodes
+    - AKS add-ons, such as managed NGINX Ingress, and Application Gateway
+      Ingress Controller
+    - AKS extensions and integrations
+    - Azure Dedicated Hosts
+    - AKS Long-term support
+    - CoreDNS configuration customization
+- Assess how you're authenticating against your AKS clusters and how you
+  configured Azure Identity and Access Management for AKS.
+- Assess the networking configuration of your AKS clusters.
+
 ### Assess your deployment and operational processes
 
 It's important to have a clear understanding of how your deployment and
@@ -361,7 +408,6 @@ In addition to the artifact type, consider how you complete the following tasks:
   artifact registry in your source environment, you need to make the artifacts
   available in your Google Cloud environment. You can do so by employing
   strategies like the following:
-
     - **Establish a communication channel between the environments**: Make the
       artifacts in your source environment reachable from the target Google
       Cloud environment.
@@ -407,36 +453,6 @@ In addition to the artifact type, consider how you complete the following tasks:
   and configure resources. For example, you might be using
   [Terraform](https://www.terraform.io/) along with configuration management
   tools to provision and configure resources in your source environment.
-
-### Tools to build the inventory of your source environment
-
-To build the inventory of your AKS clusters, you can use
-[Azure Resource Manager](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/overview)
-and [Azure Resource Inventory](https://github.com/microsoft/ARI).
-
-### Refine the inventory of your AKS clusters and workloads
-
-The data that inventory building tools provide might not fully capture the
-dimensions that you're interested in. In that case, you can integrate that data
-with the results from other data-collection mechanisms that you create that are
-based on Azure APIs, Azure developer tools, and the Azure command-line
-interface.
-
-In addition to the data that you get from these tools, consider the following
-data points for each AKS cluster that you want to migrate:
-
-- Consider AKS-specific aspects and features, including the following:
-    - Microsoft Entra integration
-    - Azure Linux nodes
-    - AKS add-ons, such as managed NGINX Ingress, and Application Gateway
-      Ingress Controller
-    - AKS extensions and integrations
-    - Azure Dedicated Hosts
-    - AKS Long-term support
-    - CoreDNS configuration customization
-- Assess how you're authenticating against your AKS clusters and how you
-  configured Azure Identity and Access Management for AKS.
-- Assess the networking configuration of your AKS clusters.
 
 ## Plan and build your foundation
 
@@ -960,7 +976,6 @@ by adopting one of the following approaches:
 
 - Directly copy data from Azure Disks volumes to Compute Engine persistent
   disks:
-
     1.  Provision Azure Virtual Machines instances and attach the Azure Disks
         volumes that contain the data to migrate.
     1.  Provision Compute Engine instances with empty persistent disks that have
@@ -973,7 +988,6 @@ by adopting one of the following approaches:
 
 - Migrate Azure Virtual Machines instances and Azure Disks volumes to Compute
   Engine:
-
     1.  Provision Azure Virtual Machines instances and attach the Azure Disks
         volumes that contain the data to migrate.
     1.  Migrate the Azure Virtual Machines instances and the Azure Disks volumes
@@ -984,7 +998,6 @@ by adopting one of the following approaches:
 
 - Copy data from Azure Disks volumes to an interim media, and migrate to GKE
   PersistentVolumes:
-
     1.  Upload data from Azure Disks volumes to an interim media such as an
         Azure Blob Storage bucket or a Cloud Storage bucket.
     1.  Download the data from the interim media to your GKE PersistentVolume
@@ -1008,7 +1021,6 @@ The best migration option for you depends on your specific needs and
 requirements, such as the following considerations:
 
 - The amount of data that you need to migrate.
-
     - If you have a small amount of data to migrate, such as a few data files,
       consider tools like rsync to copy the data directly to Compute Engine
       persistent disks. This option is relatively quick, but it might not be
@@ -1020,7 +1032,6 @@ requirements, such as the following considerations:
 
 - The type of data that you need to migrate.
 - Your network connectivity between the source and the target environments.
-
     - If you can't establish direct network connectivity between your Azure
       Virtual Machines and Compute Engine instances, you might want to consider
       using Azure Blob Storage or Cloud Storage to store the data temporarily
@@ -1029,7 +1040,6 @@ requirements, such as the following considerations:
       Compute Engine instances running simultaneously.
 
 - Your migration timeline.
-
     - If you have limited network bandwidth or a large amount of data, and your
       timeline isn't tight, you can also consider using a
       [Transfer Appliance](https://cloud.google.com/transfer-appliance) to move

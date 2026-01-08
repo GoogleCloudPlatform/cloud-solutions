@@ -32,7 +32,7 @@ resource "google_alloydb_cluster" "default" {
 
 resource "google_alloydb_instance" "default" {
   cluster           = google_alloydb_cluster.default.name
-  instance_id       = "alloydb-instance-2"
+  instance_id       = "alloydb-instance"
   instance_type     = "PRIMARY"
   availability_type = "ZONAL"
 
