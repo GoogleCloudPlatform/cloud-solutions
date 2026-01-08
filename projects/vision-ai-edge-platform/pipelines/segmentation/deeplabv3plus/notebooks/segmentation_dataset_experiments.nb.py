@@ -49,7 +49,7 @@ LOCATION = "us-central1"
 BATCH_SIZE = 2
 
 # %%
-# !gsutil mb -l $LOCATION $DATA_DIR 
+# !gcloud storage buckets create $DATA_DIR --location=$LOCATION
 
 # %%
 import os
