@@ -23,6 +23,12 @@
     {
       "hostType": "github",
       "timeout": 60000
+    },
+    {
+      "hostType": "docker",
+      "matchHost": "gcr.io",
+      "username": "",
+      "password": ""
     }
   ],
   "vulnerabilityAlerts": {
