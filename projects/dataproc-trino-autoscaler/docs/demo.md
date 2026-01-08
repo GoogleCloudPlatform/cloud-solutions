@@ -139,7 +139,7 @@ You can monitor the Trino job on Trino UI as well.
 1.  Copy the config to GCS
 
     ```bash
-    gsutil cp \
+    gcloud storage cp \
     demo/myconfig.textproto \
     "gs://${GCS_BUCKET_NAME}/trino_scaler/config.textproto"
     ```
@@ -155,7 +155,7 @@ You can monitor the Trino job on Trino UI as well.
 1.  Copy the dataproc init script to GCS
 
     ```bash
-    gsutil cp \
+    gcloud storage cp \
     demo/trino-autoscaler-init.sh \
     "gs://${GCS_BUCKET_NAME}/trino_scaler/trino-autoscaler-init.sh"
     ```

@@ -36,10 +36,10 @@ function setup_trino_autoscaler {
   mkdir -p "${TRINO_AUTOSCALE_FOLDER}"
 
   # Copy JAR from GCS to local
-  gsutil cp "${CONFIG_JAR_FILE_GCS_URI}" "${TRINO_AUTOSCALE_FOLDER}/trino_autoscaler.jar"
+  gcloud storage cp "${CONFIG_JAR_FILE_GCS_URI}" "${TRINO_AUTOSCALE_FOLDER}/trino_autoscaler.jar"
 
   # Copy Config file from GCS to local
-  gsutil cp "${CONFIG_PROTO_FILE_GCS_URI}" "${TRINO_AUTOSCALE_FOLDER}/config.textproto"
+  gcloud storage cp "${CONFIG_PROTO_FILE_GCS_URI}" "${TRINO_AUTOSCALE_FOLDER}/config.textproto"
 
   # Create Log file
   touch "${TRINO_AUTOSCALE_FOLDER}/trino_autoscaler.log"
