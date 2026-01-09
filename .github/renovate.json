@@ -13,6 +13,9 @@
   "docker-compose": {
     "enabled": true
   },
+  "nuget": {
+    "ignorePaths": ["**/projects/dotnet-modernization-demo/**"]
+  },
   "hostRules": [
     {
       "timeout": 5000
