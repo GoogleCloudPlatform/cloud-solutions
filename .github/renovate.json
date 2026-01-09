@@ -8,7 +8,8 @@
     "minimumReleaseAge": "3 days"
   },
   "pip-compile": {
-    "managerFilePatterns": ["/(^|/)requirements\\.txt$/"]
+    "managerFilePatterns": ["/(^|/)[\\w-]*requirements([-.]\\w+)?\\.txt$/"],
+    "enabled": true
   },
   "pip_requirements": {
     "enabled": false
