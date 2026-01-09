@@ -10,6 +10,6 @@ uv venv --python 3.13 --clear
 # shellcheck disable=SC1091
 source .venv/bin/activate
 
-uv pip install -r requirements.txt
+uv pip install --require-hashes -r requirements.txt
 uv run main.py
 ```

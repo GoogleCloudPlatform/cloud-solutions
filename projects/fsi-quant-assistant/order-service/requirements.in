@@ -1,0 +1,9 @@
+fastapi==0.124.4
+uvicorn==0.38.0
+pydantic==2.12.5
+pytest==9.0.2
+httpx==0.28.1
+google-cloud-alloydb-connector[pg8000]==1.11.0
+sqlalchemy==2.0.45
+pg8000==1.31.5
+python-dotenv==1.2.1

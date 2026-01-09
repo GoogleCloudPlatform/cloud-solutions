@@ -1,0 +1,7 @@
+google-cloud-aiplatform==1.128.0
+google-cloud-storage==2.19.0
+google-genai==1.47.0
+pandas==2.2.0
+Pillow==10.4.0
+matplotlib==3.8.0
+ipywidgets==8.1.5

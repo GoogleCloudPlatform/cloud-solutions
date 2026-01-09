@@ -73,7 +73,7 @@ gcloud auth application-default login
 Install the required Python packages using the `requirements.txt` file.
 
 ```bash
-pip install -r requirements.txt
+pip install --require-hashes -r requirements.txt
 ```
 
 #### Step 6: Run the Application

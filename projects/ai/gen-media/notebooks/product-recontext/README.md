@@ -38,7 +38,7 @@ cd product-recontext
 1.  Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install --require-hashes -r requirements.txt
 ```
 
 ### Usage

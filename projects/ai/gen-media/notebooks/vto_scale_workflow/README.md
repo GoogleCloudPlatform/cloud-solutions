@@ -136,7 +136,7 @@ source venv/bin/activate  # On Linux/macOS
 1.  **Install Dependencies**
 
 ```bash
-pip install -r requirements.txt
+pip install --require-hashes -r requirements.txt
 ```
 
 ## Configuration
