@@ -208,6 +208,11 @@
       "commitMessagePrefix": "chore(deps): [migrate-from-azure-to-google-cloud]"
     },
     {
+      "matchFileNames": ["projects/migrate-nutanix-to-google-cloud/**"],
+      "groupName": "migrate-nutanix-to-google-cloud",
+      "commitMessagePrefix": "chore(deps): [migrate-nutanix-to-google-cloud]"
+    },
+    {
       "matchFileNames": ["projects/mmb-hero-demo/**"],
       "groupName": "mmb-hero-demo",
       "commitMessagePrefix": "chore(deps): [mmb-hero-demo]"
