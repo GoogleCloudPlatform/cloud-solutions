@@ -8,7 +8,13 @@
     "minimumReleaseAge": "3 days"
   },
   "pip-compile": {
-    "managerFilePatterns": ["(^|/)requirements\\.txt$"]
+    "managerFilePatterns": ["/(^|/)requirements\\.txt$/"]
+  },
+  "pip_requirements": {
+    "enabled": false
+  },
+  "pip_setup": {
+    "enabled": false
   },
   "docker-compose": {
     "enabled": true
