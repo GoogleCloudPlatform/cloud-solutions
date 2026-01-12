@@ -13,16 +13,16 @@
 # limitations under the License.
 
 steps:
-- name: 'gcr.io/kaniko-project/executor:latest'
-  args:
-  - --destination=$_REPO_LOCATION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/segmentation-deeplabv3plus-$_CONTAINER_NAME:$BUILD_ID
-  - --destination=$_REPO_LOCATION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/segmentation-deeplabv3plus-$_CONTAINER_NAME:$REF_NAME
-  - --cache=true
-  - --cache-ttl=168h
+  - name: "gcr.io/kaniko-project/executor:v1.24.0"
+    args:
+      - --destination=$_REPO_LOCATION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/segmentation-deeplabv3plus-$_CONTAINER_NAME:$BUILD_ID
+      - --destination=$_REPO_LOCATION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/segmentation-deeplabv3plus-$_CONTAINER_NAME:$REF_NAME
+      - --cache=true
+      - --cache-ttl=168h
 substitutions:
   _CONTAINER_NAME: trainer
   _REPO_LOCATION: us
   _REPO_NAME: visual-inspection-ml-training
 timeout: 7200s
 options:
-  machineType: 'E2_HIGHCPU_32'
+  machineType: "E2_HIGHCPU_32"

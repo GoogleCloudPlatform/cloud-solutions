@@ -1,0 +1,11 @@
+build==1.2.1
+click==8.1.7
+importlib-metadata==7.1.0
+packaging==24.1
+pip-tools==7.4.1
+pip==25.3
+pyproject-hooks==1.1.0
+setuptools==78.1.1
+tomli==2.0.1
+wheel==0.43.0
+zipp==3.19.2

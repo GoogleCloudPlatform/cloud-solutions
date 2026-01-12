@@ -1,0 +1,11 @@
+construct==2.10.67
+google-cloud-pubsub==2.9.0
+harvesters==1.4.0
+onvif-zeep==0.2.12
+opencv-python==4.8.1.78
+paho-mqtt==1.6.1
+pillow==10.3.0
+puremagic==1.24
+pyopenssl==22.0.0
+rfc3339==6.2
+wsdiscovery==2.0.0
