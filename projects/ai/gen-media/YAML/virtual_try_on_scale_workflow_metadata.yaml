@@ -82,7 +82,7 @@ contributors:
 # [Optional] List URLs to images that will be displayed on the demo.
 # The first image is used as the demo's thumbnail.
 images:
-  - https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/images/vto_scale.png
+  - https://raw.githubusercontent.com/GoogleCloudPlatform/cloud-solutions/refs/heads/main/projects/ai/gen-media/images/vto_scale.png
 
 # A link to instructions on how to use the demo.
 demo_guide: https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/README.md
