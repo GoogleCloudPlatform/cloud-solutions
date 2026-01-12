@@ -1,0 +1,148 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: create-dms-user-script
+data:
+  create-dms-user.sh: |
+    #!/bin/bash
+    set -e
+
+    # Configuration and input validation
+    POSTGRES_HOST="${POSTGRES_HOST:?Error: Environment variable POSTGRES_HOST is required}"
+    POSTGRES_USER="${POSTGRES_USER:?Error: Environment variable POSTGRES_USER is required}"
+    POSTGRES_PASSWORD="${POSTGRES_PASSWORD:?Error: Environment variable POSTGRES_PASSWORD is required}"
+
+    # List of databases to configure
+    TARGET_DBS="postgres accounts-db ledger-db cymbalbank"
+
+    echo "Waiting for PostgreSQL to be available at ${POSTGRES_HOST}..."
+    until PGPASSWORD="${POSTGRES_PASSWORD}" psql -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" -d postgres -c "SELECT 1" >/dev/null 2>&1; do
+      echo "PostgreSQL not ready, waiting..."
+      sleep 5
+    done
+    echo "PostgreSQL is available."
+
+    # ---------------------------------------------------------
+    # PART 1: GLOBAL SETUP (Run once on 'postgres' DB)
+    # ---------------------------------------------------------
+    echo "Performing Global User Setup..."
+
+    # Note: We are using the existing admin user (${POSTGRES_USER}) for DMS.
+    # We must ensure this user has the 'rds_replication' role required by AWS RDS for logical replication.
+
+    PGPASSWORD="${POSTGRES_PASSWORD}" psql -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" -d postgres <<EOSQL
+
+    -- Grant replication privilege (Global)
+    -- If the user is already a member, this is harmless/idempotent in most versions
+    GRANT rds_replication TO "${POSTGRES_USER}";
+    EOSQL
+
+    # ---------------------------------------------------------
+    # PART 2: PER-DATABASE SETUP (Loop through all DBs)
+    # ---------------------------------------------------------
+    for DB in $TARGET_DBS; do
+      echo "Configuring database: $DB ..."
+
+      PGPASSWORD="${POSTGRES_PASSWORD}" psql -h "${POSTGRES_HOST}" -U "${POSTGRES_USER}" -d "$DB" <<EOSQL
+
+      -- 1. Install pglogical
+      CREATE EXTENSION IF NOT EXISTS pglogical;
+
+      -- 2. Grant Permissions on pglogical schema to the admin user
+      -- (Required to ensure the user specifically has usage for the migration context)
+      GRANT USAGE ON SCHEMA pglogical TO "${POSTGRES_USER}";
+      GRANT SELECT ON ALL TABLES IN SCHEMA pglogical TO "${POSTGRES_USER}";
+      GRANT USAGE ON SCHEMA pglogical TO PUBLIC;
+
+      -- 3. Grant Permissions on ALL other schemas
+      -- Even though POSTGRES_USER is likely the owner, we explicitly grant
+      -- to ensure access if tables were created by different app users.
+      DO \$migration\$
+      DECLARE
+          sch text;
+      BEGIN
+          FOR sch IN
+              SELECT nspname
+              FROM pg_namespace
+              WHERE nspname NOT LIKE 'pg_%'
+                AND nspname <> 'information_schema'
+          LOOP
+              EXECUTE format('GRANT USAGE ON SCHEMA %I TO "${POSTGRES_USER}"', sch);
+              EXECUTE format('GRANT SELECT ON ALL TABLES IN SCHEMA %I TO "${POSTGRES_USER}"', sch);
+              EXECUTE format('GRANT SELECT ON ALL SEQUENCES IN SCHEMA %I TO "${POSTGRES_USER}"', sch);
+              EXECUTE format('ALTER DEFAULT PRIVILEGES IN SCHEMA %I GRANT SELECT ON TABLES TO "${POSTGRES_USER}"', sch);
+              EXECUTE format('ALTER DEFAULT PRIVILEGES IN SCHEMA %I GRANT SELECT ON SEQUENCES TO "${POSTGRES_USER}"', sch);
+          END LOOP;
+      END
+      \$migration\$;
+
+      -- 4. FIX MISSING PRIMARY KEY (Specific to accounts-db)
+      DO \$pk_fix\$
+      BEGIN
+        IF current_database() = 'accounts-db' THEN
+            -- Check if contacts table exists but has no primary key
+            IF NOT EXISTS (
+                SELECT 1 FROM information_schema.table_constraints
+                WHERE table_name = 'contacts' AND constraint_type = 'PRIMARY KEY'
+            ) THEN
+                RAISE NOTICE 'Fixing missing PK on contacts table in accounts-db...';
+                -- Create 'id' column if it doesn't exist, and make it the PK
+                ALTER TABLE public.contacts ADD COLUMN IF NOT EXISTS id SERIAL PRIMARY KEY;
+            END IF;
+        END IF;
+      END
+      \$pk_fix\$;
+
+    EOSQL
+    done
+
+    echo "DMS setup complete using user: ${POSTGRES_USER}."
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-dms-setup
+spec:
+  template:
+    spec:
+      serviceAccountName: cymbalbank-sa
+      containers:
+        - name: create-dms-setup
+          image: postgres:16
+          command:
+            - bash
+            - "-c"
+            - |
+              set -e
+              . /scripts/create-dms-user.sh
+          env:
+            - name: POSTGRES_HOST
+              value: "RDS_ENDPOINT_PLACEHOLDER"
+            - name: POSTGRES_USER
+              value: "RDS_USERNAME_PLACEHOLDER"
+            - name: POSTGRES_PASSWORD
+              value: "RDS_PASSWORD_PLACEHOLDER"
+          volumeMounts:
+            - name: scripts
+              mountPath: "/scripts"
+              readOnly: true
+      volumes:
+        - name: scripts
+          configMap:
+            name: create-dms-user-script
+      restartPolicy: Never
+  backoffLimit: 4

@@ -1,0 +1,55 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-databases
+spec:
+  template:
+    spec:
+      serviceAccountName: cymbalbank-sa
+      containers:
+        - name: create-databases
+          image: postgres:16
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+          command:
+            - bash
+            - "-c"
+            - |
+              set -e
+              export PGPASSWORD=$POSTGRES_PASSWORD
+              echo "Connecting to $POSTGRES_HOST..."
+
+              for DB in "accounts-db" "ledger-db" "cymbalbank"; do
+                echo "Checking database: $DB"
+                EXISTS=$(psql -h $POSTGRES_HOST -U $POSTGRES_USER -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='$DB'")
+                if [ "$EXISTS" != "1" ]; then
+                  echo "Creating database: $DB"
+                  psql -h $POSTGRES_HOST -U $POSTGRES_USER -d postgres -c "CREATE DATABASE \"$DB\";"
+                else
+                  echo "Database $DB already exists."
+                fi
+              done
+          env:
+            - name: POSTGRES_HOST
+              value: "RDS_ENDPOINT_PLACEHOLDER"
+            - name: POSTGRES_USER
+              value: "RDS_USERNAME_PLACEHOLDER"
+            - name: POSTGRES_PASSWORD
+              value: "RDS_PASSWORD_PLACEHOLDER"
+      restartPolicy: Never
+  backoffLimit: 4
