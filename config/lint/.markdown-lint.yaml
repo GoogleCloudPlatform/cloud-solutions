@@ -1,0 +1,110 @@
+#
+# Copyright 2026 Google LLC
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+# Start with default values
+# Ref: https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.yaml
+default: true
+
+# MD003/heading-style : Heading style
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md003.md
+MD003:
+  # Heading style
+  style: "atx"
+
+# MD007/ul-indent : Unordered list indentation
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md007.md
+MD007:
+  indent: 4
+
+# MD013/line-length : Line length
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md013.md
+MD013:
+  # Number of characters
+  line_length: 80
+  # Do not apply line length rule to code blocks, tables or headings
+  # Links and images are excluded by default.
+  code_blocks: false
+  tables: false
+  headings: false
+  # Don't enable strict or stern modes because we might have long URLs
+  strict: false
+  stern: false
+
+# MD020/no-missing-space-closed-atx
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md021.md
+# We don't use atx-style headings, so no need to enforce this rule
+MD020: false
+
+# MD021/no-multiple-space-closed-atx
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md021.md
+# We don't use atx-style headings, so no need to enforce this rule
+MD021: false
+
+# MD029/ol-prefixt : Ordered list item prefix
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md029.md
+MD029:
+  style: one
+
+# MD030/list-marker-space : Spaces after list markers
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md030.md
+# Google Markdown style guide
+# (https://google.github.io/styleguide/docguide/style.html#nested-list-spacing)
+# says that ul_single and ul_multi should be 3, but Prettier > 3.4.0 introduced
+# a bug (https://github.com/prettier/prettier/issues/16929) that causes Prettier
+# not to dynamically compute the number of spaces after unordered list markers.
+MD030:
+  # Spaces for single-line unordered list items
+  ul_single: 1
+  # Spaces for single-line ordered list items
+  ol_single: 2
+  # Spaces for multi-line unordered list items
+  ul_multi: 1
+  # Spaces for multi-line ordered list items
+  ol_multi: 2
+
+# MD034/no-bare-urls : Bare URL used
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md034.md
+MD034: false
+
+# MD040/fenced-code-language : Fenced code blocks should have a language
+# specified
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md040.md
+MD040:
+  # List of languages
+  allowed_languages: []
+  # Require language only
+  language_only: false
+
+# MD046/code-block-style : Code block style
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md046.md
+MD046:
+  # Block style
+  style: "fenced"
+
+# MD048/code-fence-style : Code fence style
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md048.md
+MD048:
+  # Code fence style
+  style: "backtick"
+
+# MD059/descriptive-link-text : Link text should be descriptive
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md059.md
+MD059: false

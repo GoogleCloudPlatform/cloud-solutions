@@ -76,6 +76,7 @@ class Feedback(BaseModel):
 def collect_research_sources_callback(
     callback_context: CallbackContext,
 ) -> None:
+    # pylint: disable=protected-access
     session = callback_context._invocation_context.session
     url_to_short_id = callback_context.state.get("url_to_short_id", {})
     sources = callback_context.state.get("sources", {})
