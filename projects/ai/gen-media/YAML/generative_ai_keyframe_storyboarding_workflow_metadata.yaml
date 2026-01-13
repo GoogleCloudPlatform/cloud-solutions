@@ -69,12 +69,13 @@ technical_value: |
 # Demo Attribution
 
 # The Googler who owns this demo.
-owner: tdigangi
+owner:
+  - tdigangi
+  - layolin
 
 # [Optional] Googlers and Moma Teams that contributed to this demo.
 contributors:
   - isidrodeloera
-  - layolin
 
 # Demo Assets
 
