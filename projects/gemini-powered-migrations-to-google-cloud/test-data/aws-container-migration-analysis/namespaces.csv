@@ -1,0 +1,5 @@
+name,status,creation_timestamp,labels,cluster_id
+default,Active,2026-01-12 01:05:20+00:00,"{""kubernetes.io/metadata.name"": ""default""}",aws-us-west-1-mmb-demo
+kube-node-lease,Active,2026-01-12 01:05:20+00:00,"{""kubernetes.io/metadata.name"": ""kube-node-lease""}",aws-us-west-1-mmb-demo
+kube-public,Active,2026-01-12 01:05:20+00:00,"{""kubernetes.io/metadata.name"": ""kube-public""}",aws-us-west-1-mmb-demo
+kube-system,Active,2026-01-12 01:05:20+00:00,"{""kubernetes.io/metadata.name"": ""kube-system""}",aws-us-west-1-mmb-demo

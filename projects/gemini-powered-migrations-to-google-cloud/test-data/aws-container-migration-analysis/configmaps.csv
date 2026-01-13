@@ -1,0 +1,15 @@
+namespace,name,data_count,data_size_bytes,data_summary,data_keys,cluster_id
+default,accounts-db-config,1,106,ACCOUNTS_DB_URI,ACCOUNTS_DB_URI,aws-us-west-1-mmb-demo
+default,accounts-schema-config,3,6006,"0-accounts-schema.sql, 1-load-testdata.sh, initialize-database.sh","0-accounts-schema.sql, 1-load-testdata.sh, initialize-database.sh",aws-us-west-1-mmb-demo
+default,create-dms-user-script,1,2433,create-dms-user.sh,create-dms-user.sh,aws-us-west-1-mmb-demo
+default,demo-data-config,3,24,"DEMO_LOGIN_PASSWORD, DEMO_LOGIN_USERNAME, USE_DEMO_DATA","DEMO_LOGIN_PASSWORD, DEMO_LOGIN_USERNAME, USE_DEMO_DATA",aws-us-west-1-mmb-demo
+default,environment-config,2,29,"LOCAL_ROUTING_NUM, PUB_KEY_PATH","LOCAL_ROUTING_NUM, PUB_KEY_PATH",aws-us-west-1-mmb-demo
+default,kube-root-ca.crt,1,1107,ca.crt,ca.crt,aws-us-west-1-mmb-demo
+default,ledger-db-config,6,141,"POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER, ...","POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER, SPRING_DATASOURCE_PASSWORD, SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME",aws-us-west-1-mmb-demo
+default,ledger-schema-config,3,4040,"0-ledger-schema.sql, 1-load-testdata.sh, initialize-database.sh","0-ledger-schema.sql, 1-load-testdata.sh, initialize-database.sh",aws-us-west-1-mmb-demo
+default,service-api-config,5,87,"BALANCES_API_ADDR, CONTACTS_API_ADDR, HISTORY_API_ADDR, ...","BALANCES_API_ADDR, CONTACTS_API_ADDR, HISTORY_API_ADDR, TRANSACTIONS_API_ADDR, USERSERVICE_API_ADDR",aws-us-west-1-mmb-demo
+kube-node-lease,kube-root-ca.crt,1,1107,ca.crt,ca.crt,aws-us-west-1-mmb-demo
+kube-public,kube-root-ca.crt,1,1107,ca.crt,ca.crt,aws-us-west-1-mmb-demo
+kube-system,extension-apiserver-authentication,6,3413,"client-ca-file, requestheader-allowed-names, requestheader-client-ca-file, ...","client-ca-file, requestheader-allowed-names, requestheader-client-ca-file, requestheader-extra-headers-prefix, requestheader-group-headers, requestheader-username-headers",aws-us-west-1-mmb-demo
+kube-system,kube-apiserver-legacy-service-account-token-tracking,1,10,since,since,aws-us-west-1-mmb-demo
+kube-system,kube-root-ca.crt,1,1107,ca.crt,ca.crt,aws-us-west-1-mmb-demo

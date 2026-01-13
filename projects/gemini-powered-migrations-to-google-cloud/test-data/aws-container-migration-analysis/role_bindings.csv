@@ -1,0 +1,17 @@
+namespace,name,role_ref,subjects,cluster_id
+kube-public,system:controller:bootstrap-signer,Role/system:controller:bootstrap-signer,ServiceAccount:bootstrap-signer,aws-us-west-1-mmb-demo
+kube-system,eks-vpc-resource-controller-rolebinding,Role/eks-vpc-resource-controller-role,User:eks:vpc-resource-controller,aws-us-west-1-mmb-demo
+kube-system,eks:addon-manager,Role/eks:addon-manager,User:eks:addon-manager,aws-us-west-1-mmb-demo
+kube-system,eks:authenticator,Role/eks:authenticator,User:eks:authenticator,aws-us-west-1-mmb-demo
+kube-system,eks:az-poller,Role/eks:az-poller,User:eks:az-poller,aws-us-west-1-mmb-demo
+kube-system,eks:coredns-autoscaler,Role/eks:coredns-autoscaler,User:eks:coredns-autoscaler,aws-us-west-1-mmb-demo
+kube-system,eks:fargate-manager,Role/eks:fargate-manager,User:eks:fargate-manager,aws-us-west-1-mmb-demo
+kube-system,eks:network-policy-controller,Role/eks:network-policy-controller,User:eks:network-policy-controller,aws-us-west-1-mmb-demo
+kube-system,eks:node-manager,Role/eks:node-manager,User:eks:node-manager,aws-us-west-1-mmb-demo
+kube-system,eks:service-operations,Role/eks:service-operations-configmaps,Group:eks:service-operations,aws-us-west-1-mmb-demo
+kube-system,system::extension-apiserver-authentication-reader,Role/extension-apiserver-authentication-reader,"User:system:kube-controller-manager, User:system:kube-scheduler",aws-us-west-1-mmb-demo
+kube-system,system::leader-locking-kube-controller-manager,Role/system::leader-locking-kube-controller-manager,"User:system:kube-controller-manager, ServiceAccount:kube-controller-manager, ServiceAccount:leader-election-controller",aws-us-west-1-mmb-demo
+kube-system,system::leader-locking-kube-scheduler,Role/system::leader-locking-kube-scheduler,"User:system:kube-scheduler, ServiceAccount:kube-scheduler",aws-us-west-1-mmb-demo
+kube-system,system:controller:bootstrap-signer,Role/system:controller:bootstrap-signer,ServiceAccount:bootstrap-signer,aws-us-west-1-mmb-demo
+kube-system,system:controller:cloud-provider,Role/system:controller:cloud-provider,ServiceAccount:cloud-provider,aws-us-west-1-mmb-demo
+kube-system,system:controller:token-cleaner,Role/system:controller:token-cleaner,ServiceAccount:token-cleaner,aws-us-west-1-mmb-demo

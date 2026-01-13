@@ -27,6 +27,16 @@ The following custom commands are configured in this project under
 The custom commands in this section are aimed at helping you accelerate the
 evaluation.
 
+- **aws-container-migration-analysis:** This command analyzes KubeScan inventory
+  files to categorize Amazon EKS workloads and generate a Google Kubernetes
+  Engine (GKE) migration plan. To run this command, you must first generate
+  kubescan output files
+  [Kubescan](https://github.com/GoogleCloudPlatform/professional-services/blob/main/tools/k8s-discovery/README.md).
+
+    ```sh
+    /aws-container-migration-analysis review files in test-data/aws-container-migration-analysis
+    ```
+
 - **/aws-lambda-to-cloud-run-poc-selection:** This command assists in reviewing
   AWS Lambda inventories to identify suitable functions for migration to Cloud
   Run. Example:
@@ -118,6 +128,8 @@ outputs and are used by the custom Gemini CLI commands to demonstrate the
 migration selection process without requiring actual cloud environments. This
 data includes:
 
+- **`aws-container-migration-analysis/`**: Contains mock KubeScan inventory
+  files for Amazon EKS workloads.
 - **`aws-lambda-assessment-results/`**: Contains mock data for AWS Lambda
   functions.
 - **`aws-s3-assessment-results/`**: Contains mock data for S3 bucket locations,

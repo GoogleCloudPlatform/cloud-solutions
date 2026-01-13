@@ -1,0 +1,1047 @@
+[
+  {
+    "hosting_provider_details": {
+      "name": "mmb-demo",
+      "arn": "arn:aws:eks:us-west-1:229359586379:cluster/mmb-demo",
+      "createdAt": "2026-01-12 00:59:18.675000+00:00",
+      "version": "1.33",
+      "endpoint": "https://F21D350E320A90C423089015F4929830.sk1.us-west-1.eks.amazonaws.com",
+      "roleArn": "arn:aws:iam::229359586379:role/mmb-demo-cluster-20260111200353220400000002",
+      "resourcesVpcConfig": {
+        "subnetIds": ["subnet-06a9816457be5aebf", "subnet-019957a82f62be619"],
+        "securityGroupIds": ["sg-0dccb329b59a10c31"],
+        "clusterSecurityGroupId": "sg-0d858cd88c4af4714",
+        "vpcId": "vpc-0b4a2fcee120a963e",
+        "endpointPublicAccess": true,
+        "endpointPrivateAccess": true,
+        "publicAccessCidrs": ["0.0.0.0/0"]
+      },
+      "kubernetesNetworkConfig": {
+        "serviceIpv4Cidr": "172.20.0.0/16",
+        "ipFamily": "ipv4",
+        "elasticLoadBalancing": {
+          "enabled": true
+        }
+      },
+      "logging": {
+        "clusterLogging": [
+          {
+            "types": ["api", "audit", "authenticator"],
+            "enabled": true
+          },
+          {
+            "types": ["controllerManager", "scheduler"],
+            "enabled": false
+          }
+        ]
+      },
+      "identity": {
+        "oidc": {
+          "issuer": "https://oidc.eks.us-west-1.amazonaws.com/id/F21D350E320A90C423089015F4929830"
+        }
+      },
+      "status": "ACTIVE",
+      "certificateAuthority": {
+        "data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJRy83RnlGQ1M1OWd3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TmpBeE1USXdNRFU1TlRKYUZ3MHpOakF4TVRBd01UQTBOVEphTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUM1akoxTVEzRThPdFpPdVMzSzY1L1JTUmR0NDRZdnJWMHR3TlpPS1FYNFRib2hxejNVQzhhY2dtVWYKZ0FoekF3d1Q4Yzl2QVFpcjhaaE5RaVRZNkJ0ckJIcEZ3V0U5YkM3MjBrcXVBQlZEa1dxVDlPNjRDSzdkcTB1VgpRYkxkWHlHMWRrWjZkaCt0WmpEeGhJNjNvc3lSemR2TkUvWk5mc3lMd3h4cUg0ZEM3T1ZFNGlWd1ZxRlZNRW1KCnczRDFNTjdHRDRmVkpZZG8za0djc1pabnA3NzhtWWVkdlRibTE2ck8rZlVBdlZ1ZDBndDRUZFUvK0I4V0hxVXUKdWJDQkZEODFlUWhGSTBwNkxjV2FMQytkajYyY0JnRE1Jb0x3b2hsblA2S2Rhc2dlMVNXSVQ4UDVodWdLMWZYaQpOcVNXeXA1THhZTlM4YkM0VTNncjkxZTZmbFZyQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJSMEJjaytESU9qTTRPVjVrbFp3enJ0TXRNOUZ6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQlhNbUVwcGdwMQpLME00RnhOQXVyT0JOeHcwUnNZWVgxSUhGRlFFMkNTZzUwZTdsb2J6L3Q3NkN2cEUyK1d0L09tZDE4SlN4K0U3Ci9ubmlEeVhMeDdzSW5VcElRZmkyNXZxN2wzYmlqc2lDYVZGVWpoYnRjbmw2SFQ4QW1wTUYra0NoeWErdUkwS1MKMjgrdkxXaDFLT25zWU5Ka3FtUEY4M2JZcFhMTkdMem5vNVBXbjV5anY1RTdzWWtNN1p2cUNENFIwVXFVczV2MAp4MWRlbE9zeEN2SUswQlgvcU9jUHhxWHlVYlVCZ3VlZitwdExLOE1GRUZkc3U0TnFRUVBjVjlDT1I2N25VRzVCCnhJOVJydUc3RHoxQ0pjSWMzZjZXcTN1a3ljREROMndqK1dXS29JWlV5WXBnVDFzOTBFSG9uYlQ1R2x5eDJyOHIKenhvM1pSRHlXSDFZCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+      },
+      "platformVersion": "eks.24",
+      "tags": {
+        "Env": "Dev",
+        "Project": "VmMigrationDemo1529"
+      },
+      "encryptionConfig": [
+        {
+          "resources": ["secrets"],
+          "provider": {
+            "keyArn": "arn:aws:kms:us-west-1:229359586379:key/626639e1-859a-402d-994c-b5a558f22f35"
+          }
+        }
+      ],
+      "accessConfig": {
+        "authenticationMode": "API_AND_CONFIG_MAP"
+      },
+      "upgradePolicy": {
+        "supportType": "EXTENDED"
+      },
+      "computeConfig": {
+        "enabled": true,
+        "nodePools": ["general-purpose"],
+        "nodeRoleArn": "arn:aws:iam::229359586379:role/mmb-demo-eks-auto-20260111200353256500000004"
+      },
+      "storageConfig": {
+        "blockStorage": {
+          "enabled": true
+        }
+      },
+      "deletionProtection": false,
+      "region": "us-west-1",
+      "cluster_launch_types": [],
+      "nodegroups": [],
+      "fargate_profiles": []
+    },
+    "kubernetes_details": {
+      "nodes": [
+        {
+          "name": "i-078065801f41015e4",
+          "status": "KernelReady",
+          "instance_type": "c5a.large",
+          "zone": "us-west-1b",
+          "os_image": "Bottlerocket (EKS Auto, Standard) 2025.12.18 (aws-k8s-1.33-standard)",
+          "kernel_version": "6.12.58",
+          "kubelet_version": "v1.33.5-eks-3025e55",
+          "allocatable_cpu": "1780m",
+          "allocatable_memory_gib": "0 GiB"
+        }
+      ],
+      "pods": [
+        {
+          "namespace": "default",
+          "name": "balancereader-548c7489cc-5h9c5",
+          "status": "Running",
+          "pod_ip": "10.0.57.48",
+          "node_name": "i-078065801f41015e4",
+          "service_account": "cymbalbank-sa",
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/balancereader:latest"
+        },
+        {
+          "namespace": "default",
+          "name": "contacts-7bb89c8879-b266t",
+          "status": "Running",
+          "pod_ip": "10.0.57.56",
+          "node_name": "i-078065801f41015e4",
+          "service_account": "cymbalbank-sa",
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/contacts:latest"
+        },
+        {
+          "namespace": "default",
+          "name": "frontend-589cc7bb54-pwjqh",
+          "status": "Running",
+          "pod_ip": "10.0.57.57",
+          "node_name": "i-078065801f41015e4",
+          "service_account": "cymbalbank-sa",
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/frontend:latest"
+        },
+        {
+          "namespace": "default",
+          "name": "ledgerwriter-658586d4f5-4x95q",
+          "status": "Running",
+          "pod_ip": "10.0.57.49",
+          "node_name": "i-078065801f41015e4",
+          "service_account": "cymbalbank-sa",
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/ledgerwriter:latest"
+        },
+        {
+          "namespace": "default",
+          "name": "loadgenerator-8477ff95fc-89nhk",
+          "status": "Running",
+          "pod_ip": "10.0.57.50",
+          "node_name": "i-078065801f41015e4",
+          "service_account": "cymbalbank-sa",
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/loadgenerator:latest"
+        },
+        {
+          "namespace": "default",
+          "name": "transactionhistory-649b599565-mwmrf",
+          "status": "Running",
+          "pod_ip": "10.0.57.51",
+          "node_name": "i-078065801f41015e4",
+          "service_account": "cymbalbank-sa",
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/transactionhistory:latest"
+        },
+        {
+          "namespace": "default",
+          "name": "userservice-7d98858cd9-t89gm",
+          "status": "Running",
+          "pod_ip": "10.0.57.58",
+          "node_name": "i-078065801f41015e4",
+          "service_account": "cymbalbank-sa",
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/userservice:latest"
+        }
+      ],
+      "deployments": [
+        {
+          "namespace": "default",
+          "name": "balancereader",
+          "replicas": 1,
+          "replicas_ready": 1,
+          "strategy": "RollingUpdate",
+          "creation_timestamp": "2026-01-12 01:55:32+00:00",
+          "containers": [
+            {
+              "name": "balancereader",
+              "image": "229359586379.dkr.ecr.us-west-1.amazonaws.com/balancereader:latest",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+                }
+              }
+            }
+          ],
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/balancereader:latest",
+          "volume_mounts": "balancereader:/root/.ssh -> publickey"
+        },
+        {
+          "namespace": "default",
+          "name": "contacts",
+          "replicas": 1,
+          "replicas_ready": 1,
+          "strategy": "RollingUpdate",
+          "creation_timestamp": "2026-01-12 01:55:32+00:00",
+          "containers": [
+            {
+              "name": "contacts",
+              "image": "229359586379.dkr.ecr.us-west-1.amazonaws.com/contacts:latest",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "256Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "64Mi"
+                }
+              }
+            }
+          ],
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/contacts:latest",
+          "volume_mounts": "contacts:/root/.ssh -> publickey"
+        },
+        {
+          "namespace": "default",
+          "name": "frontend",
+          "replicas": 1,
+          "replicas_ready": 1,
+          "strategy": "RollingUpdate",
+          "creation_timestamp": "2026-01-12 01:55:32+00:00",
+          "containers": [
+            {
+              "name": "front",
+              "image": "229359586379.dkr.ecr.us-west-1.amazonaws.com/frontend:latest",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "256Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "64Mi"
+                }
+              }
+            }
+          ],
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/frontend:latest",
+          "volume_mounts": "front:/root/.ssh -> publickey"
+        },
+        {
+          "namespace": "default",
+          "name": "ledgerwriter",
+          "replicas": 1,
+          "replicas_ready": 1,
+          "strategy": "RollingUpdate",
+          "creation_timestamp": "2026-01-12 01:55:32+00:00",
+          "containers": [
+            {
+              "name": "ledgerwriter",
+              "image": "229359586379.dkr.ecr.us-west-1.amazonaws.com/ledgerwriter:latest",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+                }
+              }
+            }
+          ],
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/ledgerwriter:latest",
+          "volume_mounts": "ledgerwriter:/root/.ssh -> publickey"
+        },
+        {
+          "namespace": "default",
+          "name": "loadgenerator",
+          "replicas": 1,
+          "replicas_ready": 1,
+          "strategy": "RollingUpdate",
+          "creation_timestamp": "2026-01-12 01:55:32+00:00",
+          "containers": [
+            {
+              "name": "loadgenerator",
+              "image": "229359586379.dkr.ecr.us-west-1.amazonaws.com/loadgenerator:latest",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+                }
+              }
+            }
+          ],
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/loadgenerator:latest",
+          "volume_mounts": ""
+        },
+        {
+          "namespace": "default",
+          "name": "transactionhistory",
+          "replicas": 1,
+          "replicas_ready": 1,
+          "strategy": "RollingUpdate",
+          "creation_timestamp": "2026-01-12 01:55:32+00:00",
+          "containers": [
+            {
+              "name": "transactionhistory",
+              "image": "229359586379.dkr.ecr.us-west-1.amazonaws.com/transactionhistory:latest",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+                }
+              }
+            }
+          ],
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/transactionhistory:latest",
+          "volume_mounts": "transactionhistory:/root/.ssh -> publickey"
+        },
+        {
+          "namespace": "default",
+          "name": "userservice",
+          "replicas": 1,
+          "replicas_ready": 1,
+          "strategy": "RollingUpdate",
+          "creation_timestamp": "2026-01-12 01:55:33+00:00",
+          "containers": [
+            {
+              "name": "userservice",
+              "image": "229359586379.dkr.ecr.us-west-1.amazonaws.com/userservice:latest",
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "256Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "64Mi"
+                }
+              }
+            }
+          ],
+          "container_images": "229359586379.dkr.ecr.us-west-1.amazonaws.com/userservice:latest",
+          "volume_mounts": "userservice:/root/.ssh -> keys"
+        }
+      ],
+      "services": [
+        {
+          "namespace": "default",
+          "name": "balancereader",
+          "type": "ClusterIP",
+          "cluster_ip": "172.20.169.0",
+          "external_ip": "N/A",
+          "ports": "http:8080/TCP",
+          "selector": "{'app': 'balancereader'}"
+        },
+        {
+          "namespace": "default",
+          "name": "contacts",
+          "type": "ClusterIP",
+          "cluster_ip": "172.20.22.171",
+          "external_ip": "N/A",
+          "ports": "http:8080/TCP",
+          "selector": "{'app': 'contacts'}"
+        },
+        {
+          "namespace": "default",
+          "name": "frontend",
+          "type": "ClusterIP",
+          "cluster_ip": "172.20.116.154",
+          "external_ip": "N/A",
+          "ports": "None:80/TCP",
+          "selector": "{'app': 'frontend'}"
+        },
+        {
+          "namespace": "default",
+          "name": "kubernetes",
+          "type": "ClusterIP",
+          "cluster_ip": "172.20.0.1",
+          "external_ip": "N/A",
+          "ports": "https:443/TCP",
+          "selector": "None"
+        },
+        {
+          "namespace": "default",
+          "name": "ledgerwriter",
+          "type": "ClusterIP",
+          "cluster_ip": "172.20.228.159",
+          "external_ip": "N/A",
+          "ports": "http:8080/TCP",
+          "selector": "{'app': 'ledgerwriter'}"
+        },
+        {
+          "namespace": "default",
+          "name": "transactionhistory",
+          "type": "ClusterIP",
+          "cluster_ip": "172.20.39.162",
+          "external_ip": "N/A",
+          "ports": "http:8080/TCP",
+          "selector": "{'app': 'transactionhistory'}"
+        },
+        {
+          "namespace": "default",
+          "name": "userservice",
+          "type": "ClusterIP",
+          "cluster_ip": "172.20.1.66",
+          "external_ip": "N/A",
+          "ports": "http:8080/TCP",
+          "selector": "{'app': 'userservice'}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks-extension-metrics-api",
+          "type": "ClusterIP",
+          "cluster_ip": "172.20.22.212",
+          "external_ip": "N/A",
+          "ports": "metrics-api:443/TCP",
+          "selector": "None"
+        }
+      ],
+      "statefulsets": [],
+      "daemonsets": [],
+      "jobs": [],
+      "cronjobs": [],
+      "persistent_volumes": [],
+      "namespaces": [
+        {
+          "name": "default",
+          "status": "Active",
+          "creation_timestamp": "2026-01-12 01:05:20+00:00",
+          "labels": "{\"kubernetes.io/metadata.name\": \"default\"}"
+        },
+        {
+          "name": "kube-node-lease",
+          "status": "Active",
+          "creation_timestamp": "2026-01-12 01:05:20+00:00",
+          "labels": "{\"kubernetes.io/metadata.name\": \"kube-node-lease\"}"
+        },
+        {
+          "name": "kube-public",
+          "status": "Active",
+          "creation_timestamp": "2026-01-12 01:05:20+00:00",
+          "labels": "{\"kubernetes.io/metadata.name\": \"kube-public\"}"
+        },
+        {
+          "name": "kube-system",
+          "status": "Active",
+          "creation_timestamp": "2026-01-12 01:05:20+00:00",
+          "labels": "{\"kubernetes.io/metadata.name\": \"kube-system\"}"
+        }
+      ],
+      "secrets": [
+        {
+          "namespace": "default",
+          "name": "jwt-key",
+          "type": "Opaque",
+          "data_keys": "jwtRS256.key, jwtRS256.key.pub"
+        },
+        {
+          "namespace": "default",
+          "name": "jwt-keys",
+          "type": "Opaque",
+          "data_keys": "private-key, public-key"
+        }
+      ],
+      "configmaps": [
+        {
+          "namespace": "default",
+          "name": "accounts-db-config",
+          "data_count": 1,
+          "data_size_bytes": 106,
+          "data_summary": "ACCOUNTS_DB_URI",
+          "data_keys": "ACCOUNTS_DB_URI"
+        },
+        {
+          "namespace": "default",
+          "name": "accounts-schema-config",
+          "data_count": 3,
+          "data_size_bytes": 6006,
+          "data_summary": "0-accounts-schema.sql, 1-load-testdata.sh, initialize-database.sh",
+          "data_keys": "0-accounts-schema.sql, 1-load-testdata.sh, initialize-database.sh"
+        },
+        {
+          "namespace": "default",
+          "name": "create-dms-user-script",
+          "data_count": 1,
+          "data_size_bytes": 2433,
+          "data_summary": "create-dms-user.sh",
+          "data_keys": "create-dms-user.sh"
+        },
+        {
+          "namespace": "default",
+          "name": "demo-data-config",
+          "data_count": 3,
+          "data_size_bytes": 24,
+          "data_summary": "DEMO_LOGIN_PASSWORD, DEMO_LOGIN_USERNAME, USE_DEMO_DATA",
+          "data_keys": "DEMO_LOGIN_PASSWORD, DEMO_LOGIN_USERNAME, USE_DEMO_DATA"
+        },
+        {
+          "namespace": "default",
+          "name": "environment-config",
+          "data_count": 2,
+          "data_size_bytes": 29,
+          "data_summary": "LOCAL_ROUTING_NUM, PUB_KEY_PATH",
+          "data_keys": "LOCAL_ROUTING_NUM, PUB_KEY_PATH"
+        },
+        {
+          "namespace": "default",
+          "name": "kube-root-ca.crt",
+          "data_count": 1,
+          "data_size_bytes": 1107,
+          "data_summary": "ca.crt",
+          "data_keys": "ca.crt"
+        },
+        {
+          "namespace": "default",
+          "name": "ledger-db-config",
+          "data_count": 6,
+          "data_size_bytes": 141,
+          "data_summary": "POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER, ...",
+          "data_keys": "POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER, SPRING_DATASOURCE_PASSWORD, SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME"
+        },
+        {
+          "namespace": "default",
+          "name": "ledger-schema-config",
+          "data_count": 3,
+          "data_size_bytes": 4040,
+          "data_summary": "0-ledger-schema.sql, 1-load-testdata.sh, initialize-database.sh",
+          "data_keys": "0-ledger-schema.sql, 1-load-testdata.sh, initialize-database.sh"
+        },
+        {
+          "namespace": "default",
+          "name": "service-api-config",
+          "data_count": 5,
+          "data_size_bytes": 87,
+          "data_summary": "BALANCES_API_ADDR, CONTACTS_API_ADDR, HISTORY_API_ADDR, ...",
+          "data_keys": "BALANCES_API_ADDR, CONTACTS_API_ADDR, HISTORY_API_ADDR, TRANSACTIONS_API_ADDR, USERSERVICE_API_ADDR"
+        },
+        {
+          "namespace": "kube-node-lease",
+          "name": "kube-root-ca.crt",
+          "data_count": 1,
+          "data_size_bytes": 1107,
+          "data_summary": "ca.crt",
+          "data_keys": "ca.crt"
+        },
+        {
+          "namespace": "kube-public",
+          "name": "kube-root-ca.crt",
+          "data_count": 1,
+          "data_size_bytes": 1107,
+          "data_summary": "ca.crt",
+          "data_keys": "ca.crt"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "extension-apiserver-authentication",
+          "data_count": 6,
+          "data_size_bytes": 3413,
+          "data_summary": "client-ca-file, requestheader-allowed-names, requestheader-client-ca-file, ...",
+          "data_keys": "client-ca-file, requestheader-allowed-names, requestheader-client-ca-file, requestheader-extra-headers-prefix, requestheader-group-headers, requestheader-username-headers"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "kube-apiserver-legacy-service-account-token-tracking",
+          "data_count": 1,
+          "data_size_bytes": 10,
+          "data_summary": "since",
+          "data_keys": "since"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "kube-root-ca.crt",
+          "data_count": 1,
+          "data_size_bytes": 1107,
+          "data_summary": "ca.crt",
+          "data_keys": "ca.crt"
+        }
+      ],
+      "persistent_volume_claims": [],
+      "ingresses": [
+        {
+          "namespace": "default",
+          "name": "frontend",
+          "class": "alb",
+          "hosts": "",
+          "load_balancer_ips": "",
+          "tls_secret": "",
+          "annotations": "{\"alb.ingress.kubernetes.io/listen-ports\": \"[{\\\"HTTP\\\": 80}]\", \"alb.ingress.kubernetes.io/scheme\": \"internet-facing\", \"alb.ingress.kubernetes.io/target-type\": \"ip\", \"kubectl.kubernetes.io/last-applied-configuration\": \"{\\\"apiVersion\\\":\\\"networking.k8s.io/v1\\\",\\\"kind\\\":\\\"Ingress\\\",\\\"metadata\\\":{\\\"annotations\\\":{\\\"alb.ingress.kubernetes.io/listen-ports\\\":\\\"[{\\\\\\\"HTTP\\\\\\\": 80}]\\\",\\\"alb.ingress.kubernetes.io/scheme\\\":\\\"internet-facing\\\",\\\"alb.ingress.kubernetes.io/target-type\\\":\\\"ip\\\"},\\\"name\\\":\\\"frontend\\\",\\\"namespace\\\":\\\"default\\\"},\\\"spec\\\":{\\\"ingressClassName\\\":\\\"alb\\\",\\\"rules\\\":[{\\\"http\\\":{\\\"paths\\\":[{\\\"backend\\\":{\\\"service\\\":{\\\"name\\\":\\\"frontend\\\",\\\"port\\\":{\\\"number\\\":80}}},\\\"path\\\":\\\"/\\\",\\\"pathType\\\":\\\"Prefix\\\"}]}}]}}\\n\"}"
+        }
+      ],
+      "network_policies": [],
+      "hpas": [],
+      "roles": [
+        {
+          "namespace": "kube-public",
+          "name": "system:controller:bootstrap-signer",
+          "rules": "[][configmaps][get,list,watch] | [][configmaps][update] | [,events.k8s.io][events][create,patch,update]",
+          "annotations": "{\"rbac.authorization.kubernetes.io/autoupdate\": \"true\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks-vpc-resource-controller-role",
+          "rules": "[apps][deployments][get,list,watch] | [][configmaps][get,list,watch] | [][configmaps][create,list,watch] | [][configmaps][get,update,patch] | [][events][create] | [coordination.k8s.io][leases][create] | [coordination.k8s.io][leases][get,update]",
+          "annotations": "{\"kubectl.kubernetes.io/last-applied-configuration\": \"{\\\"apiVersion\\\":\\\"rbac.authorization.k8s.io/v1\\\",\\\"kind\\\":\\\"Role\\\",\\\"metadata\\\":{\\\"annotations\\\":{},\\\"name\\\":\\\"eks-vpc-resource-controller-role\\\",\\\"namespace\\\":\\\"kube-system\\\"},\\\"rules\\\":[{\\\"apiGroups\\\":[\\\"apps\\\"],\\\"resourceNames\\\":[\\\"vpc-resource-controller\\\"],\\\"resources\\\":[\\\"deployments\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"list\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resourceNames\\\":[\\\"amazon-vpc-cni\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"list\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"create\\\",\\\"list\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resourceNames\\\":[\\\"cp-vpc-resource-controller\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"update\\\",\\\"patch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resources\\\":[\\\"events\\\"],\\\"verbs\\\":[\\\"create\\\"]},{\\\"apiGroups\\\":[\\\"coordination.k8s.io\\\"],\\\"resources\\\":[\\\"leases\\\"],\\\"verbs\\\":[\\\"create\\\"]},{\\\"apiGroups\\\":[\\\"coordination.k8s.io\\\"],\\\"resourceNames\\\":[\\\"cp-vpc-resource-controller\\\"],\\\"resources\\\":[\\\"leases\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"update\\\"]}]}\\n\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:addon-manager",
+          "rules": "[policy][poddisruptionbudgets][create,delete,get,list,patch,update,watch] | [][configmaps][create,delete,get,list,patch,update,watch] | [apps][daemonsets][create,delete,get,list,patch,update,watch] | [apps][deployments][create,delete,get,list,patch,update,watch] | [][services][create,delete,get,list,patch,update,watch] | [][serviceaccounts][create,delete,get,list,patch,update,watch]",
+          "annotations": "{\"kubectl.kubernetes.io/last-applied-configuration\": \"{\\\"apiVersion\\\":\\\"rbac.authorization.k8s.io/v1\\\",\\\"kind\\\":\\\"Role\\\",\\\"metadata\\\":{\\\"annotations\\\":{},\\\"name\\\":\\\"eks:addon-manager\\\",\\\"namespace\\\":\\\"kube-system\\\"},\\\"rules\\\":[{\\\"apiGroups\\\":[\\\"policy\\\"],\\\"resourceNames\\\":[\\\"ebs-csi-controller-pod-disruption-budget\\\",\\\"ebs-csi-controller\\\"],\\\"resources\\\":[\\\"poddisruptionbudgets\\\"],\\\"verbs\\\":[\\\"create\\\",\\\"delete\\\",\\\"get\\\",\\\"list\\\",\\\"patch\\\",\\\"update\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resourceNames\\\":[\\\"coredns\\\",\\\"kube-proxy\\\",\\\"kube-proxy-config\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"create\\\",\\\"delete\\\",\\\"get\\\",\\\"list\\\",\\\"patch\\\",\\\"update\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"apps\\\"],\\\"resourceNames\\\":[\\\"aws-node\\\",\\\"kube-proxy\\\",\\\"ebs-csi-node\\\",\\\"ebs-csi-node-windows\\\"],\\\"resources\\\":[\\\"daemonsets\\\"],\\\"verbs\\\":[\\\"create\\\",\\\"delete\\\",\\\"get\\\",\\\"list\\\",\\\"patch\\\",\\\"update\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"apps\\\"],\\\"resourceNames\\\":[\\\"coredns\\\",\\\"ebs-csi-controller\\\"],\\\"resources\\\":[\\\"deployments\\\"],\\\"verbs\\\":[\\\"create\\\",\\\"delete\\\",\\\"get\\\",\\\"list\\\",\\\"patch\\\",\\\"update\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resourceNames\\\":[\\\"kube-dns\\\"],\\\"resources\\\":[\\\"services\\\"],\\\"verbs\\\":[\\\"create\\\",\\\"delete\\\",\\\"get\\\",\\\"list\\\",\\\"patch\\\",\\\"update\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resourceNames\\\":[\\\"coredns\\\",\\\"aws-node\\\",\\\"kube-proxy\\\",\\\"ebs-csi-controller-sa\\\",\\\"ebs-csi-node-sa\\\"],\\\"resources\\\":[\\\"serviceaccounts\\\"],\\\"verbs\\\":[\\\"create\\\",\\\"delete\\\",\\\"get\\\",\\\"list\\\",\\\"patch\\\",\\\"update\\\",\\\"watch\\\"]}]}\\n\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:authenticator",
+          "rules": "[][events][create,update,patch] | [][configmaps][get,list,watch]",
+          "annotations": "{}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:az-poller",
+          "rules": "[coordination.k8s.io][leases][get,patch]",
+          "annotations": "{}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:coredns-autoscaler",
+          "rules": "[coordination.k8s.io][leases][create] | [coordination.k8s.io][leases][get,update,patch] | [apps][deployments/scale][get,update] | [][events][create,patch] | [][pods][list,get,watch] | [metrics.k8s.io][pods][list] | [][pods/proxy][get]",
+          "annotations": "{}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:fargate-manager",
+          "rules": "[][configmaps][get,update,patch,delete] | [][configmaps][create] | [][events][get,list]",
+          "annotations": "{\"kubectl.kubernetes.io/last-applied-configuration\": \"{\\\"apiVersion\\\":\\\"rbac.authorization.k8s.io/v1\\\",\\\"kind\\\":\\\"Role\\\",\\\"metadata\\\":{\\\"annotations\\\":{},\\\"name\\\":\\\"eks:fargate-manager\\\",\\\"namespace\\\":\\\"kube-system\\\"},\\\"rules\\\":[{\\\"apiGroups\\\":[\\\"\\\"],\\\"resourceNames\\\":[\\\"aws-auth\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"update\\\",\\\"patch\\\",\\\"delete\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"create\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resources\\\":[\\\"events\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"list\\\"]}]}\\n\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:network-policy-controller",
+          "rules": "[][configmaps][get,list,watch] | [coordination.k8s.io][leases][create] | [coordination.k8s.io][leases][get,update,patch] | [][events][create,patch]",
+          "annotations": "{\"kubectl.kubernetes.io/last-applied-configuration\": \"{\\\"apiVersion\\\":\\\"rbac.authorization.k8s.io/v1\\\",\\\"kind\\\":\\\"Role\\\",\\\"metadata\\\":{\\\"annotations\\\":{},\\\"labels\\\":{\\\"app.kubernetes.io/name\\\":\\\"amazon-network-policy-controller-k8s\\\"},\\\"name\\\":\\\"eks:network-policy-controller\\\",\\\"namespace\\\":\\\"kube-system\\\"},\\\"rules\\\":[{\\\"apiGroups\\\":[\\\"\\\"],\\\"resourceNames\\\":[\\\"amazon-vpc-cni\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"list\\\",\\\"watch\\\"]},{\\\"apiGroups\\\":[\\\"coordination.k8s.io\\\"],\\\"resources\\\":[\\\"leases\\\"],\\\"verbs\\\":[\\\"create\\\"]},{\\\"apiGroups\\\":[\\\"coordination.k8s.io\\\"],\\\"resourceNames\\\":[\\\"amazon-network-policy-controller-k8s\\\"],\\\"resources\\\":[\\\"leases\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"update\\\",\\\"patch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resources\\\":[\\\"events\\\"],\\\"verbs\\\":[\\\"create\\\",\\\"patch\\\"]}]}\\n\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:node-manager",
+          "rules": "[][configmaps][get,update,patch] | [][configmaps][create] | [][events][get,list]",
+          "annotations": "{\"kubectl.kubernetes.io/last-applied-configuration\": \"{\\\"apiVersion\\\":\\\"rbac.authorization.k8s.io/v1\\\",\\\"kind\\\":\\\"Role\\\",\\\"metadata\\\":{\\\"annotations\\\":{},\\\"name\\\":\\\"eks:node-manager\\\",\\\"namespace\\\":\\\"kube-system\\\"},\\\"rules\\\":[{\\\"apiGroups\\\":[\\\"\\\"],\\\"resourceNames\\\":[\\\"aws-auth\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"update\\\",\\\"patch\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resources\\\":[\\\"configmaps\\\"],\\\"verbs\\\":[\\\"create\\\"]},{\\\"apiGroups\\\":[\\\"\\\"],\\\"resources\\\":[\\\"events\\\"],\\\"verbs\\\":[\\\"get\\\",\\\"list\\\"]}]}\\n\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:service-operations-configmaps",
+          "rules": "[][configmaps][get] | [][configmaps][get,create,delete,patch,update]",
+          "annotations": "{}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "extension-apiserver-authentication-reader",
+          "rules": "[][configmaps][get,list,watch]",
+          "annotations": "{\"rbac.authorization.kubernetes.io/autoupdate\": \"true\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system::leader-locking-kube-controller-manager",
+          "rules": "[][configmaps][watch] | [][configmaps][get,update] | [coordination.k8s.io][leases][create,get,list,update,watch] | [coordination.k8s.io][leasecandidates][create,get,list,update,watch]",
+          "annotations": "{\"rbac.authorization.kubernetes.io/autoupdate\": \"true\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system::leader-locking-kube-scheduler",
+          "rules": "[][configmaps][watch] | [][configmaps][get,update] | [coordination.k8s.io][leases][create,get,list,update,watch] | [coordination.k8s.io][leasecandidates][create,get,list,update,watch]",
+          "annotations": "{\"rbac.authorization.kubernetes.io/autoupdate\": \"true\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system:controller:bootstrap-signer",
+          "rules": "[][secrets][get,list,watch]",
+          "annotations": "{\"rbac.authorization.kubernetes.io/autoupdate\": \"true\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system:controller:cloud-provider",
+          "rules": "[][configmaps][create,get,list,watch]",
+          "annotations": "{\"rbac.authorization.kubernetes.io/autoupdate\": \"true\"}"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system:controller:token-cleaner",
+          "rules": "[][secrets][delete,get,list,watch] | [,events.k8s.io][events][create,patch,update]",
+          "annotations": "{\"rbac.authorization.kubernetes.io/autoupdate\": \"true\"}"
+        }
+      ],
+      "role_bindings": [
+        {
+          "namespace": "kube-public",
+          "name": "system:controller:bootstrap-signer",
+          "role_ref": "Role/system:controller:bootstrap-signer",
+          "subjects": "ServiceAccount:bootstrap-signer"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks-vpc-resource-controller-rolebinding",
+          "role_ref": "Role/eks-vpc-resource-controller-role",
+          "subjects": "User:eks:vpc-resource-controller"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:addon-manager",
+          "role_ref": "Role/eks:addon-manager",
+          "subjects": "User:eks:addon-manager"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:authenticator",
+          "role_ref": "Role/eks:authenticator",
+          "subjects": "User:eks:authenticator"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:az-poller",
+          "role_ref": "Role/eks:az-poller",
+          "subjects": "User:eks:az-poller"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:coredns-autoscaler",
+          "role_ref": "Role/eks:coredns-autoscaler",
+          "subjects": "User:eks:coredns-autoscaler"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:fargate-manager",
+          "role_ref": "Role/eks:fargate-manager",
+          "subjects": "User:eks:fargate-manager"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:network-policy-controller",
+          "role_ref": "Role/eks:network-policy-controller",
+          "subjects": "User:eks:network-policy-controller"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:node-manager",
+          "role_ref": "Role/eks:node-manager",
+          "subjects": "User:eks:node-manager"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "eks:service-operations",
+          "role_ref": "Role/eks:service-operations-configmaps",
+          "subjects": "Group:eks:service-operations"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system::extension-apiserver-authentication-reader",
+          "role_ref": "Role/extension-apiserver-authentication-reader",
+          "subjects": "User:system:kube-controller-manager, User:system:kube-scheduler"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system::leader-locking-kube-controller-manager",
+          "role_ref": "Role/system::leader-locking-kube-controller-manager",
+          "subjects": "User:system:kube-controller-manager, ServiceAccount:kube-controller-manager, ServiceAccount:leader-election-controller"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system::leader-locking-kube-scheduler",
+          "role_ref": "Role/system::leader-locking-kube-scheduler",
+          "subjects": "User:system:kube-scheduler, ServiceAccount:kube-scheduler"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system:controller:bootstrap-signer",
+          "role_ref": "Role/system:controller:bootstrap-signer",
+          "subjects": "ServiceAccount:bootstrap-signer"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system:controller:cloud-provider",
+          "role_ref": "Role/system:controller:cloud-provider",
+          "subjects": "ServiceAccount:cloud-provider"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "system:controller:token-cleaner",
+          "role_ref": "Role/system:controller:token-cleaner",
+          "subjects": "ServiceAccount:token-cleaner"
+        }
+      ],
+      "resource_quotas": [],
+      "limit_ranges": [],
+      "pod_disruption_budgets": [],
+      "service_accounts": [
+        {
+          "namespace": "default",
+          "name": "cymbalbank-sa",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:11:53+00:00"
+        },
+        {
+          "namespace": "default",
+          "name": "default",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:35+00:00"
+        },
+        {
+          "namespace": "kube-node-lease",
+          "name": "default",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:35+00:00"
+        },
+        {
+          "namespace": "kube-public",
+          "name": "default",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:35+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "attachdetach-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:31+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "aws-cloud-provider",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:25+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "certificate-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:31+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "clusterrole-aggregation-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:32+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "cronjob-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:33+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "daemon-set-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "default",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:35+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "deployment-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:32+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "disruption-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "endpoint-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "endpointslice-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:34+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "endpointslicemirroring-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "ephemeral-volume-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:34+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "expand-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "generic-garbage-collector",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:32+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "horizontal-pod-autoscaler",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "job-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:32+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "legacy-service-account-token-cleaner",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:35+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "namespace-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:34+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "node-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:25+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "persistent-volume-binder",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:34+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "pod-garbage-collector",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:31+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "pv-protection-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:31+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "pvc-protection-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:34+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "replicaset-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:31+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "replication-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:31+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "resource-claim-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:33+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "resourcequota-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:33+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "root-ca-cert-publisher",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "service-account-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "service-cidrs-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "service-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:25+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "statefulset-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:32+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "tagging-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:25+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "ttl-after-finished-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:32+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "ttl-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:34+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "validatingadmissionpolicy-status-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:33+00:00"
+        },
+        {
+          "namespace": "kube-system",
+          "name": "volumeattributesclass-protection-controller",
+          "automount_token": null,
+          "creation_timestamp": "2026-01-12 01:05:30+00:00"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,78 @@
+description = "Analyzes KubeScan inventory data to assess EKS workloads for migration to Google Kubernetes Engine (GKE)."
+
+prompt = '''
+You are a Senior Cloud Migration Architect specializing in AWS to Google Cloud migrations. Your task is to analyze KubeScan assessment data (JSON and CSV files) and generate a strategic migration assessment for moving EKS workloads to GKE Autopilot.
+Review the EKS cluster inventory files provided in the folder defined by "{{args}}" and help identify stateless workloads suitable for a direct "lift-and-shift" versus stateful workloads requiring database migration.
+
+## EKS Workload Assessment Rules
+
+**1. Workload Type (The "State" of the Pod):**
+* **Stateless**: Workloads that do NOT use PersistentVolumeClaims (PVCs). These are "Lift and Shift" candidates.
+* **Stateful**: Workloads that mount PVCs (e.g., EBS volumes). These require complex migration (e.g., using StatefulSets or migrating data to Cloud Storage).
+
+**2. Dependencies (External Data):**
+* **External Database**: Workloads connecting to RDS/ElastiCache. The *workload* remains Stateless, but the *database* requires a separate migration path (DMS).
+* **Self-Hosted Data**: Workloads hosting their own DB (StatefulSet + PVC).
+
+**3. Network Strategy:**
+* Identify AWS annotations (e.g., `service.beta.kubernetes.io/aws-load-balancer`) that need refactoring to GKE Ingress.
+
+## Your Process
+
+- Thoroughly examine files in the provided folder (`{{args}}`) that contains information about EKS workloads (specifically `workloads.csv`, `pods.csv`, `configmaps.csv`, `services.csv`, and `eks_data.json`).
+- If you think that some assessment data is missing, examine all the files in the provided folder to check if it contains that missing data.
+- List all analyzed workloads in the EKS Cluster Analysis Summary and use emojis as complexity indicators (🟢 Simple/Stateless, 🟡 Moderate/Config Changes, 🔴 Complex/Stateful).
+
+### 2. Analysis & Reasoning
+
+Document your findings by explaining:
+
+- What you discovered from files inspection
+- Which workloads are strictly stateless vs. stateful.
+- Specific AWS dependencies found (e.g., "Found RDS endpoint in ConfigMap 'backend-config'").
+- Networking changes required (e.g., "Service 'frontend' uses Classic ELB annotations").
+
+### 3. Plan Creation
+
+## Output Format for `eks-migration-assessments/[plan_name].md`
+
+**Note: Please strictly follow Markdown format for the entire output.**
+
+You **MUST** format the contents of `eks-migration-assessments/[plan_name].md` exactly as follows:
+
+- Use markdown.
+- The plan name should be short and descriptive, also make sure it can be used as a filename.
+
+```markdown
+# EKS Migration Assessment: [plan_name]
+
+## Current date and time
+
+## EKS Cluster Analysis Summary:
+
+Table with columns:
+
+Workload Name │ Namespace │ Type (Stateless/Stateful) │ External Dependencies (DB/Cache) │ Complexity │ Migration Action
+
+## Recommendations for GKE Migration:
+
+**Infrastructure Provisioning:**
+* Recommended GKE Cluster Mode (Autopilot/Standard) based on node analysis.
+* Recommended Cloud SQL sizing based on detected RDS connections.
+
+**Workload Strategy:**
+* **Stateless Workloads (Lift & Shift)**: List workloads ready for immediate redeployment.
+* **Data Migration (External Dependencies)**: Identify workloads dependent on RDS and define the DMS strategy.
+* **Stateful Workloads (Refactoring Required)**: Identify workloads using PVCs that require storage migration.
+
+**Missing Data / Assumptions:**
+* Note any missing configuration files or assumptions made about secrets.
+```
+
+## Final Steps
+
+1. Conduct your review and analysis
+2. Write the complete plan to `eks-migration-assessments/[plan_name].md`
+
+Remember: You are in planning mode only. Your job ends after the plan is written to `eks-migration-assessments/[plan_name].md`.
+'''

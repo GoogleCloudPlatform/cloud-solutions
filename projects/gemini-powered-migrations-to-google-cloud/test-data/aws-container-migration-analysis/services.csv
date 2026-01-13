@@ -1,0 +1,9 @@
+namespace,name,type,cluster_ip,external_ip,ports,selector,cluster_id
+default,balancereader,ClusterIP,172.20.169.0,N/A,http:8080/TCP,{'app': 'balancereader'},aws-us-west-1-mmb-demo
+default,contacts,ClusterIP,172.20.22.171,N/A,http:8080/TCP,{'app': 'contacts'},aws-us-west-1-mmb-demo
+default,frontend,ClusterIP,172.20.116.154,N/A,None:80/TCP,{'app': 'frontend'},aws-us-west-1-mmb-demo
+default,kubernetes,ClusterIP,172.20.0.1,N/A,https:443/TCP,None,aws-us-west-1-mmb-demo
+default,ledgerwriter,ClusterIP,172.20.228.159,N/A,http:8080/TCP,{'app': 'ledgerwriter'},aws-us-west-1-mmb-demo
+default,transactionhistory,ClusterIP,172.20.39.162,N/A,http:8080/TCP,{'app': 'transactionhistory'},aws-us-west-1-mmb-demo
+default,userservice,ClusterIP,172.20.1.66,N/A,http:8080/TCP,{'app': 'userservice'},aws-us-west-1-mmb-demo
+kube-system,eks-extension-metrics-api,ClusterIP,172.20.22.212,N/A,metrics-api:443/TCP,None,aws-us-west-1-mmb-demo

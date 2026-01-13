@@ -1,0 +1,8 @@
+namespace,name,status,pod_ip,node_name,service_account,container_images,cluster_id
+default,balancereader-548c7489cc-5h9c5,Running,10.0.57.48,i-078065801f41015e4,cymbalbank-sa,229359586379.dkr.ecr.us-west-1.amazonaws.com/balancereader:latest,aws-us-west-1-mmb-demo
+default,contacts-7bb89c8879-b266t,Running,10.0.57.56,i-078065801f41015e4,cymbalbank-sa,229359586379.dkr.ecr.us-west-1.amazonaws.com/contacts:latest,aws-us-west-1-mmb-demo
+default,frontend-589cc7bb54-pwjqh,Running,10.0.57.57,i-078065801f41015e4,cymbalbank-sa,229359586379.dkr.ecr.us-west-1.amazonaws.com/frontend:latest,aws-us-west-1-mmb-demo
+default,ledgerwriter-658586d4f5-4x95q,Running,10.0.57.49,i-078065801f41015e4,cymbalbank-sa,229359586379.dkr.ecr.us-west-1.amazonaws.com/ledgerwriter:latest,aws-us-west-1-mmb-demo
+default,loadgenerator-8477ff95fc-89nhk,Running,10.0.57.50,i-078065801f41015e4,cymbalbank-sa,229359586379.dkr.ecr.us-west-1.amazonaws.com/loadgenerator:latest,aws-us-west-1-mmb-demo
+default,transactionhistory-649b599565-mwmrf,Running,10.0.57.51,i-078065801f41015e4,cymbalbank-sa,229359586379.dkr.ecr.us-west-1.amazonaws.com/transactionhistory:latest,aws-us-west-1-mmb-demo
+default,userservice-7d98858cd9-t89gm,Running,10.0.57.58,i-078065801f41015e4,cymbalbank-sa,229359586379.dkr.ecr.us-west-1.amazonaws.com/userservice:latest,aws-us-west-1-mmb-demo

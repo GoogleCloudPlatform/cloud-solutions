@@ -1,0 +1,8 @@
+cluster_id,namespace,workload_name,workload_type,replicas,creation_timestamp,image,cpu_request,memory_request,cpu_limit,memory_limit
+aws-us-west-1-mmb-demo,default,balancereader,deployment,1,2026-01-12 01:55:32+00:00,229359586379.dkr.ecr.us-west-1.amazonaws.com/balancereader:latest,100m,512Mi,500m,1Gi
+aws-us-west-1-mmb-demo,default,contacts,deployment,1,2026-01-12 01:55:32+00:00,229359586379.dkr.ecr.us-west-1.amazonaws.com/contacts:latest,100m,64Mi,500m,256Mi
+aws-us-west-1-mmb-demo,default,frontend,deployment,1,2026-01-12 01:55:32+00:00,229359586379.dkr.ecr.us-west-1.amazonaws.com/frontend:latest,100m,64Mi,500m,256Mi
+aws-us-west-1-mmb-demo,default,ledgerwriter,deployment,1,2026-01-12 01:55:32+00:00,229359586379.dkr.ecr.us-west-1.amazonaws.com/ledgerwriter:latest,100m,512Mi,500m,1Gi
+aws-us-west-1-mmb-demo,default,loadgenerator,deployment,1,2026-01-12 01:55:32+00:00,229359586379.dkr.ecr.us-west-1.amazonaws.com/loadgenerator:latest,100m,512Mi,500m,1Gi
+aws-us-west-1-mmb-demo,default,transactionhistory,deployment,1,2026-01-12 01:55:32+00:00,229359586379.dkr.ecr.us-west-1.amazonaws.com/transactionhistory:latest,100m,512Mi,500m,1Gi
+aws-us-west-1-mmb-demo,default,userservice,deployment,1,2026-01-12 01:55:33+00:00,229359586379.dkr.ecr.us-west-1.amazonaws.com/userservice:latest,100m,64Mi,500m,256Mi

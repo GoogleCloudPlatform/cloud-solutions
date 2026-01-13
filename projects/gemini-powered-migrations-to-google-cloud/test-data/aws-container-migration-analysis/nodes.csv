@@ -1,0 +1,2 @@
+cluster_id,node_name,instance_type,zone,is_ready,status_message,cpu_capacity,memory_capacity,os_image,kernel_version,kubelet_version,creation_timestamp
+aws-us-west-1-mmb-demo,i-078065801f41015e4,c5a.large,us-west-1b,,,,,"Bottlerocket (EKS Auto, Standard) 2025.12.18 (aws-k8s-1.33-standard)",6.12.58,v1.33.5-eks-3025e55,

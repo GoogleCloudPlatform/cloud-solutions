@@ -3,6 +3,7 @@ title: Gemini-powered migrations to Google Cloud
 nav:
   - "Overview": "README.md"
   - Examples:
+      - "Amazon EKS container migration analysis": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-container-migration-analysis/"
       - "Amazon Lambda function selection plan": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-lambda-to-cloud-run-poc-plan/"
       - "Amazon S3 bucket selection": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-s3-poc-selection-us-east/"
       - "Amazon S3 migration analysis": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-s3-migration-analysis/"
