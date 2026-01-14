@@ -1,15 +1,15 @@
-# AWS EKS Migration Assessment
+# Amazon EKS Migration Assessment
 
-## EKS Cluster Analysis Summary
+## Amazon EKS Cluster Analysis Summary
 
 | Workload Name      | Namespace | Type (Stateless/Stateful) | External Dependencies (DB/Cache) | Complexity  | Migration Action                  |
 | ------------------ | --------- | ------------------------- | -------------------------------- | ----------- | --------------------------------- |
-| balancereader      | default   | Stateless                 | PostgreSQL (Assumed RDS)         | 🟡 Moderate | Lift & Shift, Reconfigure DB      |
+| balancereader      | default   | Stateless                 | PostgreSQL (Assumed Amazon RDS)  | 🟡 Moderate | Lift & Shift, Reconfigure DB      |
 | contacts           | default   | Stateless                 | Not specified                    | 🟢 Simple   | Lift & Shift                      |
 | frontend           | default   | Stateless                 | Not specified                    | 🟡 Moderate | Lift & Shift, Reconfigure Ingress |
-| ledgerwriter       | default   | Stateless                 | PostgreSQL (Assumed RDS)         | 🟡 Moderate | Lift & Shift, Reconfigure DB      |
+| ledgerwriter       | default   | Stateless                 | PostgreSQL (Assumed Amazon RDS)  | 🟡 Moderate | Lift & Shift, Reconfigure DB      |
 | loadgenerator      | default   | Stateless                 | Not specified                    | 🟢 Simple   | Lift & Shift                      |
-| transactionhistory | default   | Stateless                 | PostgreSQL (Assumed RDS)         | 🟡 Moderate | Lift & Shift, Reconfigure DB      |
+| transactionhistory | default   | Stateless                 | PostgreSQL (Assumed Amazon RDS)  | 🟡 Moderate | Lift & Shift, Reconfigure DB      |
 | userservice        | default   | Stateless                 | Not specified                    | 🟢 Simple   | Lift & Shift                      |
 
 ## Recommendations for GKE Migration
@@ -17,14 +17,14 @@
 **Infrastructure Provisioning:**
 
 - **Recommended GKE Cluster Mode:** GKE Autopilot is highly recommended. The
-  current EKS cluster has a single worker node, which indicates that the
+  current Amazon EKS cluster has a single worker node, which indicates that the
   workloads are not resource-intensive. GKE Autopilot will provide a hands-off
   operational experience by managing the underlying nodes automatically.
 - **Recommended Cloud SQL sizing:** Based on the presence of PostgreSQL
   connection strings in the ConfigMaps, it is recommended to provision a Cloud
   SQL for PostgreSQL instance. The size should be determined after a performance
-  baseline analysis of the source RDS instance. A good starting point would be a
-  `db-n1-standard-2` instance.
+  baseline analysis of the source Amazon RDS instance. A good starting point
+  would be a `db-n1-standard-2` instance.
 
 **Workload Strategy:**
 
