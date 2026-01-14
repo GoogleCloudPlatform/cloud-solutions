@@ -1,0 +1,32 @@
+{
+  "comment": "Disable some rules to match the config of conventional-commit-GCF app. Set errors to warnings to avoid making this a blocking check.",
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "body-case": [0],
+    "body-max-line-length": [0],
+    "footer-max-line-length": [0],
+    "header-max-length": [0],
+    "subject-case": [0],
+    "subject-empty": [1, "never"],
+    "subject-full-stop": [0],
+    "type-case": [1, "always", "lower-case"],
+    "type-enum": [
+      1,
+      "always",
+      [
+        "build",
+        "chore",
+        "ci",
+        "docs",
+        "feat",
+        "fix",
+        "perf",
+        "refactor",
+        "revert",
+        "style",
+        "test"
+      ]
+    ],
+    "type-empty": [1, "never"]
+  }
+}
