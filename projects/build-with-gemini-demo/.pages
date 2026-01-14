@@ -4,6 +4,7 @@ nav:
   - "Accelerate software development with Gemini": "README.md"
   - "Automating UI tests with Playwright & Gemini CLI": "build-with-gemini-demo/automating-ui-tests/"
   - "Automated code reviews with Gemini CLI": "build-with-gemini-demo/automated-code-reviews-with-gemini-cli/"
+  - "Build with Antigravity": "build-with-gemini-demo/build-with-antigravity/"
   - "Interactive code reviews with Gemini CLI": "build-with-gemini-demo/local-code-review/"
   - "Implementing UI changes with Gemini CLI": "build-with-gemini-demo/ui-changes-implementation/"
   - "Parallel Feature Development with Gemini CLI": "build-with-gemini-demo/parallel-feature-development/"
