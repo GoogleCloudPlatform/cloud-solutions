@@ -47,7 +47,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Load super-linter configuration
-        run: cat config/lint/super-linter.env >> "$GITHUB_ENV"
+        # Use grep inverse matching to exclude eventual comments in the .env file
+        # because the GitHub Actions command to set environment variables doesn't
+        # support comments.
+        # Ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-environment-variable
+        run: grep -v '^#' config/lint/super-linter.env >> "$GITHUB_ENV"
       - name: Super-Linter
         uses: super-linter/super-linter@v8.3.2
         env:
