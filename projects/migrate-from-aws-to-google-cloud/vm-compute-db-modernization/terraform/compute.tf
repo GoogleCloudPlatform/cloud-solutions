@@ -81,7 +81,6 @@ resource "aws_db_instance" "postgres" {
   publicly_accessible    = true
   skip_final_snapshot    = true
 
-  # FIX: Ensures snapshots inherit tags
   copy_tags_to_snapshot = true
 
   tags = {
@@ -94,6 +93,50 @@ resource "aws_db_instance" "postgres" {
 # =============================================================================
 # APP SERVER EC2 INSTANCE
 # =============================================================================
+
+data "cloudinit_config" "app_config" {
+
+  gzip          = true
+  base64_encode = true
+
+  part {
+    content_type = "text/cloud-config"
+    content = yamlencode({
+      runcmd = [
+        "mkdir -p /opt/flask-app"
+      ]
+      write_files = [
+        {
+          path        = "/opt/flask-app/requirements.txt"
+          owner       = "root:root"
+          permissions = "0644"
+          content     = file("../scripts/requirements.txt")
+        },
+        {
+          path        = "/opt/flask-app/app.py"
+          owner       = "root:root"
+          permissions = "0644"
+          content     = file("../scripts/app.py")
+        }
+      ]
+    })
+  }
+
+  part {
+    content_type = "text/x-shellscript"
+    content = templatefile("../scripts/app_setup.sh", {
+      db_host            = aws_db_instance.postgres.address
+      db_port            = "5432"
+      db_name            = var.db_name
+      db_user            = var.db_user
+      db_password        = var.db_password
+      db_master_user     = var.db_master_user
+      db_master_password = var.db_master_password
+      dms_user           = var.dms_user
+      dms_password       = var.dms_password
+    })
+  }
+}
 
 resource "aws_instance" "app" {
   ami                    = data.aws_ami.ubuntu.id
@@ -110,19 +153,8 @@ resource "aws_instance" "app" {
     delete_on_termination = true
   }
 
-  user_data_base64 = base64encode(templatefile("../scripts/app_setup.sh", {
-    db_host            = aws_db_instance.postgres.address
-    db_port            = "5432"
-    db_name            = var.db_name
-    db_user            = var.db_user
-    db_password        = var.db_password
-    db_master_user     = var.db_master_user
-    db_master_password = var.db_master_password
-    dms_user           = var.dms_user
-    dms_password       = var.dms_password
-  }))
-
-  depends_on = [aws_db_instance.postgres]
+  user_data_base64 = data.cloudinit_config.app_config.rendered
+  depends_on       = [aws_db_instance.postgres]
 
   tags = {
     Name        = "${var.project_name}-app"
@@ -130,7 +162,6 @@ resource "aws_instance" "app" {
     Environment = var.aws_environment_tag
   }
 
-  # FIX: Explicitly tag the root volume (Hard Drive)
   volume_tags = {
     Name        = "${var.project_name}-app-root-vol"
     Project     = var.aws_project_tag

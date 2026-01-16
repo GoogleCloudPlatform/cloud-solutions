@@ -1,4 +1,6 @@
 #!/bin/bash
+# shellcheck disable=SC2154
+# Variables are injected by Terraform templatefile function
 # Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,24 +22,6 @@ set -o pipefail
 # -----------------------------------------------------------------------------
 # Configuration & Input Validation
 # -----------------------------------------------------------------------------
-# These variables map to environment variables or must be injected before running.
-# The syntax :? ensures the script exits immediately if the variable is not set.
-
-db_host="${DB_HOST:?Error: Environment variable DB_HOST is required}"
-db_port="${DB_PORT:-5432}" # Default to 5432 if not set
-db_name="${DB_NAME:?Error: Environment variable DB_NAME is required}"
-
-# Master Credentials (AWS RDS Source or similar)
-db_master_user="${DB_MASTER_USER:?Error: Environment variable DB_MASTER_USER is required}"
-db_master_password="${DB_MASTER_PASSWORD:?Error: Environment variable DB_MASTER_PASSWORD is required}"
-
-# Application User Credentials (To be created)
-db_user="${DB_USER:?Error: Environment variable DB_USER is required}"
-db_password="${DB_PASSWORD:?Error: Environment variable DB_PASSWORD is required}"
-
-# DMS User Credentials (To be created for migration)
-dms_user="${DMS_USER:?Error: Environment variable DMS_USER is required}"
-dms_password="${DMS_PASSWORD:?Error: Environment variable DMS_PASSWORD is required}"
 
 echo "Starting app server setup..."
 
@@ -146,137 +130,10 @@ EOSQL
 echo "Database setup complete"
 
 # 4. Flask Application Setup
-mkdir -p /opt/flask-app
 cd /opt/flask-app
 
-cat >/opt/flask-app/app.py <<'APPEOF'
-from flask import Flask, jsonify, request
-import psycopg2
-from psycopg2.extras import RealDictCursor
-import os
-import socket
-
-app = Flask(__name__)
-
-DB_CONFIG = {
-    'host': os.environ.get('DB_HOST', 'localhost'),
-    'port': int(os.environ.get('DB_PORT', 5432)),
-    'database': os.environ.get('DB_NAME', 'appdb'),
-    'user': os.environ.get('DB_USER', 'appuser'),
-    'password': os.environ.get('DB_PASSWORD', '')
-}
-
-def get_db():
-    return psycopg2.connect(**DB_CONFIG, cursor_factory=RealDictCursor)
-
-@app.route('/health')
-def health():
-    try:
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute('SELECT 1')
-        cur.close()
-        conn.close()
-        return jsonify({
-            'status': 'healthy',
-            'database': 'connected',
-            'hostname': socket.gethostname(),
-            'db_host': DB_CONFIG['host']
-        })
-    except Exception as e:
-        return jsonify({
-            'status': 'unhealthy',
-            'error': str(e),
-            'hostname': socket.gethostname()
-        }), 500
-
-@app.route('/')
-def index():
-    return jsonify({
-        'message': 'Application API',
-        'version': '1.0.0',
-        'hostname': socket.gethostname(),
-        'endpoints': [
-            {'method': 'GET', 'path': '/health', 'description': 'Health check'},
-            {'method': 'GET', 'path': '/api/users', 'description': 'List all users'},
-            {'method': 'GET', 'path': '/api/users/<id>', 'description': 'Get user by ID'},
-            {'method': 'POST', 'path': '/api/users', 'description': 'Create new user'},
-            {'method': 'DELETE', 'path': '/api/users/<id>', 'description': 'Delete user'}
-        ]
-    })
-
-@app.route('/api/users', methods=['GET'])
-def get_users():
-    try:
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute('SELECT * FROM users ORDER BY id')
-        users = cur.fetchall()
-        cur.close()
-        conn.close()
-        return jsonify({'count': len(users), 'users': users})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/users/<int:user_id>', methods=['GET'])
-def get_user(user_id):
-    try:
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute('SELECT * FROM users WHERE id = %s', (user_id,))
-        user = cur.fetchone()
-        cur.close()
-        conn.close()
-        if user:
-            return jsonify(user)
-        return jsonify({'error': 'User not found'}), 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/users', methods=['POST'])
-def create_user():
-    try:
-        data = request.get_json()
-        if not data or 'name' not in data or 'email' not in data:
-            return jsonify({'error': 'name and email are required'}), 400
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute(
-            'INSERT INTO users (name, email, department) VALUES (%s, %s, %s) RETURNING *',
-            (data['name'], data['email'], data.get('department', 'General'))
-        )
-        user = cur.fetchone()
-        conn.commit()
-        cur.close()
-        conn.close()
-        return jsonify(user), 201
-    except psycopg2.IntegrityError:
-        return jsonify({'error': 'Email already exists'}), 409
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/users/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    try:
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute('DELETE FROM users WHERE id = %s RETURNING id', (user_id,))
-        deleted = cur.fetchone()
-        conn.commit()
-        cur.close()
-        conn.close()
-        if deleted:
-            return jsonify({'message': f'User {user_id} deleted'})
-        return jsonify({'error': 'User not found'}), 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
-APPEOF
-
 python3 -m venv /opt/flask-app/venv
-/opt/flask-app/venv/bin/pip install flask psycopg2-binary gunicorn
+/opt/flask-app/venv/bin/pip install --index-url https://pypi.org/simple --require-hashes -r /opt/flask-app/requirements.txt
 
 cat >/opt/flask-app/.env <<ENVEOF
 DB_HOST=${db_host}

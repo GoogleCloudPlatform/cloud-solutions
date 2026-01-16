@@ -63,7 +63,8 @@ credentials and source it.
 
     ```bash
     source aws_creds.env
-    export AWS_USER=$(basename $(aws sts get-caller-identity --query Arn --output text))
+    AWS_USER=$(basename $(aws sts get-caller-identity --query Arn --output text))
+    export AWS_USER
     echo $AWS_USER
     ```
 
