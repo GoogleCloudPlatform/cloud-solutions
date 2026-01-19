@@ -1,26 +1,7 @@
 # Secure and fast access to AlloyDB from GKE applications
 
-## Background
+Update **2026-01-19**:
 
-The AlloyDB for PostgreSQL
-[supports](https://cloud.google.com/alloydb/docs/manage-iam-authn)
-authentication via
-[Google Cloud Service Account](https://cloud.google.com/iam/docs/service-account-overview),
-this way removes the requirement of managing the username/password as secrets
-for applications to authenticate to the database.
-
-This feature can be combined with the
-[workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
-feature of GKE to let applications running in GKE to authenticate to AlloyDB
-directly using the associated service account.
-
-However, the existent documentation only describes authentication through an
-[auth_proxy](https://cloud.google.com/alloydb/docs/quickstart/integrate-kubernetes#auth-proxy),
-which has two disadvantages:
-
-- The sidecar might impact the performance
-- Extra efforts need to be taken to setup the sidecar in the application
-  deployment
-
-This [guide](howto.md) describes a way to make the applications in GKE
-authenticate to AlloyDB using workload identity without the auth_proxy.
+This project has been archived. You can still access the code by browsing the
+repository at
+[commit 79ceca9](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/79ceca9b9ff498d2af6101f264b1c731c8911aee/projects/alloydb-auth-workload-identity)
