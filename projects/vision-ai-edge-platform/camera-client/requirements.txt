@@ -201,9 +201,7 @@ cryptography==44.0.1 \
     --hash=sha256:f4daefc971c2d1f82f03097dc6f216744a6cd2ac0f04c68fb935ea2ba2a0d420 \
     --hash=sha256:f51f5705ab27898afda1aaa430f34ad90dc117421057782022edf0600bec5f14 \
     --hash=sha256:fd0ee90072861e276b0ff08bd627abec29e32a53b2be44e41dbcdf87cbee2b00
-    # via
-    #   -r requirements.in
-    #   pyopenssl
+    # via pyopenssl
 genicam==1.2.0 \
     --hash=sha256:0e10b1cb0fbe50aed02d9d99d8b2e3e2476ad3c999a849f57afdc75485874cfa \
     --hash=sha256:152e7a21559c29be7c6b4f1a9e4f5560ad4392d5ce7e24528bef0ff39514b6b4 \
@@ -217,9 +215,7 @@ genicam==1.2.0 \
     --hash=sha256:d9e93dd96b80a41871441d9cdcdcd26a9b2b9d3aa7ab05d7de94c4f07a6feabf \
     --hash=sha256:f36c442d3b009e55c205afce741b9c18bccd0ca3131b679a9b04527a35aa6181 \
     --hash=sha256:f8efe3b92584513cf7bbaf472006c6586cc6dd403e827859305a5f8b932ef643
-    # via
-    #   -r requirements.in
-    #   harvesters
+    # via harvesters
 google-api-core[grpc]==2.19.0 \
     --hash=sha256:8661eec4078c35428fd3f69a2c7ee29e342896b70f01d1a1cbcb334372dd6251 \
     --hash=sha256:cf1b7c2694047886d2af1128a03ae99e391108a08804f87cfd35970e49c9cd10
@@ -666,7 +662,6 @@ protobuf==4.25.8 \
     --hash=sha256:d552c53d0415449c8d17ced5c341caba0d89dbf433698e1436c8fa0aae7808a3 \
     --hash=sha256:f4510b93a3bec6eba8fd8f1093e9d7fb0d4a24d1a81377c10c0e5bbfe9e4ed24
     # via
-    #   -r requirements.in
     #   google-api-core
     #   googleapis-common-protos
     #   grpc-google-iam-v1
@@ -676,9 +671,9 @@ puremagic==1.24 \
     --hash=sha256:a4b664ba213d454e29a6ef997896977e207e51a28ca41171b8cf345bedf15963 \
     --hash=sha256:f389a8d69f2637fdf00cf121846893e3ba31cf2daa920b04cc2ad250c6d0c6a5
     # via -r requirements.in
-pyasn1==0.6.0 \
-    --hash=sha256:3a35ab2c4b5ef98e17dfdec8ab074046fbda76e281c5a706ccd82328cfc8f64c \
-    --hash=sha256:cca4bb0f2df5504f02f6f8a775b6e416ff9b0b3b16f7ee80b5a3153d9b804473
+pyasn1==0.6.2 \
+    --hash=sha256:1eb26d860996a18e9b6ed05e7aae0e9fc21619fcee6af91cca9bad4fbea224bf \
+    --hash=sha256:9b59a2b25ba7e4f8197db7686c09fb33e658b98339fadb826e9512629017833b
     # via
     #   pyasn1-modules
     #   rsa
@@ -789,9 +784,9 @@ typing-inspect==0.9.0 \
     --hash=sha256:9ee6fc59062311ef8547596ab6b955e1b8aa46242d854bfc78f4f6b0eff35f9f \
     --hash=sha256:b23fc42ff6f6ef6954e4852c1fb512cdd18dbea03134f91f856a95ccc9461f78
     # via libcst
-urllib3==2.6.3 \
-    --hash=sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed \
-    --hash=sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4
+urllib3==2.2.3 \
+    --hash=sha256:ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac \
+    --hash=sha256:e7d814a81dad81e6caf2ec9fdedb284ecc9c73076b62654547cc64ccdcae26e9
     # via requests
 wsdiscovery==2.0.0 \
     --hash=sha256:749400746d077d38c560f6bf89043421974809f93d92ad109668b95e7690b4a6 \
