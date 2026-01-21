@@ -1,4 +1,4 @@
-# Secure and fast access to AlloyDB from GKE applications
+# Authenticate to AlloyDB via workload identity from GKE clusters
 
 Update **2026-01-19**:
 
