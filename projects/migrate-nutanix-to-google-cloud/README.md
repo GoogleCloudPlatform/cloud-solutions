@@ -115,8 +115,7 @@ cluster.
 You can access the Nutanix Cloud Clusters (NC2) console with your existing
 account at [my.nutanix.com](https://my.nutanix.com). You can use the console to
 deploy NC2 on Google Cloud and manage tasks like health remediation and
-expanding and condensing your clusters. On-premises Prism Central instances can
-manage your deployed NC2 instance alongside your on-premises clusters. For Day 2
+expanding and condensing your clusters. For Day 2
 operations, Prism Central can also manage AOS and AHV upgrades for on-premises,
 remote or branch office, and cloud-based Nutanix clusters.
 
@@ -225,12 +224,12 @@ bare metal node fails, NC2 automatically provisions a new instance from Google
 Cloud and adds it to the cluster to restore health and full capacity (n \+ 1 or
 n \+ 2\) resilience within minutes.
 
-To ensure high availability, Nutanix uses a placement strategy that distributes
-the bare metal nodes across different fault domains or racks in a Google Cloud
-availability zone. This placement strategy maps to the Nutanix rack-awareness
-feature, ensuring that data replicas are written to different racks and allowing
-the cluster to tolerate a rack failure for both replication factor 2 and 3
-scenarios while maintaining data and service availability.
+To ensure high availability, Nutanix uses a placement strategy that distributes 
+the bare metal nodes across different Availability Domains in a Google Cloud 
+availability zone. This placement strategy maps to the Nutanix rack-awareness 
+feature, ensuring that data replicas are written to different Availability 
+Domains and allowing the cluster to tolerate a physical failure for both 
+replication factor 2 and 3 scenarios while maintaining data and service availability.
 
 For more information on planning a deployment, see the
 [Nutanix Cloud Clusters on Google Cloud Deployment and User Guide](https://portal.nutanix.com/page/documents/details?targetId=Nutanix-Cloud-Clusters-Google-Cloud:Nutanix-Cloud-Clusters-Google-Cloud).
@@ -322,12 +321,13 @@ first Prism Central or can have their own.
 **Prism Central Subnet** \- A /29 range within Cluster Management Subnet that’s
 reserved for Prism Central VMs and VIP.
 
-**NAT Range** \- A Secondary IP range within the Cluster Management (Google
-Cloud) Subnet used for the FVN networking Transit VPC.
+**NAT Range** \- A Secondary IP range within the Cluster Management (Google 
+Cloud) Subnet used for the FVN networking Transit VPC. It is used to assign 
+SNAT IPs to Flow VPCs and Floating IPs to VMs exposed to the Google Network.
 
-**No-Nat Range** \- An IP range within the Cluster Management (Google Cloud)
-Subnet used for the Flow networking Transit VPC. This IP range is configured
-within the Nutanix NC2 Console at deployment.
+**No-Nat Subnet** \- An IP subnet within the Google Cloud VPC used for the Flow 
+networking Transit VPC. This IP range is configured within the Nutanix NC2 
+Console at deployment.
 
 Both of the above IP ranges need to be configured within the Nutanix NC2 Console
 at deployment. If using an automatically created VPC the subnets will be created
@@ -377,8 +377,8 @@ For more information on licensing NC2 and other Nutanix products, see
 - [Test Drive](https://cloud.nutanixtestdrive.com/login?type=nc2gcp) \-
   Experience NC2 on Google Cloud for yourself
 - [Nutanix Announcement Blog](http://nutanix.com/blog/announcing-nutanix-cloud-clusters-nc2-on-google-cloud)
-- [Google Cloud Announcement Blog](https://urldefense.proofpoint.com/v2/url?u=https-3A__cloud.google.com_blog_topics_partners_nutanix-2Dnc2-2Dgenerally-2Davailable-2Dgoogle-2Dcloud&d=DwMFaQ&c=s883GpUCOChKOHiocYtGcg&r=NuyjJL7o-WqXBVvXhGEGy7vgNBdMUZkT0L_LWKRx_d8&m=8OqOfmpcA684UAMEhKr-H8HbHkfiy4IPj0S3qxcmoLiAJN6yFPDGqleWlUCLIZ0S&s=PVutNzHX1ttDVPhhpVxzxZc4AVIvrNBoxlxEIEYe910&e=)
-- Nutanix.com NC2 on Google Cloud
-  [page](https://www.nutanix.com/products/nutanix-cloud-clusters/google-cloud)
+- [Google Cloud Announcement Blog](https://cloud.google.com/blog/topics/partners/nutanix-nc2-generally-available-google-cloud)
+- [Nutanix.com NC2 on Google Cloud page](https://www.nutanix.com/products/nutanix-cloud-clusters/google-cloud)
 - [Hardware Spec Sheet](https://www.nutanix.com/products/hardware-platforms/specsheet?platformProvider=NC2%20on%20Google%20Cloud)
   \- Nutanix compatible Hardware Spec sheets including GCE bare metal
+  * [Getting Started with NC2 on Google Cloud video](https://youtu.be/i1WLeWV-16I?si=cpj_mOhJzRzcA2A-)
