@@ -1,1 +1,51 @@
 *       @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+
+# Keep this list alphabetically ordered
+
+/projects/ai/agents/                                                  @allen-stephen
+/projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidrodeloera, @layolin,@tdigangi
+/projects/ai/gen-media/experimental/movieLenz-main/                   @tdigangi, @layolin, @allen-stephen
+/projects/ai/gen-media/images/                                        @isidrodeloera, @layolin,@tdigangi
+/projects/ai/gen-media/notebooks/imagen_r2i/                          @isidrodeloera, @layolin,@tdigangi
+/projects/ai/gen-media/notebooks/keyframe_storyboarding/              @isidrodeloera, @layolin,@tdigangi
+/projects/ai/gen-media/notebooks/nano_banana/                         @isidrodeloera, @layolin,@tdigangi
+/projects/ai/gen-media/notebooks/product-recontext/                   @isidrodeloera, @layolin,@tdigangi
+/projects/ai/gen-media/notebooks/vto_scale_workflow/                  @isidrodeloera, @layolin,@tdigangi
+/projects/ai/gen-media/YAML/                                          @layolin, @isidrodeloera, @tdigangi
+/projects/alloydb-auth-workload-identity/                             @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/alloydb-autoscaler/                                         @nielm
+/projects/alloydbomni-ha-patroni-etcd/                                @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/arm-reference-guides/                                       @ferrarimarco, @prev-dev
+/projects/build-with-gemini-demo/                                     @gitrey, @ferrarimarco
+/projects/bulk-delete-gcs-files-fn/                                   @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/confidential-ai-model-serving/                              @jpassing
+/projects/contextual-ai/                                              @michael-chi
+/projects/conversational-commerce-agent/                              @michael-chi
+/projects/database-archival/                                          @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/dataflow-bigquery-change-data-capture/                      @slilichenko
+/projects/dataflow-gcs-avro-to-spanner-scd/                           @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/dataflow-gcs-to-alloydb/                                    @zunhoyi
+/projects/dataflow-kafka-to-bigquery/                                 @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/dataproc-trino-autoscaler/                                  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/dotnet-modernization-demo/                                  @ferrarimarco, @idofl
+/projects/fsi-quant-assistant/                                        @mservidio
+/projects/gemini-powered-migrations-to-google-cloud/                  @aburhan, @ferrarimarco, @gitrey
+/projects/gke-optimization/binpacker/                                 @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/hive-bigquery-connector-demo/                               @eyalbenivri
+/projects/imagen-object-changer/                                      @lepistom
+/projects/imagen-voice-captioning/                                    @lepistom
+/projects/k8s-hybrid-neg-controller/                                  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/migrate-from-aws-to-google-cloud/                           @aburhan, @ferrarimarco
+/projects/migrate-from-azure-to-google-cloud/                         @ferrarimarco
+/projects/migrate-nutanix-to-google-cloud/                            @ferrarimarco
+/projects/mmb-hero-demo/                                              @aburhan, @gitrey, @ferrarimarco, @idofl
+/projects/nvidia-omniverse-on-google-cloud/                           @ferrarimarco
+/projects/pino-logging-gcp-config/                                    @nielm
+/projects/sa-tools/                                                   @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/serve-llm-app-using-gke/                                    @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/serverless-event-processing/                                @ferrarimarco
+/projects/smart-npc/                                                  @michael-chi
+/projects/speech2speech_translation/                                  @lepistom
+/projects/speech2srt/                                                 @lepistom
+/projects/streamlit-pubsub/                                           @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/vision-ai-edge-platform/                                    @zunhoyi
