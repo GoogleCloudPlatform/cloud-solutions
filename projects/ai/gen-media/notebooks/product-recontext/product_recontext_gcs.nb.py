@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.18.1
+#       jupytext_version: 1.20.0
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -28,6 +28,68 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # """
+
+# %% [markdown]
+# # Product Image Recontextualization with Google Cloud Storage
+#
+# <table align="left">
+#   <td style="text-align: center">
+#     <a href="https://colab.research.google.com/github/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/product-recontext/product_recontext_gcs.ipynb">
+#       <img width="32px" src="https://www.gstatic.com/pantheon/images/bigquery/welcome_page/colab-logo.svg" alt="Google Colaboratory logo"><br> Open in Colab
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://console.cloud.google.com/vertex-ai/colab/import/https:%2F%2Fraw.githubusercontent.com%2FGoogleCloudPlatform%2Fcloud-solutions%2Fmain%2Fprojects%2Fai%2Fgen-media%2Fnotebooks%2Fproduct-recontext%2Fproduct_recontext_gcs.ipynb">
+#       <img width="32px" src="https://lh3.googleusercontent.com/JmcxdQi-qOpctIvWKgPtrzZdJJK-J3sWE1RsfjZNwshCFgE_9fULcNpuXYTilIR2hjwN" alt="Google Cloud Colab Enterprise logo"><br> Open in Colab Enterprise
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://console.cloud.google.com/vertex-ai/workbench/deploy-notebook?download_url=https://raw.githubusercontent.com/GoogleCloudPlatform/cloud-solutions/main/projects/ai/gen-media/notebooks/product-recontext/product_recontext_gcs.ipynb">
+#       <img src="https://www.gstatic.com/images/branding/gcpiconscolors/vertexai/v1/32px.svg" alt="Vertex AI logo"><br> Open in Vertex AI Workbench
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/ai/gen-media/notebooks/product-recontext">
+#       <img width="32px" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub logo"><br> View on GitHub
+#     </a>
+#   </td>
+# </table>
+
+# %% [markdown]
+# ## Overview
+#
+# This notebook demonstrates how to use Google's Gemini models to recontextualize product images at scale using Google Cloud Storage (GCS). It takes product photos with simple backgrounds and generates lifestyle images with the products in realistic, contextual settings.
+#
+# ### What this notebook does:
+# - **Reads** product images from GCS buckets
+# - **Generates** recontextualized lifestyle images using Gemini 3 Pro
+# - **Saves** output to GCS for easy access and sharing
+# - **Processes** multiple products in parallel for efficiency
+# - **Evaluates** image quality across 6 dimensions
+# - **Retries** automatically on API failures
+#
+# ### Sample Images Available:
+# This repository includes sample product images in the `./images/product_images_input/` folder with three product folders (product1, product2, product3). To use these samples, you need to upload them to your GCS bucket at `gs://your-bucket/product_images_input/` before running the pipeline. You can use gsutil or the Cloud Console to copy these folders to your bucket.
+#
+# ### GCS Structure:
+# ```
+# gs://your-bucket/
+# ├── product_images_input/
+# │   ├── product1/        # Upload your product images here
+# │   ├── product2/
+# │   └── product3/
+# └── product_images_output/
+#     ├── product1/        # Generated images saved here
+#     ├── product2/
+#     └── product3/
+# ```
+#
+# ### Prerequisites:
+# - Google Cloud Project with Vertex AI API enabled
+# - GCS bucket with appropriate permissions
+# - Product images organized in folders within the bucket
+#
+# ---
 
 # %%
 # Copyright 2025 Google LLC
@@ -91,11 +153,11 @@ from PIL import Image, UnidentifiedImageError
 
 # Data processing and visualization
 
-print(" All imports completed successfully")
-print(f" Notebook executed on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+print("All imports completed successfully")
+print(f"Notebook executed on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 # %% [markdown] id="5WXgrrH4NlYt"
-# ## Cell 2: Configuration Settings ️
+# ## Cell 2: Configuration Settings
 #
 # **Purpose:** Central configuration hub for all notebook parameters.
 #
@@ -105,7 +167,7 @@ print(f" Notebook executed on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 # - Configures safety settings and prompts
 #
 # **Action Required:**
-# - ️ **EDIT THIS CELL** to customize settings for your environment
+# - **EDIT THIS CELL** to customize settings for your environment
 # - Update PROJECT_ID, BUCKET_NAME, and paths as needed
 # - Adjust model parameters and thresholds based on requirements
 # - All other cells will automatically use these settings
@@ -235,8 +297,8 @@ print("=" * 70)
 # %% id="fFN9hSl0NlYt"
 # Authenticate with Google Cloud
 auth.authenticate_user()
-print(" Authenticated with Google Cloud")
-print(f" Ready to work with project: {PROJECT_ID}")
+print("Authenticated with Google Cloud")
+print(f"Ready to work with project: {PROJECT_ID}")
 
 # %% [markdown] id="a2eczCl8NlYt"
 # ## Cell 4: Initialize Cloud Clients
@@ -257,17 +319,17 @@ print("Initializing clients...")
 
 # Initialize Vertex AI
 aiplatform.init(project=PROJECT_ID, location=LOCATION)
-print("   Vertex AI initialized")
+print("  Vertex AI initialized")
 
 # Storage client for GCS operations
 storage_client = storage.Client()
-print("   Storage client ready")
+print("  Storage client ready")
 
 # Prediction client (for Vertex AI endpoints if needed)
 predict_client = aiplatform.gapic.PredictionServiceClient(
     client_options={"api_endpoint": f"{LOCATION}-aiplatform.googleapis.com"}
 )
-print("   Prediction client ready")
+print("  Prediction client ready")
 
 # Genai client for Gemini models
 genai_client = genai.Client(
@@ -275,10 +337,10 @@ genai_client = genai.Client(
     project=PROJECT_ID,
     location=GENAI_LOCATION,
 )
-print("   Genai client ready")
+print("  Genai client ready")
 
-print("\n All clients initialized successfully")
-print(f" Ready to process images from: {INPUT_GCS_URI}")
+print("\nAll clients initialized successfully")
+print(f"Ready to process images from: {INPUT_GCS_URI}")
 
 
 # %% [markdown] id="QAQlWBH3NlYu"
@@ -323,10 +385,10 @@ def discover_product_batches(
     bucket_name, base_prefix = m.groups()
     prefix = base_prefix.rstrip("/") + "/"
     client = storage.Client()
-    print(f" Scanning bucket={bucket_name} prefix={prefix}")
+    print(f"Scanning bucket={bucket_name} prefix={prefix}")
 
     blobs = list(client.list_blobs(bucket_name, prefix=prefix))
-    print(f"  • Found {len(blobs)} total objects under {prefix}")
+    print(f"  Found {len(blobs)} total objects under {prefix}")
 
     folder_map: Dict[str, List[storage.blob.Blob]] = {}
     for b in blobs:
@@ -339,7 +401,7 @@ def discover_product_batches(
             continue
         folder_map.setdefault(folder, []).append(b)
 
-    print(f"  • Discovered product folders: {list(folder_map.keys())}")
+    print(f"  Discovered product folders: {list(folder_map.keys())}")
 
     for folder, blob_list in folder_map.items():
         blob_list.sort(key=lambda b: os.path.basename(b.name))
@@ -405,11 +467,11 @@ def find_output_uri(bucket_name: str, product: str) -> str:
     return f"gs://{bucket_name}/{chosen}"
 
 
-print(" GCS helper functions loaded")
+print("GCS helper functions loaded")
 
 
 # %% [markdown] id="_MPiNKJ5NlYu"
-# ## Cell 6: Image Processing Helper Functions ️
+# ## Cell 6: Image Processing Helper Functions
 #
 # **Purpose:** Define utility functions for image manipulation and display.
 #
@@ -529,7 +591,7 @@ def display_product_images(product: str):
     plt.show()
 
 
-print(" Image processing helper functions loaded")
+print("Image processing helper functions loaded")
 
 
 # %% [markdown] id="Hmv4TcoWNlYu"
@@ -544,9 +606,9 @@ print(" Image processing helper functions loaded")
 # - Includes automatic retry on resource exhaustion errors
 #
 # **Features:**
-# - ️ Automatic retry on API failures
-# -  Resource exhaustion handling
-# -  Local and cloud storage of results
+# - Automatic retry on API failures
+# - Resource exhaustion handling
+# - Local and cloud storage of results
 #
 # **Action Required:** None - these functions are called by the pipeline
 
@@ -654,7 +716,7 @@ def process_single_batch_with_retry(batch, output_bucket_name):
     for attempt in range(MAX_RETRIES + 1):
         try:
             print(
-                f" Calling {GENERATION_MODEL} for {product_folder} (Attempt {attempt + 1}/{MAX_RETRIES + 1})..."
+                f"Calling {GENERATION_MODEL} for {product_folder} (Attempt {attempt + 1}/{MAX_RETRIES + 1})..."
             )
             gen, recontext_image_data = generate_recontext_image(
                 batch["image_parts"]
@@ -666,7 +728,7 @@ def process_single_batch_with_retry(batch, output_bucket_name):
                 product_folder=product_folder,
                 output_bucket_name=output_bucket_name,
             )
-            print(f" [DONE] Finished {product_folder}")
+            print(f"[DONE] Finished {product_folder}")
             return f"Success: {product_folder}"
 
         except Exception as e:
@@ -686,24 +748,24 @@ def process_single_batch_with_retry(batch, output_bucket_name):
             ):
                 if attempt < MAX_RETRIES:
                     print(
-                        f"️ Resource exhaustion for {product_folder}. Retrying in {RETRY_DELAY} seconds..."
+                        f"Resource exhaustion for {product_folder}. Retrying in {RETRY_DELAY} seconds..."
                     )
                     time.sleep(RETRY_DELAY)
                     continue
                 else:
                     print(
-                        f" [ERROR] Failed {product_folder} after {MAX_RETRIES + 1} attempts: {e}"
+                        f"[ERROR] Failed {product_folder} after {MAX_RETRIES + 1} attempts: {e}"
                     )
                     return f"Error after retries: {product_folder} - {e}"
             else:
                 # Non-retryable error
                 print(
-                    f" [ERROR] Failed {product_folder} with non-retryable error: {e}"
+                    f"[ERROR] Failed {product_folder} with non-retryable error: {e}"
                 )
                 return f"Error: {product_folder} - {e}"
 
 
-print(" Image generation functions loaded with retry logic")
+print("Image generation functions loaded with retry logic")
 
 # %% [markdown] id="9hXgtuV1NlYu"
 # ## Cell 8: Run Image Generation Pipeline
@@ -717,36 +779,36 @@ print(" Image generation functions loaded with retry logic")
 # - Saves results to GCS with automatic retry on failures
 #
 # **Features:**
-# -  Parallel processing with configurable workers
-# -  Automatic retry on resource exhaustion
-# -  Real-time progress tracking
-# -  Summary of all results
+# - Parallel processing with configurable workers
+# - Automatic retry on resource exhaustion
+# - Real-time progress tracking
+# - Summary of all results
 #
 # **Action Required:** Run this cell to start the generation process
 
 # %% id="c0dXmgFiNlYv"
 # Discover and process all product batches
-print(" Starting Image Generation Pipeline")
+print("Starting Image Generation Pipeline")
 print("=" * 70)
 
 batches = list(discover_product_batches(INPUT_GCS_URI))
-print(f"\n Total product folders discovered: {len(batches)}")
+print(f"\nTotal product folders discovered: {len(batches)}")
 
 if not batches:
     raise RuntimeError(
-        " No product batches found—check your GCS path & permissions!"
+        "No product batches found—check your GCS path & permissions!"
     )
 
 # Process in parallel with retry logic
 generation_start_time = datetime.now()
 print(
-    f"\n Generation started at: {generation_start_time.strftime('%Y-%m-%d %H:%M:%S')}"
+    f"\nGeneration started at: {generation_start_time.strftime('%Y-%m-%d %H:%M:%S')}"
 )
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-    print(f" Submitting {len(batches)} batches for parallel processing")
+    print(f"Submitting {len(batches)} batches for parallel processing")
     print(
-        f"   Workers: {MAX_WORKERS} | Retry: {MAX_RETRIES} attempts | Delay: {RETRY_DELAY}s\n"
+        f"  Workers: {MAX_WORKERS} | Retry: {MAX_RETRIES} attempts | Delay: {RETRY_DELAY}s\n"
     )
 
     future_to_folder = {
@@ -774,23 +836,23 @@ generation_end_time = datetime.now()
 generation_duration = generation_end_time - generation_start_time
 
 print("\n" + "=" * 70)
-print(" GENERATION SUMMARY")
+print("GENERATION SUMMARY")
 print("=" * 70)
-print(f" All parallel tasks completed")
-print(f" Total time: {generation_duration}")
-print(f" Products processed: {len(results)}")
+print(f"All parallel tasks completed")
+print(f"Total time: {generation_duration}")
+print(f"Products processed: {len(results)}")
 
 # Count successes and failures
 successes = [r for r in results if r.startswith("Success")]
 failures = [r for r in results if not r.startswith("Success")]
 
-print(f" Successful: {len(successes)}")
-print(f" Failed: {len(failures)}")
+print(f"Successful: {len(successes)}")
+print(f"Failed: {len(failures)}")
 
 if failures:
-    print("\n️ Failed products:")
+    print("\nFailed products:")
     for f in failures:
-        print(f"  • {f}")
+        print(f"  {f}")
 
 # %% [markdown] id="SuGLo27ANlYv"
 # ## Cell 9: Evaluation Functions

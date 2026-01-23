@@ -18,3 +18,4 @@ gunicorn==22.0.0
 markdown2pdf==0.1.4
 google-cloud-bigquery==3.24.0
 db-dtypes==1.3.0
+protobuf==6.33.5
