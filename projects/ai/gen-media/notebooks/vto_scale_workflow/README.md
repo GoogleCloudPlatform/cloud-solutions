@@ -20,7 +20,7 @@ applications that:
 
 ## Key Features
 
-### 🎯 Multi-Model AI Pipeline
+### Multi-Model AI Pipeline
 
 - **Model Generation**: Creates photorealistic digital models with diverse
   demographics (race, body type, age)
@@ -32,7 +32,7 @@ applications that:
 - **Scalable Architecture**: Processes batch inputs from CSV with parallel
   execution
 
-### 🔧 Technologies Used
+### Technologies Used
 
 - **Google Vertex AI**: Primary platform for all AI operations
 - **Gemini 2.5 Flash**: Orchestration, prompt generation, and quality critique
@@ -45,7 +45,13 @@ applications that:
 
 ```text
 vto_scale_workflow/
-├── LJ_GenMedia_Workflow.ipynb   # Main Jupyter notebook with complete pipeline
+├── VTO_GenMedia_Workflow.ipynb   # Main Jupyter notebook with complete pipeline
+├── VTO_GenMedia_Workflow.nb.py   # Python script version of the notebook
+├── dress/                       # Sample dress images for VTO
+│   ├── blue-front.png
+│   ├── multi-front.png
+│   ├── pink-front.png
+│   └── red-front.png
 ├── requirements.txt              # Python dependencies
 └── README.md                     # This file
 ```
@@ -104,6 +110,19 @@ The pipeline follows a sequential 5-step process:
     - Local: `gcloud auth application-default login`
     - Vertex AI Workbench: Automatic authentication
 
+### Preparing Input Images
+
+Before running the notebook end-to-end, copy the sample dress images from the
+`dress/` folder to your Google Cloud Storage bucket:
+
+```bash
+# Copy all sample dress images to your GCS bucket
+gsutil cp dress/*.png gs://YOUR_BUCKET_NAME/dress/
+```
+
+The notebook configuration uses `OUTFITS_PREFIX = "dress"` to specify where it
+looks for input dress images.
+
 ### Storage Setup
 
 Google Cloud Storage bucket with structure:
@@ -112,14 +131,16 @@ Google Cloud Storage bucket with structure:
 your-bucket/
 ├── Model_Creation.csv        # Generated model definitions
 ├── models/                   # Generated base model images
-├── Dress/                    # Input garment images
-│   ├── dress1.png
-│   ├── dress2.png
+├── dress/                    # Input garment images (copied from dress/ folder)
+│   ├── blue-front.png
+│   ├── multi-front.png
+│   ├── pink-front.png
+│   ├── red-front.png
 │   └── ...
-├── Dress/4tryon/            # VTO output images
-├── Dress/4tryon/final/      # Selected best VTO images
+├── dress/4tryon/            # VTO output images
+├── dress/4tryon/final/      # Selected best VTO images
 │   └── eval_summary.csv     # Critique results
-└── Dress/4tryon/final_motion/ # Generated videos
+└── dress/4tryon/final_motion/ # Generated videos
 ```
 
 ## Installation
@@ -165,7 +186,7 @@ MODEL_VIDEO = "veo-3.0-generate-001"
 
 1.  **Open the Notebook**
 
-- Launch `LJ_GenMedia_Workflow.ipynb` in Jupyter or Vertex AI Workbench
+- Launch `VTO_GenMedia_Workflow.ipynb` in Jupyter or Vertex AI Workbench
 
 1.  **Run Configuration Cell**
 
@@ -178,98 +199,6 @@ MODEL_VIDEO = "veo-3.0-generate-001"
 
 1.  **Access Results**
 
-- Final VTO images: `gs://your-bucket/Dress/4tryon/final/`
-- Motion videos: `gs://your-bucket/Dress/4tryon/final_motion/`
-- Evaluation summary: `gs://your-bucket/Dress/4tryon/final/eval_summary.csv`
-
-## Performance Considerations
-
-- **Parallel Processing**: Utilizes ThreadPoolExecutor for concurrent operations
-- **Retry Mechanism**: Automatic retry for failed VTO attempts (3 attempts by
-  default)
-- **Batch Processing**: Efficient handling of multiple model-outfit combinations
-- **Resource Management**: Configurable worker limits to control API usage
-
-## Output Examples
-
-### Generated Assets
-
-- **Model Images**: Diverse digital models in standardized outfit
-- **VTO Images**: High-quality garment transfers on each model
-- **Motion Videos**: 8-second runway walk showcasing garments
-- **Evaluation CSV**: Detailed critique results with selection reasoning
-
-### Quality Metrics
-
-The AI critique evaluates:
-
-- Garment transfer completeness
-- Fabric texture preservation
-- Fit accuracy and realism
-- Absence of visual artifacts
-- Body proportion maintenance
-
-## Troubleshooting
-
-### Common Issues
-
-1.  **Authentication Errors**
-
-- Ensure proper GCP authentication
-- Verify project permissions
-
-1.  **API Quotas**
-
-- Monitor Vertex AI quotas
-- Adjust `PARALLEL_JOBS_PER_MODEL` if needed
-
-1.  **Storage Access**
-
-- Verify bucket exists and is accessible
-- Check file paths and prefixes
-
-1.  **Model Availability**
-
-- Confirm model versions are available in your region
-- Update model IDs if using newer versions
-
-## Dependencies
-
-Core requirements (see `requirements.txt`):
-
-- `pandas==2.2.2` - Data manipulation
-- `Pillow==11.1.0` - Image processing
-- `google-genai==1.45.0` - Generative AI SDK
-- `google-cloud-storage==2.19.0` - GCS operations
-- `google-cloud-aiplatform==1.74.0` - Vertex AI integration
-
-## License
-
-This project is for demonstration purposes. Please ensure compliance with Google
-Cloud's terms of service and any applicable licensing requirements for
-production use.
-
-## Contributing
-
-This is a demonstration workflow. For production implementations, consider:
-
-- Error handling enhancements
-- Monitoring and logging integration
-- Cost optimization strategies
-- Custom quality assessment metrics
-- Extended diversity parameters
-
-## Support
-
-For issues related to:
-
-- Google Cloud setup: Consult
-  [Google Cloud Documentation](https://cloud.google.com/docs)
-- Vertex AI models: See
-  [Vertex AI Documentation](https://cloud.google.com/vertex-ai/docs)
-- Code issues: Review the notebook comments and inline documentation
-
-## Acknowledgments
-
-Created on 11/12/2025 using Google's suite of Generative AI models on Vertex AI
-platform.
+- Final VTO images: `gs://your-bucket/dress/4tryon/final/`
+- Motion videos: `gs://your-bucket/dress/4tryon/final_motion/`
+- Evaluation summary: `gs://your-bucket/dress/4tryon/final/eval_summary.csv`

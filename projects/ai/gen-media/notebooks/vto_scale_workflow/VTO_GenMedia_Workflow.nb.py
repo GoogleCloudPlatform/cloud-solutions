@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.18.1
+#       jupytext_version: 1.20.0
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -32,7 +32,32 @@ limitations under the License.
 # %% [markdown] id="B9SgWpCruX5g"
 # # Gen Media end-to-end Workflow, Virtual Try-on usecase
 #
-# This Jupyter Notebook outlines a complete, scalable pipeline for generating diverse, photorealistic virtual try-on. The core objective is to use a suite of Google's Generative AI models—Gemini (for orchestration and critique), Gemini Image Generation (for creating diverse base models), Vertex AI Virtual Try-On (VTO) (for garment swapping), and Veo (for adding motion)—to produce a large volume of Virtual Try-On images and short motion videos featuring diverse digital models in various outfits. All these are creatd using one platform Vertex AI!
+# [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/GoogleCloudPlatform/the-repo/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb)
+# [![Open in Colab Enterprise](https://img.shields.io/badge/Open%20in%20Colab%20Enterprise-blue?style=flat-square)](https://console.cloud.google.com/colab/notebooks/github/GoogleCloudPlatform/the-repo/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb)
+# [![Open in Vertex AI Workbench](https://img.shields.io/badge/Open%20in%20Vertex%20AI%20Workbench-orange?style=flat-square)](https://console.cloud.google.com/vertex-ai/workbench)
+# [![View on GitHub](https://img.shields.io/badge/View%20on%20GitHub-black?style=flat-square&logo=github)](https://github.com/GoogleCloudPlatform/the-repo/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb)
+#
+# This Jupyter Notebook outlines a complete, scalable pipeline for generating diverse, photorealistic virtual try-on. The core objective is to use a suite of Google's Generative AI models—Gemini (for orchestration and critique), Gemini Image Generation (for creating diverse base models), Vertex AI Virtual Try-On (VTO) (for garment swapping), and Veo (for adding motion)—to produce a large volume of Virtual Try-On images and short motion videos featuring diverse digital models in various outfits. All these are created using one platform Vertex AI!
+#
+# ## Prerequisites - Preparing Your GCS Bucket
+#
+# Before running this notebook end-to-end, you need to copy the sample dress images to your Google Cloud Storage bucket:
+#
+# 1. **Copy Sample Dress Images**: The sample dress images are provided in the `dress/` folder. Copy these files to your GCS bucket under the path specified by `OUTFITS_PREFIX` (which is set to "dress" by default):
+#
+#    ```bash
+#    # Example command to copy images from the local dress folder to your GCS bucket
+#    gsutil cp dress/*.png gs://YOUR_BUCKET_NAME/dress/
+#    ```
+#
+#    The notebook expects dress images to be available at: `gs://YOUR_BUCKET_NAME/dress/`
+#
+#    Note: The `OUTFITS_PREFIX = "dress"` variable in the configuration section defines where the notebook looks for input dress images.
+#
+# 2. **Update Configuration**: In the Global Configuration section below, update:
+#    - `PROJECT_ID`: Your Google Cloud Project ID
+#    - `BUCKET_NAME`: Your Google Cloud Storage bucket name
+#    - `LOCATION`: Your preferred region (default: us-central1)
 #
 # Created on 11/12/2025
 
@@ -108,9 +133,7 @@ print("Imports complete.")
 # Global Configuration, UPDATE FOR ANY MODEL CHANGES
 # --- Project & Location Settings ---
 # Ensure these match your environment
-os.environ["GOOGLE_CLOUD_PROJECT"] = (
-    "PROJECT_ID"  # update your project
-)
+os.environ["GOOGLE_CLOUD_PROJECT"] = "PROJECT_ID"  # update your project
 os.environ["GOOGLE_CLOUD_LOCATION"] = "us-central1"  # update your location
 
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT")
@@ -123,10 +146,10 @@ BUCKET_NAME = "BUCKET_NAME_PLACEHOLDER"  # Standardized bucket name , update you
 # GCS Paths/Prefixes -> The process will create the subsequent file and folder structure
 CSV_OBJECT_NAME = "Model_Creation.csv"
 MODELS_PREFIX = "models"  # Base images of models
-OUTFITS_PREFIX = "Dress"  # Input dress images
-VTO_OUTPUT_PREFIX = "Dress/4tryon"
-FINAL_PREFIX = "Dress/4tryon/final"
-MOTION_OUTPUT_PREFIX = "Dress/4tryon/final_motion"
+OUTFITS_PREFIX = "dress"  # Input dress images
+VTO_OUTPUT_PREFIX = "dress/4tryon"
+FINAL_PREFIX = "dress/4tryon/final"
+MOTION_OUTPUT_PREFIX = "dress/4tryon/final_motion"
 
 # --- Model Versions ---
 # Text/Orchestration Model
@@ -438,7 +461,7 @@ except Exception as e:
 # #Use Case 3 - Virtual Try-On (Vertex AI VTO)
 #
 # Description: Multi-try-on in one shot using the Vertex AI VTO API
-# - The process involves pairing the generated model images (from Step 4) with input outfit images (from the GCS Dress prefix).
+# - The process involves pairing the generated model images (from Step 4) with input outfit images (from the GCS dress prefix).
 #
 # - Use a ThreadPoolExecutor to orchestrate the VTO generation in parallel for multiple model/outfit pairs.
 #
@@ -593,7 +616,7 @@ print(f"[DONE] Outputs in: gs://{BUCKET_NAME}/{VTO_OUTPUT_PREFIX}")
 #
 # - Execute the critique process in parallel using a ThreadPoolExecutor.
 #
-# - The winning image for each model/outfit combination is copied to the final GCS folder (Dress/4tryon/final).
+# - The winning image for each model/outfit combination is copied to the final GCS folder (dress/4tryon/final).
 
 # %% id="SehmdW6_x_q9"
 print("[START] AI Critique")
@@ -829,7 +852,7 @@ else:
 #
 # - The VTO image is used as the input image and a prompt (e.g., "slowly walking on a white runway") is provided to instruct the motion and environment.
 #
-# - The generated short video clips are uploaded to the final motion GCS prefix (Dress/4tryon/final_motion).
+# - The generated short video clips are uploaded to the final motion GCS prefix (dress/4tryon/final_motion).
 
 # %% id="CboQHX_JywYl"
 VIDEO_PROMPT = (
