@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.18.1
+#       jupytext_version: 1.20.0
 #   kernelspec:
 #     display_name: .venv
 #     language: python
@@ -29,7 +29,31 @@
 # limitations under the License.
 
 # %% [markdown] id="VEqbX8OhE8y9"
-# # Gemini 3.0 & Nano Banana 3.0 Keyframe Storyboarding 
+# # Gemini 3.0 & Nano Banana 3.0 Keyframe Storyboarding
+#
+# <table align="left">
+#   <td style="text-align: center">
+#     <a href="https://colab.research.google.com/github/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/keyframe_storyboarding/gemini3_0_keyframe_storyboarding.ipynb">
+#       <img width="32px" src="https://www.gstatic.com/pantheon/images/bigquery/welcome_page/colab-logo.svg" alt="Google Colaboratory logo"><br> Open in Colab
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://console.cloud.google.com/vertex-ai/colab/import/https:%2F%2Fraw.githubusercontent.com%2FGoogleCloudPlatform%2Fcloud-solutions%2Fmain%2Fprojects%2Fai%2Fgen-media%2Fnotebooks%2Fkeyframe_storyboarding%2Fgemini3_0_keyframe_storyboarding.ipynb">
+#       <img width="32px" src="https://lh3.googleusercontent.com/JmcxdQi-qOpctIvWKgPtrzZdJJK-J3sWE1RsfjZNwshCFgE_9fULcNpuXYTilIR2hjwN" alt="Google Cloud Colab Enterprise logo"><br> Open in Colab Enterprise
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://console.cloud.google.com/vertex-ai/workbench/deploy-notebook?download_url=https://raw.githubusercontent.com/GoogleCloudPlatform/cloud-solutions/main/projects/ai/gen-media/notebooks/keyframe_storyboarding/gemini3_0_keyframe_storyboarding.ipynb">
+#       <img src="https://www.gstatic.com/images/branding/gcpiconscolors/vertexai/v1/32px.svg" alt="Vertex AI logo"><br> Open in Vertex AI Workbench
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/ai/gen-media/notebooks/keyframe_storyboarding">
+#       <img width="32px" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub logo"><br> View on GitHub
+#     </a>
+#   </td>
+# </table>
+# <br clear="all">
 
 # %% [markdown] id="G1KDmM_PBAXz"
 # | Author |

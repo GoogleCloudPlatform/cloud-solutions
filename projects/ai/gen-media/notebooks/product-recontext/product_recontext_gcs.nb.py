@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,nb.py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -54,6 +55,11 @@
 #     </a>
 #   </td>
 # </table>
+# <br clear="all">
+#
+# | Author |
+# | --- |
+# | [Layolin Jesudhass](layolin@google.com) |
 
 # %% [markdown]
 # ## Overview

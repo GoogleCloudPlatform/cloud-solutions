@@ -32,10 +32,35 @@ limitations under the License.
 # %% [markdown] id="B9SgWpCruX5g"
 # # Gen Media end-to-end Workflow, Virtual Try-on usecase
 #
-# [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/GoogleCloudPlatform/the-repo/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb)
-# [![Open in Colab Enterprise](https://img.shields.io/badge/Open%20in%20Colab%20Enterprise-blue?style=flat-square)](https://console.cloud.google.com/colab/notebooks/github/GoogleCloudPlatform/the-repo/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb)
-# [![Open in Vertex AI Workbench](https://img.shields.io/badge/Open%20in%20Vertex%20AI%20Workbench-orange?style=flat-square)](https://console.cloud.google.com/vertex-ai/workbench)
-# [![View on GitHub](https://img.shields.io/badge/View%20on%20GitHub-black?style=flat-square&logo=github)](https://github.com/GoogleCloudPlatform/the-repo/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb)
+# <table align="left">
+#   <td style="text-align: center">
+#     <a href="https://colab.research.google.com/github/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb">
+#       <img width="32px" src="https://www.gstatic.com/pantheon/images/bigquery/welcome_page/colab-logo.svg" alt="Google Colaboratory logo"><br> Open in Colab
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://console.cloud.google.com/vertex-ai/colab/import/https:%2F%2Fraw.githubusercontent.com%2FGoogleCloudPlatform%2Fcloud-solutions%2Fmain%2Fprojects%2Fai%2Fgen-media%2Fnotebooks%2Fvto_scale_workflow%2FVTO_GenMedia_Workflow.ipynb">
+#       <img width="32px" src="https://lh3.googleusercontent.com/JmcxdQi-qOpctIvWKgPtrzZdJJK-J3sWE1RsfjZNwshCFgE_9fULcNpuXYTilIR2hjwN" alt="Google Cloud Colab Enterprise logo"><br> Open in Colab Enterprise
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://console.cloud.google.com/vertex-ai/workbench/deploy-notebook?download_url=https://raw.githubusercontent.com/GoogleCloudPlatform/cloud-solutions/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb">
+#       <img src="https://www.gstatic.com/images/branding/gcpiconscolors/vertexai/v1/32px.svg" alt="Vertex AI logo"><br> Open in Vertex AI Workbench
+#     </a>
+#   </td>
+#   <td style="text-align: center">
+#     <a href="https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/ai/gen-media/notebooks/vto_scale_workflow">
+#       <img width="32px" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub logo"><br> View on GitHub
+#     </a>
+#   </td>
+# </table>
+# <br clear="all">
+#
+# | Author |
+# | --- |
+# | [Layolin Jesudhass](layolin@google.com) |
+#
+# ## Overview
 #
 # This Jupyter Notebook outlines a complete, scalable pipeline for generating diverse, photorealistic virtual try-on. The core objective is to use a suite of Google's Generative AI models—Gemini (for orchestration and critique), Gemini Image Generation (for creating diverse base models), Vertex AI Virtual Try-On (VTO) (for garment swapping), and Veo (for adding motion)—to produce a large volume of Virtual Try-On images and short motion videos featuring diverse digital models in various outfits. All these are created using one platform Vertex AI!
 #
