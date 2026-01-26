@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
 # File Info
 
 file_type: demo
+license: Apache-2.0
 
 # Demo Info
 
@@ -98,6 +99,10 @@ artifacts:
   - title: Jupyter Notebook
     type: colab
     link: https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/keyframe_storyboarding/gemini3_0_keyframe_storyboarding.ipynb
+
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/1POibk8wq-rcTPHC8AQr78gMFWh6UJQpZ/view?usp=sharing
 
 # [Optional] Designate an asset as the demo's key asset.
 featured_artifact_title: Jupyter Notebook

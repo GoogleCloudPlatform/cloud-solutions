@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
 # File Info
 
 file_type: demo
+license: Apache-2.0
 
 # Demo Info
 
@@ -37,7 +38,7 @@ thumbnail_summary: A comprehensive, end-to-end pipeline for generating diverse, 
 
 # [Optional] A summary of the demo's intention. Markdown supported.
 purpose: |
-  This project demonstrates a scalable workflow for fashion e-commerce applications that generates diverse digital models with various demographics, performs high-fidelity virtual garment try-on, adds realistic motion to showcase garments in runway-style videos, and processes inputs at scale from CSV files using Google Cloud Storage.
+  This project demonstrates a scalable workflow for fashion online retail applications that generates diverse digital models with various demographics, performs high-fidelity virtual garment try-on, adds realistic motion to showcase garments in runway-style videos, and processes inputs at scale from CSV files using Google Cloud Storage.
 
   Key capabilities demonstrated:
   * Generate diverse digital models with various demographics
@@ -48,7 +49,7 @@ purpose: |
 
 # [Optional] A summary of the demo's business value. Markdown supported.
 business_value: |
-  This solution enables fashion e-commerce businesses to showcase their products on a diverse set of digital models, reducing the need for costly and time-consuming photoshoots.
+  This solution enables fashion online retail businesses to showcase their products on a diverse set of digital models, reducing the need for costly and time-consuming photoshoots.
 
   Key benefits include:
   * **Cost Savings:** Eliminate 90% of traditional photoshoot expenses
@@ -98,7 +99,11 @@ artifacts:
 
   - title: Jupyter Notebook
     type: colab
-    link: https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/LJ_GenMedia_Workflow.ipynb
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/vto_scale_workflow/VTO_GenMedia_Workflow.ipynb
+
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/1_8z0dLOqQNQ9xlNlxTvrpc3HdkH9_7DY/view?usp=sharing
 
 # [Optional] Designate an asset as the demo's key asset.
 featured_artifact_title: Jupyter Notebook

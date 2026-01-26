@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#      https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
 # File Info
 
 file_type: demo
+license: Apache-2.0
 
 # Demo Info
 
@@ -33,17 +34,17 @@ type: application
 title: "GenMedia: AI-Powered Product Image Re-contextualization"
 
 # A short description of the demo.
-thumbnail_summary: A pipeline that uses generative AI to transform standard product photos into realistic, contextualized lifestyle images for e-commerce.
+thumbnail_summary: A pipeline that uses generative AI to transform standard product photos into realistic, contextualized lifestyle images for online retail.
 
 # [Optional] A summary of the demo's intention. Markdown supported.
 purpose: |
   This demo showcases an end-to-end workflow for automatically re-contextualizing product images. It takes clean, studio-shot product photos from Google Cloud Storage, uses a powerful generative AI model (Gemini) to place the product into a new, appropriate, and realistic environment, and then uses another AI model to evaluate the quality of the generated image across multiple dimensions like product fidelity, scene realism, and aesthetic quality.
 
-  The goal is to automate the creation of high-quality lifestyle imagery for marketing and e-commerce at scale.
+  The goal is to automate the creation of high-quality lifestyle imagery for marketing and online retail at scale.
 
 # [Optional] A summary of the demo's business value. Markdown supported.
 business_value: |
-  Automates the costly and time-consuming process of lifestyle photoshoots, enabling e-commerce businesses to quickly generate a wide variety of engaging, high-quality marketing images.
+  Automates the costly and time-consuming process of lifestyle photoshoots, enabling online retail businesses to quickly generate a wide variety of engaging, high-quality marketing images.
 
   Key benefits include:
   * **Reduced Costs:** Eliminate the need for expensive photoshoots and studio setups
@@ -90,7 +91,11 @@ artifacts:
 
   - title: Jupyter Notebook
     type: colab
-    link: https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/product-recontext/LJ_product_recontext.ipynb
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/ai/gen-media/notebooks/product-recontext/product_recontext_gcs.ipynb
+
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/1PW4HYaz38_XLxtXC5nZ7RfZDmfZ6FaEC/view?usp=sharing
 
 # [Optional] Designate an asset as the demo's key asset.
 featured_artifact_title: Jupyter Notebook
