@@ -175,6 +175,18 @@ from pydantic import BaseModel
 # ## Project Setup & Authentication
 
 # %% [markdown]
+# ### Authenticate your notebook environment (Colab only)
+
+# %%
+import sys
+
+if "google.colab" in sys.modules:
+    from google.colab import auth
+
+    auth.authenticate_user()
+    print("Authenticated as a user from colab.")
+
+# %% [markdown]
 # ### Set Google Cloud project information
 #
 # To get started using Vertex AI, you must have an existing Google Cloud project and [enable the Vertex AI API](https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com).
