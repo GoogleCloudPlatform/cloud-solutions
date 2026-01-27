@@ -7,5 +7,5 @@ pip==25.3
 pyproject-hooks==1.1.0
 setuptools==78.1.1
 tomli==2.0.1
-wheel==0.43.0
+wheel==0.46.2
 zipp==3.19.2
