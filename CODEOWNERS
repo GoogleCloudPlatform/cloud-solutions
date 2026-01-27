@@ -3,7 +3,7 @@
 # Keep this list alphabetically ordered
 
 /projects/ai/agents/                                                  @allen-stephen
-/projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidrodeloera @layolin,@tdigangi
+/projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidrodeloera @layolin @tdigangi
 /projects/ai/gen-media/experimental/movieLenz-main/                   @tdigangi @layolin @allen-stephen
 /projects/ai/gen-media/images/                                        @isidrodeloera @layolin @tdigangi
 /projects/ai/gen-media/notebooks/imagen_r2i/                          @isidrodeloera @layolin @tdigangi
