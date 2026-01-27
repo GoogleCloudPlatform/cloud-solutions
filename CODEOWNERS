@@ -5,12 +5,12 @@
 /projects/ai/agents/                                                  @allen-stephen
 /projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidrodeloera @layolin,@tdigangi
 /projects/ai/gen-media/experimental/movieLenz-main/                   @tdigangi @layolin @allen-stephen
-/projects/ai/gen-media/images/                                        @isidrodeloera @layolin,@tdigangi
-/projects/ai/gen-media/notebooks/imagen_r2i/                          @isidrodeloera @layolin,@tdigangi
-/projects/ai/gen-media/notebooks/keyframe_storyboarding/              @isidrodeloera @layolin,@tdigangi
-/projects/ai/gen-media/notebooks/nano_banana/                         @isidrodeloera @layolin,@tdigangi
-/projects/ai/gen-media/notebooks/product-recontext/                   @isidrodeloera @layolin,@tdigangi
-/projects/ai/gen-media/notebooks/vto_scale_workflow/                  @isidrodeloera @layolin,@tdigangi
+/projects/ai/gen-media/images/                                        @isidrodeloera @layolin @tdigangi
+/projects/ai/gen-media/notebooks/imagen_r2i/                          @isidrodeloera @layolin @tdigangi
+/projects/ai/gen-media/notebooks/keyframe_storyboarding/              @isidrodeloera @layolin @tdigangi
+/projects/ai/gen-media/notebooks/nano_banana/                         @isidrodeloera @layolin @tdigangi
+/projects/ai/gen-media/notebooks/product-recontext/                   @isidrodeloera @layolin @tdigangi
+/projects/ai/gen-media/notebooks/vto_scale_workflow/                  @isidrodeloera @layolin @tdigangi
 /projects/ai/gen-media/YAML/                                          @layolin @isidrodeloera @tdigangi
 /projects/alloydb-auth-workload-identity/                             @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/alloydb-autoscaler/                                         @nielm
