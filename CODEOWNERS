@@ -3,15 +3,15 @@
 # Keep this list alphabetically ordered
 
 /projects/ai/agents/                                                  @allen-stephen
-/projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidrodeloera @layolin @tdigangi
-/projects/ai/gen-media/experimental/movieLenz-main/                   @tdigangi @layolin @allen-stephen
-/projects/ai/gen-media/images/                                        @isidrodeloera @layolin @tdigangi
-/projects/ai/gen-media/notebooks/imagen_r2i/                          @isidrodeloera @layolin @tdigangi
-/projects/ai/gen-media/notebooks/keyframe_storyboarding/              @isidrodeloera @layolin @tdigangi
-/projects/ai/gen-media/notebooks/nano_banana/                         @isidrodeloera @layolin @tdigangi
-/projects/ai/gen-media/notebooks/product-recontext/                   @isidrodeloera @layolin @tdigangi
-/projects/ai/gen-media/notebooks/vto_scale_workflow/                  @isidrodeloera @layolin @tdigangi
-/projects/ai/gen-media/YAML/                                          @layolin @isidrodeloera @tdigangi
+/projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidro-deloera @luj20 @tdigangi
+/projects/ai/gen-media/experimental/movieLenz-main/                   @tdigangi @luj20 @allen-stephen
+/projects/ai/gen-media/images/                                        @isidro-deloera @luj20 @tdigangi
+/projects/ai/gen-media/notebooks/imagen_r2i/                          @isidro-deloera @luj20 @tdigangi
+/projects/ai/gen-media/notebooks/keyframe_storyboarding/              @isidro-deloera @luj20 @tdigangi
+/projects/ai/gen-media/notebooks/nano_banana/                         @isidro-deloera @luj20 @tdigangi
+/projects/ai/gen-media/notebooks/product-recontext/                   @isidro-deloera @luj20 @tdigangi
+/projects/ai/gen-media/notebooks/vto_scale_workflow/                  @isidro-deloera @luj20 @tdigangi
+/projects/ai/gen-media/YAML/                                          @isidro-deloera @luj20 @tdigangi
 /projects/alloydb-auth-workload-identity/                             @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/alloydb-autoscaler/                                         @nielm
 /projects/alloydbomni-ha-patroni-etcd/                                @GoogleCloudPlatform/cloud-solutions-the-repo-admin
