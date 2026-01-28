@@ -11,8 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# In-repo Cloud Build deployment for the Web Application (GCP Target).
-# cloud-solutions/not-tracked-v0.0.0
 
 
 output "vpc_id" {

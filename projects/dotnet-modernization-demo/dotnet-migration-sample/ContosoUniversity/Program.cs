@@ -19,9 +19,6 @@
 // This file may need updated according to the specific scenario of the application being upgraded.
 // For more information on ASP.NET Core hosting, see https://docs.microsoft.com/aspnet/core/fundamentals/host/web-host
 
-// This is an example application, so asset tracking is not necessary
-// cloud-solutions/not-tracked-v0.0.0
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

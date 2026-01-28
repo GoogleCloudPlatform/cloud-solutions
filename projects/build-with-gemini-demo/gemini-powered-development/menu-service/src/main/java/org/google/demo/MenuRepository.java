@@ -16,9 +16,6 @@ package org.google.demo;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
-// This is an example application, so asset tracking is not necessary
-// cloud-solutions/not-tracked-v0.0.0
-
 /** Repository for Menu entities. */
 @ApplicationScoped
 public class MenuRepository implements PanacheRepository<Menu> {}
