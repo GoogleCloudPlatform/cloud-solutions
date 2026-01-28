@@ -20,19 +20,19 @@
 #
 
 ## Markdown Extensions
-pymdown-extensions == 10.18
+pymdown-extensions == 10.20.1
 pygments == 2.19.2
 
 ## Mkdocs Plugins
 mkdocs == 1.6.1
 mkdocs-get-deps == 0.2.0
-mkdocs-material == 9.7.0
+mkdocs-material == 9.7.1
 mkdocs-redirects == 1.2.2
-mkdocstrings[python] == 1.0.0
+mkdocstrings[python] == 1.0.2
 mkdocs-awesome-pages-plugin == 2.10.1
 
 # dependencies needed for kokoro run
 typing_extensions == 4.15.0
-importlib_metadata == 8.7.0
+importlib_metadata == 8.7.1
 astunparse == 1.6.3
 pytz == 2025.2
