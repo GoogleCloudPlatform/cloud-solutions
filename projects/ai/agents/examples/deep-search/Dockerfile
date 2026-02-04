@@ -14,7 +14,10 @@
 
 FROM python:3.11-slim
 
-RUN pip install --no-cache-dir uv==0.8.13
+WORKDIR /code
+
+COPY requirements-uv.txt .
+RUN pip install --no-cache-dir --require-hashes -r requirements-uv.txt
 
 WORKDIR /code
 
