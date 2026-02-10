@@ -1,0 +1,73 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+license: Apache-2.0
+file_type: demo
+type: guided_doc
+title: Migrate VMs to Compute Engine and databases to Cloud SQL
+thumbnail_summary: Demonstrate the migration of a three-tier application running on AWS to Google Cloud.
+
+purpose: |
+  This demo provides a step-by-step guide for migrating a three-tier application from AWS to Google Cloud. It covers the entire migration process, from asset discovery and TCO analysis in the Migration Center to the actual migration of an RDS PostgreSQL database to Cloud SQL using the Database Migration Service (DMS) and Amazon EC2 VMs to Compute Engine using Migrate to Virtual Machines (M2VM).
+
+  Key learning objectives:
+  * Discover AWS assets in the Migration Center.
+  * Generate Total Cost of Ownership (TCO) and asset reports.
+  * Migrate an RDS PostgreSQL to Cloud SQL using Database Migration Service (DMS).
+  * Migrate Amazon EC2 VMs to Compute Engine using Migrate to Virtual Machines (M2VM).
+
+business_value: |
+  This migration strategy offers significant business benefits by moving from a traditional IaaS model to a more managed and cost-effective cloud environment.
+
+  Key benefits include:
+  * **Reduced Operational Overhead:** Offload database management tasks to Cloud SQL, a fully managed service, reducing the need for manual intervention in patching, backups, and scaling.
+  * **Cost Optimization:** Leverage the TCO analysis from the Migration Center to "right-size" infrastructure and optimize costs by selecting the most appropriate Compute Engine and Cloud SQL instances.
+  * **Improved Performance and Reliability:** Benefit from Google's high-performance infrastructure and the reliability of managed services like Cloud SQL.
+
+technical_value: |
+  This demo showcases a robust and repeatable migration process using powerful Google Cloud tools:
+  * **Comprehensive Assessment:** Utilize the Migration Center for asset discovery, TCO reporting, and migration planning, providing a data-driven approach to migration.
+  * **Automated Database Migration:** Leverage the Database Migration Service (DMS) for a low-downtime, continuous replication of your PostgreSQL database from AWS RDS to Cloud SQL.
+  * **Seamless VM Migration:** Use Migrate to Virtual Machines (M2VM) to efficiently move your EC2 instances to Compute Engine with minimal disruption.
+  * **Infrastructure as Code:** The use of Terraform to deploy the source environment in AWS demonstrates a best-practice approach to managing infrastructure.
+
+owner: ameenahb
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: 2175442982642
+channel_id: 10
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/migrate-from-aws-to-google-cloud/vm-compute-db-modernization
+
+artifacts:
+  - title: Code Repository
+    type: code_repo
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/migrate-from-aws-to-google-cloud/vm-compute-db-modernization
+  - title: Demo Script
+    type: document
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.fvi3zxxvzq76
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/1zDFYgYBOYK2M1wahzyNDJIL2NxLbc2ba/view?usp=sharing
+
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+
+industries:
+  - all
+
+products:
+  - compute_engine
+  - cloud_sql
+  - migrate_to_virtual_machines
+  - database_migration_service

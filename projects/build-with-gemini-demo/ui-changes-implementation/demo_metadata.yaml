@@ -1,0 +1,60 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+file_type: demo
+type: guided_doc
+title: Implementing UI changes with Gemini CLI
+thumbnail_summary:
+  Demonstrate Gemini CLI's multimodal capabilities by visually analyzing
+  UI differences.
+purpose: |
+  This demonstration highlights Gemini's powerful multimodal capabilities in analyzing visual differences between UI versions (V1 and V2) and precisely identifying necessary code modifications. Gemini effectively locates relevant source files within the codebase and applies the required changes, showcasing its ability to streamline the process of implementing UI updates and reduce manual effort.
+
+  Key learning objectives:
+  * Understand how to use Gemini CLI to compare two images and identify changes.
+  * Learn how to use Gemini CLI to locate source files and make required changes based on the updated UI.
+business_value: |
+  This capability can significantly accelerate the UI development process and reduce the manual effort required to implement UI updates.
+
+  Key benefits include:
+  * **Accelerated UI Development:** By automating the process of identifying and implementing UI changes, you can deliver UI updates faster.
+  * **Reduced Manual Effort:** The use of Gemini CLI to locate source files and make required changes can significantly reduce the manual effort required to implement UI updates.
+  * **Improved Accuracy:** The use of AI to analyze visual differences and identify necessary code modifications can help to improve the accuracy of UI updates.
+  * **Increased Developer Productivity:** The streamlined workflow and automated code generation can help to increase developer productivity and satisfaction.
+technical_value: |
+  This demo showcases the powerful multimodal capabilities of the Gemini CLI for UI development.
+
+  Key technical insights:
+  * **Multimodal AI:** The use of AI to analyze visual differences between UI versions and identify necessary code modifications.
+  * **AI-Powered Code Generation:** The use of AI to locate relevant source files and apply the required changes.
+  * **Streamlined Workflow:** The use of the Gemini CLI to streamline the process of implementing UI updates.
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/ui-changes-implementation
+owner: andreyshakirov
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+channel_id: 10
+team_owner: 2175442982642
+artifacts:
+  - title: Code Repository
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/ui-changes-implementation
+  - link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.ba1n7nel7qox
+    title: Demo Script
+  - link: https://drive.google.com/file/d/1xN9c82Ubncp6xDd1ilW9Fa41p2qp_ut8/view?resourcekey
+    title: Walkthrough Demo Video
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+industries:
+  - all
+products:
+  - gemini_api

@@ -1,0 +1,77 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+license: Apache-2.0
+file_type: demo
+type: guided_doc
+title: Amazon S3 to Cloud Storage
+thumbnail_summary: Demonstrate an AI-accelerated migration from AWS S3 to Google Cloud Storage.
+
+purpose: |
+  This project provides a set of Gemini CLI custom commands to accelerate assessments and migration of workloads and data from Amazon Web Services (AWS) S3 to Google Cloud Storage. The Gemini CLI custom commands use Gemini to analyze data, identifying suitable resources for migration, and augmenting traditional assessments with AI.
+
+  Key learning objectives:
+  * Understand AWS permissions required for S3 inventory extraction and demo setup.
+  * Configure Google Cloud permissions for migration commands (creating buckets and transfer jobs).
+  * Set up Gemini CLI and AWS CLI prerequisites.
+  * Prepare S3 inventory data using various options (generate new demo bucket, use existing, or use sample data).
+  * Run Gemini CLI custom commands to analyze S3 object inventory and generate migration recommendations.
+
+business_value: |
+  This Gemini-powered approach to S3 to Cloud Storage migration offers significant business advantages by streamlining the assessment and migration process with AI assistance.
+
+  Key benefits include:
+  * **Accelerated Migration Assessments:** Leverage Gemini to quickly analyze S3 data, identifying suitable resources and augmenting traditional assessments with AI insights.
+  * **Reduced Manual Effort:** Automate the generation of migration steps and code for Storage Transfer Service, minimizing manual configuration.
+  * **Improved Accuracy and Efficiency:** AI-driven analysis helps in making informed decisions for migration strategy and resource allocation.
+  * **Streamlined Workflow:** Integrate Gemini CLI into the migration workflow for a more cohesive and efficient process.
+  * **Secure Data Transfer:** Utilize Google Cloud Storage Transfer Service for reliable and secure data migration.
+
+technical_value: |
+  This project showcases a technically advanced approach to cloud migration using AI-powered tooling and cloud-native services.
+
+  Key technical insights:
+  * **Gemini CLI Custom Commands:** Demonstrates the use of custom Gemini CLI commands for specialized migration tasks.
+  * **AI-Augmented Assessments:** Utilizes Gemini's analytical capabilities to enhance traditional cloud migration assessments.
+  * **S3 Inventory Generation:** Provides scripts for generating detailed inventory of AWS S3 buckets, capturing crucial metadata.
+  * **Storage Transfer Service Integration:** Generates code and steps for configuring Google Cloud Storage Transfer Service for efficient data movement.
+
+owner: ameenahb
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: 2175442982642
+channel_id: 10
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/migrate-from-aws-to-google-cloud/s3-to-cloud-storage
+
+artifacts:
+  - title: Code Repository
+    type: code_repo
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/migrate-from-aws-to-google-cloud/s3-to-cloud-storage
+  - title: Demo Script
+    type: document
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.0
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/1vdefsFhwX9H0Eg7xmhp6B0p9A35sTIeA/view?usp=sharing
+
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+
+industries:
+  - all
+
+products:
+  - cloud_storage
+  - storage_transfer_service
+  - gemini_cli

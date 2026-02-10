@@ -1,0 +1,64 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+license: Apache-2.0
+file_type: demo
+type: guided_doc
+title: Scanning and fixing security issues with Gemini CLI and Snyk
+thumbnail_summary:
+  Integrate Snyk with the Gemini CLI to identify and automatically
+  remediate security vulnerabilities.
+purpose: |
+  This guide demonstrates how to integrate Snyk with the Gemini CLI to scan and fix code vulnerabilities, accelerating secure software delivery. It covers the setup process, configuring the Snyk MCP server, and using Gemini CLI with natural language prompts to orchestrate Snyk scans and automatically resolve issues.
+
+  Key learning objectives:
+  * Create a Snyk account and obtain an auth token.
+  * Install and authenticate the Snyk CLI.
+  * Configure the Snyk MCP server for Gemini CLI integration.
+  * Run a security scan using a natural language prompt.
+  * Automatically fix the identified security issues.
+business_value: |
+  This integration enables rapid identification and remediation of security issues, streamlining the secure software delivery lifecycle by providing proactive security checks and ensuring fixes are suggested and applied quickly.
+
+  Key benefits include:
+  * **Accelerated Secure Software Delivery:** By automating the process of scanning and fixing security vulnerabilities, you can deliver secure software faster.
+  * **Improved Security Posture:** Proactive security checks help to ensure that your code is secure from the start, reducing the risk of security breaches.
+  * **Increased Developer Productivity:** The streamlined workflow and automated remediation can help to increase developer productivity and satisfaction.
+  * **Reduced Risk:** By identifying and fixing security issues early in the development process, you can reduce the risk of costly security incidents.
+technical_value: |
+  This demo showcases a powerful combination of the Gemini CLI and Snyk for automated security scanning and remediation.
+
+  Key technical insights:
+  * **MCP Server Integration:** The use of an MCP server allows for seamless integration between the Gemini CLI and Snyk.
+  * **Natural Language Prompts:** The use of natural language prompts makes it easy to orchestrate Snyk scans and automatically resolve issues.
+  * **Automated Remediation:** The ability to automatically fix identified security issues can significantly speed up the development process and improve the security of your code.
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/security-scan-fix
+owner: andreyshakirov
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: "2175442982642"
+channel_id: 10
+artifacts:
+  - link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/security-scan-fix
+    title: Code Repository
+  - title: Demo Script
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.e59g39peiojg
+  - link: https://drive.google.com/file/d/13dvgug92XVRQLgnjVtSrUAoKB5dVk2iG/view
+    title: Walkthrough Demo Video
+featured_video_artifact_title: Walkthrough Demo Video
+featured_artifact_title: Code Repository
+industries:
+  - all
+products:
+  - gemini_code_assist

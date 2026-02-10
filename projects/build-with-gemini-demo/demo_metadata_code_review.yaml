@@ -1,0 +1,60 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+license: Apache-2.0
+file_type: demo
+type: guided_doc
+title: Demonstrate how to configure Gemini Code Assist on GitHub to automate code reviews.
+thumbnail_summary: Demonstrate how to use Gemini CLI to implement features with context from external systems (JIRA/Confluence).
+purpose: |
+  This demo showcases how to prototype and implement application features with Gemini. It walks through preparing the environment and automating GitHub Pull Requests reviews with a Code Review Agent.
+
+  Key learning objectives:
+  * Automate code reviews in GitHub Pull Requests using a Code Review Agent.
+business_value: |
+  This demo shows how to accelerate the software development lifecycle using AI-powered tools, which can lead to faster time-to-market for new features and products.
+
+  Key benefits include:
+  * **Increased Developer Velocity:** By leveraging Gemini for code review, development teams can significantly reduce manual effort.
+  * **Faster Time-to-Market:** Accelerate the delivery of new features and products.
+  * **Improved Code Quality:** Automating reviews and leveraging AI assistance helps in maintaining high code standards.
+  * **Enhanced Innovation:** Freeing up developers from repetitive tasks allows them to focus on innovation.
+technical_value: |
+  This demo provides hands-on experience with Gemini CLI for reviewing code.
+
+  Key technical insights:
+  * **Workflow Automation:** Allows developers to streamline their workflows and automate repetitive tasks.
+  * **Intelligent Code Assistance:** Provides intelligent assistance to developers throughout the development process.
+owner: andreyshakirov
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: 2175442982642
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/#automate-github-pull-requests-reviews-with-code-review-agent
+artifacts:
+  - title: Code Repository
+    type: code_repo
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo#automate-github-pull-requests-reviews-with-code-review-agent
+  - title: Demo Script
+    type: document
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.9yeglbgvehg1#heading=h.2xbxf7vhbhul
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/1ujIzSWpSpy--JEWP_K90CbKfQSkOkytq/view
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+industries:
+  - all
+products:
+  - vertex_ai
+  - gemini_api

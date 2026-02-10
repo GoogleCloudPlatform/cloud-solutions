@@ -1,0 +1,60 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+file_type: demo
+type: guided_doc
+title: Prototype ADK Agents with Gemini CLI
+thumbnail_summary:
+  This repository serves as a prototype for building ADK (Agent Development
+  Kit) agents using the Gemini CLI
+purpose: |
+  This repository serves as a prototype for building ADK (Agent Development Kit) agents using the Gemini CLI. It demonstrates how to leverage existing context files and custom commands to streamline the agent development process.
+
+  Key learning objectives:
+  * Understand the key files used in the prototype.
+  * Learn about the custom commands available for planning and implementing ADK agents.
+business_value: |
+  This prototype offers a streamlined and efficient approach to ADK agent development, which can lead to significant business benefits.
+
+  Key benefits include:
+  * **Accelerated Development:** The use of custom commands and existing context files can significantly speed up the development of ADK agents.
+  * **Improved Code Quality:** The use of predefined plans and best practices helps to ensure that the generated agents are of high quality.
+  * **Reduced Development Costs:** By automating many of the tasks involved in agent development, this prototype can help to reduce development costs.
+  * **Increased Developer Productivity:** The streamlined workflow and powerful tools can help to increase developer productivity and satisfaction.
+technical_value: |
+  This prototype demonstrates a powerful and flexible approach to ADK agent development using the Gemini CLI.
+
+  Key technical insights:
+  * **Custom Commands:** The use of custom commands in the Gemini CLI allows for the automation of complex tasks and the enforcement of best practices.
+  * **Context-Aware Development:** The use of existing context files, such as `GEMINI.md` and `AGENTS.txt`, allows the agent to generate code that is consistent with the existing codebase and follows established patterns.
+  * **Plan-Based Implementation:** The use of a plan-based implementation approach helps to ensure that the generated agent meets the specified requirements and is of high quality.
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/#prototype-adk-agents-with-gemini-cli
+owner: andreyshakirov
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: 2175442982642
+channel_id: 10
+artifacts:
+  - link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/prototype-adk-agent-with-gemini-cli
+    title: Code Repository
+  - link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.4682c466ix6g#heading=h.8e6rlzmet0x2
+    title: Demo Script
+  - title: Walkthrough Demo Video
+    link: https://drive.google.com/file/d/1kpzPGcb70bfi7gnmAW8o5Z4oogHKm5e8/view?usp=drive_link
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+industries:
+  - all
+products:
+  - gemini_cli

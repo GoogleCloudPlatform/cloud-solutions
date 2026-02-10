@@ -1,0 +1,82 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+license: Apache-2.0
+file_type: demo
+type: guided_doc
+title: Gemini-powered .NET modernization
+thumbnail_summary: Modernize a .NET Framework application to a Linux-ready .NET application using Gemini CLI, Migration Center App Modernization Assessment, and deploy to Google Cloud with Cloud Run and Cloud SQL.
+
+purpose: |
+  This demo guides you through modernizing a .NET Framework application to a Linux-ready .NET application and deploying it on Google Cloud. It leverages the Gemini CLI for application modernization and Migration Center's App Modernization Assessment for initial analysis.
+
+  Key learning objectives:
+  * Prepare the development environment for .NET modernization.
+  * Generate a modernization assessment report using the `codmod` CLI.
+  * Modernize a .NET application using the Gemini CLI.
+  * Generate deployment descriptors for Google Cloud.
+  * Deploy the modernized application to Google Cloud using Cloud Run and Cloud SQL for PostgreSQL.
+
+business_value: |
+  Modernizing .NET applications to cloud-native architectures on Google Cloud offers substantial business advantages, driving agility, efficiency, and innovation.
+
+  Key benefits include:
+  * **Accelerated Innovation:** Migrate from legacy .NET Framework to modern .NET, enabling faster development cycles and adoption of new features.
+  * **Cost Optimization:** Reduce infrastructure costs by moving to Linux-based containers and serverless platforms like Cloud Run, paying only for resources consumed.
+  * **Increased Agility and Scalability:** Deploy applications on Cloud Run for automatic scaling, high availability, and rapid deployment capabilities.
+  * **Reduced Operational Burden:** Leverage managed services like Cloud Run and Cloud SQL, minimizing operational overhead for infrastructure management.
+  * **Data-Driven Modernization:** Utilize tools like the Migration Center App Modernization Assessment for informed decisions and streamlined modernization paths.
+
+technical_value: |
+  This demo showcases a powerful combination of tools and Google Cloud services for comprehensive .NET application modernization.
+
+  Key technical insights:
+  * **Automated Modernization:** Demonstrates the use of Gemini CLI to automatically refactor and modernize .NET Framework code to modern .NET standards.
+  * **Migration Assessment:** Utilizes the `codmod` CLI (Migration Center App Modernization Assessment) to generate detailed reports for planning the modernization effort.
+  * **Containerization:** Leverages Docker for packaging the modernized application, enabling portability and deployment across various environments.
+  * **Serverless Deployment:** Deploys the containerized application to Cloud Run, a fully managed, serverless platform for containerized workloads.
+  * **Managed Database:** Integrates with Cloud SQL for PostgreSQL to provide a fully managed relational database backend.
+  * **CI/CD Integration:** Showcases how Google Cloud Build can be used to build and push container images to Artifact Registry for a streamlined deployment pipeline.
+
+owner: ferrarim
+team_owner: 2175442982642
+contributors:
+  - idoflatow
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+channel_id: 10
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/dotnet-modernization-demo
+
+artifacts:
+  - title: Code Repository
+    type: code_repo
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/dotnet-modernization-demo
+  - title: Demo Script
+    type: document
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.rpvwpeuvhfi0
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/18KFi4VbSfpcW2v2HBSxCG749-GBKQkIH/view?usp=drive_link
+
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+
+industries:
+  - all
+
+products:
+  - cloud_run
+  - cloud_sql
+  - cloud_build
+  - artifact_registry
+  - gemini

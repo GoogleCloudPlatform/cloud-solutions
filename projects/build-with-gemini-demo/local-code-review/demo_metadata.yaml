@@ -1,0 +1,67 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+file_type: demo
+type: guided_doc
+title: Interactive code reviews with Gemini CLI
+thumbnail_summary:
+  Demonstrate how developers can get immediate, AI-driven feedback
+  on local code changes.
+purpose: |
+  This guide provides a walkthrough for using the Gemini CLI Code Review extension to perform an interactive review of local code changes. This extension offers a powerful, low-friction method for developers to receive immediate, Gemini-driven feedback on their work-in-progress, without submitting a formal change request.
+
+  Key learning objectives:
+  * Install and verify the Gemini CLI Code Review extension.
+  * Invoke the `/code-review` command in the terminal to review local changes.
+  * Understand the output from Gemini's code review, including identified issues and suggestions for improvement.
+  * Implement Gemini's suggestions to fix review findings and iterate on code quality.
+  * Customize the code review process with project-specific coding guidelines and standards.
+business_value: |
+  Integrating interactive code reviews with Gemini CLI into the development workflow significantly enhances productivity and code quality.
+
+  Key benefits include:
+  * **Higher Code Quality:** Receive immediate, AI-driven feedback on local changes, leading to cleaner, more robust code before formal submission.
+  * **Faster Iteration Cycles:** Accelerate development by quickly identifying and addressing issues early in the coding process.
+  * **Reduced Pre-Submission Review Time:** Minimize the need for extensive manual reviews by catching common errors and improving code quality interactively.
+  * **Streamlined Onboarding:** New team members can quickly learn and adhere to project-specific coding standards through automated guidance.
+  * **Empowered Developers:** Provide developers with an intelligent assistant to self-correct and improve their code efficiently.
+technical_value: |
+  This demo showcases the technical capabilities of the Gemini CLI Code Review extension for enhancing local development practices.
+
+  Key technical insights:
+  * **Gemini CLI Extension Integration:** Demonstrates the installation and usage of a Gemini CLI extension for specialized functionality.
+  * **Interactive Code Analysis:** Utilizes the `/code-review` command to perform AI-powered analysis of uncommitted or committed local code changes against a base branch.
+  * **AI-Driven Feedback:** Provides concrete suggestions and identifies potential issues such as race conditions, missing validation, performance bottlenecks, and security vulnerabilities.
+  * **Iterative Refinement:** Supports an iterative workflow for fixing review findings based on Gemini's suggestions and re-running the review.
+  * **Customizable Review Rules:** Highlights the extensibility of Gemini CLI to incorporate project-specific coding guidelines and standards.
+  * **Git Integration:** Shows how the extension works with Git to compare changes between branches for review purposes.
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/local-code-review
+owner: andreyshakirov
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: "2175442982642"
+channel_id: 10
+artifacts:
+  - link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/local-code-review
+    title: Code Repository
+  - title: Demo Script
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.awt4xe51bvwh
+  - title: Walkthrough Demo Video
+    link: https://drive.google.com/file/d/1MuLhAPsrEaFgjNG2_uzp29oofyeDh898/view
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+industries:
+  - all
+products:
+  - gemini_api

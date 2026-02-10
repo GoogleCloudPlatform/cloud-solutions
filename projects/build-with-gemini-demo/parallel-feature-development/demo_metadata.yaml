@@ -1,0 +1,72 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+file_type: demo
+type: guided_doc
+title: Parallel Feature Development with Gemini CLI
+thumbnail_summary: Demonstrate how to use Gemini CLI to simulate a multi-agent workflow.
+purpose: |
+  This demo guide illustrates a powerful workflow for accelerating software development using the Gemini CLI in a multi-agent setup, enabling parallel feature implementation. By utilizing Git worktrees, developers can simulate two independent development streams—one focused on a UI feature (refactoring to use Bootstrap) and the other on a Backend feature (adding an in-memory database)—without interfering with the main branch.
+
+  The core of this demonstration showcases the ability of multiple Gemini CLI sessions to autonomously work on separate, complex tasks concurrently, and the subsequent process of merging these parallel changes, including conflict resolution, back into the main branch.
+
+  Key learning objectives:
+  * Explain the existing codebase.
+  * Set up Git worktrees for parallel development.
+  * Implement UI and backend features in parallel using separate Gemini CLI sessions.
+  * Commit changes to the respective feature branches.
+  * Merge the feature branches into the main branch, resolving any conflicts.
+  * Test the final integrated application.
+business_value: |
+  This workflow offers significant business advantages by enabling parallel development, which accelerates the delivery of new features and improvements.
+
+  Key benefits include:
+  * **Accelerated Time-to-Market:** By working on multiple features concurrently, development teams can deliver value to users faster.
+  * **Increased Developer Productivity:** Developers can work on different features in isolation, reducing dependencies and context-switching overhead.
+  * **Improved Code Quality:** The use of separate worktrees and branches for each feature helps to isolate changes and reduce the risk of introducing bugs.
+  * **Enhanced Collaboration:** The process of merging parallel changes encourages communication and collaboration among team members.
+  * **Greater Flexibility:** This approach allows for more flexibility in planning and prioritizing features, as development streams can be managed independently.
+technical_value: |
+  This demo showcases a powerful combination of Git worktrees and the Gemini CLI for advanced development workflows.
+
+  Key technical insights:
+  * **Git Worktrees:** Demonstrates the use of Git worktrees to manage multiple working directories and branches within a single repository.
+  * **Multi-Agent Development:** Illustrates how multiple Gemini CLI sessions can be used as autonomous agents to work on different tasks in parallel.
+  * **Conflict Resolution:** Shows how to merge changes from parallel development streams and resolve any conflicts that may arise.
+  * **AI-Powered Code Generation:** Leverages the Gemini CLI to automatically generate code for both UI and backend features.
+  * **End-to-End Workflow:** Provides a complete end-to-end workflow for parallel feature development, from codebase explanation to final testing.
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/parallel-feature-development
+owner: andreyshakirov
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+channel_id: 10
+team_owner: "2175442982642"
+artifacts:
+  - title: Code Repository
+    type: code_repo
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/parallel-feature-development
+
+  - title: Demo Script
+    type: document
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.gsbblm3d64yu
+
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/1A-iNg__zifKZLX9YogIaF8rif7N_qLXF/view
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+industries:
+  - all
+products:
+  - gemini_cli

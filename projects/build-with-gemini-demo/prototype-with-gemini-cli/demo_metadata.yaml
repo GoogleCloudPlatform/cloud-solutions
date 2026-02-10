@@ -1,0 +1,62 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+file_type: demo
+type: guided_doc
+title: "Prototype with Gemini CLI"
+thumbnail_summary:
+  Demonstrate how to go from an idea to a running web application
+  in minutes using the Gemini CLI.
+purpose: |
+  This demo shows the power and efficiency of using the Gemini CLI for rapid prototyping. It guides you from a conceptual idea to a running web application prototype by leveraging the CLI's custom commands.
+
+  Key learning objectives:
+  * Prepare the environment for prototyping.
+  * Build a specification for an application idea.
+  * Implement the application using the specification.
+  * Test the application and iterate on its features.
+business_value: |
+  The Gemini CLI significantly shortens the prototyping cycle, allowing for faster iteration and experimentation.
+
+  Key benefits include:
+  * **Faster Time to Market:** By automating boilerplate code generation and setup, developers can quickly validate ideas and focus on the core logic and unique aspects of their application.
+  * **Reduced Development Costs:** The streamlined process and reduced manual effort can lead to significant cost savings in the long run.
+  * **Improved Collaboration:** The use of a shared specification and automated code generation can improve collaboration between team members and stakeholders.
+  * **Increased Innovation:** By making it easier and faster to prototype new ideas, the Gemini CLI can help to foster a culture of innovation within an organization.
+technical_value: |
+  This demo showcases a powerful and flexible approach to rapid prototyping using the Gemini CLI.
+
+  Key technical insights:
+  * **Custom Commands:** The use of custom commands in the Gemini CLI allows for the automation of complex tasks, such as generating a specification from an idea or generating code from a specification.
+  * **Iterative Development:** The Gemini CLI supports an iterative development process, allowing you to easily test and refine your application as you go.
+  * **AI-Powered Code Generation:** The use of AI to generate code can significantly speed up the development process and help to ensure that the generated code is of high quality.
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/prototype-with-gemini-cli
+owner: andreyshakirov
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: 2175442982642
+channel_id: 10
+artifacts:
+  - link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/prototype-with-gemini-cli
+    title: Code Repository
+  - title: Demo Script
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.r9f9gmhurjwu
+  - title: Walkthrough Demo Video
+    link: https://drive.google.com/file/d/1Axm6JqRYgNc5NJZo7yj9G2uZ2I-dzYQH/view
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+industries:
+  - all
+products:
+  - gemini_api

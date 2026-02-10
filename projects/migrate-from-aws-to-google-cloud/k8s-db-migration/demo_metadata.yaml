@@ -1,0 +1,78 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+license: Apache-2.0
+file_type: demo
+type: guided_doc
+title: Migrate Amazon EKS and Amazon RDS to Google Kubernetes Engine (GKE) and Cloud SQL
+thumbnail_summary: Demonstrate the replatforming of a containerized banking application from Amazon EKS and Amazon RDS to Google Kubernetes Engine (GKE) Autopilot and Cloud SQL, including Kubernetes cluster discovery and data replication.
+
+purpose: |
+  This guide walks through replatforming a containerized application from Amazon EKS and Amazon RDS to Google Kubernetes Engine (GKE) Autopilot and Cloud SQL. The process involves a "lift-and-shift" migration for the application layer (redeploying stateless workloads) and a data replication migration for the database layer using Database Migration Service (DMS). It also highlights the use of the Kubernetes Cluster Discovery Tool for comprehensive inventory of Kubernetes objects.
+
+  Key learning objectives:
+  * Replatform a containerized application from Amazon EKS to Google Kubernetes Engine (GKE) Autopilot.
+  * Migrate an Amazon RDS database to Cloud SQL using Database Migration Service (DMS).
+  * Perform a "lift-and-shift" migration for stateless application workloads.
+  * Utilize the Kubernetes Cluster Discovery Tool to assess source environments and build inventory.
+  * Generate migration recommendations using Gemini CLI for EKS cluster analysis.
+
+business_value: |
+  This replatforming migration offers significant benefits for organizations looking to modernize their containerized applications and leverage Google Cloud's managed services.
+
+  Key benefits include:
+  * **Modernization:** Move to a fully managed Kubernetes service (GKE Autopilot) and a managed database (Cloud SQL), reducing operational burden and improving reliability.
+  * **Cost Efficiency:** GKE Autopilot automatically scales and optimizes resources, leading to potential cost savings compared to self-managing EKS clusters.
+  * **Enhanced Developer Experience:** Focus on application development rather than infrastructure management, with seamless deployments to GKE.
+  * **Data Integrity:** Ensure continuous data replication during migration using Database Migration Service, minimizing downtime and data loss.
+  * **Informed Decision Making:** Leverage automated discovery and Gemini-powered recommendations for a data-driven migration strategy.
+
+technical_value: |
+  This demo provides a robust technical approach to migrating containerized workloads and databases, leveraging advanced tools and managed services:
+  * **Hybrid Cloud Tools:** Demonstrates the use of Terraform for both AWS and GCP infrastructure provisioning, ensuring consistency and automation.
+  * **Kubernetes Cluster Discovery:** Utilizes the Kubernetes Cluster Discovery Tool for detailed inventory and assessment of EKS resources, aiding in migration planning.
+  * **Gemini-Powered Migration Analysis:** Showcases the integration of Gemini CLI to generate intelligent migration plans based on discovered EKS assets.
+  * **Managed Kubernetes:** Migrates to GKE Autopilot, abstracting away Kubernetes cluster management and node provisioning.
+  * **Database Replication:** Implements the Database Migration Service (DMS) for secure and efficient replication of PostgreSQL data from RDS to Cloud SQL.
+  * **Containerized Deployment:** Details the process of building container images, pushing to Artifact Registry, and deploying to GKE.
+
+owner: ameenahb
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: 2175442982642
+channel_id: 10
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/migrate-from-aws-to-google-cloud/k8s-db-migration
+
+artifacts:
+  - title: Code Repository
+    type: code_repo
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/migrate-from-aws-to-google-cloud/k8s-db-migration
+  - title: Demo Script
+    type: document
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.quqg0d1qqjoy
+  - title: Walkthrough Demo Video
+    type: video
+    link: https://drive.google.com/file/d/1qrcbgNbw_LJVyvXzwblMpLaO8lV0sdLL/view?usp=sharing
+
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+
+industries:
+  - all
+
+products:
+  - gke
+  - cloud_sql
+  - database_migration_service
+  - gemini_cli

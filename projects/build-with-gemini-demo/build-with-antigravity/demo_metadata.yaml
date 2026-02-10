@@ -1,0 +1,67 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific.
+type: guided_doc
+file_type: demo
+title: Build with Antigravity
+thumbnail_summary: Demonstrate how Antigravity's agentic development platform accelerates
+purpose: |
+  This guide demonstrates how Antigravity's agentic development platform can accelerate your software development. It teaches how to leverage Antigravity's powerful, customizable workflows to automate and streamline various stages of the development process.
+
+  Key learning objectives:
+  * Prototype a new application using the `/idea-to-app` workflow.
+  * Generate comprehensive unit tests automatically with the `/unit-tests` workflow.
+  * Perform proactive security scans using the `/security-scan` workflow (e.g., with Snyk).
+  * Automate documentation generation with the `/documentation` workflow.
+  * Streamline GitHub Pull Request creation using the `/open-pr` workflow.
+business_value: |
+  Antigravity significantly enhances developer productivity and software quality across the development lifecycle.
+
+  Key benefits include:
+  * **Increased Developer Velocity:** Automate repetitive and time-consuming tasks, allowing developers to focus on core innovation.
+  * **Improved Code Quality:** Enforce coding standards and generate robust unit tests automatically.
+  * **Enhanced Security Posture:** Proactively identify and address vulnerabilities through integrated security scanning.
+  * **Streamlined Collaboration:** Automate PR creation and documentation, fostering more efficient team collaboration.
+  * **Reduced Operational Costs:** Decrease manual effort in testing, security, and documentation, leading to overall cost savings.
+technical_value: |
+  This demo highlights the technical prowess of Antigravity as an agentic development platform, offering deep integration and customizable automation.
+
+  Key technical insights:
+  * **Agentic Development Platform:** Showcases Antigravity as a platform leveraging intelligent agents for autonomous development tasks.
+  * **Customizable Workflows:** Demonstrates the power of configurable workflows (`/idea-to-app`, `/unit-tests`, `/security-scan`, `/documentation`, `/open-pr`) defined in YAML.
+  * **Guardrails via Rules:** Explains how Markdown-based rules enforce coding standards and behavioral expectations.
+  * **Agent Skills:** Illustrates the use of reusable knowledge packages to extend agent capabilities.
+  * **MCP Servers Integration:** Highlights secure interfacing with local tools, databases, and external services (e.g., GitHub, Snyk) via the Model Context Protocol.
+  * **Automated SDLC Tasks:** Covers automation of prototyping, testing, security scanning, documentation, and source control operations.
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/build-with-antigravity
+owner: andreyshakirov
+contributors:
+  - andreyshakirov
+  - ameenahb
+  - ferrarim
+team_owner: "2175442982642"
+channel_id: "10"
+artifacts:
+  - title: Code Repository
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/build-with-antigravity
+  - title: Demo Script
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.u8slq09swump
+  - title: Walkthrough Demo Video
+    link: https://drive.google.com/file/d/1hRY4X4o-tEinbmrP-zrInqem4s2wP7Ci/view
+featured_artifact_title: Code Repository
+featured_video_artifact_title: Walkthrough Demo Video
+industries:
+  - all
+products:
+  - gemini
+  - gemini_code_assist
+  - google_antigravity
