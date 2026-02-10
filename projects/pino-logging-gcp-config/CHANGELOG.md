@@ -2,6 +2,15 @@
 
 <!-- markdownlint-disable -->
 
+## [1.3.2](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.1...pino-logging-gcp-config-v1.3.2) (2026-02-10)
+
+
+### Bug Fixes
+
+* **ci:** centralize CODEOWNERS ([12fe439](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/12fe439318dc7a986f15625dc014f410c6495372))
+* **deps:** update npm dependencies ([37f5cfa](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/37f5cfa8c5ca7538e61769eb06539fcd32b75f97))
+
+
 ## [1.3.1](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.0...pino-logging-gcp-config-v1.3.1) (2025-12-12)
 
 
