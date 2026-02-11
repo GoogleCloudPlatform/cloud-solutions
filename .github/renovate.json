@@ -40,8 +40,9 @@
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["SECURITY", "p0"]
+    "labels": ["SECURITY", "p0","dependencies"]
   },
+  "labels": ["dependencies"],
   "customManagers": [
     {
       "customType": "regex",
