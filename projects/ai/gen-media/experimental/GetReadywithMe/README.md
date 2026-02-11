@@ -5,6 +5,7 @@ Creation, Single/Multi VTO, Beauty Demo, and Size & Fit.
 
 ## Prerequisites
 
+1.  **Python 3.12+** required (f-string syntax used requires 3.12+)
 1.  **Google Cloud CLI** installed and authenticated
 
     ```bash
@@ -16,10 +17,29 @@ Creation, Single/Multi VTO, Beauty Demo, and Size & Fit.
 
 ## First-Time Deployment
 
-After receiving the `App.zip` file, run:
+### Option 1: Clone from GitHub
 
 ```bash
-unzip -o App.zip && cd GetReadywithMe && ./deploy.sh
+git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git
+cd cloud-solutions/projects/ai/gen-media/experimental/GetReadywithMe
+./deploy.sh
+```
+
+### Option 2: Download and Run
+
+Download just the `GetReadywithMe` folder without cloning the
+entire repository:
+
+```bash
+echo "Downloading GetReadywithMe..." \
+  && curl -sL https://github.com/GoogleCloudPlatform/cloud-solutions/archive/refs/heads/main.tar.gz | tar -xz \
+  && mv cloud-solutions-main/projects/ai/gen-media/experimental/GetReadywithMe . \
+  && rm -rf cloud-solutions-main \
+  && echo "Download complete."
+
+cd GetReadywithMe
+chmod +x deploy.sh redeploy.sh
+./deploy.sh
 ```
 
 The script will:
@@ -29,8 +49,7 @@ The script will:
 1.  Enable required APIs (Cloud Run, Storage, Cloud Build,
     Artifact Registry, Vertex AI)
 1.  Create the GCS bucket
-1.  Automatically extract all asset zips and upload to the
-    bucket
+1.  Upload assets to the bucket
 1.  Build and deploy the app to Cloud Run
 1.  Print the live URL
 
@@ -66,6 +85,33 @@ Streamlit web app with 5 tabs:
 
 All assets are bundled as zip files in `assets/` and uploaded
 automatically during first deployment.
+
+## Local Development
+
+To run the app locally:
+
+```bash
+# Ensure Python 3.12+ is installed
+python3 --version
+
+# Create a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables
+export GCP_PROJECT_ID=your-project-id
+export GCS_BUCKET_NAME=your-bucket-name
+export GOOGLE_CLOUD_PROJECT=your-project-id
+
+# Authenticate with Google Cloud
+gcloud auth application-default login
+
+# Run the app
+streamlit run src/app.py
+```
 
 ## Cleanup
 

@@ -480,10 +480,45 @@ class SingleVTOTab:
                                     }
                                 )
 
-                    # Sort by name for consistent order
+                    # Extract model number
+                    for mi in model_images:
+                        mi['number'] = None
+                        fn = mi['name'].lower()
+                        if 'model_0' in fn:
+                            mi['number'] = int(
+                                fn.split(
+                                    'model_0'
+                                )[1][0]
+                            )
+                        elif 'model' in fn:
+                            for char in (
+                                fn.split('model')[1]
+                            ):
+                                if char.isdigit():
+                                    mi['number'] = (
+                                        int(char)
+                                    )
+                                    break
+
+                    # Sort by number, newest first
                     model_images.sort(
-                        key=lambda x: x['name']
+                        key=lambda x: (
+                            x['number'] or 99,
+                            -x['blob']
+                            .time_created
+                            .timestamp()
+                        )
                     )
+
+                    # Deduplicate by model number
+                    seen = set()
+                    unique_images = []
+                    for mi in model_images:
+                        num = mi['number']
+                        if num and num not in seen:
+                            seen.add(num)
+                            unique_images.append(mi)
+                    model_images = unique_images
 
                     if model_images:
                         # Model selection grid

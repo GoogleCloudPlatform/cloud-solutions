@@ -200,8 +200,14 @@ class MultiTryOnTab:
                     'number': num
                 })
 
-            # Sort by model number
-            models.sort(key=lambda x: x['number'])
+            # Sort by model number, newest first
+            models.sort(
+                key=lambda x: (
+                    x['number'],
+                    -x['blob'].time_created
+                    .timestamp()
+                )
+            )
 
             # Deduplicate by model number
             seen_numbers = set()
@@ -759,142 +765,146 @@ class MultiTryOnTab:
                 if st.session_state.get(
                     'multi_show_videos'
                 ):
-                    for mv_idx, model in enumerate(
-                        selected_models
-                    ):
-                        model_name = model['name']
-                        st.markdown(
-                            f'##### {model_name}'
+                    # Display videos for Model 1 only
+                    model_1 = next(
+                        (m for m in selected_models
+                         if m['number'] == 1),
+                        None
+                    )
+                    if not model_1:
+                        model_1 = selected_models[0]
+
+                    st.markdown(
+                        f"##### {model_1['name']}"
+                    )
+
+                    num_prods = len(
+                        selected_products
+                    )
+                    videos_per_row = 5
+                    num_rows = (
+                        (
+                            num_prods
+                            + videos_per_row
+                            - 1
+                        )
+                        // videos_per_row
+                    )
+
+                    for row in range(num_rows):
+                        s_idx = (
+                            row * videos_per_row
+                        )
+                        e_idx = min(
+                            s_idx
+                            + videos_per_row,
+                            num_prods
+                        )
+                        num_in_row = (
+                            e_idx - s_idx
                         )
 
-                        num_prods = len(
-                            selected_products
-                        )
-                        videos_per_row = 5
-                        num_rows = (
-                            (
-                                num_prods
-                                + videos_per_row
-                                - 1
-                            )
-                            // videos_per_row
+                        video_cols = st.columns(
+                            num_in_row
                         )
 
-                        for row in range(num_rows):
-                            s_idx = (
-                                row * videos_per_row
-                            )
-                            e_idx = min(
-                                s_idx
-                                + videos_per_row,
-                                num_prods
-                            )
-                            num_in_row = (
-                                e_idx - s_idx
-                            )
-
-                            video_cols = st.columns(
-                                num_in_row
-                            )
-
-                            for c_idx, p_idx in (
-                                enumerate(
-                                    range(
-                                        s_idx,
-                                        e_idx
-                                    )
+                        for c_idx, p_idx in (
+                            enumerate(
+                                range(
+                                    s_idx,
+                                    e_idx
                                 )
-                            ):
-                                product = (
-                                    selected_products[
-                                        p_idx
-                                    ]
+                            )
+                        ):
+                            product = (
+                                selected_products[
+                                    p_idx
+                                ]
+                            )
+
+                            with video_cols[
+                                c_idx
+                            ]:
+                                p_name = (
+                                    product[
+                                        'name'
+                                    ][:15]
+                                )
+                                st.caption(
+                                    p_name
                                 )
 
-                                with video_cols[
-                                    c_idx
-                                ]:
-                                    p_name = (
+                                video_bytes = (
+                                    self
+                                    .find_video(
+                                        model_1[
+                                            'number'
+                                        ],
                                         product[
                                             'name'
-                                        ][:15]
+                                        ]
                                     )
-                                    st.caption(
-                                        p_name
+                                )
+                                if video_bytes:
+                                    st.video(
+                                        video_bytes,
+                                        autoplay=True,
+                                        loop=True,
+                                        muted=True
                                     )
 
-                                    video_bytes = (
-                                        self
-                                        .find_video(
-                                            model[
-                                                'number'
-                                            ],
-                                            product[
-                                                'name'
-                                            ]
-                                        )
+                                    m_name = (
+                                        model_1[
+                                            'name'
+                                        ]
                                     )
-                                    if video_bytes:
-                                        st.video(
-                                            video_bytes,
-                                            autoplay=True,
-                                            loop=True,
-                                            muted=True
-                                        )
+                                    p_nm = (
+                                        product[
+                                            'name'
+                                        ]
+                                    )
+                                    vfn = (
+                                        f'{m_name}'
+                                        f'_{p_nm}'
+                                        '.mp4'
+                                    )
+                                    hlp = (
+                                        'Download'
+                                        f' {m_name}'
+                                        ' -'
+                                        f' {p_nm}'
+                                    )
+                                    st.download_button(
+                                        label=(
+                                            'Save'
+                                        ),
+                                        data=(
+                                            video_bytes
+                                        ),
+                                        file_name=(
+                                            vfn
+                                        ),
+                                        mime=(
+                                            'video'
+                                            '/mp4'
+                                        ),
+                                        key=(
+                                            'dl_'
+                                            'vid_'
+                                            'm0'
+                                            '_'
+                                            f'{p_idx}'
+                                        ),
+                                        help=hlp
+                                    )
+                                else:
+                                    st.info(
+                                        'Video'
+                                        ' not'
+                                        ' available'
+                                    )
 
-                                        m_name = (
-                                            model[
-                                                'name'
-                                            ]
-                                        )
-                                        p_nm = (
-                                            product[
-                                                'name'
-                                            ]
-                                        )
-                                        vfn = (
-                                            f'{m_name}'
-                                            f'_{p_nm}'
-                                            '.mp4'
-                                        )
-                                        hlp = (
-                                            'Download'
-                                            f' {m_name}'
-                                            ' -'
-                                            f' {p_nm}'
-                                        )
-                                        st.download_button(
-                                            label=(
-                                                'Save'
-                                            ),
-                                            data=(
-                                                video_bytes
-                                            ),
-                                            file_name=(
-                                                vfn
-                                            ),
-                                            mime=(
-                                                'video'
-                                                '/mp4'
-                                            ),
-                                            key=(
-                                                'dl_'
-                                                'vid_'
-                                                'm'
-                                                f'{mv_idx}'
-                                                '_'
-                                                f'{p_idx}'
-                                            ),
-                                            help=hlp
-                                        )
-                                    else:
-                                        st.info(
-                                            'Video'
-                                            ' not'
-                                            ' available'
-                                        )
-
-                        st.markdown('---')
+                    st.markdown('---')
 
         else:
             st.info(

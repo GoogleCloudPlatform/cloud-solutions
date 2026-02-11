@@ -656,7 +656,7 @@ class ModelCreationTab:
                             )
                             mid = model_data["id"]
                             filename = (
-                                f"model_{mid}"
+                                f"{mid}"
                                 f"_{timestamp}.png"
                             )
                             gcs_path = (
