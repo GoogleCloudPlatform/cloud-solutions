@@ -8,9 +8,9 @@ astunparse==1.6.3 \
     --hash=sha256:5ad93a8456f0d084c3456d059fd9a92cce667963232cbf763eac3bc5b7940872 \
     --hash=sha256:c2652417f2c8b5bb325c885ae329bdf3f86424075c4fd1a128674bc6fba4b8e8
     # via -r requirements.in
-babel==2.18.0 \
-    --hash=sha256:b80b99a14bd085fcacfa15c9165f651fbb3406e66cc603abf11c5750937c992d \
-    --hash=sha256:e2b422b277c2b9a9630c1d7903c2a00d0830c409c59ac8cae9081c92f1aeba35
+babel==2.17.0 \
+    --hash=sha256:0c54cffb19f690cdcc52a3b50bcbf71e07a808d1c80d549f2459b9d2cf0afb9d \
+    --hash=sha256:4d0b53093fdfb4b21c92b5213dba5a1b23885afa8383709427046b21c366e5f2
     # via mkdocs-material
 backrefs==6.1 \
     --hash=sha256:13eafbc9ccd5222e9c1f0bec563e6d2a6d21514962f11e7fc79872fd56cbc853 \
@@ -152,23 +152,16 @@ colorama==0.4.6 \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
     # via
-    #   griffecli
+    #   griffe
     #   mkdocs-material
 ghp-import==2.1.0 \
     --hash=sha256:8337dd7b50877f163d4c0289bc1f1c7f127550241988d568c1db512c4324a619 \
     --hash=sha256:9c535c4c61193c2df8871222567d7fd7e5014d835f97dc7b7439069e2413d343
     # via mkdocs
-griffe==2.0.0 \
-    --hash=sha256:5418081135a391c3e6e757a7f3f156f1a1a746cc7b4023868ff7d5e2f9a980aa
+griffe==1.15.0 \
+    --hash=sha256:6f6762661949411031f5fcda9593f586e6ce8340f0ba88921a0f2ef7a81eb9a3 \
+    --hash=sha256:7726e3afd6f298fbc3696e67958803e7ac843c1cfe59734b6251a40cdbfb5eea
     # via mkdocstrings-python
-griffecli==2.0.0 \
-    --hash=sha256:9f7cd9ee9b21d55e91689358978d2385ae65c22f307a63fb3269acf3f21e643d
-    # via griffe
-griffelib==2.0.0 \
-    --hash=sha256:01284878c966508b6d6f1dbff9b6fa607bc062d8261c5c7253cb285b06422a7f
-    # via
-    #   griffe
-    #   griffecli
 idna==3.11 \
     --hash=sha256:771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea \
     --hash=sha256:795dafcc9c04ed0c1fb032c2aa73654d8e8c5023a7df64a53f39190ada629902
@@ -184,9 +177,9 @@ jinja2==3.1.6 \
     #   mkdocs
     #   mkdocs-material
     #   mkdocstrings
-markdown==3.10.2 \
-    --hash=sha256:994d51325d25ad8aa7ce4ebaec003febcce822c3f8c911e3b17c52f7f589f950 \
-    --hash=sha256:e91464b71ae3ee7afd3017d9f358ef0baf158fd9a298db92f1d4761133824c36
+markdown==3.10.1 \
+    --hash=sha256:1c19c10bd5c14ac948c53d0d762a04e2fa35a6d58a6b7b1e6bfcbe6fefc0001a \
+    --hash=sha256:867d788939fe33e4b736426f5b9f651ad0c0ae0ecf89df0ca5d1176c70812fe3
     # via
     #   mkdocs
     #   mkdocs-autorefs
@@ -304,9 +297,9 @@ mkdocs==1.6.1 \
     #   mkdocs-material
     #   mkdocs-redirects
     #   mkdocstrings
-mkdocs-autorefs==1.4.4 \
-    --hash=sha256:834ef5408d827071ad1bc69e0f39704fa34c7fc05bc8e1c72b227dfdc5c76089 \
-    --hash=sha256:d54a284f27a7346b9c38f1f852177940c222da508e66edc816a0fa55fc6da197
+mkdocs-autorefs==1.4.3 \
+    --hash=sha256:469d85eb3114801d08e9cc55d102b3ba65917a869b893403b8987b601cf55dc9 \
+    --hash=sha256:beee715b254455c4aa93b6ef3c67579c399ca092259cc41b7d9342573ff1fc75
     # via
     #   mkdocstrings
     #   mkdocstrings-python
@@ -332,15 +325,15 @@ mkdocs-redirects==1.2.2 \
     --hash=sha256:3094981b42ffab29313c2c1b8ac3969861109f58b2dd58c45fc81cd44bfa0095 \
     --hash=sha256:7dbfa5647b79a3589da4401403d69494bd1f4ad03b9c15136720367e1f340ed5
     # via -r requirements.in
-mkdocstrings[python]==1.0.3 \
-    --hash=sha256:0d66d18430c2201dc7fe85134277382baaa15e6b30979f3f3bdbabd6dbdb6046 \
-    --hash=sha256:ab670f55040722b49bb45865b2e93b824450fb4aef638b00d7acb493a9020434
+mkdocstrings[python]==1.0.2 \
+    --hash=sha256:41897815a8026c3634fe5d51472c3a569f92ded0ad8c7a640550873eea3b6817 \
+    --hash=sha256:48edd0ccbcb9e30a3121684e165261a9d6af4d63385fc4f39a54a49ac3b32ea8
     # via
     #   -r requirements.in
     #   mkdocstrings-python
-mkdocstrings-python==2.0.2 \
-    --hash=sha256:31241c0f43d85a69306d704d5725786015510ea3f3c4bdfdb5a5731d83cdc2b0 \
-    --hash=sha256:4a32ccfc4b8d29639864698e81cfeb04137bce76bb9f3c251040f55d4b6e1ad8
+mkdocstrings-python==2.0.1 \
+    --hash=sha256:66ecff45c5f8b71bf174e11d49afc845c2dfc7fc0ab17a86b6b337e0f24d8d90 \
+    --hash=sha256:843a562221e6a471fefdd4b45cc6c22d2607ccbad632879234fa9692e9cf7732
     # via mkdocstrings
 natsort==8.4.0 \
     --hash=sha256:45312c4a0e5507593da193dedd04abb1469253b601ecaf63445ad80f0a1ea581 \

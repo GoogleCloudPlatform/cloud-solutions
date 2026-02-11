@@ -48,7 +48,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: 3.14.3
+          python-version: 3.x
       - name: Build site
         working-directory: docs
         run: ./mkdocs.sh build --site-dir build/public
