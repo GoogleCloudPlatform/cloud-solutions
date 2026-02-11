@@ -7,7 +7,7 @@ matplotlib==3.10.7
 moviepy==2.2.1
 numpy==2.3.4
 pandas==2.3.3
-pillow==11.3.0
+pillow==12.1.1
 python-dotenv==1.2.1
 pyyaml==6.0.3
 reportlab==4.1.0
