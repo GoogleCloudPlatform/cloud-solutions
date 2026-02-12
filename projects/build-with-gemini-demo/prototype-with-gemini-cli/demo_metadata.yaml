@@ -33,9 +33,6 @@ business_value: |
   * **Improved Collaboration:** The use of a shared specification and automated code generation can improve collaboration between team members and stakeholders.
   * **Increased Innovation:** By making it easier and faster to prototype new ideas, the Gemini CLI can help to foster a culture of innovation within an organization.
 technical_value: |
-  This demo showcases a powerful and flexible approach to rapid prototyping using the Gemini CLI.
-
-  Key technical insights:
   * **Custom Commands:** The use of custom commands in the Gemini CLI allows for the automation of complex tasks, such as generating a specification from an idea or generating code from a specification.
   * **Iterative Development:** The Gemini CLI supports an iterative development process, allowing you to easily test and refine your application as you go.
   * **AI-Powered Code Generation:** The use of AI to generate code can significantly speed up the development process and help to ensure that the generated code is of high quality.
@@ -46,7 +43,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: 2175442982642
-channel_id: 10
+channel_id: 84
 artifacts:
   - link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/prototype-with-gemini-cli
     title: Code Repository

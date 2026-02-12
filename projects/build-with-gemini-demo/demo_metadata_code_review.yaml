@@ -29,9 +29,6 @@ business_value: |
   * **Improved Code Quality:** Automating reviews and leveraging AI assistance helps in maintaining high code standards.
   * **Enhanced Innovation:** Freeing up developers from repetitive tasks allows them to focus on innovation.
 technical_value: |
-  This demo provides hands-on experience with Gemini CLI for reviewing code.
-
-  Key technical insights:
   * **Workflow Automation:** Allows developers to streamline their workflows and automate repetitive tasks.
   * **Intelligent Code Assistance:** Provides intelligent assistance to developers throughout the development process.
 owner: andreyshakirov

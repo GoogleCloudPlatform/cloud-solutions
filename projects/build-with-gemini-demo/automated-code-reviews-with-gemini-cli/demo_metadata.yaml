@@ -36,9 +36,6 @@ business_value: |
   * **Improved Compliance and Standards:** Ensure adherence to documentation and test coverage requirements automatically.
   * **Enhanced Team Productivity:** Foster a more efficient and agile development environment by integrating AI into routine workflows.
 technical_value: |
-  This demo showcases a robust technical integration of AI into modern CI/CD practices using Gemini CLI and GitHub Actions.
-
-  Key technical insights:
   * **Non-interactive Gemini CLI:** Demonstrates the advanced usage of Gemini CLI in a headless mode suitable for automated environments.
   * **GitHub Actions Integration:** Provides a practical example of defining and executing a GitHub Actions workflow to orchestrate AI-driven tasks.
   * **Secure API Key Management:** Illustrates best practices for securely storing and accessing sensitive credentials (Gemini API Key) using GitHub Secrets.
@@ -52,7 +49,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: 2175442982642
-channel_id: 10
+channel_id: 84
 artifacts:
   - title: Code Repository
     link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/automated-code-reviews-with-gemini-cli

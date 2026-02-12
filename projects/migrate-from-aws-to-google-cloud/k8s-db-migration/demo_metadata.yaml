@@ -27,9 +27,6 @@ purpose: |
   * Generate migration recommendations using Gemini CLI for EKS cluster analysis.
 
 business_value: |
-  This replatforming migration offers significant benefits for organizations looking to modernize their containerized applications and leverage Google Cloud's managed services.
-
-  Key benefits include:
   * **Modernization:** Move to a fully managed Kubernetes service (GKE Autopilot) and a managed database (Cloud SQL), reducing operational burden and improving reliability.
   * **Cost Efficiency:** GKE Autopilot automatically scales and optimizes resources, leading to potential cost savings compared to self-managing EKS clusters.
   * **Enhanced Developer Experience:** Focus on application development rather than infrastructure management, with seamless deployments to GKE.
@@ -37,7 +34,6 @@ business_value: |
   * **Informed Decision Making:** Leverage automated discovery and Gemini-powered recommendations for a data-driven migration strategy.
 
 technical_value: |
-  This demo provides a robust technical approach to migrating containerized workloads and databases, leveraging advanced tools and managed services:
   * **Hybrid Cloud Tools:** Demonstrates the use of Terraform for both AWS and GCP infrastructure provisioning, ensuring consistency and automation.
   * **Kubernetes Cluster Discovery:** Utilizes the Kubernetes Cluster Discovery Tool for detailed inventory and assessment of EKS resources, aiding in migration planning.
   * **Gemini-Powered Migration Analysis:** Showcases the integration of Gemini CLI to generate intelligent migration plans based on discovered EKS assets.
@@ -51,7 +47,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: 2175442982642
-channel_id: 10
+channel_id: 84
 demo_guide: https://googlecloudplatform.github.io/cloud-solutions/migrate-from-aws-to-google-cloud/k8s-db-migration
 
 artifacts:
@@ -72,7 +68,7 @@ industries:
   - all
 
 products:
-  - gke
+  - google_kubernetes_engine
   - cloud_sql
   - database_migration_service
-  - gemini_cli
+  - gemini_api

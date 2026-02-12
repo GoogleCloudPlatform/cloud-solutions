@@ -31,9 +31,6 @@ business_value: |
   * **Improved Accuracy:** The use of AI to analyze visual differences and identify necessary code modifications can help to improve the accuracy of UI updates.
   * **Increased Developer Productivity:** The streamlined workflow and automated code generation can help to increase developer productivity and satisfaction.
 technical_value: |
-  This demo showcases the powerful multimodal capabilities of the Gemini CLI for UI development.
-
-  Key technical insights:
   * **Multimodal AI:** The use of AI to analyze visual differences between UI versions and identify necessary code modifications.
   * **AI-Powered Code Generation:** The use of AI to locate relevant source files and apply the required changes.
   * **Streamlined Workflow:** The use of the Gemini CLI to streamline the process of implementing UI updates.
@@ -43,7 +40,7 @@ contributors:
   - andreyshakirov
   - ameenahb
   - ferrarim
-channel_id: 10
+channel_id: 84
 team_owner: 2175442982642
 artifacts:
   - title: Code Repository

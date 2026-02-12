@@ -34,7 +34,6 @@ business_value: |
   * **Improved Performance and Reliability:** Benefit from Google's high-performance infrastructure and the reliability of managed services like Cloud SQL.
 
 technical_value: |
-  This demo showcases a robust and repeatable migration process using powerful Google Cloud tools:
   * **Comprehensive Assessment:** Utilize the Migration Center for asset discovery, TCO reporting, and migration planning, providing a data-driven approach to migration.
   * **Automated Database Migration:** Leverage the Database Migration Service (DMS) for a low-downtime, continuous replication of your PostgreSQL database from AWS RDS to Cloud SQL.
   * **Seamless VM Migration:** Use Migrate to Virtual Machines (M2VM) to efficiently move your EC2 instances to Compute Engine with minimal disruption.
@@ -46,7 +45,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: 2175442982642
-channel_id: 10
+channel_id: 84
 demo_guide: https://googlecloudplatform.github.io/cloud-solutions/migrate-from-aws-to-google-cloud/vm-compute-db-modernization
 
 artifacts:

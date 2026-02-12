@@ -31,9 +31,6 @@ business_value: |
   * **Reduced Development Costs:** By automating many of the tasks involved in agent development, this prototype can help to reduce development costs.
   * **Increased Developer Productivity:** The streamlined workflow and powerful tools can help to increase developer productivity and satisfaction.
 technical_value: |
-  This prototype demonstrates a powerful and flexible approach to ADK agent development using the Gemini CLI.
-
-  Key technical insights:
   * **Custom Commands:** The use of custom commands in the Gemini CLI allows for the automation of complex tasks and the enforcement of best practices.
   * **Context-Aware Development:** The use of existing context files, such as `GEMINI.md` and `AGENTS.txt`, allows the agent to generate code that is consistent with the existing codebase and follows established patterns.
   * **Plan-Based Implementation:** The use of a plan-based implementation approach helps to ensure that the generated agent meets the specified requirements and is of high quality.
@@ -44,7 +41,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: 2175442982642
-channel_id: 10
+channel_id: 84
 artifacts:
   - link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/prototype-adk-agent-with-gemini-cli
     title: Code Repository
@@ -57,4 +54,4 @@ featured_video_artifact_title: Walkthrough Demo Video
 industries:
   - all
 products:
-  - gemini_cli
+  - gemini_code_assist

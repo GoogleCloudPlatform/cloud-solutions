@@ -35,9 +35,6 @@ business_value: |
   * **Streamlined Onboarding:** New team members can quickly learn and adhere to project-specific coding standards through automated guidance.
   * **Empowered Developers:** Provide developers with an intelligent assistant to self-correct and improve their code efficiently.
 technical_value: |
-  This demo showcases the technical capabilities of the Gemini CLI Code Review extension for enhancing local development practices.
-
-  Key technical insights:
   * **Gemini CLI Extension Integration:** Demonstrates the installation and usage of a Gemini CLI extension for specialized functionality.
   * **Interactive Code Analysis:** Utilizes the `/code-review` command to perform AI-powered analysis of uncommitted or committed local code changes against a base branch.
   * **AI-Driven Feedback:** Provides concrete suggestions and identifies potential issues such as race conditions, missing validation, performance bottlenecks, and security vulnerabilities.
@@ -51,7 +48,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: "2175442982642"
-channel_id: 10
+channel_id: 84
 artifacts:
   - link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/local-code-review
     title: Code Repository

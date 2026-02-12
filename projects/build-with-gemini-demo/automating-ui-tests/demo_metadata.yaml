@@ -35,9 +35,6 @@ business_value: |
   * **Streamlined Collaboration:** Automate PR creation and documentation, fostering more efficient team collaboration.
   * **Reduced Operational Costs:** Decrease manual effort in testing, security, and documentation, leading to overall cost savings.
 technical_value: |
-  This demo showcases a powerful technical synergy between AI and modern testing frameworks for robust UI test automation.
-
-  Key technical insights:
   * **Gemini CLI Integration:** Demonstrates how Gemini CLI acts as an orchestration layer, allowing natural language control over complex testing tools.
   * **Playwright MCP Server:** Highlights the Model Context Protocol (MCP) for securely interfacing Gemini CLI with external tools like Playwright.
   * **Natural Language Test Automation:** Enables developers to write and execute UI tests using descriptive English prompts, abstracting away framework-specific syntax.
@@ -51,7 +48,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: 2175442982642
-channel_id: 10
+channel_id: 84
 artifacts:
   - title: Code Repository
     link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/automating-ui-tests

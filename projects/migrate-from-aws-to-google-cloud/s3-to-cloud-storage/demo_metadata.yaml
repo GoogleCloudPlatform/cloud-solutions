@@ -37,9 +37,6 @@ business_value: |
   * **Secure Data Transfer:** Utilize Google Cloud Storage Transfer Service for reliable and secure data migration.
 
 technical_value: |
-  This project showcases a technically advanced approach to cloud migration using AI-powered tooling and cloud-native services.
-
-  Key technical insights:
   * **Gemini CLI Custom Commands:** Demonstrates the use of custom Gemini CLI commands for specialized migration tasks.
   * **AI-Augmented Assessments:** Utilizes Gemini's analytical capabilities to enhance traditional cloud migration assessments.
   * **S3 Inventory Generation:** Provides scripts for generating detailed inventory of AWS S3 buckets, capturing crucial metadata.
@@ -51,7 +48,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: 2175442982642
-channel_id: 10
+channel_id: 84
 demo_guide: https://googlecloudplatform.github.io/cloud-solutions/migrate-from-aws-to-google-cloud/s3-to-cloud-storage
 
 artifacts:
@@ -74,4 +71,4 @@ industries:
 products:
   - cloud_storage
   - storage_transfer_service
-  - gemini_cli
+  - gemini_api

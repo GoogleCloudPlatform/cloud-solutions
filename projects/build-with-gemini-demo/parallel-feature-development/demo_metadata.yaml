@@ -15,11 +15,6 @@ type: guided_doc
 title: Parallel Feature Development with Gemini CLI
 thumbnail_summary: Demonstrate how to use Gemini CLI to simulate a multi-agent workflow.
 purpose: |
-  This demo guide illustrates a powerful workflow for accelerating software development using the Gemini CLI in a multi-agent setup, enabling parallel feature implementation. By utilizing Git worktrees, developers can simulate two independent development streams—one focused on a UI feature (refactoring to use Bootstrap) and the other on a Backend feature (adding an in-memory database)—without interfering with the main branch.
-
-  The core of this demonstration showcases the ability of multiple Gemini CLI sessions to autonomously work on separate, complex tasks concurrently, and the subsequent process of merging these parallel changes, including conflict resolution, back into the main branch.
-
-  Key learning objectives:
   * Explain the existing codebase.
   * Set up Git worktrees for parallel development.
   * Implement UI and backend features in parallel using separate Gemini CLI sessions.
@@ -50,7 +45,7 @@ contributors:
   - andreyshakirov
   - ameenahb
   - ferrarim
-channel_id: 10
+channel_id: 84
 team_owner: "2175442982642"
 artifacts:
   - title: Code Repository
@@ -69,4 +64,4 @@ featured_video_artifact_title: Walkthrough Demo Video
 industries:
   - all
 products:
-  - gemini_cli
+  - gemini_api

@@ -35,9 +35,6 @@ business_value: |
   * **Increased Developer Productivity:** The streamlined workflow and automated remediation can help to increase developer productivity and satisfaction.
   * **Reduced Risk:** By identifying and fixing security issues early in the development process, you can reduce the risk of costly security incidents.
 technical_value: |
-  This demo showcases a powerful combination of the Gemini CLI and Snyk for automated security scanning and remediation.
-
-  Key technical insights:
   * **MCP Server Integration:** The use of an MCP server allows for seamless integration between the Gemini CLI and Snyk.
   * **Natural Language Prompts:** The use of natural language prompts makes it easy to orchestrate Snyk scans and automatically resolve issues.
   * **Automated Remediation:** The ability to automatically fix identified security issues can significantly speed up the development process and improve the security of your code.
@@ -48,7 +45,7 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: "2175442982642"
-channel_id: 10
+channel_id: 84
 artifacts:
   - link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo/security-scan-fix
     title: Code Repository
