@@ -13,22 +13,26 @@
 license: Apache-2.0
 file_type: demo
 type: guided_doc
-title: Demonstrate how to configure Gemini Code Assist on GitHub to automate code reviews.
+title: Implement features with Gemini CLI
 thumbnail_summary: Demonstrate how to use Gemini CLI to implement features with context from external systems (JIRA/Confluence).
 purpose: |
-  This demo showcases how to prototype and implement application features with Gemini. It walks through preparing the environment and automating GitHub Pull Requests reviews with a Code Review Agent.
+  This demo showcases how to prototype and implement application features with Gemini. It walks through preparing the environment, prototyping ADK agents with Gemini CLI, implementing new features with Gemini CLI, and automating GitHub Pull Requests reviews with a Code Review Agent.
 
   Key learning objectives:
+  * Prepare the environment for development with Gemini CLI.
+  * Prototype ADK (Agent Development Kit) agents using Gemini CLI.
+  * Implement new application features with Gemini CLI and integrate with JIRA and Confluence.
   * Automate code reviews in GitHub Pull Requests using a Code Review Agent.
 business_value: |
   This demo shows how to accelerate the software development lifecycle using AI-powered tools, which can lead to faster time-to-market for new features and products.
 
   Key benefits include:
-  * **Increased Developer Velocity:** By leveraging Gemini for code review, development teams can significantly reduce manual effort.
+  * **Increased Developer Velocity:** By leveraging Gemini for prototyping and implementation development teams can significantly reduce manual effort.
   * **Faster Time-to-Market:** Accelerate the delivery of new features and products.
   * **Improved Code Quality:** Automating reviews and leveraging AI assistance helps in maintaining high code standards.
   * **Enhanced Innovation:** Freeing up developers from repetitive tasks allows them to focus on innovation.
 technical_value: |
+  * **AI-Assisted Development:** Demonstrates practical application of Gemini CLI in the software development lifecycle.
   * **Workflow Automation:** Allows developers to streamline their workflows and automate repetitive tasks.
   * **Intelligent Code Assistance:** Provides intelligent assistance to developers throughout the development process.
 owner: andreyshakirov
@@ -37,17 +41,20 @@ contributors:
   - ameenahb
   - ferrarim
 team_owner: 2175442982642
-demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/#automate-github-pull-requests-reviews-with-code-review-agent
+channel_id: 84
+demo_guide: https://googlecloudplatform.github.io/cloud-solutions/build-with-gemini-demo/#implement-features-with-gemini-cli
 artifacts:
   - title: Code Repository
     type: code_repo
-    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo#automate-github-pull-requests-reviews-with-code-review-agent
+    link: https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo#implement-features-with-gemini-cli
+
   - title: Demo Script
     type: document
-    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.9yeglbgvehg1#heading=h.2xbxf7vhbhul
+    link: https://docs.google.com/document/d/1U0DrU-1w3b-rExrDGyd0REtxlujAA6796fThWskPlmY/edit?resourcekey=0-zJ1dl2Z5mzAAXBVegfEOWw&tab=t.c11ia3tr2ldm
+
   - title: Walkthrough Demo Video
     type: video
-    link: https://drive.google.com/file/d/1ujIzSWpSpy--JEWP_K90CbKfQSkOkytq/view
+    link: https://drive.google.com/file/d/1bWIj3uS3BovMYUR2RX5djtRacyFxdVAX/view?usp=drive_link
 featured_artifact_title: Code Repository
 featured_video_artifact_title: Walkthrough Demo Video
 industries:
