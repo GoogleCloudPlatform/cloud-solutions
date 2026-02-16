@@ -1,0 +1,104 @@
+description = "Refactor an AWS Lambda Python application to run on Cloud Run"
+
+prompt = '''
+# Role
+
+Act as a Senior Cloud Architect and Python Developer. Your goal is to refactor
+an existing AWS Lambda function into a containerized microservice suitable for
+Google Cloud Run.
+
+# Context
+
+I will provide:
+
+1. The Python source code for the AWS Lambda function.
+2. The requirements.txt (if available).
+3. The CloudFormation template (if available).
+
+All these input files are available in the {{args}} directory.
+
+# Instructions
+
+## 1. Code Refactoring (Application Layer)
+
+Refactor the Python logic into a production-ready web service using **FastAPI**
+(preferred) or Flask.
+
+* **Adapter Pattern & Routing**: Create a `main.py` file with a POST route at
+  `/`. * The route must accept a JSON body.
+  * It should construct a simulated `event` object from the JSON body.
+  * It must instantiate a `MockContext` class to simulate the AWS Lambda
+    Context object (providing attributes like `aws_request_id` and methods like
+    `get_remaining_time_in_millis` to prevent AttributeErrors).
+  * Pass these to the existing `handler(event, context)` function so the core
+    logic remains untouched.
+
+* **Cloud Run Container Contract Compliance** (https://docs.cloud.google.com/run/docs/container-contract):
+  * **Port Binding:** Listen on `0.0.0.0` using the port defined in the `PORT`
+    environment variable (default 8080).
+  * **Logging:** Configure the root logger to stream JSON-structured logs to
+    `stdout`. Map AWS-specific log levels (like `context.log`) to standard
+    Python logging if necessary.
+  * **Health Check:** Add a simple GET route at `/health` returning 200 OK.
+
+* **Concurrency & Safety**:
+  * Analyze the code for global variables that function as state (e.g., caching
+    data in a global list).
+  * If found, refactor to use request-local storage or add a comment warning
+    about race conditions in a multi-threaded environment.
+  * Implement a signal handler for `SIGTERM` to allow graceful shutdown.
+
+* **Documentation**:
+  * Document Python modules and functions.
+
+## 2. Dependency Management
+
+* Analyze imports to generate a comprehensive `requirements.txt`.
+* **Version Pinning:** Do not use `latest`. Pin libraries to specific versions
+  (e.g., `requests==2.28.1`).
+* **WSGI Server:** Add `gunicorn` (and `uvicorn` if using FastAPI) to the
+  requirements.
+
+## 3. Dockerfile Generation
+
+Write a `Dockerfile` following these best practices:
+
+* **Base Image:** Use a specific `slim` tag of the official Python image
+  matching the Lambda runtime (e.g., `python:3.9-slim`).
+* **Non-Root User:** Create and switch to a non-root user for security.
+* **Optimization:** Clean up `pip` caches and apt-get lists to minimize image
+  size.
+* **Entrypoint:** Use `gunicorn` with `uvicorn` workers.
+  * *Command:* `CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app`
+  * *Note:* Use JSON array syntax for CMD (e.g.,
+    `CMD ["exec", "gunicorn", ...]`) to ensure signals are passed correctly.
+* **Dependencies**: Install the PyPI packages by using the requirements.txt file
+  inside the container image, not on the host.
+* **Build checks**: Ensure that the Dockerfile passes all docker build checks.
+  Read about Docker build checks
+  (https://docs.docker.com/reference/build-checks/) and ensure that the
+  Dockerfile passes all the checks. Here are the instructions to run Docker
+  build checks without actually building the image:
+  https://docs.docker.com/build/checks/#check-a-build-without-building. Run
+  Docker build checks without building the image by running:
+  "docker build --check ."
+
+## 4. Documentation (README.md)
+
+Create a README with:
+
+* A description of the refactored function.
+* **Architecture:** A diagram or description of the request flow
+  (Cloud Run -> Gunicorn -> FastAPI -> Lambda Handler).
+* **Migration Notes:** A summary of changes, specifically pointing out the
+  `MockContext` implementation.
+* **Environment Variables:** A table of required environment variables extracted
+  from the CloudFormation template (if provided) or inferred from `os.environ`
+  calls in the code.
+* **Local Testing:** Specific `docker build` and `docker run` commands. Ensure
+  that all "docker run" commands have the --rm flag.
+  * **Payload Example:** A `curl` command showing how to send the specific JSON
+    payload expected by the Lambda.
+* *Note:* Include how to inject AWS credentials (AWS_ACCESS_KEY_ID, etc.) if the
+  code uses `boto3`.
+'''

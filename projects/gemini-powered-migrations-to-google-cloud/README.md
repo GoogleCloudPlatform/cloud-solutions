@@ -12,20 +12,24 @@ To effectively utilize these instructions, ensure the following are set up:
 
 - **Gemini CLI:** Installed and configured. For installation instructions, visit
   [geminicli.com](https://geminicli.com/docs/get-started/deployment/).
-- **Source Cloud Provider Inventory Details:** Access to inventory and
-  assessment reports (e.g., bucket/container policies, locations, object lists)
-  from your source cloud provider (AWS, Azure, etc.) for analysis. Sample inputs
-  are available in the `test-data/` folder.
+- **Source Cloud Provider Inventory Details:** Access to the inventory of
+  objects to migrate (such as virtual machines, storage buckets, workloads,
+  etc.) from your source environment for analysis. Sample inputs are available
+  in the `test-data/` directory.
 
 ## Gemini CLI custom commands
 
-The following custom commands are configured in this project under
-`.gemini/commands` folder.
+This project provides Gemini CLI custom commands in the `.gemini/commands`
+directory for doing the following:
+
+- [Evaluate inventories](#evaluate-inventories)
+- [Refactor and modernize applications](#refactor-and-modernize-applications)
+- [Generate sample data](#generate-sample-data)
 
 ### Evaluate inventories
 
 The custom commands in this section are aimed at helping you accelerate the
-evaluation.
+evaluation and inventory assessments.
 
 - **aws-container-migration-analysis:** This command analyzes cluster and object
   inventory files from Amazon EKS workloads to generate a Google Kubernetes
@@ -92,7 +96,82 @@ evaluation.
     /azure-blob-storage-poc-selection review files in test-data/azure-blob-storage-assessment-results for migration to US EAST region.
     ```
 
-## Setup & Usage Instructions
+### Refactor and modernize applications
+
+The commands listed in this section are aimed at refactoring and modernizing the
+source code of the applications to migrate:
+
+- **/aws-lambda-refactor-python-app-to-cloud-run:** This command helps you
+  refactor AWS Lambda functions and applications to run on Cloud Run:
+
+    ```text
+    /aws-lambda-refactor-python-app-to-cloud-run path/to/your/aws-lambda/function
+    ```
+
+    Where `path/to/your/aws-lambda/function` is the path to the source code of
+    the AWS Lambda function or application to refactor.
+
+- **/dotnet-sql-server-application-modernization:** This command helps you
+  refactor legacy .NET applications to port them to a more modern .NET version
+  that can run in a container. Also, it refactors SQL Server usage to
+  PostgreSQL.
+
+    ```text
+    /dotnet-sql-server-application-modernization path/to/your/dotnet/app
+    ```
+
+    Where `path/to/your/dotnet/app` is the path to the source code of the .NET
+    application to refactor.
+
+### Generate sample data
+
+The commands listed in this section are useful to generate sample data when you
+don't have a source environment available, but you need data to evaluate other
+commands:
+
+- **/generate-sample-aws-lambda-list-functions:** This command helps you
+  generate sample `aws lambda list-functions` command output:
+
+    ```text
+    /generate-sample-aws-lambda-list-functions test-data/aws-lambda-assessment-results/aws-lambda-list-functions-sample.json
+    ```
+
+- **/generate-sample-aws-lambda-get-function:** This command helps you generate
+  sample `aws lambda get-function` command output:
+
+    ```text
+    /generate-sample-aws-lambda-get-function test-data/aws-lambda-assessment-results/aws-lambda-list-functions-sample.json
+    ```
+
+    The command takes the output of the `aws lambda list-functions` command as
+    input.
+
+- **/generate-sample-aws-lambda-get-function-configuration:** This command helps
+  you generate sample `aws lambda get-function-configuration` command output:
+
+    ```text
+    /generate-sample-aws-lambda-get-function-configuration test-data/aws-lambda-assessment-results/aws-lambda-list-functions-sample.json
+    ```
+
+    The command takes the output of the `aws lambda list-functions` and
+    `aws lambda get-function` commands as input.
+
+- **/generate-sample-aws-lambda-get-policy-and-list-event-source-mappings:**
+  This command helps you generate sample `aws lambda get-policy` and
+  `aws lambda list-event-source-mappings` command output:
+
+    ```text
+    /generate-sample-aws-lambda-get-policy-and-list-event-source-mappings test-data/aws-lambda-assessment-results/aws-lambda-list-functions-sample.json
+    ```
+
+    The command takes the output of the `aws lambda list-functions`,
+    `aws lambda get-function`, and `aws lambda get-function-configuration`
+    commands as input.
+
+The sample output in the `test-data` directory has been generated using these
+commands.
+
+## Setup and usage instructions
 
 1.  Install Gemini CLI. For installation instructions, visit
     [geminicli.com](https://geminicli.com/docs/get-started/deployment/).

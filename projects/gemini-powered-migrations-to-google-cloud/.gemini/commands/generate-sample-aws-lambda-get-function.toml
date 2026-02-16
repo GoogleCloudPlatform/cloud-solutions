@@ -1,0 +1,21 @@
+description = "Generate sample `aws lambda get-function` command output"
+
+prompt = '''
+Generate sample JSON output as if I was running the
+"aws lambda get-function --output json" command against an existing AWS account.
+
+Simulate running the command for each function listed in {{args}}.
+
+Save the generated output files in the same directory as the input file.
+For each function, create a file named
+aws-lambda-get-function-[function-name].json, and save the generated output for
+that function there.
+
+For some sample functions, include some external dependencies.
+
+Make sure that each sample file:
+- Respects the response syntax outlined in https://docs.aws.amazon.com/lambda/latest/api/API_GetFunction.html
+- Is valid JSON
+- All double quotes in the values should be escaped
+- All new lines in JSON keys or values should be converted to \n
+'''

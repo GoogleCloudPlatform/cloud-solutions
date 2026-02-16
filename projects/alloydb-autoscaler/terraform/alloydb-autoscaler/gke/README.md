@@ -101,8 +101,8 @@ The GKE deployment has the following pros and cons:
 - **Audit**: because of the high level of control by each team, a centralized
   audit may become more complex.
 
-The Poller and Scaler components are be deployed as a single pod, which runs as
-a Kubernetes cron job. This means there are no long-running components.
+The Poller and Scaler components should be deployed as a single pod, which runs
+as a Kubernetes cron job. This means there are no long-running components.
 
 ## Before you begin
 
@@ -187,7 +187,6 @@ In this section you prepare your project for deployment.
     ```
 
 1.  There are two options for deploying the state store for the Autoscaler:
-
     1.  Store the state in [Firestore][cloud-firestore]
     1.  Store the state in [Spanner][spanner]
 

@@ -1,0 +1,15 @@
+description = "Generate sample `aws lambda list-functions` command output"
+
+prompt = '''
+Generate sample JSON output as if I was running the
+"aws lambda list-functions --output json" command against an existing AWS account.
+
+Save the output in the {{args}} file.
+
+Make sure that each sample file:
+
+- Respects the response syntax outlined in https://docs.aws.amazon.com/lambda/latest/api/API_ListFunctions.html
+- Is valid JSON
+- All double quotes in the values should be escaped
+- All new lines in JSON keys or values should be converted to \n
+'''
