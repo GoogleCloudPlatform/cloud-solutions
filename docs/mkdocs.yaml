@@ -21,7 +21,7 @@
 
 site_name: Cloud Solutions
 site_url: https://googlecloudplatform.github.io/cloud-solutions/
-docs_dir: docs
+docs_dir: build/docs
 theme:
   name: material
   custom_dir: overrides
@@ -52,7 +52,7 @@ repo_name: cloud-solutions
 repo_url: https://github.com/GoogleCloudPlatform/cloud-solutions
 copyright: |
   The projects contained in this repository are maintained by the Google Cloud Solutions Architects team.<br>
-  Copyright &copy; 2019-YYYY Google LLC  <a href="#__consent" style="float:right; font-size: 10px;">Change cookie settings</a><br>
+  Copyright &copy; 2019-2024 Google LLC  <a href="#__consent" style="float:right; font-size: 10px;">Change cookie settings</a><br>
   <a href='https://cloud.google.com/'><img src='https://googlecloudplatform.github.io/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
 plugins:
   - search

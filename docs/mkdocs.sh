@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2026 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -41,9 +41,6 @@ BUILD_DIR="${DOCS_DIR}/build"
 # This directory structure helps limit the number of directories
 # mkdocs needs to watch for file changes.
 #
-# Note: this YAML file is copied to the build directory, with the
-# string YYYY replaced with the current year for the copyright
-# notice
 
 #
 # Make sure pip is installed.
@@ -65,7 +62,6 @@ ln -sf "${DOCS_DIR}/index.md" "${BUILD_DIR}/docs/index.md"
 ln -sf "${DOCS_DIR}/google13f96ebf51862cf4.html" "${BUILD_DIR}/docs/google13f96ebf51862cf4.html"
 ln -sf "${DOCS_DIR}/common" "${BUILD_DIR}/docs/common"
 ln -sf "${DOCS_DIR}/stylesheets" "${BUILD_DIR}/docs/stylesheets"
-ln -sf "${DOCS_DIR}/overrides" "${BUILD_DIR}/overrides"
 
 for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
   PROJECT_DIRNAME="$(basename "$CURRENT_PROJECT_DIR")"
@@ -128,10 +124,5 @@ pip3 install \
   --require-hashes \
   -r "${SCRIPT_DIR}/requirements.txt"
 
-## Replace year placeholder in yaml copyright footer, creating build/mkdocs.yaml
-sed -s "s/YYYY/$(date +%Y)/" "${SCRIPT_DIR}/mkdocs.yaml" \
-  >"${BUILD_DIR}/mkdocs.yaml"
-
-# Run mkdocs in build dir
-cd "${BUILD_DIR}" || exit 1
-python3 -m mkdocs "$@"
+# Run mkdocs.
+(cd "${SCRIPT_DIR}" && python3 -m mkdocs "$@")
