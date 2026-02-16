@@ -51,7 +51,7 @@ jobs:
           python-version: 3.14.3
       - name: Build site
         working-directory: docs
-        run: ./mkdocs.sh build --site-dir build/public
+        run: ./mkdocs.sh build --site-dir "${{ runner.temp }}/site"
       - name: Set up Pages
         if: github.ref == 'refs/heads/main'
         uses: actions/configure-pages@v5
@@ -59,7 +59,7 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         if: github.ref == 'refs/heads/main'
         with:
-          path: "docs/build/public"
+          path: "${{ runner.temp }}/site"
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
         uses: actions/deploy-pages@v4
