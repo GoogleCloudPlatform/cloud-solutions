@@ -1,0 +1,10 @@
+streamlit>=1.28.0
+pandas>=2.0.0
+pillow>=10.0.0
+numpy>=1.24.0
+google-cloud-storage>=2.10.0
+google-genai>=0.2.0
+google-cloud-aiplatform>=1.35.0
+opencv-python>=4.8.0
+scikit-image>=0.21.0
+requests>=2.31.0
