@@ -6,7 +6,7 @@ This library contains the code to generate a Pino configuration which outputs
 This can be used with any Google Cloud service that captures logs written to
 stdout (such as Cloud Run, Cloud Run Functions and Google Kubernetes Engine
 workloads), so that the logging is formatted correctly in
-[Google Cloud Logging](https://cloud.google.com/logging/docs). This then alllows
+[Google Cloud Logging](https://cloud.google.com/logging/docs). This then allows
 filtering by log level, the ability to include structured data in the logs, and
 reporting of errors with stack traces to
 [Google Cloud Error Reporting](https://cloud.google.com/error-reporting/docs)
