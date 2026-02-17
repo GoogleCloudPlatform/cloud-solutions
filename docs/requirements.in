@@ -20,7 +20,7 @@
 #
 
 ## Markdown Extensions
-pymdown-extensions == 10.20.1
+pymdown-extensions ==10.21
 pygments == 2.19.2
 
 ## Mkdocs Plugins
