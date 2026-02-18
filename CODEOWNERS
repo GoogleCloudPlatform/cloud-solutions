@@ -12,7 +12,7 @@
 /projects/ai/gen-media/notebooks/vto_scale_workflow/                  @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/YAML/                                          @isidro-deloera @luj20 @tdigangi
 /projects/alloydb-auth-workload-identity/                             @GoogleCloudPlatform/cloud-solutions-the-repo-admin
-/projects/alloydb-autoscaler/                                         @nielm
+/projects/alloydb-autoscaler/                                         @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/alloydbomni-ha-patroni-etcd/                                @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/arm-reference-guides/                                       @ferrarimarco @prev-dev
 /projects/build-with-gemini-demo/                                     @gitrey @ferrarimarco
