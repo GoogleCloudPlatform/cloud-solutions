@@ -57,7 +57,7 @@ fi
 # directories
 
 echo "Initializing docs build folder at: ${BUILD_DIR}/docs"
-rm -rf "${BUILD_DIR}/docs" "${BUILD_DIR}/site"
+rm -rf "${BUILD_DIR}/docs" "${BUILD_DIR}/site" "${BUILD_DIR}/overrides"
 mkdir -p "${BUILD_DIR}/docs"
 
 ## Setup common files and folders
