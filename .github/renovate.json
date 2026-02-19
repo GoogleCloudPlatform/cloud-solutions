@@ -40,7 +40,7 @@
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["SECURITY", "p0","dependencies"]
+    "labels": ["SECURITY", "p0", "dependencies"]
   },
   "labels": ["dependencies"],
   "customManagers": [
