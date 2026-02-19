@@ -165,11 +165,6 @@
       "commitMessagePrefix": "chore(deps): [dataflow-kafka-to-bigquery]"
     },
     {
-      "matchFileNames": ["projects/dataproc-trino-autoscaler/**"],
-      "groupName": "dataproc-trino-autoscaler",
-      "commitMessagePrefix": "chore(deps): [dataproc-trino-autoscaler]"
-    },
-    {
       "matchFileNames": ["projects/dotnet-modernization-demo/**"],
       "groupName": "dotnet-modernization-demo",
       "commitMessagePrefix": "chore(deps): [dotnet-modernization-demo]"

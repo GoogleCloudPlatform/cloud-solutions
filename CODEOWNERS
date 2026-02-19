@@ -25,7 +25,6 @@
 /projects/dataflow-gcs-avro-to-spanner-scd/                           @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/dataflow-gcs-to-alloydb/                                    @zunhoyi
 /projects/dataflow-kafka-to-bigquery/                                 @GoogleCloudPlatform/cloud-solutions-the-repo-admin
-/projects/dataproc-trino-autoscaler/                                  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/dotnet-modernization-demo/                                  @ferrarimarco @idofl
 /projects/fsi-quant-assistant/                                        @mservidio
 /projects/gemini-powered-migrations-to-google-cloud/                  @aburhan @ferrarimarco @gitrey
