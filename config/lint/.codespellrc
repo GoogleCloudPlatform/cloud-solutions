@@ -1,0 +1,6 @@
+[codespell]
+check-filenames =
+check-hidden =
+ignore-regex = [A-Za-z0-9+/]{100,}
+ignore-words = config/lint/codespell-ignore-words.txt
+skip = *.log,*.svg,*/package-lock.json,*/packages.lock.json,.git,*/third_party/*,*/azure-blob-storage-assessment-results,*/contentnet_labels.csv,*/gemini-powered-development/menu-service/src/main/resources/META-INF/resources/index.html,*/containers-blobs/*.txt
