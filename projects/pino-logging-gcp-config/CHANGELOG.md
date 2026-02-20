@@ -2,6 +2,16 @@
 
 <!-- markdownlint-disable -->
 
+## [1.3.3](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.2...pino-logging-gcp-config-v1.3.3) (2026-02-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependancies ([1a85e3c](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/1a85e3c481bd4a554ad38ff5d977e8591a726bd9))
+* **docs:** fix typo in `pino-loggin-gcp-config` ([841f12a](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/841f12a4251098e6316f27b0cf74f8cbfc16be42))
+* **docs:** fix typo in `pino-loggin-gcp-config` ([841f12a](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/841f12a4251098e6316f27b0cf74f8cbfc16be42))
+* **docs:** fix typo in `pino-loggin-gcp-config` ([#332](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/332)) ([f7f5992](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/f7f59920da33d6db834dc4620f6a4142cfb1addd))
+
 ## [1.3.2](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.1...pino-logging-gcp-config-v1.3.2) (2026-02-10)
 
 
