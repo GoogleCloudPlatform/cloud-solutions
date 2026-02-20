@@ -178,7 +178,7 @@ VTO_VARIATIONS = 4               # Candidates per try-on
 # Model Versions (update as needed)
 MODEL_TEXT = "gemini-2.5-flash"
 MODEL_IMAGE_GEN = "gemini-2.5-flash-image"
-MODEL_ID_VTO = "virtual-try-on-preview-08-04"
+MODEL_ID_VTO = "virtual-try-on-001"
 MODEL_VIDEO = "veo-3.0-generate-001"
 ```
 

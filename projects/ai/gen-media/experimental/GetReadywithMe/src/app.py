@@ -228,36 +228,38 @@ def cleanup_previous_session_outputs():
                 if not blob.name.endswith("/"):
                     blob.delete()
 
-        # Enforce max 5 model_* and 5 face_* files
+        # Protect preloaded model and face files
+        preloaded_filenames = {
+            "model_01_20260120_103259.png",
+            "model_02_20260120_103301.png",
+            "model_03_20260120_103303.png",
+            "model_04_20260120_103305.png",
+            "model_05_20260120_103257.png",
+            "face_01_20260120_113301.png",
+            "face_02_20260120_113301.png",
+            "face_03_20260120_113301.png",
+            "face_04_20260120_113301.png",
+            "face_05_20260120_113301.png",
+        }
+
+        # Clean up non-preloaded model/face files
         models_prefix = "beauty/vto/models/"
         all_blobs = list(
             bucket.list_blobs(prefix=models_prefix)
         )
 
-        def _is_model(b):
-            name = b.name.split("/")[-1]
-            return name.startswith("model_")
-
-        def _is_face(b):
-            name = b.name.split("/")[-1]
-            return name.startswith("face_")
-
-        model_blobs = sorted(
-            [b for b in all_blobs if _is_model(b)],
-            key=lambda b: b.time_created,
-            reverse=True,
-        )
-        face_blobs = sorted(
-            [b for b in all_blobs if _is_face(b)],
-            key=lambda b: b.time_created,
-            reverse=True,
-        )
-
-        # Keep only newest 5 of each, delete rest
-        for blob in model_blobs[5:]:
-            blob.delete()
-        for blob in face_blobs[5:]:
-            blob.delete()
+        for blob in all_blobs:
+            if blob.name.endswith("/"):
+                continue
+            filename = blob.name.split("/")[-1]
+            # Skip preloaded files
+            if filename in preloaded_filenames:
+                continue
+            # Delete extra model_* or face_* files
+            if filename.startswith(
+                "model_"
+            ) or filename.startswith("face_"):
+                blob.delete()
 
     except (
         api_exceptions.GoogleAPICallError,
@@ -326,7 +328,7 @@ def perform_virtual_tryon(
 
         # Call recontext_image API
         response = genai_client.models.recontext_image(
-            model="virtual-try-on-preview-08-04",
+            model="virtual-try-on-001",
             source=RecontextImageSource(
                 person_image=person_image,
                 product_images=[
