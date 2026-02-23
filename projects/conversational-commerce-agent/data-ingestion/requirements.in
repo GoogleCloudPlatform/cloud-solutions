@@ -5,7 +5,7 @@ charset-normalizer==3.4.0
 docstring_parser==0.16
 google-api-core==2.23.0
 google-auth==2.36.0
-google-cloud-aiplatform==1.48.0
+google-cloud-aiplatform==1.133.0
 google-cloud-bigquery==3.27.0
 google-cloud-core==2.4.1
 google-cloud-resource-manager==1.13.1
