@@ -5,5 +5,5 @@ google-cloud==0.34.0
 google-cloud-storage==2.19.0
 google-cloud-bigquery==3.34.0
 google-genai==1.24.0
-google-cloud-aiplatform==1.101.0
+google-cloud-aiplatform==1.133.0
 python-dotenv==1.1.1
