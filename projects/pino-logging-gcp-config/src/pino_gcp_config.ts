@@ -46,7 +46,7 @@ const eventId = new EventId();
  * See
  * https://github.com/googleapis/release-please/blob/main/docs/customizing.md#updating-arbitrary-files
  */
-const NODEJS_GCP_PINO_LIBRARY_VERSION = '1.3.2'; // {x-release-please-version}
+const NODEJS_GCP_PINO_LIBRARY_VERSION = '1.3.3'; // {x-release-please-version}
 const NODEJS_GCP_PINO_LIBRARY_NAME = 'nodejs-gcppino';
 
 const PINO_TO_GCP_LOG_LEVELS = Object.freeze(

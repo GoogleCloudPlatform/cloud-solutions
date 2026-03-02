@@ -137,9 +137,7 @@ class SingleVTOTab:
         )
 
         # VTO model name for recontext_image
-        self.vto_model = (
-            'virtual-try-on-preview-08-04'
-        )
+        self.vto_model = 'virtual-try-on-001'
 
         # Initialize session state for real-time VTO
         if 'vto_results' not in st.session_state:

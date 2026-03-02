@@ -184,7 +184,7 @@ MODEL_TEXT = "gemini-2.5-flash"
 MODEL_IMAGE_GEN = "gemini-2.5-flash-image"
 
 # Virtual Try-On (Vertex AI)
-MODEL_ID_VTO = "virtual-try-on-preview-08-04"
+MODEL_ID_VTO = "virtual-try-on-001"
 
 # Video Generation (Veo)
 MODEL_VIDEO = "veo-3.0-generate-001"
