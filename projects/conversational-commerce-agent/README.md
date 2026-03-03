@@ -20,51 +20,8 @@ The Conversational Agent \- Apparel demonstrates:
 - Recommend products based on user’s input via Vertex AI Search for Retail API.
 - Integrate with third party delivery services via Application Integration.
 
-## Architecture
+Update **2025-12-10**:
 
-The following diagram illustrates the solution architecture.
-
-- A web application with Dialogflow Messenger embedded as the frontend user
-  interface.
-- The Conversational Agent uses Cloud Functions tools to search and recommend
-  products to the end customer.
-- The Conversational Agent uses Application Integration tools to fetch delivery
-  status.
-
-![Architecture](./docs/architecture.svg "Architecture")
-
-## Use cases
-
-This demo is intended to showcase “art of the possible” with conversational
-shopping experiences to existing and prospective retail customers.
-
-### This demo covers
-
-- Connection to Retail Search API and Recommendations AI: The agent establishes
-  a seamless connection to Retail Search API and Recommendations AI, enabling
-  accurate product search and personalized recommendations based on user
-  preferences.
-- Intuitive Search Results and Recommendations: The AI-driven virtual fashion
-  coordinator facilitates a more intuitive search experience, understanding user
-  needs text inputs and delivering relevant recommendations considering various
-  factors like size, color preferences and cultural norms.
-- Rich Content Display: The agent incorporates rich content display to provide
-  users with comprehensive information about products, including customer
-  reviews, sizing details, and related items, contributing to a more informed
-  decision-making process.
-
-## Third-party delivery service integration
-
-In this demo, we integrate with the demo DHL environment to simulate delivery
-tracking. The integration is enabled by default, no additional configuration
-required. You can integrate with other 3rd party delivery services as needed.
-Please refer to the Application Integration document for details.
-
-## Deploy the solution
-
-Please refer to the [Deployment Guide](./docs/deployment.md) for step by step
-instructions.
-
-## Known Limitations
-
-- Product reviews are currently hardcoded
+This project has been archived. You can still access the code by browsing the
+repository at
+[commit 8261ed7](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/8261ed75a23701d2b2fa8fa27cdaa60acf416012/projects/conversational-commerce-agent)
