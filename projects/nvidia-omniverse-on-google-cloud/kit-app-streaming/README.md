@@ -27,3 +27,7 @@ To deploy NVIDIA Omniverse Kit Streaming applications on the GKE cluster, see
 
 - Develop NVIDIA RTX applications on
   [NVIDIA RTX Virtual Workstations on Google Cloud](../README.md#nvidia-rtx-virtual-workstations).
+
+- Setup ThinLinc to support 3D accelerated remote desktop connections: [GCP_NVIDIA_Isaac_Sim_Thinlinc](https://github.com/GoogleCloudPlatform/scientific-computing-examples/tree/main/remote%20visualization/GCP_NVIDIA_Isaac_Sim_Thinlinc).
+
+- Setup Chrome Remote Desktop to support 3D accelerated remote desktop connections: [GCP_NVIDIA_Isaac_Sim_CRD](https://github.com/GoogleCloudPlatform/scientific-computing-examples/tree/main/remote%20visualization/GCP_NVIDIA_Isaac_Sim_CRD).
