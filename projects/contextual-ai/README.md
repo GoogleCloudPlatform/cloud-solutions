@@ -12,9 +12,6 @@ The solution is composed of a frontend UI, a data access API, and an agent API
 powered by generative AI. It supports different types of widgets for data
 interaction.
 
-For detailed architecture diagram and flows, please refer to
-[this document](./docs/architecture.md).
-
 ### Key Features
 
 - **Deterministic Widgets**: Widgets that fetch data using pre-defined SQL
@@ -26,7 +23,8 @@ For detailed architecture diagram and flows, please refer to
 - **Search Integration**: A search widget integrates with Vertex AI Search to
   provide search and summarization capabilities.
 
-## Deploy the solution
+Update **2026-03-04**:
 
-For detailed step-by-step instructions on how to deploy the solution, please
-refer to the [Deployment Guide](./docs/index.md).
+This project has been archived. You can still access the code by browsing the
+repository at
+[commit dd333d5](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/dd333d52914b6b5df80ac45ee3086b8294af2df7/projects/contextual-ai)

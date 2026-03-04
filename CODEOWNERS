@@ -18,7 +18,7 @@
 /projects/build-with-gemini-demo/                                     @gitrey @ferrarimarco
 /projects/bulk-delete-gcs-files-fn/                                   @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/confidential-ai-model-serving/                              @jpassing
-/projects/contextual-ai/                                              @michael-chi
+/projects/contextual-ai/                                              @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/conversational-commerce-agent/                              @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/database-archival/                                          @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/dataflow-bigquery-change-data-capture/                      @slilichenko
