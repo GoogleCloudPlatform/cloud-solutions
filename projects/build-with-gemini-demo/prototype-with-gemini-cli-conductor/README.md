@@ -1,4 +1,4 @@
-# Prototype with Gemini CLI
+# Prototype with the Gemini CLI Conductor Extension
 
 This demo showcases the power and efficiency of using the Gemini CLI for rapid
 prototyping, guiding you from a conceptual idea to a running web application. It

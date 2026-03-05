@@ -1,4 +1,4 @@
-# Prototype with Gemini CLI
+# Prototype with Gemini CLI Custom Commands
 
 This demo shows the power and efficiency of using the Gemini CLI for rapid
 prototyping. It guides you from a conceptual idea to a running web application

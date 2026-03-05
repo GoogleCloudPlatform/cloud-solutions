@@ -9,5 +9,5 @@ nav:
   - "Implementing UI changes with Gemini CLI": "build-with-gemini-demo/ui-changes-implementation/"
   - "Parallel Feature Development with Gemini CLI": "build-with-gemini-demo/parallel-feature-development/"
   - "Prototype with Gemini CLI Custom Commands": "build-with-gemini-demo/prototype-with-gemini-cli/"
-  - "Prototype with Gemini CLI Conductor Extension": "build-with-gemini-demo/prototype-with-gemini-cli-conductor/"
+  - "Prototype with the Gemini CLI Conductor Extension": "build-with-gemini-demo/prototype-with-gemini-cli-conductor/"
   - "Scanning and fixing security issues with Gemini CLI and Snyk": "build-with-gemini-demo/security-scan-fix/"
