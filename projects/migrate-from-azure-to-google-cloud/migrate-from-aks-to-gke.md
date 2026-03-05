@@ -830,6 +830,20 @@ least amount of changes that you need to make your workloads suitable for GKE,
 and critical bug fixes. You can plan other improvements and changes as part of
 future projects.
 
+#### Accelerate workload reviews and refactoring with Gemini
+
+To accelerate code assessment, review, and refactoring tasks, you can use Gemini
+to augment your migration team. For example, you can use Gemini CLI to do the
+following:
+
+1.  Assess the source code of the workloads to migrate and assess their
+    Kubernetes objects, such as Deployments, Services, and Gateways.
+1.  Plan code refactoring.
+1.  Refactor code, and validate changes.
+
+For more information, see
+[Gemini-powered migrations to Google Cloud](../gemini-powered-migrations-to-google-cloud/README.md).
+
 ### Refactor deployment and operational processes
 
 After you refactor your workloads, you refactor your deployment and operational
@@ -891,7 +905,10 @@ outlines a possible, general, refactoring strategy:
 1.  Refactor your build processes to store artifacts in Artifact Registry only.
 1.  If necessary, migrate earlier versions of the artifacts to deploy from the
     repositories in your source environment to Artifact Registry. For example,
-    you can copy container images to Artifact Registry.
+    to migrate container images to Artifact Registry, you can use tools like
+    [gcrane](https://github.com/google/go-containerregistry/blob/main/cmd/gcrane/README.md)
+    or
+    [Rackware SWIFT](https://www.rackwareinc.com/post/rackware-swift-container-replication-backup-and-dr).
 1.  Decommission the repositories in your source environment when you no longer
     require them.
 
@@ -937,6 +954,13 @@ in your Azure environment.
 
 ### Migrate data
 
+When you migrate your workloads to GKE, assess their statefulness. It's simpler
+to migrate stateless workloads compared to migrating stateful workloads. When
+you migrate stateless workloads, you redeploy them in the target environment
+without affecting their data. However, when you migrate stateful workloads, you
+also need to migrate their data, such as their PersistentVolumes and stateful
+ConfigMaps.
+
 GKE supports several data storage services, such as block storage, raw block
 storage, file storage, and object storage. For more information, see
 [Storage for GKE clusters overview](https://cloud.google.com/kubernetes-engine/docs/concepts/storage-overview).
@@ -957,7 +981,24 @@ To migrate data to your GKE environment, you do the following:
     environment.
 
 To migrate data from your source environment to your Google Cloud environment,
-we recommend that you design a data migration plan by following the guidance in
+we recommend that you design a data migration plan. The data migration plan
+design depends on factors like the type of data migration that you want to
+accomplish, your downtime requirements, and the data administration and
+management tools that your workload provides:
+
+- If your workload provides tools or features to move or replicate data, you can
+  use those tools to implement your migration plan. For example, to migrate data
+  from a stateful workload instance to a target workload instance that's running
+  on GKE, you can use these options:
+    - Any data management and administration tool that supports your workload.
+    - Any data cloning replication features that your workload supports.
+
+- If your workload doesn't provide any application-level tools or features to
+  migrate data, you can use a third-party tool such as
+  [Rackware SWIFT](https://www.rackwareinc.com/post/rackware-swift-container-replication-backup-and-dr)
+  or [Velero](https://velero.io/).
+
+For more information about designing a data migration plan, see
 [Migrate to Google Cloud: Transfer large datasets](https://cloud.google.com/architecture/migration-to-google-cloud-transferring-your-large-datasets).
 
 #### Migrate data from AKS to GKE
@@ -1137,6 +1178,38 @@ addresses and network load balancers.
 
 After you start gradually shifting traffic to your GKE environment, we recommend
 that you monitor how your workloads behave as their loads increase.
+
+Depending on how you designed your GKE environment, you have the following
+options to implement a mechanism that gradually shifts traffic from your source
+environment to your target environment:
+
+- A DNS resolution policy that resolves a percentage of requests to IP addresses
+  that belong to your GKE environment. This technique is relatively simple to
+  implement, but it might lack the necessary flexibility to accommodate all of
+  your traffic-shifting needs. It also assumes that clients honor DNS resolution
+  responses, instead of aggressively caching past responses to increase
+  performance.
+- A manually configured Cloud Load Balancing load balancer, to which you attach
+  the following:
+    - A
+      [Standalone Network Endpoint Group (NEG)](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/standalone-neg)
+      that points to the instances of your workloads that are deployed on GKE.
+    - A
+      [Hybrid connectivity NEG](https://docs.cloud.google.com/load-balancing/docs/negs/hybrid-neg-concepts)
+      that points to the instances of your workloads that are deployed on your
+      source environment.
+
+    You then configure the load balancer to gradually shift traffic from the
+    source environment to the GKE environment. With this technique, you delegate
+    load balancing to Cloud Load Balancing, but you need to configure the load
+    balancer yourself. This technique also poses challenges if you want to
+    switch to a GKE-managed load balancer, such as when you provision a
+    Kubernetes Gateway, an Ingress, or a Service of type LoadBalancer.
+
+- A proxy that's deployed in your GKE environment that can forward traffic from
+  your GKE environment to your source environment. You then configure Cloud
+  Service Mesh to gradually shift traffic from the proxy to the instances of
+  your workloads that are deployed on GKE.
 
 Finally, you perform a _cutover_, which happens when you shift all the traffic
 from your source environment to your GKE environment.
