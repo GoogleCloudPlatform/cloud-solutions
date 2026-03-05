@@ -227,6 +227,11 @@
       "commitMessagePrefix": "chore(deps): [migrate-nutanix-to-google-cloud]"
     },
     {
+      "matchFileNames": ["projects/mmb-datacloud/**"],
+      "groupName": "mmb-datacloud",
+      "commitMessagePrefix": "chore(deps): [mmb-datacloud]"
+    },
+    {
       "matchFileNames": ["projects/mmb-hero-demo/**"],
       "groupName": "mmb-hero-demo",
       "commitMessagePrefix": "chore(deps): [mmb-hero-demo]"
