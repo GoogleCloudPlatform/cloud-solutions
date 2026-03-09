@@ -1,0 +1,38 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+services:
+  locust:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8089:8089"
+    extra_hosts:
+      - "proxy-demo.test:${TARGET_IP}"
+    command: >
+      -f /app/locustfile.py
+      --host http://proxy-demo.test
+      --users 50
+      --spawn-rate 5
+      --autostart
+
+  proxy:
+    image: nginx:1.29-alpine
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - "proxy-demo.test:${TARGET_IP}"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
