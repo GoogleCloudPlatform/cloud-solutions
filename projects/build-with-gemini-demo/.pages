@@ -2,6 +2,7 @@ title: Accelerate software development with Gemini
 
 nav:
   - "Accelerate software development with Gemini": "README.md"
+  - "Agentic development with Antigravity": "build-with-gemini-demo/agentic-development-with-antigravity/"
   - "Automating UI tests with Playwright & Gemini CLI": "build-with-gemini-demo/automating-ui-tests/"
   - "Automated code reviews with Gemini CLI": "build-with-gemini-demo/automated-code-reviews-with-gemini-cli/"
   - "Build with Antigravity": "build-with-gemini-demo/build-with-antigravity/"
