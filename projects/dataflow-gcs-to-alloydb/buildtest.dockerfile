@@ -15,7 +15,7 @@
 
 # buildtest.dockerfile is only used for ci.
 
-FROM python:3.12
+FROM python:3.13.12
 
 ENV JAVA_HOME=/opt/java/openjdk
 COPY --from=eclipse-temurin:17-jdk $JAVA_HOME $JAVA_HOME
@@ -27,9 +27,9 @@ WORKDIR "$PROJECT_SUBDIRECTORY"
 ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
 CMD [ " \
   [[ \"$(id -u)\" != 0 ]] && { echo 'This test needs to run as root'; exit 1; }; \
-  python3 -m venv .venv && \
-  . .venv/bin/activate && \
-  python3 -m pip  install --no-deps --require-hashes -r requirements-dev.txt && \
+  python3 -m venv /tmp/venv && \
+  . /tmp/venv/bin/activate && \
+  pip  install --no-deps --require-hashes -r requirements-dev.txt && \
   cd ./src && \
   python3 dataflow_gcs_to_alloydb_test.py \
   " ]

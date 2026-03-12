@@ -1,4 +1,5 @@
-apache-beam[gcp]==2.71.0
-pandas
+apache-beam[gcp]==2.70.0
+apache-beam[tfrecord]==2.70.0
+pandas <3.0.0
 orjson > 3.11.4
 protobuf > 6.33.4
