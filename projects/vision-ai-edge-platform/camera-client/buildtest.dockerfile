@@ -15,7 +15,7 @@
 
 # buildtest.dockerfile is only used for ci.
 
-FROM python:3.10.12 AS base
+FROM python:3.13 AS base
 
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
@@ -25,8 +25,8 @@ WORKDIR ${PROJECT_SUBDIRECTORY}
 
 ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
 
-RUN apt-get update \
-  && apt-get --assume-yes --no-install-recommends install protobuf-compiler \
+RUN apt-get update -qyy \
+  && apt-get -qyy --no-install-recommends install protobuf-compiler \
   libopencv-dev python3-opencv \
   && rm -rf /var/lib/apt/lists/*
 

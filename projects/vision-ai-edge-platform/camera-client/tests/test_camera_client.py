@@ -187,8 +187,8 @@ def test_write_config(mocker):
     cc.write_config(True, logger, cam, "cfg_file.txt")
 
     # Assert that the expected methods were called
-    assert cam.set_properties.called_once
-    assert logger.debug.called_once
+    cam.set_properties.assert_called_once()
+    logger.debug.assert_called_once()
 
     # Assert that the correct configurations were written to the camera
     expected_configs = {"key": 1}

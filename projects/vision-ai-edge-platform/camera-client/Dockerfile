@@ -1,4 +1,4 @@
-FROM python:3.10.12 AS base
+FROM python:3.13 AS base
 
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
@@ -40,17 +40,16 @@ RUN python3 -m pytest tests/
 
 FROM camera-integration-test AS camera-integration
 
-ARG CLOUD_SDK_VERSION=445.0.0
+ARG CLOUD_SDK_VERSION=560.0.0-0
 ENV CLOUD_SDK_VERSION=$CLOUD_SDK_VERSION
 
 # hadolint ignore=DL4006
-RUN CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" \
-  && export CLOUD_SDK_REPO \
-  && echo "deb https://packages.cloud.google.com/apt ${CLOUD_SDK_REPO} main" > /etc/apt/sources.list.d/google-cloud-sdk.list \
-  && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends \
-  google-cloud-sdk=${CLOUD_SDK_VERSION}-0 \
+RUN apt-get update -qyy \
+  && apt-get install -qyy --no-install-recommends ca-certificates gnupg curl \
+  && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" > /etc/apt/sources.list.d/google-cloud-sdk.list \
+  && apt-get update -qyy \
+  && apt-get install -qyy --no-install-recommends google-cloud-cli=${CLOUD_SDK_VERSION} \
   && rm -rf /var/lib/apt/lists/* \
   && gcloud --version
 
