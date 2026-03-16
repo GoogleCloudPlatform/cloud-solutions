@@ -15,6 +15,10 @@ dependencies = [
 
 requires-python = ">=3.10,<3.13"
 
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.python.org/simple/"
+
 [dependency-groups]
 dev = [
     "pytest~=9.0.1",

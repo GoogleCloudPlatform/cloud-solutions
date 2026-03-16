@@ -8,3 +8,4 @@ python-dotenv
 reportlab
 Requests
 seaborn
+pillow>=12.1.1
