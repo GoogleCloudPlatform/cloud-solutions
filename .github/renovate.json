@@ -4,6 +4,7 @@
   "osvVulnerabilityAlerts": true,
   "dependencyDashboardApproval": true,
   "rangeStrategy": "bump",
+  "rebaseWhen": "behind-base-branch",
   "npm": {
     "minimumReleaseAge": "3 days"
   },
