@@ -312,7 +312,7 @@ genicam==1.5.1 \
     --hash=sha256:f1af464366c504fb7282379e66fda96d1a31736fc46a8e7be652a58b6c94bbb3 \
     --hash=sha256:ff286bc2a84d1f3df0d9eecf907d3771922aa7b57cf500e57d4fbe8de44b8297
     # via harvesters
-google-api-core==2.30.0 \
+google-api-core[grpc]==2.30.0 \
     --hash=sha256:02edfa9fab31e17fc0befb5f161b3bf93c9096d99aed584625f38065c511ad9b \
     --hash=sha256:80be49ee937ff9aba0fd79a6eddfde35fe658b9953ab9b79c57dd7061afa8df5
     # via google-cloud-pubsub
@@ -326,7 +326,7 @@ google-cloud-pubsub==2.36.0 \
     --hash=sha256:96e057e5f83433ce428852095d652c2f7fc193f0f77db1f27cc39186fe69c1f4 \
     --hash=sha256:d6726ccf9373924e0746338dadf8244b9aa1a97a24130b59a2106c926ea37598
     # via -r requirements.in
-googleapis-common-protos==1.73.0 \
+googleapis-common-protos[grpc]==1.73.0 \
     --hash=sha256:778d07cd4fbeff84c6f7c72102f0daf98fa2bfd3fa8bea426edc545588da0b5a \
     --hash=sha256:dfdaaa2e860f242046be561e6d6cb5c5f1541ae02cfbcb034371aadb2942b4e8
     # via
@@ -401,7 +401,6 @@ grpcio==1.78.1 \
     --hash=sha256:ffbb760df1cd49e0989f9826b2fd48930700db6846ac171eaff404f3cfbe5c28
     # via
     #   google-api-core
-    #   google-cloud-pubsub
     #   googleapis-common-protos
     #   grpc-google-iam-v1
     #   grpcio-status
@@ -806,9 +805,9 @@ puremagic==2.1.0 \
     --hash=sha256:06beb598183c625bf9bfed70016930c2d1299e138cd07ed5d6085a7c5deaab19 \
     --hash=sha256:9e613ffe9e6e33a0f651d4c0cfc1e16f86d2220edf137dfa3dd0ba2ba353f013
     # via -r requirements.in
-pyasn1==0.6.2 \
-    --hash=sha256:1eb26d860996a18e9b6ed05e7aae0e9fc21619fcee6af91cca9bad4fbea224bf \
-    --hash=sha256:9b59a2b25ba7e4f8197db7686c09fb33e658b98339fadb826e9512629017833b
+pyasn1==0.6.3 \
+    --hash=sha256:697a8ecd6d98891189184ca1fa05d1bb00e2f84b5977c481452050549c8a72cf \
+    --hash=sha256:a80184d120f0864a52a073acc6fc642847d0be408e7c7252f31390c0f4eadcde
     # via pyasn1-modules
 pyasn1-modules==0.4.2 \
     --hash=sha256:29253a9207ce32b64c3ac6600edc75368f98473906e8fd1043bd6b5b1de2c14a \
