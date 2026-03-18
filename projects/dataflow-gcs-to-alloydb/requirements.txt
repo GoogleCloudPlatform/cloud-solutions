@@ -144,7 +144,7 @@ anyio==4.12.1 \
     # via
     #   google-genai
     #   httpx
-apache-beam==2.70.0 \
+apache-beam[gcp,tfrecord]==2.70.0 \
     --hash=sha256:04ed233c6382ac5986492a833472ab285af866774e39bd930cb5323989255343 \
     --hash=sha256:09a6d10cb5931224167113a4f5e448d29ec3b1b2ad40c55fb32c927c47d11814 \
     --hash=sha256:144e7bfa222e80b4869cb8a5d47cf73fe6cff1e36f374f50abc0f179586938bd \
@@ -659,7 +659,7 @@ frozenlist==1.8.0 \
     # via
     #   aiohttp
     #   aiosignal
-google-api-core==2.30.0 \
+google-api-core[grpc]==2.30.0 \
     --hash=sha256:02edfa9fab31e17fc0befb5f161b3bf93c9096d99aed584625f38065c511ad9b \
     --hash=sha256:80be49ee937ff9aba0fd79a6eddfde35fe658b9953ab9b79c57dd7061afa8df5
     # via
@@ -687,7 +687,7 @@ google-apitools==0.5.35 \
     --hash=sha256:0f6f67fbe6f228f4777ae7e9d00e01476f7b8a48dca3a4353a1c32369437bbd0 \
     --hash=sha256:911bc3698686c74187414c610ae30bd6e3c0a7404178fc6479ead6c420d2dd94
     # via apache-beam
-google-auth==2.49.1 \
+google-auth[requests]==2.49.1 \
     --hash=sha256:16d40da1c3c5a0533f57d268fe72e0ebb0ae1cc3b567024122651c045d879b64 \
     --hash=sha256:195ebe3dca18eddd1b3db5edc5189b76c13e96f29e73043b923ebcf3f1a860f7
     # via
@@ -854,7 +854,7 @@ google-resumable-media==2.8.0 \
     # via
     #   google-cloud-bigquery
     #   google-cloud-storage
-googleapis-common-protos==1.73.0 \
+googleapis-common-protos[grpc]==1.73.0 \
     --hash=sha256:778d07cd4fbeff84c6f7c72102f0daf98fa2bfd3fa8bea426edc545588da0b5a \
     --hash=sha256:dfdaaa2e860f242046be561e6d6cb5c5f1541ae02cfbcb034371aadb2942b4e8
     # via
@@ -946,7 +946,6 @@ grpcio==1.78.1 \
     #   google-cloud-kms
     #   google-cloud-language
     #   google-cloud-monitoring
-    #   google-cloud-pubsub
     #   google-cloud-pubsublite
     #   google-cloud-resource-manager
     #   google-cloud-secret-manager
@@ -1767,9 +1766,9 @@ pyarrow-hotfix==0.7 \
     --hash=sha256:3236f3b5f1260f0e2ac070a55c1a7b339c4bb7267839bd2015e283234e758100 \
     --hash=sha256:59399cd58bdd978b2e42816a4183a55c6472d4e33d183351b6069f11ed42661d
     # via apache-beam
-pyasn1==0.6.2 \
-    --hash=sha256:1eb26d860996a18e9b6ed05e7aae0e9fc21619fcee6af91cca9bad4fbea224bf \
-    --hash=sha256:9b59a2b25ba7e4f8197db7686c09fb33e658b98339fadb826e9512629017833b
+pyasn1==0.6.3 \
+    --hash=sha256:697a8ecd6d98891189184ca1fa05d1bb00e2f84b5977c481452050549c8a72cf \
+    --hash=sha256:a80184d120f0864a52a073acc6fc642847d0be408e7c7252f31390c0f4eadcde
     # via
     #   oauth2client
     #   pyasn1-modules
