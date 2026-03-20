@@ -72,7 +72,7 @@ limitations under the License.
 #
 #    ```bash
 #    # Example command to copy images from the local dress folder to your GCS bucket
-#    gsutil cp dress/*.png gs://YOUR_BUCKET_NAME/dress/
+#    gcloud storage cp dress/*.png gs://YOUR_BUCKET_NAME/dress/
 #    ```
 #
 #    The notebook expects dress images to be available at: `gs://YOUR_BUCKET_NAME/dress/`

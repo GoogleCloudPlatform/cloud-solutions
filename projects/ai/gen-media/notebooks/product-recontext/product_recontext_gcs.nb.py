@@ -75,7 +75,7 @@
 # - **Retries** automatically on API failures
 #
 # ### Sample Images Available:
-# This repository includes sample product images in the `./images/product_images_input/` folder with three product folders (product1, product2, product3). To use these samples, you need to upload them to your GCS bucket at `gs://your-bucket/product_images_input/` before running the pipeline. You can use gsutil or the Cloud Console to copy these folders to your bucket.
+# This repository includes sample product images in the `./images/product_images_input/` folder with three product folders (product1, product2, product3). To use these samples, you need to upload them to your GCS bucket at `gs://your-bucket/product_images_input/` before running the pipeline. You can use gcloud storage or the Cloud Console to copy these folders to your bucket.
 #
 # ### GCS Structure:
 # ```

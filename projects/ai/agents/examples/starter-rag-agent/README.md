@@ -96,10 +96,10 @@ directory for quick testing. To use them:
 export PROJECT_ID="your-project-id"
 
 # Create bucket (via gcloud CLI)
-gsutil mb -l us-central1 gs://${PROJECT_ID}-rag-documents
+gcloud storage buckets create gs://${PROJECT_ID}-rag-documents --location=us-central1
 
 # Upload the included sample documents
-gsutil cp assets/* gs://${PROJECT_ID}-rag-documents/
+gcloud storage cp assets/* gs://${PROJECT_ID}-rag-documents/
 ```
 
 Alternatively, create the bucket via the
@@ -112,10 +112,10 @@ To use custom documents instead of the included samples:
 
 ```bash
 # Create bucket
-gsutil mb -l us-central1 gs://your-rag-documents-bucket
+gcloud storage buckets create gs://your-rag-documents-bucket --location=us-central1
 
 # Upload your documents
-gsutil cp /path/to/your/documents/* gs://your-rag-documents-bucket/
+gcloud storage cp /path/to/your/documents/* gs://your-rag-documents-bucket/
 ```
 
 **Important:** Ensure only the documents you want to ingest are in the

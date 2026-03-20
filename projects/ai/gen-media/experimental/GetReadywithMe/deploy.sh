@@ -97,10 +97,10 @@ gcloud services enable \
 
 # ---- Step 5: Create bucket ----
 echo -e "${BLUE}[3/6] Creating GCS bucket...${NC}"
-if gsutil mb -p "$PROJECT_ID" -l us-central1 "gs://$BUCKET_NAME" 2>/dev/null; then
+if gcloud storage buckets create "gs://$BUCKET_NAME" --project="$PROJECT_ID" --location="us-central1" 2>/dev/null; then
   echo "  Created: gs://$BUCKET_NAME"
 else
-  if gsutil ls -b "gs://$BUCKET_NAME" &>/dev/null; then
+  if gcloud storage buckets describe "gs://$BUCKET_NAME" &>/dev/null; then
     echo "  Using existing: gs://$BUCKET_NAME"
   else
     echo -e "${RED}Error: Could not create bucket. Name may be taken.${NC}"
@@ -126,7 +126,7 @@ if [ -d "$ASSETS_DIR" ]; then
 
   # Upload all extracted files to bucket
   echo "  Uploading all files to gs://$BUCKET_NAME/..."
-  gsutil -m cp -r "$TEMP_DIR"/* "gs://$BUCKET_NAME/" 2>/dev/null || true
+  gcloud storage cp -r "$TEMP_DIR"/* "gs://$BUCKET_NAME/" 2>/dev/null || true
   echo "  Upload complete."
 
   # Clean up
@@ -172,5 +172,6 @@ echo -e "  Bucket:      gs://$BUCKET_NAME"
 echo ""
 echo -e "${YELLOW}To clean up later:${NC}"
 echo "  gcloud run services delete vto-demo --region us-central1 --quiet"
-echo "  gsutil -m rm -r gs://$BUCKET_NAME"
+echo "  gcloud storage rm -r gs://$BUCKET_NAME"
+echo ""
 echo ""

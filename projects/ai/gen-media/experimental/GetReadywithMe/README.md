@@ -119,5 +119,5 @@ To remove the deployed app and bucket:
 
 ```bash
 gcloud run services delete vto-demo --region us-central1 --quiet
-gsutil -m rm -r gs://YOUR_BUCKET_NAME
+gcloud storage rm -r gs://YOUR_BUCKET_NAME
 ```

@@ -117,7 +117,7 @@ Before running the notebook end-to-end, copy the sample dress images from the
 
 ```bash
 # Copy all sample dress images to your GCS bucket
-gsutil cp dress/*.png gs://YOUR_BUCKET_NAME/dress/
+gcloud storage cp dress/*.png gs://YOUR_BUCKET_NAME/dress/
 ```
 
 The notebook configuration uses `OUTFITS_PREFIX = "dress"` to specify where it
