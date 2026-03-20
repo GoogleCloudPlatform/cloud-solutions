@@ -1,21 +1,45 @@
-# Gemini Powered Migrations To Google Cloud
+# Gemini-powered migrations to Google Cloud
 
-This project provides a set of Gemini CLI custom commands to accelerate
-assessments and migration of workloads and data from Amazon Web Services (AWS)
-and Azure to Google Cloud. The Gemini CLI custom commands use Gemini to analyze
-data, identifying suitable resources for migration, and augmenting traditional
-assessments with AI.
+This project provides a set of Gemini CLI
+[Agent Skills](https://geminicli.com/docs/cli/skills/) and
+[custom commands](https://geminicli.com/docs/cli/custom-commands/) to accelerate
+assessments and migration of workloads and data to Google Cloud. The Gemini CLI
+Agent Skills and custom commands use Gemini to analyze data and to augment
+traditional assessments and migrations with AI.
 
 ## Prerequisites
 
-To effectively utilize these instructions, ensure the following are set up:
+To utilize these instructions, ensure the following are set up:
 
 - **Gemini CLI:** Installed and configured. For installation instructions, visit
   [geminicli.com](https://geminicli.com/docs/get-started/deployment/).
 - **Source Cloud Provider Inventory Details:** Access to the inventory of
-  objects to migrate (such as virtual machines, storage buckets, workloads,
-  etc.) from your source environment for analysis. Sample inputs are available
-  in the `test-data/` directory.
+  objects to migrate, such as virtual machines, storage buckets, and workloads
+  from your source environment for analysis. Sample inputs are available in the
+  `test-data/` directory.
+
+## Agent Skills
+
+This project provides Agent Skills in the `.agents/skills` directory for doing
+the following:
+
+- [Create a legacy applications for demos](#create-legacy-applications-for-demos)
+
+### Create legacy applications for demos
+
+The skills in this section help you create legacy applications that you can use
+for migration and modernization demos:
+
+- **legacy-app-generator**: Generates a legacy application source code and
+  sample data for migration and modernization demos based on a specified tech
+  stack. For example, you can use the following prompt to trigger this skill and
+  generate a legacy Java application:
+
+    ```text
+    Generate a legacy Java application for warehouse inventory management.
+    Generate the application in the legacy-java-app directory. The application
+    should have a Struts-based stack.
+    ```
 
 ## Gemini CLI custom commands
 
@@ -28,8 +52,8 @@ directory for doing the following:
 
 ### Evaluate inventories
 
-The custom commands in this section are aimed at helping you accelerate the
-evaluation and inventory assessments.
+The custom commands in this section help you accelerate the evaluation and
+inventory assessments.
 
 - **aws-container-migration-analysis:** This command analyzes cluster and object
   inventory files from Amazon EKS workloads to generate a Google Kubernetes
@@ -98,8 +122,8 @@ evaluation and inventory assessments.
 
 ### Refactor and modernize applications
 
-The commands listed in this section are aimed at refactoring and modernizing the
-source code of the applications to migrate:
+The commands listed in this section help you refactor and modernizing the source
+code of the applications to migrate:
 
 - **/aws-lambda-refactor-python-app-to-cloud-run:** This command helps you
   refactor AWS Lambda functions and applications to run on Cloud Run:
@@ -187,6 +211,12 @@ commands.
     directory so that they are available as global user commands or project
     commands. For more information about configuring Gemini CLI custom commands,
     see [Custom commands](https://geminicli.com/docs/cli/custom-commands/).
+
+1.  Configure the Agent Skills in the
+    `cloud-solutions/projects/gemini-powered-migrations-to-google-cloud`
+    directory so that they are available as global skills, or project-specific
+    skills. For more information about using Agent Skills with Gemini CLI, see
+    [Agent Skills](https://geminicli.com/docs/cli/skills/).
 
 1.  Change the working directory to the directory where you stored the files you
     want to assess with Gemini CLI, such as inventory files from other cloud
