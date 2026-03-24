@@ -23,7 +23,7 @@ To utilize these instructions, ensure the following are set up:
 This project provides Agent Skills in the `.agents/skills` directory for doing
 the following:
 
-- [Create a legacy applications for demos](#create-legacy-applications-for-demos)
+- [Create legacy applications for demos](#create-legacy-applications-for-demos)
 
 ### Create legacy applications for demos
 
