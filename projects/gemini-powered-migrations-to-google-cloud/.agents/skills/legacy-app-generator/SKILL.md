@@ -46,8 +46,8 @@ generation tool, such as Nano Banana, if available.
       global `npm install -g`.
     - Whenever applicable, provide Dockerfiles and Docker Compose configuration
       to containerize the legacy app, ensuring complete host system isolation.
-    - Follow the latest Docker Compose spec when writing the Docker Compose
-      configuration.
+    - Follow the latest Compose spec when writing the Docker Compose
+      configuration, not the Compose v2 or v3 spec.
     - Name the Docker Compose file as: `compose.yaml`.
     - Run the database in a container as well.
 

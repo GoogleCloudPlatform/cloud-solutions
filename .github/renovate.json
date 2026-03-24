@@ -198,6 +198,11 @@
       "commitMessagePrefix": "chore(deps): [hpa-recommender]"
     },
     {
+      "matchFileNames": ["projects/java-modernization-demo/**"],
+      "groupName": "java-modernization-demo",
+      "commitMessagePrefix": "chore(deps): [java-modernization-demo]"
+    },
+    {
       "matchFileNames": ["projects/k8s-hybrid-neg-controller/**"],
       "groupName": "k8s-hybrid-neg-controller",
       "commitMessagePrefix": "chore(deps): [k8s-hybrid-neg-controller]"
