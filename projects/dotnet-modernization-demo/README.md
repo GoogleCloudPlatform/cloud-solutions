@@ -18,7 +18,7 @@ To deploy this demo, you need:
 - A Google Cloud project.
 - An account that has the `owner` role on that Google Cloud project.
 - The [gcloud CLI](https://docs.cloud.google.com/sdk/docs/install)
-- [Gemini CLI](https://geminicli.com/docs/get-started/deployment/)
+- [Gemini CLI](https://geminicli.com/docs/get-started/installation/)
 - The
   [codmod CLI](https://docs.cloud.google.com/migration-center/docs/app-modernization-assessment)
 - [Docker Engine](https://docs.docker.com/engine/install/) (to test locally on
