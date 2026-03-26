@@ -113,7 +113,7 @@ if [[ -z "${VIRTUAL_ENV:-}" || ! -x "${VIRTUAL_ENV}/bin/python3" ]]; then
   # No, check for an existing local venv:
   VENV_DIR="${DOCS_DIR}/../kokoro/.venv"
   if [[ ! -x "${VENV_DIR}/bin/python3" ]]; then
-    # No - proably running in Github Actions, create a new local one.
+    # No - probably running in Github Actions, create a new local one.
     VENV_DIR="${BUILD_DIR}/venv"
     echo "Initialize Python venv at: ${VENV_DIR}"
     python3 -m venv "${VENV_DIR}"

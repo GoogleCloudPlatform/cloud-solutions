@@ -296,7 +296,7 @@ describe('Instrumentation', () => {
     expect(logged).toContain('hello world');
   });
 
-  it('Should inlude pinoOptionsMixins results into any instrumentation', async () => {
+  it('Should include pinoOptionsMixins results into any instrumentation', async () => {
     createGcpLoggingPinoConfig(
       {
         serviceContext,
