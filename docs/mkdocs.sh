@@ -132,6 +132,10 @@ pip3 install \
 sed -s "s/YYYY/$(date +%Y)/" "${SCRIPT_DIR}/mkdocs.yaml" \
   >"${BUILD_DIR}/mkdocs.yaml"
 
+# Disable Mkdocs 2.0 warning
+# see: https://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/
+export NO_MKDOCS_2_WARNING=1
+
 # Run mkdocs in build dir
 cd "${BUILD_DIR}" || exit 1
 python3 -m mkdocs "$@"
