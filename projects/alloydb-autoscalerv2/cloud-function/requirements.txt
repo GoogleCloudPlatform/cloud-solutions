@@ -1,0 +1,6 @@
+google-cloud-monitoring>=2.27.1
+google-api-python-client>=2.92.0
+google-auth>=2.0.0
+google-auth-httplib2>=0.1.0
+protobuf>=4.21.0
+requests>=2.25.1
