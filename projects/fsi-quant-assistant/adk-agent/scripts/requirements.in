@@ -1,2 +1,2 @@
-google-cloud-aiplatform
-pytz
+google-cloud-aiplatform==1.143.0
+pytz==2026.1.post1
