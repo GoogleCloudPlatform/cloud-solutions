@@ -32,10 +32,12 @@
 /projects/hive-bigquery-connector-demo/                               @eyalbenivri
 /projects/imagen-object-changer/                                      @lepistom
 /projects/imagen-voice-captioning/                                    @lepistom
+/projects/java-modernization-demo/                                   @ferrarimarco
 /projects/k8s-hybrid-neg-controller/                                  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/migrate-from-aws-to-google-cloud/                           @aburhan @ferrarimarco
 /projects/migrate-from-azure-to-google-cloud/                         @ferrarimarco
 /projects/migrate-nutanix-to-google-cloud/                            @ferrarimarco
+/projects/mmb-datacloud/                                              @zunhoyi
 /projects/mmb-hero-demo/                                              @aburhan @gitrey @ferrarimarco @idofl
 /projects/nvidia-omniverse-on-google-cloud/                           @ferrarimarco
 /projects/pino-logging-gcp-config/                                    @nielm
@@ -47,4 +49,3 @@
 /projects/speech2srt/                                                 @lepistom
 /projects/streamlit-pubsub/                                           @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/vision-ai-edge-platform/                                    @GoogleCloudPlatform/cloud-solutions-the-repo-admin
-/projects/mmb-datacloud/                                              @zunhoyi
