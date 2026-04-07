@@ -305,7 +305,7 @@ google-auth==2.47.0 \
 google-cloud-aiplatform==1.128.0 \
     --hash=sha256:2c4f6ac60fd52b12499b84f80d6e66e601763f21114f5ac9b01bb1daacf54cd9 \
     --hash=sha256:3341e5c688124381833529886fea59351681f4f42c10dcc50000096680d49555
-    # via -r projects/ai/gen-media/notebooks/product-recontext/requirements.in
+    # via -r requirements.in
 google-cloud-bigquery==3.40.0 \
     --hash=sha256:0469bcf9e3dad3cab65b67cce98180c8c0aacf3253d47f0f8e976f299b49b5ab \
     --hash=sha256:b3ccb11caf0029f15b29569518f667553fe08f6f1459b959020c83fbbd8f2e68
@@ -324,7 +324,7 @@ google-cloud-storage==2.19.0 \
     --hash=sha256:aeb971b5c29cf8ab98445082cbfe7b161a1f48ed275822f59ed3f1524ea54fba \
     --hash=sha256:cd05e9e7191ba6cb68934d8eb76054d9be4562aa89dbc4236feee4d7d51342b2
     # via
-    #   -r projects/ai/gen-media/notebooks/product-recontext/requirements.in
+    #   -r requirements.in
     #   google-cloud-aiplatform
 google-crc32c==1.8.0 \
     --hash=sha256:014a7e68d623e9a4222d663931febc3033c5c7c9730785727de2a81f87d5bab8 \
@@ -367,7 +367,7 @@ google-genai==1.47.0 \
     --hash=sha256:e3851237556cbdec96007d8028b4b1f2425cdc5c099a8dc36b72a57e42821b60 \
     --hash=sha256:ecece00d0a04e6739ea76cc8dad82ec9593d9380aaabef078990e60574e5bf59
     # via
-    #   -r projects/ai/gen-media/notebooks/product-recontext/requirements.in
+    #   -r requirements.in
     #   google-cloud-aiplatform
 google-resumable-media==2.8.0 \
     --hash=sha256:dd14a116af303845a8d932ddae161a26e86cc229645bc98b39f026f9b1717582 \
@@ -488,7 +488,7 @@ ipython-pygments-lexers==1.1.1 \
 ipywidgets==8.1.5 \
     --hash=sha256:3290f526f87ae6e77655555baba4f36681c555b8bdbbff430b70e52c34c86245 \
     --hash=sha256:870e43b1a35656a80c18c9503bbf2d16802db1cb487eec6fab27d683381dde17
-    # via -r projects/ai/gen-media/notebooks/product-recontext/requirements.in
+    # via -r requirements.in
 jedi==0.19.2 \
     --hash=sha256:4770dc3de41bde3966b02eb84fbcf557fb33cce26ad23da12c742fb50ecb11f0 \
     --hash=sha256:a8ef22bde8490f57fe5c7681a3c83cb58874daf72b4784de3cce5b6ef6edb5b9
@@ -629,7 +629,7 @@ matplotlib==3.8.0 \
     --hash=sha256:eee482731c8c17d86d9ddb5194d38621f9b0f0d53c99006275a12523ab021732 \
     --hash=sha256:f691b4ef47c7384d0936b2e8ebdeb5d526c81d004ad9403dfb9d4c76b9979a93 \
     --hash=sha256:f8b5a1bf27d078453aa7b5b27f52580e16360d02df6d3dc9504f3d2ce11f6309
-    # via -r projects/ai/gen-media/notebooks/product-recontext/requirements.in
+    # via -r requirements.in
 matplotlib-inline==0.2.1 \
     --hash=sha256:d56ce5156ba6085e00a9d54fead6ed29a9c47e215cd1bba2e976ef39f5710a76 \
     --hash=sha256:e1ee949c340d771fc39e241ea75683deb94762c8fa5f2927ec57c83c4dffa9fe
@@ -713,7 +713,7 @@ pandas==2.2.0 \
     --hash=sha256:f5be5d03ea2073627e7111f61b9f1f0d9625dc3c4d8dda72cc827b0c58a1d042 \
     --hash=sha256:f9670b3ac00a387620489dfc1bca66db47a787f4e55911f1293063a78b108df1 \
     --hash=sha256:fbc1b53c0e1fdf16388c33c3cca160f798d38aea2978004dd3f4d3dec56454c9
-    # via -r projects/ai/gen-media/notebooks/product-recontext/requirements.in
+    # via -r requirements.in
 parso==0.8.5 \
     --hash=sha256:034d7354a9a018bdce352f48b2a8a450f05e9d6ee85db84764e9b6bd96dafe5a \
     --hash=sha256:646204b5ee239c396d040b90f9e272e9a8017c630092bf59980beb62fd033887
@@ -815,7 +815,7 @@ pillow==12.1.1 \
     --hash=sha256:fc354a04072b765eccf2204f588a7a532c9511e8b9c7f900e1b64e3e33487090 \
     --hash=sha256:fc44ef1f3de4f45b50ccf9136999d71abb99dca7706bc75d222ed350b9fd2289
     # via
-    #   -r projects/ai/gen-media/notebooks/product-recontext/requirements.in
+    #   -r requirements.in
     #   matplotlib
 prompt-toolkit==3.0.52 \
     --hash=sha256:28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855 \
@@ -832,7 +832,7 @@ protobuf==6.33.5 \
     --hash=sha256:1fe3730068fcf2e595816a6c34fe66eeedd37d51d0400b72fabc848811fdc1bc \
     --hash=sha256:dc2e61bca3b10470c1912d166fe0af67bfc20eb55971dcef8dfa48ce14f0ed91
     # via
-    #   -r projects/ai/gen-media/notebooks/product-recontext/requirements.in
+    #   -r requirements.in
     #   google-api-core
     #   google-cloud-aiplatform
     #   google-cloud-resource-manager
@@ -987,9 +987,9 @@ pydantic-core==2.41.5 \
     --hash=sha256:f41eb9797986d6ebac5e8edff36d5cef9de40def462311b3eb3eeded1431e425 \
     --hash=sha256:f547144f2966e1e16ae626d8ce72b4cfa0caedc7fa28052001c94fb2fcaa1c52
     # via pydantic
-pygments==2.19.2 \
-    --hash=sha256:636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887 \
-    --hash=sha256:86540386c03d588bb81d44bc3928634ff26449851e99741617ecb9037ee5ec0b
+pygments==2.20.0 \
+    --hash=sha256:6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f \
+    --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
     # via
     #   ipython
     #   ipython-pygments-lexers
