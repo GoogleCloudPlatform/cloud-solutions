@@ -1,4 +1,4 @@
-google-cloud-aiplatform==1.128.0
+google-cloud-aiplatform==1.133.0
 google-cloud-storage==2.19.0
 google-genai==1.47.0
 pandas==2.2.0
