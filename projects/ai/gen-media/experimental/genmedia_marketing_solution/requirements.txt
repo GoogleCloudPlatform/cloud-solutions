@@ -799,9 +799,9 @@ google-auth-httplib2==0.3.1 \
     --hash=sha256:0af542e815784cb64159b4469aa5d71dd41069ba93effa006e1916b1dcd88e55 \
     --hash=sha256:682356a90ef4ba3d06548c37e9112eea6fc00395a11b0303a644c1a86abc275c
     # via google-api-python-client
-google-cloud-aiplatform==1.145.0 \
-    --hash=sha256:4d1c31797a8bd8f3342ed5f186dd30d1f6bca73ddbee2bde452777100d2ddc11 \
-    --hash=sha256:7894c4f3d2684bdb60e9a122004c01678e3b585174a27298ae7a3ed1e5eaf3bd
+google-cloud-aiplatform==1.146.0 \
+    --hash=sha256:3b95bc6c5a49b1341153b6e20c2d6139fde76a908c335116222db3bd496c4b51 \
+    --hash=sha256:bd1912841905c2c7b49cc65726aaa1c0cc41df8474ca427d2f8af09bb72c0e3d
     # via
     #   -r requirements.in
     #   google-adk
@@ -1099,7 +1099,6 @@ grpcio==1.80.0 \
     #   google-cloud-iam
     #   google-cloud-logging
     #   google-cloud-monitoring
-    #   google-cloud-pubsub
     #   google-cloud-resource-manager
     #   google-cloud-secret-manager
     #   google-cloud-speech
