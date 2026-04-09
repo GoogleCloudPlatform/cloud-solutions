@@ -28,8 +28,8 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jasmine": "^6.0.0",
-    "@types/node": "^20.19.33",
-    "jasmine": "^6.0.0",
+    "@types/node": "^20.19.39",
+    "jasmine": "^6.1.0",
     "jasmine-console-reporter": "^3.1.0",
     "typescript": "^5.9.3"
   },
@@ -39,6 +39,6 @@
     "pino": "^10.3.1"
   },
   "engines": {
-    "node": ">=20.20.0"
+    "node": ">=20.20.2"
   }
 }
