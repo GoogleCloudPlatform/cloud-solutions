@@ -21,7 +21,7 @@ AlloyDB for PostgreSQL using Database Migration Service like the diagram below.
 
 ## Setup guide
 
-1.  Clone "cloud-solutions" repo from Github with bellow command.
+1.  Clone "cloud-solutions" repo from Github with below command.
 
       ```shell
       git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git
