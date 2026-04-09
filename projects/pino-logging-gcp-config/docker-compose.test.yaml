@@ -19,7 +19,7 @@
 services:
   node_20_tests:
     container_name: node_20_tests
-    image: node:20.20.0-slim
+    image: node:20.20.2-slim
     working_dir: /the-repo/projects/pino-logging-gcp-config
     entrypoint: ["/bin/bash", "-e", "-x", "-c"]
     command:
@@ -29,7 +29,7 @@ services:
 
   node_22_tests:
     container_name: node_22_tests
-    image: node:22.22.0-slim
+    image: node:22.22.2-slim
     working_dir: /the-repo/projects/pino-logging-gcp-config
     entrypoint: ["/bin/bash", "-e", "-x", "-c"]
     command:
@@ -42,7 +42,7 @@ services:
 
   node_24_tests:
     container_name: node_24_tests
-    image: node:24.13.0-slim
+    image: node:24.14.1-slim
     working_dir: /the-repo/projects/pino-logging-gcp-config
     entrypoint: ["/bin/bash", "-e", "-x", "-c"]
     command:
