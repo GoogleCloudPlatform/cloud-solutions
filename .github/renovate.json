@@ -208,6 +208,11 @@
       "commitMessagePrefix": "chore(deps): [k8s-hybrid-neg-controller]"
     },
     {
+      "matchFileNames": ["projects/lab2life/**"],
+      "groupName": "lab2life",
+      "commitMessagePrefix": "chore(deps): [lab2life]"
+    },
+    {
       "matchFileNames": ["projects/like-scelsius-but-better/**"],
       "groupName": "like-scelsius-but-better",
       "commitMessagePrefix": "chore(deps): [like-scelsius-but-better]"
