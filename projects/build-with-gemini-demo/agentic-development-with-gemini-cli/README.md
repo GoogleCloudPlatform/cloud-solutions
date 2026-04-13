@@ -856,8 +856,8 @@ functionality in the browser.
     ```markdown
     Using the @browser_agent, verify external access to the Swagger UI:
     1. Read the Load Balancer IP from `@k8s-context.md`.
-    2. Open the Swagger UI for the customer service at
-        `http://<LOAD_BALANCER_IP>/customers/swagger-ui/index.html`.
+    2. Open the Swagger UI for the order service at
+        `http://<LOAD_BALANCER_IP>/swagger-ui/index.html`.
     3. Verify that the UI loads and execute a `GET` request through it to
         confirm it is interactive.
     ```

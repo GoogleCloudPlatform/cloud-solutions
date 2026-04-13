@@ -14,8 +14,20 @@
 
 
 # Cloud SQL Client role for the Kubernetes Service Account
-resource "google_project_iam_member" "cloud_sql_client" {
+resource "google_project_iam_member" "cloud_sql_client_customer" {
   project = data.google_project.project.project_id
   role    = "roles/cloudsql.client"
-  member  = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${data.google_project.project.project_id}.svc.id.goog/subject/ns/ecommerce/sa/java-backend-ksa"
+  member  = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${data.google_project.project.project_id}.svc.id.goog/subject/ns/ecommerce/sa/customer-sa"
+}
+
+resource "google_project_iam_member" "cloud_sql_client_order" {
+  project = data.google_project.project.project_id
+  role    = "roles/cloudsql.client"
+  member  = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${data.google_project.project.project_id}.svc.id.goog/subject/ns/ecommerce/sa/order-sa"
+}
+
+resource "google_project_iam_member" "cloud_sql_client_product" {
+  project = data.google_project.project.project_id
+  role    = "roles/cloudsql.client"
+  member  = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${data.google_project.project.project_id}.svc.id.goog/subject/ns/ecommerce/sa/product-sa"
 }

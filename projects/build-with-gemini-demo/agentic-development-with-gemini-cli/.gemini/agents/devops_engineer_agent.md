@@ -73,10 +73,20 @@ code, container orchestration, and local deployment configurations.
       the pod being killed.
 - **Cloud SQL Integration**: Always use the Cloud SQL Auth Proxy sidecar
   (`gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.2`) when connecting to
-  Cloud SQL from GKE.
-- **GKE Gateway**: Use the Gateway API (`Gateway` and `HTTPRoute` resources)
-  instead of legacy Ingress. Use the `gke-l7-gxlb` gateway class for external
-  load balancing.
+  Cloud SQL from GKE. If the Cloud SQL instance only has a private IP, ensure
+  you pass the --private-ip flag as a separate argument in the container args.
+- **GKE Gateway**:
+    - Use the Gateway API (`Gateway` and `HTTPRoute` resources)
+      instead of legacy Ingress. Use the `gke-l7-gxlb` gateway class for
+      external load balancing.
+    - To bind a reserved static IP to the Gateway, use the
+      `spec.addresses` field with `type: NamedAddress` instead of using
+      annotations.
+    - Setting readiness probes in the Deployment does not suffice for the
+      external load balancer. If the application requires a specific health
+      check path (e.g., /actuator/health/readiness), create and apply a
+      HealthCheckPolicy custom resource targeting the Service to update the Load
+      Balancer health check path.
 - **Resource Requests**: Set conservative requests for Java apps on GKE (e.g.,
   `150m CPU`, `384Mi Memory`) to avoid quota issues.
 - **Operations**:
