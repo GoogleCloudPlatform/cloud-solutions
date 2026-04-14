@@ -56,11 +56,11 @@ secure file access.
 
 These custom commands help you with planning and implementing ADK agents.
 
-1.  `/plan:new` - this command leverages provided documentation (GEMINI.md,
+1.  `/adk-plan:new` - this command leverages provided documentation (GEMINI.md,
     AGENTS.txt) to generate an implementation plan, ensuring adherence to best
     practices.
 
-1.  `/plan:impl` - this command uses the implementation plan to generate the
+1.  `/adk-plan:impl` - this command uses the implementation plan to generate the
     necessary Python files, reducing boilerplate and focusing on ADK
     requirements.
 
@@ -108,7 +108,11 @@ These custom commands help you with planning and implementing ADK agents.
 1.  Send prompt to create implementation plan:
 
     ```text
-    /plan:new Build a customer support ADK agent that allows users to look up the full details of any ticket using its ID and also provide the ability to return a summary for any selected ticket. For summary requests return ticket description. Generate 20 sample tickets (each with an integer based ID, title, and description) and use them as an in-memory db.
+    /adk-plan:new Build a customer support ADK agent that allows users to look
+    up the full details of any ticket using its ID and also provide the ability
+    to return a summary for any selected ticket. For summary requests return
+    ticket description. Generate 20 sample tickets (each with an integer based
+    ID, title, and description) and use them as an in-memory db.
     ```
 
     Review generated plan and request implementation. You can find an example
@@ -119,7 +123,8 @@ These custom commands help you with planning and implementing ADK agents.
 1.  Send prompt to implement the plan:
 
     ```text
-    /plan:impl implement the plan and generate a requirements.txt file for more reproducible builds.
+    /adk-plan:impl implement the plan and generate a requirements.txt
+    file for more reproducible builds.
     ```
 
     Review and approve tools and suggested code changes.
@@ -212,9 +217,13 @@ rating to a menu service), and automatic JIRA updates.
     ```text
     Title: Update Menu service
 
-    Update Menu service: 1. add new fields: description and rating to Menu entity 2. update other dependencies where Menu entity is used in the code, eg MenuResource. 3. Add unit tests for all methods, including new fields.
+    Update Menu service:
+    1. Add new fields: description and rating to Menu entity.
+    2. Update other dependencies where Menu entity is used in the code, eg MenuResource.
+    3. Add unit tests for all methods, including new fields.
 
-    Link to Confluence page: https://YOUR-ORG.atlassian.net/wiki/spaces/SD/pages/87785484/Menu-Service+Rating+capabilities
+    Link to Confluence page:
+    https://YOUR-ORG.atlassian.net/wiki/spaces/SD/pages/87785484/Menu-Service+Rating+capabilities
     ```
 
 ### Prepare the environment for Atlassian integration
@@ -297,8 +306,8 @@ rating to a menu service), and automatic JIRA updates.
     I will approve the plan before you can start implementation.
 
     Update Menu service:
-    1. add new fields: description and rating to Menu entity
-    2. update other dependencies where Menu entity is used in the code, eg MenuResource.
+    1. Add new fields: description and rating to Menu entity.
+    2. Update other dependencies where Menu entity is used in the code, eg MenuResource.
     3. Add unit tests for all methods, including new fields.
 
     Rating must be an integer value from 1 to 5.

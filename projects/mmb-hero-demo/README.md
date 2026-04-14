@@ -958,11 +958,11 @@ secure file access.
 
 These custom commands help you in both planning and implementing ADK agents.
 
-1.  `/plan:new` - this command leverages provided documentation (GEMINI.md,
+1.  `/adk-plan:new` - this command leverages provided documentation (GEMINI.md,
     AGENTS.md) to generate an implementation plan, ensuring adherence to best
     practices.
 
-1.  `/plan:impl` - this command uses the implementation plan to generate the
+1.  `/adk-plan:impl` - this command uses the implementation plan to generate the
     necessary Python files, reducing boilerplate and focusing on ADK
     requirements.
 
@@ -998,7 +998,7 @@ These custom commands help you in both planning and implementing ADK agents.
 1.  Send prompt to create implementation plan:
 
     ```text
-    /plan:new Build a customer support ADK agent that allows users to look up the full details of any ticket using its ID and also provide the ability to return a summary for any selected ticket. For summary requests return ticket description. Generate 20 sample tickets (each with an integer based ID, title, and description) and use them as an in-memory db.
+    /adk-plan:new Build a customer support ADK agent that allows users to look up the full details of any ticket using its ID and also provide the ability to return a summary for any selected ticket. For summary requests return ticket description. Generate 20 sample tickets (each with an integer based ID, title, and description) and use them as an in-memory db.
     ```
 
     Review generated plan and request implementation. You can find an example
@@ -1009,7 +1009,7 @@ These custom commands help you in both planning and implementing ADK agents.
 1.  Send prompt to implement the plan:
 
     ```text
-    /plan:impl implement the plan and generate a requirements.txt file for more reproducible builds.
+    /adk-plan:impl implement the plan and generate a requirements.txt file for more reproducible builds.
     ```
 
     Review and approve tools and suggested code changes.
