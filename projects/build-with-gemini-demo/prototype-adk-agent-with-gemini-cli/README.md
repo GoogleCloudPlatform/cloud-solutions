@@ -45,8 +45,7 @@ These custom commands help you in both planning and implementing ADK agents.
     ```bash
     git clone --filter=blob:none --no-checkout https://github.com/GoogleCloudPlatform/cloud-solutions
     cd cloud-solutions
-    git sparse-checkout init --cone
-    git sparse-checkout set projects/build-with-gemini-demo/prototype-adk-agent-with-gemini-cli
+    git sparse-checkout set --cone projects/build-with-gemini-demo/prototype-adk-agent-with-gemini-cli
     git checkout
     cd projects/build-with-gemini-demo/prototype-adk-agent-with-gemini-cli
     ```

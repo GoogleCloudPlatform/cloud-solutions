@@ -37,14 +37,11 @@ To follow this demo, you need:
 1.  Clone the repository and set the working directory:
 
     ```bash
-    git clone https://github.com/GoogleCloudPlatform/cloud-solutions && \
+    git clone --filter=blob:none --no-checkout https://github.com/GoogleCloudPlatform/cloud-solutions
     cd cloud-solutions
-    ```
-
-1.  Change the working directory:
-
-    ```bash
-    cd "$(git rev-parse --show-toplevel)/projects/build-with-gemini-demo/prototype-with-gemini-cli-conductor"
+    git sparse-checkout set --cone projects/build-with-gemini-demo/prototype-with-gemini-cli-conductor
+    git checkout
+    cd projects/build-with-gemini-demo/prototype-with-gemini-cli-conductor
     ```
 
 ### Start prototyping

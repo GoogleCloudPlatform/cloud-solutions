@@ -72,8 +72,10 @@ These custom commands help you with planning and implementing ADK agents.
 1.  Clone the repository and set the working directory:
 
     ```bash
-    git clone https://github.com/GoogleCloudPlatform/cloud-solutions && \
+    git clone --filter=blob:none --no-checkout https://github.com/GoogleCloudPlatform/cloud-solutions
     cd cloud-solutions
+    git sparse-checkout set --cone projects/build-with-gemini-demo
+    git checkout
     ```
 
 ### Start building the agent
