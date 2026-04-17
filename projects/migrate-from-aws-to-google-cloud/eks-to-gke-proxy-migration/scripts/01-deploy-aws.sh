@@ -15,14 +15,9 @@
 
 set -euo pipefail
 
-if [[ "${PREFIX}" == "[YOUR_PREFIX]" ]]; then
-  echo "ERROR: PREFIX not set in 00-setup-env.sh"
-  exit 1
-fi
-
 TF_DIR="terraform/aws"
 terraform -chdir=${TF_DIR} init
-terraform -chdir=${TF_DIR} apply -var="prefix=${PREFIX}" -auto-approve
+terraform -chdir=${TF_DIR} apply -auto-approve
 
 EKS_CLUSTER_NAME="$(terraform -chdir=${TF_DIR} output -raw cluster_name)"
 AWS_REGION="$(terraform -chdir=${TF_DIR} output -raw region)"
@@ -33,6 +28,7 @@ aws eks update-kubeconfig \
   --region "${AWS_REGION}"
 
 echo "==> deploying to EKS"
+kubectl apply -f k8s/namespace.yaml
 sed -e "s|CLOUD_PROVIDER_PLACEHOLDER|AWS|g" \
   -e "s|PLATFORM_PLACEHOLDER|Amazon EKS|g" \
   -e "s|CLUSTER_NAME_PLACEHOLDER|${EKS_CLUSTER_NAME}|g" \

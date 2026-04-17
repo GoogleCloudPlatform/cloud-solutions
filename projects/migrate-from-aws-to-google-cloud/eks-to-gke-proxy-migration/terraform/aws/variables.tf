@@ -18,11 +18,6 @@ variable "aws_region" {
   default     = "us-west-1"
 }
 
-variable "prefix" {
-  type        = string
-  description = "A short prefix for all AWS resources"
-}
-
 variable "node_instance_type" {
   type        = string
   description = "The instance type for EKS worker nodes"

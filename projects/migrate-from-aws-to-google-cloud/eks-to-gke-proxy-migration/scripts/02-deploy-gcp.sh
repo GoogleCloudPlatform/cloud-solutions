@@ -15,14 +15,9 @@
 
 set -euo pipefail
 
-if [[ "${PREFIX}" == "[YOUR_PREFIX]" ]]; then
-  echo "ERROR: PREFIX not set. Please set the PREFIX environment variable."
-  exit 1
-fi
-
 TF_DIR="terraform/gcp"
 terraform -chdir=${TF_DIR} init
-terraform -chdir=${TF_DIR} apply -var="project_id=${PROJECT_ID}" -var="prefix=${PREFIX}" -auto-approve
+terraform -chdir=${TF_DIR} apply -var="project_id=${PROJECT_ID}" -auto-approve
 
 GKE_CLUSTER="$(terraform -chdir=${TF_DIR} output -raw cluster_name)"
 GKE_GATEWAY_IP="$(terraform -chdir=${TF_DIR} output -raw gateway_ip)"
@@ -35,6 +30,7 @@ gcloud container clusters get-credentials "${GKE_CLUSTER}" \
   --project "${PROJECT_ID}"
 
 echo "==> deploying to GKE"
+kubectl apply -f k8s/namespace.yaml
 sed -e "s|CLOUD_PROVIDER_PLACEHOLDER|GCP|g" \
   -e "s|PLATFORM_PLACEHOLDER|Google Kubernetes Engine|g" \
   -e "s|CLUSTER_NAME_PLACEHOLDER|${GKE_CLUSTER}|g" \

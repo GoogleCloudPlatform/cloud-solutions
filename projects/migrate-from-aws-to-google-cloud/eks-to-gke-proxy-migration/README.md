@@ -72,10 +72,6 @@ To avoid continued charges, follow the instructions in [Clean up](#clean-up).
 
 1.  [Enable the GKE, Compute Engine, and Cloud NAT APIs](https://console.cloud.google.com/flows/enableapi?apiid=container.googleapis.com,compute.googleapis.com,networkmanagement.googleapis.com).
 
-> [!CAUTION] **Use a local environment.** Cloud Shell's 5GB disk limit is
-> insufficient, and its ephemeral sessions clears your environment variables
-> upon timeout.
-
 ### AWS permissions
 
 Your AWS credentials need permissions to create and manage the following
@@ -129,23 +125,37 @@ Balancer (ALB).
     aws configure
     ```
 
-1.  Set your resource prefix and deploy the source environment:
+1.  Clone the repository and change the working directory:
 
     ```sh
-    PREFIX=YOUR_PREFIX scripts/01-deploy-aws.sh
+    git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git
+    cd cloud-solutions/projects/migrate-from-aws-to-google-cloud/eks-to-gke-proxy-migration
     ```
 
-    Replace `YOUR_PREFIX` with a short identifier. The scripts prepend this
-    value to all resource names.
+1.  Deploy the source environment:
+
+    ```sh
+    ./scripts/01-deploy-aws.sh
+    ```
 
     The script provisions the following resources:
     - An EKS cluster
     - A Kubernetes Deployment and LoadBalancer Service
 
+    <!--
+        Disabling markdownlint MD046 because it interprets this note as a code
+        block, and flags it for using indentation instead of code fences.
+    -->
+    <!-- markdownlint-disable MD046 -->
+
+    !!! note "Local-only hostname"
+
         `proxy-demo.test` is a local-only hostname used throughout this tutorial
         as a stand-in for a real production domain. It is resolved within Docker
         containers using the `--add-host` feature, allowing you to test the
         migration without modifying your host's DNS settings.
+
+    <!-- markdownlint-enable MD046 -->
 
     Example output:
 
@@ -158,18 +168,19 @@ Balancer (ALB).
     ======================================================
     ```
 
-    1.  Export the `EKS_ALB_IP` programmatically from the Terraform output:
+    1.  Export the `EKS_ALB_IP` programmatically:
 
-    ```sh
-    export EKS_ALB_IP=$(terraform -chdir=terraform/aws output -raw lb_ip)
-    echo "EKS ALB IP: ${EKS_ALB_IP}"
-    ```
+        ```sh
+        export EKS_ALB_HOSTNAME=$(kubectl get svc proxy-demo -n app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+        export EKS_ALB_IP=$(dig +short "${EKS_ALB_HOSTNAME}" | head -1)
+        echo "EKS ALB IP: ${EKS_ALB_IP}"
+        ```
 
     1.  Verify the application:
 
-    ```sh
-    curl -s -o /dev/null -w "%{http_code}\n" -H "Host: proxy-demo.test" http://${EKS_ALB_IP}/
-    ```
+        ```sh
+        curl -s -o /dev/null -w "%{http_code}\n" -H "Host: proxy-demo.test" http://${EKS_ALB_IP}/
+        ```
 
     A `200` response confirms EKS is serving traffic.
 
@@ -225,7 +236,7 @@ the EKS endpoint.
 1.  Deploy the GKE infrastructure:
 
     ```sh
-    scripts/02-deploy-gcp.sh
+    ./scripts/02-deploy-gcp.sh
     ```
 
     This step takes approximately 10 minutes. The script provisions the
@@ -268,7 +279,7 @@ GKE is in the path but not yet serving requests.
 1.  Run the migration script:
 
     ```sh
-    scripts/03-migrate.sh
+    ./scripts/03-migrate.sh
     ```
 
     The script deploys the following resources:
@@ -428,7 +439,7 @@ point, stop and investigate before shifting more traffic.
 1.  **80/20** — Shift 20% of traffic to GKE:
 
     ```sh
-    scripts/04-test-traffic.sh 80 20
+    ./scripts/04-test-traffic.sh 80 20
     ```
 
     Example output:
@@ -475,7 +486,7 @@ point, stop and investigate before shifting more traffic.
 1.  **50/50** — Shift to an even split:
 
     ```sh
-    scripts/04-test-traffic.sh 50 50
+    ./scripts/04-test-traffic.sh 50 50
     ```
 
     Expected result: ~5 `AWS` and ~5 `Google Cloud`. On the Locust dashboard,
@@ -485,7 +496,7 @@ point, stop and investigate before shifting more traffic.
 1.  **20/80** — Shift the majority to GKE:
 
     ```sh
-    scripts/04-test-traffic.sh 20 80
+    ./scripts/04-test-traffic.sh 20 80
     ```
 
     Expected result: ~2 `AWS` and ~8 `Google Cloud`. Median latency on the
@@ -495,7 +506,7 @@ point, stop and investigate before shifting more traffic.
 1.  **0/100** — Complete the cutover:
 
     ```sh
-    scripts/04-test-traffic.sh 0 100
+    ./scripts/04-test-traffic.sh 0 100
     ```
 
     Expected result:
@@ -539,7 +550,7 @@ point, stop and investigate before shifting more traffic.
 
 1.  Reload `http://localhost:8080`. Every reload shows the blue GKE page.
 
-1.  Check the Locust dashboard `http://localhost:8089`. Confirm the test are
+1.  Check the Locust dashboard `http://localhost:8089`. Confirm the tests are
     steady before proceeding to decommission.
 
 #### Monitor the shift in Google Cloud console
@@ -605,6 +616,8 @@ traffic path.
     containers:
 
     ```sh
+    docker compose -f locust/docker-compose.yaml stop
+    docker compose -f locust/docker-compose.yaml logs locust
     docker compose -f locust/docker-compose.yaml down
     ```
 
@@ -664,16 +677,13 @@ project or destroy the individual resources.
 1.  Destroy the AWS resources:
 
     ```sh
-    terraform -chdir=terraform/aws destroy \
-      -var="prefix=${PREFIX}" \
-      -auto-approve
+    terraform -chdir=terraform/aws destroy -auto-approve
     ```
 
 1.  Destroy the Google Cloud resources:
 
     ```sh
-    terraform -chdir=terraform/gcp destroy \
-      -auto-approve
+    terraform -chdir=terraform/gcp destroy -auto-approve
     ```
 
 ## What's next

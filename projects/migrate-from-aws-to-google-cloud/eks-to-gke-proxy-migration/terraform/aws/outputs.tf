@@ -22,7 +22,3 @@ output "region" {
   value       = var.aws_region
 }
 
-output "lb_ip" {
-  description = "The IP address of the EKS Load Balancer"
-  value       = data.aws_lb.eks_lb.dns_name
-}

@@ -28,7 +28,7 @@ provider "aws" {
 }
 
 locals {
-  cluster_name = "${var.prefix}-eks"
+  cluster_name = "proxy-demo-eks"
   tags = {
     Project = "VmMigrationDemo1529"
     Env     = "Dev"
@@ -136,11 +136,4 @@ resource "aws_eks_node_group" "main" {
   ]
 }
 
-data "aws_lb" "eks_lb" {
-  tags = {
-    "kubernetes.io/cluster/${local.cluster_name}" = "owned"
-    "kubernetes.io/service/name"                  = "app/proxy-demo"
-  }
-  depends_on = [aws_eks_node_group.main]
-}
 
