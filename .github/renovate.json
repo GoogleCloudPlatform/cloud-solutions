@@ -188,6 +188,11 @@
       "commitMessagePrefix": "chore(deps): [gke-optimization]"
     },
     {
+      "matchFileNames": ["projects/hadoop-to-lakehouse-migration-demo/**"],
+      "groupName": "hadoop-to-lakehouse-migration-demo",
+      "commitMessagePrefix": "chore(deps): [hadoop-to-lakehouse-migration-demo]"
+    },
+    {
       "matchFileNames": ["projects/hive-bigquery-connector-demo/**"],
       "groupName": "hive-bigquery-connector-demo",
       "commitMessagePrefix": "chore(deps): [hive-bigquery-connector-demo]"
