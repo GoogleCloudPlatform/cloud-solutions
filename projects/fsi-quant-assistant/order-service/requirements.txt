@@ -292,7 +292,7 @@ fastapi==0.129.0 \
     --hash=sha256:61315cebd2e65df5f97ec298c888f9de30430dd0612d59d6480beafbc10655af \
     --hash=sha256:b4946880e48f462692b31c083be0432275cbfb6e2274566b1be91479cc1a84ec
     # via -r requirements.in
-google-api-core==2.29.0 \
+google-api-core[grpc]==2.29.0 \
     --hash=sha256:84181be0f8e6b04006df75ddfe728f24489f0af57c96a529ff7cf45bc28797f7 \
     --hash=sha256:d30bc60980daa36e314b5d5a3e5958b0200cb44ca8fa1be2b614e932b75a3ea9
     # via
@@ -309,11 +309,11 @@ google-cloud-alloydb==0.7.0 \
     --hash=sha256:7a88371ee1e3804d8d85678f9eccc5eed8a4a071f67db9aa96ff1ad7b14e8e7e \
     --hash=sha256:f50d478af2be78b9f337b37b6a58826b28ffeb99af20aa6a6f7a8eea7550d81e
     # via google-cloud-alloydb-connector
-google-cloud-alloydb-connector==1.12.0 \
+google-cloud-alloydb-connector[pg8000]==1.12.0 \
     --hash=sha256:8d17eece649dab32bfbefc0745aa6b2aa61185711815cb98d1304bb9ebde24ff \
     --hash=sha256:e8a634d59c17952ce380512fca79fe15792c1fcc1d49b49009851ee5de498016
     # via -r requirements.in
-googleapis-common-protos==1.72.0 \
+googleapis-common-protos[grpc]==1.72.0 \
     --hash=sha256:4299c5a82d5ae1a9702ada957347726b167f9f8d1fc352477702a1e851ff4038 \
     --hash=sha256:e55a601c1b32b52d7a3e65f43563e2aa61bcd737998ee672ac9b951cd49319f5
     # via
@@ -672,9 +672,9 @@ python-dateutil==2.9.0.post0 \
     --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
     --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
     # via pg8000
-python-dotenv==1.2.1 \
-    --hash=sha256:42667e897e16ab0d66954af0e60a9caa94f0fd4ecf3aaf6d2d260eec1aa36ad6 \
-    --hash=sha256:b81ee9561e9ca4004139c6cbba3a238c32b03e4894671e181b671e8cb8425d61
+python-dotenv==1.2.2 \
+    --hash=sha256:1d8214789a24de455a8b8bd8ae6fe3c6b69a5e3d64aa8a8e5d68e694bbcb285a \
+    --hash=sha256:2c371a91fbd7ba082c2c1dc1f8bf89ca22564a087c2c287cd9b662adde799cf3
     # via -r requirements.in
 requests==2.33.1 \
     --hash=sha256:18817f8c57c6263968bc123d237e3b8b08ac046f5456bd1e307ee8f4250d3517 \
