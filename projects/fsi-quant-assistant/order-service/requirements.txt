@@ -292,7 +292,7 @@ fastapi==0.129.0 \
     --hash=sha256:61315cebd2e65df5f97ec298c888f9de30430dd0612d59d6480beafbc10655af \
     --hash=sha256:b4946880e48f462692b31c083be0432275cbfb6e2274566b1be91479cc1a84ec
     # via -r requirements.in
-google-api-core==2.29.0 \
+google-api-core[grpc]==2.29.0 \
     --hash=sha256:84181be0f8e6b04006df75ddfe728f24489f0af57c96a529ff7cf45bc28797f7 \
     --hash=sha256:d30bc60980daa36e314b5d5a3e5958b0200cb44ca8fa1be2b614e932b75a3ea9
     # via
@@ -309,11 +309,11 @@ google-cloud-alloydb==0.7.0 \
     --hash=sha256:7a88371ee1e3804d8d85678f9eccc5eed8a4a071f67db9aa96ff1ad7b14e8e7e \
     --hash=sha256:f50d478af2be78b9f337b37b6a58826b28ffeb99af20aa6a6f7a8eea7550d81e
     # via google-cloud-alloydb-connector
-google-cloud-alloydb-connector==1.12.0 \
+google-cloud-alloydb-connector[pg8000]==1.12.0 \
     --hash=sha256:8d17eece649dab32bfbefc0745aa6b2aa61185711815cb98d1304bb9ebde24ff \
     --hash=sha256:e8a634d59c17952ce380512fca79fe15792c1fcc1d49b49009851ee5de498016
     # via -r requirements.in
-googleapis-common-protos==1.72.0 \
+googleapis-common-protos[grpc]==1.72.0 \
     --hash=sha256:4299c5a82d5ae1a9702ada957347726b167f9f8d1fc352477702a1e851ff4038 \
     --hash=sha256:e55a601c1b32b52d7a3e65f43563e2aa61bcd737998ee672ac9b951cd49319f5
     # via
@@ -664,9 +664,9 @@ pygments==2.20.0 \
     # via
     #   -r requirements.in
     #   pytest
-pytest==9.0.2 \
-    --hash=sha256:711ffd45bf766d5264d487b917733b453d917afd2b0ad65223959f59089f875b \
-    --hash=sha256:75186651a92bd89611d1d9fc20f0b4345fd827c41ccd5c299a868a05d70edf11
+pytest==9.0.3 \
+    --hash=sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9 \
+    --hash=sha256:b86ada508af81d19edeb213c681b1d48246c1a91d304c6c81a427674c17eb91c
     # via -r requirements.in
 python-dateutil==2.9.0.post0 \
     --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
