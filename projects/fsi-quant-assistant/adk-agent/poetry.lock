@@ -999,14 +999,14 @@ tqdm = ["tqdm"]
 
 [[package]]
 name = "google-adk"
-version = "1.28.0"
+version = "1.28.1"
 description = "Agent Development Kit"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "google_adk-1.28.0-py3-none-any.whl", hash = "sha256:8470c2e5a97bcef9a54283148be9f4ffaa88b3eefe3f55f269183f715d8830b6"},
-    {file = "google_adk-1.28.0.tar.gz", hash = "sha256:3c7ef1a518296641b992cc68ae4795987da48765f9788af37da1acc39db0f362"},
+    {file = "google_adk-1.28.1-py3-none-any.whl", hash = "sha256:ee7cdf90ba05737be3a2aa4867804324a02f2918bd810e746fe6416184e11511"},
+    {file = "google_adk-1.28.1.tar.gz", hash = "sha256:76e6ec4a13f981bd9c2c7782e8b37b0e973b570b699b750a52444998e8886ced"},
 ]
 
 [package.dependencies]
@@ -5246,4 +5246,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "d13c6d9b2f2b2eb7b1379974955bedac17435a3615e5319b9dda998e5f92a86e"
+content-hash = "3f41f9d2b66d82e8b8869567943e76d809d591b33b587acc1f68376eea3ff79b"

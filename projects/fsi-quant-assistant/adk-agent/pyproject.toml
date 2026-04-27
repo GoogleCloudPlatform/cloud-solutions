@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10,<3.12"
 
 dependencies = [
-    "google-adk==1.28.0",
+    "google-adk==1.28.1",
     "google-cloud-logging>=3.14.0,<4.0.0",
     "google-cloud-aiplatform[evaluation,agent-engines]>=1.143.0,<2.0.0",
     "protobuf>=6.33.6,<7.0.0",
