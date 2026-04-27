@@ -2,7 +2,7 @@
 
 # Third-party libraries
 pandas==2.2.2
-Pillow==12.1.1
+Pillow==12.2.0
 
 # Google Generative AI and Vertex AI SDKs
 google-genai>=1.45.0
