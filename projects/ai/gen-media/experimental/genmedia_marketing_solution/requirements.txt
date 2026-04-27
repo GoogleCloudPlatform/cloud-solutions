@@ -738,11 +738,11 @@ frozenlist==1.8.0 \
     # via
     #   aiohttp
     #   aiosignal
-google-adk==1.28.0 \
-    --hash=sha256:3c7ef1a518296641b992cc68ae4795987da48765f9788af37da1acc39db0f362 \
-    --hash=sha256:8470c2e5a97bcef9a54283148be9f4ffaa88b3eefe3f55f269183f715d8830b6
+google-adk==1.28.1 \
+    --hash=sha256:76e6ec4a13f981bd9c2c7782e8b37b0e973b570b699b750a52444998e8886ced \
+    --hash=sha256:ee7cdf90ba05737be3a2aa4867804324a02f2918bd810e746fe6416184e11511
     # via -r requirements.in
-google-api-core==2.30.1 \
+google-api-core[grpc]==2.30.1 \
     --hash=sha256:3be893babbb54a89c6807b598383ddf212112130e3d24d06c681b5d18f082e08 \
     --hash=sha256:7304ef3bd7e77fd26320a36eeb75868f9339532bfea21694964f4765b37574ee
     # via
@@ -769,7 +769,7 @@ google-api-python-client==2.193.0 \
     --hash=sha256:8f88d16e89d11341e0a8b199cafde0fb7e6b44260dffb88d451577cbd1bb5d33 \
     --hash=sha256:c42aa324b822109901cfecab5dc4fc3915d35a7b376835233c916c70610322db
     # via google-adk
-google-auth==2.49.1 \
+google-auth[pyopenssl,requests]==2.49.1 \
     --hash=sha256:16d40da1c3c5a0533f57d268fe72e0ebb0ae1cc3b567024122651c045d879b64 \
     --hash=sha256:195ebe3dca18eddd1b3db5edc5189b76c13e96f29e73043b923ebcf3f1a860f7
     # via
@@ -799,7 +799,7 @@ google-auth-httplib2==0.3.1 \
     --hash=sha256:0af542e815784cb64159b4469aa5d71dd41069ba93effa006e1916b1dcd88e55 \
     --hash=sha256:682356a90ef4ba3d06548c37e9112eea6fc00395a11b0303a644c1a86abc275c
     # via google-api-python-client
-google-cloud-aiplatform==1.145.0 \
+google-cloud-aiplatform[agent-engines]==1.145.0 \
     --hash=sha256:4d1c31797a8bd8f3342ed5f186dd30d1f6bca73ddbee2bde452777100d2ddc11 \
     --hash=sha256:7894c4f3d2684bdb60e9a122004c01678e3b585174a27298ae7a3ed1e5eaf3bd
     # via
@@ -945,7 +945,7 @@ google-resumable-media==2.8.2 \
     # via
     #   google-cloud-bigquery
     #   google-cloud-storage
-googleapis-common-protos==1.73.1 \
+googleapis-common-protos[grpc]==1.73.1 \
     --hash=sha256:13114f0e9d2391756a0194c3a8131974ed7bffb06086569ba193364af59163b6 \
     --hash=sha256:e51f09eb0a43a8602f5a915870972e6b4a394088415c79d79605a46d8e826ee8
     # via
@@ -2410,7 +2410,7 @@ pydantic-settings==2.13.1 \
     --hash=sha256:b4c11847b15237fb0171e1462bf540e294affb9b86db4d9aa5c01730bdbe4025 \
     --hash=sha256:d56fd801823dbeae7f0975e1f8c8e25c258eb75d278ea7abb5d9cebb01b56237
     # via mcp
-pyjwt==2.12.1 \
+pyjwt[crypto]==2.12.1 \
     --hash=sha256:28ca37c070cad8ba8cd9790cd940535d40274d22f80ab87f3ac6a713e6e8454c \
     --hash=sha256:c74a7a2adf861c04d002db713dd85f84beb242228e671280bf709d765b03672b
     # via mcp
