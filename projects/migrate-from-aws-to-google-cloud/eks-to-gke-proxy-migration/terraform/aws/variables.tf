@@ -41,3 +41,15 @@ variable "node_max_capacity" {
   description = "The maximum number of worker nodes in the EKS cluster"
   default     = 4
 }
+
+variable "project_name" {
+  description = "Value for the Project tag"
+  type        = string
+  default     = "EksGkeMigrationDemo1729"
+}
+
+variable "environment" {
+  description = "Value for the Env tag"
+  type        = string
+  default     = "Prod"
+}

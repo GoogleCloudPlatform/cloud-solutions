@@ -128,8 +128,11 @@ Balancer (ALB).
 1.  Clone the repository and change the working directory:
 
     ```sh
-    git clone https://github.com/GoogleCloudPlatform/cloud-solutions.git
-    cd cloud-solutions/projects/migrate-from-aws-to-google-cloud/eks-to-gke-proxy-migration
+    git clone --filter=blob:none --no-checkout https://github.com/GoogleCloudPlatform/cloud-solutions
+    cd cloud-solutions
+    git sparse-checkout set --cone projects/migrate-from-aws-to-google-cloud/eks-to-gke-proxy-migration
+    git checkout
+    cd projects/migrate-from-aws-to-google-cloud/eks-to-gke-proxy-migration
     ```
 
 1.  Deploy the source environment:
@@ -213,6 +216,7 @@ host's DNS settings.
     migration.
 
     Example baseline values:
+
     - **Throughput:** ~23 req/s
     - **Median latency:** 70 ms
     - **P99 latency:** ~140 ms
@@ -241,6 +245,7 @@ the EKS endpoint.
 
     This step takes approximately 10 minutes. The script provisions the
     following resources:
+
     - VPC with auto subnets
     - GKE Autopilot cluster with Gateway API enabled
     - Cloud Router and Cloud NAT
@@ -264,9 +269,13 @@ the EKS endpoint.
 
 In this stage, you shift traffic from EKS to GKE. The
 [EKS to GKE migration guide](https://docs.cloud.google.com/architecture/migrate-amazon-eks-to-gke)
-describes several approaches for traffic shifting, including DNS routing
-policies, Hybrid connectivity NEGs with Cloud Load Balancing, and a proxy with
-Cloud Service Mesh. This guide uses a GKE Gateway with HTTPRoute, which provides
+describes several approaches for traffic shifting, including:
+
+- DNS routing policies
+- Hybrid connectivity NEGs with Cloud Load Balancing
+- A proxy with Cloud Service Mesh.
+
+This guide uses a GKE Gateway with HTTPRoute, which provides
 weighted traffic splitting.
 
 ### Deploy your workloads
@@ -283,6 +292,7 @@ GKE is in the path but not yet serving requests.
     ```
 
     The script deploys the following resources:
+
     - GKE Gateway `proxy-demo-gateway` bound to the reserved static IP
     - NGINX proxy ConfigMap, Deployment, and ClusterIP Service with NEG
       annotation
@@ -402,7 +412,7 @@ containers to point at the GKE Gateway IP.
     are now going to the GKE Gateway, which routes 100% through the proxy to
     EKS.
 
-1.  Check the Locust dashboard `http://localhost:8089`. The cutover does not
+1.  Check the Locust dashboard at `http://localhost:8089`. The cutover does not
     cause any errors. If you see a brief latency spike during the DNS cutover,
     that's normal. It settles within a few seconds.
 
@@ -465,8 +475,8 @@ point, stop and investigate before shifting more traffic.
     Propagation window complete. Starting traffic test.
     Request 1: AWS
     Request 2: AWS
-    Request 3: AWS
-    Request 4: Google Cloud
+    Request 3: Google Cloud
+    Request 4: AWS
     Request 5: AWS
     Request 6: AWS
     Request 7: AWS
@@ -550,7 +560,7 @@ point, stop and investigate before shifting more traffic.
 
 1.  Reload `http://localhost:8080`. Every reload shows the blue GKE page.
 
-1.  Check the Locust dashboard `http://localhost:8089`. Confirm the tests are
+1.  Check the Locust dashboard at `http://localhost:8089`. Confirm the tests are
     steady before proceeding to decommission.
 
 #### Monitor the shift in Google Cloud console
@@ -643,9 +653,9 @@ traffic path.
     the Locust dashboard's charts tab, you can see the latency drop as traffic
     shifted from the proxy path to GKE.
 
-    The elevated maximum, 1700 ms, comes from GKE Autopilot's on-demand node
+    The elevated maximum of 1700 ms results from GKE Autopilot's on-demand node
     scheduling. The first requests to a freshly scheduled pod wait for the node
-    to provision. These outliers decrease after the cluster reaches steady
+    to provision. These outliers decrease after the cluster reaches a steady
     state.
 
 #### Key performance comparison

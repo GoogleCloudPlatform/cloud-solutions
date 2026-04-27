@@ -30,8 +30,8 @@ provider "aws" {
 locals {
   cluster_name = "proxy-demo-eks"
   tags = {
-    Project = "VmMigrationDemo1529"
-    Env     = "Dev"
+    Project = var.project_name
+    Env     = var.environment
   }
 }
 
