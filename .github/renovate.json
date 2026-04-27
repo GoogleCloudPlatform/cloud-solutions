@@ -183,6 +183,11 @@
       "commitMessagePrefix": "chore(deps): [gemini-powered-migrations-to-google-cloud]"
     },
     {
+      "matchFileNames": ["projects/generative-media-shot-production/**"],
+      "groupName": "generative-media-shot-production",
+      "commitMessagePrefix": "chore(deps): [generative-media-shot-production]"
+    },
+    {
       "matchFileNames": ["projects/gke-optimization/**"],
       "groupName": "gke-optimization",
       "commitMessagePrefix": "chore(deps): [gke-optimization]"
