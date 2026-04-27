@@ -10,7 +10,7 @@ authors = [
     {name = "Lavi Nigam", email = "lavinigam@google.com"},
 ]
 dependencies = [
-    "google-adk>=1.8.0",
+    "google-adk>=1.28.1",
 ]
 
 requires-python = ">=3.10,<3.13"
