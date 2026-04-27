@@ -1,7 +1,7 @@
 fastapi==0.129.0
 uvicorn==0.41.0
 pydantic==2.12.5
-pytest==9.0.2
+pytest==9.0.3
 httpx==0.28.1
 google-cloud-alloydb-connector[pg8000]==1.12.0
 sqlalchemy==2.0.46
