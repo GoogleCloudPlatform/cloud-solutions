@@ -738,9 +738,9 @@ frozenlist==1.8.0 \
     # via
     #   aiohttp
     #   aiosignal
-google-adk==1.28.0 \
-    --hash=sha256:3c7ef1a518296641b992cc68ae4795987da48765f9788af37da1acc39db0f362 \
-    --hash=sha256:8470c2e5a97bcef9a54283148be9f4ffaa88b3eefe3f55f269183f715d8830b6
+google-adk==1.28.1 \
+    --hash=sha256:76e6ec4a13f981bd9c2c7782e8b37b0e973b570b699b750a52444998e8886ced \
+    --hash=sha256:ee7cdf90ba05737be3a2aa4867804324a02f2918bd810e746fe6416184e11511
     # via -r requirements.in
 google-api-core==2.30.1 \
     --hash=sha256:3be893babbb54a89c6807b598383ddf212112130e3d24d06c681b5d18f082e08 \
