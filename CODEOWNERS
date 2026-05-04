@@ -3,6 +3,7 @@
 # Keep this list alphabetically ordered
 
 /projects/ai/agents/                                                  @allen-stephen
+/projects/ai/gen-media/ads-agent/                                     @luj20
 /projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/experimental/GetReadywithMe/                   @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/experimental/movieLenz-main/                   @tdigangi @luj20 @allen-stephen
