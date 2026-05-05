@@ -28,10 +28,10 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jasmine": "^6.0.0",
-    "@types/node": "^20.19.33",
+    "@types/node": "^24.12.2",
     "jasmine": "^6.0.0",
     "jasmine-console-reporter": "^3.1.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "@google-cloud/logging": "^11.2.1",

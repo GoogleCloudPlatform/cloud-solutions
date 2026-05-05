@@ -1,0 +1,37 @@
+[project]
+name = "marketing_agent"
+version = "5.20260410.1"
+description = "Combined Marketing Campaign Agent - Image Ads and Video Ads"
+authors = [{ name = "Layolin Jesudhass" }]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "google-adk==1.30.0",
+    "google-cloud-aiplatform[adk,agent-engines]==1.147.0",
+    "google-cloud-bigquery==3.38.0",
+    "google-genai==1.74.0",
+    "pydantic==2.12.0",
+    "pydantic-settings>=2.0.0",
+    "absl-py==2.3.1",
+    "python-dotenv==1.2.2",
+    "pandas==2.3.3",
+    "toolbox-core==0.5.3",
+    "moviepy==2.2.1",
+    "google-cloud-texttospeech==2.33.0",
+    "soundfile==0.13.1",
+    "aiohttp==3.13.4",
+    "adk_common",
+    "requests",
+    "Pillow>=10.0.0",
+    "lxml==6.1.0",
+    "httpx==0.28.1",
+    "google-cloud-storage",
+    "tenacity",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["marketing_agent"]
