@@ -11,9 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# pylint: disable=C0301, C0413, C0415, E0606, W0404, W0611, W0612, W0613, W0718, W1309, W1405, W1510, W1514
-
+# pylint: disable=C0301, C0413, C0415, E0606, W0102, W0104, W0404, W0611, W0612, W0613, W0718, W1203, W1309, W1405, W1510, W1514
 """Personalized Marketing Agent — End-to-end campaign generation with image ads and video ads."""
 
 import asyncio
@@ -224,6 +222,51 @@ def identify_inventory_opportunities(tool_context: ToolContext) -> list[dict]:
 
 
 
+async def display_product_image(
+    tool_context: ToolContext,
+    image_url: str,
+    product_name: str = "product",
+):
+    """Displays a product image inline.
+
+    Call this in Path B when the user provides their product
+    image URL.
+
+    Args:
+        image_url: The GCS URI or HTTPS URL of the product image.
+        product_name: Name of the product (used for the filename).
+    """
+    try:
+        img_bytes, _ = (
+            utils_agents.download_bytes_from_reference(image_url)
+        )
+        if img_bytes:
+            safe_name = product_name.replace(" ", "_")[:30]
+            product_media = GeneratedMedia(
+                filename=f"product_{safe_name}.png",
+                mime_type="image/png",
+                media_bytes=img_bytes,
+            )
+            await utils_agents.save_to_artifact_and_render_asset(
+                asset=product_media,
+                context=tool_context,
+                save_in_gcs=False,
+                save_in_artifacts=True,
+            )
+            tool_context.state["_product_image_displayed"] = True
+            return {
+                "status": "success",
+                "details": (
+                    f"Product image displayed for {product_name}"
+                ),
+            }
+    except Exception as e:
+        return {"status": "error", "details": str(e)}
+    return {
+        "status": "error",
+        "details": "Could not download image",
+    }
+
 
 async def get_product_by_sku(tool_context: ToolContext, sku: str) -> dict:
     """Retrieves a product and its associated brand information by SKU.
@@ -257,6 +300,7 @@ async def get_product_by_sku(tool_context: ToolContext, sku: str) -> dict:
                     asset=product_media, context=tool_context,
                     save_in_gcs=False, save_in_artifacts=True,
                 )
+                tool_context.state["_product_image_displayed"] = True
         except Exception:
             pass
 
@@ -906,6 +950,23 @@ async def setup_product_campaign(
     tool_context.state["PRODUCT_NAME"] = product_name
     tool_context.state[PRODUCT_IMAGE_URI_STATE_KEY] = product_image_uri
     tool_context.state[LOGO_IMAGE_URI_STATE_KEY] = logo_uri
+
+    # Display product image inline for Path B (Path A already shows via get_product_by_sku)
+    if product_image_uri and not tool_context.state.get("_product_image_displayed"):
+        try:
+            img_bytes, _ = utils_agents.download_bytes_from_reference(product_image_uri)
+            if img_bytes:
+                safe_name = product_name.replace(" ", "_")[:30]
+                product_media = GeneratedMedia(
+                    filename=f"product_{safe_name}.png", mime_type="image/png", media_bytes=img_bytes,
+                )
+                await utils_agents.save_to_artifact_and_render_asset(
+                    asset=product_media, context=tool_context,
+                    save_in_gcs=False, save_in_artifacts=True,
+                )
+                tool_context.state["_product_image_displayed"] = True
+        except Exception:
+            pass
     tool_context.state[GENERATED_GCS_URIS_STATE_KEY] = []
 
     # Store reference guidelines in session state for use by downstream generation steps
@@ -1283,7 +1344,11 @@ async def _generate_storyline(company_name: str, product_name: str, rationale: s
             f"- The 3 acts must flow like ONE continuous story, not 3 separate scenes\n"
             f"- Be WILDLY CREATIVE — surprise the viewer, break expectations, tell a story no one has seen before\n"
             f"- Think Nike 'Dream Crazy', Apple '1984', Old Spice 'The Man Your Man Could Smell Like'\n"
-            f"- NO generic product-on-table shots. Every frame must have PURPOSE, EMOTION, and VISUAL IMPACT\n\n"
+            f"- NO generic product-on-table shots. Every frame must have PURPOSE, EMOTION, and VISUAL IMPACT\n"
+            f"- Show the product in REAL-LIFE USAGE — people living their lives WITH the product naturally present\n"
+            f"- The product is a background hero — it's THERE, it's VISIBLE, but the STORY is about the people using it\n"
+            f"- Example: a security camera sits on a shelf while kids play below, a whisky bottle on a dinner table while friends laugh\n"
+            f"- The product NEVER activates, moves, transforms, or does anything — it just EXISTS in the scene\n\n"
             f"Product details:\n"
             f"Brand: {company_name}\nProduct: {product_name}\nAd concept: {rationale}\n"
             f"{guidelines_context}{persona_context}\n"
@@ -1312,6 +1377,9 @@ async def _generate_storyline(company_name: str, product_name: str, rationale: s
             f"- Objects do NOT move by themselves — only a human hand can move an object\n"
             f"- Objects do NOT teleport, change location, fall over, roll away, or disappear\n"
             f"- The product does NOT open, close, fold, unfold, transform, or animate on its own\n"
+            f"- The product has NO moving parts in the video — no lens opening, no shutter, no lights turning on\n"
+            f"- The product sits MOTIONLESS like a prop — only people and environment move around it\n"
+            f"- The motion_prompt must NEVER describe the product activating, powering on, or doing anything mechanical\n"
             f"- People walk naturally, sit naturally, hold things naturally — no supernatural movements\n"
             f"- Every scene must look like something that ACTUALLY HAPPENS in real life\n"
             f"- If you wouldn't see it in a real TV commercial filmed with real cameras, DON'T include it\n\n"
@@ -2196,10 +2264,14 @@ async def _generate_full_video_ad(
             f"Only a human hand physically touching an object can move it. "
             f"OBJECTS DO NOT CHANGE LOCATION: if vegetables are on the countertop, they stay on the countertop — "
             f"they do NOT suddenly appear on the island or a different surface. Everything stays where it was placed. "
-            f"The product {product_name} must NEVER change size, open, close, fold, unfold, or transform. "
-            f"It is a STATIC retail object that sits still unless a person picks it up. "
+            f"PRODUCT {product_name} — ABSOLUTE RULES: "
+            f"The product must NEVER change size, open, close, fold, unfold, transform, or animate. "
+            f"NO lens opening, NO shutter closing, NO parts moving, NO lights blinking on/off, NO mechanical motion. "
+            f"The product is a SEALED, STATIC, MOTIONLESS object — like a prop on a shelf. "
+            f"It does NOT do anything. It just SITS THERE. Only the ENVIRONMENT and PEOPLE move around it. "
+            f"The product looks EXACTLY like the reference photo at ALL times — no added parts, no removed parts. "
+            f"If it is a camera, it does NOT zoom, pan, tilt, open a lens, or activate. It is OFF and STILL. "
             f"PEOPLE MOVE NATURALLY: walking is smooth, arms move realistically, no sudden jumps or teleporting. "
-            f"A person putting down a water bottle keeps it on the surface — it does NOT fall or roll away. "
             f"Think of this as a REAL video shot with a REAL camera — nothing magical, nothing impossible."
         )
 
@@ -2780,6 +2852,7 @@ root_agent = Agent(
         # --- Retail Pipeline ---
         identify_inventory_opportunities,
         get_product_by_sku,
+        display_product_image,
 
         # --- Sub-agents ---
         AgentTool(agent=trend_spotter_agent.agent),
