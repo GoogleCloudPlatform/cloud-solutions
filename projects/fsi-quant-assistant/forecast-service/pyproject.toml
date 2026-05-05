@@ -10,5 +10,5 @@ package-mode = false
 python = ">=3.11,<3.12"
 fastapi = "^0.109.0"
 uvicorn = "^0.27.0"
-python-dotenv = "^1.2.1"
+python-dotenv = "^1.2.2"
 numpy = "^2.3.5"
