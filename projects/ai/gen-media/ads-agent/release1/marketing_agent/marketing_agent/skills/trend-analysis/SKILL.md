@@ -1,8 +1,8 @@
-<!-- markdownlint-disable -->
 ---
 name: trend-analysis
 description: "Market trend analysis and product-trend mapping expertise. Covers how to interpret trend data, align products to cultural moments, and create trend-informed campaign angles. Load this skill during the Creative Research Phase when running trend_spotter and product_trend_mapper."
 ---
+<!-- markdownlint-disable -->
 
 # Trend Analysis Skill
 

@@ -150,9 +150,9 @@ gs://<your-artifacts-bucket>/
 │   ├── ELEC-001.png
 │   └── ...
 ├── samples/                     # Sample brand assets (from Step 2)
-│   ├── nestguard_pro.png
-│   ├── securevision_logo.png
-│   └── nestguard_pro_marketing_guide.md
+│   ├── <your-product>.png
+│   ├── <your-logo>.png
+│   └── <your-marketing-guide>.md
 ├── logo.png                     # Default logo (upload your own)
 └── {ProductName}_{Persona}/     # Generated assets (created by the agent)
     ├── asset_sheet_*.png

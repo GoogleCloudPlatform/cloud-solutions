@@ -1,8 +1,8 @@
-<!-- markdownlint-disable -->
 ---
 name: platform-specs
 description: "Ad platform specifications and best practices. Covers Google Ads, YouTube, Instagram, TikTok, and Meta ad formats, dimensions, character limits, and optimization tips. Load this skill when creating platform-specific content or recommending campaign settings."
 ---
+<!-- markdownlint-disable -->
 
 # Platform Specs Skill
 

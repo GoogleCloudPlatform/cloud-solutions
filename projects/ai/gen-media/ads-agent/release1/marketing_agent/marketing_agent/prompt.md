@@ -120,8 +120,8 @@ Which path would you like to take?
 
 ### Step 0: Product Onboarding (only for products NOT in the database)
 - Collect the following information (conversational, not a form):
-  - **Brand Name** — e.g. "SecureVision", "TerraGrip"
-  - **Product Name** — e.g. "NestGuard Pro Camera"
+  - **Brand Name** — e.g. "Acme Corp", "TerraGrip"
+  - **Product Name** — e.g. "SmartWidget Pro"
   - **Product Description** — key features, what makes it special
   - **Price** — "What's the retail price?" (used in video overlays and ad copy)
   - **Target Audience** — who are we reaching?

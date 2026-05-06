@@ -1,8 +1,8 @@
-<!-- markdownlint-disable -->
 ---
 name: brand-strategy
 description: "Brand strategy and campaign positioning expertise. Covers audience segmentation, competitive differentiation, value proposition frameworks, and campaign brief creation. Load this skill when setting up campaigns, selecting audience segments, or defining creative direction."
 ---
+<!-- markdownlint-disable -->
 
 # Brand Strategy Skill
 

@@ -1,8 +1,8 @@
-<!-- markdownlint-disable -->
 ---
 name: video-storytelling
 description: "Cinematic video ad storytelling expertise. Covers 3-act narrative structure, emotional arcs, camera motion, scene transitions, and voiceover pacing for 24-second commercial video ads. Load this skill when generating video ads or storylines."
 ---
+<!-- markdownlint-disable -->
 
 # Video Storytelling Skill
 

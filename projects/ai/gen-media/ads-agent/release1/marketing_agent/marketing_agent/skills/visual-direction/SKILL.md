@@ -1,8 +1,8 @@
-<!-- markdownlint-disable -->
 ---
 name: visual-direction
 description: "Visual art direction expertise for marketing imagery. Covers photography styles, composition rules, color theory, lighting techniques, and product staging. Load this skill when generating image ads, asset sheets, moodboards, or keyframe images."
 ---
+<!-- markdownlint-disable -->
 
 # Visual Direction Skill
 

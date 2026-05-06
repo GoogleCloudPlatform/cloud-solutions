@@ -1,8 +1,8 @@
-<!-- markdownlint-disable -->
 ---
 name: ad-copywriting
 description: "Google Ads copywriting expertise. Covers Responsive Search Ad (RSA) best practices, headline formulas, description frameworks, and character limits. Load this skill when generating text ads, headlines, or ad copy."
 ---
+<!-- markdownlint-disable -->
 
 # Ad Copywriting Skill
 
@@ -24,7 +24,7 @@ You MUST output ads in this exact JSON structure:
 
 ### Headline Formulas That Convert
 - `[Benefit] + [Product]` → "Ultra-Clear 4K Security"
-- `[Brand] + [Category]` → "SecureVision Smart Cameras"
+- `[Brand] + [Category]` → "Acme Smart Cameras"
 - `[Number] + [Benefit]` → "24/7 AI-Powered Protection"
 - `[Question]` → "Need Smarter Security?"
 - `[Action] + [Benefit]` → "See Everything, Miss Nothing"

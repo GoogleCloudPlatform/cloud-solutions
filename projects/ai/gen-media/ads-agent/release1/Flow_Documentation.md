@@ -456,9 +456,9 @@ assets/
 │   ├── ELEC-001.png
 │   └── ... (84 images)
 └── samples/                     # Sample brand assets for demo
-    ├── nestguard_pro.png        # Sample product photo
-    ├── securevision_logo.png    # Sample brand logo
-    └── nestguard_pro_marketing_guide.md  # Sample reference doc
+    ├── <your-product>.png       # Sample product photo
+    ├── <your-logo>.png          # Sample brand logo
+    └── <your-marketing-guide>.md  # Sample reference doc
 ```
 
 ### Setup Steps
