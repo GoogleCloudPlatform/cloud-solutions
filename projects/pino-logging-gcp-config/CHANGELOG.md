@@ -2,6 +2,14 @@
 
 <!-- markdownlint-disable -->
 
+## [1.3.4](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.3...pino-logging-gcp-config-v1.3.4) (2026-05-06)
+
+
+### Bug Fixes
+
+* **deps:** [pino-logging-gcp-config] Update pino-logging-gcp-config ([8d74958](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/8d7495852a86d125f124ac282f5d7bbb69365f3e))
+* **deps:** update npm dependencies and docker versions ([351012a](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/351012a2d1dedab24e1edb795db2b96873955a98))
+
 ## [1.3.3](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.2...pino-logging-gcp-config-v1.3.3) (2026-02-20)
 
 
