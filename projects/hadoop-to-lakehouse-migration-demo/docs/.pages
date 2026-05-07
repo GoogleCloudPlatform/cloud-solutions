@@ -1,0 +1,5 @@
+title: "Hadoop-to-Google Cloud Data Platform Journey"
+nav:
+  - "Overview": "README.md"
+  - "Reference Architecture": "reference_architecture.md"
+  - "User Journey": "user_journey.md"
