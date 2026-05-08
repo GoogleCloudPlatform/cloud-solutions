@@ -22,4 +22,5 @@
 **/*.cjs
 **/*.js
 **/*.mjs
+!config/lint/eslint.config.mjs
 **/*.jsx
