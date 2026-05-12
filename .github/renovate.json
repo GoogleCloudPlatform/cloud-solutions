@@ -223,6 +223,11 @@
       "commitMessagePrefix": "chore(deps): [lab2life]"
     },
     {
+      "matchFileNames": ["projects/legacy-detox-demo/**"],
+      "groupName": "legacy-detox-demo",
+      "commitMessagePrefix": "chore(deps): [legacy-detox-demo]"
+    },
+    {
       "matchFileNames": ["projects/like-scelsius-but-better/**"],
       "groupName": "like-scelsius-but-better",
       "commitMessagePrefix": "chore(deps): [like-scelsius-but-better]"
