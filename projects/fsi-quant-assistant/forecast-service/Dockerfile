@@ -41,7 +41,7 @@ RUN if [ "$USE_JAX" = "true" ]; then \
 # Copy configuration and install project dependencies
 COPY pyproject.toml poetry.lock ./
 RUN poetry export -f requirements.txt --output requirements.txt && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir --require-hashes -r requirements.txt
 
 
 # Stage 2: Final image
