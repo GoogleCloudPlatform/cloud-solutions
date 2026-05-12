@@ -50,9 +50,10 @@ extra_css:
   - stylesheets/extra.css
 repo_name: cloud-solutions
 repo_url: https://github.com/GoogleCloudPlatform/cloud-solutions
+# COPYRIGHT_YEAR is replaced by current year in mkdocs.sh
 copyright: |
   The projects contained in this repository are maintained by the Google Cloud Solutions Architects team.<br>
-  Copyright &copy; 2019-YYYY Google LLC  <a href="#__consent" style="float:right; font-size: 10px;">Change cookie settings</a><br>
+  Copyright &copy; 2019-COPYRIGHT_YEAR Google LLC  <a href="#__consent" style="float:right; font-size: 10px;">Change cookie settings</a><br>
   <a href='https://cloud.google.com/'><img src='https://googlecloudplatform.github.io/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
 plugins:
   - search
@@ -60,6 +61,9 @@ plugins:
       filename: .pages
       collapse_single_pages: true
   - mkdocstrings
+  - mermaid2:
+      # MERMAID_VERSION is replaced by current version in mkdocs.sh
+      version: MERMAID_VERSION
 markdown_extensions:
   - admonition
   - attr_list
@@ -78,7 +82,12 @@ markdown_extensions:
       pygments_lang_class: true
       line_spans: __span
       anchor_linenums: true
-  - pymdownx.superfences
+  - pymdownx.superfences:
+        # make exceptions to highlighting of code:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
   - pymdownx.inlinehilite
   - toc:
       permalink: true

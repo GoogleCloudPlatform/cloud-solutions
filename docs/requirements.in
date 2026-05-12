@@ -30,6 +30,7 @@ mkdocs-material
 mkdocs-redirects
 mkdocstrings[python]
 mkdocs-awesome-pages-plugin
+mkdocs-mermaid2-plugin
 
 # dependencies needed for kokoro run
 typing_extensions

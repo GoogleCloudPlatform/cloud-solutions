@@ -128,8 +128,15 @@ pip3 install \
   --require-hashes \
   -r "${SCRIPT_DIR}/requirements.txt"
 
-## Replace year placeholder in yaml copyright footer, creating build/mkdocs.yaml
-sed -s "s/YYYY/$(date +%Y)/" "${SCRIPT_DIR}/mkdocs.yaml" \
+# renovate: datasource=npm packageName=mermaid versioning=npm
+MERMAID_VERSION=10.9.6
+COPYRIGHT_YEAR="$(date +%Y)"
+
+## Replace placeholders in docs/mkdocs.yaml creating build/mkdocs.yaml
+sed \
+  -e "s/COPYRIGHT_YEAR/${COPYRIGHT_YEAR}/" \
+  -e "s/MERMAID_VERSION/${MERMAID_VERSION}/" \
+  "${SCRIPT_DIR}/mkdocs.yaml" \
   >"${BUILD_DIR}/mkdocs.yaml"
 
 # Disable Mkdocs 2.0 warning
