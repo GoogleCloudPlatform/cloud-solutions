@@ -1,0 +1,316 @@
+{
+  "id": "cca266b5-48b5-41f6-aa16-6630d8fa578f",
+  "revision": 0,
+  "last_node_id": 42,
+  "last_link_id": 36,
+  "nodes": [
+    {
+      "id": 41,
+      "type": "PreviewImage",
+      "pos": [1130.2796870004945, 52.66383183692174],
+      "size": [705.1288500697201, 526.9730010721105],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 35
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 4,
+      "type": "VHS_LoadImagePath",
+      "pos": [-1937.4928616365514, -248.69578898679293],
+      "size": [441.2487156815358, 367.8181829706265],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [30]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/shot_production/shot_production3_1.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/shot_production/shot_production3_1.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 39,
+      "type": "Gemini31FlashImage",
+      "pos": [-1414.4896697754612, 67.97361940345208],
+      "size": [680.8020693058638, 761.8314761608427],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 30
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Generated Image",
+          "type": "IMAGE",
+          "links": [36]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Gemini31FlashImage"
+      },
+      "widgets_values": [
+        "GEMINI_31_FLASH_IMAGE",
+        "use the reference image and change the front camera angle of this shot, make it a high angle wide shot looking down on the fun fair, with the blue inflatable character centrally framed\n\n",
+        "16:9",
+        "1K",
+        "PNG",
+        0.7,
+        1,
+        32,
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "",
+        "",
+        "global"
+      ]
+    },
+    {
+      "id": 42,
+      "type": "PreviewImage",
+      "pos": [-610.9940310451303, 410.9008887367816],
+      "size": [585.6321504078333, 585.2120796241779],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 36
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 5,
+      "type": "VHS_LoadImagePath",
+      "pos": [-160.9272550010431, -361.443294406474],
+      "size": [547.6424048336028, 425.72693402541665],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [33]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/shot_production/shot_production3_2.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/shot_production/shot_production3_2.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 40,
+      "type": "Gemini31FlashImage",
+      "pos": [435.1166056677415, 298.3272392231022],
+      "size": [569.9392181432431, 690.9817256241154],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 33
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Generated Image",
+          "type": "IMAGE",
+          "links": [35]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Gemini31FlashImage"
+      },
+      "widgets_values": [
+        "GEMINI_31_FLASH_IMAGE",
+        "change the camera angle in this shot, make it lower, almost on the ground, looking up and focusing on the blue inflatable.",
+        "16:9",
+        "1K",
+        "PNG",
+        0.7,
+        1,
+        32,
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "",
+        "",
+        "global"
+      ]
+    }
+  ],
+  "links": [
+    [30, 4, 0, 39, 0, "IMAGE"],
+    [33, 5, 0, 40, 0, "IMAGE"],
+    [35, 40, 0, 41, 0, "IMAGE"],
+    [36, 39, 0, 42, 0, "IMAGE"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.720360384179026,
+      "offset": [2052.5649229632495, 480.1520988486873]
+    },
+    "frontendVersion": "1.41.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

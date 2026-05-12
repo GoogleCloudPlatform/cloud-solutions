@@ -1,0 +1,168 @@
+{
+  "id": "b5a711bb-5b14-4525-9f6a-394e1412fe88",
+  "revision": 0,
+  "last_node_id": 7,
+  "last_link_id": 7,
+  "nodes": [
+    {
+      "id": 4,
+      "type": "VHS_LoadImagePath",
+      "pos": [-1849.1684047972665, -424.39241824618347],
+      "size": [532.6133866743605, 527.9796412084008],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [5]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/casting/casting_reference_to_image.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/casting/casting_reference_to_image.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "Gemini31FlashImage",
+      "pos": [-1122.1043067859018, -396.71440366433023],
+      "size": [826.720303622159, 748.4799249822443],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Generated Image",
+          "type": "IMAGE",
+          "links": [7]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Gemini31FlashImage"
+      },
+      "widgets_values": [
+        "GEMINI_31_FLASH_IMAGE",
+        "Use the reference image to generate an image. A highly detailed 3D render in a photorealistic CGI style shows two cute, chubby, blue, blob-like mascot characters, one large and one small, with pear-shaped bodies, stubby arms, and short legs, standing still side-by-side. The characters have simple, happy cartoon faces with two round white eyes with black pupils, thin black arching eyebrows, and a simple black curved line for a smile, and they are facing directly forward towards the camera in a friendly pose. The arms feature visible stitched seams, appearing as if they are made of a separate, attached piece of vinyl. They stand on a surface within a minimalist product photography studio with a seamless, plain, light gray infinity cove background. The composition is a centered, eye-level, full-body wide shot of both characters, leaving ample negative space around them. The scene is lit with soft, diffuse studio lighting that creates gentle, realistic shadows on the surface beneath the smooth, matte plastic or soft vinyl textured characters. The image is 4K.",
+        "16:9",
+        "1K",
+        "PNG",
+        0.7,
+        1,
+        32,
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "",
+        "",
+        "global"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "PreviewImage",
+      "pos": [-1.3106278086294012, -319.01947956987],
+      "size": [491.41668146306847, 401.75755726207376],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    }
+  ],
+  "links": [
+    [5, 4, 0, 6, 0, "IMAGE"],
+    [7, 6, 0, 7, 0, "IMAGE"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.1,
+      "offset": [1952.9916469847656, 624.2712495894012]
+    },
+    "frontendVersion": "1.41.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

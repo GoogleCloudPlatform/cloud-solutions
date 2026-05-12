@@ -1,0 +1,339 @@
+{
+  "id": "a796b24e-9b2c-4fc9-b4ea-a0723b579375",
+  "revision": 0,
+  "last_node_id": 8,
+  "last_link_id": 11,
+  "nodes": [
+    {
+      "id": 3,
+      "type": "VHS_LoadImagePath",
+      "pos": [
+        42.78778963893696,
+        321.451202810515
+      ],
+      "size": [
+        245.2001953125,
+        263.78553782077813
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/storyboard/storyboard_prop1.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/storyboard/storyboard_prop1.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 1,
+      "type": "VHS_LoadImagePath",
+      "pos": [
+        43.56156778325039,
+        1123.952527700549
+      ],
+      "size": [
+        321.45387133782094,
+        300.0310675003247
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/storyboard/storyboard_environment1.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/storyboard/storyboard_environment1.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "VHS_LoadImagePath",
+      "pos": [
+        35.7288097634595,
+        697.5387541910886
+      ],
+      "size": [
+        245.2001953125,
+        261.5804735429448
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/storyboard/storyboard_cast1.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/storyboard/storyboard_cast1.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": "Gemini31FlashImage",
+      "pos": [
+        606.4990335500191,
+        528.2047462432795
+      ],
+      "size": [
+        701.9816606599816,
+        702.3698443582673
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 7
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 8
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 9
+        },
+        {
+          "name": "image4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Generated Image",
+          "type": "IMAGE",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Gemini31FlashImage"
+      },
+      "widgets_values": [
+        "GEMINI_31_FLASH_IMAGE",
+        "A group of whimsical two blue characters from image2 joyfully eating fluffy pink cotton candy(reference image1) , set within a a fair environment(reference image3). Wide-angle cinematic frame, eye-level composition, soft volumetric lighting, high-detail 3D render style with vibrant colors.",
+        "16:9",
+        "1K",
+        "PNG",
+        0.7,
+        1,
+        32,
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "",
+        "",
+        "global"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "PreviewImage",
+      "pos": [
+        1663.1725753865019,
+        622.5791476162528
+      ],
+      "size": [
+        504.0799244594691,
+        353.73458410089415
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 11
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    }
+  ],
+  "links": [
+    [
+      7,
+      3,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      2,
+      0,
+      7,
+      1,
+      "IMAGE"
+    ],
+    [
+      9,
+      1,
+      0,
+      7,
+      2,
+      "IMAGE"
+    ],
+    [
+      11,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9587996713422838,
+      "offset": [
+        295.23147835832657,
+        -180.59311583294175
+      ]
+    },
+    "frontendVersion": "1.41.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

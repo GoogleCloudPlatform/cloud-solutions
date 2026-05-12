@@ -1,0 +1,351 @@
+{
+  "id": "36e9d254-5451-4d2a-9cfa-5ac97b2a1dbc",
+  "revision": 0,
+  "last_node_id": 58,
+  "last_link_id": 44,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "VHS_LoadImagePath",
+      "pos": [-2627.415767883302, -455.89354826354946],
+      "size": [245.2001953125, 255.3464415015244],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [38]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/character_continuity/character_continuity_scene1.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/character_continuity/character_continuity_scene1.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "VHS_LoadImagePath",
+      "pos": [-2631.295625518803, -84.28527291870134],
+      "size": [245.2001953125, 263.6393229166667],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [39]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/character_continuity/character_continuity_single_character_env.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/character_continuity/character_continuity_single_character_env.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "VHS_LoadImagePath",
+      "pos": [-2663.5168102417015, 310.52702917480553],
+      "size": [245.2001953125, 258.06612181432035],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [40]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/character_continuity/character_continuity_single_character_prop.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/character_continuity/character_continuity_single_character_prop.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 43,
+      "type": "Veo3ReferenceToVideo",
+      "pos": [-540.6938281249918, -439.72326145935466],
+      "size": [567.5802734374997, 728.67234375],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 42
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_paths",
+          "type": "VEO_VIDEO",
+          "links": [43]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Veo3ReferenceToVideo"
+      },
+      "widgets_values": [
+        "VEO_3_1",
+        "PNG",
+        "Use the reference image to create analog film photography, close-up shot with extremely shallow depth of field and creamy dreamlike bokeh. The face of a blue, pill-shaped inflatable character with smooth matte vinyl skin and simple wide-set cartoonish eyes starts with an expression of joyous surprise that deepens as it looks around and changes to happy cartoon smile, then the smile slowly inverts into a disaapointment and its eyes shift to a saddened expression and the shoulders drop. Bathed in the warm, hazy glow of golden hour with a blurred funfair background featuring game stalls and a distant ferris wheel silhouette. The style is nostalgic and gentle with a desaturated color palette of warm yellows and muted earth tones, featuring distinct fine film grain and a vintage analog quality.\n",
+        "16:9",
+        "720p",
+        "optimized",
+        "allow_adult",
+        8,
+        false,
+        1,
+        "",
+        "",
+        3804045301,
+        "randomize",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 57,
+      "type": "VeoVideoSaveAndPreview",
+      "pos": [330.0674182093997, -332.403262929534],
+      "size": [479.71017480468754, 427.5771633605957],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_paths",
+          "type": "VEO_VIDEO",
+          "link": 43
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "VeoVideoSaveAndPreview"
+      },
+      "widgets_values": [true, true, true, true, "veo_video"]
+    },
+    {
+      "id": 56,
+      "type": "Gemini31FlashImage",
+      "pos": [-2213.7141268955784, -383.69071257552946],
+      "size": [822.7311729125979, 912.4803649291994],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 38
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 39
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 40
+        },
+        {
+          "name": "image4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Generated Image",
+          "type": "IMAGE",
+          "links": [42, 44]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Gemini31FlashImage"
+      },
+      "widgets_values": [
+        "GEMINI_31_FLASH_IMAGE",
+        "Analog film photography, close-up shot: The frame is tightly focused on the face of a blue, pill-shaped inflatable character. Its smooth, matte vinyl skin catches the soft light, and its simple, wide-set cartoonish eyes are open with an expression of joyous surprise, paired with a simple curved smile. The entire scene is bathed in the warm, hazy glow of the golden hour, creating a deeply nostalgic and gentle atmosphere. The color palette is beautifully desaturated, dominated by warm yellows, soft oranges, and muted earth tones, characteristic of vintage film stock. A distinct, fine film grain covers the entire image, enhancing the tangible, analog quality. The depth of field is extremely shallow, causing the funfair background to dissolve into a creamy, dreamlike bokeh. Within this soft blur, the indistinct shapes of a carnival midway are visible: the warm glow from game stalls, the primary colors of a rubber duck game, the vertical stacks of a tin can toss, and the distant, towering silhouette of a ferris wheel against the pale, hazy sky. The focus remains steadfastly on the character, capturing a fleeting moment of pure happiness and wonder",
+        "16:9",
+        "1K",
+        "PNG",
+        0.7,
+        1,
+        32,
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "",
+        "",
+        "global"
+      ]
+    },
+    {
+      "id": 58,
+      "type": "PreviewImage",
+      "pos": [-1145.898498782788, -188.91632057723908],
+      "size": [473.98059008789073, 494.98110763549823],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 44
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    }
+  ],
+  "links": [
+    [38, 1, 0, 56, 0, "IMAGE"],
+    [39, 3, 0, 56, 1, "IMAGE"],
+    [40, 2, 0, 56, 2, "IMAGE"],
+    [42, 56, 0, 43, 0, "IMAGE"],
+    [43, 43, 0, 57, 0, "VEO_VIDEO"],
+    [44, 56, 0, 58, 0, "IMAGE"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7513148009015777,
+      "offset": [2845.089948245679, 723.684889669036]
+    },
+    "frontendVersion": "1.41.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

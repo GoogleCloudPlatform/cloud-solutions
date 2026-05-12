@@ -1,0 +1,345 @@
+{
+  "id": "5aa88dd0-0d14-4b57-88ab-089c69c295d7",
+  "revision": 0,
+  "last_node_id": 41,
+  "last_link_id": 34,
+  "nodes": [
+    {
+      "id": 12,
+      "type": "VHS_LoadImagePath",
+      "pos": [-2668.4390057657793, -24.335822468892275],
+      "size": [326.09153900833263, 314.0520515929735],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [28]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/shot_production/shot_production1_cast.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/shot_production/shot_production1_cast.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "VHS_LoadImagePath",
+      "pos": [-2795.90266964008, 428.1075749168298],
+      "size": [341.32420810651183, 308.46123531797707],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [29]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/shot_production/shot_production1_prop.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/shot_production/shot_production1_prop.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 15,
+      "type": "VHS_LoadImagePath",
+      "pos": [-2647.6897109529573, 942.8123835459866],
+      "size": [368.5001143764026, 331.333396128221],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [30]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/shot_production/shot_production1_environment.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/shot_production/shot_production1_environment.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 26,
+      "type": "Veo3ReferenceToVideo",
+      "pos": [-835.8627789938624, 579.6070419721704],
+      "size": [856.1223864816748, 892.761200765174],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 32
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_paths",
+          "type": "VEO_VIDEO",
+          "links": [33]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Veo3ReferenceToVideo"
+      },
+      "widgets_values": [
+        "VEO_3_1",
+        "PNG",
+        "A medium close-up shot of a friendly blue cartoon mascot looking around and then waving happily at the camera, set at a bustling carnival during golden hour with a Ferris wheel and game stalls in the background, in a warm, cheerful, and whimsical blend of CGI and live-action.",
+        "16:9",
+        "720p",
+        "optimized",
+        "allow_adult",
+        8,
+        false,
+        1,
+        "",
+        "",
+        2220761326,
+        "randomize",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 40,
+      "type": "VeoVideoSaveAndPreview",
+      "pos": [400.61134411636203, 364.66718882960345],
+      "size": [709.8484041942556, 691.2051793030439],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_paths",
+          "type": "VEO_VIDEO",
+          "link": 33
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "VeoVideoSaveAndPreview"
+      },
+      "widgets_values": [true, true, true, true, "veo_video"]
+    },
+    {
+      "id": 39,
+      "type": "Gemini31FlashImage",
+      "pos": [-2085.4845557846497, 121.51820977047251],
+      "size": [1086.3541495701022, 905.7764980375534],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 28
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 29
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 30
+        },
+        {
+          "name": "image4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Generated Image",
+          "type": "IMAGE",
+          "links": [32, 34]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Gemini31FlashImage"
+      },
+      "widgets_values": [
+        "GEMINI_31_FLASH_IMAGE",
+        "\nAnalog film photography, close-up shot: The frame is tightly focused on the face of a blue, pill-shaped inflatable character. Its smooth, matte vinyl skin catches the soft light, and its simple, wide-set cartoonish eyes are open with an expression of joyous surprise, paired with a simple curved smile. The entire scene is bathed in the warm, hazy glow of the golden hour, creating a deeply nostalgic and gentle atmosphere. The color palette is beautifully desaturated, dominated by warm yellows, soft oranges, and muted earth tones, characteristic of vintage film stock. A distinct, fine film grain covers the entire image, enhancing the tangible, analog quality. The depth of field is extremely shallow, causing the funfair background to dissolve into a creamy, dreamlike bokeh. Within this soft blur, the indistinct shapes of a carnival midway are visible: the warm glow from game stalls, the primary colors of a rubber duck game, the vertical stacks of a tin can toss, and the distant, towering silhouette of a ferris wheel against the pale, hazy sky. The focus remains steadfastly on the character, capturing a fleeting moment of pure happiness and wonder.\n\n",
+        "16:9",
+        "1K",
+        "PNG",
+        0.7,
+        1,
+        32,
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "",
+        "",
+        "global"
+      ]
+    },
+    {
+      "id": 41,
+      "type": "PreviewImage",
+      "pos": [-634.4305124174408, -41.237376348838396],
+      "size": [693.4827289321233, 412.5518435454129],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 34
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    }
+  ],
+  "links": [
+    [28, 12, 0, 39, 0, "IMAGE"],
+    [29, 14, 0, 39, 1, "IMAGE"],
+    [30, 15, 0, 39, 2, "IMAGE"],
+    [32, 39, 0, 26, 0, "IMAGE"],
+    [33, 26, 0, 40, 0, "VEO_VIDEO"],
+    [34, 39, 0, 41, 0, "IMAGE"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6548730765263873,
+      "offset": [2998.81624469813, 226.41428539903254]
+    },
+    "frontendVersion": "1.41.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

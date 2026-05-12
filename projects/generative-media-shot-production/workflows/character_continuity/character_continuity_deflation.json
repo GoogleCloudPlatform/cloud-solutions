@@ -1,0 +1,151 @@
+{
+  "id": "209af995-1ec6-4de6-bd4f-2967ff0af8ee",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "VHS_LoadImagePath",
+      "pos": [-1640.7332352305045, -412.015140525125],
+      "size": [245.2001953125, 255.3464415015244],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [2]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/funday/character_continuity/character_continuity_deflation.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/funday/character_continuity/character_continuity_deflation.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "Veo3ReferenceToVideo",
+      "pos": [-1101.8234340941415, -455.60889052512493],
+      "size": [731.1079545454545, 680.7876420454545],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 2
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_paths",
+          "type": "VEO_VIDEO",
+          "links": [4]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Veo3ReferenceToVideo"
+      },
+      "widgets_values": [
+        "VEO_3_1",
+        "PNG",
+        "Static medium-wide shot with a shallow depth of field, the blue inflatable character slowly deflating and losing air until they wrinkle and slump completely toward the floor and lay flat, set against a clean minimalist white studio background, high-quality 3D animation style with soft studio lighting and a playful atmosphere.",
+        "16:9",
+        "720p",
+        "optimized",
+        "allow_adult",
+        8,
+        true,
+        1,
+        "",
+        "",
+        1205830019,
+        "randomize",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 6,
+      "type": "VeoVideoSaveAndPreview",
+      "pos": [-66.92641704868701, -342.36315188876137],
+      "size": [359.082919034091, 305.44531249999994],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_paths",
+          "type": "VEO_VIDEO",
+          "link": 4
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "VeoVideoSaveAndPreview"
+      },
+      "widgets_values": [true, true, true, true, "veo_video"]
+    }
+  ],
+  "links": [
+    [2, 2, 0, 4, 0, "IMAGE"],
+    [4, 4, 0, 6, 0, "VEO_VIDEO"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.1000000000000003,
+      "offset": [1868.1586613668683, 619.4299132523977]
+    },
+    "frontendVersion": "1.41.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

@@ -1,0 +1,117 @@
+{
+  "id": "1acb014b-de61-4e6d-ad11-ca14409884e3",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 6,
+      "type": "PreviewImage",
+      "pos": [-415.35675928945415, -367.38995187100625],
+      "size": [419.19810901988626, 355.62041681463063],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 5,
+      "type": "Gemini31FlashImage",
+      "pos": [-1676.0735894563568, -459.6839859619153],
+      "size": [768.0871027166193, 783.3206232244318],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Generated Image",
+          "type": "IMAGE",
+          "links": [5]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Gemini31FlashImage"
+      },
+      "widgets_values": [
+        "GEMINI_31_FLASH_IMAGE",
+        "A highly detailed 3D render in a photorealistic CGI style shows two cute, chubby, blue, blob-like mascot characters, one large and one small, with pear-shaped bodies, stubby arms, and short legs, standing still side-by-side. The characters have simple, happy cartoon faces with two round white eyes with black pupils, thin black arching eyebrows, and a simple black curved line for a smile, and they are facing directly forward towards the camera in a friendly pose. The arms feature visible stitched seams, appearing as if they are made of a separate, attached piece of vinyl. They stand on a surface within a minimalist product photography studio with a seamless, plain, light gray infinity cove background. The composition is a centered, eye-level, full-body wide shot of both characters, leaving ample negative space around them. The scene is lit with soft, diffuse studio lighting that creates gentle, realistic shadows on the surface beneath the smooth, matte plastic or soft vinyl textured characters. The image is 4K.",
+        "16:9",
+        "1K",
+        "PNG",
+        0.7,
+        1,
+        32,
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "BLOCK_MEDIUM_AND_ABOVE",
+        "",
+        "",
+        "global"
+      ]
+    }
+  ],
+  "links": [[5, 5, 0, 6, 0, "IMAGE"]],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.1,
+      "offset": [2124.7754826559312, 663.7401882435204]
+    },
+    "frontendVersion": "1.41.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
