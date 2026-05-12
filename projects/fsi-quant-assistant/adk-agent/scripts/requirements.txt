@@ -293,7 +293,7 @@ docstring-parser==0.17.0 \
     --hash=sha256:583de4a309722b3315439bb31d64ba3eebada841f2e2cee23b99df001434c912 \
     --hash=sha256:cf2569abd23dce8099b300f9b4fa8191e9582dda731fd533daf54c4551658708
     # via google-cloud-aiplatform
-google-api-core[grpc]==2.30.1 \
+google-api-core==2.30.1 \
     --hash=sha256:3be893babbb54a89c6807b598383ddf212112130e3d24d06c681b5d18f082e08 \
     --hash=sha256:7304ef3bd7e77fd26320a36eeb75868f9339532bfea21694964f4765b37574ee
     # via
@@ -302,7 +302,7 @@ google-api-core[grpc]==2.30.1 \
     #   google-cloud-core
     #   google-cloud-resource-manager
     #   google-cloud-storage
-google-auth[requests]==2.49.1 \
+google-auth==2.49.1 \
     --hash=sha256:16d40da1c3c5a0533f57d268fe72e0ebb0ae1cc3b567024122651c045d879b64 \
     --hash=sha256:195ebe3dca18eddd1b3db5edc5189b76c13e96f29e73043b923ebcf3f1a860f7
     # via
@@ -313,9 +313,9 @@ google-auth[requests]==2.49.1 \
     #   google-cloud-resource-manager
     #   google-cloud-storage
     #   google-genai
-google-cloud-aiplatform==1.143.0 \
-    --hash=sha256:1f0124a89795a6b473deb28724dd37d95334205df3a9c9c48d0b8d7a3d5d5cc4 \
-    --hash=sha256:78df97d044859f743a9cc48b89a260d33579b0d548b1589bb3ae9f4c2afc0c5a
+google-cloud-aiplatform==1.151.0 \
+    --hash=sha256:2f29b1853f790a7371a746c747bf1f664380b534254682441acd4b5ee26fafd2 \
+    --hash=sha256:61372bb0923b14b8027f45b83393452df3a85bf4ea86fa48e08844fb5ec50049
     # via -r requirements.in
 google-cloud-bigquery==3.41.0 \
     --hash=sha256:2217e488b47ed576360c9b2cc07d59d883a54b83167c0ef37f915c26b01a06fe \
@@ -382,7 +382,7 @@ google-resumable-media==2.8.0 \
     # via
     #   google-cloud-bigquery
     #   google-cloud-storage
-googleapis-common-protos[grpc]==1.73.1 \
+googleapis-common-protos==1.73.1 \
     --hash=sha256:13114f0e9d2391756a0194c3a8131974ed7bffb06086569ba193364af59163b6 \
     --hash=sha256:e51f09eb0a43a8602f5a915870972e6b4a394088415c79d79605a46d8e826ee8
     # via
@@ -661,9 +661,9 @@ python-dateutil==2.9.0.post0 \
     --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
     --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
     # via google-cloud-bigquery
-pytz==2026.1.post1 \
-    --hash=sha256:3378dde6a0c3d26719182142c56e60c7f9af7e968076f31aae569d72a0358ee1 \
-    --hash=sha256:f2fd16142fda348286a75e1a524be810bb05d444e5a081f37f7affc635035f7a
+pytz==2026.2 \
+    --hash=sha256:04156e608bee23d3792fd45c94ae47fae1036688e75032eea2e3bf0323d1f126 \
+    --hash=sha256:0e60b47b29f21574376f218fe21abc009894a2321ea16c6754f3cad6eb7cdd6a
     # via -r requirements.in
 requests==2.33.1 \
     --hash=sha256:18817f8c57c6263968bc123d237e3b8b08ac046f5456bd1e307ee8f4250d3517 \
@@ -690,6 +690,7 @@ typing-extensions==4.15.0 \
     --hash=sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466 \
     --hash=sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548
     # via
+    #   anyio
     #   google-cloud-aiplatform
     #   google-genai
     #   grpcio
@@ -700,10 +701,12 @@ typing-inspection==0.4.2 \
     --hash=sha256:4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7 \
     --hash=sha256:ba561c48a67c5958007083d386c3295464928b01faa735ab8547c5692e87f464
     # via pydantic
-urllib3==2.6.3 \
-    --hash=sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed \
-    --hash=sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4
-    # via requests
+urllib3==2.7.0 \
+    --hash=sha256:231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c \
+    --hash=sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897
+    # via
+    #   -r requirements.in
+    #   requests
 websockets==16.0 \
     --hash=sha256:0298d07ee155e2e9fda5be8a9042200dd2e3bb0b8a38482156576f863a9d457c \
     --hash=sha256:04cdd5d2d1dacbad0a7bf36ccbcd3ccd5a30ee188f2560b7a62a30d14107b31a \

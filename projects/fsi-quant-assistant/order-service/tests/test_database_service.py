@@ -52,7 +52,9 @@ def database_service(
             "ALLOYDB_DATABASE": "db",
         },
     ):
-        return DatabaseService()
+        svc = DatabaseService()
+        svc.get_engine()
+        return svc
 
 
 def test_insert_order_success(
