@@ -76,6 +76,11 @@
       "commitMessagePrefix": "chore(deps): [aaa-user-guide]"
     },
     {
+      "matchFileNames": ["projects/agentic-coding-with-data-agent-kit-demo/**"],
+      "groupName": "agentic-coding-with-data-agent-kit-demo",
+      "commitMessagePrefix": "chore(deps): [agentic-coding-with-data-agent-kit-demo]"
+    },
+    {
       "matchFileNames": ["projects/agentic-customer-engagement-fsi-demo/**"],
       "groupName": "agentic-customer-engagement-fsi-demo",
       "commitMessagePrefix": "chore(deps): [agentic-customer-engagement-fsi-demo]"
