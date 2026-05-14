@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manufacturing - Technician Assistant</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/js/app.js" type="module"></script>
+</head>
+
+<body>
+  <header>
+    <h1>Manufacturing - Technician Assistant</h1>
+    <div class="subtitle">Real-time audio and video</div>
+    <div class="header-options" style="display: none;">
+      <label class="header-checkbox"
+        title="Enable model to proactively respond without explicit prompts (Native audio models only)">
+        <input type="checkbox" id="enableProactivity">
+        <span>Proactivity</span>
+      </label>
+      <label class="header-checkbox"
+        title="Enable model to detect and adapt to emotional cues (Native audio models only)">
+        <input type="checkbox" id="enableAffectiveDialog">
+        <span>Affective Dialog</span>
+      </label>
+    </div>
+    <div class="connection-status">
+      <span class="status-indicator" id="statusIndicator"></span>
+      <span id="status-text">Disconnected</span>
+      <button type="button" id="session-control-button">Start Session</button>
+      <button type="button" id="context-button" style="display: none;">Context</button>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <div class="container">
+      <div id="videoContainer" class="embedded-video-container" style="display: none;">
+        <video id="cameraPreview" autoplay playsinline class="embedded-video"></video>
+      </div>
+      <div id="messages"></div>
+
+      <div class="input-container">
+        <form id="message-form">
+          <div class="input-wrapper">
+            <input type="text" id="message" name="message" placeholder="Type your message here..." autocomplete="off" />
+            <div class="button-group">
+              <button type="submit" id="text-mode-button" disabled>Text</button>
+              <button type="button" id="audio-mode-button" disabled>Audio</button>
+              <button type="button" id="video-mode-button" disabled>Video</button>
+              <button type="button" id="switchCameraButton" style="display: none;">Switch</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="console-panel" style="display: none;">
+      <div class="console-header">
+        <h2>Event Console</h2>
+        <div class="console-controls">
+          <label class="console-checkbox">
+            <input type="checkbox" id="showAudioEvents">
+            <span>Show audio</span>
+          </label>
+          <button id="clearConsole" class="console-clear-btn">Clear</button>
+        </div>
+      </div>
+      <div id="consoleContent" class="console-content"></div>
+    </div>
+  </div>
+
+
+  <!-- Context Modal -->
+  <div id="contextModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2>Provide Context</h2>
+      <form id="contextForm">
+        <div class="form-group">
+          <label for="contextPrompt">Prompt for Gemini:</label>
+          <textarea id="contextPrompt" name="prompt" rows="4" placeholder="Enter instruction prompt..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="contextFiles">Additional Files (Manuals, etc.):</label>
+          <input type="file" id="contextFiles" name="files" multiple>
+        </div>
+        <div class="form-group">
+          <label>Existing Files in GCS:</label>
+          <ul id="existingFilesList" style="list-style-type: disc; padding-left: 20px; color: #ccc;"></ul>
+        </div>
+        <div class="form-group">
+          <label for="contextGcsPath">GCS Storage Location:</label>
+          <input type="text" id="contextGcsPath" name="gcs_path" placeholder="gs://bucket/path">
+        </div>
+        <button type="submit" id="save-context-button">Save Context</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>

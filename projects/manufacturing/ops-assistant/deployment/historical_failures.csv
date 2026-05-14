@@ -1,0 +1,8 @@
+log_timestamp,asset_id,vibration_rms,shock_pulse_db,peak_frequency_hz,root_cause,technician_notes
+2025-12-01 16:45:00 UTC,HPC-5000-A02,3.2,31,60,Misalignment,No pitting; vibration was purely mechanical/structural.
+2025-06-20 08:15:00 UTC,HPC-5000-B12,1.8,22,60,Normal Wear,Routine swap; no critical defects found.
+2026-03-10 13:20:00 UTC,HPC-5000-C04,1.9,21.5,60,Normal Wear,Bearing replaced during scheduled rebuild; minimal wear observed.
+2025-02-05 14:30:00 UTC,HPC-5000-B02,4.9,51.2,1240.5,Electrical Fluting,VFD current leakage identified; bearing was washboarded.
+2025-09-15 11:20:00 UTC,HPC-5000-C01,5.8,55.4,1240.5,Pitting/Spalling,Heavy pitting on 6206 bearing; caused by coolant contamination.
+2024-11-12 09:00:00 UTC,HPC-5000-A04,5.2,49.8,1240.5,Precision Pitting,Inner race degradation; matched shock pulse signature.
+2026-01-15 10:00:00 UTC,HPC-5000-B10,5.1,47.3,1240.5,Precision Pitting,Significant pitting on raceway; detected via ADK agent during routine scan.

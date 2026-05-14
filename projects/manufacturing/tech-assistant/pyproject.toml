@@ -1,0 +1,22 @@
+[project]
+name = "tech-assistant"
+version = "0.1.0"
+description = "Technician Assistant in Manufacturing"
+authors = [
+    { name = "Google LLC" }
+]
+license = {text = "Apache License 2.0"}
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "google-cloud-aiplatform[adk,agent_engine]>=1.93.0",
+    "google-cloud-bigquery>=3.20.0",
+    "pydantic>=2.7.0",
+    "google-auth>=2.30.0",
+    "python-dotenv>=1.2.2",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pypdf>=6.10.2",
+]
+
