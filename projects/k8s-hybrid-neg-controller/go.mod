@@ -16,7 +16,7 @@ module github.com/googlecloudplatform/k8s-hybrid-neg-controller
 
 go 1.24.0
 
-toolchain go1.24.13
+toolchain go1.25.10
 
 require (
 	cloud.google.com/go/compute v1.31.1
