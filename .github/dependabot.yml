@@ -24,6 +24,7 @@ version: 2
 multi-ecosystem-groups:
   all-security-updates:
     applies-to: "security-updates"
+    open-pull-requests-limit: 0
     schedule:
       interval: "daily"
     labels:
@@ -39,7 +40,6 @@ updates:
       - "**/*"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
     multi-ecosystem-group: "all-security-updates"
     patterns:
       - "*"
@@ -49,7 +49,6 @@ updates:
       - "**/*"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
     multi-ecosystem-group: "all-security-updates"
     patterns:
       - "*"
@@ -59,7 +58,6 @@ updates:
       - "**/*"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
     multi-ecosystem-group: "all-security-updates"
     patterns:
       - "*"
@@ -69,7 +67,6 @@ updates:
       - "**/*"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
     multi-ecosystem-group: "all-security-updates"
     patterns:
       - "*"
@@ -79,7 +76,6 @@ updates:
       - "**/*"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
     multi-ecosystem-group: "all-security-updates"
     patterns:
       - "*"
@@ -89,7 +85,6 @@ updates:
       - "**/*"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
     multi-ecosystem-group: "all-security-updates"
     patterns:
       - "*"
@@ -99,7 +94,6 @@ updates:
       - "**/*"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
     multi-ecosystem-group: "all-security-updates"
     patterns:
       - "*"
@@ -109,7 +103,6 @@ updates:
       - "**/*"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 0
     multi-ecosystem-group: "all-security-updates"
     patterns:
       - "*"
