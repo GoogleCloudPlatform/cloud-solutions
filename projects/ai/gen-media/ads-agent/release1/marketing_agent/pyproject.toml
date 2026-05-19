@@ -22,7 +22,7 @@ dependencies = [
     "aiohttp==3.13.4",
     "adk_common",
     "requests",
-    "Pillow>=10.0.0",
+    "Pillow>=10.4.0",
     "lxml==6.1.0",
     "httpx==0.28.1",
     "google-cloud-storage",
