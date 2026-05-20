@@ -2,7 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", ":semanticCommits", ":docker"],
   "osvVulnerabilityAlerts": true,
-  "additionalBranchPrefix": "{{#if groupName}}{{#unless isGroup}}{{groupName}}-{{/unless}}{{/if}}",
   "dependencyDashboardApproval": true,
   "rangeStrategy": "bump",
   "rebaseWhen": "behind-base-branch",
@@ -347,6 +346,10 @@
       "matchFileNames": ["projects/vision-ai-edge-platform/**"],
       "groupName": "vision-ai-edge-platform",
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]"
+    },
+    {
+      "matchUpdateTypes": ["security"],
+      "branchName": "{{branchPrefix}}{{#if groupName}}{{groupName}}-{{/if}}{{datasource}}-{{depName}}-vulnerability"
     }
   ]
 }
