@@ -348,8 +348,8 @@
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]"
     },
     {
-      "matchUpdateTypes": ["security"],
-      "branchName": "{{branchPrefix}}{{#if groupName}}{{groupName}}-{{/if}}{{datasource}}-{{depName}}-vulnerability"
+      "matchIsVulnerabilityAlert": true,
+      "branchTopic": "{{#if groupName}}{{groupName}}-{{/if}}{{datasource}}-{{depName}}-vulnerability"
     }
   ]
 }
