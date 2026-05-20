@@ -1,0 +1,8 @@
+google-adk
+google-ads
+google-auth
+google-api-python-client
+google-cloud-aiplatform
+google-cloud-logging
+rapidfuzz
+pillow>=10.0.0

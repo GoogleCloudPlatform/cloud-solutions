@@ -340,7 +340,7 @@ IDENTIFIER_COLUMNS = ["Title"]
 STYLE_INSTRUCTION = (
     "Render a full-body studio photo of the described person with the following fixed styling:\n"
     "- Outfit: plain white round neck t-shirt, classic black jeans, and white casual sneakers.\n"
-    "- IMPORTANT :same style for every model, keep the t-shirt completly inserted.\n"
+    "- IMPORTANT :same style for every model, keep the t-shirt completely inserted.\n"
     "- Styling: Make sure all models are styled the same way.\n"
     "- Background: plain solid white background, no props, no text.\n"
     "- Lighting: neutral and even; avoid hard shadows.\n"
@@ -630,7 +630,7 @@ print(f"[DONE] Outputs in: gs://{BUCKET_NAME}/{VTO_OUTPUT_PREFIX}")
 # %% [markdown] id="QaVTCIINx8JZ"
 # #Use Case 4 - AI Critique & Selection
 #
-# Description: Uses Gemini Flash to critique the 4 generated options and select the best one based on realism, fidelity, and artifact checking. Creates Evluation Summary with reason for the final pick.
+# Description: Uses Gemini Flash to critique the 4 generated options and select the best one based on realism, fidelity, and artifact checking. Creates Evaluation Summary with reason for the final pick.
 # - Collect and group all VTO candidate images, ensuring exactly 4 candidates exist for each model/outfit combination.
 #
 # - Define the judge function that uses the Gemini Text Model (gemini flash) for a multi-modal critique.
