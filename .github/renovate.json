@@ -41,7 +41,8 @@
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["SECURITY", "p0", "dependencies"]
+    "labels": ["SECURITY", "p0", "dependencies"],
+    "branchTopic": "{{#if groupName}}{{{groupName}}}-{{/if}}{{{datasource}}}-{{{depNameSanitized}}}-vulnerability"
   },
   "labels": ["dependencies"],
   "customManagers": [
@@ -346,10 +347,6 @@
       "matchFileNames": ["projects/vision-ai-edge-platform/**"],
       "groupName": "vision-ai-edge-platform",
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]"
-    },
-    {
-      "matchIsVulnerabilityAlert": true,
-      "branchTopic": "{{#if groupName}}{{groupName}}-{{/if}}{{datasource}}-{{depName}}-vulnerability"
     }
   ]
 }
