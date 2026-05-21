@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# pylint: disable=C0114, C0115, C0301, C0303, C0412, C0413, C0415, E0606, E1136, W0102, W0104, W0311, W0404, W0611, W0612, W0613, W0718, W1203, W1309, W1405, W1510, W1514
+# pylint: disable=C0301, C0412, C0413, C0415, E0606, W0102, W0104, W0404, W0611, W0612, W0613, W0718, W1203, W1309, W1405, W1510, W1514
 """Personalized Marketing Agent — End-to-end campaign generation with image ads and video ads."""
 
 import asyncio
@@ -62,22 +62,16 @@ from .tools.sales import SalesTool
 # ============================================================
 GOOGLE_CLOUD_PROJECT = get_required_env_var("GOOGLE_CLOUD_PROJECT")
 GOOGLE_CLOUD_LOCATION = get_required_env_var("GOOGLE_CLOUD_LOCATION")
-GOOGLE_CLOUD_BUCKET_ARTIFACTS = get_required_env_var(
-    "GOOGLE_CLOUD_BUCKET_ARTIFACTS"
-)
+GOOGLE_CLOUD_BUCKET_ARTIFACTS = get_required_env_var("GOOGLE_CLOUD_BUCKET_ARTIFACTS")
 GEMINI_IMAGE_MODEL = get_required_env_var("IMAGE_GENERATION_MODEL")
 GEMINI_TTS_MODEL = get_required_env_var("AUDIO_TTS_GENERATION_MODEL")
 GEMINI_TTS_VOICE = get_required_env_var("AUDIO_TTS_VOICE_NAME")
 VEO_MODEL = get_required_env_var("VIDEO_GENERATION_MODEL")
 VEO_CLIP_DURATION = int(get_optional_env_var("VIDEO_DEFAULT_DURATION", "4"))
-LLM_GEMINI_MODEL_MARKETING_ANALYST = get_required_env_var(
-    "LLM_GEMINI_MODEL_MARKETING_ANALYST"
-)
+LLM_GEMINI_MODEL_MARKETING_ANALYST = get_required_env_var("LLM_GEMINI_MODEL_MARKETING_ANALYST")
 AGENT_VERSION = get_required_env_var("AGENT_VERSION")
 DEMO_COMPANY_NAME = get_optional_env_var("DEMO_COMPANY_NAME", "LayoGenMedia")
-MARKETING_ANALYST_DATASTORE_CLOUD_BUCKET = get_required_env_var(
-    "MARKETING_ANALYST_DATASTORE_CLOUD_BUCKET"
-)
+MARKETING_ANALYST_DATASTORE_CLOUD_BUCKET = get_required_env_var("MARKETING_ANALYST_DATASTORE_CLOUD_BUCKET")
 CAMPAIGNS_CONFIG_URL = get_required_env_var("CAMPAIGNS_CONFIG_URL")
 OUTPUT_FOLDER = "generated"
 
@@ -109,24 +103,15 @@ def _set_output_folder(tool_context):
             if matched:
                 OUTPUT_FOLDER = f"{safe_name}_{matched}"
             else:
-                safe_persona = (
-                    persona_desc.split(".")[0]
-                    .replace(" ", "_")
-                    .replace(",", "")[:30]
-                )
+                safe_persona = persona_desc.split(".")[0].replace(" ", "_").replace(",", "")[:30]
                 OUTPUT_FOLDER = f"{safe_name}_{safe_persona}"
         else:
             OUTPUT_FOLDER = safe_name
     log_message(f"Output folder: {OUTPUT_FOLDER}", Severity.INFO)
 
-
-SELECTED_CAMPAIGN_FILE_NAME = (
-    f"{get_required_env_var('SELECTED_CAMPAIGN_FILE_NAME')}.{AGENT_VERSION}.txt"
-)
+SELECTED_CAMPAIGN_FILE_NAME = f"{get_required_env_var('SELECTED_CAMPAIGN_FILE_NAME')}.{AGENT_VERSION}.txt"
 SELECTED_ASSET_SHEET_FILE_NAME = f"{get_required_env_var('SELECTED_ASSET_SHEET_FILE_NAME')}.{AGENT_VERSION}.txt"
-SESSION_STATE_FILE_NAME = (
-    f"{get_required_env_var('SESSION_STATE_FILE_NAME')}.{AGENT_VERSION}.json"
-)
+SESSION_STATE_FILE_NAME = f"{get_required_env_var('SESSION_STATE_FILE_NAME')}.{AGENT_VERSION}.json"
 
 # State keys
 CHOSEN_CAMPAIGN_IDEA_STATE_KEY = "CHOSEN_CAMPAIGN_IDEA"
@@ -204,7 +189,6 @@ trend_spotter_agent = TrendSpotter()
 # Retail Pipeline Tools (from Andrew)
 # ============================================================
 
-
 def identify_inventory_opportunities(tool_context: ToolContext) -> list[dict]:
     """Identifies high-stock, low-velocity inventory items by cross-referencing inventory and sales data.
     Returns a list of product opportunities sorted by priority: low velocity first, then by highest stock.
@@ -215,7 +199,7 @@ def identify_inventory_opportunities(tool_context: ToolContext) -> list[dict]:
     # Build set of low-velocity SKUs for quick lookup
     low_velocity_skus = set()
     for p in low_velocity_products:
-        if hasattr(p, "core_identifiers") and p.core_identifiers:
+        if hasattr(p, 'core_identifiers') and p.core_identifiers:
             low_velocity_skus.add(p.core_identifiers.sku)
 
     # Sort: low velocity first, then by stock quantity descending
@@ -223,12 +207,8 @@ def identify_inventory_opportunities(tool_context: ToolContext) -> list[dict]:
     high_stock_products.sort(
         key=lambda p: (
             velocity_order.get(
-                (
-                    p.commercial_status.sales_velocity
-                    if p.commercial_status
-                    else "average"
-                ),
-                1,
+                p.commercial_status.sales_velocity if p.commercial_status else "average",
+                1
             ),
             -(p.commercial_status.stock_quantity if p.commercial_status else 0),
         )
@@ -241,17 +221,14 @@ def identify_inventory_opportunities(tool_context: ToolContext) -> list[dict]:
     return opportunities_as_dict
 
 
+
+
 def _extract_structured_data(html: str) -> dict:
     """Extract JSON-LD, Open Graph, and meta tag data from raw HTML."""
     import re as _re
-
     structured = {"json_ld": [], "og": {}, "meta": {}}
 
-    for m in _re.finditer(
-        r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
-        html,
-        _re.DOTALL,
-    ):
+    for m in _re.finditer(r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', html, _re.DOTALL):
         try:
             data = json.loads(m.group(1).strip())
             if isinstance(data, list):
@@ -261,18 +238,10 @@ def _extract_structured_data(html: str) -> dict:
         except json.JSONDecodeError:
             pass
 
-    for m in _re.finditer(
-        r'<meta\s+(?:property|name)=["\']og:(\w+)["\']\s+content=["\']([^"\']*)["\']',
-        html,
-        _re.IGNORECASE,
-    ):
+    for m in _re.finditer(r'<meta\s+(?:property|name)=["\']og:(\w+)["\']\s+content=["\']([^"\']*)["\']', html, _re.IGNORECASE):
         structured["og"][m.group(1)] = m.group(2)
 
-    for m in _re.finditer(
-        r'<meta\s+(?:name|property)=["\']([^"\']+)["\']\s+content=["\']([^"\']*)["\']',
-        html,
-        _re.IGNORECASE,
-    ):
+    for m in _re.finditer(r'<meta\s+(?:name|property)=["\']([^"\']+)["\']\s+content=["\']([^"\']*)["\']', html, _re.IGNORECASE):
         structured["meta"][m.group(1)] = m.group(2)
 
     return structured
@@ -280,42 +249,36 @@ def _extract_structured_data(html: str) -> dict:
 
 def _extract_embedded_app_state(html: str) -> dict | None:
     """Extract window.APP_STATE, __NEXT_DATA__, or similar embedded JSON state from HTML.
-    Most modern e-commerce sites (Verizon, Best Buy, etc.) embed full product data in JS variables.
-    """
+    Most modern e-commerce sites (Verizon, Best Buy, etc.) embed full product data in JS variables."""
     import re as _re
 
     state_markers = [
-        "window.APP_STATE",
-        "window.__INITIAL_STATE__",
-        "window.__NEXT_DATA__",
-        "window.__data",
+        'window.APP_STATE',
+        'window.__INITIAL_STATE__',
+        'window.__NEXT_DATA__',
+        'window.__data',
     ]
 
     for marker in state_markers:
         idx = html.find(marker)
         if idx < 0:
             continue
-        eq_idx = html.find("=", idx)
+        eq_idx = html.find('=', idx)
         if eq_idx < 0 or eq_idx > idx + len(marker) + 5:
             continue
         json_start = eq_idx + 1
-        while json_start < len(html) and html[json_start] in " \t\n\r":
+        while json_start < len(html) and html[json_start] in ' \t\n\r':
             json_start += 1
         try:
             decoder = json.JSONDecoder()
             obj, _ = decoder.raw_decode(html, json_start)
             if isinstance(obj, dict):
-                log_message(
-                    f"Found embedded state via {marker} ({len(json.dumps(obj))} chars)",
-                    Severity.INFO,
-                )
+                log_message(f"Found embedded state via {marker} ({len(json.dumps(obj))} chars)", Severity.INFO)
                 return obj
         except (json.JSONDecodeError, Exception):
             pass
 
-    for m in _re.finditer(
-        r'<script[^>]*id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, _re.DOTALL
-    ):
+    for m in _re.finditer(r'<script[^>]*id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, _re.DOTALL):
         try:
             return json.loads(m.group(1).strip())
         except (json.JSONDecodeError, Exception):
@@ -338,9 +301,7 @@ def _flatten_app_state_product(app_state: dict) -> dict:
             result["category"] = pd.get("category", "")
             result["productId"] = pd.get("productId", "")
             result["defaultSkuId"] = pd.get("defaultSkuId", "")
-            result["accessorySpecification"] = pd.get(
-                "accessorySpecification", ""
-            )
+            result["accessorySpecification"] = pd.get("accessorySpecification", "")
             result["includedAccessories"] = pd.get("includedAccessories", "")
             result["rating"] = pd.get("rating", {})
 
@@ -367,9 +328,7 @@ def _flatten_app_state_product(app_state: dict) -> dict:
 
             img_map = sku_obj.get("imageUrlMap", {})
             if img_map:
-                result["imageUrl"] = img_map.get(
-                    "largeImage", img_map.get("defaultImage", "")
-                )
+                result["imageUrl"] = img_map.get("largeImage", img_map.get("defaultImage", ""))
 
             inv = sku_obj.get("inventoryDetails", {})
             dfill = inv.get("dFillInventory", {})
@@ -381,14 +340,7 @@ def _flatten_app_state_product(app_state: dict) -> dict:
         qa_list = faq.get("QAInfo", [])
         if qa_list:
             result["faq"] = [
-                {
-                    "q": q.get("question", ""),
-                    "a": (
-                        q.get("answers", [{}])[0].get("answer", "")
-                        if q.get("answers")
-                        else ""
-                    ),
-                }
+                {"q": q.get("question", ""), "a": q.get("answers", [{}])[0].get("answer", "") if q.get("answers") else ""}
                 for q in qa_list[:5]
             ]
 
@@ -396,23 +348,16 @@ def _flatten_app_state_product(app_state: dict) -> dict:
     if props:
         product = props.get("product", props.get("productData", {}))
         if product:
-            result["displayName"] = result.get("displayName") or product.get(
-                "name", product.get("title", "")
-            )
-            result["brandName"] = result.get("brandName") or product.get(
-                "brand", ""
-            )
+            result["displayName"] = result.get("displayName") or product.get("name", product.get("title", ""))
+            result["brandName"] = result.get("brandName") or product.get("brand", "")
             result["description"] = product.get("description", "")
-            result["originalPrice"] = result.get(
-                "originalPrice"
-            ) or product.get("price", "")
+            result["originalPrice"] = result.get("originalPrice") or product.get("price", "")
 
     import re as _re
-
     for k, v in result.items():
         if isinstance(v, str) and "<" in v:
-            result[k] = _re.sub(r"<[^>]+>", " ", v).strip()
-            result[k] = _re.sub(r"\s+", " ", result[k])
+            result[k] = _re.sub(r'<[^>]+>', ' ', v).strip()
+            result[k] = _re.sub(r'\s+', ' ', result[k])
 
     return {k: v for k, v in result.items() if v}
 
@@ -441,9 +386,7 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
     }
 
     try:
-        async with httpx.AsyncClient(
-            follow_redirects=True, timeout=30.0, headers=headers
-        ) as client:
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30.0, headers=headers) as client:
             resp = await client.get(url)
             resp.raise_for_status()
             html_content = resp.text
@@ -453,9 +396,7 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
 
     structured = _extract_structured_data(html_content)
     app_state = _extract_embedded_app_state(html_content)
-    app_state_product = (
-        _flatten_app_state_product(app_state) if app_state else {}
-    )
+    app_state_product = _flatten_app_state_product(app_state) if app_state else {}
 
     content_parts = []
 
@@ -478,43 +419,24 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
         )
 
     if structured["meta"]:
-        relevant_meta = {
-            k: v
-            for k, v in structured["meta"].items()
-            if any(
-                kw in k.lower()
-                for kw in [
-                    "description",
-                    "price",
-                    "product",
-                    "title",
-                    "brand",
-                    "image",
-                    "keyword",
-                ]
-            )
-        }
+        relevant_meta = {k: v for k, v in structured["meta"].items()
+                         if any(kw in k.lower() for kw in ["description", "price", "product", "title", "brand", "image", "keyword"])}
         if relevant_meta:
             content_parts.append(
-                "=== META TAGS ===\n" + json.dumps(relevant_meta, indent=2)
+                "=== META TAGS ===\n"
+                + json.dumps(relevant_meta, indent=2)
             )
 
     import re as _price_re
-
     price_section = ""
-    all_dollar_amounts = _price_re.findall(
-        r"(.{0,100}\$[\d,]+\.?\d*.{0,100})", html_content
-    )
+    all_dollar_amounts = _price_re.findall(r'(.{0,100}\$[\d,]+\.?\d*.{0,100})', html_content)
     if all_dollar_amounts:
-        price_section = (
-            "=== PRICE DATA FOUND IN PAGE ===\n"
-            + "\n".join(all_dollar_amounts[:20])
-            + "\n\n"
-        )
+        price_section = "=== PRICE DATA FOUND IN PAGE ===\n" + "\n".join(all_dollar_amounts[:20]) + "\n\n"
 
     content_parts.append(price_section)
     content_parts.append(
-        "=== RAW HTML (page source) ===\n" + html_content[:50000]
+        "=== RAW HTML (page source) ===\n"
+        + html_content[:50000]
     )
 
     all_content = "\n\n".join(content_parts)
@@ -547,9 +469,9 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
         '  "video_urls": ["product video or demo mp4 URLs — look for storage.googleapis.com or CDN video URLs"],\n'
         '  "gallery_images": ["ONLY images of THIS EXACT product showing different angles/views/colors/usage — NOT related products, banners, icons, or promotional images. Max 8 URLs. Include images showing the product in use, different angles, packaging, and lifestyle context. These help the AI understand how the product looks and functions for ad generation."],\n'
         '  "product_usage": "HOW is this product physically used? Describe installation, interaction, and visual behavior. '
-        "Examples: a thermostat is wall-mounted, users turn the outer ring gently, the display color changes with temperature "
-        "(blue=cool, orange=warm, green=eco). A phone is held in hand, users tap and swipe the screen. "
-        "A speaker sits on a surface, users speak to it. Be specific about how users PHYSICALLY INTERACT with the product "
+        'Examples: a thermostat is wall-mounted, users turn the outer ring gently, the display color changes with temperature '
+        '(blue=cool, orange=warm, green=eco). A phone is held in hand, users tap and swipe the screen. '
+        'A speaker sits on a surface, users speak to it. Be specific about how users PHYSICALLY INTERACT with the product '
         'and how the product VISUALLY RESPONDS (screen changes, LED colors, sounds, etc.)"\n'
         "}\n\n"
         "IMPORTANT:\n"
@@ -588,10 +510,7 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
         product_data = json.loads(extracted_text)
     except Exception as e:
         log_message(f"AI extraction failed: {e}", Severity.ERROR)
-        return {
-            "status": "error",
-            "details": f"Could not extract product details: {e}",
-        }
+        return {"status": "error", "details": f"Could not extract product details: {e}"}
 
     brand = product_data.get("brand", "")
     product_name = product_data.get("product_name", "")
@@ -614,21 +533,9 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
             return True
         if isinstance(val, str):
             low = val.strip().lower()
-            return low in (
-                "",
-                "not specified",
-                "not listed",
-                "not listed/varies",
-                "not available",
-                "n/a",
-                "na",
-                "none",
-                "varies",
-                "unknown",
-                "not found",
-                "price not available",
-                "contact for price",
-            )
+            return low in ("", "not specified", "not listed", "not listed/varies",
+                           "not available", "n/a", "na", "none", "varies", "unknown",
+                           "not found", "price not available", "contact for price")
         return False
 
     if app_state_product:
@@ -654,64 +561,43 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
 
     if _is_empty(price):
         import re as _re
-
-        price_match = _re.search(
-            r'\\?"originalPrice\\?"\s*:\s*([\d.]+)', html_content
-        )
+        price_match = _re.search(r'\\?"originalPrice\\?"\s*:\s*([\d.]+)', html_content)
         if price_match:
             orig_val = price_match.group(1)
             price = f"${orig_val}"
-            monthly_match = _re.search(
-                r'\\?"monthlyPrice\\?"\s*:\s*([\d.]+)', html_content
-            )
-            term_match = _re.search(
-                r'\\?"afoTerm\\?"\s*:\s*(\d+)', html_content
-            )
+            monthly_match = _re.search(r'\\?"monthlyPrice\\?"\s*:\s*([\d.]+)', html_content)
+            term_match = _re.search(r'\\?"afoTerm\\?"\s*:\s*(\d+)', html_content)
             if monthly_match and term_match:
                 price += f" (or ${monthly_match.group(1)}/mo for {term_match.group(1)} months)"
-            log_message(
-                f"Price extracted from embedded JSON: {price}", Severity.INFO
-            )
+            log_message(f"Price extracted from embedded JSON: {price}", Severity.INFO)
     if _is_empty(price):
         import re as _re
-
-        html_price = _re.search(r">\s*\$([\d,]+\.?\d*)\s*<", html_content)
+        html_price = _re.search(r'>\s*\$([\d,]+\.?\d*)\s*<', html_content)
         if html_price:
             price = f"${html_price.group(1)}"
-            log_message(
-                f"Price extracted from visible HTML: {price}", Severity.INFO
-            )
+            log_message(f"Price extracted from visible HTML: {price}", Severity.INFO)
 
     full_description = description
     if overview and overview not in description:
         full_description = f"{overview}\n\n{description}"
     if features:
         features_text = "\n".join(f"- {f}" for f in features)
-        full_description = (
-            f"{full_description}\n\nKey Features:\n{features_text}"
-        )
+        full_description = f"{full_description}\n\nKey Features:\n{features_text}"
     if specs:
         specs_text = "\n".join(f"- {k}: {v}" for k, v in specs.items())
-        full_description = (
-            f"{full_description}\n\nSpecifications:\n{specs_text}"
-        )
+        full_description = f"{full_description}\n\nSpecifications:\n{specs_text}"
     if product_usage:
         full_description = f"{full_description}\n\nProduct Usage & Interaction: {product_usage}"
     if compatibility:
-        full_description = (
-            f"{full_description}\n\nCompatibility: {compatibility}"
-        )
+        full_description = f"{full_description}\n\nCompatibility: {compatibility}"
     if whats_in_box:
         full_description = f"{full_description}\n\nIn the Box: {whats_in_box}"
     if price:
         full_description = f"{full_description}\n\nPrice: {price}"
 
-    additional_images = product_data.get(
-        "gallery_images", []
-    ) or product_data.get("additional_images", [])
+    additional_images = product_data.get("gallery_images", []) or product_data.get("additional_images", [])
 
     import re as _html_re
-
     guest_ids = _html_re.findall(r'"(GUEST_[a-f0-9\-]+)"', html_content)
     guest_ids = list(dict.fromkeys(guest_ids))
     for gid in guest_ids:
@@ -733,10 +619,7 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
             seen_bases.add(base)
             unique_images.append(u)
     additional_images = unique_images[:8]
-    log_message(
-        f"Product gallery images from Gemini + HTML: {len(additional_images)}",
-        Severity.INFO,
-    )
+    log_message(f"Product gallery images from Gemini + HTML: {len(additional_images)}", Severity.INFO)
 
     product_videos_from_html = _html_re.findall(
         r'(https://storage\.googleapis\.com/[^\s"\'<>]+\.mp4)', html_content
@@ -745,15 +628,11 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
         r'(https://[^\s"\'<>]+\.mp4)', html_content
     )
     scene7_videos = _html_re.findall(
-        r"(https://target\.scene7\.com/is/content/Target/GUEST_[a-f0-9\-]+)",
-        html_content,
+        r'(https://target\.scene7\.com/is/content/Target/GUEST_[a-f0-9\-]+)', html_content
     )
     product_videos_from_html += list(dict.fromkeys(scene7_videos))
     product_videos_from_html = list(dict.fromkeys(product_videos_from_html))[:3]
-    log_message(
-        f"Product videos from HTML: {len(product_videos_from_html)}",
-        Severity.INFO,
-    )
+    log_message(f"Product videos from HTML: {len(product_videos_from_html)}", Severity.INFO)
 
     tool_context.state[PRODUCT_COMPANY_NAME_STATE_KEY] = brand
     tool_context.state["PRODUCT_NAME"] = product_name
@@ -788,10 +667,7 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
             json.dumps(product_data_for_gcs, indent=2).encode("utf-8"),
             f"{safe_name}/product_data.json",
         )
-        log_message(
-            f"Full product data saved to GCS: {safe_name}/product_data.json",
-            Severity.INFO,
-        )
+        log_message(f"Full product data saved to GCS: {safe_name}/product_data.json", Severity.INFO)
     except Exception:
         pass
     if additional_images:
@@ -802,16 +678,10 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
         try:
             img_bytes = None
             if image_url.startswith("gs://"):
-                img_bytes, _ = utils_agents.download_bytes_from_reference(
-                    image_url
-                )
+                img_bytes, _ = utils_agents.download_bytes_from_reference(image_url)
             else:
-                async with httpx.AsyncClient(
-                    follow_redirects=True, timeout=20.0
-                ) as img_client:
-                    img_resp = await img_client.get(
-                        image_url, headers={"User-Agent": headers["User-Agent"]}
-                    )
+                async with httpx.AsyncClient(follow_redirects=True, timeout=20.0) as img_client:
+                    img_resp = await img_client.get(image_url, headers={"User-Agent": headers["User-Agent"]})
                     if img_resp.status_code == 200:
                         img_bytes = img_resp.content
             if img_bytes:
@@ -819,14 +689,11 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
                     import io
 
                     from PIL import Image
-
                     img = Image.open(io.BytesIO(img_bytes))
                     canvas_size = 600
                     max_product = int(canvas_size * 0.7)
                     img.thumbnail((max_product, max_product), Image.LANCZOS)
-                    canvas = Image.new(
-                        "RGB", (canvas_size, canvas_size), (0, 0, 0)
-                    )
+                    canvas = Image.new("RGB", (canvas_size, canvas_size), (0, 0, 0))
                     paste_x = (canvas_size - img.width) // 2
                     paste_y = (canvas_size - img.height) // 2
                     if img.mode == "RGBA":
@@ -841,51 +708,34 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
                 safe_name = product_name.replace(" ", "_")[:30]
                 gcs_blob = f"{safe_name}/product_{safe_name}.png"
                 try:
-                    utils_gcs.upload_to_gcs(
-                        GOOGLE_CLOUD_BUCKET_ARTIFACTS, img_bytes, gcs_blob
-                    )
+                    utils_gcs.upload_to_gcs(GOOGLE_CLOUD_BUCKET_ARTIFACTS, img_bytes, gcs_blob)
                     gcs_uri = f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{gcs_blob}"
                     tool_context.state[PRODUCT_IMAGE_URI_STATE_KEY] = gcs_uri
-                    log_message(
-                        f"Product image uploaded to GCS: {gcs_uri}",
-                        Severity.INFO,
-                    )
+                    log_message(f"Product image uploaded to GCS: {gcs_uri}", Severity.INFO)
                 except Exception:
                     pass
                 product_media = GeneratedMedia(
-                    filename=f"product_{safe_name}.png",
-                    mime_type="image/png",
-                    media_bytes=img_bytes,
+                    filename=f"product_{safe_name}.png", mime_type="image/png", media_bytes=img_bytes,
                 )
                 await utils_agents.save_to_artifact_and_render_asset(
-                    asset=product_media,
-                    context=tool_context,
-                    save_in_gcs=False,
-                    save_in_artifacts=True,
+                    asset=product_media, context=tool_context,
+                    save_in_gcs=False, save_in_artifacts=True,
                 )
         except Exception:
             pass
 
     gallery_gcs_uris = []
     if additional_images:
-
         async def _download_gallery_img(img_u, idx):
             try:
-                async with httpx.AsyncClient(
-                    follow_redirects=True, timeout=15.0
-                ) as gc:
-                    gr = await gc.get(
-                        img_u, headers={"User-Agent": headers["User-Agent"]}
-                    )
+                async with httpx.AsyncClient(follow_redirects=True, timeout=15.0) as gc:
+                    gr = await gc.get(img_u, headers={"User-Agent": headers["User-Agent"]})
                     if gr.status_code == 200 and len(gr.content) > 5000:
                         safe_name = product_name.replace(" ", "_")[:30]
                         gcs_blob = f"{safe_name}/gallery_{idx}.png"
                         try:
                             await asyncio.to_thread(
-                                utils_gcs.upload_to_gcs,
-                                GOOGLE_CLOUD_BUCKET_ARTIFACTS,
-                                gr.content,
-                                gcs_blob,
+                                utils_gcs.upload_to_gcs, GOOGLE_CLOUD_BUCKET_ARTIFACTS, gr.content, gcs_blob
                             )
                             return f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{gcs_blob}"
                         except Exception:
@@ -896,17 +746,11 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
 
         gallery_to_show = additional_images[:4]
         gallery_results = await asyncio.gather(
-            *[
-                _download_gallery_img(u, i)
-                for i, u in enumerate(gallery_to_show)
-            ],
+            *[_download_gallery_img(u, i) for i, u in enumerate(gallery_to_show)],
             return_exceptions=True,
         )
         gallery_gcs_uris = [r for r in gallery_results if isinstance(r, str)]
-        log_message(
-            f"Gallery images uploaded to GCS: {len(gallery_gcs_uris)}/{len(gallery_to_show)}",
-            Severity.INFO,
-        )
+        log_message(f"Gallery images uploaded to GCS: {len(gallery_gcs_uris)}/{len(gallery_to_show)}", Severity.INFO)
 
     video_urls = product_data.get("video_urls", [])
     if not video_urls:
@@ -914,23 +758,15 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
     if video_urls:
         tool_context.state["PRODUCT_VIDEO_URLS"] = video_urls[:3]
         try:
-            async with httpx.AsyncClient(
-                follow_redirects=True, timeout=20.0
-            ) as vc:
-                vr = await vc.get(
-                    video_urls[0], headers={"User-Agent": headers["User-Agent"]}
-                )
+            async with httpx.AsyncClient(follow_redirects=True, timeout=20.0) as vc:
+                vr = await vc.get(video_urls[0], headers={"User-Agent": headers["User-Agent"]})
                 if vr.status_code == 200 and len(vr.content) > 10000:
                     vm = GeneratedMedia(
-                        filename="product_video.mp4",
-                        mime_type="video/mp4",
-                        media_bytes=vr.content,
+                        filename="product_video.mp4", mime_type="video/mp4", media_bytes=vr.content,
                     )
                     await utils_agents.save_to_artifact_and_render_asset(
-                        asset=vm,
-                        context=tool_context,
-                        save_in_gcs=False,
-                        save_in_artifacts=True,
+                        asset=vm, context=tool_context,
+                        save_in_gcs=False, save_in_artifacts=True,
                     )
         except Exception:
             pass
@@ -941,28 +777,19 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
                 gb, _ = utils_agents.download_bytes_from_reference(guri)
                 if gb:
                     gm = GeneratedMedia(
-                        filename=f"gallery_{i}.png",
-                        mime_type="image/png",
-                        media_bytes=gb,
+                        filename=f"gallery_{i}.png", mime_type="image/png", media_bytes=gb,
                     )
                     await utils_agents.save_to_artifact_and_render_asset(
-                        asset=gm,
-                        context=tool_context,
-                        save_in_gcs=False,
-                        save_in_artifacts=True,
+                        asset=gm, context=tool_context,
+                        save_in_gcs=False, save_in_artifacts=True,
                     )
             except Exception:
                 pass
     if additional_images:
         tool_context.state["PRODUCT_ADDITIONAL_IMAGES"] = additional_images[:8]
 
-    log_message(
-        f"Extracted product: {brand} — {product_name} ({price})", Severity.INFO
-    )
-    log_message(
-        f"  Features: {len(features)}, Specs: {len(specs)}, Image: {'YES' if image_url else 'NO'}, Gallery: {len(additional_images)}, Videos: {len(video_urls)}",
-        Severity.INFO,
-    )
+    log_message(f"Extracted product: {brand} — {product_name} ({price})", Severity.INFO)
+    log_message(f"  Features: {len(features)}, Specs: {len(specs)}, Image: {'YES' if image_url else 'NO'}, Gallery: {len(additional_images)}, Videos: {len(video_urls)}", Severity.INFO)
 
     return {
         "status": "success",
@@ -994,9 +821,7 @@ async def extract_product_from_url(tool_context: ToolContext, url: str) -> dict:
     }
 
 
-async def display_product_image(
-    tool_context: ToolContext, image_url: str, product_name: str = "product"
-):
+async def display_product_image(tool_context: ToolContext, image_url: str, product_name: str = "product"):
     """Displays a product image inline. Call this in Path B when the user provides their product image URL.
 
     Args:
@@ -1008,22 +833,15 @@ async def display_product_image(
         if img_bytes:
             safe_name = product_name.replace(" ", "_")[:30]
             product_media = GeneratedMedia(
-                filename=f"product_{safe_name}.png",
-                mime_type="image/png",
-                media_bytes=img_bytes,
+                filename=f"product_{safe_name}.png", mime_type="image/png", media_bytes=img_bytes,
             )
             await utils_agents.save_to_artifact_and_render_asset(
-                asset=product_media,
-                context=tool_context,
-                save_in_gcs=False,
-                save_in_artifacts=True,
+                asset=product_media, context=tool_context,
+                save_in_gcs=False, save_in_artifacts=True,
             )
             tool_context.state["_product_image_displayed"] = True
             tool_context.state["PRODUCT_IMAGE_URI"] = image_url
-            return {
-                "status": "success",
-                "details": f"Product image displayed for {product_name}",
-            }
+            return {"status": "success", "details": f"Product image displayed for {product_name}"}
     except Exception as e:
         return {"status": "error", "details": str(e)}
     return {"status": "error", "details": "Could not download image"}
@@ -1040,18 +858,14 @@ async def get_product_by_sku(tool_context: ToolContext, sku: str) -> dict:
     if not product:
         return {}, {}
 
-    tool_context.state["product"] = to_dict_recursive(product)
+    tool_context.state['product'] = to_dict_recursive(product)
     brand_name = product.core_identifiers.brand
     brand_info = next(
-        (
-            brand
-            for brand in tool_context.state.get("brand_data", [])
-            if brand.get("name") == brand_name
-        ),
-        None,
+        (brand for brand in tool_context.state.get("brand_data", [])
+         if brand.get("name") == brand_name), None
     )
     if brand_info:
-        tool_context.state["brand_info"] = brand_info
+        tool_context.state['brand_info'] = brand_info
 
     product_image_uri = product.media.main_image_url if product.media else ""
     if product_image_uri:
@@ -1060,12 +874,7 @@ async def get_product_by_sku(tool_context: ToolContext, sku: str) -> dict:
     return to_dict_recursive(product), brand_info or {}
 
 
-async def setup_campaign_from_sku(
-    tool_context: ToolContext,
-    sku: str,
-    num_segments: int = 2,
-    reference_guidelines: str = "",
-):
+async def setup_campaign_from_sku(tool_context: ToolContext, sku: str, num_segments: int = 2, reference_guidelines: str = ""):
     """Sets up a full marketing campaign from a product SKU.
     Automatically extracts brand, product name, description, image, and target audience
     from the product database — no manual input needed.
@@ -1081,10 +890,7 @@ async def setup_campaign_from_sku(
     product = None
     opportunities = tool_context.state.get("opportunities", [])
     for opp in opportunities:
-        if (
-            isinstance(opp, dict)
-            and opp.get("core_identifiers", {}).get("sku") == sku
-        ):
+        if isinstance(opp, dict) and opp.get("core_identifiers", {}).get("sku") == sku:
             # Reconstruct Product from dict
             product = Product(**opp)
             break
@@ -1094,41 +900,28 @@ async def setup_campaign_from_sku(
         product = get_product_by_sku_from_bq(sku)
 
     if not product:
-        return {
-            "status": "error",
-            "details": f"Product with SKU '{sku}' not found.",
-        }
+        return {"status": "error", "details": f"Product with SKU '{sku}' not found."}
 
     company_name = product.core_identifiers.brand or DEMO_COMPANY_NAME
     product_name = product.core_identifiers.product_name
     product_description = (
-        product.description.long
-        if product.description and product.description.long
-        else (
-            product.description.short
-            if product.description and product.description.short
-            else product_name
-        )
+        product.description.long if product.description and product.description.long
+        else product.description.short if product.description and product.description.short
+        else product_name
     )
 
     # Auto-generate target audience from product category and price
     dept = product.categorization.department if product.categorization else ""
     cat = product.categorization.category if product.categorization else ""
-    price = (
-        product.commercial_status.current_price
-        if product.commercial_status
-        else 0
-    )
-    price_tier = (
-        "premium" if price > 200 else "mid-range" if price > 50 else "value"
-    )
+    price = product.commercial_status.current_price if product.commercial_status else 0
+    price_tier = "premium" if price > 200 else "mid-range" if price > 50 else "value"
     target_audience = f"{dept} {cat} consumers interested in {price_tier} {product_name.lower()} products, ages 25-50"
 
     product_image_uri = product.media.main_image_url if product.media else ""
     logo_uri = get_optional_env_var("BACKUP_LOGO_IMAGE_URL", "")
 
     # Store product in state for sub-agents
-    tool_context.state["product"] = to_dict_recursive(product)
+    tool_context.state['product'] = to_dict_recursive(product)
 
     num_segments = max(1, min(num_segments, 4))  # clamp 1-4
 
@@ -1149,9 +942,7 @@ async def setup_campaign_from_sku(
         result["product_summary"] = {
             "brand": company_name,
             "product_name": product_name,
-            "description": (
-                product.description.short if product.description else ""
-            ),
+            "description": product.description.short if product.description else "",
             "category": f"{dept} / {cat}",
             "price": f"${price:.2f}",
             "target_audience": target_audience,
@@ -1181,10 +972,7 @@ _VARIATION_STYLES = [
     "SPORT PERFORMANCE — Dynamic motion blur, sweat, intensity. The product captured mid-action. Speed ramps, dramatic angles, peak performance moment.",
 ]
 
-
-async def _retry_generate_content(
-    client, model, contents, config, label="LLM", max_attempts=4
-):
+async def _retry_generate_content(client, model, contents, config, label="LLM", max_attempts=4):
     """Shared retry wrapper for all Gemini generate_content calls with 429 backoff."""
     for attempt in range(max_attempts):
         try:
@@ -1196,23 +984,14 @@ async def _retry_generate_content(
         except Exception as e:
             is_429 = "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)
             if is_429 and attempt < max_attempts - 1:
-                backoff = (2**attempt) * 3 + random.uniform(0, 2)
-                log_message(
-                    f"{label}: 429 retry {attempt+1}/{max_attempts}, backoff {backoff:.1f}s",
-                    Severity.WARNING,
-                )
+                backoff = (2 ** attempt) * 3 + random.uniform(0, 2)
+                log_message(f"{label}: 429 retry {attempt+1}/{max_attempts}, backoff {backoff:.1f}s", Severity.WARNING)
                 await asyncio.sleep(backoff)
             elif attempt < max_attempts - 1:
                 await asyncio.sleep(2)
-                log_message(
-                    f"{label}: error retry {attempt+1}/{max_attempts}: {e}",
-                    Severity.WARNING,
-                )
+                log_message(f"{label}: error retry {attempt+1}/{max_attempts}: {e}", Severity.WARNING)
             else:
-                log_message(
-                    f"{label}: failed after {max_attempts} attempts: {e}",
-                    Severity.ERROR,
-                )
+                log_message(f"{label}: failed after {max_attempts} attempts: {e}", Severity.ERROR)
                 raise
 
 
@@ -1233,54 +1012,34 @@ def _find_asset_rationale(asset_url: str) -> str | None:
     return None
 
 
-async def _generate_gemini_image(
-    prompt: str, reference_images: list[bytes], label: str = "image"
-) -> bytes | None:
-    parts = [
-        types.Part.from_bytes(data=img, mime_type="image/png")
-        for img in reference_images
-    ]
+async def _generate_gemini_image(prompt: str, reference_images: list[bytes], label: str = "image") -> bytes | None:
+    parts = [types.Part.from_bytes(data=img, mime_type="image/png") for img in reference_images]
     parts.append(types.Part.from_text(text=prompt))
 
     for attempt in range(5):
         try:
-            client = genai.Client(
-                vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global"
-            )
+            client = genai.Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global")
             response = await asyncio.wait_for(
                 client.aio.models.generate_content(
                     model=GEMINI_IMAGE_MODEL,
                     contents=[types.Content(role="user", parts=parts)],
-                    config=types.GenerateContentConfig(
-                        response_modalities=["IMAGE", "TEXT"]
-                    ),
+                    config=types.GenerateContentConfig(response_modalities=["IMAGE", "TEXT"]),
                 ),
                 timeout=120,
             )
             if response.candidates and response.candidates[0].content:
                 for part in response.candidates[0].content.parts:
                     if part.inline_data and part.inline_data.data:
-                        log_message(
-                            f"{label} generated ({len(part.inline_data.data)} bytes)",
-                            Severity.INFO,
-                        )
+                        log_message(f"{label} generated ({len(part.inline_data.data)} bytes)", Severity.INFO)
                         return part.inline_data.data
-            log_message(
-                f"{label}: no image in response (attempt {attempt + 1}/5)",
-                Severity.WARNING,
-            )
+            log_message(f"{label}: no image in response (attempt {attempt + 1}/5)", Severity.WARNING)
         except Exception as e:
             error_str = str(e)
             is_429 = "429" in error_str or "RESOURCE_EXHAUSTED" in error_str
-            log_message(
-                f"{label} failed (attempt {attempt + 1}/5, 429={is_429}): {e}",
-                Severity.WARNING,
-            )
+            log_message(f"{label} failed (attempt {attempt + 1}/5, 429={is_429}): {e}", Severity.WARNING)
             if is_429 and attempt < 4:
-                backoff = (2**attempt) * 2 + random.uniform(0, 3)
-                log_message(
-                    f"{label}: 429 backoff {backoff:.1f}s", Severity.INFO
-                )
+                backoff = (2 ** attempt) * 2 + random.uniform(0, 3)
+                log_message(f"{label}: 429 backoff {backoff:.1f}s", Severity.INFO)
                 await asyncio.sleep(backoff)
                 continue
         if attempt < 4:
@@ -1289,13 +1048,9 @@ async def _generate_gemini_image(
 
 
 async def _generate_image_on_demand(
-    asset_url: str,
-    rationale: str,
-    product_image_bytes: bytes,
-    company_name: str,
-    product_name: str,
-    logo_image_bytes: bytes | None = None,
-    variation_index: int = 0,
+    asset_url: str, rationale: str, product_image_bytes: bytes,
+    company_name: str, product_name: str,
+    logo_image_bytes: bytes | None = None, variation_index: int = 0,
     reference_guidelines: str = "",
     customer_persona: str = "",
 ) -> bytes | None:
@@ -1402,7 +1157,9 @@ async def _generate_image_on_demand(
                 f"The people shown must LOOK like this customer type — their age, style, setting, and aspirations.\n"
                 f"Environments must be places this customer frequents — their home, their hangout, their lifestyle.\n"
             )
-        prompt += f"Return only the image."
+        prompt += (
+            f"Return only the image."
+        )
     else:
         prompt = (
             f"Create a stunning, ready-to-publish digital marketing display ad for "
@@ -1500,10 +1257,7 @@ async def _render_asset(asset_url: str, tool_context: ToolContext):
 
         rationale = _find_asset_rationale(asset_url)
         if not rationale:
-            return {
-                "status": "error",
-                "details": f"No rationale for {asset_url}",
-            }
+            return {"status": "error", "details": f"No rationale for {asset_url}"}
 
         product_image_uri = tool_context.state.get(PRODUCT_IMAGE_URI_STATE_KEY)
         if not product_image_uri:
@@ -1512,72 +1266,46 @@ async def _render_asset(asset_url: str, tool_context: ToolContext):
         # Cache product + logo bytes — download once, reuse across parallel calls
         if _cached_product_bytes is None:
             try:
-                _cached_product_bytes, _ = (
-                    utils_agents.download_bytes_from_reference(
-                        product_image_uri
-                    )
-                )
+                _cached_product_bytes, _ = utils_agents.download_bytes_from_reference(product_image_uri)
             except Exception:
-                return {
-                    "status": "error",
-                    "details": "Failed to download product image",
-                }
+                return {"status": "error", "details": "Failed to download product image"}
 
         if _cached_logo_bytes is None:
             logo_uri = tool_context.state.get(LOGO_IMAGE_URI_STATE_KEY)
             if logo_uri:
                 try:
-                    _cached_logo_bytes, _ = (
-                        utils_agents.download_bytes_from_reference(logo_uri)
-                    )
+                    _cached_logo_bytes, _ = utils_agents.download_bytes_from_reference(logo_uri)
                 except Exception:
                     pass
 
-        company_name = tool_context.state.get(
-            PRODUCT_COMPANY_NAME_STATE_KEY, ""
-        )
+        company_name = tool_context.state.get(PRODUCT_COMPANY_NAME_STATE_KEY, "")
         product_name = tool_context.state.get("PRODUCT_NAME", "product")
         var_idx = hash(asset_url) % len(_VARIATION_STYLES)
-        ref_guidelines = tool_context.state.get(
-            REFERENCE_GUIDELINES_STATE_KEY, ""
-        )
+        ref_guidelines = tool_context.state.get(REFERENCE_GUIDELINES_STATE_KEY, "")
         fidelity_prompt = tool_context.state.get("PRODUCT_FIDELITY_PROMPT", "")
         if fidelity_prompt:
-            ref_guidelines = (
-                f"{ref_guidelines}\n\nPRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
-                if ref_guidelines
-                else f"PRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
-            )
+            ref_guidelines = f"{ref_guidelines}\n\nPRODUCT FIDELITY GUIDE:\n{fidelity_prompt}" if ref_guidelines else f"PRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
         persona = tool_context.state.get(CUSTOMER_PERSONA_STATE_KEY, "")
 
         asset_bytes = await _generate_image_on_demand(
-            asset_url=asset_url,
-            rationale=rationale,
-            product_image_bytes=_cached_product_bytes,
-            company_name=company_name,
-            product_name=product_name,
-            logo_image_bytes=_cached_logo_bytes,
+            asset_url=asset_url, rationale=rationale,
+            product_image_bytes=_cached_product_bytes, company_name=company_name,
+            product_name=product_name, logo_image_bytes=_cached_logo_bytes,
             variation_index=var_idx,
             reference_guidelines=ref_guidelines,
             customer_persona=persona,
         )
 
         if not asset_bytes:
-            return {
-                "status": "error",
-                "details": f"Failed to generate image for {asset_url}",
-            }
+            return {"status": "error", "details": f"Failed to generate image for {asset_url}"}
 
         if _cached_logo_bytes:
             try:
                 import io as _pio
 
                 from PIL import Image as _PILImg
-
                 bg = _PILImg.open(_pio.BytesIO(asset_bytes)).convert("RGBA")
-                logo = _PILImg.open(_pio.BytesIO(_cached_logo_bytes)).convert(
-                    "RGBA"
-                )
+                logo = _PILImg.open(_pio.BytesIO(_cached_logo_bytes)).convert("RGBA")
                 logo_size = int(bg.width * 0.12)
                 logo.thumbnail((logo_size, logo_size), _PILImg.LANCZOS)
                 x = bg.width - logo.width - 30
@@ -1590,15 +1318,11 @@ async def _render_asset(asset_url: str, tool_context: ToolContext):
                 pass
 
         generated_media = GeneratedMedia(
-            filename=filename,
-            mime_type="image/png",
-            media_bytes=asset_bytes,
+            filename=filename, mime_type="image/png", media_bytes=asset_bytes,
         )
         generated_media = await utils_agents.save_to_artifact_and_render_asset(
-            asset=generated_media,
-            context=tool_context,
-            save_in_gcs=True,
-            save_in_artifacts=True,
+            asset=generated_media, context=tool_context,
+            save_in_gcs=True, save_in_artifacts=True,
             gcs_folder=OUTPUT_FOLDER,
         )
 
@@ -1610,9 +1334,7 @@ async def _render_asset(asset_url: str, tool_context: ToolContext):
         return {"status": "error", "details": str(e)}
 
 
-async def _pre_generate_images(
-    asset_uris: list[str], tool_context: ToolContext
-):
+async def _pre_generate_images(asset_uris: list[str], tool_context: ToolContext):
     """Pre-generates multiple images in parallel using Gemini."""
     uris_needing_generation = []
     for uri in asset_uris:
@@ -1632,9 +1354,7 @@ async def _pre_generate_images(
     if not product_image_uri:
         return
     try:
-        product_bytes, _ = utils_agents.download_bytes_from_reference(
-            product_image_uri
-        )
+        product_bytes, _ = utils_agents.download_bytes_from_reference(product_image_uri)
     except Exception:
         return
 
@@ -1651,21 +1371,14 @@ async def _pre_generate_images(
     ref_guidelines = tool_context.state.get(REFERENCE_GUIDELINES_STATE_KEY, "")
     fidelity_prompt = tool_context.state.get("PRODUCT_FIDELITY_PROMPT", "")
     if fidelity_prompt:
-        ref_guidelines = (
-            f"{ref_guidelines}\n\nPRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
-            if ref_guidelines
-            else f"PRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
-        )
+        ref_guidelines = f"{ref_guidelines}\n\nPRODUCT FIDELITY GUIDE:\n{fidelity_prompt}" if ref_guidelines else f"PRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
     persona = tool_context.state.get(CUSTOMER_PERSONA_STATE_KEY, "")
 
     async def _gen_one(uri, rationale, var_idx):
         img_bytes = await _generate_image_on_demand(
-            asset_url=uri,
-            rationale=rationale,
-            product_image_bytes=product_bytes,
-            company_name=company_name,
-            product_name=product_name,
-            logo_image_bytes=logo_bytes,
+            asset_url=uri, rationale=rationale,
+            product_image_bytes=product_bytes, company_name=company_name,
+            product_name=product_name, logo_image_bytes=logo_bytes,
             variation_index=var_idx,
             reference_guidelines=ref_guidelines,
             customer_persona=persona,
@@ -1673,10 +1386,7 @@ async def _pre_generate_images(
         return uri, img_bytes
 
     results = await asyncio.gather(
-        *[
-            _gen_one(uri, rat, i)
-            for i, (uri, rat) in enumerate(uris_needing_generation)
-        ],
+        *[_gen_one(uri, rat, i) for i, (uri, rat) in enumerate(uris_needing_generation)],
         return_exceptions=True,
     )
 
@@ -1687,12 +1397,10 @@ async def _pre_generate_images(
 # Campaign Generation Pipeline (from your parallel agent)
 # ============================================================
 
-
 def _folder_has_content(folder: str, prefix_filter: str = "") -> bool:
     """Checks if a GCS folder already has files matching a specific prefix."""
     try:
         from google.cloud import storage as gcs_storage
-
         storage_client = gcs_storage.Client(project=GOOGLE_CLOUD_PROJECT)
         bucket = storage_client.bucket(GOOGLE_CLOUD_BUCKET_ARTIFACTS)
         search = f"{folder}/{prefix_filter}" if prefix_filter else f"{folder}/"
@@ -1723,9 +1431,7 @@ async def generate_product_fidelity_prompt(tool_context: ToolContext) -> dict:
     # Step 1: Google Search to understand real-world product usage
     search_context = ""
     try:
-        search_client = genai.Client(
-            vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global"
-        )
+        search_client = genai.Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global")
         search_prompt = (
             f"Research how the {product_name} by {company_name} is used in real life. "
             f"I need to know:\n"
@@ -1741,12 +1447,7 @@ async def generate_product_fidelity_prompt(tool_context: ToolContext) -> dict:
         search_response = await asyncio.to_thread(
             search_client.models.generate_content,
             model="gemini-3.1-pro-preview",
-            contents=[
-                types.Content(
-                    role="user",
-                    parts=[types.Part.from_text(text=search_prompt)],
-                )
-            ],
+            contents=[types.Content(role="user", parts=[types.Part.from_text(text=search_prompt)])],
             config=types.GenerateContentConfig(
                 temperature=0.2,
                 max_output_tokens=2048,
@@ -1757,14 +1458,9 @@ async def generate_product_fidelity_prompt(tool_context: ToolContext) -> dict:
             for part in search_response.candidates[0].content.parts:
                 if part.text:
                     search_context += part.text
-        log_message(
-            f"Google Search product research: {len(search_context)} chars",
-            Severity.INFO,
-        )
+        log_message(f"Google Search product research: {len(search_context)} chars", Severity.INFO)
     except Exception as e:
-        log_message(
-            f"Google Search for product research failed: {e}", Severity.WARNING
-        )
+        log_message(f"Google Search for product research failed: {e}", Severity.WARNING)
 
     # Step 2: Generate fidelity guide using all available info
     prompt_for_gemini = (
@@ -1780,71 +1476,69 @@ async def generate_product_fidelity_prompt(tool_context: ToolContext) -> dict:
         f"- Has {len(additional_images)} gallery images and {len(video_urls)} product videos\n\n"
     )
     if search_context:
-        prompt_for_gemini += f"REAL-WORLD RESEARCH (from Google Search):\n{search_context[:3000]}\n\n"
+        prompt_for_gemini += (
+            f"REAL-WORLD RESEARCH (from Google Search):\n{search_context[:3000]}\n\n"
+        )
     prompt_for_gemini += (
         f"Generate a JSON with these EXACT keys:\n"
-        f"{{\n"
+        f'{{\n'
         f'  "physical_description": "Describe the product EXACT physical appearance: shape, color, materials, '
         f'finish, dimensions in inches. Be very specific — this will be used to generate images.",\n'
         f'  "installation_context": "CRITICAL: How is this product PHYSICALLY installed? '
-        f"Be EXPLICIT: is it SCREWED TO A WALL? PLACED ON A TABLE? WORN ON WRIST? HELD IN HAND? "
-        f"If wall-mounted, specify: which wall, which room, at what height, with what mount/base plate. "
+        f'Be EXPLICIT: is it SCREWED TO A WALL? PLACED ON A TABLE? WORN ON WRIST? HELD IN HAND? '
+        f'If wall-mounted, specify: which wall, which room, at what height, with what mount/base plate. '
         f'This is the MOST IMPORTANT field — getting this wrong means the entire ad is wrong.",\n'
         f'  "user_interaction": "How do users PHYSICALLY interact with it? Be specific about gestures: '
-        f"turn the outer ring, tap the screen, swipe, press a button, speak to it, use an app. "
+        f'turn the outer ring, tap the screen, swipe, press a button, speak to it, use an app. '
         f'What happens visually when they interact?",\n'
         f'  "visual_behavior": "Does the product have dynamic visual elements? Describe EXACTLY: '
-        f"what colors appear on the display and when, what triggers color changes, what information is shown. "
+        f'what colors appear on the display and when, what triggers color changes, what information is shown. '
         f'Example: thermostat shows blue at cool temps, orange at warm temps, green leaf for eco mode.",\n'
         f'  "real_world_size": "EXACT dimensions from research. Compare to common objects. '
         f'Example: 3.3 inches diameter, about the size of a hockey puck, or 6.1 inches tall like a smartphone.",\n'
         f'  "what_NOT_to_show": "CRITICAL — list things that should NEVER appear in generated ads: '
-        f"1. Product on a TABLE if it is WALL-MOUNTED. "
-        f"2. Product floating or lying on surfaces if it has a specific mount. "
-        f"3. Fabricated back/internal views. "
-        f"4. Features not confirmed in the product description. "
-        f"5. Wrong size/proportions. "
+        f'1. Product on a TABLE if it is WALL-MOUNTED. '
+        f'2. Product floating or lying on surfaces if it has a specific mount. '
+        f'3. Fabricated back/internal views. '
+        f'4. Features not confirmed in the product description. '
+        f'5. Wrong size/proportions. '
         f'6. People interacting with it in ways it cannot be used.",\n'
         f'  "ad_scene_suggestions": "Write 3 scenes like an AD DIRECTOR shot list. Each scene MUST include: '
-        f"SHOT TYPE (wide/medium/close-up), CAMERA MOVEMENT (steadicam walk, dolly push-in, static, slow orbit), "
-        f"CAMERA HEIGHT (eye level, low angle, high angle), FRAMING (product position in frame), "
-        f"LIGHTING (natural window light, warm evening glow, dramatic side-light), "
-        f"ENVIRONMENT (weather outside, room details, time of day — use environment as storytelling), "
-        f"PRODUCT STATE (what the display shows, what mode it is in). "
-        f"IMPORTANT: Do NOT show anyone physically touching/operating the product — this causes visual artifacts in AI generation. "
-        f"Instead, show the product in its installed position with the ENVIRONMENT telling the story "
-        f"(rain outside = product shows weather data, evening = warm lighting, morning = fresh start). "
-        f"People can be IN the scene but NOT touching the product. "
+        f'SHOT TYPE (wide/medium/close-up), CAMERA MOVEMENT (steadicam walk, dolly push-in, static, slow orbit), '
+        f'CAMERA HEIGHT (eye level, low angle, high angle), FRAMING (product position in frame), '
+        f'LIGHTING (natural window light, warm evening glow, dramatic side-light), '
+        f'ENVIRONMENT (weather outside, room details, time of day — use environment as storytelling), '
+        f'PRODUCT STATE (what the display shows, what mode it is in). '
+        f'IMPORTANT: Do NOT show anyone physically touching/operating the product — this causes visual artifacts in AI generation. '
+        f'Instead, show the product in its installed position with the ENVIRONMENT telling the story '
+        f'(rain outside = product shows weather data, evening = warm lighting, morning = fresh start). '
+        f'People can be IN the scene but NOT touching the product. '
         f'Each scene should feel like a frame from a premium Apple or Google commercial.",\n'
         f'  "video_ad_guidance": "Write a 3-act DIRECTOR BRIEF for a 24-second video ad (8 seconds per act). '
-        f"IMPORTANT: Do NOT show anyone physically operating/touching the product — this causes visual artifacts. "
-        f"Instead, let the ENVIRONMENT tell the story while the product sits beautifully in its installed position. "
-        f"For EACH act specify: "
-        f"ACT 1 (0-8s): ESTABLISHING — steadicam walks into the space. Wide shot showing the environment and mood. "
-        f"Use WEATHER and ENVIRONMENT as storytelling (rain on windows, snow outside, golden sunset, morning mist). "
-        f"Product is visible in its correct position but not the focus yet. "
-        f"ACT 2 (8-16s): HERO — Camera gently pushes toward the product. Medium/close-up shot. "
-        f"The product display is clearly visible showing relevant information. "
-        f"NO ONE touches the product. The environment around it tells the story (warm light, cozy room, kids playing in background). "
-        f"ACT 3 (16-24s): PAYOFF — Pull back to lifestyle wide shot. The result is visible "
-        f"(comfortable family, perfect home, peaceful evening). Product in background, part of the beautiful scene. "
+        f'IMPORTANT: Do NOT show anyone physically operating/touching the product — this causes visual artifacts. '
+        f'Instead, let the ENVIRONMENT tell the story while the product sits beautifully in its installed position. '
+        f'For EACH act specify: '
+        f'ACT 1 (0-8s): ESTABLISHING — steadicam walks into the space. Wide shot showing the environment and mood. '
+        f'Use WEATHER and ENVIRONMENT as storytelling (rain on windows, snow outside, golden sunset, morning mist). '
+        f'Product is visible in its correct position but not the focus yet. '
+        f'ACT 2 (8-16s): HERO — Camera gently pushes toward the product. Medium/close-up shot. '
+        f'The product display is clearly visible showing relevant information. '
+        f'NO ONE touches the product. The environment around it tells the story (warm light, cozy room, kids playing in background). '
+        f'ACT 3 (16-24s): PAYOFF — Pull back to lifestyle wide shot. The result is visible '
+        f'(comfortable family, perfect home, peaceful evening). Product in background, part of the beautiful scene. '
         f'CRITICAL: Product stays FIXED in place in ALL 3 acts. Nobody touches it. Camera and environment do all the storytelling.",\n'
         f'  "keyframe_instruction": "ONE sentence that MUST appear in EVERY keyframe generation prompt. '
-        f"Example for a thermostat: The Nest thermostat is MOUNTED FLAT ON A WHITE WALL at eye level, showing its round display. "
-        f"Example for sneakers: The sneakers are WORN ON FEET, shown at ground level on pavement. "
+        f'Example for a thermostat: The Nest thermostat is MOUNTED FLAT ON A WHITE WALL at eye level, showing its round display. '
+        f'Example for sneakers: The sneakers are WORN ON FEET, shown at ground level on pavement. '
         f'This sentence forces the image generator to place the product correctly."\n'
-        f"}}\n\n"
+        f'}}\n\n'
         f"CRITICAL: Only include information you can CONFIRM from the product description and category. "
         f"Do NOT invent features or behaviors. If unsure, say 'not confirmed from available info'.\n"
         f"Return ONLY the JSON, no markdown."
     )
 
     try:
-        client = genai.Client(
-            vertexai=True,
-            project=GOOGLE_CLOUD_PROJECT,
-            location=GOOGLE_CLOUD_LOCATION,
-        )
+        client = genai.Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location=GOOGLE_CLOUD_LOCATION)
         response = await asyncio.to_thread(
             client.models.generate_content,
             model=LLM_GEMINI_MODEL_MARKETING_ANALYST,
@@ -1856,12 +1550,10 @@ async def generate_product_fidelity_prompt(tool_context: ToolContext) -> dict:
         )
         fidelity_data = json.loads(response.text.strip())
     except Exception as e:
-        log_message(
-            f"Failed to generate product fidelity prompt: {e}", Severity.ERROR
-        )
+        log_message(f"Failed to generate product fidelity prompt: {e}", Severity.ERROR)
         return {"status": "error", "details": str(e)}
 
-    keyframe_instruction = fidelity_data.get("keyframe_instruction", "")
+    keyframe_instruction = fidelity_data.get('keyframe_instruction', '')
 
     fidelity_text = (
         f"# Product Fidelity Guide: {product_name} by {company_name}\n\n"
@@ -1883,13 +1575,9 @@ async def generate_product_fidelity_prompt(tool_context: ToolContext) -> dict:
         safe_name = product_name.replace(" ", "_")[:40]
         gcs_blob = f"{safe_name}/product_fidelity_prompt.md"
         utils_gcs.upload_to_gcs(
-            GOOGLE_CLOUD_BUCKET_ARTIFACTS,
-            fidelity_text.encode("utf-8"),
-            gcs_blob,
+            GOOGLE_CLOUD_BUCKET_ARTIFACTS, fidelity_text.encode("utf-8"), gcs_blob,
         )
-        log_message(
-            f"Product fidelity prompt saved to GCS: {gcs_blob}", Severity.INFO
-        )
+        log_message(f"Product fidelity prompt saved to GCS: {gcs_blob}", Severity.INFO)
     except Exception:
         pass
 
@@ -1909,39 +1597,27 @@ def delete_asset_from_gcs(tool_context: ToolContext, filename: str):
         filename: The filename to delete (e.g. 'img_c1_s1_urban_1.png', 'asset_sheet_c1_1.png', 'video_ad_123_456.mp4').
     """
     _set_output_folder(tool_context)
-    deleted_uri = (
-        f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{OUTPUT_FOLDER}/{filename}"
-    )
+    deleted_uri = f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{OUTPUT_FOLDER}/{filename}"
     try:
         from google.cloud import storage as gcs_storage
-
         storage_client = gcs_storage.Client(project=GOOGLE_CLOUD_PROJECT)
         bucket = storage_client.bucket(GOOGLE_CLOUD_BUCKET_ARTIFACTS)
         blob_path = f"{OUTPUT_FOLDER}/{filename}"
         blob = bucket.blob(blob_path)
         if blob.exists():
             blob.delete()
-            log_message(
-                f"Deleted old asset from GCS: {blob_path}", Severity.INFO
-            )
+            log_message(f"Deleted old asset from GCS: {blob_path}", Severity.INFO)
         else:
-            log_message(
-                f"Asset not found in GCS (may already be deleted): {blob_path}",
-                Severity.INFO,
-            )
+            log_message(f"Asset not found in GCS (may already be deleted): {blob_path}", Severity.INFO)
     except Exception as e:
-        log_message(
-            f"Failed to delete {filename} from GCS: {e}", Severity.WARNING
-        )
+        log_message(f"Failed to delete {filename} from GCS: {e}", Severity.WARNING)
 
     removed_count = 0
     session_artifacts = tool_context.state.get("SESSION_ARTIFACTS_STATE", {})
     if session_artifacts:
         keys_to_remove = [
-            k
-            for k, v in session_artifacts.items()
-            if isinstance(v, dict)
-            and (
+            k for k, v in session_artifacts.items()
+            if isinstance(v, dict) and (
                 filename in (v.get("asset", {}).get("gcs_uri", "") or "")
                 or filename in (v.get("asset", {}).get("filename", "") or "")
                 or deleted_uri == (v.get("asset", {}).get("gcs_uri", "") or "")
@@ -1953,29 +1629,17 @@ def delete_asset_from_gcs(tool_context: ToolContext, filename: str):
         if keys_to_remove:
             tool_context.state["SESSION_ARTIFACTS_STATE"] = session_artifacts
 
-    for state_key in [
-        SELECTED_IMAGES_STATE_KEY,
-        SELECTED_VIDEOS_STATE_KEY,
-        SELECTED_ASSET_SHEETS_STATE_KEY,
-        GENERATED_GCS_URIS_STATE_KEY,
-    ]:
+    for state_key in [SELECTED_IMAGES_STATE_KEY, SELECTED_VIDEOS_STATE_KEY,
+                      SELECTED_ASSET_SHEETS_STATE_KEY, GENERATED_GCS_URIS_STATE_KEY]:
         uri_list = tool_context.state.get(state_key, [])
         if isinstance(uri_list, list):
-            cleaned = [
-                u for u in uri_list if filename not in u and deleted_uri != u
-            ]
+            cleaned = [u for u in uri_list if filename not in u and deleted_uri != u]
             if len(cleaned) != len(uri_list):
                 tool_context.state[state_key] = cleaned
                 removed_count += len(uri_list) - len(cleaned)
 
-    log_message(
-        f"Removed {removed_count} references to {filename} from session state",
-        Severity.INFO,
-    )
-    return {
-        "status": "success",
-        "details": f"Deleted {filename} and removed {removed_count} stale references from session state",
-    }
+    log_message(f"Removed {removed_count} references to {filename} from session state", Severity.INFO)
+    return {"status": "success", "details": f"Deleted {filename} and removed {removed_count} stale references from session state"}
 
 
 def _prefixed_blob(blob_path: str) -> str:
@@ -1999,8 +1663,8 @@ def _add_selected_asset(state_key: str, asset: str) -> list[str]:
     state_json[state_key] = selected_assets
     utils_gcs.upload_to_gcs(
         bucket_path=MARKETING_ANALYST_DATASTORE_CLOUD_BUCKET,
-        file_bytes=json.dumps(state_json).encode("utf-8"),
-        destination_blob_name=_prefixed_blob(SESSION_STATE_FILE_NAME),
+        file_bytes=json.dumps(state_json).encode('utf-8'),
+        destination_blob_name=_prefixed_blob(SESSION_STATE_FILE_NAME)
     )
     return selected_assets
 
@@ -2012,19 +1676,11 @@ def check_existing_assets(tool_context: ToolContext):
     _set_output_folder(tool_context)
     if _folder_has_content(OUTPUT_FOLDER):
         from google.cloud import storage as gcs_storage
-
         try:
             storage_client = gcs_storage.Client(project=GOOGLE_CLOUD_PROJECT)
             bucket = storage_client.bucket(GOOGLE_CLOUD_BUCKET_ARTIFACTS)
-            blobs = list(
-                bucket.list_blobs(prefix=f"{OUTPUT_FOLDER}/", max_results=50)
-            )
-            files = {
-                "images": [],
-                "videos": [],
-                "text_ads": [],
-                "asset_sheets": [],
-            }
+            blobs = list(bucket.list_blobs(prefix=f"{OUTPUT_FOLDER}/", max_results=50))
+            files = {"images": [], "videos": [], "text_ads": [], "asset_sheets": []}
             for b in blobs:
                 name = b.name.split("/")[-1]
                 if name.startswith("asset_sheet"):
@@ -2049,9 +1705,7 @@ def check_existing_assets(tool_context: ToolContext):
     return {"status": "empty", "folder": OUTPUT_FOLDER}
 
 
-def _get_nonselected_assets(
-    state_key: str, alternatives: list[str]
-) -> list[str]:
+def _get_nonselected_assets(state_key: str, alternatives: list[str]) -> list[str]:
     state_json = _get_state()
     selected_assets = state_json.get(state_key, [])
     return [a for a in alternatives if a not in selected_assets]
@@ -2062,8 +1716,8 @@ def _clear_selected_assets_of_type(state_key: str) -> None:
     state_json[state_key] = []
     utils_gcs.upload_to_gcs(
         bucket_path=MARKETING_ANALYST_DATASTORE_CLOUD_BUCKET,
-        file_bytes=json.dumps(state_json).encode("utf-8"),
-        destination_blob_name=_prefixed_blob(SESSION_STATE_FILE_NAME),
+        file_bytes=json.dumps(state_json).encode('utf-8'),
+        destination_blob_name=_prefixed_blob(SESSION_STATE_FILE_NAME)
     )
 
 
@@ -2079,9 +1733,7 @@ def _get_ideas_and_briefs_string(context: ReadonlyContext) -> tuple[str, bool]:
     except Exception as e:
         log_message(f"Error reading campaigns config: {e}", Severity.ERROR)
 
-    raise RuntimeError(
-        "Could not retrieve campaigns config. Run setup_product_campaign first."
-    )
+    raise RuntimeError("Could not retrieve campaigns config. Run setup_product_campaign first.")
 
 
 def _get_and_cache_campaigns(tool_context) -> list[Campaign]:
@@ -2136,13 +1788,9 @@ async def setup_product_campaign(
     tool_context.state[LOGO_IMAGE_URI_STATE_KEY] = logo_uri
 
     # Display product image inline for Path B (Path A already shows via get_product_by_sku)
-    if product_image_uri and not tool_context.state.get(
-        "_product_image_displayed"
-    ):
+    if product_image_uri and not tool_context.state.get("_product_image_displayed"):
         try:
-            img_bytes, _ = utils_agents.download_bytes_from_reference(
-                product_image_uri
-            )
+            img_bytes, _ = utils_agents.download_bytes_from_reference(product_image_uri)
             if img_bytes:
                 tool_context.state["_product_image_displayed"] = True
         except Exception:
@@ -2151,9 +1799,7 @@ async def setup_product_campaign(
 
     # Store reference guidelines in session state for use by downstream generation steps
     if reference_guidelines and reference_guidelines.strip():
-        tool_context.state[REFERENCE_GUIDELINES_STATE_KEY] = (
-            reference_guidelines.strip()
-        )
+        tool_context.state[REFERENCE_GUIDELINES_STATE_KEY] = reference_guidelines.strip()
 
     try:
         xml_content = generate_campaigns_xml(
@@ -2167,18 +1813,12 @@ async def setup_product_campaign(
             reference_guidelines=reference_guidelines,
         )
     except Exception as e:
-        return {
-            "status": "error",
-            "details": f"Failed to generate campaigns: {e}",
-        }
+        return {"status": "error", "details": f"Failed to generate campaigns: {e}"}
 
     try:
         campaigns = parse_campaigns_from_xml(xml_content)
         if not campaigns:
-            return {
-                "status": "error",
-                "details": "No valid campaigns generated.",
-            }
+            return {"status": "error", "details": "No valid campaigns generated."}
         _CACHED_CAMPAIGNS_LIST = campaigns
         _CACHED_IDEAS_STRING = xml_content
 
@@ -2186,9 +1826,7 @@ async def setup_product_campaign(
             utils_gcs.upload_to_gcs(
                 bucket_path=MARKETING_ANALYST_DATASTORE_CLOUD_BUCKET,
                 file_bytes=xml_content.encode("utf-8"),
-                destination_blob_name=_prefixed_blob(
-                    f"generated_campaigns.{AGENT_VERSION}.xml"
-                ),
+                destination_blob_name=_prefixed_blob(f"generated_campaigns.{AGENT_VERSION}.xml"),
             )
         except Exception:
             pass
@@ -2221,13 +1859,7 @@ def get_campaign_idea(tool_context: ToolContext, quantity: int):
     selected_campaigns = []
     picked = []
     for _ in range(max(quantity, 1)):
-        valid = [
-            a
-            for a in _get_nonselected_assets(
-                SELECTED_CAMPAIGN_IDEAS_STATE_KEY, campaign_names
-            )
-            if a not in picked
-        ]
+        valid = [a for a in _get_nonselected_assets(SELECTED_CAMPAIGN_IDEAS_STATE_KEY, campaign_names) if a not in picked]
         if not valid:
             valid = [a for a in campaign_names if a not in picked]
             if not valid:
@@ -2237,17 +1869,12 @@ def get_campaign_idea(tool_context: ToolContext, quantity: int):
         _add_selected_asset(SELECTED_CAMPAIGN_IDEAS_STATE_KEY, name)
         campaign = find_campaign_by_name(campaigns, name)
         if campaign:
-            selected_campaigns.append(
-                {
-                    "name": campaign.name,
-                    "hook": campaign.hook,
-                    "insight": campaign.insight,
-                    "visual_key": campaign.visual_key,
-                    "tagline": campaign.tagline,
-                    "why_it_works": campaign.why_it_works,
-                    "segments": [s.name for s in campaign.segments],
-                }
-            )
+            selected_campaigns.append({
+                "name": campaign.name, "hook": campaign.hook,
+                "insight": campaign.insight, "visual_key": campaign.visual_key,
+                "tagline": campaign.tagline, "why_it_works": campaign.why_it_works,
+                "segments": [s.name for s in campaign.segments],
+            })
     _clear_selected_assets_of_type(SELECTED_ASSET_SHEETS_STATE_KEY)
     _clear_selected_assets_of_type(SELECTED_IMAGES_STATE_KEY)
     _clear_selected_assets_of_type(SELECTED_VIDEOS_STATE_KEY)
@@ -2260,10 +1887,7 @@ def save_selected_campaign(chosen_idea: str, tool_context: ToolContext):
     chosen = find_campaign_by_name(campaigns, chosen_idea)
     if not chosen:
         names = [c.name for c in campaigns]
-        return {
-            "status": "error",
-            "details": f"No campaign named '{chosen_idea}'. Options: {names}",
-        }
+        return {"status": "error", "details": f"No campaign named '{chosen_idea}'. Options: {names}"}
     tool_context.state[CHOSEN_CAMPAIGN_IDEA_STATE_KEY] = chosen.name
     return {"status": "success", "details": f"Saved: {chosen.name}"}
 
@@ -2277,17 +1901,12 @@ def get_selected_brief(tool_context: ToolContext, selected_campaign_name: str):
     campaigns = _get_and_cache_campaigns(tool_context)
     campaign = find_campaign_by_name(campaigns, selected_campaign_name)
     if not campaign:
-        return {
-            "status": "error",
-            "details": f"No campaign named '{selected_campaign_name}'",
-        }
+        return {"status": "error", "details": f"No campaign named '{selected_campaign_name}'"}
     save_selected_campaign(selected_campaign_name, tool_context)
     return campaign.relevant_brief
 
 
-async def get_asset_sheet(
-    tool_context: ToolContext, selected_campaign_name: str, quantity: int = 2
-):
+async def get_asset_sheet(tool_context: ToolContext, selected_campaign_name: str, quantity: int = 2):
     """Generates asset sheet configurations for the selected campaign.
 
     Args:
@@ -2305,13 +1924,7 @@ async def get_asset_sheet(
     selected_sheets = []
     picked = []
     for _ in range(max(quantity, 1)):
-        valid = [
-            a
-            for a in _get_nonselected_assets(
-                SELECTED_ASSET_SHEETS_STATE_KEY, all_alts
-            )
-            if a not in picked
-        ]
+        valid = [a for a in _get_nonselected_assets(SELECTED_ASSET_SHEETS_STATE_KEY, all_alts) if a not in picked]
         if not valid:
             valid = [a for a in all_alts if a not in picked]
             if not valid:
@@ -2319,19 +1932,14 @@ async def get_asset_sheet(
         key = random.choice(valid)
         picked.append(key)
         _add_selected_asset(SELECTED_ASSET_SHEETS_STATE_KEY, key)
-        sheet = next(
-            (s for s in campaign.asset_sheets if (s.id or s.uri) == key), None
-        )
+        sheet = next((s for s in campaign.asset_sheets if (s.id or s.uri) == key), None)
         if sheet:
             selected_sheets.append(sheet)
 
     # Generate images on-demand and render as artifacts — ALL IN PARALLEL
     if selected_sheets:
         render_results = await asyncio.gather(
-            *[
-                _render_asset(sheet.uri, tool_context)
-                for sheet in selected_sheets
-            ],
+            *[_render_asset(sheet.uri, tool_context) for sheet in selected_sheets],
             return_exceptions=True,
         )
 
@@ -2345,18 +1953,12 @@ async def get_asset_sheet(
             sheets_out.append(d)
         return {"status": "success", "asset_sheets": sheets_out}
 
-    return {
-        "status": "success",
-        "asset_sheets": [s.model_dump() for s in selected_sheets],
-    }
+    return {"status": "success", "asset_sheets": [s.model_dump() for s in selected_sheets]}
 
 
 async def get_image_ads_for_audience(
-    tool_context: ToolContext,
-    quantity: int,
-    segment_name: str,
-    asset_sheet_uri: str,
-    selected_campaign_name: str,
+    tool_context: ToolContext, quantity: int, segment_name: str,
+    asset_sheet_uri: str, selected_campaign_name: str,
 ):
     """Retrieves image ad concepts for a specific audience segment.
 
@@ -2370,29 +1972,17 @@ async def get_image_ads_for_audience(
     campaigns = _get_and_cache_campaigns(tool_context)
     campaign = find_campaign_by_name(campaigns, selected_campaign_name)
     if not campaign:
-        return {
-            "status": "error",
-            "details": f"No campaign named '{selected_campaign_name}'",
-        }
+        return {"status": "error", "details": f"No campaign named '{selected_campaign_name}'"}
 
     segment = campaign.get_segment_by_name(segment_name)
     if not segment:
-        return {
-            "status": "error",
-            "details": f"No segment named '{segment_name}'",
-        }
+        return {"status": "error", "details": f"No segment named '{segment_name}'"}
 
     all_alts = [a.uri for a in segment.image_ads]
     selected_ads = []
     picked = []
     for _ in range(max(quantity, 1)):
-        valid = [
-            a
-            for a in _get_nonselected_assets(
-                SELECTED_IMAGES_STATE_KEY, all_alts
-            )
-            if a not in picked
-        ]
+        valid = [a for a in _get_nonselected_assets(SELECTED_IMAGES_STATE_KEY, all_alts) if a not in picked]
         if not valid:
             valid = [a for a in all_alts if a not in picked]
             if not valid:
@@ -2421,18 +2011,12 @@ async def get_image_ads_for_audience(
             ads_out.append(d)
         return {"status": "success", "image_ads": ads_out}
 
-    return {
-        "status": "success",
-        "image_ads": [a.model_dump() for a in selected_ads],
-    }
+    return {"status": "success", "image_ads": [a.model_dump() for a in selected_ads]}
 
 
 async def get_video_ads_for_audience(
-    tool_context: ToolContext,
-    quantity: int,
-    segment_name: str,
-    asset_sheet_uri: str,
-    selected_campaign_name: str,
+    tool_context: ToolContext, quantity: int, segment_name: str,
+    asset_sheet_uri: str, selected_campaign_name: str,
 ):
     """Retrieves video ad concepts for a specific audience segment.
 
@@ -2446,29 +2030,17 @@ async def get_video_ads_for_audience(
     campaigns = _get_and_cache_campaigns(tool_context)
     campaign = find_campaign_by_name(campaigns, selected_campaign_name)
     if not campaign:
-        return {
-            "status": "error",
-            "details": f"No campaign named '{selected_campaign_name}'",
-        }
+        return {"status": "error", "details": f"No campaign named '{selected_campaign_name}'"}
 
     segment = campaign.get_segment_by_name(segment_name)
     if not segment:
-        return {
-            "status": "error",
-            "details": f"No segment named '{segment_name}'",
-        }
+        return {"status": "error", "details": f"No segment named '{segment_name}'"}
 
     all_alts = [a.uri for a in segment.video_ads]
     selected_ads = []
     picked = []
     for _ in range(max(quantity, 1)):
-        valid = [
-            a
-            for a in _get_nonselected_assets(
-                SELECTED_VIDEOS_STATE_KEY, all_alts
-            )
-            if a not in picked
-        ]
+        valid = [a for a in _get_nonselected_assets(SELECTED_VIDEOS_STATE_KEY, all_alts) if a not in picked]
         if not valid:
             valid = [a for a in all_alts if a not in picked]
             if not valid:
@@ -2482,19 +2054,12 @@ async def get_video_ads_for_audience(
 
     # Generate actual video ads on-demand — ALL IN PARALLEL
     if selected_ads:
-        product_image_uri = tool_context.state.get(
-            PRODUCT_IMAGE_URI_STATE_KEY, ""
-        )
-        company_name = tool_context.state.get(
-            PRODUCT_COMPANY_NAME_STATE_KEY, ""
-        )
+        product_image_uri = tool_context.state.get(PRODUCT_IMAGE_URI_STATE_KEY, "")
+        company_name = tool_context.state.get(PRODUCT_COMPANY_NAME_STATE_KEY, "")
         product_name = tool_context.state.get("PRODUCT_NAME", "product")
 
         async def _gen_video_ad(ad, idx):
-            log_message(
-                f"Generating video ad {idx + 1}/{len(selected_ads)}: {ad.rationale}",
-                Severity.INFO,
-            )
+            log_message(f"Generating video ad {idx + 1}/{len(selected_ads)}: {ad.rationale}", Severity.INFO)
             return await _generate_full_video_ad(
                 rationale=ad.rationale,
                 product_image_uri=product_image_uri,
@@ -2503,10 +2068,7 @@ async def get_video_ads_for_audience(
                 tool_context=tool_context,
             )
 
-        log_message(
-            f"Launching {len(selected_ads)} video ads in parallel...",
-            Severity.INFO,
-        )
+        log_message(f"Launching {len(selected_ads)} video ads in parallel...", Severity.INFO)
         parallel_results = await asyncio.gather(
             *[_gen_video_ad(ad, i) for i, ad in enumerate(selected_ads)],
             return_exceptions=True,
@@ -2519,12 +2081,7 @@ async def get_video_ads_for_audience(
                 log_message(f"Video ad failed: {result}", Severity.ERROR)
                 d["status"] = "failed"
             elif result:
-                (
-                    video_bytes,
-                    processing_time,
-                    video_length,
-                    storyline_summary,
-                ) = result
+                video_bytes, processing_time, video_length, storyline_summary = result
                 ts = int(time.time())
                 filename = f"video_ad_{id(ad)}_{ts}.mp4"
 
@@ -2533,14 +2090,12 @@ async def get_video_ads_for_audience(
                     mime_type="video/mp4",
                     media_bytes=video_bytes,
                 )
-                video_media = (
-                    await utils_agents.save_to_artifact_and_render_asset(
-                        asset=video_media,
-                        context=tool_context,
-                        save_in_gcs=True,
-                        save_in_artifacts=True,
-                        gcs_folder=OUTPUT_FOLDER,
-                    )
+                video_media = await utils_agents.save_to_artifact_and_render_asset(
+                    asset=video_media,
+                    context=tool_context,
+                    save_in_gcs=True,
+                    save_in_artifacts=True,
+                    gcs_folder=OUTPUT_FOLDER,
                 )
 
                 public_url = f"https://storage.googleapis.com/{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{OUTPUT_FOLDER}/{filename}"
@@ -2555,10 +2110,7 @@ async def get_video_ads_for_audience(
 
         return {"status": "success", "video_ads": video_results}
 
-    return {
-        "status": "success",
-        "video_ads": [a.model_dump() for a in selected_ads],
-    }
+    return {"status": "success", "video_ads": [a.model_dump() for a in selected_ads]}
 
 
 # ============================================================
@@ -2569,38 +2121,11 @@ STORYLINE_MODEL = "gemini-3.1-pro-preview"
 LYRIA_MODEL = "lyria-3-pro-preview"
 
 _VEO_SENSITIVE_WORDS = [
-    "surveillance",
-    "spy",
-    "spying",
-    "weapon",
-    "gun",
-    "knife",
-    "blood",
-    "violent",
-    "violence",
-    "attack",
-    "kill",
-    "murder",
-    "death",
-    "dead",
-    "bomb",
-    "explosive",
-    "terror",
-    "child",
-    "children",
-    "minor",
-    "nude",
-    "naked",
-    "drugs",
-    "injection",
-    "syringe",
-    "intruder",
-    "burglar",
-    "break-in",
-    "breaking in",
-    "trespasser",
-    "stalker",
-    "stalking",
+    "surveillance", "spy", "spying", "weapon", "gun", "knife", "blood",
+    "violent", "violence", "attack", "kill", "murder", "death", "dead",
+    "bomb", "explosive", "terror", "child", "children", "minor", "nude",
+    "naked", "drugs", "injection", "syringe", "intruder", "burglar",
+    "break-in", "breaking in", "trespasser", "stalker", "stalking",
 ]
 
 
@@ -2608,21 +2133,11 @@ def _sanitize_veo_prompt(prompt: str) -> str:
     """Removes words that VEO's content policy may flag."""
     sanitized = prompt
     for word in _VEO_SENSITIVE_WORDS:
-        sanitized = (
-            sanitized.replace(word, "")
-            .replace(word.capitalize(), "")
-            .replace(word.upper(), "")
-        )
+        sanitized = sanitized.replace(word, "").replace(word.capitalize(), "").replace(word.upper(), "")
     return " ".join(sanitized.split())
 
 
-async def _generate_storyline(
-    company_name: str,
-    product_name: str,
-    rationale: str,
-    reference_guidelines: str = "",
-    customer_persona: str = "",
-) -> dict:
+async def _generate_storyline(company_name: str, product_name: str, rationale: str, reference_guidelines: str = "", customer_persona: str = "") -> dict:
     """Gemini generates a 3-act storyline with per-act voiceover and motion prompts.
 
     Each act is 8 seconds. Voiceover is split per act (~20 words each = 8s at 2.5 words/sec).
@@ -2630,14 +2145,10 @@ async def _generate_storyline(
     """
     ACTS = 3
     CLIP_SEC = 8
-    words_per_act = (
-        15  # ~2 words/sec x 8s (energetic pace with speaking_rate=0.95)
-    )
+    words_per_act = 15  # ~2 words/sec x 8s (energetic pace with speaking_rate=0.95)
 
     try:
-        client = genai.Client(
-            vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global"
-        )
+        client = genai.Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global")
         guidelines_context = ""
         if reference_guidelines and reference_guidelines.strip():
             guidelines_context = (
@@ -2790,13 +2301,13 @@ async def _generate_storyline(
             f'"end_scene_description": "Final frame — product ALONE in frame, perfectly composed, brand name visible. Elegant, still, iconic. Like a magazine cover.", '
             f'"motion_prompt": "CONTINUOUS motion for {CLIP_SEC}s. Slow, elegant push-in toward the product. Camera settles on a CLEAN hero shot. Last 2 seconds: product fills the frame, beautifully lit, no distractions.", '
             f'"voiceover": "Exactly {words_per_act} words. Final brand statement — then silence for the product to breathe."}}'
-            f"],\n"
+            f'],\n'
             f'"storyline": "Combined voiceover script for all 3 acts (~{words_per_act * ACTS} words total)",\n'
             f'"lyria_prompt": "A concise prompt (under 80 words) for instrumental background music that PERFECTLY matches the storyline mood and energy. '
-            f"The music must make viewers feel the SAME emotion as the video — if the ad is luxurious, the music is sophisticated; "
-            f"if the ad is adventurous, the music is thrilling; if the ad is heartwarming, the music is tender then uplifting. "
-            f"Must build progressively with the storyline arc — start engaging, build momentum, finish with an unforgettable crescendo. "
-            f"STRICTLY INSTRUMENTAL — NO vocals, NO lyrics, NO singing. "
+            f'The music must make viewers feel the SAME emotion as the video — if the ad is luxurious, the music is sophisticated; '
+            f'if the ad is adventurous, the music is thrilling; if the ad is heartwarming, the music is tender then uplifting. '
+            f'Must build progressively with the storyline arc — start engaging, build momentum, finish with an unforgettable crescendo. '
+            f'STRICTLY INSTRUMENTAL — NO vocals, NO lyrics, NO singing. '
             f'Describe specific instruments, tempo (BPM), mood shifts per act, and dynamic range."\n'
             f"}}\n\n"
             f"CRITICAL RULES:\n"
@@ -2810,12 +2321,8 @@ async def _generate_storyline(
             f"- The music should make the viewer feel what the video shows — it's the emotional backbone of the ad"
         )
         response = await _retry_generate_content(
-            client,
-            STORYLINE_MODEL,
-            prompt,
-            config=types.GenerateContentConfig(
-                temperature=1.0, top_p=0.95, max_output_tokens=8192
-            ),
+            client, STORYLINE_MODEL, prompt,
+            config=types.GenerateContentConfig(temperature=1.0, top_p=0.95, max_output_tokens=8192),
             label="storyline",
         )
         raw = response.text.strip()
@@ -2823,7 +2330,6 @@ async def _generate_storyline(
             raw = raw.split("\n", 1)[1] if "\n" in raw else raw[3:]
             raw = raw.rsplit("```", 1)[0]
         import json as _json
-
         result = _json.loads(raw)
 
         # Build combined storyline from per-act voiceovers
@@ -2866,40 +2372,27 @@ async def _generate_storyline(
         }
 
 
-async def _generate_single_veo_clip(
-    prompt: str,
-    start_frame_gcs_uri: str,
-    clip_duration: int = 6,
-    end_frame_gcs_uri: str | None = None,
-    label: str = "clip",
-) -> bytes | None:
+async def _generate_single_veo_clip(prompt: str, start_frame_gcs_uri: str,
+                                     clip_duration: int = 6, end_frame_gcs_uri: str | None = None,
+                                     label: str = "clip") -> bytes | None:
     """Generates a single VEO video clip from a keyframe image."""
     mode = "interpolation" if end_frame_gcs_uri else "i2v"
     try:
-        client = genai.Client(
-            vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global"
-        )
+        client = genai.Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global")
         img_mime = "image/png"
 
         last_frame = None
         if end_frame_gcs_uri:
-            last_frame = types.Image(
-                gcs_uri=end_frame_gcs_uri, mime_type=img_mime
-            )
+            last_frame = types.Image(gcs_uri=end_frame_gcs_uri, mime_type=img_mime)
 
         veo_config = types.GenerateVideosConfig(
-            number_of_videos=1,
-            duration_seconds=clip_duration,
-            aspect_ratio="16:9",
+            number_of_videos=1, duration_seconds=clip_duration, aspect_ratio="16:9",
             last_frame=last_frame,
             generate_audio=False,
             person_generation="allow_all",
         )
 
-        log_message(
-            f"VEO {label} ({mode}): submitting {clip_duration}s clip...",
-            Severity.INFO,
-        )
+        log_message(f"VEO {label} ({mode}): submitting {clip_duration}s clip...", Severity.INFO)
 
         operation = None
         for veo_attempt in range(3):
@@ -2907,29 +2400,19 @@ async def _generate_single_veo_clip(
                 operation = client.models.generate_videos(
                     model=VEO_MODEL,
                     prompt=prompt,
-                    image=types.Image(
-                        gcs_uri=start_frame_gcs_uri, mime_type=img_mime
-                    ),
+                    image=types.Image(gcs_uri=start_frame_gcs_uri, mime_type=img_mime),
                     config=veo_config,
                 )
                 break
             except Exception as submit_err:
-                if "429" in str(submit_err) or "RESOURCE_EXHAUSTED" in str(
-                    submit_err
-                ):
-                    backoff = (2**veo_attempt) * 5 + random.uniform(0, 3)
-                    log_message(
-                        f"VEO {label}: 429 on submit, backoff {backoff:.1f}s (attempt {veo_attempt+1}/3)",
-                        Severity.WARNING,
-                    )
+                if "429" in str(submit_err) or "RESOURCE_EXHAUSTED" in str(submit_err):
+                    backoff = (2 ** veo_attempt) * 5 + random.uniform(0, 3)
+                    log_message(f"VEO {label}: 429 on submit, backoff {backoff:.1f}s (attempt {veo_attempt+1}/3)", Severity.WARNING)
                     await asyncio.sleep(backoff)
                 else:
                     raise
         if not operation:
-            log_message(
-                f"VEO {label} ({mode}): failed to submit after 3 retries",
-                Severity.ERROR,
-            )
+            log_message(f"VEO {label} ({mode}): failed to submit after 3 retries", Severity.ERROR)
             return None
 
         for poll in range(80):
@@ -2939,49 +2422,33 @@ async def _generate_single_veo_clip(
             operation = client.operations.get(operation)
 
         if not operation.done:
-            log_message(
-                f"VEO {label} ({mode}): timed out after {80 * 10}s polling",
-                Severity.ERROR,
-            )
+            log_message(f"VEO {label} ({mode}): timed out after {80 * 10}s polling", Severity.ERROR)
             return None
         if operation.error:
-            log_message(
-                f"VEO {label} ({mode}): operation error: {operation.error}",
-                Severity.ERROR,
-            )
+            log_message(f"VEO {label} ({mode}): operation error: {operation.error}", Severity.ERROR)
             return None
         if not operation.response or not operation.response.generated_videos:
-            log_message(
-                f"VEO {label} ({mode}): no videos in response", Severity.ERROR
-            )
+            log_message(f"VEO {label} ({mode}): no videos in response", Severity.ERROR)
             return None
 
         generated = operation.response.generated_videos[0]
         if not generated.video or not generated.video.video_bytes:
-            log_message(
-                f"VEO {label} ({mode}): generated video has no bytes",
-                Severity.ERROR,
-            )
+            log_message(f"VEO {label} ({mode}): generated video has no bytes", Severity.ERROR)
             return None
 
-        log_message(
-            f"VEO {label} ({mode}): success, {len(generated.video.video_bytes):,} bytes",
-            Severity.INFO,
-        )
+        log_message(f"VEO {label} ({mode}): success, {len(generated.video.video_bytes):,} bytes", Severity.INFO)
         return generated.video.video_bytes
     except Exception as e:
         log_message(f"VEO {label} ({mode}) exception: {e}", Severity.ERROR)
         return None
 
 
-async def _generate_lyria_music(
-    lyria_prompt: str, product_name: str
-) -> bytes | None:
+
+
+async def _generate_lyria_music(lyria_prompt: str, product_name: str) -> bytes | None:
     """Generates instrumental background music using Lyria from the storyline's lyria_prompt."""
     try:
-        client = genai.Client(
-            vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global"
-        )
+        client = genai.Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global")
 
         if not lyria_prompt or len(lyria_prompt) < 20:
             lyria_prompt = (
@@ -2996,20 +2463,13 @@ async def _generate_lyria_music(
 
         # Generate music with Lyria via generate_content API
         response = await _retry_generate_content(
-            client,
-            LYRIA_MODEL,
-            lyria_prompt,
-            config=types.GenerateContentConfig(
-                response_modalities=["AUDIO", "TEXT"]
-            ),
+            client, LYRIA_MODEL, lyria_prompt,
+            config=types.GenerateContentConfig(response_modalities=["AUDIO", "TEXT"]),
             label="lyria-music",
         )
         for part in response.parts:
             if part.inline_data and part.inline_data.data:
-                log_message(
-                    f"Lyria music generated: {len(part.inline_data.data) // 1024} KB",
-                    Severity.INFO,
-                )
+                log_message(f"Lyria music generated: {len(part.inline_data.data) // 1024} KB", Severity.INFO)
                 return part.inline_data.data
 
         log_message("Lyria returned no audio", Severity.WARNING)
@@ -3017,6 +2477,7 @@ async def _generate_lyria_music(
     except Exception as e:
         log_message(f"Lyria music generation failed: {e}", Severity.ERROR)
         return None
+
 
 
 async def _generate_voiceover_audio(script: str) -> bytes | None:
@@ -3038,15 +2499,10 @@ async def _generate_voiceover_audio(script: str) -> bytes | None:
                 ),
             )
             if response.audio_content:
-                log_message(
-                    f"Voiceover generated: {len(response.audio_content)} bytes",
-                    Severity.INFO,
-                )
+                log_message(f"Voiceover generated: {len(response.audio_content)} bytes", Severity.INFO)
                 return response.audio_content
         except Exception as e:
-            log_message(
-                f"TTS attempt {attempt + 1}/3 failed: {e}", Severity.WARNING
-            )
+            log_message(f"TTS attempt {attempt + 1}/3 failed: {e}", Severity.WARNING)
         if attempt < 2:
             await asyncio.sleep(2)
     return None
@@ -3074,19 +2530,7 @@ def _stitch_videos(clip_bytes_list: list[bytes]) -> bytes | None:
             for p in clip_paths:
                 f.write(f"file '{p}'\n")
 
-        cmd = [
-            "ffmpeg",
-            "-y",
-            "-f",
-            "concat",
-            "-safe",
-            "0",
-            "-i",
-            list_file,
-            "-c",
-            "copy",
-            out_path,
-        ]
+        cmd = ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", list_file, "-c", "copy", out_path]
         result = subprocess.run(cmd, capture_output=True, timeout=60)
         if result.returncode == 0:
             with open(out_path, "rb") as f:
@@ -3102,9 +2546,8 @@ def _stitch_videos(clip_bytes_list: list[bytes]) -> bytes | None:
     return clip_bytes_list[0] if clip_bytes_list else None
 
 
-def _mix_audio_onto_video(
-    video_bytes: bytes, voiceover_bytes: bytes | None, music_bytes: bytes | None
-) -> bytes:
+def _mix_audio_onto_video(video_bytes: bytes, voiceover_bytes: bytes | None,
+                           music_bytes: bytes | None) -> bytes:
     """Mixes voiceover (100% volume) and Lyria music (15% volume) onto video using ffmpeg.
     Voiceover and music are trimmed to match video duration exactly."""
     import subprocess
@@ -3120,26 +2563,12 @@ def _mix_audio_onto_video(
 
         # Get video duration for precise trimming
         probe = subprocess.run(
-            [
-                "ffprobe",
-                "-v",
-                "error",
-                "-show_entries",
-                "format=duration",
-                "-of",
-                "default=noprint_wrappers=1:nokey=1",
-                vid_path,
-            ],
-            capture_output=True,
-            text=True,
-            timeout=10,
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", vid_path],
+            capture_output=True, text=True, timeout=10,
         )
-        video_duration = (
-            float(probe.stdout.strip()) if probe.returncode == 0 else 24.0
-        )
-        log_message(
-            f"Video duration for audio mix: {video_duration}s", Severity.INFO
-        )
+        video_duration = float(probe.stdout.strip()) if probe.returncode == 0 else 24.0
+        log_message(f"Video duration for audio mix: {video_duration}s", Severity.INFO)
 
         inputs = ["-i", vid_path]
 
@@ -3180,24 +2609,11 @@ def _mix_audio_onto_video(
             filter_complex += f"{''.join(mix_inputs)}amix=inputs={len(mix_inputs)}:duration=longest:dropout_transition=0[aout]"
 
         cmd = [
-            "ffmpeg",
-            "-y",
-            *inputs,
-            "-filter_complex",
-            filter_complex,
-            "-map",
-            "0:v",
-            "-map",
-            "[aout]",
-            "-c:v",
-            "copy",
-            "-c:a",
-            "aac",
-            "-b:a",
-            "192k",
-            "-movflags",
-            "+faststart",
-            out_path,
+            "ffmpeg", "-y", *inputs,
+            "-filter_complex", filter_complex,
+            "-map", "0:v", "-map", "[aout]",
+            "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+            "-movflags", "+faststart", out_path,
         ]
 
         result = subprocess.run(cmd, capture_output=True, timeout=120)
@@ -3205,10 +2621,7 @@ def _mix_audio_onto_video(
             with open(out_path, "rb") as f:
                 return f.read()
         else:
-            log_message(
-                f"Audio mix failed: {result.stderr.decode()[:300]}",
-                Severity.WARNING,
-            )
+            log_message(f"Audio mix failed: {result.stderr.decode()[:300]}", Severity.WARNING)
             return video_bytes
     except Exception as e:
         log_message(f"Audio mix error: {e}", Severity.WARNING)
@@ -3221,9 +2634,7 @@ def _mix_audio_onto_video(
                 pass
 
 
-def _overlay_logo_on_video(
-    video_bytes: bytes, logo_bytes: bytes, opacity: float = 0.8
-) -> bytes:
+def _overlay_logo_on_video(video_bytes: bytes, logo_bytes: bytes, opacity: float = 0.8) -> bytes:
     """Overlays logo on video top-right corner using ffmpeg. Preserves transparency."""
     import subprocess
 
@@ -3238,26 +2649,12 @@ def _overlay_logo_on_video(
             f.write(logo_bytes)
 
         cmd = [
-            "ffmpeg",
-            "-y",
-            "-i",
-            vid_path,
-            "-i",
-            logo_path,
+            "ffmpeg", "-y", "-i", vid_path, "-i", logo_path,
             "-filter_complex",
             f"[1:v]scale=iw*0.15:-1,format=rgba,colorchannelmixer=aa={opacity}[logo];"
             f"[0:v][logo]overlay=W-w-20:20[out]",
-            "-map",
-            "[out]",
-            "-map",
-            "0:a?",
-            "-c:v",
-            "libx264",
-            "-preset",
-            "fast",
-            "-c:a",
-            "copy",
-            out_path,
+            "-map", "[out]", "-map", "0:a?",
+            "-c:v", "libx264", "-preset", "fast", "-c:a", "copy", out_path,
         ]
         result = subprocess.run(cmd, capture_output=True, timeout=60)
         if result.returncode == 0:
@@ -3274,14 +2671,8 @@ def _overlay_logo_on_video(
                 pass
 
 
-def _add_text_overlays(
-    video_bytes: bytes,
-    company_name: str,
-    tagline: str,
-    video_duration: float,
-    product_name: str = "",
-    price: str = "",
-) -> bytes:
+def _add_text_overlays(video_bytes: bytes, company_name: str, tagline: str, video_duration: float,
+                        product_name: str = "", price: str = "") -> bytes:
     """Adds cinematic text overlays: brand + product at start, tagline mid-video, price near end."""
     import subprocess
 
@@ -3293,12 +2684,7 @@ def _add_text_overlays(
             f.write(video_bytes)
 
         def _sanitize(text):
-            return (
-                text.replace("'", "")
-                .replace(":", "")
-                .replace("\\", "")
-                .replace('"', "")
-            )
+            return text.replace("'", "").replace(":", "").replace("\\", "").replace('"', '')
 
         safe_company = _sanitize(company_name)
         safe_product = _sanitize(product_name)[:40] if product_name else ""
@@ -3336,30 +2722,16 @@ def _add_text_overlays(
 
         filter_str = ",".join(filters)
         cmd = [
-            "ffmpeg",
-            "-y",
-            "-i",
-            vid_path,
-            "-vf",
-            filter_str,
-            "-c:a",
-            "copy",
-            "-c:v",
-            "libx264",
-            "-preset",
-            "fast",
-            "-movflags",
-            "+faststart",
-            out_path,
+            "ffmpeg", "-y", "-i", vid_path,
+            "-vf", filter_str,
+            "-c:a", "copy", "-c:v", "libx264", "-preset", "fast",
+            "-movflags", "+faststart", out_path,
         ]
         result = subprocess.run(cmd, capture_output=True, timeout=60)
         if result.returncode == 0:
             with open(out_path, "rb") as f:
                 return f.read()
-        log_message(
-            f"Text overlay failed: {result.stderr.decode()[:200]}",
-            Severity.WARNING,
-        )
+        log_message(f"Text overlay failed: {result.stderr.decode()[:200]}", Severity.WARNING)
         return video_bytes
     except Exception as e:
         log_message(f"Text overlay error: {e}", Severity.WARNING)
@@ -3372,14 +2744,8 @@ def _add_text_overlays(
                 pass
 
 
-def _add_end_card(
-    video_bytes: bytes,
-    logo_bytes: bytes | None,
-    company_name: str,
-    tagline: str,
-    duration: float = 3.0,
-    product_bytes: bytes | None = None,
-) -> bytes:
+def _add_end_card(video_bytes: bytes, logo_bytes: bytes | None, company_name: str, tagline: str,
+                   duration: float = 3.0, product_bytes: bytes | None = None) -> bytes:
     """Appends a branded end card: dark background, product image, logo, company name, tagline."""
     import subprocess
 
@@ -3395,36 +2761,18 @@ def _add_end_card(
 
         # Get video dimensions
         probe = subprocess.run(
-            [
-                "ffprobe",
-                "-v",
-                "error",
-                "-select_streams",
-                "v:0",
-                "-show_entries",
-                "stream=width,height,r_frame_rate",
-                "-of",
-                "csv=p=0",
-                vid_path,
-            ],
-            capture_output=True,
-            text=True,
-            timeout=10,
+            ["ffprobe", "-v", "error", "-select_streams", "v:0",
+             "-show_entries", "stream=width,height,r_frame_rate",
+             "-of", "csv=p=0", vid_path],
+            capture_output=True, text=True, timeout=10,
         )
         parts = probe.stdout.strip().split(",")
         w, h = int(parts[0]), int(parts[1])
 
         safe_company = company_name.replace("'", "").replace(":", "")
-        safe_tagline = (
-            (tagline.replace("'", "").replace(":", "")[:50]) if tagline else ""
-        )
+        safe_tagline = (tagline.replace("'", "").replace(":", "")[:50]) if tagline else ""
 
-        inputs = [
-            "-f",
-            "lavfi",
-            "-i",
-            f"color=c=black:s={w}x{h}:d={duration}:r=24",
-        ]
+        inputs = ["-f", "lavfi", "-i", f"color=c=black:s={w}x{h}:d={duration}:r=24"]
         overlay_idx = 1
 
         # Add product image input
@@ -3448,9 +2796,7 @@ def _add_end_card(
             overlay_idx += 1
 
         # Silent audio
-        inputs.extend(
-            ["-f", "lavfi", "-i", f"anullsrc=r=48000:cl=stereo:d={duration}"]
-        )
+        inputs.extend(["-f", "lavfi", "-i", f"anullsrc=r=48000:cl=stereo:d={duration}"])
         audio_idx = overlay_idx
 
         # Build filter: product on left, logo+text on right
@@ -3458,21 +2804,15 @@ def _add_end_card(
         current_label = "0:v"
 
         if has_product:
-            filter_complex += (
-                f"[{product_input_idx}:v]scale=-1:{int(h*0.6)}[prod];"
-            )
-            filter_complex += (
-                f"[{current_label}][prod]overlay=W*0.08:(H-h)/2[withprod];"
-            )
+            filter_complex += f"[{product_input_idx}:v]scale=-1:{int(h*0.6)}[prod];"
+            filter_complex += f"[{current_label}][prod]overlay=W*0.08:(H-h)/2[withprod];"
             current_label = "withprod"
 
         if has_logo:
             filter_complex += f"[{logo_input_idx}:v]scale=-1:{h//6}[logo];"
             logo_x = "W*0.65" if has_product else "(W-w)/2"
             logo_y = "H*0.25" if has_product else "H*0.3"
-            filter_complex += (
-                f"[{current_label}][logo]overlay={logo_x}:{logo_y}[withlogo];"
-            )
+            filter_complex += f"[{current_label}][logo]overlay={logo_x}:{logo_y}[withlogo];"
             current_label = "withlogo"
 
         # Text: company name + tagline
@@ -3491,31 +2831,16 @@ def _add_end_card(
         filter_complex += "[out]"
 
         cmd = [
-            "ffmpeg",
-            "-y",
-            *inputs,
-            "-filter_complex",
-            filter_complex,
-            "-map",
-            "[out]",
-            "-map",
-            f"{audio_idx}:a",
-            "-c:v",
-            "libx264",
-            "-preset",
-            "fast",
-            "-c:a",
-            "aac",
-            "-shortest",
-            card_path,
+            "ffmpeg", "-y", *inputs,
+            "-filter_complex", filter_complex,
+            "-map", "[out]", "-map", f"{audio_idx}:a",
+            "-c:v", "libx264", "-preset", "fast", "-c:a", "aac",
+            "-shortest", card_path,
         ]
 
         result = subprocess.run(cmd, capture_output=True, timeout=30)
         if result.returncode != 0:
-            log_message(
-                f"End card generation failed: {result.stderr.decode()[:200]}",
-                Severity.WARNING,
-            )
+            log_message(f"End card generation failed: {result.stderr.decode()[:200]}", Severity.WARNING)
             return video_bytes
 
         # Concat video + end card
@@ -3524,54 +2849,28 @@ def _add_end_card(
             f.write(f"file '{vid_path}'\nfile '{card_path}'\n")
 
         concat_cmd = [
-            "ffmpeg",
-            "-y",
-            "-f",
-            "concat",
-            "-safe",
-            "0",
-            "-i",
-            list_file,
-            "-c:v",
-            "libx264",
-            "-preset",
-            "fast",
-            "-c:a",
-            "aac",
-            "-movflags",
-            "+faststart",
-            out_path,
+            "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", list_file,
+            "-c:v", "libx264", "-preset", "fast", "-c:a", "aac",
+            "-movflags", "+faststart", out_path,
         ]
         result = subprocess.run(concat_cmd, capture_output=True, timeout=60)
         if result.returncode == 0:
             with open(out_path, "rb") as f:
                 return f.read()
-        log_message(
-            f"End card concat failed: {result.stderr.decode()[:200]}",
-            Severity.WARNING,
-        )
+        log_message(f"End card concat failed: {result.stderr.decode()[:200]}", Severity.WARNING)
         return video_bytes
     except Exception as e:
         log_message(f"End card error: {e}", Severity.WARNING)
         return video_bytes
     finally:
-        for p in [
-            vid_path,
-            logo_path,
-            product_path,
-            card_path,
-            out_path,
-            "/tmp/_endcard_list.txt",
-        ]:
+        for p in [vid_path, logo_path, product_path, card_path, out_path, "/tmp/_endcard_list.txt"]:
             try:
                 os.unlink(p)
             except Exception:
                 pass
 
 
-def _add_end_card_overlay(
-    video_bytes: bytes, company_name: str, tagline: str, product_price: str = ""
-) -> bytes:
+def _add_end_card_overlay(video_bytes: bytes, company_name: str, tagline: str, product_price: str = "") -> bytes:
     """Overlays brand name, tagline, and price on the last 3 seconds of the video — no separate end card."""
     import subprocess
 
@@ -3583,32 +2882,15 @@ def _add_end_card_overlay(
             f.write(video_bytes)
 
         probe = subprocess.run(
-            [
-                "ffprobe",
-                "-v",
-                "error",
-                "-show_entries",
-                "format=duration",
-                "-of",
-                "default=noprint_wrappers=1:nokey=1",
-                vid_path,
-            ],
-            capture_output=True,
-            text=True,
-            timeout=10,
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", vid_path],
+            capture_output=True, text=True, timeout=10,
         )
-        duration = (
-            float(probe.stdout.strip()) if probe.returncode == 0 else 24.0
-        )
+        duration = float(probe.stdout.strip()) if probe.returncode == 0 else 24.0
         start = max(0, duration - 3)
 
         def _s(text):
-            return (
-                text.replace("'", "")
-                .replace(":", "")
-                .replace("\\", "")
-                .replace('"', "")
-            )
+            return text.replace("'", "").replace(":", "").replace("\\", "").replace('"', '')
 
         safe_company = _s(company_name)
         safe_tagline = _s(tagline)[:50] if tagline else ""
@@ -3642,30 +2924,16 @@ def _add_end_card_overlay(
             )
 
         cmd = [
-            "ffmpeg",
-            "-y",
-            "-i",
-            vid_path,
-            "-vf",
-            ",".join(filters),
-            "-c:a",
-            "copy",
-            "-c:v",
-            "libx264",
-            "-preset",
-            "fast",
-            "-movflags",
-            "+faststart",
-            out_path,
+            "ffmpeg", "-y", "-i", vid_path,
+            "-vf", ",".join(filters),
+            "-c:a", "copy", "-c:v", "libx264", "-preset", "fast",
+            "-movflags", "+faststart", out_path,
         ]
         result = subprocess.run(cmd, capture_output=True, timeout=60)
         if result.returncode == 0:
             with open(out_path, "rb") as f:
                 return f.read()
-        log_message(
-            f"End card overlay failed: {result.stderr.decode()[:200]}",
-            Severity.WARNING,
-        )
+        log_message(f"End card overlay failed: {result.stderr.decode()[:200]}", Severity.WARNING)
         return video_bytes
     except Exception as e:
         log_message(f"End card overlay error: {e}", Severity.WARNING)
@@ -3679,10 +2947,8 @@ def _add_end_card_overlay(
 
 
 async def _generate_full_video_ad(
-    rationale: str,
-    product_image_uri: str,
-    company_name: str,
-    product_name: str,
+    rationale: str, product_image_uri: str,
+    company_name: str, product_name: str,
     tool_context: ToolContext,
 ) -> bytes | None:
     """Full video ad pipeline — 3 acts, 24 seconds + 3s end card.
@@ -3705,7 +2971,6 @@ async def _generate_full_video_ad(
       7. ffmpeg → stitch + audio mix + logo overlay
     """
     import time as _time
-
     _pipeline_start = _time.time()
 
     ACTS = 3
@@ -3714,9 +2979,7 @@ async def _generate_full_video_ad(
 
     # Step 0: Download product image + logo
     try:
-        product_bytes, _ = utils_agents.download_bytes_from_reference(
-            product_image_uri
-        )
+        product_bytes, _ = utils_agents.download_bytes_from_reference(product_image_uri)
     except Exception as e:
         log_message(f"Could not download product image: {e}", Severity.ERROR)
         return None
@@ -3733,11 +2996,7 @@ async def _generate_full_video_ad(
     ref_guidelines = tool_context.state.get(REFERENCE_GUIDELINES_STATE_KEY, "")
     fidelity_prompt = tool_context.state.get("PRODUCT_FIDELITY_PROMPT", "")
     if fidelity_prompt:
-        ref_guidelines = (
-            f"{ref_guidelines}\n\nPRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
-            if ref_guidelines
-            else f"PRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
-        )
+        ref_guidelines = f"{ref_guidelines}\n\nPRODUCT FIDELITY GUIDE:\n{fidelity_prompt}" if ref_guidelines else f"PRODUCT FIDELITY GUIDE:\n{fidelity_prompt}"
     customer_persona = tool_context.state.get(CUSTOMER_PERSONA_STATE_KEY, "")
 
     # ================================================================
@@ -3749,11 +3008,8 @@ async def _generate_full_video_ad(
     storyline_data = {}
     try:
         storyline_data = await _generate_storyline(
-            company_name,
-            product_name,
-            rationale,
-            reference_guidelines=ref_guidelines,
-            customer_persona=customer_persona,
+            company_name, product_name, rationale,
+            reference_guidelines=ref_guidelines, customer_persona=customer_persona,
         )
         if not isinstance(storyline_data, dict):
             storyline_data = {}
@@ -3764,74 +3020,34 @@ async def _generate_full_video_ad(
     lyria_prompt_from_storyline = storyline_data.get("lyria_prompt", "")
     acts = storyline_data.get("acts", [])
     while len(acts) < ACTS:
-        acts.append(
-            acts[-1]
-            if acts
-            else {
-                "scene_description": "Hero shot",
-                "motion_prompt": "Slow push-in",
-            }
-        )
+        acts.append(acts[-1] if acts else {"scene_description": "Hero shot", "motion_prompt": "Slow push-in"})
     acts = acts[:ACTS]
 
     import re as _val_re
-
     hallucination_words = [
-        "glowing",
-        "radiating",
-        "pulsing",
-        "transforming",
-        "revealing",
-        "emerging",
-        "morphing",
-        "floating",
-        "hovering",
-        "spinning",
-        "rotating",
-        "flying",
-        "exploding",
-        "disassembling",
-        "opening up",
-        "unfolding",
-        "activating",
-        "powering on",
-        "turning on",
-        "lighting up",
-        "blinking",
-        "twisting",
+        "glowing", "radiating", "pulsing", "transforming", "revealing", "emerging",
+        "morphing", "floating", "hovering", "spinning", "rotating", "flying",
+        "exploding", "disassembling", "opening up", "unfolding", "activating",
+        "powering on", "turning on", "lighting up", "blinking", "twisting",
     ]
     for act in acts:
-        for field in [
-            "scene_description",
-            "motion_prompt",
-            "end_scene_description",
-        ]:
+        for field in ["scene_description", "motion_prompt", "end_scene_description"]:
             text = act.get(field, "")
             for word in hallucination_words:
                 if word.lower() in text.lower():
-                    text = _val_re.sub(
-                        word, "visible", text, flags=_val_re.IGNORECASE
-                    )
-                    log_message(
-                        f"Storyline validation: replaced '{word}' with 'visible' in {field}",
-                        Severity.WARNING,
-                    )
+                    text = _val_re.sub(word, "visible", text, flags=_val_re.IGNORECASE)
+                    log_message(f"Storyline validation: replaced '{word}' with 'visible' in {field}", Severity.WARNING)
             act[field] = text
 
     # Start voiceover + Lyria immediately — they run alongside keyframes + VEO
     vo_task = asyncio.create_task(_generate_voiceover_audio(voiceover_script))
-    lyria_task = asyncio.create_task(
-        _generate_lyria_music(lyria_prompt_from_storyline, product_name)
-    )
+    lyria_task = asyncio.create_task(_generate_lyria_music(lyria_prompt_from_storyline, product_name))
 
     # ================================================================
     # PHASE 2: Generate 5 keyframe images in parallel
     # Each keyframe MUST be a COMPLETELY DIFFERENT scene/environment
     # ================================================================
-    log_message(
-        f"Phase 2: Generating {NUM_KEYFRAMES} distinct keyframes...",
-        Severity.INFO,
-    )
+    log_message(f"Phase 2: Generating {NUM_KEYFRAMES} distinct keyframes...", Severity.INFO)
     refs = [product_bytes] + ([logo_bytes] if logo_bytes else [])
 
     # 4 keyframes with DRAMATIC bright-to-dark progression — wow visual transitions
@@ -3843,29 +3059,18 @@ async def _generate_full_video_ad(
     ]
 
     kf_descriptions = [
-        acts[0].get(
-            "scene_description", f"Bright reveal of {product_name} in daylight"
-        ),
-        acts[0].get(
-            "end_scene_description",
-            acts[1].get("scene_description", f"{product_name} in golden hour"),
-        ),
-        acts[1].get(
-            "end_scene_description",
-            acts[2].get(
-                "scene_description", f"{product_name} at dramatic dusk"
-            ),
-        ),
-        acts[2].get(
-            "end_scene_description",
-            f"Hero shot of {product_name} in dramatic night lighting with {company_name}",
-        ),
+        acts[0].get("scene_description", f"Bright reveal of {product_name} in daylight"),
+        acts[0].get("end_scene_description", acts[1].get("scene_description", f"{product_name} in golden hour")),
+        acts[1].get("end_scene_description", acts[2].get("scene_description", f"{product_name} at dramatic dusk")),
+        acts[2].get("end_scene_description", f"Hero shot of {product_name} in dramatic night lighting with {company_name}"),
     ]
 
     # Build guidelines and persona context for keyframes
     kf_guidelines = ""
     if ref_guidelines:
-        kf_guidelines = f"\nBRAND GUIDELINES (follow for visual style and tone): {ref_guidelines[:500]}\n"
+        kf_guidelines = (
+            f"\nBRAND GUIDELINES (follow for visual style and tone): {ref_guidelines[:500]}\n"
+        )
     kf_persona = ""
     if customer_persona:
         kf_persona = (
@@ -3952,49 +3157,28 @@ async def _generate_full_video_ad(
             f"{kf_guidelines}{kf_persona}"
             f"Product at CORRECT real-world scale. 16:9 landscape. Single image. Return only the image."
         )
-        return await _generate_gemini_image(
-            prompt, refs, label=f"keyframe {idx + 1}/{NUM_KEYFRAMES}"
-        )
+        return await _generate_gemini_image(prompt, refs, label=f"keyframe {idx + 1}/{NUM_KEYFRAMES}")
 
     # Generate all keyframes in parallel
     kf_results = await asyncio.gather(
         *[_gen_kf(i) for i in range(NUM_KEYFRAMES)],
         return_exceptions=True,
     )
-    keyframes = [
-        r if isinstance(r, bytes) else product_bytes for r in kf_results
-    ]
-    log_message(
-        f"Keyframes: {sum(1 for r in kf_results if isinstance(r, bytes))}/{NUM_KEYFRAMES} generated",
-        Severity.INFO,
-    )
+    keyframes = [r if isinstance(r, bytes) else product_bytes for r in kf_results]
+    log_message(f"Keyframes: {sum(1 for r in kf_results if isinstance(r, bytes))}/{NUM_KEYFRAMES} generated", Severity.INFO)
 
     # Upload keyframes to GCS — parallel
-    kf_blobs = [
-        f"{OUTPUT_FOLDER}/_keyframe_{i + 1}.png" for i in range(NUM_KEYFRAMES)
-    ]
-    await asyncio.gather(
-        *[
-            asyncio.to_thread(
-                utils_gcs.upload_to_gcs,
-                GOOGLE_CLOUD_BUCKET_ARTIFACTS,
-                img,
-                blob,
-            )
-            for img, blob in zip(keyframes, kf_blobs)
-        ]
-    )
-    kf_uris = [
-        f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{blob}" for blob in kf_blobs
-    ]
+    kf_blobs = [f"{OUTPUT_FOLDER}/_keyframe_{i + 1}.png" for i in range(NUM_KEYFRAMES)]
+    await asyncio.gather(*[
+        asyncio.to_thread(utils_gcs.upload_to_gcs, GOOGLE_CLOUD_BUCKET_ARTIFACTS, img, blob)
+        for img, blob in zip(keyframes, kf_blobs)
+    ])
+    kf_uris = [f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{blob}" for blob in kf_blobs]
 
     # ================================================================
     # PHASE 3: VEO clips — all parallel (voiceover + Lyria already in flight)
     # ================================================================
-    log_message(
-        "Phase 3: VEO clips (parallel, voiceover + Lyria already in flight)...",
-        Severity.INFO,
-    )
+    log_message("Phase 3: VEO clips (parallel, voiceover + Lyria already in flight)...", Severity.INFO)
 
     transition_effects = [
         "WALKING THROUGH THE HOME: Camera moves like a person walking naturally through the space — entering the room, noticing the environment, and gradually discovering the product in its installed position. Smooth steadicam walk-through. No abrupt cuts or zooms.",
@@ -4004,12 +3188,8 @@ async def _generate_full_video_ad(
 
     def _build_motion_prompt(act_idx):
         act = acts[act_idx]
-        base_motion = act.get(
-            "motion_prompt", f"Cinematic shot of {product_name}"
-        )
-        transition = transition_effects[
-            min(act_idx, len(transition_effects) - 1)
-        ]
+        base_motion = act.get("motion_prompt", f"Cinematic shot of {product_name}")
+        transition = transition_effects[min(act_idx, len(transition_effects) - 1)]
         return (
             f"{base_motion}. "
             f"TRANSITION EFFECT: {transition} "
@@ -4049,17 +3229,10 @@ async def _generate_full_video_ad(
         start_uri = kf_uris[act_idx]
         end_uri = kf_uris[act_idx + 1]
 
-        result = await _generate_single_veo_clip(
-            motion, start_uri, CLIP_SEC, end_uri, label=label
-        )
+        result = await _generate_single_veo_clip(motion, start_uri, CLIP_SEC, end_uri, label=label)
         if result is None:
-            log_message(
-                f"Clip {label} interpolation failed, retrying as i2v (no end frame)",
-                Severity.WARNING,
-            )
-            result = await _generate_single_veo_clip(
-                motion, start_uri, CLIP_SEC, None, label=f"{label}-retry"
-            )
+            log_message(f"Clip {label} interpolation failed, retrying as i2v (no end frame)", Severity.WARNING)
+            result = await _generate_single_veo_clip(motion, start_uri, CLIP_SEC, None, label=f"{label}-retry")
         return act_idx, result
 
     veo_results = await asyncio.gather(
@@ -4085,23 +3258,16 @@ async def _generate_full_video_ad(
         label = f"act{act_idx + 1}/{ACTS}-retry-final"
         motion = _build_motion_prompt(act_idx)
         log_message(f"Final retry for failed clip {label}", Severity.WARNING)
-        result = await _generate_single_veo_clip(
-            motion, kf_uris[act_idx], CLIP_SEC, None, label=label
-        )
+        result = await _generate_single_veo_clip(motion, kf_uris[act_idx], CLIP_SEC, None, label=label)
         if isinstance(result, bytes):
             clip_map[act_idx] = result
         else:
-            log_message(
-                f"Clip {label} failed after all retries", Severity.ERROR
-            )
+            log_message(f"Clip {label} failed after all retries", Severity.ERROR)
 
     # SAFETY NET: If any clips still missing, regenerate with safe product-only keyframe
     missing_acts = [i for i in range(ACTS) if i not in clip_map]
     if missing_acts:
-        log_message(
-            f"Safety net: {len(missing_acts)} clips still missing. Regenerating with product-only keyframes.",
-            Severity.WARNING,
-        )
+        log_message(f"Safety net: {len(missing_acts)} clips still missing. Regenerating with product-only keyframes.", Severity.WARNING)
         for act_idx in missing_acts:
             safe_prompt = (
                 f"Photorealistic commercial photograph of {product_name} by {company_name}. "
@@ -4109,19 +3275,13 @@ async def _generate_full_video_ad(
                 f"The product sits on a beautiful surface with dramatic {kf_environments[act_idx].split('—')[0].strip()} lighting. "
                 f"Clean, elegant, cinematic. 16:9 landscape. Return only the image."
             )
-            log_message(
-                f"Generating safe keyframe for act {act_idx + 1}", Severity.INFO
-            )
-            safe_kf = await _generate_gemini_image(
-                safe_prompt, refs, label=f"safe-keyframe-{act_idx + 1}"
-            )
+            log_message(f"Generating safe keyframe for act {act_idx + 1}", Severity.INFO)
+            safe_kf = await _generate_gemini_image(safe_prompt, refs, label=f"safe-keyframe-{act_idx + 1}")
             if safe_kf:
                 safe_blob = f"{OUTPUT_FOLDER}/_safe_keyframe_{act_idx + 1}.png"
                 await asyncio.to_thread(
                     utils_gcs.upload_to_gcs,
-                    GOOGLE_CLOUD_BUCKET_ARTIFACTS,
-                    safe_kf,
-                    safe_blob,
+                    GOOGLE_CLOUD_BUCKET_ARTIFACTS, safe_kf, safe_blob,
                 )
                 safe_uri = f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{safe_blob}"
                 safe_motion = (
@@ -4131,36 +3291,18 @@ async def _generate_full_video_ad(
                     f"Continuous smooth motion for {CLIP_SEC} seconds."
                 )
                 safe_motion = _sanitize_veo_prompt(safe_motion)
-                log_message(
-                    f"Generating safe VEO clip for act {act_idx + 1}",
-                    Severity.INFO,
-                )
-                result = await _generate_single_veo_clip(
-                    safe_motion,
-                    safe_uri,
-                    CLIP_SEC,
-                    None,
-                    label=f"safe-act{act_idx + 1}",
-                )
+                log_message(f"Generating safe VEO clip for act {act_idx + 1}", Severity.INFO)
+                result = await _generate_single_veo_clip(safe_motion, safe_uri, CLIP_SEC, None, label=f"safe-act{act_idx + 1}")
                 if isinstance(result, bytes):
                     clip_map[act_idx] = result
-                    log_message(
-                        f"Safety net clip act {act_idx + 1} generated successfully",
-                        Severity.INFO,
-                    )
+                    log_message(f"Safety net clip act {act_idx + 1} generated successfully", Severity.INFO)
                 else:
-                    log_message(
-                        f"Safety net clip act {act_idx + 1} also failed",
-                        Severity.ERROR,
-                    )
+                    log_message(f"Safety net clip act {act_idx + 1} also failed", Severity.ERROR)
 
     # Final check — ensure we have all 3 clips
     still_missing = [i for i in range(ACTS) if i not in clip_map]
     if still_missing:
-        log_message(
-            f"WARNING: {len(still_missing)} clips still missing after safety net. Video will be {len(clip_map) * CLIP_SEC}s instead of {ACTS * CLIP_SEC}s",
-            Severity.WARNING,
-        )
+        log_message(f"WARNING: {len(still_missing)} clips still missing after safety net. Video will be {len(clip_map) * CLIP_SEC}s instead of {ACTS * CLIP_SEC}s", Severity.WARNING)
 
     # Save individual clips to GCS
     for act_idx, clip_bytes in clip_map.items():
@@ -4168,19 +3310,11 @@ async def _generate_full_video_ad(
         try:
             await asyncio.to_thread(
                 utils_gcs.upload_to_gcs,
-                GOOGLE_CLOUD_BUCKET_ARTIFACTS,
-                clip_bytes,
-                clip_blob,
+                GOOGLE_CLOUD_BUCKET_ARTIFACTS, clip_bytes, clip_blob,
             )
-            log_message(
-                f"Saved clip act{act_idx + 1} to GCS: {clip_blob}",
-                Severity.INFO,
-            )
+            log_message(f"Saved clip act{act_idx + 1} to GCS: {clip_blob}", Severity.INFO)
         except Exception as e:
-            log_message(
-                f"Failed to save clip act{act_idx + 1} to GCS: {e}",
-                Severity.WARNING,
-            )
+            log_message(f"Failed to save clip act{act_idx + 1} to GCS: {e}", Severity.WARNING)
 
     # Assemble clips in act order
     clips = [clip_map[i] for i in sorted(clip_map.keys())]
@@ -4203,10 +3337,7 @@ async def _generate_full_video_ad(
                 file_bytes=music_bytes,
                 destination_blob_name=f"{OUTPUT_FOLDER}/{music_filename}",
             )
-            log_message(
-                f"Lyria music saved to GCS: {OUTPUT_FOLDER}/{music_filename}",
-                Severity.INFO,
-            )
+            log_message(f"Lyria music saved to GCS: {OUTPUT_FOLDER}/{music_filename}", Severity.INFO)
     except Exception as e:
         log_message(f"Lyria music failed: {e}", Severity.WARNING)
 
@@ -4224,9 +3355,7 @@ async def _generate_full_video_ad(
     # ================================================================
     # PHASE 4: Post-production — stitch + audio + text overlays + end card
     # ================================================================
-    log_message(
-        "Phase 4: Stitch + audio + text overlays + end card...", Severity.INFO
-    )
+    log_message("Phase 4: Stitch + audio + text overlays + end card...", Severity.INFO)
     stitched = _stitch_videos(clips) if len(clips) > 1 else clips[0]
     if not stitched:
         stitched = clips[0]
@@ -4253,19 +3382,11 @@ async def _generate_full_video_ad(
         cs = product_data.get("commercial_status", {})
         if cs and cs.get("current_price"):
             product_price = f"Price ${cs['current_price']:.2f}"
-    final = _add_text_overlays(
-        final,
-        company_name,
-        campaign_tagline,
-        video_dur,
-        product_name=product_name,
-        price=product_price,
-    )
+    final = _add_text_overlays(final, company_name, campaign_tagline, video_dur,
+                                product_name=product_name, price=product_price)
 
     # End card overlay — brand + tagline + price on the last 3 seconds of the video (no separate card)
-    final = _add_end_card_overlay(
-        final, company_name, campaign_tagline, product_price=product_price
-    )
+    final = _add_end_card_overlay(final, company_name, campaign_tagline, product_price=product_price)
 
     # Rename keyframes from temp prefix to permanent names
     for i in range(NUM_KEYFRAMES):
@@ -4273,16 +3394,11 @@ async def _generate_full_video_ad(
             old_blob = f"{OUTPUT_FOLDER}/_keyframe_{i + 1}.png"
             new_blob = f"{OUTPUT_FOLDER}/keyframe_{i + 1}.png"
             from google.cloud import storage as gcs_storage
-
-            bucket = gcs_storage.Client(project=GOOGLE_CLOUD_PROJECT).bucket(
-                GOOGLE_CLOUD_BUCKET_ARTIFACTS
-            )
+            bucket = gcs_storage.Client(project=GOOGLE_CLOUD_PROJECT).bucket(GOOGLE_CLOUD_BUCKET_ARTIFACTS)
             src = bucket.blob(old_blob)
             if src.exists():
                 bucket.rename_blob(src, new_blob)
-                log_message(
-                    f"Kept keyframe {i + 1} in GCS: {new_blob}", Severity.INFO
-                )
+                log_message(f"Kept keyframe {i + 1} in GCS: {new_blob}", Severity.INFO)
         except Exception:
             pass
 
@@ -4295,19 +3411,15 @@ async def _generate_full_video_ad(
     )
     storyline_summary = []
     for i, act in enumerate(acts):
-        storyline_summary.append(
-            {
-                "act": i + 1,
-                "scene": act.get("scene_description", ""),
-                "voiceover": act.get("voiceover_chunk", ""),
-            }
-        )
+        storyline_summary.append({
+            "act": i + 1,
+            "scene": act.get("scene_description", ""),
+            "voiceover": act.get("voiceover_chunk", ""),
+        })
     return final, processing_time, video_length, storyline_summary
 
 
-def save_selected_asset_sheet(
-    asset_sheet_uri: str, tool_context: ToolContext, selected_campaign_name: str
-):
+def save_selected_asset_sheet(asset_sheet_uri: str, tool_context: ToolContext, selected_campaign_name: str):
     """Saves the user's chosen asset sheet.
 
     Args:
@@ -4315,15 +3427,10 @@ def save_selected_asset_sheet(
         selected_campaign_name: Name of the selected campaign.
     """
     tool_context.state[CHOSEN_ASSET_SHEET_ID_STATE_KEY] = asset_sheet_uri
-    return {
-        "status": "success",
-        "details": f"Saved asset sheet: {asset_sheet_uri}",
-    }
+    return {"status": "success", "details": f"Saved asset sheet: {asset_sheet_uri}"}
 
 
-def recommend_campaign_settings(
-    tool_context: ToolContext, segment_name: str, selected_campaign_name: str
-):
+def recommend_campaign_settings(tool_context: ToolContext, segment_name: str, selected_campaign_name: str):
     """Recommends campaign launch settings for a segment.
 
     Args:
@@ -4343,9 +3450,7 @@ def recommend_campaign_settings(
     }
 
 
-def get_stocking_projection(
-    tool_context: ToolContext, selected_campaign_name: str
-):
+def get_stocking_projection(tool_context: ToolContext, selected_campaign_name: str):
     """Returns stocking projection and optimization suggestions.
 
     Args:
@@ -4361,7 +3466,6 @@ def get_stocking_projection(
 # ============================================================
 # Customer Personalization
 # ============================================================
-
 
 def set_customer_persona(tool_context: ToolContext, persona_number: int):
     """Sets the customer persona for personalized ad generation.
@@ -4399,20 +3503,15 @@ def set_customer_persona(tool_context: ToolContext, persona_number: int):
 def clear_customer_persona(tool_context: ToolContext):
     """Clears the customer persona, reverting to generic (non-personalized) ad generation."""
     tool_context.state[CUSTOMER_PERSONA_STATE_KEY] = ""
-    return {
-        "status": "success",
-        "details": "Personalization cleared. Ads will use default targeting.",
-    }
+    return {"status": "success", "details": "Personalization cleared. Ads will use default targeting."}
 
 
 # ============================================================
 # Text Ad Generation
 # ============================================================
 
-
 async def generate_text_ad(
-    tool_context: ToolContext,
-    segment_name: str,
+    tool_context: ToolContext, segment_name: str,
     selected_campaign_name: str,
 ):
     """Generates a text ad for a specific audience segment and saves it to a file in GCS.
@@ -4426,17 +3525,11 @@ async def generate_text_ad(
     campaigns = _get_and_cache_campaigns(tool_context)
     campaign = find_campaign_by_name(campaigns, selected_campaign_name)
     if not campaign:
-        return {
-            "status": "error",
-            "details": f"No campaign named '{selected_campaign_name}'",
-        }
+        return {"status": "error", "details": f"No campaign named '{selected_campaign_name}'"}
 
     segment = campaign.get_segment_by_name(segment_name)
     if not segment:
-        return {
-            "status": "error",
-            "details": f"No segment named '{segment_name}'",
-        }
+        return {"status": "error", "details": f"No segment named '{segment_name}'"}
 
     company_name = tool_context.state.get(PRODUCT_COMPANY_NAME_STATE_KEY, "")
     product_name = tool_context.state.get("PRODUCT_NAME", "product")
@@ -4444,15 +3537,11 @@ async def generate_text_ad(
     fidelity_prompt = tool_context.state.get("PRODUCT_FIDELITY_PROMPT", "")
     customer_persona = tool_context.state.get(CUSTOMER_PERSONA_STATE_KEY, "")
 
-    client = genai.Client(
-        vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global"
-    )
+    client = genai.Client(vertexai=True, project=GOOGLE_CLOUD_PROJECT, location="global")
 
     guidelines_context = ""
     if ref_guidelines:
-        guidelines_context = (
-            f"\nBrand Guidelines (MUST follow): {ref_guidelines[:500]}\n"
-        )
+        guidelines_context = f"\nBrand Guidelines (MUST follow): {ref_guidelines[:500]}\n"
     if fidelity_prompt:
         guidelines_context += f"\nProduct Fidelity Guide (use for accurate product descriptions): {fidelity_prompt[:800]}\n"
 
@@ -4488,36 +3577,23 @@ async def generate_text_ad(
 
     try:
         response = await _retry_generate_content(
-            client,
-            "gemini-3.1-pro-preview",
-            prompt,
+            client, "gemini-3.1-pro-preview", prompt,
             config=types.GenerateContentConfig(
-                temperature=0.8,
-                max_output_tokens=1024,
+                temperature=0.8, max_output_tokens=1024,
                 response_mime_type="application/json",
             ),
             label="text-ad",
         )
         text_ad_data = json.loads(response.text)
     except Exception as e:
-        log_message(
-            f"Text ad generation failed, using fallback: {e}", Severity.WARNING
-        )
+        log_message(f"Text ad generation failed, using fallback: {e}", Severity.WARNING)
         short_name = product_name.split(" - ")[0].split(" by ")[0].strip()
         if len(short_name) > 25:
             short_name = " ".join(short_name.split()[:3])
         text_ad_data = {
             "headlines": [
-                (
-                    campaign.tagline[:30]
-                    if len(campaign.tagline) <= 30
-                    else " ".join(campaign.tagline.split()[:4])
-                ),
-                (
-                    f"{short_name} by {company_name}"[:30]
-                    if len(f"{short_name} by {company_name}") <= 30
-                    else short_name[:30]
-                ),
+                campaign.tagline[:30] if len(campaign.tagline) <= 30 else " ".join(campaign.tagline.split()[:4]),
+                f"{short_name} by {company_name}"[:30] if len(f"{short_name} by {company_name}") <= 30 else short_name[:30],
                 f"Discover {short_name}"[:30],
             ],
             "descriptions": [
@@ -4536,12 +3612,8 @@ async def generate_text_ad(
             return trimmed[:last_space].rstrip(".,!? ")
         return trimmed.rstrip(".,!? ")
 
-    text_ad_data["headlines"] = [
-        _smart_trim(h, 30) for h in text_ad_data.get("headlines", [])
-    ]
-    text_ad_data["descriptions"] = [
-        _smart_trim(d, 90) for d in text_ad_data.get("descriptions", [])
-    ]
+    text_ad_data["headlines"] = [_smart_trim(h, 30) for h in text_ad_data.get("headlines", [])]
+    text_ad_data["descriptions"] = [_smart_trim(d, 90) for d in text_ad_data.get("descriptions", [])]
 
     # Save to GCS as JSON
     ts = int(time.time())
@@ -4584,38 +3656,23 @@ async def generate_text_ad(
 # Dynamic Instruction Provider
 # ============================================================
 
-
 def _dynamic_instruction_provider(context: ReadonlyContext) -> str:
     prompt_path = os.path.join(os.path.dirname(__file__), "prompt.md")
     with open(prompt_path, "r") as f:
         prompt_template = f.read()
 
-    company_name = context.state.get(
-        PRODUCT_COMPANY_NAME_STATE_KEY, DEMO_COMPANY_NAME
-    )
-    selected_campaign = context.state.get(
-        CHOSEN_CAMPAIGN_IDEA_STATE_KEY, "Not selected yet"
-    )
-    selected_asset_sheet = context.state.get(
-        CHOSEN_ASSET_SHEET_ID_STATE_KEY, "Not selected yet"
-    )
+    company_name = context.state.get(PRODUCT_COMPANY_NAME_STATE_KEY, DEMO_COMPANY_NAME)
+    selected_campaign = context.state.get(CHOSEN_CAMPAIGN_IDEA_STATE_KEY, "Not selected yet")
+    selected_asset_sheet = context.state.get(CHOSEN_ASSET_SHEET_ID_STATE_KEY, "Not selected yet")
     product_setup_done = context.state.get(PRODUCT_SETUP_DONE_STATE_KEY, False)
 
     reference_guidelines = context.state.get(REFERENCE_GUIDELINES_STATE_KEY, "")
-    has_guidelines = (
-        "Yes — guidelines loaded and active"
-        if reference_guidelines
-        else "No reference documents provided"
-    )
+    has_guidelines = "Yes — guidelines loaded and active" if reference_guidelines else "No reference documents provided"
 
     prompt = prompt_template.replace("{{AGENT_NAME}}", "LayoAgent")
     prompt = prompt_template.replace("{{DEMO_COMPANY_NAME}}", str(company_name))
-    prompt = prompt.replace(
-        "{{SELECTED_CAMPAIGN_NAME}}", str(selected_campaign)
-    )
-    prompt = prompt.replace(
-        "{{SELECTED_ASSET_SHEET_URI}}", str(selected_asset_sheet)
-    )
+    prompt = prompt.replace("{{SELECTED_CAMPAIGN_NAME}}", str(selected_campaign))
+    prompt = prompt.replace("{{SELECTED_ASSET_SHEET_URI}}", str(selected_asset_sheet))
     prompt = prompt.replace("{{PRODUCT_SETUP_DONE}}", str(product_setup_done))
     prompt = prompt.replace("{{REFERENCE_GUIDELINES_STATUS}}", has_guidelines)
     return prompt
@@ -4641,7 +3698,6 @@ _marketing_skills = SkillToolset(
 # ============================================================
 # A2A — Google Ads Publisher (via A2A Python SDK)
 # ============================================================
-
 
 async def publish_to_google_ads(
     tool_context: ToolContext,
@@ -4685,40 +3741,21 @@ async def publish_to_google_ads(
     video_uris = []
     try:
         from google.cloud import storage as gcs_storage
-
         storage_client = gcs_storage.Client(project=GOOGLE_CLOUD_PROJECT)
         bucket = storage_client.bucket(GOOGLE_CLOUD_BUCKET_ARTIFACTS)
-        for blob in bucket.list_blobs(
-            prefix=f"{OUTPUT_FOLDER}/", max_results=50
-        ):
+        for blob in bucket.list_blobs(prefix=f"{OUTPUT_FOLDER}/", max_results=50):
             uri = f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{blob.name}"
             name = blob.name.split("/")[-1]
-            if (
-                name.startswith("_")
-                or name.startswith("keyframe_")
-                or name.startswith("clip_act")
-                or name.startswith("background_music")
-                or name.endswith(".json")
-            ):
+            if name.startswith("_") or name.startswith("keyframe_") or name.startswith("clip_act") or name.startswith("background_music") or name.endswith(".json"):
                 continue
-            if (
-                name.endswith(".png") or name.endswith(".jpg")
-            ) and not name.endswith("_resized.png"):
+            if (name.endswith(".png") or name.endswith(".jpg")) and not name.endswith("_resized.png"):
                 image_uris.append(uri)
             elif name.endswith(".mp4"):
                 video_uris.append(uri)
-        log_message(
-            f"GCS scan for publish: {len(image_uris)} images, {len(video_uris)} videos in {OUTPUT_FOLDER}/",
-            Severity.INFO,
-        )
+        log_message(f"GCS scan for publish: {len(image_uris)} images, {len(video_uris)} videos in {OUTPUT_FOLDER}/", Severity.INFO)
     except Exception as e:
-        log_message(
-            f"GCS scan failed, falling back to session state: {e}",
-            Severity.WARNING,
-        )
-        session_artifacts = tool_context.state.get(
-            "SESSION_ARTIFACTS_STATE", {}
-        )
+        log_message(f"GCS scan failed, falling back to session state: {e}", Severity.WARNING)
+        session_artifacts = tool_context.state.get("SESSION_ARTIFACTS_STATE", {})
         for entry in session_artifacts.values():
             asset = entry.get("asset", {})
             gcs_uri = asset.get("gcs_uri", "")
@@ -4734,12 +3771,9 @@ async def publish_to_google_ads(
     if not headlines:
         try:
             from google.cloud import storage as gcs_storage
-
             storage_client = gcs_storage.Client(project=GOOGLE_CLOUD_PROJECT)
             bucket = storage_client.bucket(GOOGLE_CLOUD_BUCKET_ARTIFACTS)
-            for blob in bucket.list_blobs(
-                prefix=f"{OUTPUT_FOLDER}/text_ad_", max_results=1
-            ):
+            for blob in bucket.list_blobs(prefix=f"{OUTPUT_FOLDER}/text_ad_", max_results=1):
                 text_ad_json = json.loads(blob.download_as_text())
                 headlines = text_ad_json.get("headlines", [])
                 descriptions = text_ad_json.get("descriptions", [])
@@ -4747,16 +3781,9 @@ async def publish_to_google_ads(
         except Exception:
             pass
     if not headlines:
-        headlines = [
-            product_name[:30],
-            business_name[:30],
-            f"Discover {product_name}"[:30],
-        ]
+        headlines = [product_name[:30], business_name[:30], f"Discover {product_name}"[:30]]
     if not descriptions:
-        descriptions = [
-            f"Discover {product_name} by {business_name}."[:90],
-            f"Premium {product_name}. Shop now."[:90],
-        ]
+        descriptions = [f"Discover {product_name} by {business_name}."[:90], f"Premium {product_name}. Shop now."[:90]]
 
     # Auto-square the logo if needed
     if logo_uri:
@@ -4764,17 +3791,12 @@ async def publish_to_google_ads(
             import io as _io
 
             from PIL import Image as _PILImage
-
-            logo_bytes_raw, _ = utils_agents.download_bytes_from_reference(
-                logo_uri
-            )
+            logo_bytes_raw, _ = utils_agents.download_bytes_from_reference(logo_uri)
             if logo_bytes_raw:
                 _img = _PILImage.open(_io.BytesIO(logo_bytes_raw))
                 if _img.width != _img.height:
                     _size = max(_img.width, _img.height)
-                    _canvas = _PILImage.new(
-                        "RGB", (_size, _size), (255, 255, 255)
-                    )
+                    _canvas = _PILImage.new("RGB", (_size, _size), (255, 255, 255))
                     _px = (_size - _img.width) // 2
                     _py = (_size - _img.height) // 2
                     if _img.mode == "RGBA":
@@ -4784,29 +3806,16 @@ async def publish_to_google_ads(
                     _buf = _io.BytesIO()
                     _canvas.save(_buf, format="PNG")
                     _sq_blob = f"{OUTPUT_FOLDER}/logo_square.png"
-                    utils_gcs.upload_to_gcs(
-                        GOOGLE_CLOUD_BUCKET_ARTIFACTS, _buf.getvalue(), _sq_blob
-                    )
-                    logo_uri = (
-                        f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{_sq_blob}"
-                    )
-                    log_message(
-                        f"Logo squared and uploaded: {logo_uri}", Severity.INFO
-                    )
+                    utils_gcs.upload_to_gcs(GOOGLE_CLOUD_BUCKET_ARTIFACTS, _buf.getvalue(), _sq_blob)
+                    logo_uri = f"gs://{GOOGLE_CLOUD_BUCKET_ARTIFACTS}/{_sq_blob}"
+                    log_message(f"Logo squared and uploaded: {logo_uri}", Severity.INFO)
         except Exception as e:
             log_message(f"Logo squaring failed: {e}", Severity.WARNING)
 
     import re as _clean_re
-
-    clean_search_theme = _clean_re.sub(
-        r"[^a-zA-Z0-9 \-]", "", product_name
-    ).strip()[:80]
-    clean_headlines = [
-        _clean_re.sub(r"[^\w\s.,!?$%&\-]", "", h)[:30] for h in headlines
-    ]
-    clean_descriptions = [
-        _clean_re.sub(r"[^\w\s.,!?$%&\-]", "", d)[:90] for d in descriptions
-    ]
+    clean_search_theme = _clean_re.sub(r'[^a-zA-Z0-9 \-]', '', product_name).strip()[:80]
+    clean_headlines = [_clean_re.sub(r'[^\w\s.,!?$%&\-]', '', h)[:30] for h in headlines]
+    clean_descriptions = [_clean_re.sub(r'[^\w\s.,!?$%&\-]', '', d)[:90] for d in descriptions]
 
     # Build payload matching create_pmax_campaign signature exactly
     publish_payload = {
@@ -4835,7 +3844,6 @@ async def publish_to_google_ads(
 
     try:
         import sys
-
         repo_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         if repo_root not in sys.path:
             sys.path.insert(0, repo_root)
@@ -4849,10 +3857,7 @@ async def publish_to_google_ads(
             "google_ads_response": result.get("response", ""),
         }
     except ImportError:
-        log_message(
-            "ads_agent not available, returning payload for manual publish",
-            Severity.WARNING,
-        )
+        log_message("ads_agent not available, returning payload for manual publish", Severity.WARNING)
         return {
             "status": "manual_review",
             "published_payload": publish_payload,
@@ -4860,12 +3865,7 @@ async def publish_to_google_ads(
         }
     except Exception as e:
         log_message(f"Google Ads publish failed: {e}", Severity.ERROR)
-        return {
-            "status": "error",
-            "details": str(e),
-            "published_payload": publish_payload,
-        }
-
+        return {"status": "error", "details": str(e), "published_payload": publish_payload}
 
 # ============================================================
 # Root Agent Definition
@@ -4876,11 +3876,12 @@ root_agent = Agent(
     model="gemini-3.1-pro-preview",
     instruction=_dynamic_instruction_provider,
     description="Combined Marketing Campaign Agent for generating image ads and video ads. "
-    "Combines retail analytics, trend analysis, brand-aware creative direction, "
-    "and on-demand media generation.",
+                "Combines retail analytics, trend analysis, brand-aware creative direction, "
+                "and on-demand media generation.",
     tools=[
         # --- ADK Skills (on-demand expertise) ---
         _marketing_skills,
+
         # --- Product & Campaign Pipeline ---
         setup_product_campaign,
         setup_campaign_from_sku,
@@ -4900,14 +3901,18 @@ root_agent = Agent(
         get_stocking_projection,
         check_existing_assets,
         delete_asset_from_gcs,
+
         # --- Retail Pipeline ---
         identify_inventory_opportunities,
         get_product_by_sku,
         display_product_image,
         extract_product_from_url,
+
         # --- Sub-agents ---
         AgentTool(agent=trend_spotter_agent.agent),
+
         # --- A2A — Google Ads Publisher ---
         publish_to_google_ads,
+
     ],
 )
