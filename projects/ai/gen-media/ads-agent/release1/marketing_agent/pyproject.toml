@@ -2,7 +2,7 @@
 name = "marketing_agent"
 version = "5.20260410.1"
 description = "Combined Marketing Campaign Agent - Image Ads and Video Ads"
-authors = [{ name = "Layolin Jesudhass" }]
+authors = [{ name = "Layolin Jesudhass" }, { name = "Ana Esqueda" }]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

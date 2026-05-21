@@ -2,7 +2,7 @@
 name = "adk_common"
 version = "3.20251118.1"
 description = "Common utilities for Tahoe agents"
-authors = [{ name = "Layolin Jesudhass" }]
+authors = [{ name = "Layolin Jesudhass" }, { name = "Ana Esqueda" }]
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
