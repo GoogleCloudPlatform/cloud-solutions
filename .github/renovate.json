@@ -279,6 +279,11 @@
       "commitMessagePrefix": "chore(deps): [nvidia-omniverse-on-google-cloud]"
     },
     {
+      "matchFileNames": ["projects/operational-ai-leap/**"],
+      "groupName": "operational-ai-leap",
+      "commitMessagePrefix": "chore(deps): [operational-ai-leap]"
+    },
+    {
       "matchFileNames": ["projects/pino-logging-gcp-config/**"],
       "groupName": "pino-logging-gcp-config",
       "commitMessagePrefix": "chore(deps): [pino-logging-gcp-config]"
