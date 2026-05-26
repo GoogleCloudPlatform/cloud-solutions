@@ -31,7 +31,7 @@ make it easy to control every aspect of an image. Features like
 Reference-to-Image allows users to control the models using traditional
 techniques, making them an extension of their creative workflow. It also offers
 Production-ready resolutions from 512px to 4K. Check out
-[Nano Banan documentation](https://ai.google.dev/gemini-api/docs/image-generation)
+[Nano Banana documentation](https://ai.google.dev/gemini-api/docs/image-generation)
 for more dtails.
 
 ### Veo
@@ -52,7 +52,7 @@ for more details.
 ### Lyria
 
 Lyria allows complete creative control of creation of music. It supports
-professional-grade composition where doesn't just loop; it understands musical
+professional-grade composition where it doesn't just loop; it understands musical
 structure (intros, verses, choruses, and bridges) for tracks. It support
 high-fidelity vocals, from soulful baritones to clear sopranos, to multilingual
 lyrics (8+ languages). You can dial in specific BPM, instruments, and dynamics,
