@@ -1,0 +1,106 @@
+{
+  "name": "54800c7a-078d-4bcc-ae9d-b1ff85c237cb",
+  "actions": [
+    {
+      "userUtterance": {
+        "text": "I am logging in as the DBA."
+      }
+    },
+    {
+      "agentUtterance": {
+        "text": "Welcome! Since you're logged in as a Database Administrator, I've tailored my tools for your operational workflow. I can help you check database health, monitor active sessions, or check tablespace capacity. What would you like to investigate first?"
+      }
+    },
+    {
+      "userUtterance": {
+        "text": "Check database health"
+      }
+    },
+    {
+      "toolUse": {
+        "tool": "Oracle_FinOps_MCP",
+        "action": "execute_mcp_tool",
+        "inputActionParameters": {
+          "requestBody": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "arguments": {},
+              "name": "check_database_health"
+            }
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "result": {
+              "content": [
+                {
+                  "text": "**Oracle Cloud Infrastructure Health Report:**\n- **Instance**: `ORCLPDB1` (Node: ora-vm-central)\n- **Status**: OPEN | **Role**: PRIMARY\n- **Database Version**: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0\n- **Uptime**: 14 Days, 6 Hours\n- **Telemetry**: Listener Port 1521 active. Real-time RTT: 1.4ms.",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "agentUtterance": {
+        "text": "The Oracle database is healthy and running as the PRIMARY instance (Version 19c) on node 'ora-vm-central'. The listener is active on Port 1521 with an uptime of 14 days, 6 hours. RTT latency is extremely low at 1.4ms. Would you like me to monitor active sessions or check critical tablespace storage capacity?"
+      }
+    },
+    {
+      "userUtterance": {
+        "text": "Monitor active sessions"
+      }
+    },
+    {
+      "toolUse": {
+        "tool": "Oracle_FinOps_MCP",
+        "action": "execute_mcp_tool",
+        "inputActionParameters": {
+          "requestBody": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "arguments": {},
+              "name": "list_active_sessions"
+            }
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "result": {
+              "content": [
+                {
+                  "text": "Top Active Sessions (ASH):\n* SID 104 | User: APP_FINANCE | Wait Event: db file sequential read | Time: 1.24s\n* SID 421 | User: SYS | Wait Event: control file sequential read | Time: 0.81s",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "agentUtterance": {
+        "text": "I am monitoring active database connections. Currently, there are active user sessions running: SID 104 (User: APP_FINANCE) is experiencing a 'db file sequential read' wait event (1.24s), and SID 421 (SYS) is on a 'control file sequential read' wait event (0.81s). Would you like me to check tablespace storage usage or investigate a specific connection?"
+      }
+    }
+  ],
+  "playbookOutput": {
+    "executionSummary": "DBA logged in, successfully scanned database system health, and monitored top active database sessions.",
+    "actionParameters": {}
+  },
+  "displayName": "Example 4: SRE Database Telemetry \u0026 Health Scan",
+  "retrievalStrategy": "DEFAULT",
+  "tokenCount": 843,
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

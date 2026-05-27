@@ -1,0 +1,10 @@
+FynanceAI Corporate Procurement & Expense Policy (v4.0)
+-------------------------------------------------------
+Section 2.1: Transaction Limits & Pre-approval Thresholds
+All individual operational transactions exceeding $15,000 must require pre-approval from the Department Head. Any transactions processed without an active pre-approval ID are automatically flagged for forensic review.
+
+Section 3.5: AI Flagged Anomaly Controls & Financial Hold Actions
+To mitigate financial risk and protect corporate assets, any transaction showing anomalous spending patterns, duplicate invoicing, or policy violations (such as purchasing hardware for personal use) must be placed on a temporary financial HOLD. Flagged transactions are frozen in the pending ledger until resolved.
+
+Section 5.3: Forensic Review & Termination Guidelines
+Transactions placed on hold are routed to the forensic queue. The SRE or Financial Auditor has full authority to either reject the transaction (releasing the held funds back to the treasury) or approve it if valid evidence is presented.
