@@ -322,6 +322,12 @@
       "additionalBranchPrefix": "nvidia-omniverse-on-google-cloud-"
     },
     {
+      "matchFileNames": ["projects/oracle-bigquery-mcp-agent/**"],
+      "groupName": "oracle-bigquery-mcp-agent",
+      "commitMessagePrefix": "chore(deps): [oracle-bigquery-mcp-agent]",
+      "additionalBranchPrefix": "oracle-bigquery-mcp-agent-"
+    },
+    {
       "matchFileNames": ["projects/operational-ai-leap/**"],
       "groupName": "operational-ai-leap",
       "commitMessagePrefix": "chore(deps): [operational-ai-leap]"
