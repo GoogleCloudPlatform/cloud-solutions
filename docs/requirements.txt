@@ -207,6 +207,7 @@ markdown==3.10.2 \
     --hash=sha256:994d51325d25ad8aa7ce4ebaec003febcce822c3f8c911e3b17c52f7f589f950 \
     --hash=sha256:e91464b71ae3ee7afd3017d9f358ef0baf158fd9a298db92f1d4761133824c36
     # via
+    #   mdx-breakless-lists
     #   mkdocs
     #   mkdocs-autorefs
     #   mkdocs-material
@@ -309,6 +310,10 @@ markupsafe==3.0.3 \
     #   mkdocs-autorefs
     #   mkdocstrings
     #   properdocs
+mdx-breakless-lists==1.0.1 \
+    --hash=sha256:2ec7978048673ad7cb8042b5787420a9d252053908dcb3418708cf2f91a6a538 \
+    --hash=sha256:d49209a42561142b1dacea6821a3899a8ccd17a45da5e7e04294aa23d98d76c8
+    # via -r requirements.in
 mergedeep==1.3.4 \
     --hash=sha256:0096d52e9dad9939c3d975a774666af186eda617e6ca84df4c94dec30004f2a8 \
     --hash=sha256:70775750742b25c0d8f36c55aed03d24c3384d17c951b3175d898bd778ef0307
@@ -324,6 +329,7 @@ mkdocs==1.6.1 \
     #   mkdocs-awesome-pages-plugin
     #   mkdocs-material
     #   mkdocs-mermaid2-plugin
+    #   mkdocs-pagetree-plugin
     #   mkdocs-redirects
     #   mkdocstrings
 mkdocs-autorefs==1.4.4 \
@@ -353,6 +359,10 @@ mkdocs-material-extensions==1.3.1 \
 mkdocs-mermaid2-plugin==1.2.3 \
     --hash=sha256:33f60c582be623ed53829a96e19284fc7f1b74a1dbae78d4d2e47fe00c3e190d \
     --hash=sha256:fb6f901d53e5191e93db78f93f219cad926ccc4d51e176271ca5161b6cc5368c
+    # via -r requirements.in
+mkdocs-pagetree-plugin==0.0.17 \
+    --hash=sha256:861016a33d37e05c9ffe382f06471eb5664833fb4713bf4f51e11e28e825b5bf \
+    --hash=sha256:980fee9d44fc327b847d56f27d6869d97d578f10891248fe4343266a8463601e
     # via -r requirements.in
 mkdocs-redirects==1.2.3 \
     --hash=sha256:5e980330999299729a2d6a125347d1af78023d68a23681a4de3053ce7dfe2e51 \

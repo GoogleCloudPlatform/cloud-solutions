@@ -68,10 +68,12 @@ plugins:
   - mermaid2:
       # MERMAID_VERSION is replaced by current version in mkdocs.sh
       version: MERMAID_VERSION
+  - pagetree
 markdown_extensions:
   - admonition
   - attr_list
   - fenced_code
+  - mdx_breakless_lists
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.emoji:
