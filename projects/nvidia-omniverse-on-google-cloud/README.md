@@ -45,24 +45,14 @@ For more information, see
 For more information, see
 [Deploy NVIDIA Omniverse Farm on Google Cloud](./omniverse-farm/README.md).
 
-## NVIDIA RTX Virtual Workstations
-
-To develop NVIDIA RTX applications on Google Cloud, you deploy one of the
-following virtual workstations on Compute Engine:
-
-- [NVIDIA Omniverse Development Workstation (Linux)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-development-workstation-linux)
-- [NVIDIA Omniverse Development Workstation (Windows)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-development-workstation-windows)
-- [NVIDIA Omniverse Enterprise Workstation (Linux)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-enterprise-workstation-linux)
-- [NVIDIA Omniverse Enterprise Workstation (Windows)](https://console.cloud.google.com/marketplace/product/nvidia/nvidia-omniverse-enterprise-workstation-windows)
-- [NVIDIA RTX Virtual Workstation: G2 machine family (L4 GPUs), Ubuntu 22.04](./g2-development-workstation/ubuntu-22.04/README.md)
-
 ## Remote Visualization Options
 
-Omniverse workstation (Linux) requires 3rd party software to support 3D accelerated
-remote desktop connections. Here are the options:
+Omniverse workstation (Linux) requires 3rd party software to support 3D
+accelerated remote desktop connections. Here are the options:
 
-- ThinLinc by Cendio - (Recommanded by NVIDIA with
-[Community licenses](https://www.cendio.com/thinlinc/buy-pricing/free-usage/))
-Setup [ThinLinc to support NVIDIA Omniverse workstations](https://github.com/GoogleCloudPlatform/scientific-computing-examples/tree/main/remote%20visualization/GCP_NVIDIA_Isaac_Sim_Thinlinc)
+- ThinLinc by Cendio - (Recommended by NVIDIA with
+  [Community licenses](https://www.cendio.com/thinlinc/buy-pricing/free-usage/))
+  Setup
+  [ThinLinc to support NVIDIA Omniverse workstations](https://github.com/GoogleCloudPlatform/scientific-computing-examples/tree/main/remote%20visualization/GCP_NVIDIA_Isaac_Sim_Thinlinc)
 - Chrome Remote Desktop - (Provided by Google) Setup
-[Chrome Remote Desktop to support NVIDIA Omniverse workstations](https://github.com/GoogleCloudPlatform/scientific-computing-examples/tree/main/remote%20visualization/GCP_NVIDIA_Isaac_Sim_CRD)
+  [Chrome Remote Desktop to support NVIDIA Omniverse workstations](https://github.com/GoogleCloudPlatform/scientific-computing-examples/tree/main/remote%20visualization/GCP_NVIDIA_Isaac_Sim_CRD)
