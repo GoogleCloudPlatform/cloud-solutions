@@ -4,15 +4,15 @@
 
 /projects/agentic-coding-with-data-agent-kit-demo/                    @kingman
 /projects/ai/agents/                                                  @allen-stephen
+/projects/ai/gen-media/YAML/                                          @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/ads-agent/                                     @luj20
-/projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/experimental/GetReadywithMe/                   @isidro-deloera @luj20 @tdigangi
+/projects/ai/gen-media/experimental/genmedia_marketing_solution/      @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/experimental/movieLenz-main/                   @tdigangi @luj20 @allen-stephen
 /projects/ai/gen-media/images/                                        @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/notebooks/keyframe_storyboarding/              @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/notebooks/product-recontext/                   @isidro-deloera @luj20 @tdigangi
 /projects/ai/gen-media/notebooks/vto_scale_workflow/                  @isidro-deloera @luj20 @tdigangi
-/projects/ai/gen-media/YAML/                                          @isidro-deloera @luj20 @tdigangi
 /projects/alloydb-auth-workload-identity/                             @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/alloydb-autoscaler/                                         @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/alloydbomni-ha-patroni-etcd/                                @GoogleCloudPlatform/cloud-solutions-the-repo-admin
@@ -30,13 +30,15 @@
 /projects/dotnet-modernization-demo/                                  @ferrarimarco @idofl
 /projects/fsi-quant-assistant/                                        @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/gemini-powered-migrations-to-google-cloud/                  @aburhan @ferrarimarco @gitrey
+/projects/generative-media-shot-production/                           @gushob21
 /projects/gke-optimization/binpacker/                                 @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/hive-bigquery-connector-demo/                               @eyalbenivri
 /projects/imagen-object-changer/                                      @lepistom
 /projects/imagen-voice-captioning/                                    @lepistom
-/projects/java-modernization-demo/                                   @ferrarimarco
+/projects/java-modernization-demo/                                    @ferrarimarco
 /projects/k8s-hybrid-neg-controller/                                  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/lab2life/                                                   @novaes
+/projects/legacy-detox-demo/                                          @eyalbenivri
 /projects/manufacturing/                                              @ashwins2
 /projects/migrate-from-aws-to-google-cloud/                           @aburhan @ferrarimarco
 /projects/migrate-from-azure-to-google-cloud/                         @ferrarimarco
@@ -44,6 +46,7 @@
 /projects/mmb-datacloud/                                              @zunhoyi
 /projects/mmb-hero-demo/                                              @aburhan @gitrey @ferrarimarco @idofl
 /projects/nvidia-omniverse-on-google-cloud/                           @ferrarimarco
+/projects/operational-ai-leap/                                        @zunhoyi
 /projects/pino-logging-gcp-config/                                    @nielm
 /projects/sa-tools/                                                   @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/serve-llm-app-using-gke/                                    @GoogleCloudPlatform/cloud-solutions-the-repo-admin
@@ -53,6 +56,3 @@
 /projects/speech2srt/                                                 @lepistom
 /projects/streamlit-pubsub/                                           @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/vision-ai-edge-platform/                                    @GoogleCloudPlatform/cloud-solutions-the-repo-admin
-/projects/generative-media-shot-production/                           @gushob21
-/projects/legacy-detox-demo/                                          @eyalbenivri
-
