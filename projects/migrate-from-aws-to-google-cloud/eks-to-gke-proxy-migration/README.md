@@ -142,6 +142,7 @@ Balancer (ALB).
     ```
 
     The script provisions the following resources:
+
     - An EKS cluster
     - A Kubernetes Deployment and LoadBalancer Service
 

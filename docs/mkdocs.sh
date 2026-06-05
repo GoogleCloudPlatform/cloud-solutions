@@ -62,6 +62,7 @@ mkdir -p "${BUILD_DIR}/docs"
 
 ## Setup common files and folders
 ln -sf "${DOCS_DIR}/index.md" "${BUILD_DIR}/docs/index.md"
+ln -sf "${DOCS_DIR}/.pages" "${BUILD_DIR}/docs/.pages"
 ln -sf "${DOCS_DIR}/google13f96ebf51862cf4.html" "${BUILD_DIR}/docs/google13f96ebf51862cf4.html"
 ln -sf "${DOCS_DIR}/common" "${BUILD_DIR}/docs/common"
 ln -sf "${DOCS_DIR}/stylesheets" "${BUILD_DIR}/docs/stylesheets"
@@ -75,22 +76,29 @@ for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
   elif [[ -f "${CURRENT_PROJECT_DIR}/README.md" ]]; then
     echo "Using README.md for ${PROJECT_DIRNAME}"
     cd "${PROJECTS_DIR}"
+    mkdir -p "${BUILD_DIR}/docs/${PROJECT_DIRNAME}/"
 
-    # We need the README and any referenced markdown or image files, including
-    # their paths, copied to the docs directory
-    # mkdocs will use either READNE.md or index.md as index page
+    # Need README and any referenced markdown or image files, including
+    # their paths, linked in the docs directory
+    # mkdocs will use index.md as index page
     #
-    # Use find with included and excluded file and dir patterns, dirs and
-    # pass to cp --parent to copy with paths.
+    # Use find with included and excluded file and dir patterns
     INCLUDED_FILES_ARGS=(-name "*.md" -o -name "*.png" -o -name "*.jpg" -o -name "*.svg" -o -name ".pages" -o -name "*.mp4")
     EXCLUDED_FILES_ARGS=(-iname "CHANGELOG*" -o -iname "LICENSE*" -o -iname "CONTRIBUTING*")
-    EXCLUDED_DIRS_ARGS=(-path "*/node_modules/*" -o -path "*/build/*" -o -path "*/venv/*")
-    find "${PROJECT_DIRNAME}" \
-      \( "${INCLUDED_FILES_ARGS[@]}" \) \
-      -a -not \( "${EXCLUDED_FILES_ARGS[@]}" \) \
-      -a -not \( "${EXCLUDED_DIRS_ARGS[@]}" -prune \) \
-      -print0 |
-      xargs -0 -I '{}' cp --parent '{}' "${BUILD_DIR}/docs"
+    EXCLUDED_DIRS_ARGS=(-path "*/node_modules/*" -o -path "*/build/*" -o -path "*/venv/*" -o -path "*/.*/*")
+    readarray -t files_to_link < <(
+      find "${PROJECT_DIRNAME}" \
+        \( "${INCLUDED_FILES_ARGS[@]}" \) \
+        -a -not \( "${EXCLUDED_FILES_ARGS[@]}" \) \
+        -a -not \( "${EXCLUDED_DIRS_ARGS[@]}" -prune \) \
+        -a -type f \
+        -print
+    )
+    for file in "${files_to_link[@]}"; do
+      dir="$(dirname "$file")"
+      [[ ! -d "${BUILD_DIR}/docs/$dir" ]] && mkdir -v -p "${BUILD_DIR}/docs/$dir"
+      ln -s -v -T "${PROJECTS_DIR}/$file" "${BUILD_DIR}/docs/${file}"
+    done
   fi
 done
 

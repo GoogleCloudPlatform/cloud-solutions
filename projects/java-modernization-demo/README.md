@@ -335,6 +335,7 @@ Leave the Gemini CLI terminal running, and open a new terminal in your shell:
     ```
 
     Where:
+
     - `YOUR_PROJECT_ID` is the ID of the Google Cloud project where you want to
       provision resources for this demo.
 

@@ -41,7 +41,8 @@
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["SECURITY", "p0", "dependencies"]
+    "labels": ["SECURITY", "p0", "dependencies"],
+    "groupName": "vulnerabilityAlerts"
   },
   "labels": ["dependencies"],
   "customManagers": [
@@ -63,284 +64,351 @@
     {
       "matchFileNames": ["!projects/**"],
       "groupName": "00-repository-management",
-      "commitMessagePrefix": "chore(deps): [repository-management]"
+      "commitMessagePrefix": "chore(deps): [repository-management]",
+      "additionalBranchPrefix": "00-repository-management-"
     },
     {
       "matchFileNames": ["projects/**"],
       "groupName": "00-ungrouped-projects",
-      "commitMessagePrefix": "chore(deps): [ungrouped-projects]"
+      "commitMessagePrefix": "chore(deps): [ungrouped-projects]",
+      "additionalBranchPrefix": "00-ungrouped-projects-"
     },
     {
       "matchFileNames": ["projects/aaa-user-guide/**"],
       "groupName": "aaa-user-guide",
-      "commitMessagePrefix": "chore(deps): [aaa-user-guide]"
+      "commitMessagePrefix": "chore(deps): [aaa-user-guide]",
+      "additionalBranchPrefix": "aaa-user-guide-"
     },
     {
       "matchFileNames": ["projects/agentic-coding-with-data-agent-kit-demo/**"],
       "groupName": "agentic-coding-with-data-agent-kit-demo",
-      "commitMessagePrefix": "chore(deps): [agentic-coding-with-data-agent-kit-demo]"
+      "commitMessagePrefix": "chore(deps): [agentic-coding-with-data-agent-kit-demo]",
+      "additionalBranchPrefix": "agentic-coding-with-data-agent-kit-demo-"
     },
     {
       "matchFileNames": ["projects/agentic-customer-engagement-fsi-demo/**"],
       "groupName": "agentic-customer-engagement-fsi-demo",
-      "commitMessagePrefix": "chore(deps): [agentic-customer-engagement-fsi-demo]"
+      "commitMessagePrefix": "chore(deps): [agentic-customer-engagement-fsi-demo]",
+      "additionalBranchPrefix": "agentic-customer-engagement-fsi-demo-"
     },
     {
       "matchFileNames": ["projects/ai/**"],
       "groupName": "ai",
-      "commitMessagePrefix": "chore(deps): [ai]"
+      "commitMessagePrefix": "chore(deps): [ai]",
+      "additionalBranchPrefix": "ai-"
     },
     {
       "matchFileNames": ["projects/alloydb-auth-workload-identity/**"],
       "groupName": "alloydb-auth-workload-identity",
-      "commitMessagePrefix": "chore(deps): [alloydb-auth-workload-identity]"
+      "commitMessagePrefix": "chore(deps): [alloydb-auth-workload-identity]",
+      "additionalBranchPrefix": "alloydb-auth-workload-identity-"
     },
     {
       "matchFileNames": ["projects/alloydb-autoscaler/**"],
       "groupName": "alloydb-autoscaler",
-      "commitMessagePrefix": "chore(deps): [alloydb-autoscaler]"
+      "commitMessagePrefix": "chore(deps): [alloydb-autoscaler]",
+      "additionalBranchPrefix": "alloydb-autoscaler-"
     },
     {
       "matchFileNames": ["projects/alloydbomni-ha-patroni-etcd/**"],
       "groupName": "alloydbomni-ha-patroni-etcd",
-      "commitMessagePrefix": "chore(deps): [alloydbomni-ha-patroni-etcd]"
+      "commitMessagePrefix": "chore(deps): [alloydbomni-ha-patroni-etcd]",
+      "additionalBranchPrefix": "alloydbomni-ha-patroni-etcd-"
     },
     {
       "matchFileNames": ["projects/arm-reference-guides/**"],
       "groupName": "arm-reference-guides",
-      "commitMessagePrefix": "chore(deps): [arm-reference-guides]"
+      "commitMessagePrefix": "chore(deps): [arm-reference-guides]",
+      "additionalBranchPrefix": "arm-reference-guides-"
     },
     {
       "matchFileNames": ["projects/awt/**"],
       "groupName": "awt",
-      "commitMessagePrefix": "chore(deps): [awt]"
+      "commitMessagePrefix": "chore(deps): [awt]",
+      "additionalBranchPrefix": "awt-"
     },
     {
       "matchFileNames": ["projects/bss-ai-agent-infra/**"],
       "groupName": "bss-ai-agent-infra",
-      "commitMessagePrefix": "chore(deps): [bss-ai-agent-infra]"
+      "commitMessagePrefix": "chore(deps): [bss-ai-agent-infra]",
+      "additionalBranchPrefix": "bss-ai-agent-infra-"
     },
     {
       "matchFileNames": ["projects/build-with-gemini-demo/**"],
       "groupName": "build-with-gemini-demo",
-      "commitMessagePrefix": "chore(deps): [build-with-gemini-demo]"
+      "commitMessagePrefix": "chore(deps): [build-with-gemini-demo]",
+      "additionalBranchPrefix": "build-with-gemini-demo-"
     },
     {
       "matchFileNames": ["projects/bulk-delete-gcs-files-fn/**"],
       "groupName": "bulk-delete-gcs-files-fn",
-      "commitMessagePrefix": "chore(deps): [bulk-delete-gcs-files-fn]"
+      "commitMessagePrefix": "chore(deps): [bulk-delete-gcs-files-fn]",
+      "additionalBranchPrefix": "bulk-delete-gcs-files-fn-"
     },
     {
       "matchFileNames": ["projects/confidential-ai-model-serving/**"],
       "groupName": "confidential-ai-model-serving",
-      "commitMessagePrefix": "chore(deps): [confidential-ai-model-serving]"
+      "commitMessagePrefix": "chore(deps): [confidential-ai-model-serving]",
+      "additionalBranchPrefix": "confidential-ai-model-serving-"
     },
     {
       "matchFileNames": ["projects/contextual-ai/**"],
       "groupName": "contextual-ai",
-      "commitMessagePrefix": "chore(deps): [contextual-ai]"
+      "commitMessagePrefix": "chore(deps): [contextual-ai]",
+      "additionalBranchPrefix": "contextual-ai-"
     },
     {
       "matchFileNames": ["projects/conversational-commerce-agent/**"],
       "groupName": "conversational-commerce-agent",
-      "commitMessagePrefix": "chore(deps): [conversational-commerce-agent]"
+      "commitMessagePrefix": "chore(deps): [conversational-commerce-agent]",
+      "additionalBranchPrefix": "conversational-commerce-agent-"
     },
     {
       "matchFileNames": ["projects/database-archival/**"],
       "groupName": "database-archival",
-      "commitMessagePrefix": "chore(deps): [database-archival]"
+      "commitMessagePrefix": "chore(deps): [database-archival]",
+      "additionalBranchPrefix": "database-archival-"
     },
     {
       "matchFileNames": ["projects/dataflow-bigquery-change-data-capture/**"],
       "groupName": "dataflow-bigquery-change-data-capture",
-      "commitMessagePrefix": "chore(deps): [dataflow-bigquery-change-data-capture]"
+      "commitMessagePrefix": "chore(deps): [dataflow-bigquery-change-data-capture]",
+      "additionalBranchPrefix": "dataflow-bigquery-change-data-capture-"
     },
     {
       "matchFileNames": ["projects/dataflow-gcs-avro-to-spanner-scd/**"],
       "groupName": "dataflow-gcs-avro-to-spanner-scd",
-      "commitMessagePrefix": "chore(deps): [dataflow-gcs-avro-to-spanner-scd]"
+      "commitMessagePrefix": "chore(deps): [dataflow-gcs-avro-to-spanner-scd]",
+      "additionalBranchPrefix": "dataflow-gcs-avro-to-spanner-scd-"
     },
     {
       "matchFileNames": ["projects/dataflow-gcs-to-alloydb/**"],
       "groupName": "dataflow-gcs-to-alloydb",
-      "commitMessagePrefix": "chore(deps): [dataflow-gcs-to-alloydb]"
+      "commitMessagePrefix": "chore(deps): [dataflow-gcs-to-alloydb]",
+      "additionalBranchPrefix": "dataflow-gcs-to-alloydb-"
     },
     {
       "matchFileNames": ["projects/dataflow-kafka-to-bigquery/**"],
       "groupName": "dataflow-kafka-to-bigquery",
-      "commitMessagePrefix": "chore(deps): [dataflow-kafka-to-bigquery]"
+      "commitMessagePrefix": "chore(deps): [dataflow-kafka-to-bigquery]",
+      "additionalBranchPrefix": "dataflow-kafka-to-bigquery-"
     },
     {
       "matchFileNames": ["projects/dotnet-modernization-demo/**"],
       "groupName": "dotnet-modernization-demo",
-      "commitMessagePrefix": "chore(deps): [dotnet-modernization-demo]"
+      "commitMessagePrefix": "chore(deps): [dotnet-modernization-demo]",
+      "additionalBranchPrefix": "dotnet-modernization-demo-"
     },
     {
       "matchFileNames": ["projects/fsi-quant-assistant/**"],
       "groupName": "fsi-quant-assistant",
-      "commitMessagePrefix": "chore(deps): [fsi-quant-assistant]"
+      "commitMessagePrefix": "chore(deps): [fsi-quant-assistant]",
+      "additionalBranchPrefix": "fsi-quant-assistant-"
     },
     {
       "matchFileNames": [
         "projects/gemini-powered-migrations-to-google-cloud/**"
       ],
       "groupName": "gemini-powered-migrations-to-google-cloud",
-      "commitMessagePrefix": "chore(deps): [gemini-powered-migrations-to-google-cloud]"
+      "commitMessagePrefix": "chore(deps): [gemini-powered-migrations-to-google-cloud]",
+      "additionalBranchPrefix": "gemini-powered-migrations-to-google-cloud-"
     },
     {
       "matchFileNames": ["projects/generative-media-shot-production/**"],
       "groupName": "generative-media-shot-production",
-      "commitMessagePrefix": "chore(deps): [generative-media-shot-production]"
+      "commitMessagePrefix": "chore(deps): [generative-media-shot-production]",
+      "additionalBranchPrefix": "generative-media-shot-production-"
     },
     {
       "matchFileNames": ["projects/gke-optimization/**"],
       "groupName": "gke-optimization",
-      "commitMessagePrefix": "chore(deps): [gke-optimization]"
+      "commitMessagePrefix": "chore(deps): [gke-optimization]",
+      "additionalBranchPrefix": "gke-optimization-"
     },
     {
       "matchFileNames": ["projects/hadoop-to-lakehouse-migration-demo/**"],
       "groupName": "hadoop-to-lakehouse-migration-demo",
-      "commitMessagePrefix": "chore(deps): [hadoop-to-lakehouse-migration-demo]"
+      "commitMessagePrefix": "chore(deps): [hadoop-to-lakehouse-migration-demo]",
+      "additionalBranchPrefix": "hadoop-to-lakehouse-migration-demo-"
     },
     {
       "matchFileNames": ["projects/hive-bigquery-connector-demo/**"],
       "groupName": "hive-bigquery-connector-demo",
-      "commitMessagePrefix": "chore(deps): [hive-bigquery-connector-demo]"
+      "commitMessagePrefix": "chore(deps): [hive-bigquery-connector-demo]",
+      "additionalBranchPrefix": "hive-bigquery-connector-demo-"
     },
     {
       "matchFileNames": ["projects/hpa-recommender/**"],
       "groupName": "hpa-recommender",
-      "commitMessagePrefix": "chore(deps): [hpa-recommender]"
+      "commitMessagePrefix": "chore(deps): [hpa-recommender]",
+      "additionalBranchPrefix": "hpa-recommender-"
     },
     {
       "matchFileNames": ["projects/java-modernization-demo/**"],
       "groupName": "java-modernization-demo",
-      "commitMessagePrefix": "chore(deps): [java-modernization-demo]"
+      "commitMessagePrefix": "chore(deps): [java-modernization-demo]",
+      "additionalBranchPrefix": "java-modernization-demo-"
     },
     {
       "matchFileNames": ["projects/k8s-hybrid-neg-controller/**"],
       "groupName": "k8s-hybrid-neg-controller",
-      "commitMessagePrefix": "chore(deps): [k8s-hybrid-neg-controller]"
+      "commitMessagePrefix": "chore(deps): [k8s-hybrid-neg-controller]",
+      "additionalBranchPrefix": "k8s-hybrid-neg-controller-"
     },
     {
       "matchFileNames": ["projects/lab2life/**"],
       "groupName": "lab2life",
-      "commitMessagePrefix": "chore(deps): [lab2life]"
+      "commitMessagePrefix": "chore(deps): [lab2life]",
+      "additionalBranchPrefix": "lab2life-"
     },
     {
       "matchFileNames": ["projects/legacy-detox-demo/**"],
       "groupName": "legacy-detox-demo",
-      "commitMessagePrefix": "chore(deps): [legacy-detox-demo]"
+      "commitMessagePrefix": "chore(deps): [legacy-detox-demo]",
+      "additionalBranchPrefix": "legacy-detox-demo-"
     },
     {
       "matchFileNames": ["projects/like-scelsius-but-better/**"],
       "groupName": "like-scelsius-but-better",
-      "commitMessagePrefix": "chore(deps): [like-scelsius-but-better]"
+      "commitMessagePrefix": "chore(deps): [like-scelsius-but-better]",
+      "additionalBranchPrefix": "like-scelsius-but-better-"
     },
     {
       "matchFileNames": ["projects/log-scoping-tool/**"],
       "groupName": "log-scoping-tool",
-      "commitMessagePrefix": "chore(deps): [log-scoping-tool]"
+      "commitMessagePrefix": "chore(deps): [log-scoping-tool]",
+      "additionalBranchPrefix": "log-scoping-tool-"
     },
     {
       "matchFileNames": ["projects/manufacturing/**"],
       "groupName": "manufacturing",
-      "commitMessagePrefix": "chore(deps): [manufacturing]"
+      "commitMessagePrefix": "chore(deps): [manufacturing]",
+      "additionalBranchPrefix": "manufacturing-"
     },
     {
       "matchFileNames": ["projects/migrate-from-aws-to-google-cloud/**"],
       "groupName": "migrate-from-aws-to-google-cloud",
-      "commitMessagePrefix": "chore(deps): [migrate-from-aws-to-google-cloud]"
+      "commitMessagePrefix": "chore(deps): [migrate-from-aws-to-google-cloud]",
+      "additionalBranchPrefix": "migrate-from-aws-to-google-cloud-"
     },
     {
       "matchFileNames": ["projects/migrate-from-azure-to-google-cloud/**"],
       "groupName": "migrate-from-azure-to-gcp",
-      "commitMessagePrefix": "chore(deps): [migrate-from-azure-to-google-cloud]"
+      "commitMessagePrefix": "chore(deps): [migrate-from-azure-to-google-cloud]",
+      "additionalBranchPrefix": "migrate-from-azure-to-gcp-"
     },
     {
       "matchFileNames": ["projects/migrate-nutanix-to-google-cloud/**"],
       "groupName": "migrate-nutanix-to-google-cloud",
-      "commitMessagePrefix": "chore(deps): [migrate-nutanix-to-google-cloud]"
+      "commitMessagePrefix": "chore(deps): [migrate-nutanix-to-google-cloud]",
+      "additionalBranchPrefix": "migrate-nutanix-to-google-cloud-"
     },
     {
       "matchFileNames": ["projects/mmb-datacloud/**"],
       "groupName": "mmb-datacloud",
-      "commitMessagePrefix": "chore(deps): [mmb-datacloud]"
+      "commitMessagePrefix": "chore(deps): [mmb-datacloud]",
+      "additionalBranchPrefix": "mmb-datacloud-"
     },
     {
       "matchFileNames": ["projects/mmb-hero-demo/**"],
       "groupName": "mmb-hero-demo",
-      "commitMessagePrefix": "chore(deps): [mmb-hero-demo]"
+      "commitMessagePrefix": "chore(deps): [mmb-hero-demo]",
+      "additionalBranchPrefix": "mmb-hero-demo-"
     },
     {
       "matchFileNames": ["projects/nvidia-omniverse-on-google-cloud/**"],
       "groupName": "nvidia-omniverse-on-google-cloud",
-      "commitMessagePrefix": "chore(deps): [nvidia-omniverse-on-google-cloud]"
+      "commitMessagePrefix": "chore(deps): [nvidia-omniverse-on-google-cloud]",
+      "additionalBranchPrefix": "nvidia-omniverse-on-google-cloud-"
+    },
+    {
+      "matchFileNames": ["projects/oracle-bigquery-mcp-agent/**"],
+      "groupName": "oracle-bigquery-mcp-agent",
+      "commitMessagePrefix": "chore(deps): [oracle-bigquery-mcp-agent]",
+      "additionalBranchPrefix": "oracle-bigquery-mcp-agent-"
+    },
+    {
+      "matchFileNames": ["projects/operational-ai-leap/**"],
+      "groupName": "operational-ai-leap",
+      "commitMessagePrefix": "chore(deps): [operational-ai-leap]"
     },
     {
       "matchFileNames": ["projects/pino-logging-gcp-config/**"],
       "groupName": "pino-logging-gcp-config",
-      "commitMessagePrefix": "chore(deps): [pino-logging-gcp-config]"
+      "commitMessagePrefix": "chore(deps): [pino-logging-gcp-config]",
+      "additionalBranchPrefix": "pino-logging-gcp-config-"
     },
     {
       "matchFileNames": ["projects/retail-catalog-content-enrichment/**"],
       "groupName": "retail-catalog-content-enrichment",
-      "commitMessagePrefix": "chore(deps): [retail-catalog-content-enrichment]"
+      "commitMessagePrefix": "chore(deps): [retail-catalog-content-enrichment]",
+      "additionalBranchPrefix": "retail-catalog-content-enrichment-"
     },
     {
       "matchFileNames": ["projects/sa-tools/**"],
       "groupName": "sa-tools",
-      "commitMessagePrefix": "chore(deps): [sa-tools]"
+      "commitMessagePrefix": "chore(deps): [sa-tools]",
+      "additionalBranchPrefix": "sa-tools-"
     },
     {
       "matchFileNames": ["projects/sa-tools/common/**"],
       "groupName": "sa-tools-common",
-      "commitMessagePrefix": "chore(deps): [sa-tools-common]"
+      "commitMessagePrefix": "chore(deps): [sa-tools-common]",
+      "additionalBranchPrefix": "sa-tools-common-"
     },
     {
       "matchFileNames": ["projects/sa-tools/perf-benchmark/**"],
       "groupName": "sa-tools-perf-benchmark",
-      "commitMessagePrefix": "chore(deps): [sa-tools-perf-benchmark]"
+      "commitMessagePrefix": "chore(deps): [sa-tools-perf-benchmark]",
+      "additionalBranchPrefix": "sa-tools-perf-benchmark-"
     },
     {
       "matchFileNames": ["projects/sa-tools/performance-testing/**"],
       "groupName": "sa-tools-performance-testing",
-      "commitMessagePrefix": "chore(deps): [sa-tools-performance-testing]"
+      "commitMessagePrefix": "chore(deps): [sa-tools-performance-testing]",
+      "additionalBranchPrefix": "sa-tools-performance-testing-"
     },
     {
       "matchFileNames": ["projects/serverless-event-processing/**"],
       "groupName": "serverless-event-processing",
-      "commitMessagePrefix": "chore(deps): [serverless-event-processing]"
+      "commitMessagePrefix": "chore(deps): [serverless-event-processing]",
+      "additionalBranchPrefix": "serverless-event-processing-"
     },
     {
       "matchFileNames": ["projects/smart-npc/**"],
       "groupName": "smart-npc",
-      "commitMessagePrefix": "chore(deps): [smart-npc]"
+      "commitMessagePrefix": "chore(deps): [smart-npc]",
+      "additionalBranchPrefix": "smart-npc-"
     },
     {
       "matchFileNames": ["projects/speech2speech_translation/**"],
       "groupName": "speech2speech_translation",
-      "commitMessagePrefix": "chore(deps): [speech2speech_translation]"
+      "commitMessagePrefix": "chore(deps): [speech2speech_translation]",
+      "additionalBranchPrefix": "speech2speech_translation-"
     },
     {
       "matchFileNames": ["projects/speech2srt/**"],
       "groupName": "speech2srt",
-      "commitMessagePrefix": "chore(deps): [speech2srt]"
+      "commitMessagePrefix": "chore(deps): [speech2srt]",
+      "additionalBranchPrefix": "speech2srt-"
     },
     {
       "matchFileNames": ["projects/streamlit-pubsub/**"],
       "groupName": "streamlit-pubsub",
-      "commitMessagePrefix": "chore(deps): [streamlit-pubsub]"
+      "commitMessagePrefix": "chore(deps): [streamlit-pubsub]",
+      "additionalBranchPrefix": "streamlit-pubsub-"
     },
     {
       "matchFileNames": ["projects/unified-secops/**"],
       "groupName": "unified-secops",
-      "commitMessagePrefix": "chore(deps): [unified-secops]"
+      "commitMessagePrefix": "chore(deps): [unified-secops]",
+      "additionalBranchPrefix": "unified-secops-"
     },
     {
       "matchFileNames": ["projects/vision-ai-edge-platform/**"],
       "groupName": "vision-ai-edge-platform",
-      "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]"
+      "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]",
+      "additionalBranchPrefix": "vision-ai-edge-platform-"
     }
   ]
 }

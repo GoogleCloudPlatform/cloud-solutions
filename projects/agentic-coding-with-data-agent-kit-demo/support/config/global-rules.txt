@@ -1,0 +1,3 @@
+1. When generating text embeddings in Google Cloud the default embedding model is text-embedding-005 if nothing else is specified.
+2. For usage of LLM in code and agents, the default model is gemini-2.5-flash-lite if nothing else is specified.
+3. When using Agent Development Kit (ADK) use the latest version 2.0.0 for the google-adk package if nothing else is specified.

@@ -1,0 +1,10 @@
+# Required at this level for the last step in the guide to open pull request.
+# Users will create/init new git repository in this folder and push the changes.
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.db
+*.db
+.DS_Store
