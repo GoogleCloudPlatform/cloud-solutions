@@ -1,0 +1,3 @@
+title: "Single file - title is ignored"
+nav:
+  - "Modernizing Data Apps with the Data Agent Kit": README.md

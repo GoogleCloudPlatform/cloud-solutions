@@ -2,7 +2,7 @@
 
 This NVIDIA RTX Virtual Workstation is based on the
 [Google Cloud Compute Engine G2 machine family](https://cloud.google.com/compute/docs/gpus#l4-gpus).
-A VM based on the G2 machine family includes one to eigth NVIDIA L4 GPUs.
+A VM based on the G2 machine family includes one to eight NVIDIA L4 GPUs.
 
 _G2 machine are not officially supported by NVIDIA for NVIDIA Omniverse
 development_
@@ -33,6 +33,7 @@ following:
 
     The `setup-workstation.sh` script does the following to the workstation for
     NVIDIA Omniverse application development:
+
     - Verify that NVIDIA drivers are installed
     - Install dependencies
     - Install Docker

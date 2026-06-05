@@ -1,7 +1,7 @@
 <!-- markdownlint-disable -->
 # Personalized Marketing Agent
 
-**Author:** Layolin Jesudhass
+**Authors:** Layolin Jesudhass, Ana Esqueda
 
 End-to-end marketing campaign agent built on **Google ADK**. Generates personalized **text ads**, **image ads**, **asset sheets**, and **cinematic video ads** (24s with voiceover + background music) for any product — then publishes to **Google Ads** as a PMAX campaign.
 

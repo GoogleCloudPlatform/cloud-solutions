@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "google-developer-knowledge": {
+      "serverUrl": "https://developerknowledge.googleapis.com/mcp",
+      "authProviderType": "google_credentials",
+      "oauth": {
+        "scopes": ["https://www.googleapis.com/auth/cloud-platform"]
+      },
+      "headers": {
+        "X-goog-user-project": "PROJECT_ID"
+      }
+    }
+  }
+}

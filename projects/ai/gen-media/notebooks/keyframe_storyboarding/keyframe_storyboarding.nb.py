@@ -130,7 +130,7 @@
 # ## Get Started 
 
 # %% [markdown]
-# ### Install Dependancies
+# ### Install Dependencies
 #
 # If you are using VS Code read more on how to [Manage Jupyter Kernels in VS Code](https://code.visualstudio.com/docs/datascience/jupyter-kernel-management). You will need to ensure you have executed `pip install ipykernel` on the local terminal.
 

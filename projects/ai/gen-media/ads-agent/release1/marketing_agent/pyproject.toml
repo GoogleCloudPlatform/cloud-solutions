@@ -2,7 +2,7 @@
 name = "marketing_agent"
 version = "5.20260410.1"
 description = "Combined Marketing Campaign Agent - Image Ads and Video Ads"
-authors = [{ name = "Layolin Jesudhass" }]
+authors = [{ name = "Layolin Jesudhass" }, { name = "Ana Esqueda" }]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -21,8 +21,8 @@ dependencies = [
     "soundfile==0.13.1",
     "aiohttp==3.13.4",
     "adk_common",
-    "requests",
-    "Pillow>=10.0.0",
+    "requests==2.33.1",
+    "Pillow==12.2.0",
     "lxml==6.1.0",
     "httpx==0.28.1",
     "google-cloud-storage",
