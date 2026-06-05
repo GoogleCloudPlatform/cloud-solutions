@@ -62,6 +62,15 @@ updates:
     patterns:
       - "*"
 
+  - package-ecosystem: "uv"
+    directories:
+      - "**/*"
+    schedule:
+      interval: "daily"
+    multi-ecosystem-group: "all-security-updates"
+    patterns:
+      - "*"
+
   - package-ecosystem: "maven"
     directories:
       - "**/*"

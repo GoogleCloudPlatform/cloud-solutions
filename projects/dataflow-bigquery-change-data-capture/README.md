@@ -22,8 +22,8 @@ project to be used:
 project_id = "<your-project-id>"
 ```
 
-[terraform/variables.tf](terraform/variables.tf) lists additional variables you
-can override in that file.
+The `terraform/variables.tf` file lists additional variables you can override in
+that file.
 
 Create the environment:
 
