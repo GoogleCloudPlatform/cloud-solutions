@@ -304,6 +304,12 @@
       "additionalBranchPrefix": "migrate-nutanix-to-google-cloud-"
     },
     {
+      "matchFileNames": ["projects/migrate-vmware-to-gce/**"],
+      "groupName": "migrate-vmware-to-gce",
+      "commitMessagePrefix": "chore(deps): [migrate-vmware-to-gce]",
+      "additionalBranchPrefix": "migrate-vmware-to-gce-"
+    },
+    {
       "matchFileNames": ["projects/mmb-datacloud/**"],
       "groupName": "mmb-datacloud",
       "commitMessagePrefix": "chore(deps): [mmb-datacloud]",
@@ -322,15 +328,15 @@
       "additionalBranchPrefix": "nvidia-omniverse-on-google-cloud-"
     },
     {
+      "matchFileNames": ["projects/operational-ai-leap/**"],
+      "groupName": "operational-ai-leap",
+      "commitMessagePrefix": "chore(deps): [operational-ai-leap]"
+    },
+    {
       "matchFileNames": ["projects/oracle-bigquery-mcp-agent/**"],
       "groupName": "oracle-bigquery-mcp-agent",
       "commitMessagePrefix": "chore(deps): [oracle-bigquery-mcp-agent]",
       "additionalBranchPrefix": "oracle-bigquery-mcp-agent-"
-    },
-    {
-      "matchFileNames": ["projects/operational-ai-leap/**"],
-      "groupName": "operational-ai-leap",
-      "commitMessagePrefix": "chore(deps): [operational-ai-leap]"
     },
     {
       "matchFileNames": ["projects/pino-logging-gcp-config/**"],
