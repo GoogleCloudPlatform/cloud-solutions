@@ -15,13 +15,13 @@ to complex, multi-agent systems orchestrated by reasoning models, allowing
 developers to focus on high-level technical intent while the agent handles
 operational heavy lifting.
 
-The Google Cloud Data Agent Kit (ADK) and the Antigravity IDE provide a unified
-interface for interacting with your data. This integration allows you to connect
-to databases, explore schemas, and execute advanced SQL or GraphQL queries
-directly within the IDE's catalog view. By leveraging built-in skills, such as
-automated database provisioning, you can configure your infrastructure in
-real-time, enabling you to build intelligent applications without leaving your
-IDE environment.
+The Google Cloud Data Agent Kit (Data Agent Kit) and the Antigravity IDE
+provide a unified interface for interacting with your data. This integration
+allows you to connect to databases, explore schemas, and execute advanced SQL
+or GraphQL queries directly within the IDE's catalog view. By leveraging
+built-in skills, such as automated database provisioning, you can configure
+your infrastructure in real-time, enabling you to build intelligent
+applications without leaving your IDE environment.
 
 **Why this matters for Productivity:**
 
