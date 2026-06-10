@@ -16,6 +16,7 @@ package org.google.demo;
 import io.quarkus.panache.common.Sort;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -106,7 +107,7 @@ public class MenuResource {
    */
   @POST
   @Transactional
-  public Response create(Menu menu) {
+  public Response create(@Valid Menu menu) {
     if (menu == null || menu.id != null) {
       throw new WebApplicationException("id != null");
     }
@@ -125,7 +126,7 @@ public class MenuResource {
   @PUT
   @Transactional
   @Path("{id}")
-  public Menu update(@PathParam("id") Long id, Menu menu) {
+  public Menu update(@PathParam("id") Long id, @Valid Menu menu) {
 
     Menu entity = menuRepository.findById(id);
     if (entity == null) {
@@ -147,6 +148,12 @@ public class MenuResource {
     }
     if (menu.itemThumbnailUrl != null) {
       entity.itemThumbnailUrl = menu.itemThumbnailUrl;
+    }
+    if (menu.description != null) {
+      entity.description = menu.description;
+    }
+    if (menu.rating != null) {
+      entity.rating = menu.rating;
     }
     if (menu.status != null) {
       entity.status = menu.status;

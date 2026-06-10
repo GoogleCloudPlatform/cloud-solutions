@@ -16,6 +16,10 @@ package org.google.demo;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -38,6 +42,16 @@ public class Menu extends PanacheEntity {
 
   @Column(name = "tag_line")
   public String tagLine; // "sweets delight", "super spicy"
+
+  @NotBlank
+  @Column(name = "description")
+  public String description;
+
+  @NotNull
+  @Min(1)
+  @Max(5)
+  @Column(name = "rating")
+  public Integer rating;
 
   @Column(name = "item_image_url")
   public URL itemImageUrl;

@@ -42,12 +42,16 @@ public class MenuResourceTest {
     menu.itemPrice = BigDecimal.valueOf(10.0);
     menu.spiceLevel = 1;
     menu.tagLine = "Test Tagline";
-    menu.itemImageUrl = null; // Set to null or a valid URL
-    menu.itemThumbnailUrl = null; // Set to null or a valid URL
+    menu.description = "Test Description";
+    menu.rating = 5;
+    menu.itemImageUrl = null;
+    menu.itemThumbnailUrl = null;
     menu.status = Status.Ready;
 
     Mockito.when(menuRepository.findById(1L)).thenReturn(menu);
-    Mockito.when(menuRepository.listAll()).thenReturn(Collections.singletonList(menu));
+    Mockito.when(menuRepository.listAll(any())).thenReturn(Collections.singletonList(menu));
+    Mockito.when(menuRepository.list(any(String.class), any(Object.class))).thenReturn(Collections.singletonList(menu));
+    
     Mockito.doAnswer(
             invocation -> {
               Menu m = invocation.getArgument(0);
@@ -66,8 +70,8 @@ public class MenuResourceTest {
     menu.itemPrice = java.math.BigDecimal.valueOf(10.0);
     menu.spiceLevel = 1;
     menu.tagLine = "Test Tagline";
-    menu.itemImageUrl = null; // Set to null or a valid URL
-    menu.itemThumbnailUrl = null; // Set to null or a valid URL
+    menu.description = "Test Description";
+    menu.rating = 5;
     menu.status = Status.Ready;
 
     given()
@@ -78,6 +82,98 @@ public class MenuResourceTest {
         .then()
         .statusCode(200)
         .body("id", notNullValue())
+        .body("itemName", is("Test Item"))
+        .body("description", is("Test Description"))
+        .body("rating", is(5));
+  }
+
+  /** Tests the creation of a menu item with invalid rating. */
+  @Test
+  public void testCreateMenuInvalidRating() {
+    Menu menu = new Menu();
+    menu.itemName = "Test Item";
+    menu.itemPrice = java.math.BigDecimal.valueOf(10.0);
+    menu.description = "Test Description";
+    menu.rating = 0; // Invalid
+
+    given()
+        .contentType(ContentType.JSON)
+        .body(menu)
+        .when()
+        .post("/menu")
+        .then()
+        .statusCode(400);
+  }
+
+  /** Tests the creation of a menu item with missing description. */
+  @Test
+  public void testCreateMenuMissingDescription() {
+    Menu menu = new Menu();
+    menu.itemName = "Test Item";
+    menu.itemPrice = java.math.BigDecimal.valueOf(10.0);
+    menu.rating = 5;
+    // description is missing
+
+    given()
+        .contentType(ContentType.JSON)
+        .body(menu)
+        .when()
+        .post("/menu")
+        .then()
+        .statusCode(400);
+  }
+
+  /** Tests getting all menu items. */
+  @Test
+  public void testGetAll() {
+    given()
+        .when()
+        .get("/menu")
+        .then()
+        .statusCode(200)
+        .body("$.size()", is(1))
+        .body("[0].itemName", is("Test Item"));
+  }
+
+  /** Tests getting a menu item by ID. */
+  @Test
+  public void testGetById() {
+    given()
+        .when()
+        .get("/menu/1")
+        .then()
+        .statusCode(200)
+        .body("id", is(1))
         .body("itemName", is("Test Item"));
+  }
+
+  /** Tests updating a menu item. */
+  @Test
+  public void testUpdateMenu() {
+    Menu menu = new Menu();
+    menu.itemName = "Updated Item";
+    menu.description = "Updated Description";
+    menu.rating = 4;
+
+    given()
+        .contentType(ContentType.JSON)
+        .body(menu)
+        .when()
+        .put("/menu/1")
+        .then()
+        .statusCode(200)
+        .body("itemName", is("Updated Item"))
+        .body("description", is("Updated Description"))
+        .body("rating", is(4));
+  }
+
+  /** Tests deleting a menu item. */
+  @Test
+  public void testDeleteMenu() {
+    given()
+        .when()
+        .delete("/menu/1")
+        .then()
+        .statusCode(204);
   }
 }
