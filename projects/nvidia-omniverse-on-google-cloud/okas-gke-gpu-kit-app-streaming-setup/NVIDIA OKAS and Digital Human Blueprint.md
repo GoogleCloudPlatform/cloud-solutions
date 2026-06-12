@@ -18,14 +18,15 @@ access with the following:
 * In your local terminal or Cloud Shell, install [NVIDIA GPU Cloud (NGC) CLI](https://org.ngc.nvidia.com/setup/installers/cli).
 * Perform both google sdk login
 
-```
+```shell
 gcloud auth login
 gcloud auth application-default login
 ```
 
 ### Generate an API Key
 
-At [https://org.ngc.nvidia.com/setup/api-keys](https://org.ngc.nvidia.com/setup/api-keys), create an API key with access for the following components:
+At [https://org.ngc.nvidia.com/setup/api-keys](https://org.ngc.nvidia.com/setup/api-keys)
+, create an API key with access for the following components:
 
 * **NGC Catalog**
   NGC should have the following services
@@ -40,7 +41,7 @@ At [https://org.ngc.nvidia.com/setup/api-keys](https://org.ngc.nvidia.com/setup/
     Service: NVIDIA Private Registry
     Scope: All Scopes
     Entity Type: All Entity
-    Entity Value: <Organization ID>/ *
+    Entity Value: `<Organization ID>/*`
 
 ![generate api key](images/generate_key.png)
 
@@ -54,7 +55,10 @@ ngc config set
 
 ### Determine Kit App Streaming version
 
-Navigate to the [installation page](https://docs.omniverse.nvidia.com/ovas/latest/deployments/infra/installation.html) for Kit App Streaming. At the top, you will see the **Latest Container Release**. Note that version and set the `APP_VERSION` environment variable to this version:
+Navigate to the [installation page](https://docs.omniverse.nvidia.com/ovas/latest/deployments/infra/installation.html)
+for Kit App Streaming. At the top, you will see the **Latest Container
+Release** . Note that version and set the `APP_VERSION` environment variable
+to this version:
 
 ## Create a Standard GKE cluster
 
@@ -152,7 +156,8 @@ gcloud beta container node-pools create "gpu-worker-pool" \
   --node-locations $ZONE
 ```
 
-To use DWS Flex mode for this node pool request, please add the following to the above command:
+To use DWS Flex mode for this node pool request, please add the following to 
+the above command:
 
 ```shell
 --num-nodes "0" \
@@ -173,7 +178,9 @@ gcloud container clusters get-credentials $CLUSTER_NAME \
 
 ## Install NVIDIA GPU Operator
 
-See to the [external documentation](https://cloud.google.com/kubernetes-engine/docs/how-to/gpu-operator#before_you_begin) as reference, but note there are differences in how we install NVIDIA GPU Operator on a cluster with G4 machines.
+See to the [external documentation](https://cloud.google.com/kubernetes-engine/docs/how-to/gpu-operator#before_you_begin) as reference,
+but note there are differences in how we install NVIDIA GPU Operator on a
+cluster with G4 machines.
 
 ### Create the gpu-operator namespace
 
@@ -208,7 +215,9 @@ EOF
 
 ### Set up Helm repository
 
-Set up the Helm repository references on your deployment system. If you are not using Cloud Shell, install Helm is required. In Cloud Shell run the following commands:
+Set up the Helm repository references on your deployment system. If you are not
+using Cloud Shell, install Helm is required. In Cloud Shell run the following
+commands:
 
 ```shell
 helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
@@ -243,13 +252,15 @@ helm install gpu-operator -n gpu-operator \
 
 ### Daemonset for symbolic link creation
 
-If the pods under `gpu-operator` namespace are failing with an error similar to this, we have to create a symbolic link to that bin folder:
+If the pods under `gpu-operator` namespace are failing with an error similar
+to this, we have to create a symbolic link to that bin folder:
 
 ```shell
 plugin type="ptp" failed (add): failed to find plugin "ptp" in path [/opt/cni/bin]
 ```
 
-To do that at scale we are using a daemonset. Create a file called `symlink-operator.yaml` containing the following:
+To do that at scale we are using a daemonset. Create a file called
+`symlink-operator.yaml` containing the following:
 
 ```shell
 apiVersion: apps/v1
@@ -316,7 +327,8 @@ kubectl apply -f symlink-operator.yaml
 
 ### Verify GPU Operator is working
 
-Once complete, you can verify GPU Operator is installed and working on your cluster with the following command:
+Once complete, you can verify GPU Operator is installed and working on your
+cluster with the following command:
 
 `kubectl -n gpu-operator get pods`
 
@@ -340,7 +352,8 @@ nvidia-mig-manager-fl7d6                                      1/1     Running   
 nvidia-operator-validator-xpjw4                               1/1     Running     0          115s
 ```
 
-If any pods aren't marked `Running` or `Completed`, you can refer to NVIDIA's GPU Operator [Troubleshooting documentation](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/25.3.2/troubleshooting.html).
+If any pods aren't marked `Running` or `Completed`, you can refer to NVIDIA's
+GPU Operator [Troubleshooting documentation](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/25.3.2/troubleshooting.html).
 
 ## Install Omniverse streaming application
 
@@ -368,7 +381,8 @@ kubectl create secret -n omni-streaming docker-registry regcred \
 
 ### Download Helm resources
 
-In Cloud Shell, create a directory to contain the App Streaming resources, then download:
+In Cloud Shell, create a directory to contain the App Streaming resources,
+then download:
 note: Make sure you do did the "ngc config set" command.
 
 ```shell
@@ -383,7 +397,9 @@ You can get the latest version at the top of the [docs](https://docs.omniverse.n
 
 ### Install Memcached Service
 
-**Note:** due to recent [changes](https://hub.docker.com/r/bitnami/memcached) to the bitnami/memcached repo, we have to point the repo to `bitnamilegacy` by modifying the file `helm/memcached/values.yml`. At the bottom of the file, add the following:
+**Note:** due to recent [changes](https://hub.docker.com/r/bitnami/memcached) to the bitnami/memcached repo, we have to point the repo to `bitnamilegacy`
+by modifying the file `helm/memcached/values.yml`. At the bottom of the file,
+add the following:
 
 ```shell
 image:
@@ -464,7 +480,8 @@ helm upgrade --install \
 
 ### Install the Streaming Session Manager
 
-Update the file `helm/kit-appstreaming-manager/values_generic.yaml` and change the following:
+Update the file `helm/kit-appstreaming-manager/values_generic.yaml` and change
+the following:
 
 ```shell
 backend_csp_args:
@@ -490,7 +507,8 @@ helm upgrade --install \
 
 ### Install Application and Profile Manager (AP)
 
-The Applications and Profile Manager manages the available applications and runtime profiles.
+The Applications and Profile Manager manages the available applications and
+runtime profiles.
 
 ```shell
 helm fetch https://helm.ngc.nvidia.com/nvidia/omniverse/charts/kit-appstreaming-applications-1.12.0.tgz --username='$oauthtoken' --password=< NGC personal KEY >
@@ -508,9 +526,11 @@ helm upgrade --install \
 
 ## Update Appstreaming Session Helm chart
 
-For GKE, we need to modify the default `kit-appstreaming-session` Helm chart to include updated LoadBalancer service specifications to handle multiple protocols.
+For GKE, we need to modify the default `kit-appstreaming-session` Helm chart to
+include updated LoadBalancer service specifications to handle multiple protocols.
 
-1. The `kit-appstreaming-session` Helm chart is not included in the resources downloaded earlier, so first pull the Helm chart from the NGC registry:
+1. The `kit-appstreaming-session` Helm chart is not included in the resources
+downloaded earlier, so first pull the Helm chart from the NGC registry:
 
 ```shell
 cd helm
@@ -522,7 +542,8 @@ gunzip kit-appstreaming-session-1.12.0.tgz
 tar -xvf kit-appstreaming-session-1.12.0.tar
 ```
 
-2. Extract the resulting archive and modify the file `templates/service.yaml` to include the following lines at the top of the `spec:` section:
+2. Extract the resulting archive and modify the file `templates/service.yaml`
+to include the following lines at the top of the `spec:` section:
 
 ```shell
 spec:
@@ -533,7 +554,8 @@ spec:
   ...
 ```
 
-3. Update `Chart.yaml` with a unique application version (changing both `appVersion` and version `values`).
+3. Update `Chart.yaml` with a unique application version (changing both
+`appVersion` and version `values`).
 
 4. Package the updated Helm chart:
 
@@ -561,7 +583,8 @@ ngc registry chart push \
 
    Where `[APP_VERSION]` is your updated Helm chart version.
 
-7. Navigate back to your original Helm resources directory, duplicate the file `manifests/helm-repositories/ngc-omniverse.yaml` then modify this new file:
+7. Navigate back to your original Helm resources directory, duplicate the file
+ `manifests/helm-repositories/ngc-omniverse.yaml` then modify this new file:
 
    ```shell
    cd manifests/helm-repositories/
@@ -580,7 +603,9 @@ ngc registry chart push \
     -f manifests/helm-repositories/ngc-omniverse-appstreaming-session.yaml
   ```
 
-9. In `resources/helm`, create a new directory called `kit-appstreaming-session` to hold the updated `values.yaml` which contain the following:
+9. In `resources/helm`, create a new directory called 
+`kit-appstreaming-session` to hold the updated `values.yaml` which contain
+the following:
 
 ```shell
 global:
@@ -630,9 +655,11 @@ helm upgrade --install \
 
 ## Install Omniverse sample application
 
-Using NVIDIA's [documentation](https://docs.omniverse.nvidia.com/ovas/latest/deployments/apps/2_create_app_config.html) as reference, install a sample application to test GKE functionality.
+Using NVIDIA's [documentation](https://docs.omniverse.nvidia.com/ovas/latest/deployments/apps/2_create_app_config.html) as reference,
+install a sample application to test GKE functionality.
 
-Move to the directory at the same level as `kit-app-streaming`, Create a directory to store configuration files:
+Move to the directory at the same level as `kit-app-streaming`, Create a
+directory to store configuration files:
 
 ```shell
 mkdir sample-application
@@ -641,7 +668,8 @@ cd sample-application
 
 ### Create an Application Custom Resource
 
-In this new directory, create a file called `sample-application.yaml` containing the following:
+In this new directory, create a file called `sample-application.yaml`
+containing the following:
 
 ```shell
 apiVersion: omniverse.nvidia.com/v1
@@ -743,7 +771,8 @@ kubectl apply -f application-profile.yaml -n omni-streaming
 
 ## Change services to LoadBalancers
 
-By default, both applications and streaming services are created as `ClusterIP` services. We need to switch this to `type:LoadBalancer`.
+By default, both applications and streaming services are created as `ClusterIP`
+services. We need to switch this to `type:LoadBalancer`.
 
 1. Delete both ingress points:
 
@@ -771,7 +800,8 @@ rmcp                   ClusterIP      34.118.227.223   <none>          80/TCP   
 streaming              LoadBalancer   34.118.239.151   34.58.95.51     80:30947/TCP   4m29s
 ```
 
-4. Test if the applications and streaming endpoints are working by navigating to the following in a browser:
+4. Test if the applications and streaming endpoints are working by navigating
+to the following in a browser:
 
    [`http://[EXTERNAL-IP]/docs`](http://[EXTERNAL-IP]/docs)
    You should see an API usage page:
@@ -780,9 +810,11 @@ streaming              LoadBalancer   34.118.239.151   34.58.95.51     80:30947/
 
 ## Test the deployment
 
-Use the NVIDIA [Web Viewer Sample](https://github.com/NVIDIA-Omniverse/web-viewer-sample) to connect to the OKAS service:
+Use the NVIDIA [Web Viewer Sample](https://github.com/NVIDIA-Omniverse/web-viewer-sample)
+to connect to the OKAS service:
 
-Although the Cloud Shell offers localhost web preview, using a VM with external IP / IAP tunnel to the machine is an good option.
+Although the Cloud Shell offers localhost web preview, using a VM with external
+IP / IAP tunnel to the machine is an good option.
 
 ```shell
 gcloud compute instances create npm-server \
@@ -794,7 +826,8 @@ gcloud compute instances create npm-server \
 
    git clone [https://github.com/NVIDIA-Omniverse/web-viewer-sample.git](https://github.com/NVIDIA-Omniverse/web-viewer-sample.git)
 
-2. Follow the [instructions](https://github.com/NVIDIA-Omniverse/web-viewer-sample?tab=readme-ov-file#quick-start) to build the application, paying close attention to the required dependencies.
+2. Follow the [instructions](https://github.com/NVIDIA-Omniverse/web-viewer-sample?tab=readme-ov-file#quick-start) to build the application,
+paying close attention to the required dependencies.
 3. Modify the file stream.config.json and change the following:
 
    `"source": "stream",`
@@ -818,7 +851,8 @@ gcloud compute instances create npm-server \
 
 7. Select **UI for any streaming app**.
 
-8. Server Information should show the IP addresses of the App Server and Stream Server:
+8. Server Information should show the IP addresses of the App Server and Stream
+Server:
 
    ![server-info](images/server_information.png)
    Click **Next**.
@@ -829,7 +863,8 @@ gcloud compute instances create npm-server \
 
 11. Select **default**, click **Next**.
 
-12. You should see **Attempting to load stream…** In approximately two minutes, the app should come up:
+12. You should see **Attempting to load stream…** In approximately two minutes,
+the app should come up:
 
     ![web-viewer](images/embedded_web_viewer.png)
 
@@ -841,4 +876,5 @@ gcloud compute instances create npm-server \
 
 ![pod-running](images/pods_running.png)
 
-* Click **End Stream** to close the stream. The pod and LoadBalancer will be shut down.
+* Click **End Stream** to close the stream. The pod and LoadBalancer will be
+shut down.
