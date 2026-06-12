@@ -64,9 +64,9 @@ to this version:
 
 We create a standard cluster because:
 
-1.  We need to customize the node types.
-2.  We need to add 3 node pools (system-pool, memcached-pool, gpu-worker-pool).
-3.  We need to add node labels to each pool.
+1. We need to customize the node types.
+1. We need to add 3 node pools (system-pool, memcached-pool, gpu-worker-pool).
+1. We need to add node labels to each pool.
 
 **Note:** system-pool needs 3 nodes, not 1\.
 
@@ -530,7 +530,7 @@ helm upgrade --install \
 For GKE, we need to modify the default `kit-appstreaming-session` Helm chart to
 include updated LoadBalancer service specifications to handle multiple protocols.
 
-1.  The `kit-appstreaming-session` Helm chart is not included in the resources
+1. The `kit-appstreaming-session` Helm chart is not included in the resources
 downloaded earlier, so first pull the Helm chart from the NGC registry:
 
 ```shell
@@ -543,7 +543,7 @@ gunzip kit-appstreaming-session-1.12.0.tgz
 tar -xvf kit-appstreaming-session-1.12.0.tar
 ```
 
-2.  Extract the resulting archive and modify the file `templates/service.yaml`
+1. Extract the resulting archive and modify the file `templates/service.yaml`
 to include the following lines at the top of the `spec:` section:
 
 ```shell
@@ -555,16 +555,16 @@ spec:
   ...
 ```
 
-3.  Update `Chart.yaml` with a unique application version (changing both
+1. Update `Chart.yaml` with a unique application version (changing both
 `appVersion` and version `values`).
 
-4.  Package the updated Helm chart:
+1. Package the updated Helm chart:
 
    `helm package kit-appstreaming-session`
 
    An archive with your updated version is created in your current folder.
 
-5. Create a private entry in NGC for your updated Helm chart:
+1. Create a private entry in NGC for your updated Helm chart:
 
 ```shell
 ngc registry chart create \
@@ -574,7 +574,7 @@ ngc registry chart create \
 
    Where `[ORG_ID]` is your NGC account organization ID.
 
-6.  Push the artifact to your private NGC registry:
+1. Push the artifact to your private NGC registry:
 
 ```shell
 ngc registry chart push \
@@ -584,7 +584,7 @@ ngc registry chart push \
 
    Where `[APP_VERSION]` is your updated Helm chart version.
 
-7.  Navigate back to your original Helm resources directory, duplicate the file
+1. Navigate back to your original Helm resources directory, duplicate the file
  `manifests/helm-repositories/ngc-omniverse.yaml` then modify this new file:
 
    ```shell
@@ -597,14 +597,14 @@ ngc registry chart push \
 * `name: ngc-omniverse-kit-appstreaming-session`
 * `url: https://helm.ngc.nvidia.com/[ORG_ID]`
 
-8.  Apply the updated Helm repository to your deployment:
+1. Apply the updated Helm repository to your deployment:
 
   ```shell
   kubectl -n omni-streaming apply \
     -f manifests/helm-repositories/ngc-omniverse-appstreaming-session.yaml
   ```
 
-9.  In `resources/helm`, create a new directory called
+1. In `resources/helm`, create a new directory called
 `kit-appstreaming-session` to hold the updated `values.yaml` which contain
 the following:
 
@@ -823,14 +823,14 @@ gcloud compute instances create npm-server \
     --machine-type=e2-medium
 ```
 
-1.  Clone the repository to your local workstation:
+1. Clone the repository to your local workstation:
 
    git clone [https://github.com/NVIDIA-Omniverse/web-viewer-sample.git](https://github.com/NVIDIA-Omniverse/web-viewer-sample.git)
 
-2.  Follow the [instructions](https://github.com/NVIDIA-Omniverse/web-viewer-sample?tab=readme-ov-file#quick-start)
+1. Follow the [instructions](https://github.com/NVIDIA-Omniverse/web-viewer-sample?tab=readme-ov-file#quick-start)
 to build the application, paying close attention to the required dependencies.
 
-3.  Modify the file stream.config.json and change the following:
+1. Modify the file stream.config.json and change the following:
 
    `"source": "stream",`
    `"appServer": "http://[APP_SERVER_IP]",`
@@ -838,43 +838,43 @@ to build the application, paying close attention to the required dependencies.
 
    Both external IP addresses can be found via `kubectl -n omni-streaming get svc`.
 
-4.  Run the Web Viewer:
+1. Run the Web Viewer:
 
    ```shell
    npm run dev
    ```
 
-5.  In a local browser, navigate to [http://localhost:5173](http://localhost:5173)
+1. In a local browser, navigate to [http://localhost:5173](http://localhost:5173)
     If using the VM, please replace the localhost with the external IP address
 
-6.  You should see the Web Viewer UI:
+1. You should see the Web Viewer UI:
 
    ![ui_option](images/ui_option.png)
 
-7.  Select **UI for any streaming app**.
+1. Select **UI for any streaming app**.
 
-8.  Server Information should show the IP addresses of the App Server and Stream
+1. Server Information should show the IP addresses of the App Server and Stream
 Server:
 
    ![server-info](images/server_information.png)
    Click **Next**.
 
-9.  Select **usd-viewer**, then **Next**.
+1. Select **usd-viewer**, then **Next**.
 
-10.  Select your custom version, click **Next**.
+1. Select your custom version, click **Next**.
 
-11.  Select **default**, click **Next**.
+1. Select **default**, click **Next**.
 
-12.  You should see **Attempting to load stream…** In approximately two minutes,
+1. You should see **Attempting to load stream…** In approximately two minutes,
 the app should come up:
 
    ![web-viewer](images/embedded_web_viewer.png)
 
-13.  You can check the status of the kit-app pod and LoadBalancer with:
+1. You can check the status of the kit-app pod and LoadBalancer with:
 
-    ```shell
-    kubectl -n omni-streaming get pods,svc
-    ```
+```shell
+  kubectl -n omni-streaming get pods,svc
+```
 
 ![pod-running](images/pods_running.png)
 
