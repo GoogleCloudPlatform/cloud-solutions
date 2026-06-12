@@ -10,9 +10,9 @@
 
 - Ensure you have a default VPC in your project.
 - Ensure you have account access to <https://ngc.nvidia.com>. Make sure you have
-  access with the following: _ NGC catalog: downloading artifact and all
+  access with the following: NGC catalog: downloading artifact and all
   resource "nvidia/_/_",. otherwise you cannot download the necessary package
-  and create registry chart at ngc. _ NVIDIA Private Registry access
+  and create registry chart at ngc. NVIDIA Private Registry access
 - In your local terminal or Cloud Shell, install
   [NVIDIA GPU Cloud (NGC) CLI](https://org.ngc.nvidia.com/setup/installers/cli).
 - Perform both google sdk login
