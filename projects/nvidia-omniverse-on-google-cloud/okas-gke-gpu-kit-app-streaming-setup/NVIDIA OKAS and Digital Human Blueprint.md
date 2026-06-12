@@ -584,7 +584,7 @@ ngc registry chart push \
 
    Where `[APP_VERSION]` is your updated Helm chart version.
 
-1. Navigate back to your original Helm resources directory, duplicate the file
+1.  Navigate back to your original Helm resources directory, duplicate the file
  `manifests/helm-repositories/ngc-omniverse.yaml` then modify this new file:
 
    ```shell
