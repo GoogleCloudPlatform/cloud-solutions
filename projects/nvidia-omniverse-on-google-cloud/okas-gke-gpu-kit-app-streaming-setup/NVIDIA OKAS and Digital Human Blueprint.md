@@ -2,13 +2,13 @@
 
 ## Resources
 
-* [Infrastructure & Setup — Kit App Streaming](https://docs.omniverse.nvidia.com/ovas/latest/deployments/infra/index.html)  
+* [Infrastructure & Setup — Kit App Streaming](https://docs.omniverse.nvidia.com/ovas/latest/deployments/infra/index.html)
 * [Manage the GPU Stack with the NVIDIA GPU Operator on Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/docs/how-to/gpu-operator#before_you_begin)
 
 ## Before you begin
 
-* Ensure you have a default VPC in your project.  
-* Ensure you have account access to https://ngc.nvidia.com. Make sure you have access with the following:  
+* Ensure you have a default VPC in your project.
+* Ensure you have account access to https://ngc.nvidia.com. Make sure you have access with the following:
    - NGC catalog - downloading artifact and all resource "nvidia/*/*",. otherwise you cannot download the necessary package and create registry chart at ngc.
    - NVIDIA Private Registry access
 * In your local terminal or Cloud Shell, install [NVIDIA GPU Cloud (NGC) CLI](https://org.ngc.nvidia.com/setup/installers/cli).
@@ -22,14 +22,14 @@ gcloud auth application-default login
 
 At [https://org.ngc.nvidia.com/setup/api-keys](https://org.ngc.nvidia.com/setup/api-keys), create an API key with access for the following components:
 
-* **NGC Catalog**  
+* **NGC Catalog**
   NGC should have the following services
     Service: NGC Catalog
     Scope: Download Artifact, Get Artifact, Get Artifact Deployment
     Entity Type: All Resources
     Entity Value: nvidia/*/*
-* **Secrets Manager**  
-* **Public API Endpoints**  
+* **Secrets Manager**
+* **Public API Endpoints**
 * **Private Registry**
   NGC should have the following services
     Service: NVIDIA Private Registry
@@ -53,8 +53,8 @@ Navigate to the [installation page](https://docs.omniverse.nvidia.com/ovas/lates
 
 We create a standard cluster because:
 
-1. We need to customize the node types.  
-2. We need to add 3 node pools (system-pool, memcached-pool, gpu-worker-pool).  
+1. We need to customize the node types.
+2. We need to add 3 node pools (system-pool, memcached-pool, gpu-worker-pool).
 3. We need to add node labels to each pool.
 
 **Note:** system-pool needs 3 nodes, not 1\.
@@ -62,7 +62,7 @@ We create a standard cluster because:
 ### Define shell variables
 
 In your local terminal or Cloud Shell, define variables for use in further steps:
-Please check the latest version here: 
+Please check the latest version here:
 - Kit app Steaming: https://docs.omniverse.nvidia.com/ovas/latest/release-notes.html
 - GKE version (Rapid): https://docs.cloud.google.com/kubernetes-engine/docs/release-notes
 
@@ -147,7 +147,7 @@ To use DWS Flex mode for this node pool request, please add the following to the
 ```
 --num-nodes "0" \
 --flex-start \
---enable-autoscaling \ 
+--enable-autoscaling \
 --reservation-affinity none \
 ```
 
@@ -360,10 +360,10 @@ https://org.ngc.nvidia.com/setup/installers/cli offers the instruction on instal
 ### Download Helm resources
 
 In Cloud Shell, create a directory to contain the App Streaming resources, then download:
-note: Make sure you do did the "ngc config set" command. 
+note: Make sure you do did the "ngc config set" command.
 
 ```shell
-mkdir kit-app-streaming         
+mkdir kit-app-streaming
 cd kit-app-streaming
 ngc registry resource download-version \
   "nvidia/omniverse/kit-appstreaming-resources:${APP_VERSION}"
@@ -440,8 +440,8 @@ Then deploy the RMCP components:
 Fetch the kit-appstreaming-rmcp
 ```
 helm fetch https://helm.ngc.nvidia.com/nvidia/omniverse/charts/kit-appstreaming-rmcp-1.12.0.tgz --username='$oauthtoken' --password=< NGC personal KEY >
-gunzip kit-appstreaming-rmcp-1.12.0.tgz 
-tar -xvf kit-appstreaming-rmcp-1.12.0.tar 
+gunzip kit-appstreaming-rmcp-1.12.0.tgz
+tar -xvf kit-appstreaming-rmcp-1.12.0.tar
 ```
 
 ```shell
@@ -466,8 +466,8 @@ Save the file, and install the Helm chart:
 
 ```
 helm fetch https://helm.ngc.nvidia.com/nvidia/omniverse/charts/kit-appstreaming-manager-1.12.0.tgz --username='$oauthtoken' --password=< NGC personal KEY >
-gunzip kit-appstreaming-manager-1.12.0.tgz 
-tar -xvf kit-appstreaming-manager-1.12.0.tar 
+gunzip kit-appstreaming-manager-1.12.0.tgz
+tar -xvf kit-appstreaming-manager-1.12.0.tar
 ```
 
 
@@ -485,8 +485,8 @@ The Applications and Profile Manager manages the available applications and runt
 
 ```
 helm fetch https://helm.ngc.nvidia.com/nvidia/omniverse/charts/kit-appstreaming-applications-1.12.0.tgz --username='$oauthtoken' --password=< NGC personal KEY >
-gunzip kit-appstreaming-applications-1.12.0.tgz 
-tar -xvf kit-appstreaming-applications-1.12.0.tar 
+gunzip kit-appstreaming-applications-1.12.0.tgz
+tar -xvf kit-appstreaming-applications-1.12.0.tar
 ```
 
 ```shell
@@ -524,7 +524,7 @@ spec:
   ...
 ```
 
-3. Update `Chart.yaml` with a unique application version (changing both `appVersion` and version `values`).  
+3. Update `Chart.yaml` with a unique application version (changing both `appVersion` and version `values`).
 4. Package the updated Helm chart:
 
    `helm package kit-appstreaming-session`
@@ -538,7 +538,7 @@ ngc registry chart create \
   [ORG_ID]/kit-appstreaming-session \
   --short-desc "custom session to handle LoadBalancer"
 ```
- 
+
    Where `[ORG_ID]` is your NGC account organization ID.
 
 6. Push the artifact to your private NGC registry:
@@ -560,13 +560,13 @@ ngc registry chart push \
 
   Edit the new file and change the following values:
 
-* `name: ngc-omniverse-kit-appstreaming-session`  
+* `name: ngc-omniverse-kit-appstreaming-session`
 * `url: https://helm.ngc.nvidia.com/[ORG_ID]`
 
 8. Apply the updated Helm repository to your deployment:
 
   ```shell
-  kubectl -n omni-streaming apply \  
+  kubectl -n omni-streaming apply \
     -f manifests/helm-repositories/ngc-omniverse-appstreaming-session.yaml
   ```
 
@@ -581,7 +581,7 @@ session:
   serviceConfig:
     root_path: ""
     prefix_url: "/session"
-    
+
     # -- Flux release deployment timeout
     helm_flux_release_timeout: "5m"
 
@@ -692,7 +692,7 @@ spec:
   description: Updated memory and CPU settings.
   supportedApplications:
     - name: "usd-viewer"
-      versions: 
+      versions:
         - "*"
   chartMappings:
     container: streamingKit.image.repository
@@ -763,7 +763,7 @@ streaming              LoadBalancer   34.118.239.151   34.58.95.51     80:30947/
 
 4. Test if the applications and streaming endpoints are working by navigating to the following in a browser:
 
-   [`http://[EXTERNAL-IP]/docs`](http://[EXTERNAL-IP]/docs)  
+   [`http://[EXTERNAL-IP]/docs`](http://[EXTERNAL-IP]/docs)
    You should see an API usage page:
 
    ![application_api_image](images/application_streaming_api.png)
@@ -777,18 +777,18 @@ Although the Cloud Shell offers localhost web preview, using a VM with external 
 ```shell
 gcloud compute instances create npm-server \
     --zone=us-central1-f \
-    --machine-type=e2-medium 
+    --machine-type=e2-medium
 ```
 
 1. Clone the repository to your local workstation:
 
    git clone [https://github.com/NVIDIA-Omniverse/web-viewer-sample.git](https://github.com/NVIDIA-Omniverse/web-viewer-sample.git)
 
-2. Follow the [instructions](https://github.com/NVIDIA-Omniverse/web-viewer-sample?tab=readme-ov-file#quick-start) to build the application, paying close attention to the required dependencies.  
+2. Follow the [instructions](https://github.com/NVIDIA-Omniverse/web-viewer-sample?tab=readme-ov-file#quick-start) to build the application, paying close attention to the required dependencies.
 3. Modify the file stream.config.json and change the following:
 
-   `"source": "stream",`  
-   `"appServer": "http://[APP_SERVER_IP]",`  
+   `"source": "stream",`
+   `"appServer": "http://[APP_SERVER_IP]",`
    `"streamServer": "http://[STREAM_SERVER_IP]"`
 
    Both external IP addresses can be found via `kubectl -n omni-streaming get svc`.
@@ -809,7 +809,7 @@ gcloud compute instances create npm-server \
 
 8. Server Information should show the IP addresses of the App Server and Stream Server:
 
-   ![server-info](images/server_information.png)  
+   ![server-info](images/server_information.png)
    Click **Next**.
 
 9. Select **usd-viewer**, then **Next**.
