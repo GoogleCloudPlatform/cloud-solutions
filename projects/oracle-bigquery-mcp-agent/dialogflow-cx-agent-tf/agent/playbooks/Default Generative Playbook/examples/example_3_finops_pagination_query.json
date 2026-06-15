@@ -1,0 +1,112 @@
+{
+  "name": "20be08ed-4da0-450e-a85a-252b256eec5a",
+  "actions": [
+    {
+      "userUtterance": {
+        "text": "I am logging in as the FinOps."
+      }
+    },
+    {
+      "agentUtterance": {
+        "text": "Welcome! Since you're logged in as a FinOps Manager, I've tailored my tools for your audit workflow. I can help you audit pending transactions or review transactions currently on hold. What would you like to investigate first?"
+      }
+    },
+    {
+      "userUtterance": {
+        "text": "Audit pending transactions"
+      }
+    },
+    {
+      "toolUse": {
+        "tool": "Oracle_FinOps_MCP",
+        "action": "execute_mcp_tool",
+        "inputActionParameters": {
+          "requestBody": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "arguments": {
+                "limit": 20,
+                "offset": 0
+              },
+              "name": "audit_pending_transactions"
+            }
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "result": {
+              "content": [
+                {
+                  "text": "Here are the top 20 pending transactions...",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "agentUtterance": {
+        "text": "I found the top 20 pending transactions. Would you like to review the next page of transactions?"
+      }
+    },
+    {
+      "userUtterance": {
+        "text": "Yes, show me the next 20."
+      }
+    },
+    {
+      "toolUse": {
+        "tool": "Oracle_FinOps_MCP",
+        "action": "execute_mcp_tool",
+        "inputActionParameters": {
+          "requestBody": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "arguments": {
+                "limit": 20,
+                "offset": 20
+              },
+              "name": "audit_pending_transactions"
+            }
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "result": {
+              "content": [
+                {
+                  "text": "Here are pending transactions 21 to 40 (Page 2)...",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "agentUtterance": {
+        "text": "Here are pending transactions from 21 to 40 on Page 2. Would you like me to proceed to the next page or put a hold on a specific transaction ID?"
+      }
+    }
+  ],
+  "playbookOutput": {
+    "executionSummary": "FinOps logged in, audited pending transactions, and successfully paginated to Page 2.",
+    "actionParameters": {}
+  },
+  "displayName": "Example 3: FinOps Pagination Query",
+  "retrievalStrategy": "DEFAULT",
+  "tokenCount": 599,
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

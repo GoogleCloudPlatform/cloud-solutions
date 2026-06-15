@@ -10,8 +10,6 @@ Use the Table of Contents to view the documentation on all available projects,
 or browse the source code at GitHub:
 [GoogleCloudPlatform/cloud-solutions](https://github.com/GoogleCloudPlatform/cloud-solutions)
 
----
-
 ## Note
 
 The projects in this repository are not officially supported Google products,
@@ -23,6 +21,12 @@ and are not eligible for the
 All files in this repository are under the
 [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 unless noted otherwise.
+
+---
+
+## Table of Contents
+
+{{ pagetree(siblings) }}
 
 ---
 

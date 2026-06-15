@@ -1,0 +1,84 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+openapi: 3.0.0
+info:
+  title: Oracle Universal MCP Connector
+  version: 1.0.0
+servers:
+  - url: https://YOUR_CLOUD_RUN_SERVICE_URL
+paths:
+  /:
+    post:
+      operationId: execute_mcp_tool
+      description: "Use this tool to execute any database action. You MUST format your request as a valid JSON-RPC 2.0 object."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: string
+                  default: "1"
+                method:
+                  type: string
+                  default: "tools/call"
+                params:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: "The exact name of the tool to run. MUST be one of: audit_pending_transactions, get_expense_by_id, fetch_held_transactions, update_expense_status, reject_expense, check_database_health, list_active_sessions, list_top_sql_by_resource, list_tablespace_usage, list_invalid_objects, generate_explain_plan."
+                    arguments:
+                      type: object
+                      description: "The JSON arguments required for the specific tool."
+                  required:
+                    - name
+                    - arguments
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+      responses:
+        "200":
+          description: "Returns the JSON data from the Oracle database."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: string
+                  result:
+                    type: object
+                    properties:
+                      content:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            text:
+                              type: string
+                            isError:
+                              type: boolean
