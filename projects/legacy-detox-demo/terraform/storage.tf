@@ -13,6 +13,7 @@
 # limitations under the License.
 
 resource "google_storage_bucket" "detox_bucket" {
+  project                     = data.google_project.legacy_detox_project.project_id
   name                        = "${var.project_id}-detox-bucket"
   location                    = var.region
   uniform_bucket_level_access = true
@@ -23,9 +24,9 @@ resource "google_storage_bucket" "detox_bucket" {
 # when files are generated during the apply phase.
 locals {
   src_artifacts_for_upload = [
-    "predict_job.py",
-    "run_predict_job.sh",
-    "spark_centric_demo.ipynb"
+    "batches/predict_job.py",
+    "batches/run_predict_job.sh",
+    "notebooks/spark_centric_demo.ipynb"
   ]
 }
 

@@ -17,25 +17,35 @@
 set -e
 
 echo "🚀 Initializing Legacy Detox Demo Project..."
+CURRENT_PROJECT=$(gcloud config get-value project)
 
 # Ask for Project ID
-read -r -p "Enter your Google Cloud Project ID: " PROJECT_ID
+read -r -p "Enter your Google Cloud Project ID [$CURRENT_PROJECT]: " PROJECT_ID
 
 if [ -z "$PROJECT_ID" ]; then
-  echo "❌ Project ID is required. Exiting."
-  exit 1
+  PROJECT_ID="${CURRENT_PROJECT}"
 fi
 
 # Ask for Region (with default)
 read -r -p "Enter your Google Cloud Region [us-central1]: " REGION
 REGION=${REGION:-us-central1}
 
+SCRIPT_DIR=$(dirname "$0")
+
+# Check if terraform directory exists
+if [ ! -d "$SCRIPT_DIR/../terraform" ]; then
+  echo "Error: The 'terraform' directory does not exist at $SCRIPT_DIR/../terraform" >&2
+  exit 1
+fi
+
 # Create terraform/terraform.tfvars
 echo "📝 Creating terraform/terraform.tfvars..."
-cat <<VARSEOF >terraform/terraform.tfvars
+if [ ! -f "$SCRIPT_DIR/../terraform/terraform.tfvars" ]; then
+  cat <<VARSEOF >"$SCRIPT_DIR/../terraform/terraform.tfvars"
 project_id = "$PROJECT_ID"
 region     = "$REGION"
 VARSEOF
+fi
 
 # Set current project
 echo "⚙️ Setting gcloud project to $PROJECT_ID..."
@@ -47,9 +57,13 @@ SERVICES=(
   "compute.googleapis.com"
   "dataproc.googleapis.com"
   "dataform.googleapis.com"
+  "cloudaicompanion.googleapis.com"
   "bigquery.googleapis.com"
   "storage-api.googleapis.com"
   "aiplatform.googleapis.com"
+  "bigqueryunified.googleapis.com"
+  "artifactregistry.googleapis.com"
+  "cloudbuild.googleapis.com"
 )
 
 gcloud services enable "${SERVICES[@]}"

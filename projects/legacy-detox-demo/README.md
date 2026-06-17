@@ -102,14 +102,16 @@ terraform apply
 1.  If this is your first time in BigQuery Studio, select a code region.
 1.  On the left panel, make sure you are on the "Files" tab.
 1.  Click "+ Add" -> upload -> Notebook
-1.  Browse to the `src` directory in this project, and select
+1.  Browse to the `src/notebooks` directory in this project, and select
     `spark_centric_demo.ipynb`.
-1.  Upload and open the notebook.
+1.  Upload the notebook.
+1.  Repeat the process for the `src/notebooks/bq_centric_demo.ipynb`
+1.  Open each of the notebooks in any order your would like.
 1.  Click "Connect" on the top right to create a runtime.
-1.  You might be asked to choose a network. If so, choose the `dataproc-vpc` and
-    `dataproc-subnet`.
+1.  You might be asked to choose a network. If so, choose the `legacy-detox-vpc`
+    and `legacy-detox-subnet`.
 1.  Click `Create default Runtime`
-1.  Follow the instructions in the notebook.
+1.  Follow the instructions in the notebooks.
 
 ## Cleanup
 
@@ -128,8 +130,7 @@ cd terraform
 terraform destroy
 ```
 
-> [!NOTE]
-> `terraform destroy` will stop and remove the notebooks runtime, but as
+> [!NOTE] `terraform destroy` will stop and remove the notebooks runtime, but as
 > this operation is async, sometimes the `destroy` will fail. You can remove the
 > runtime manually, through the Google Cloud Console, under **Colab Enterprise**
 > -> **Runtimes**, and try again.

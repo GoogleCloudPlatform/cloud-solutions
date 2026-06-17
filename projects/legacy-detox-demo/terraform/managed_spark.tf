@@ -13,11 +13,12 @@
 # limitations under the License.
 
 resource "google_dataproc_cluster" "managed_spark" {
-  name   = "managed-spark-cluster"
-  region = var.region
+  project = data.google_project.legacy_detox_project.project_id
+  name    = "managed-spark-cluster"
+  region  = var.region
 
   cluster_config {
-    # Staging bucket for Dataproc cluster data
+    # Staging bucket for ManagedSpark cluster data
     staging_bucket = google_storage_bucket.detox_bucket.name
 
     master_config {
@@ -43,8 +44,8 @@ resource "google_dataproc_cluster" "managed_spark" {
 
     # Network configuration
     gce_cluster_config {
-      subnetwork      = google_compute_subnetwork.dataproc_subnet.id
-      service_account = google_service_account.dataproc_sa.email
+      subnetwork      = google_compute_subnetwork.legacy_detox_subnet.id
+      service_account = google_service_account.managed_spark_sa.email
       service_account_scopes = [
         "https://www.googleapis.com/auth/cloud-platform"
       ]

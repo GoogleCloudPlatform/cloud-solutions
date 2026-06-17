@@ -15,7 +15,8 @@
 # limitations under the License.
 
 """
-Dataproc Batch Inference Job: Product Affinity Re-engagement
+Managed Service for Apache Spark Batch Inference Job:
+Product Affinity Re-engagement
 This script identifies inactive users, predicts their preferred product category
 using a pre-trained SparkML model, and recommends a top-rated product.
 """
@@ -28,7 +29,7 @@ from pyspark.sql import functions as F
 
 
 def get_spark_session() -> SparkSession:
-    # App name for Dataproc UI tracking
+    # App name for Managed Service For Apache Spark UI tracking
     return SparkSession.builder.appName(
         "Production-Batch-Inference-Reengagement"
     ).getOrCreate()
@@ -133,7 +134,9 @@ def main(project_id, bucket_name, model_path):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Dataproc Batch Inference Job")
+    parser = argparse.ArgumentParser(
+        description="Managed Service for Apache Spark Batch Inference Job"
+    )
     parser.add_argument(
         "--project-id", required=True, help="Google Cloud Project ID"
     )

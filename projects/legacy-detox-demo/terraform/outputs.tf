@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-output "dataproc_cluster_name" {
+output "managed_spark_cluster_name" {
   value       = google_dataproc_cluster.managed_spark.name
-  description = "The name of the Dataproc cluster."
+  description = "The name of the Managed Spark cluster."
 }
 
 output "bucket_name" {
@@ -33,4 +33,9 @@ output "project_id" {
 
 output "region" {
   value = var.region
+}
+
+output "inference_server_image_uri" {
+  value       = local.inference_server_image_uri
+  description = "The URI of the inference server Docker image."
 }
