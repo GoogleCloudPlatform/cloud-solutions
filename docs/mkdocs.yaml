@@ -57,6 +57,7 @@ copyright: |
   <a href='https://cloud.google.com/'><img src='https://googlecloudplatform.github.io/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
 plugins:
   - search
+  - gh-admonitions
   - awesome-pages:
       filename: .pages
       collapse_single_pages: true
