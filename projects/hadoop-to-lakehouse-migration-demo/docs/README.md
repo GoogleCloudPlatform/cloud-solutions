@@ -37,9 +37,12 @@ The intent of this demo is to showcase:
 To get started with the demo, please follow the step-by-step guide in the
 [User Journey](user_journey.md).
 
-!!! important "Prerequisites" Before you begin, make sure to review the
-prerequisites section in the [User Journey](user_journey.md). You will need
-**two** Google Cloud projects with billing enabled and appropriate permissions.
+> [!IMPORTANT]
+> **Prerequisites**
+>
+> Before you begin, make sure to review the prerequisites section in the
+> [User Journey](user_journey.md). You will need **two** Google Cloud projects
+> with billing enabled and appropriate permissions.
 
 ## Reference Architecture
 

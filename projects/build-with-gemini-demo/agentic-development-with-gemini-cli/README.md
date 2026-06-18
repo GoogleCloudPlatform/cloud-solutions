@@ -89,13 +89,10 @@ To run this demo, you need the following:
     - `kubectl`, configured for your GKE cluster
     - `jq` for testing
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Gemini Pro model"
-
-    This demo uses the latest Gemini Pro model.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Gemini Pro model**
+>
+> This demo uses the latest Gemini Pro model.
 
 ## Set up your environment and workspace
 
@@ -437,25 +434,23 @@ In this section, you use the
 to automatically test the microservices through the Swagger UI. The agent opens
 the browser, clicks the endpoints, and verifies the responses.
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Prerequisite: Enable the Browser Agent"
-
-    The Browser Agent is experimental and disabled by default. Ensure it is
-    enabled in your `settings.json` before proceeding:
-    ```json
-    {
-      "agents": {
-        "overrides": {
-          "browser_agent": {
-            "enabled": true
-          }
-        }
-      }
-    }
-    ```
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Prerequisite: Enable the Browser Agent**
+>
+> The Browser Agent is experimental and disabled by default. Ensure it is
+> enabled in your `settings.json` before proceeding:
+>
+> ```json
+> {
+>   "agents": {
+>     "overrides": {
+>       "browser_agent": {
+>         "enabled": true
+>       }
+>     }
+>   }
+> }
+> ```
 
 1.  Send the following prompt to the Browser Agent:
 
@@ -619,14 +614,11 @@ roles in your Google Cloud project:
 For demonstration purposes, the basic `Owner` role (`roles/owner`) is
 sufficient.
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Production environment"
-
-    In a production environment, always adhere to the principle of
-    least privilege.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Production environment**
+>
+> In a production environment, always adhere to the principle of
+> least privilege.
 
 ### Execute Terraform scripts to provision GKE and database resources
 
@@ -871,14 +863,11 @@ To avoid incurring charges, destroy the demo infrastructure:
 terraform -chdir=terraform destroy
 ```
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Confirming resource deletion"
-
-    Review the resources that Terraform plans to delete. When prompted, enter
-    `yes` to confirm and proceed with the deletion.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Confirming resource deletion**
+>
+> Review the resources that Terraform plans to delete. When prompted, enter
+> `yes` to confirm and proceed with the deletion.
 
 ## What's next
 

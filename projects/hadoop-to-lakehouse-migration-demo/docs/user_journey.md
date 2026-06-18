@@ -32,16 +32,14 @@ Before you begin, ensure you have:
     export ZONE="us-central1-a"
     ```
 
-!!! note
-
-    <!-- markdownlint-disable MD046 --> You may need to make the scripts
-    executable before running them. You can do this for all scripts in the `scripts`
-    directory with:
-
-    ```bash
-    chmod +x scripts/*.sh
-    ```
-    <!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> You may need to make the scripts
+> executable before running them. You can do this for all scripts in the `scripts`
+> directory with:
+>
+> ```bash
+> chmod +x scripts/*.sh
+> ```
 
 ## Steps
 
@@ -86,12 +84,10 @@ cd ../.. # or make sure you are on the project root
 scripts/03-load_data.sh
 ```
 
-!!! note
-
-    <!-- markdownlint-disable MD046 --> This script will automatically read values from your
-    `terraform/source-environment` state if run after step 2.1. If you need to
-    override, use flags like `--project-id`.
-    <!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> This script will automatically read values from your
+> `terraform/source-environment` state if run after step 2.1. If you need to
+> override, use flags like `--project-id`.
 
 ### Checking Work: Viewing Data in the Source System
 
@@ -158,14 +154,9 @@ terraform init
 terraform apply
 ```
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note
-
-    This provisions Cloud Storage buckets, Dataproc Metastore, BigQuery
-    datasets, and Dataplex resources.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> This provisions Cloud Storage buckets, Dataproc Metastore, BigQuery
+> datasets, and Dataplex resources.
 
 ### 5. Execute Migration
 
@@ -270,55 +261,55 @@ node (the namenode) so that the agents have direct access to HDFS. The script
 (`scripts/05.02.01-namenode_install_transfer_agent_script.sh`) that then will be
 run on the namenode to install the transfer agents.
 
-<!-- markdownlint-disable MD046 -->
+> [!NOTE]
+> **Authentication**
+>
+> By default, the `gcloud` command on the cluster, that will be used in this
+> script, uses the VM's service account.
+>
+> To ensure you have the necessary permissions to register agents in the
+> target project, you should give the Managed Service for Apache Spark
+> (formerly Dataproc) service account on the source cluster, the
+> `roles/storagetransfer.admin` role.
+>
+> This is already done for you with in
+> `scripts/05.02-setup_transfer_service.sh`. Another option is to run
+> `gcloud auth login` on the name node, and authenticate with your
+> credentials.
 
-!!! note "Authentication"
+<!-- Comment to separate 2 blockquotes for MD028 -->
 
-    By default, the `gcloud` command on the cluster, that will be used in this
-    script, uses the VM's service account.
-
-    To ensure you have the necessary permissions to register agents in the
-    target project, you should give the Managed Service for Apache Spark
-    (formerly Dataproc) service account on the source cluster, the
-    `roles/storagetransfer.admin` role.
-
-    This is already done for you with in
-    `scripts/05.02-setup_transfer_service.sh`. Another option is to run
-    `gcloud auth login` on the name node, and authenticate with your
-    credentials.
-
-!!! info "Understanding the IAM Requirements"
-
-    In a cross-project migration, the data transfer agents require specific
-    permissions across both environments:
-
-    - **Target Project (STS Admin & Object Admin)**:
-
-        The agents must be registered in the **Target Project's** agent pool and
-        need write access to the Cloud Storage bucket in that same project. Even
-        though the agents run in the source environment, they act as "producers"
-        for the target data lake.
-
-    - **Source Project (STS Admin)**:
-
-        The agents need to interact with the Storage Transfer API in the source
-        project to coordinate the data extraction from HDFS.
-
-    - **Hadoop GCS Connector**:
-
-        For certain cluster-native operations (like `hadoop fs -cp` using the
-        GCS connector), the source service account may require
-        `roles/storage.admin` in the target project to avoid _403 Forbidden
-        errors_, as `roles/storage.objectAdmin` might not provide
-        sufficient bucket-level metadata permissions for the Hadoop
-        filesystem client.
-
-    These cross-project permissions are
-    automatically granted to the source Dataproc service account by
-    the `05.02-setup_transfer_service.sh` script to simplify the demo
-    setup.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Understanding the IAM Requirements**
+>
+> In a cross-project migration, the data transfer agents require specific
+> permissions across both environments:
+>
+> - **Target Project (STS Admin & Object Admin)**:
+>
+>     The agents must be registered in the **Target Project's** agent pool and
+>     need write access to the Cloud Storage bucket in that same project. Even
+>     though the agents run in the source environment, they act as "producers"
+>     for the target data lake.
+>
+> - **Source Project (STS Admin)**:
+>
+>     The agents need to interact with the Storage Transfer API in the source
+>     project to coordinate the data extraction from HDFS.
+>
+> - **Hadoop GCS Connector**:
+>
+>     For certain cluster-native operations (like `hadoop fs -cp` using the
+>     GCS connector), the source service account may require
+>     `roles/storage.admin` in the target project to avoid _403 Forbidden
+>     errors_, as `roles/storage.objectAdmin` might not provide
+>     sufficient bucket-level metadata permissions for the Hadoop
+>     filesystem client.
+>
+> These cross-project permissions are
+> automatically granted to the source Dataproc service account by
+> the `05.02-setup_transfer_service.sh` script to simplify the demo
+> setup.
 
 **Run the script for installing transfer agents**:
 

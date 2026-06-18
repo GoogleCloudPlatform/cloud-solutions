@@ -63,13 +63,10 @@ To run this demo, you need the following:
     - `kubectl` (configure this for your GKE cluster)
     - `jq` (for testing)
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Gemini Pro model"
-
-    This demo uses the latest Gemini Pro model.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Gemini Pro model**
+>
+> This demo uses the latest Gemini Pro model.
 
 ## Set up your environment and workspace
 
@@ -98,14 +95,11 @@ an agentic development platform for building microservices.
         `Request Review`. The agent no longer runs commands without your manual
         approval.
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Review Driven Development"
-
-    Throughout this demo, you must manually approve or reject every command the
-    agent suggests by selecting either the Run or Reject option.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Review Driven Development**
+>
+> Throughout this demo, you must manually approve or reject every command the
+> agent suggests by selecting either the Run or Reject option.
 
 ## Generate the domain model
 
@@ -328,15 +322,12 @@ Antigravity supports running multiple parallel agents. This allows you to launch
 separate tasks such as generating test suites for different microservices
 simultaneously, to save time and isolate the context for each service.
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Parallel execution"
-
-    You can launch all three agents below at the same time. Since they run
-    in parallel, you don't need to wait for one test suite to finish before
-    starting the next.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Parallel execution**
+>
+> You can launch all three agents below at the same time. Since they run
+> in parallel, you don't need to wait for one test suite to finish before
+> starting the next.
 
 - Tester Agent 1:
 
@@ -425,16 +416,13 @@ simultaneously, to save time and isolate the context for each service.
     application successfully started by checking its `/actuator/health` endpoint.
     ```
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Planning mode"
-
-    Toggle the **Sidebar** to navigate between your active
-    conversations. Since you are in Planning mode, you must switch to each
-    agent's respective chat and approve their individual implementation plans
-    before they can begin generating the tests.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Planning mode**
+>
+> Toggle the **Sidebar** to navigate between your active
+> conversations. Since you are in Planning mode, you must switch to each
+> agent's respective chat and approve their individual implementation plans
+> before they can begin generating the tests.
 
 1.  Wait for all three agents to finish generating the test suites.
 1.  Verify that the tests execute successfully and that the agents resolved any
@@ -498,15 +486,12 @@ functionality directly within the browser.
     explanation and check the recording in the walkthrough to verify that each
     service returns a successful response from its GET endpoints.
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Browser agent"
-
-    If this is your first time using the browser agent, it might prompt
-    you to install the Google Antigravity browser extension and its dependencies.
-    Allow it to complete the setup.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Browser agent**
+>
+> If this is your first time using the browser agent, it might prompt
+> you to install the Google Antigravity browser extension and its dependencies.
+> Allow it to complete the setup.
 
 Now that the individual services are running correctly, you can orchestrate them
 using Docker Compose to create a more robust local environment.
@@ -613,14 +598,11 @@ project:
 For demonstration purposes, the basic `Owner` role (`roles/owner`) is
 sufficient.
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Production environment"
-
-    In a production environment, always adhere to the principle of
-    least privilege.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Production environment**
+>
+> In a production environment, always adhere to the principle of
+> least privilege.
 
 ### Execute Terraform scripts to provision GKE and database resources
 
@@ -924,14 +906,11 @@ To avoid incurring charges, destroy the demo infrastructure:
 terraform -chdir=cloud-solutions/projects/build-with-gemini-demo/agentic-development-with-antigravity/terraform destroy
 ```
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Confirming resource deletion"
-
-    Review the resources that Terraform plans to delete. When prompted, enter
-    `yes` to confirm and proceed with the deletion.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Confirming resource deletion**
+>
+> Review the resources that Terraform plans to delete. When prompted, enter
+> `yes` to confirm and proceed with the deletion.
 
 ## What's next
 

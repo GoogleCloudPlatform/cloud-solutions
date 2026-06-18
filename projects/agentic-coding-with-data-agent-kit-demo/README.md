@@ -393,15 +393,10 @@ Follow these steps to execute the generated query and explore the data:
 1.  Click the **Run Query** button (represented by a play icon `▷` at the top of
     the editor menu bar) to execute the query.
 
-<!-- markdownlint-disable MD046 --> <!-- disable code block checks -->
-
-!!! note
-
-    If the query editor is not pointing to the correct database, you can
-    configure it by clicking the **Open Spanner Query Settings** button next to the
-    **Run Query** button.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> If the query editor is not pointing to the correct database, you can
+> configure it by clicking the **Open Spanner Query Settings** button next to the
+> **Run Query** button.
 
 Visualize the results of the query execution in the bottom pane, for example for
 the Causes table:
@@ -477,15 +472,10 @@ Perform the initialization of the frontend service, including:
 Ensure all frontend source code is organized within a specific frontend/ directory.
 ```
 
-<!-- markdownlint-disable MD046 --> <!-- disable code block checks -->
-
-!!! note
-
-    Once the frontend service is initialized, the agent will typically output
-    the local server URL (e.g., `http://localhost:5173`). Make a note of this
-    URL, as you will need it to access the application manually in later steps.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> Once the frontend service is initialized, the agent will typically output
+> the local server URL (e.g., `http://localhost:5173`). Make a note of this
+> URL, as you will need it to access the application manually in later steps.
 
 **Demo Prompt** \- Automated UI Validation:
 

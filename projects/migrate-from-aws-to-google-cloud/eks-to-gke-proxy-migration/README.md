@@ -118,6 +118,14 @@ Install the following tools:
 Provision the EKS cluster and deploy the application behind an Application Load
 Balancer (ALB).
 
+> [!NOTE]
+> **Local-only hostname**
+>
+> `proxy-demo.test` is a local-only hostname used throughout this tutorial
+> as a stand-in for a real production domain. It is resolved within Docker
+> containers using the `--add-host` feature, allowing you to test the
+> migration without modifying your host's DNS settings.
+
 1.  Configure the AWS CLI with credentials that have permissions to create EKS
     clusters and IAM roles:
 
@@ -145,21 +153,6 @@ Balancer (ALB).
 
     - An EKS cluster
     - A Kubernetes Deployment and LoadBalancer Service
-
-    <!--
-        Disabling markdownlint MD046 because it interprets this note as a code
-        block, and flags it for using indentation instead of code fences.
-    -->
-    <!-- markdownlint-disable MD046 -->
-
-    !!! note "Local-only hostname"
-
-        `proxy-demo.test` is a local-only hostname used throughout this tutorial
-        as a stand-in for a real production domain. It is resolved within Docker
-        containers using the `--add-host` feature, allowing you to test the
-        migration without modifying your host's DNS settings.
-
-    <!-- markdownlint-enable MD046 -->
 
     Example output:
 

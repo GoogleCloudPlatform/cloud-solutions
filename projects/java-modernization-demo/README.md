@@ -24,13 +24,10 @@ Follow these steps to run the demo:
 1.  **Deploy the application** - Deploy to Google Kubernetes Engine (GKE).
 1.  **Test the application** - Verify the application on GKE.
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Gemini Pro model"
-
-    This demo uses the latest Gemini Pro model.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Gemini Pro model**
+>
+> This demo uses the latest Gemini Pro model.
 
 ## Requirements
 
@@ -60,14 +57,11 @@ For infrastructure provisioning and deployment:
     - Project IAM Admin (`roles/resourcemanager.projectIamAdmin`): To grant IAM
       roles to service accounts.
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Production environment"
-
-    In a production environment, always adhere to the principle of
-    least privilege.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Production environment**
+>
+> In a production environment, always adhere to the principle of
+> least privilege.
 
 ## Set up your environment and workspace
 
@@ -383,15 +377,12 @@ Leave the Gemini CLI terminal running, and open a new terminal in your shell:
     export LB_IP=$(terraform -chdir=terraform output -raw load_balancer_ip)
     ```
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Terraform backend"
-
-    This demo uses a local Terraform backend. In a production environment, we
-    recommend that you configure a
-    [remote backend on Cloud Storage](https://docs.cloud.google.com/docs/terraform/resource-management/store-state).
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Terraform backend**
+>
+> This demo uses a local Terraform backend. In a production environment, we
+> recommend that you configure a
+> [remote backend on Cloud Storage](https://docs.cloud.google.com/docs/terraform/resource-management/store-state).
 
 ## Build container images
 
@@ -615,14 +606,11 @@ Go back to your terminal and run the following command:
 terraform -chdir=terraform destroy
 ```
 
-<!-- markdownlint-disable MD046 -->
-
-!!! note "Confirming resource deletion"
-
-    Review the resources that Terraform plans to delete. When prompted, enter
-    `yes` to confirm and proceed with the deletion.
-
-<!-- markdownlint-enable MD046 -->
+> [!NOTE]
+> **Confirming resource deletion**
+>
+> Review the resources that Terraform plans to delete. When prompted, enter
+> `yes` to confirm and proceed with the deletion.
 
 ## What's next
 
