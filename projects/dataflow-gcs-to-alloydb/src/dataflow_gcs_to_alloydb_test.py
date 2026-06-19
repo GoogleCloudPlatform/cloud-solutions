@@ -22,7 +22,14 @@ from unittest import mock
 import dataflow_gcs_to_alloydb
 import sqlalchemy
 from absl.testing import parameterized
-from testcontainers import postgres
+from testcontainers.community.postgres import PostgresContainer
+from testcontainers.core.docker_client import DockerClient
+
+# Monkeypatch testcontainers to prevent it from inheriting the host network
+# when run inside a container with host networking. This avoids conflicts
+# with port bindings.
+DockerClient.find_host_network = lambda self: None
+
 
 _TEST_POSTGRES_CONTAINER = 'postgres:15'
 _POSTGRES_INTERNAL_PORT = 5432
@@ -217,7 +224,7 @@ class TestPipelineRun(TestPipelineBase):
 
     def setUp(self):
         super().setUp()
-        self.postgres_container = postgres.PostgresContainer(
+        self.postgres_container = PostgresContainer(
             image=_TEST_POSTGRES_CONTAINER,
             port=_POSTGRES_INTERNAL_PORT,
             driver='pg8000',
@@ -237,7 +244,7 @@ class TestPipelineRun(TestPipelineBase):
             # 'input_file_format': 'csv',
             # Must specify input_file_pattern on your test.
             # 'input_file_pattern': './testadata/*.csv',
-            # Must speficy input_file_schema on your test.
+            # Must specify input_file_schema on your test.
             # 'input_schema': 'id:int64;first_name:string',
             'input_csv_file_delimiter': ',',
             'input_file_contains_headers': '1',
