@@ -224,6 +224,12 @@
       "additionalBranchPrefix": "generative-media-shot-production-"
     },
     {
+      "matchFileNames": ["projects/gke-migration-agent/**"],
+      "groupName": "gke-migration-agent",
+      "commitMessagePrefix": "chore(deps): [gke-migration-agent]",
+      "additionalBranchPrefix": "gke-migration-agent-"
+    },
+    {
       "matchFileNames": ["projects/gke-optimization/**"],
       "groupName": "gke-optimization",
       "commitMessagePrefix": "chore(deps): [gke-optimization]",
