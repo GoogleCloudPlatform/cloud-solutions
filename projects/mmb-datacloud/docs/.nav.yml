@@ -22,7 +22,8 @@
 title: "Migrate, Modernize, and Build with Data Cloud"
 nav:
   - "Overview": "index.md"
-  - "Migrate from PostgreSQL to Alloy DB using Database Migration Service": "phase1.md"
+  - "Migrate from PostgreSQL to AlloyDB": "postgresql-to-alloydb.md"
+  - "Migrate from SQL Server to AlloyDB": "sqlserver-to-alloydb.md"
 flatten_single_child_sections: true
 sort:
   by: title

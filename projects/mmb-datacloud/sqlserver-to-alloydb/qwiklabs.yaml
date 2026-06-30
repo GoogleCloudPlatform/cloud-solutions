@@ -1,0 +1,42 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+environment:
+  resources:
+    - type: gcp_project
+      id: project_1
+      variant: gcpfree
+      allowed_locations:
+        - us-central1
+        - us-west1
+        - us-west4
+        - us-east1
+        - us-east4
+      startup_script:
+        type: qwiklabs
+        path: sqlserver-to-alloydb
+      student_visible_outputs:
+        - label: "GCP Project ID"
+          reference: project_1.startup_script.gcp_project_id
+        - label: "GCP Region"
+          reference: project_1.startup_script.gcp_region
+        - label: "SQL Server Instance Name"
+          reference: project_1.startup_script.sql_server_instance_name
+        - label: "SQL Server Private IP"
+          reference: project_1.startup_script.sql_server_private_ip
+        - label: "SQL Server Password"
+          reference: project_1.startup_script.sql_server_password
+        - label: "Loader VM Name"
+          reference: project_1.startup_script.loader_vm_name

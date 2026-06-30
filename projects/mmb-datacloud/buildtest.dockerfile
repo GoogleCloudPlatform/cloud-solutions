@@ -1,4 +1,3 @@
-#!/bin/sh
 # Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +14,21 @@
 
 FROM hashicorp/terraform:1.12.1
 
-WORKDIR /app
-COPY phase1/*.tf ./
-COPY phase1/scripts/*.sh ./scripts/
+ARG PROJECT_SUBDIRECTORY=/app
+ENV PROJECT_SUBDIRECTORY=$PROJECT_SUBDIRECTORY
+WORKDIR ${PROJECT_SUBDIRECTORY}
+
 ENTRYPOINT [ "/bin/ash", "-e", "-x", "-c" ]
-CMD [ "terraform init -input=false -no-color && terraform validate -no-color" ]
+CMD [ " \
+  if [ -d postgresql-to-alloydb ]; then \
+    cd postgresql-to-alloydb && \
+    terraform init -input=false -no-color && \
+    terraform validate -no-color && \
+    cd ..; \
+  fi && \
+  if [ -d sqlserver-to-alloydb ]; then \
+    cd sqlserver-to-alloydb && \
+    terraform init -input=false -no-color && \
+    terraform validate -no-color && \
+    cd ..; \
+  fi" ]

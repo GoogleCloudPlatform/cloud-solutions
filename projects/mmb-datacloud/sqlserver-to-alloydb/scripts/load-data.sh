@@ -1,0 +1,255 @@
+#!/bin/bash
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Redirect stdout and stderr to a log file
+exec > >(tee -i /var/log/startup-script.log) 2>&1
+
+echo "Starting startup script..."
+
+# Update package lists
+apt-get update -y
+
+# Install gnupg, curl, etc.
+apt-get install -y gnupg curl apt-transport-https
+
+# Add Microsoft package repository for ODBC Driver 18
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >/usr/share/keyrings/microsoft-prod.gpg
+echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" >/etc/apt/sources.list.d/mssql-release.list
+
+apt-get update -y
+
+# Install Microsoft ODBC Driver 18 (accept EULA)
+ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18
+echo "export PATH=\"\$PATH:/opt/mssql-tools18/bin\"" >>/etc/profile.d/mssql.sh
+
+# Install Python3, pip, unixodbc-dev
+apt-get install -y python3 python3-pip python3-venv unixodbc-dev
+
+# Create python virtual environment
+python3 -m venv /opt/loader-env
+
+# Install python libraries
+/opt/loader-env/bin/pip install --upgrade pip
+/opt/loader-env/bin/pip install pandas sqlalchemy pyodbc google-cloud-bigquery db-dtypes
+
+# Write the python script to load data
+cat <<'EOF' >/opt/load_data.py
+import os
+import time
+import urllib.parse
+import pandas as pd
+from google.cloud import bigquery
+from sqlalchemy import create_engine
+from sqlalchemy.types import Integer, String, Float, DateTime
+import socket
+
+def get_metadata(key):
+    import urllib.request
+    req = urllib.request.Request(
+        f"http://metadata.google.internal/computeMetadata/v1/instance/attributes/{key}",
+        headers={"Metadata-Flavor": "Google"}
+    )
+    try:
+        with urllib.request.urlopen(req) as response:
+            return response.read().decode('utf-8')
+    except Exception as e:
+        print(f"Error fetching metadata {key}: {e}")
+        return None
+
+sql_server_ip = get_metadata("SQL_SERVER_IP")
+sql_server_password = get_metadata("SQL_SERVER_PASSWORD")
+
+if not sql_server_ip or not sql_server_password:
+    print("Missing SQL Server IP or Password in metadata.")
+    exit(1)
+
+# Wait for SQL Server to be ready
+print(f"Waiting for SQL Server at {sql_server_ip}:1433 to be ready...")
+while True:
+    try:
+        with socket.create_connection((sql_server_ip, 1433), timeout=5):
+            print("SQL Server is up!")
+            break
+    except OSError:
+        print("SQL Server not ready yet, sleeping 10s...")
+        time.sleep(10)
+
+# Connect to master database to create the database
+params = urllib.parse.quote_plus(
+    "DRIVER={ODBC Driver 18 for SQL Server};"
+    f"SERVER={sql_server_ip};"
+    "DATABASE=master;"
+    "UID=sqlserver;"
+    f"PWD={sql_server_password};"
+    "Encrypt=yes;"
+    "TrustServerCertificate=yes;"
+)
+engine = create_engine(f"mssql+pyodbc:///?odbc_connect={params}")
+
+# Create database
+with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
+    result = conn.execute("SELECT name FROM sys.databases WHERE name = 'thelook_ecommerce'")
+    if not result.fetchone():
+        conn.execute("CREATE DATABASE thelook_ecommerce;")
+        print("Database thelook_ecommerce created.")
+    else:
+        print("Database thelook_ecommerce already exists.")
+
+# Reconnect to thelook_ecommerce database
+params = urllib.parse.quote_plus(
+    "DRIVER={ODBC Driver 18 for SQL Server};"
+    f"SERVER={sql_server_ip};"
+    "DATABASE=thelook_ecommerce;"
+    "UID=sqlserver;"
+    f"PWD={sql_server_password};"
+    "Encrypt=yes;"
+    "TrustServerCertificate=yes;"
+)
+engine = create_engine(f"mssql+pyodbc:///?odbc_connect={params}", fast_executemany=True)
+
+# Define data types for schema mapping
+dtypes_map = {
+    'distribution_centers': {
+        'id': Integer(),
+        'name': String(255),
+        'latitude': Float(),
+        'longitude': Float()
+    },
+    'products': {
+        'id': Integer(),
+        'cost': Float(),
+        'category': String(255),
+        'name': String(255),
+        'brand': String(255),
+        'retail_price': Float(),
+        'department': String(255),
+        'sku': String(255),
+        'distribution_center_id': Integer()
+    },
+    'users': {
+        'id': Integer(),
+        'first_name': String(255),
+        'last_name': String(255),
+        'email': String(255),
+        'age': Integer(),
+        'gender': String(50),
+        'state': String(255),
+        'street_address': String(500),
+        'postal_code': String(50),
+        'city': String(255),
+        'country': String(255),
+        'latitude': Float(),
+        'longitude': Float(),
+        'traffic_source': String(255),
+        'created_at': DateTime()
+    },
+    'orders': {
+        'order_id': Integer(),
+        'user_id': Integer(),
+        'status': String(50),
+        'gender': String(50),
+        'created_at': DateTime(),
+        'returned_at': DateTime(),
+        'shipped_at': DateTime(),
+        'delivered_at': DateTime(),
+        'num_of_item': Integer()
+    },
+    'order_items': {
+        'id': Integer(),
+        'order_id': Integer(),
+        'user_id': Integer(),
+        'product_id': Integer(),
+        'inventory_item_id': Integer(),
+        'status': String(50),
+        'created_at': DateTime(),
+        'shipped_at': DateTime(),
+        'delivered_at': DateTime(),
+        'returned_at': DateTime(),
+        'sale_price': Float()
+    },
+    'inventory_items': {
+        'id': Integer(),
+        'product_id': Integer(),
+        'created_at': DateTime(),
+        'sold_at': DateTime(),
+        'cost': Float(),
+        'product_category': String(255),
+        'product_name': String(255),
+        'product_brand': String(255),
+        'product_retail_price': Float(),
+        'product_department': String(255),
+        'product_sku': String(255),
+        'product_distribution_center_id': Integer()
+    },
+    'events': {
+        'id': Integer(),
+        'user_id': Integer(),
+        'sequence_number': Integer(),
+        'session_id': String(255),
+        'created_at': DateTime(),
+        'ip_address': String(50),
+        'city': String(255),
+        'state': String(255),
+        'postal_code': String(50),
+        'browser': String(50),
+        'traffic_source': String(255),
+        'uri': String(500),
+        'event_type': String(50)
+    }
+}
+
+bq_client = bigquery.Client()
+
+for table, dtypes in dtypes_map.items():
+    print(f"Loading table {table} from BigQuery...")
+    try:
+        with engine.connect() as conn:
+            result = conn.execute(f"SELECT COUNT(*) FROM {table}")
+            count = result.fetchone()[0]
+            if count > 0:
+                print(f"Table {table} already exists and has {count} rows. Skipping.")
+                continue
+    except Exception:
+        pass
+
+    if table == 'events':
+        query = f"SELECT * FROM `bigquery-public-data.thelook_ecommerce.{table}` LIMIT 100000"
+        print("Limiting events table to 100,000 rows.")
+    else:
+        query = f"SELECT * FROM `bigquery-public-data.thelook_ecommerce.{table}`"
+
+    try:
+        df = bq_client.query(query).to_dataframe()
+        print(f"Downloaded {len(df)} rows. Writing to SQL Server...")
+        df.to_sql(
+            table,
+            engine,
+            if_exists='replace',
+            index=False,
+            dtype=dtypes,
+            chunksize=5000
+        )
+        print(f"Table {table} successfully loaded.")
+    except Exception as e:
+        print(f"Error loading table {table}: {e}")
+
+print("Data loading process complete.")
+EOF
+
+# Run the python script
+echo "Running the data loader script..."
+/opt/loader-env/bin/python3 /opt/load_data.py
+
+echo "Startup script finished."
