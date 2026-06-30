@@ -41,7 +41,7 @@
     },
     {
       "name": "alloydb_port",
-      "label": "AlloyDB instace port",
+      "label": "AlloyDB instance port",
       "helpText": "Port of the AlloyDB instance. Default: 5432.",
       "isOptional": true
     },

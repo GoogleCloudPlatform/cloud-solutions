@@ -246,7 +246,7 @@ configured by changing the parameters.
       --region $REGION \
       --parameters "input_file_format=csv" \
       --parameters "input_file_pattern=gs://$BUCKET_NAME/dataflow-template/data.csv" \
-      --parameters 'input_schema=id:int64;first_name:string;last_name:string;deparment:string;salary:float;hire_date:string' \
+      --parameters 'input_schema=id:int64;first_name:string;last_name:string;department:string;salary:float;hire_date:string' \
       --parameters "alloydb_ip=$ALLOYDB_IP" \
       --parameters "alloydb_password=$ALLOYDB_PASSWORD" \
       --parameters "alloydb_table=employees" \
