@@ -12,8 +12,8 @@
 #     name: python3
 # ---
 
-# %% id="9ed271242ba30f17"
-# Copyright 2025 Google LLC
+# %%
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# %% [markdown] id="b5dbe25705c71059"
+# %% [markdown]
 # # Legacy-Detox: AI-Native ML Pipelines - Spark-Centric Demo
 #
 # **Before you begin** make sure to click "Connect" on the top right corner, to create or connect to a runtime.
@@ -52,23 +52,23 @@
 # - Train a **Multi-class Logistic Regression** model to predict user category affinity.
 # - Deploy this model for a **Production Batch Job** on a managed cluster to generate actionable marketing leads in BigQuery.
 
-# %% [markdown] id="0tyG91mQqEmM"
+# %% [markdown]
 # ## Step 1: Setup
 #
 # We initialize our environment variables.
 
-# %% id="4754ca56eb4290c8"
+# %%
 import os
 
 PROJECT_ID = os.environ["GOOGLE_CLOUD_PROJECT"]
 REGION = os.environ["GOOGLE_CLOUD_REGION"]
 BUCKET_NAME = f"{PROJECT_ID}-detox-bucket"
 
-# %% id="smac8OYyT-Dh"
+# %%
 # We also need to install mleap as we will use it to serialize the model for later
 # !pip install mleap
 
-# %% [markdown] id="b3421937e8ba768c"
+# %% [markdown]
 # ## Step 2: Modern Spark Sessions with the Lightning Engine
 #
 # In a legacy world, you'd spend hours tuning `spark-defaults.conf`. Here, we define a Serverless session that automatically uses the **Lightning Engine** for optimized performance.
@@ -77,8 +77,20 @@ BUCKET_NAME = f"{PROJECT_ID}-detox-bucket"
 # - **Native Execution**: Faster SQL and Dataframe operations.
 # - **Auto-Scaling**: Dynamically adjusts to the workload.
 # - **BigQuery Optimization**: High-speed data transfer between Spark and BigQuery.
+#
+# ---
+#
+# ### 👥 Persona Deep Dive
+#
+# #### 🛠️ The Data Engineer
+# *   **Operational Advantage:** Legacy Spark requires meticulously tuning `spark-defaults.conf`, sizing executors, drivers, and memory overhead, often leading to wasted resources or out-of-memory (OOM) errors. With Dataproc Serverless, the infrastructure is completely abstracted. The system auto-scales executors dynamically based on the workload, drastically reducing cluster maintenance overhead and cloud spend. Spark Connect decouples the client (notebook) from the Spark driver, making the interactive session highly resilient.
+#
+# #### 🧪 The Data Scientist
+# *   **Frictionless Iteration:** No need to wait for a DevOps team to provision a cluster or learn complex Spark configuration flags. You get a fully functional, high-performance Spark session in seconds. Because Spark Connect runs the driver on the cluster, your local notebook environment remains lightweight and won't crash due to large driver-side data collection.
+#
+# ---
 
-# %% id="1c3041f33cb1096"
+# %%
 from google.cloud.dataproc_spark_connect import DataprocSparkSession
 from google.cloud.dataproc_v1 import Session
 from pyspark.sql import SparkSession
@@ -107,12 +119,24 @@ def create_spark_session():
 spark = create_spark_session()
 print("AI-Native Spark Session Created with Lightning Engine")
 
-# %% [markdown] id="a1bc2857af2db8d4"
+# %% [markdown]
 # ## Step 3: High-Speed Data Access from BigQuery
 #
 # Load users, orders, and product data. Because we are using the Spark-BigQuery connector on the Lightning engine, this read is significantly faster than standard JDBC connections.
+#
+# ---
+#
+# ### 👥 Persona Deep Dive
+#
+# #### 🛠️ The Data Engineer
+# *   **Operational Advantage:** Traditional Spark-BigQuery connections rely on slow, single-threaded JDBC drivers or complex intermediate GCS exports. The modern Spark-BigQuery connector uses the BigQuery Storage Read API to stream data directly in parallel from BigQuery slots to Spark executors. This bypasses the bottleneck, drastically reducing ingestion time and ensuring data governance policies (like column-level security) are enforced at the source.
+#
+# #### 🧪 The Data Scientist
+# *   **High-Speed Data Access:** Instant access to petabyte-scale datasets directly from your Spark DataFrames. You can query production BigQuery tables with minimal latency, speeding up the exploratory data analysis (EDA) phase.
+#
+# ---
 
-# %% id="71f266d5173fe8cb"
+# %%
 # Load Users
 users_df = (
     spark.read.format("bigquery")
@@ -138,7 +162,7 @@ users_df.createOrReplaceTempView("users")
 order_items_df.createOrReplaceTempView("order_items")
 products_df.createOrReplaceTempView("products")
 
-# %% [markdown] id="36e05f5a27306abd"
+# %% [markdown]
 # ## Step 3a (optional): AI-Assisted Exploration with Gemini
 #
 # BigQuery Studio notebooks include a Gemini-powered code assistant. You can use natural language to explore the data we just loaded.
@@ -152,7 +176,7 @@ products_df.createOrReplaceTempView("products")
 # 5. *"Using PySpark, join 'users' and 'order_items' to find the total number of orders per country."*
 # 6. *"Generate a matplotlib chart showing the number of users created per year."*
 
-# %% [markdown] id="4c00874d19c65a7f"
+# %% [markdown]
 # ## Step 4: Feature Engineering
 #
 # We need to build a training set. Our goal is to predict the `category` of the last item a user bought.
@@ -163,7 +187,7 @@ products_df.createOrReplaceTempView("products")
 # 3. Identify the most recent category purchased per user.
 # 4. Use demographics (Age, Gender, Country) as features.
 
-# %% id="4ee3305ca1ae9565"
+# %%
 # We use Spark SQL for complex joins, a familiar syntax for legacy users but running on modern infra.
 training_data_raw = spark.sql("""
 WITH user_category_purchases AS (
@@ -191,14 +215,14 @@ WHERE rank = 1
 
 training_data_raw.show(5)
 
-# %% [markdown] id="5cb7b481e589d325"
+# %% [markdown]
 # ## Step 5: Multi-class Model Training
 #
 # Use `StringIndexer` to convert our categorical features and labels into numerical indices, and then train a `LogisticRegression` model.
 #
 # Unlike the simple "buy/no-buy" model, this is a **Multi-class Classifier**.
 
-# %% id="9205179e6347c5f5"
+# %%
 from pyspark.ml.classification import LogisticRegression
 from pyspark.ml.feature import (
     IndexToString,
@@ -256,12 +280,12 @@ pipeline_model = pipeline.fit(train)
 
 print("Model Training Complete.")
 
-# %% [markdown] id="52bffd17a56548f7"
+# %% [markdown]
 # ## Step 6: Evaluation & Accuracy
 #
 # We evaluate how well we can predict the category affinity.
 
-# %% id="8f295f787eb9d2d4"
+# %%
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 
 predictions = pipeline_model.transform(test)
@@ -270,18 +294,18 @@ accuracy = evaluator.evaluate(predictions)
 
 print(f"Model Accuracy: {accuracy:.2%}")
 
-# %% [markdown] id="327379efad590414"
+# %% [markdown]
 # ## Step 7: Saving the AI Asset for Spark Batch Inference
 #
 # We save the trained pipeline (including the indexers) to Cloud Storage. This allows our production batch job to load the model and apply the same transformations to new, unseen data.
 
-# %% id="1cc0b78e2e14f357"
+# %%
 # 1. Save standard Spark ML model (for Batch Jobs)
 MODEL_PATH = f"gs://{BUCKET_NAME}/models/product_affinity_model"
 pipeline_model.write().overwrite().save(MODEL_PATH)
 print(f"Spark ML Model successfully exported to {MODEL_PATH}")
 
-# %% [markdown] id="2f7944fbe89d5e06"
+# %% [markdown]
 # ### Transition: From Notebook to Production Batch Inference
 #
 # We've "detoxed" our development environment by moving to Serverless Spark and the Lightning Engine. However, a notebook is not a production environment.
@@ -297,11 +321,23 @@ print(f"Spark ML Model successfully exported to {MODEL_PATH}")
 # You can review the code in this repository.
 #
 # #### Triggering the Batch Job:
-# In a real environment, you would use **Cloud Composer (Airflow)** or **Vertex AI Pipelines**. For this demo, we've provided a simple bash runner that submits this job to a persistent Managed Service for Apache Spark cluster.
+# In a real environment, you would use **Cloud Composer (Airflow)** or **Gemini Enterprise Agent Platform Pipelines**. For this demo, we've provided a simple bash runner that submits this job to a persistent Managed Service for Apache Spark cluster.
 #
 # This shows how to deploy the developed model in a robust, automated production pipeline.
+#
+# ---
+#
+# ### 👥 Persona Deep Dive
+#
+# #### 🛠️ The Data Engineer
+# *   **Operational Advantage:** In legacy environments, running a production batch job meant writing complex Airflow DAGs to spin up a transient Dataproc/EMR cluster, submit the job, monitor it, and tear it down. If the cluster creation failed or ran out of IP addresses, the pipeline broke. With Dataproc Serverless, you simply submit the PySpark script (`predict_job.py`) as a serverless batch job. Google Cloud handles the provisioning, execution, and cleanup automatically, turning cluster management into a simple API call.
+#
+# #### 🧪 The Data Scientist
+# *   **Write Once, Run Anywhere:** The exact same code you wrote in the notebook (`pipeline_model.transform()`) can be packaged directly into `predict_job.py` without rewriting it for a different production execution framework, ensuring consistency between training and inference.
+#
+# ---
 
-# %% [markdown] id="4253af7e2506d3ae"
+# %% [markdown]
 # ## Step 8: Run the Production Batch Inference Job
 #
 # The following cell executes our rendered `run_predict_job.sh` script. This script:
@@ -309,7 +345,7 @@ print(f"Spark ML Model successfully exported to {MODEL_PATH}")
 # 2. Submits the `predict_job.py` Spark job.
 # 3. Passes the model path and data sources as arguments.
 
-# %% id="da7397161838c77c"
+# %%
 # Call the shell script that triggers a batch PySpark job.
 # Review the shell script in this repository.
 
@@ -317,18 +353,18 @@ print(f"Spark ML Model successfully exported to {MODEL_PATH}")
 # !chmod +x ./run_predict_job.sh
 # !./run_predict_job.sh --project-id {PROJECT_ID} --region {REGION} --bucket-name {BUCKET_NAME}
 
-# %% [markdown] id="69b83e0d6273ea46"
+# %% [markdown]
 # ## Step 9: Final Results in BigQuery
 #
 # Our modernized Spark pipeline has successfully integrated with the Google Cloud ecosystem. The re-engagement leads are now available directly in BigQuery, making them accessible to SQL developers, BI tools, and downstream automation.
 #
 # Let's verify the results using BigQuery SQL.
 
-# %% id="6b1e37b16bf3a76a"
+# %%
 # %%bigquery
 SELECT * FROM `reengagement.affinity_leads` LIMIT 20
 
-# %% [markdown] id="Et4gD3fQElZi"
+# %% [markdown]
 # ## Step 10: Saving the AI Asset model for on-demand serving (Modern Lean Export)
 #
 # In a traditional Spark ML workflow, you would export the model using MLeap or save it as a standard Spark ML artifact. However, both approaches have drawbacks for real-time serving:
@@ -343,8 +379,20 @@ SELECT * FROM `reengagement.affinity_leads` LIMIT 20
 # 2. **Ultra-lightweight Container:** We can shrink our Docker image by gigabytes by removing Java and Spark.
 # 3. **Microsecond Latency:** Replicating the forward pass in Numpy is orders of magnitude faster than invoking Spark or MLeap JVM bridges.
 # 4. **100% Spark Connect Compatible:** Bypasses the client-side JVM limitation entirely.
+#
+# ---
+#
+# ### 👥 Persona Deep Dive
+#
+# #### 🛠️ The Data Engineer
+# *   **Operational Advantage:** Traditional real-time serving of Spark ML models required running a JVM-based service (like MLeap or a full Spark local session) inside a heavy Docker container (often > 2GB). This led to slow cold-start times (seconds to minutes), high memory overhead, and complex dependency management (Java + Scala + Python). By extracting model parameters to a lightweight JSON and serving via a pure Python/NumPy container, we reduce the Docker image size to < 500MB, achieve sub-millisecond cold starts, and eliminate JVM management entirely. This makes it ideal for serverless serving platforms (like Cloud Run).
+#
+# #### 🧪 The Data Scientist
+# *   **Transparent Model Serving:** You don't need to learn Scala or MLeap serialization quirks, which often fail on custom transformers. By exporting the model parameters to JSON, you can easily verify the model math in pure Python/NumPy and hand over a simple, transparent asset to the engineering team.
+#
+# ---
 
-# %% id="YKH51_mjE55r"
+# %%
 import json
 
 print("Extracting model parameters for Lean serving...")
@@ -381,8 +429,8 @@ gcs_json_path = f"gs://{BUCKET_NAME}/models/product_affinity_model/model.json"
 # !gcloud storage cp {local_json_path} {gcs_json_path}
 print(f"Lean Model JSON successfully exported to {gcs_json_path}")
 
-# %% [markdown] id="-8Dm3St9iNx7"
-# ## Step 11: Deploying to Gemini Enterprise Agent Platform (formally Vertex AI)
+# %% [markdown]
+# ## Step 11: Deploying to Gemini Enterprise Agent Platform (formerly Gemini Enterprise Agent Platform)
 #
 # Now that we have our model exported in lightweight format and our custom inference server container built, we can deploy it to Gemini Enterprise Agent Platform for real-time serving.
 #
@@ -394,7 +442,7 @@ print(f"Lean Model JSON successfully exported to {gcs_json_path}")
 #
 # __Note__: The model registry and endpoint creation can each take some time (approx. 30 minutes for each action).
 
-# %% id="XL5IDRO_iMf9"
+# %%
 from google.cloud import aiplatform
 
 # Define constants for deployment
@@ -403,7 +451,7 @@ IMAGE_NAME = "inference-server"
 IMAGE_TAG = "latest"
 IMAGE_URI = f"{REGION}-docker.pkg.dev/{PROJECT_ID}/{REPOSITORY_ID}/{IMAGE_NAME}:{IMAGE_TAG}"
 
-# Initialize Vertex AI SDK
+# Initialize Gemini Enterprise Agent Platform SDK
 aiplatform.init(project=PROJECT_ID, location=REGION)
 
 print(f"Registering model with container: {IMAGE_URI}")
@@ -421,7 +469,7 @@ model = aiplatform.Model.upload(
 
 print(f"Model registered: {model.resource_name}")
 
-# %% id="8q0ekc8nmLIw"
+# %%
 # 2. Create Endpoint and Deploy
 # This provisions the infrastructure and starts our container.
 endpoint = model.deploy(
@@ -432,19 +480,19 @@ endpoint = model.deploy(
 
 print(f"Model successfully deployed to endpoint: {endpoint.resource_name}")
 
-# %% [markdown] id="qKpji5vajptL"
+# %% [markdown]
 # ## Step 11: Live Prediction Demo
 #
 # Let's test our deployed endpoint with some synthetic user data. This demonstrates how our custom MLeap inference server (the Gemini Enterprise Agent Platform) can serve predictions with low latency, without needing a full Spark session.
 
-# %% id="ucUFhtA_jt_C"
+# %%
 # Define a synthetic user record that matches our training schema:
 # Age (Double), Gender (String), Country (String)
 test_instance = {"age": 28.0, "gender": "M", "country": "United States"}
 
 print(f"Sending prediction request for: {test_instance}")
 
-# Send the request to the Vertex AI endpoint
+# Send the request to the Gemini Enterprise Agent Platform endpoint
 # The SDK handles the JSON formatting for us
 response = endpoint.predict(instances=[test_instance])
 
@@ -453,7 +501,7 @@ for prediction in response.predictions:
     category = prediction.get("predicted_category")
     print(f"✅ Predicted Product Affinity: {category}")
 
-# %% [markdown] id="d1dcbf43d5401242"
+# %% [markdown]
 # ## Conclusion: The Legacy-Detox Recap
 #
 # Congratulations! You have successfully journeyed from a "Legacy" mindset to an **AI-Native Spark Pipeline**.

@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "path": "skills/pipeline-generator"
+    },
+    {
+      "path": "skills/zero-copy-ingestion"
+    },
+    {
+      "path": "skills/spark-lightning-optimization"
+    },
+    {
+      "path": "skills/bigframes-bqml"
+    },
+    {
+      "path": "skills/model-evaluation"
+    },
+    {
+      "path": "skills/unified-model-registry"
+    }
+  ]
+}

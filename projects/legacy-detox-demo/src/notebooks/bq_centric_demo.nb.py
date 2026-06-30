@@ -13,7 +13,7 @@
 # ---
 
 # %%
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@
 # - Explore customer and order data using BigQuery DataFrames.
 # - Train a **Multi-class Logistic Regression** model using BQML (via `bigframes.ml`).
 # - Run **Native Batch Inference** to generate marketing leads directly in BigQuery.
-# - Provide a suggestion for **Native On-Demand Serving** using Vertex AI Model Registry.
+# - Provide a suggestion for **Native On-Demand Serving** using Gemini Enterprise Agent Platform Model Registry.
 
 # %%
 import os
@@ -68,12 +68,24 @@ print(
     f"BigQuery DataFrames initialized for project: {PROJECT_ID} in region: {REGION}"
 )
 
-# %% [markdown] id="cc955707"
+# %% [markdown]
 # ## Step 1: Zero-Movement Data Loading
 #
 # We load the public dataset tables. Unlike Spark, this does not copy data to a local environment or Spark workers. It creates references to the BigQuery tables.
+#
+# ---
+#
+# ### 👥 Persona Deep Dive
+#
+# #### 🛠️ The Data Engineer
+# *   **Operational Advantage:** Traditional feature engineering requires moving massive datasets out of the data warehouse into a Spark cluster or a Pandas VM. This introduces massive egress costs, security vulnerabilities (data duplication), and network latency. BigQuery DataFrames (BigFrames) keeps the data securely inside BigQuery. All Pandas-like operations are compiled into highly optimized SQL and executed natively on BigQuery's petabyte-scale engine, maintaining strict data governance.
+#
+# #### 🧪 The Data Scientist
+# *   **Familiar API, Infinite Scale:** You don't have to learn the BigQuery SQL or PySpark to work with large-scale data. You can write your feature engineering code using the familiar Pandas API (`bpd` instead of `pd`). BigFrames handles the scale transparently—no more `OutOfMemory` errors when your dataset grows beyond your notebook instance's RAM.
+#
+# ---
 
-# %% id="01786a4b"
+# %%
 # Load Users
 users_df = bpd.read_gbq("bigquery-public-data.thelook_ecommerce.users")
 
@@ -87,14 +99,14 @@ products_df = bpd.read_gbq("bigquery-public-data.thelook_ecommerce.products")
 
 print("BigQuery DataFrames references created successfully.")
 
-# %% [markdown] id="22abd55e"
+# %% [markdown]
 # ## Step 2: Feature Engineering
 #
 # We construct our training set. We want to predict the `category` of the last complete purchase per user.
 # Instead of writing raw SQL, we use the pandas-like API of BigQuery DataFrames to perform the joins,
 # sorting, and deduplication natively in BigQuery.
 
-# %% id="d5749428"
+# %%
 # Filter for complete orders
 complete_orders = order_items_df[order_items_df["status"] == "Complete"]
 
@@ -122,12 +134,12 @@ training_data_raw["age"] = training_data_raw["age"].astype("Float64")
 
 training_data_raw.head(5)
 
-# %% [markdown] id="d0d32395"
+# %% [markdown]
 # ## Step 3: Train-Test Split
 #
 # We split our featurized data into training and evaluation sets natively using BigFrames ML.
 
-# %% id="7994c9fd"
+# %%
 # Split features and label
 X = training_data_raw[["age", "gender", "country"]]
 y = training_data_raw[["label_category"]]
@@ -140,14 +152,26 @@ X_train, X_test, y_train, y_test = train_test_split(
 print(f"Training set size: {len(X_train)} rows")
 print(f"Evaluation set size: {len(X_test)} rows")
 
-# %% [markdown] id="5022171f"
+# %% [markdown]
 # ## Step 4: Model Training
 #
 # We train a multinomial `LogisticRegression` model natively in BigQuery.
 # BigQuery ML automatically handles categorical features (like `gender` and `country`) by one-hot encoding them natively,
 # and standardizes numerical features (like `age`). This eliminates the need for manual preprocessing pipelines.
+#
+# ---
+#
+# ### 👥 Persona Deep Dive
+#
+# #### 🛠️ The Data Engineer
+# *   **Operational Advantage:** Model training is typically a separate infrastructure silo requiring specialized GPU/CPU clusters. BQML democratizes training by running it directly inside BigQuery. It leverages BigQuery's serverless compute, meaning you don't need to manage, scale, or pay for idle training clusters. Security boundaries are maintained since data never leaves the warehouse during training.
+#
+# #### 🧪 The Data Scientist
+# *   **Rapid Prototyping:** BQML automates tedious preprocessing steps. It automatically handles one-hot encoding for categorical variables and scales numerical features. You can train a model with a single line of Python (`LogisticRegression().fit()`) without building complex Scikit-Learn pipelines, enabling rapid prototyping and model iteration.
+#
+# ---
 
-# %% id="e1726419"
+# %%
 # Initialize the BQML Logistic Regression model
 model = LogisticRegression()
 
@@ -156,24 +180,24 @@ print("Training BQML Logistic Regression model...")
 model.fit(X_train, y_train)
 print("Model training complete.")
 
-# %% [markdown] id="2b3a511f"
+# %% [markdown]
 # ## Step 5: Model Evaluation
 #
 # We evaluate the model's accuracy on the test set.
 
-# %% id="01971d98"
+# %%
 # Score the model
 accuracy = model.score(X_test, y_test)
 # The score method returns a DataFrame with metrics.
 print("Evaluation Metrics:")
 print(accuracy)
 
-# %% [markdown] id="ec85a419"
+# %% [markdown]
 # ## Step 6: Saving the Model Natively
 #
 # We save our trained model as a native BigQuery ML model.
 
-# %% id="ccd90219"
+# %%
 # Save the model to a BigQuery dataset
 # Note: This assumes the 'reengagement' dataset exists in your project
 MODEL_NAME = f"{PROJECT_ID}.reengagement.bq_product_affinity_model"
@@ -182,14 +206,26 @@ MODEL_NAME = f"{PROJECT_ID}.reengagement.bq_product_affinity_model"
 model.to_gbq(MODEL_NAME, replace=True)
 print(f"Model successfully saved to BigQuery as: {MODEL_NAME}")
 
-# %% [markdown] id="65801fb7"
+# %% [markdown]
 # ## Step 7: Native Batch Inference
 #
 # Instead of launching a Spark batch job, we run batch inference natively in BigQuery.
 # We identify inactive users (no purchase in 90 days) and predict their product affinity.
 # We use the BigQuery DataFrames API to perform this filtering natively.
+#
+# ---
+#
+# ### 👥 Persona Deep Dive
+#
+# #### 🛠️ The Data Engineer
+# *   **Operational Advantage:** Running batch inference on billions of rows usually requires orchestrating a massive Spark batch job. BQML batch inference runs as a native BigQuery query. It scales automatically to handle billions of rows in seconds, leveraging BigQuery's massive parallel processing. There are no clusters to spin up, and the output is written directly to a BigQuery table, eliminating complex write-back pipelines.
+#
+# #### 🧪 The Data Scientist
+# *   **Simple Prediction Pipelines:** Running predictions is as simple as calling `model.predict()` on a BigQuery DataFrame. The results are instantly available for analysis or visualization in your notebook, with no need to wait for a batch job queue.
+#
+# ---
 
-# %% id="7c5966b5"
+# %%
 # Calculate cutoff date (90 days ago)
 cutoff_date = pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=90)
 
@@ -223,32 +259,44 @@ leads.to_gbq(LEADS_TABLE, if_exists="replace")
 
 print(f"Batch inference complete. Leads written to: {LEADS_TABLE}")
 
-# %% [markdown] id="71156ce1"
+# %% [markdown]
 # ## Step 8: Verify Batch Results
 #
 # We verify the generated leads using BigQuery SQL.
 
-# %% id="e22901bd"
+# %%
 # %%bigquery
 SELECT * FROM `reengagement.bq_affinity_leads` LIMIT 20
 
-# %% [markdown] id="f6e7d6a9"
-# ## Step 9: Native On-Demand Serving (Vertex AI Integration)
+# %% [markdown]
+# ## Step 9: Native On-Demand Serving (Gemini Enterprise Agent Platform Integration)
 #
 # In a production environment, you may need to serve predictions in real-time (on-demand) to a web application.
 #
 # ### The Modern, Lean Approach
-# Rather than exporting the model to GCS, downloading weights, and writing custom FastAPI containers (as required by Spark), BigQuery ML integrates natively with the **Vertex AI Model Registry**.
+# Rather than exporting the model to GCS, downloading weights, and writing custom FastAPI containers (as required by Spark), BigQuery ML integrates natively with the **Gemini Enterprise Agent Platform Model Registry**.
 #
 # #### How it works:
-# 1. **Native Registration:** We register our BQML model to the Vertex AI Model Registry using the `ALTER MODEL` SQL statement, executed via the BigQuery client.
-# 2. **Zero-Code Deployment:** We deploy the model from the Vertex AI Model Registry to a **Vertex AI Endpoint** using the Vertex AI SDK.
+# 1. **Native Registration:** We register our BQML model to the Gemini Enterprise Agent Platform Model Registry using the `ALTER MODEL` SQL statement, executed via the BigQuery client.
+# 2. **Zero-Code Deployment:** We deploy the model from the Gemini Enterprise Agent Platform Model Registry to a **Gemini Enterprise Agent Platform Endpoint** using the Gemini Enterprise Agent Platform SDK.
 # 3. **Live Prediction:** We send a sample request to the deployed endpoint to get a real-time prediction.
+#
+# ---
+#
+# ### 👥 Persona Deep Dive
+#
+# #### 🛠️ The Data Engineer
+# *   **Operational Advantage:** The transition from a trained model to a live API endpoint is often a bottleneck, requiring custom Dockerfiles, FastAPI code, and CI/CD pipelines. BQML's direct integration with Gemini Enterprise Agent Platform Model Registry allows you to register the model natively with a single SQL/Python command.  then deploys it to a fully managed endpoint using pre-built, optimized containers. This eliminates custom container maintenance, dependency patching, and manual deployment scripting.
+#
+# #### 🧪 The Data Scientist
+# *   **End-to-End Control:** You can deploy your model to a production-ready API endpoint in minutes directly from the notebook. You don't need to hand over weights to a software engineering team or write API wrapper code, giving you full control over the end-to-end model lifecycle.
+#
+# ---
 
-# %% id="5c3c21dd"
+# %%
 from google.cloud import aiplatform
 
-# Initialize Vertex AI SDK
+# Initialize Gemini Enterprise Agent Platform SDK
 aiplatform.init(project=PROJECT_ID, location=REGION)
 
 # Get the BigQuery client from the BigFrames session
@@ -259,7 +307,7 @@ bq_client = session.bqclient
 BUCKET_NAME = os.environ.get("BUCKET_NAME", f"{PROJECT_ID}-detox-bucket")
 EXPORT_PATH = f"gs://{BUCKET_NAME}/models/bq_product_affinity_model"
 
-# %% id="6fe1dc87"
+# %%
 print(f"1. Exporting BQML model to GCS at {EXPORT_PATH}...")
 # Export the BQML model as a TensorFlow SavedModel
 export_sql = f"""
@@ -270,8 +318,10 @@ query_job = bq_client.query(export_sql)
 query_job.result()
 print("✅ Model exported successfully to GCS.")
 
-# %% id="_MOLGqS4ex4l"
-print("2. Uploading model to Vertex AI Model Registry...")
+# %%
+print(
+    "2. Uploading model to Gemini Enterprise Agent Platform Model Registry..."
+)
 # Use the pre-built TensorFlow serving container
 serving_container_image_uri = (
     "us-docker.pkg.dev/vertex-ai/prediction/tf2-cpu.2-15:latest"
@@ -286,8 +336,8 @@ print(
     f"✅ Model uploaded successfully. Resource name: {uploaded_model.resource_name}"
 )
 
-# %% id="f4ploGZ6exd5"
-print("3. Deploying model to Vertex AI Endpoint...")
+# %%
+print("3. Deploying model to Gemini Enterprise Agent Platform Endpoint...")
 # This provisions the serving infrastructure (takes 10-15 minutes)
 # We set replica count to 1 to minimize cost
 endpoint = uploaded_model.deploy(
@@ -297,19 +347,19 @@ endpoint = uploaded_model.deploy(
 )
 print(f"✅ Model successfully deployed to endpoint: {endpoint.resource_name}")
 
-# %% [markdown] id="a45b91cd"
+# %% [markdown]
 # ## Step 10: Live Prediction Demo
 #
-# We test our deployed endpoint with a sample user record. This demonstrates how Vertex AI can serve BQML predictions with low latency, without needing any custom serving code.
+# We test our deployed endpoint with a sample user record. This demonstrates how Gemini Enterprise Agent Platform can serve BQML predictions with low latency, without needing any custom serving code.
 
-# %% id="841db5db"
+# %%
 # Define a sample user record matching our training schema:
 # age (float64), gender (string), country (string)
 test_instance = {"age": 28.0, "gender": "M", "country": "United States"}
 
 print(f"Sending prediction request for: {test_instance}")
 
-# Send the request to the Vertex AI endpoint
+# Send the request to the Gemini Enterprise Agent Platform endpoint
 # Note: BQML models expect the instance keys to match the feature column names
 response = endpoint.predict(instances=[test_instance])
 
@@ -321,5 +371,4 @@ for prediction in response.predictions:
     print(f"\n✅ Predicted Product Affinity: {predicted_category}")
     print(f"Full Prediction Output: {prediction}")
 
-
-# %% id="-Y0ncn6ylcVC"
+# %%

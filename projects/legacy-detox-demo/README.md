@@ -5,7 +5,7 @@ data science jobs on Google Cloud. It focuses on migrating legacy PySpark jobs
 (e.g., from Hadoop, SAS, Netezza) to Managed Service for Apache Spark and
 BigQuery, providing a unified environment for Data Engineers and Data Scientists
 to collaborate, perform exploratory data analysis with Gemini, and train/deploy
-machine learning models using SparkML and Vertex AI.
+machine learning models using SparkML and Gemini Enterprise Agent Platform.
 
 ## Product Definition: AI-Native - The Legacy Detox
 
@@ -36,10 +36,27 @@ training and deployment.
   infrastructure.
 - **Unified Collaboration:** Enable engineers and scientists to work on the
   exact same datasets (Lakehouse/Iceberg) without data duplication.
-- **Frictionless AI:** Move from raw data to trained models (SparkML/Vertex AI)
-  within a single notebook environment.
+- **Frictionless AI:** Move from raw data to trained models (SparkML/Gemini
+  Enterprise Agent Engine) within a single notebook environment.
 - **Performance:** Demonstrate high-speed, cost-effective execution using the
   Lightning Engine.
+
+### Reference Material
+
+- **Serverless Spark Quickstart**: Refer to the
+  [Managed Service for Apache Spark Serverless Lab Manual](https://github.com/GoogleCloudPlatform/lakehouse-solutions/blob/main/solutions/spark-serverless-quickstart/lab-manuals/ts2-manual.md)
+  for environment setup and Spark Lightning Engine configuration.
+- **Data Science Notebook**: Adopted the flow and code samples found in the
+  [Spark Data Science Notebook](https://github.com/chmstimoteo/devrel-demos/blob/main/data-analytics/qwiklabs/Spark_Data_Science.ipynb).
+- **Dataproc Examples**:
+  [Dataproc examples notebooks](https://github.com/statmike/vertex-ai-mlops/blob/main/data%2Bai/dataproc/examples/readme.md).
+- **BigQuery Notebooks Guide**: Get up and running with
+  [PySpark in BigQuery Notebook documentation](https://docs.cloud.google.com/bigquery/docs/use-spark#dataproc_serverless_bq_notebook-Wordcount).
+- **Data Science Agent in BigQuery Notebooks**: Guides in the
+  [BigQuery Notebook documentation](https://docs.cloud.google.com/bigquery/docs/colab-data-science-agent).
+- **BigQuery DataFrames**: Refer to the
+  [BigQuery DataFrame guides](https://docs.cloud.google.com/bigquery/docs/bigquery-dataframes-introduction)
+  to implement transformations done in Spark DataFrames.
 
 ### Core Features
 
@@ -51,8 +68,8 @@ training and deployment.
   interoperability between Spark and BigQuery.
 - **Gemini Integration:** AI-assisted data analysis, code generation, and
   insight discovery.
-- **Vertex AI Model Registry:** Centralized governance for models trained via
-  Spark or BigQuery ML.
+- **Gemini Enterprise Agent Platform Model Registry:** Centralized governance
+  for models trained via Spark or BigQuery ML.
 
 ### Modules
 
@@ -72,7 +89,7 @@ training and deployment.
   journey.
 - Successful execution of a legacy-style PySpark job on serverless
   infrastructure.
-- Deployment of a trained model to Vertex AI Registry.
+- Deployment of a trained model to Gemini Enterprise Agent Platform Registry.
 - Demonstrable performance benefits of the Lightning Engine.
 
 ## 🚀 Getting Started
@@ -112,6 +129,77 @@ terraform apply
     and `legacy-detox-subnet`.
 1.  Click `Create default Runtime`
 1.  Follow the instructions in the notebooks.
+
+## Use Skills: Bring your own use-case
+
+We have created a set of AI Agent Skills that allow you to easily replicate this
+"Zero-Copy" architecture for your own datasets and use cases. Instead of
+manually writing the notebooks, you can use a coding agent (like Antigravity) to
+interview you, investigate your schemas, and generate the pipelines.
+
+### How it Works
+
+The architecture is split into a coordinator skill and several specialized
+sub-skills:
+
+1.  **`pipeline-generator` (Coordinator)**: Conducts the user interview,
+    inspects BigQuery schemas using the `bq` CLI, recommends the best
+    architecture, and orchestrates the other skills.
+1.  **`zero-copy-ingestion`**: Handles loading data from BigQuery (Spark
+    connector & BigFrames).
+1.  **`spark-lightning-optimization`**: Configures optimized Serverless Spark
+    sessions.
+1.  **`bigframes-bqml`**: Handles BigQuery-centric training and feature
+    engineering.
+1.  **`model-evaluation`**: Generates evaluation code (Accuracy, AUC-PR,
+    Confusion Matrix).
+1.  **`unified-model-registry`**: Handles model serving (Lean JSON, ONNX, or
+    Vertex AI Endpoints).
+
+### Installation & Registration
+
+These skills are registered locally in the project. If you are using a
+compatible agent (like Antigravity), they will be automatically discovered via
+the `.agents/skills.json` file.
+
+To ensure they are active in your workspace:
+
+1.  Make sure the `.agents/skills.json` file exists in the project root (it is
+    configured to point to `skills/`).
+1.  The agent will automatically load them upon startup.
+
+### Example: Running with Antigravity
+
+You can invoke the coordinator skill using the `antigravity` CLI or in an
+interactive chat session.
+
+#### Option 1: Interactive Chat
+
+Start a chat session with the agent in this directory:
+
+```bash
+antigravity chat
+```
+
+Then, ask the agent to start the process:
+
+> **User**: I want to create a new pipeline for a new use case. Please use the
+> `pipeline-generator` skill.
+
+#### Option 2: Direct Command
+
+You can also trigger it directly:
+
+```bash
+antigravity run --prompt "Use the pipeline-generator skill to build a zero-copy pipeline for my new dataset."
+```
+
+The agent will then start the interview:
+
+1.  It will ask you about your business goal and table names.
+1.  It will run `bq show` to inspect the schemas.
+1.  It will propose the design and, upon your approval, generate the new
+    notebooks under `src/notebooks/`.
 
 ## Cleanup
 

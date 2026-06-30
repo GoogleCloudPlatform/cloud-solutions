@@ -29,7 +29,7 @@ WORKDIR /app
 COPY main.py /app/main.py
 
 # Install dependencies
-# - fastapi/uvicorn: Web server for Vertex AI
+# - fastapi/uvicorn: Web server for Gemini Enterprise Agent Platform
 # - google-cloud-storage: Download model artifacts from GCS
 # - numpy: For high-performance matrix math in the prediction loop
 # - pandas: For data manipulation (if needed, kept for compatibility)
@@ -41,7 +41,7 @@ RUN pip install --no-cache-dir --upgrade pip==26.1.2 && \
     numpy==2.2.6 \
     pandas==2.3.3
 
-# Expose port 8080 for Vertex AI routing
+# Expose port 8080 for Gemini Enterprise Agent Platform routing
 EXPOSE 8080
 
 # Run Uvicorn server bound to port 8080

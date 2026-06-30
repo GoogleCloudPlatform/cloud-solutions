@@ -13,8 +13,8 @@
 # limitations under the License.
 
 """
-Inference server for Vertex AI, serving a Spark ML model using pure
-Python/Numpy. This server loads model parameters from a JSON
+Inference server for Gemini Enterprise Agent Platform, serving a Spark ML model
+using pure Python/Numpy. This server loads model parameters from a JSON
 file and replicates the pipeline math.
 """
 
@@ -39,7 +39,7 @@ def download_model():
     """Downloads the Lean model JSON file from Cloud Storage to local disk."""
     global model_params
 
-    # Vertex AI injects the GCS URI where your model
+    # Gemini Enterprise Agent Platform injects the GCS URI where your model
     # artifacts live via this env var
     MODEL_ARTIFACT_DIR = os.environ.get("AIP_STORAGE_URI")
     logging.info(os.environ)
@@ -92,7 +92,7 @@ async def startup_event():
 
 @app.get("/health")
 def health_check():
-    """Vertex AI requirement: Return 200 OK to
+    """Gemini Enterprise Agent Platform requirement: Return 200 OK to
     indicate the container is live."""
     if model_params is not None:
         return {"status": "HEALTHY"}
@@ -102,8 +102,8 @@ def health_check():
 @app.post("/predict")
 async def predict(request: Request):
     """
-    Vertex AI requirement: Receive instances, score them using
-    pure Python/Numpy, and return predictions.
+    Gemini Enterprise Agent Platform requirement: Receive instances,
+    score them using pure Python/Numpy, and return predictions.
     Bypasses Spark/JVM runtime entirely.
     """
     if model_params is None:
