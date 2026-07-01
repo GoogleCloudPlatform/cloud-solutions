@@ -665,15 +665,15 @@ pytest==9.0.3 \
     --hash=sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9 \
     --hash=sha256:b86ada508af81d19edeb213c681b1d48246c1a91d304c6c81a427674c17eb91c
     # via locust
-python-engineio==4.13.1 \
-    --hash=sha256:0a853fcef52f5b345425d8c2b921ac85023a04dfcf75d7b74696c61e940fd066 \
-    --hash=sha256:f32ad10589859c11053ad7d9bb3c9695cdf862113bfb0d20bc4d890198287399
+python-engineio==4.13.2 \
+    --hash=sha256:8c101cd170e400dc4e970cd523325cde22df8fc25140953f379327055d701a6b \
+    --hash=sha256:a7732e99cfb7db6ed1aee31f18d7f73bbae086a92f31dee019bc646155d9684e
     # via
     #   locust
     #   python-socketio
-python-socketio[client]==5.16.1 \
-    --hash=sha256:a3eb1702e92aa2f2b5d3ba00261b61f062cce51f1cfb6900bf3ab4d1934d2d35 \
-    --hash=sha256:f863f98eacce81ceea2e742f6388e10ca3cdd0764be21d30d5196470edf5ea89
+python-socketio[client]==5.16.2 \
+    --hash=sha256:ad88c228d921646efa436c0a0df217e364ef30ec072df4041484e54d49c15989 \
+    --hash=sha256:bef2da3374fd533aed4297f57b4f6512b52aa51604cb0da2165f401291c5ca20
     # via locust
 pyzmq==27.1.0 \
     --hash=sha256:01c0e07d558b06a60773744ea6251f769cd79a41a97d11b8bf4ab8f034b0424d \
