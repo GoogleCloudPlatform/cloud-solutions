@@ -78,9 +78,6 @@ following:
 
 1.  Open the generated report with a web browser, such as Google Chrome.
 
-To review how the output looks like, see the sample report:
-`modernization-report-sample/third_party/codmod-full-report-dotnet-mod.html`.
-
 ## Modernize the .NET application using Gemini CLI
 
 1.  Change the working directory to the .NET application directory:

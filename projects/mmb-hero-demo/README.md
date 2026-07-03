@@ -702,9 +702,6 @@ following:
 
 1.  Open the generated report with a web browser, such as Google Chrome.
 
-To review how the output looks like, see the sample report:
-`modernization-report-sample/third_party/codmod-full-report-dotnet-mod.html`.
-
 #### Modernize the .NET application using Gemini CLI
 
 1.  Change the working directory to the .NET application directory:
@@ -1140,7 +1137,8 @@ requirements to code.
 For this demo, requirements are sent directly to the Gemini CLI.
 
 Alternatively, you can configure an Atlassian MCP server to pull requirements
-from JIRA/Confluence. Refer to this [page](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo#implement-features-with-gemini-cli)
+from JIRA/Confluence. Refer to this
+[page](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/build-with-gemini-demo#implement-features-with-gemini-cli)
 for detailed configuration steps.
 
 1.  Send prompt with the task requirements:
