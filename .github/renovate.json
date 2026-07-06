@@ -33,6 +33,10 @@
       "timeout": 60000
     },
     {
+      "hostType": "npm",
+      "timeout": 60000
+    },
+    {
       "hostType": "docker",
       "matchHost": "gcr.io",
       "username": "",
