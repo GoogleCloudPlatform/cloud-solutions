@@ -1,5 +1,5 @@
 #
-# Copyright 2024 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -58,13 +58,7 @@ copyright: |
 plugins:
   - search
   - gh-admonitions
-  - awesome-pages:
-      filename: .pages
-      collapse_single_pages: true
-      sort_type: natural
-      order: asc
-      order_by: title
-      ignore_case: true
+  - awesome-nav
   - mkdocstrings
   - mermaid2:
       # MERMAID_VERSION is replaced by current version in mkdocs.sh
@@ -109,6 +103,8 @@ validation:
     # the '/...' in nav config raises an absolute_links warning
     # so downgrade to info
     absolute_links: info
+    # Not all pages are supposed to be in the nav
+    omitted_files: info
 
 exclude_docs: |
   alloydb-autoscaler/

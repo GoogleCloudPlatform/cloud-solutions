@@ -1,5 +1,5 @@
 #
-# Copyright 2024 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -19,24 +19,26 @@
 # under the License.
 #
 
-## Markdown Extensions
-pymdown-extensions
-pygments
-mdx-breakless-lists
-
-## Mkdocs Plugins
-mkdocs
-mkdocs-get-deps
-mkdocs-material
-mkdocs-redirects
-mkdocstrings[python]
-mkdocs-awesome-nav
-mkdocs-mermaid2-plugin
-mkdocs-pagetree-plugin
-mkdocs-github-admonitions-plugin
-
-# dependencies needed for kokoro run
-typing_extensions
-importlib_metadata
-astunparse
-pytz
+title: Hybrid NEG controller for Kubernetes
+nav:
+  - "Overview": "index.md"
+  - use-cases.md
+  - user-guide.md
+  - network.md
+  - build.md
+  - Deployment:
+      - deploy-off-gcp.md
+      - deploy-eks.md
+      - deploy-aks.md
+      - deploy-gke.md
+      - deploy-kind.md
+  - troubleshoot.md
+  - limitations.md
+  - references.md
+flatten_single_child_sections: true
+sort:
+  by: title
+  direction: asc
+  ignore_case: true
+  sections: mixed
+  type: natural

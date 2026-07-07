@@ -62,7 +62,7 @@ mkdir -p "${BUILD_DIR}/docs"
 
 ## Setup common files and folders
 ln -sf "${DOCS_DIR}/index.md" "${BUILD_DIR}/docs/index.md"
-ln -sf "${DOCS_DIR}/.pages" "${BUILD_DIR}/docs/.pages"
+ln -sf "${DOCS_DIR}/.nav.yml" "${BUILD_DIR}/docs/.nav.yml"
 ln -sf "${DOCS_DIR}/google13f96ebf51862cf4.html" "${BUILD_DIR}/docs/google13f96ebf51862cf4.html"
 ln -sf "${DOCS_DIR}/common" "${BUILD_DIR}/docs/common"
 ln -sf "${DOCS_DIR}/stylesheets" "${BUILD_DIR}/docs/stylesheets"
@@ -83,7 +83,7 @@ for CURRENT_PROJECT_DIR in "${PROJECTS_DIR}"/*/; do
     # mkdocs will use index.md as index page
     #
     # Use find with included and excluded file and dir patterns
-    INCLUDED_FILES_ARGS=(-name "*.md" -o -name "*.png" -o -name "*.jpg" -o -name "*.svg" -o -name ".pages" -o -name "*.mp4")
+    INCLUDED_FILES_ARGS=(-name "*.md" -o -name "*.png" -o -name "*.jpg" -o -name "*.svg" -o -name ".nav.yml" -o -name "*.mp4")
     EXCLUDED_FILES_ARGS=(-iname "CHANGELOG*" -o -iname "LICENSE*" -o -iname "CONTRIBUTING*")
     EXCLUDED_DIRS_ARGS=(-path "*/node_modules/*" -o -path "*/build/*" -o -path "*/venv/*" -o -path "*/.*/*")
     readarray -t files_to_link < <(

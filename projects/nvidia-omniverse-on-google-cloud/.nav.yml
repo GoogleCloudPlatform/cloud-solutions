@@ -1,5 +1,5 @@
 #
-# Copyright 2024 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -19,24 +19,16 @@
 # under the License.
 #
 
-## Markdown Extensions
-pymdown-extensions
-pygments
-mdx-breakless-lists
-
-## Mkdocs Plugins
-mkdocs
-mkdocs-get-deps
-mkdocs-material
-mkdocs-redirects
-mkdocstrings[python]
-mkdocs-awesome-nav
-mkdocs-mermaid2-plugin
-mkdocs-pagetree-plugin
-mkdocs-github-admonitions-plugin
-
-# dependencies needed for kokoro run
-typing_extensions
-importlib_metadata
-astunparse
-pytz
+title: NVIDIA Omniverse on Google Cloud
+nav:
+  - README.md
+  - "Configure GKE for NVIDIA Omniverse": "nvidia-omniverse-on-google-cloud/gke-base-platform/README.md"
+  - "Deploy NVIDIA Omniverse Kit App Streaming applications on Google Cloud": "nvidia-omniverse-on-google-cloud/kit-app-streaming/README.md"
+  - "Deploy NVIDIA Omniverse Farm on Google Cloud": "nvidia-omniverse-on-google-cloud/omniverse-farm/README.md"
+flatten_single_child_sections: true
+sort:
+  by: title
+  direction: asc
+  ignore_case: true
+  sections: mixed
+  type: natural

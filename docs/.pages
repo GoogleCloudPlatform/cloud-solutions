@@ -1,4 +1,0 @@
-nav:
-  - "Home": index.md
-  - ...
-order_by: title
