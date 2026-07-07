@@ -28,17 +28,17 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jasmine": "^6.0.0",
-    "@types/node": "^20.19.33",
-    "jasmine": "^6.0.0",
+    "@types/node": "^20.19.43",
+    "jasmine": "^6.3.0",
     "jasmine-console-reporter": "^3.1.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@google-cloud/logging": "^11.2.1",
+    "@google-cloud/logging": "^11.2.3",
     "eventid": "^2.0.1",
     "pino": "^10.3.1"
   },
   "engines": {
-    "node": ">=20.20.0"
+    "node": ">=20.20.2"
   }
 }
