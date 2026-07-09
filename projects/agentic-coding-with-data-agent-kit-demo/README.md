@@ -15,13 +15,13 @@ to complex, multi-agent systems orchestrated by reasoning models, allowing
 developers to focus on high-level technical intent while the agent handles
 operational heavy lifting.
 
-The Google Cloud Data Agent Kit (Data Agent Kit) and the Antigravity IDE
-provide a unified interface for interacting with your data. This integration
-allows you to connect to databases, explore schemas, and execute advanced SQL
-or GraphQL queries directly within the IDE's catalog view. By leveraging
-built-in skills, such as automated database provisioning, you can configure
-your infrastructure in real-time, enabling you to build intelligent
-applications without leaving your IDE environment.
+The Google Cloud Data Agent Kit (Data Agent Kit) and the Antigravity IDE provide
+a unified interface for interacting with your data. This integration allows you
+to connect to databases, explore schemas, and execute advanced SQL or GraphQL
+queries directly within the IDE's catalog view. By leveraging built-in skills,
+such as automated database provisioning, you can configure your infrastructure
+in real-time, enabling you to build intelligent applications without leaving
+your IDE environment.
 
 **Why this matters for Productivity:**
 
@@ -394,9 +394,10 @@ Follow these steps to execute the generated query and explore the data:
     the editor menu bar) to execute the query.
 
 > [!NOTE]
-> If the query editor is not pointing to the correct database, you can
-> configure it by clicking the **Open Spanner Query Settings** button next to the
-> **Run Query** button.
+>
+> If the query editor is not pointing to the correct database, you can configure
+> it by clicking the **Open Spanner Query Settings** button next to the **Run
+> Query** button.
 
 Visualize the results of the query execution in the bottom pane, for example for
 the Causes table:
@@ -473,9 +474,10 @@ Ensure all frontend source code is organized within a specific frontend/ directo
 ```
 
 > [!NOTE]
-> Once the frontend service is initialized, the agent will typically output
-> the local server URL (e.g., `http://localhost:5173`). Make a note of this
-> URL, as you will need it to access the application manually in later steps.
+>
+> Once the frontend service is initialized, the agent will typically output the
+> local server URL (e.g., `http://localhost:5173`). Make a note of this URL, as
+> you will need it to access the application manually in later steps.
 
 **Demo Prompt** \- Automated UI Validation:
 

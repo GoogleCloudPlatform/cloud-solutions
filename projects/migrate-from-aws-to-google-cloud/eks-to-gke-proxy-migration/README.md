@@ -119,12 +119,11 @@ Provision the EKS cluster and deploy the application behind an Application Load
 Balancer (ALB).
 
 > [!NOTE]
-> **Local-only hostname**
 >
-> `proxy-demo.test` is a local-only hostname used throughout this tutorial
-> as a stand-in for a real production domain. It is resolved within Docker
-> containers using the `--add-host` feature, allowing you to test the
-> migration without modifying your host's DNS settings.
+> **Local-only hostname**: `proxy-demo.test` is a local-only hostname used
+> throughout this tutorial as a stand-in for a real production domain. It is
+> resolved within Docker containers using the `--add-host` feature, allowing you
+> to test the migration without modifying your host's DNS settings.
 
 1.  Configure the AWS CLI with credentials that have permissions to create EKS
     clusters and IAM roles:
@@ -269,8 +268,8 @@ describes several approaches for traffic shifting, including:
 - Hybrid connectivity NEGs with Cloud Load Balancing
 - A proxy with Cloud Service Mesh.
 
-This guide uses a GKE Gateway with HTTPRoute, which provides
-weighted traffic splitting.
+This guide uses a GKE Gateway with HTTPRoute, which provides weighted traffic
+splitting.
 
 ### Deploy your workloads
 

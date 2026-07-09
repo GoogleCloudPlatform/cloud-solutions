@@ -22,9 +22,10 @@ To deploy this demo, you need:
 - **Python 3.9+ & pip**: Required to run the
   [k8s discovery tool](https://github.com/GoogleCloudPlatform/professional-services/tree/main/tools/k8s-discovery#1-system-requirements)
 
-> [!CAUTION] **Use a local environment.** Cloud Shell's 5GB disk limit is
-> insufficient, and its ephemeral sessions will clear your environment variables
-> upon timeout.
+> [!CAUTION]
+>
+> **Use a local environment.**: Cloud Shell's 5GB disk limit is insufficient,
+> and its ephemeral sessions will clear your environment variables upon timeout.
 
 ### AWS Permissions
 

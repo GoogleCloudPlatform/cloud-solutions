@@ -90,9 +90,8 @@ To run this demo, you need the following:
     - `jq` for testing
 
 > [!NOTE]
-> **Gemini Pro model**
 >
-> This demo uses the latest Gemini Pro model.
+> **Gemini Pro model**: This demo uses the latest Gemini Pro model.
 
 ## Set up your environment and workspace
 
@@ -434,8 +433,7 @@ In this section, you use the
 to automatically test the microservices through the Swagger UI. The agent opens
 the browser, clicks the endpoints, and verifies the responses.
 
-> [!NOTE]
-> **Prerequisite: Enable the Browser Agent**
+> [!NOTE] **Prerequisite: Enable the Browser Agent**
 >
 > The Browser Agent is experimental and disabled by default. Ensure it is
 > enabled in your `settings.json` before proceeding:
@@ -615,10 +613,9 @@ For demonstration purposes, the basic `Owner` role (`roles/owner`) is
 sufficient.
 
 > [!NOTE]
-> **Production environment**
 >
-> In a production environment, always adhere to the principle of
-> least privilege.
+> **Production environment**: In a production environment, always adhere to the
+> principle of least privilege.
 
 ### Execute Terraform scripts to provision GKE and database resources
 
@@ -864,10 +861,9 @@ terraform -chdir=terraform destroy
 ```
 
 > [!NOTE]
-> **Confirming resource deletion**
 >
-> Review the resources that Terraform plans to delete. When prompted, enter
-> `yes` to confirm and proceed with the deletion.
+> **Confirming resource deletion**: Review the resources that Terraform plans to
+> delete. When prompted, enter `yes` to confirm and proceed with the deletion.
 
 ## What's next
 

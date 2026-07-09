@@ -95,6 +95,7 @@ This section shows you how to deploy the example application by using Terraform.
     Make note of this URL, you'll need it later.
 
 > [!NOTE]
+>
 > If you haven't used Artifact Registry before, the command might fail with the
 > following error:
 >

@@ -25,9 +25,8 @@ Follow these steps to run the demo:
 1.  **Test the application** - Verify the application on GKE.
 
 > [!NOTE]
-> **Gemini Pro model**
 >
-> This demo uses the latest Gemini Pro model.
+> **Gemini Pro model**: This demo uses the latest Gemini Pro model.
 
 ## Requirements
 
@@ -58,10 +57,9 @@ For infrastructure provisioning and deployment:
       roles to service accounts.
 
 > [!NOTE]
-> **Production environment**
 >
-> In a production environment, always adhere to the principle of
-> least privilege.
+> **Production environment**: In a production environment, always adhere to the
+> principle of least privilege.
 
 ## Set up your environment and workspace
 
@@ -378,10 +376,9 @@ Leave the Gemini CLI terminal running, and open a new terminal in your shell:
     ```
 
 > [!NOTE]
-> **Terraform backend**
 >
-> This demo uses a local Terraform backend. In a production environment, we
-> recommend that you configure a
+> **Terraform backend**: This demo uses a local Terraform backend. In a
+> production environment, we recommend that you configure a
 > [remote backend on Cloud Storage](https://docs.cloud.google.com/docs/terraform/resource-management/store-state).
 
 ## Build container images
@@ -607,10 +604,9 @@ terraform -chdir=terraform destroy
 ```
 
 > [!NOTE]
-> **Confirming resource deletion**
 >
-> Review the resources that Terraform plans to delete. When prompted, enter
-> `yes` to confirm and proceed with the deletion.
+> **Confirming resource deletion**: Review the resources that Terraform plans to
+> delete. When prompted, enter `yes` to confirm and proceed with the deletion.
 
 ## What's next
 

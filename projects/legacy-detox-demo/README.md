@@ -218,7 +218,9 @@ cd terraform
 terraform destroy
 ```
 
-> [!NOTE] `terraform destroy` will stop and remove the notebooks runtime, but as
-> this operation is async, sometimes the `destroy` will fail. You can remove the
+> [!NOTE]
+>
+> `terraform destroy` will stop and remove the notebooks runtime, but as this
+> operation is async, sometimes the `destroy` will fail. You can remove the
 > runtime manually, through the Google Cloud Console, under **Colab Enterprise**
 > -> **Runtimes**, and try again.
