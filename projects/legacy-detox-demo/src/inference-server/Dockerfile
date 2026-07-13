@@ -25,21 +25,14 @@ ENV PYTHONUNBUFFERED=1 \
 # Set up work directory
 WORKDIR /app
 
-# Copy application files
-COPY main.py /app/main.py
+# Copy requirements file
+COPY requirements.txt /app/requirements.txt
 
 # Install dependencies
-# - fastapi/uvicorn: Web server for Gemini Enterprise Agent Platform
-# - google-cloud-storage: Download model artifacts from GCS
-# - numpy: For high-performance matrix math in the prediction loop
-# - pandas: For data manipulation (if needed, kept for compatibility)
-RUN pip install --no-cache-dir --upgrade pip==26.1.2 && \
-    pip install --no-cache-dir \
-    fastapi==0.137.2 \
-    uvicorn==0.49.0 \
-    google-cloud-storage==3.12.0 \
-    numpy==2.2.6 \
-    pandas==2.3.3
+RUN pip install --no-cache-dir --require-hashes -r /app/requirements.txt
+
+# Copy application files
+COPY main.py /app/main.py
 
 # Expose port 8080 for Gemini Enterprise Agent Platform routing
 EXPOSE 8080
