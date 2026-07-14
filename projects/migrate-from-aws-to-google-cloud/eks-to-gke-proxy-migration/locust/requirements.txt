@@ -235,9 +235,9 @@ charset-normalizer==3.4.4 \
     --hash=sha256:faa3a41b2b66b6e50f84ae4a68c64fcd0c44355741c6374813a800cd6695db9e \
     --hash=sha256:fd44c878ea55ba351104cb93cc85e74916eb8fa440ca7903e57575e97394f608
     # via requests
-click==8.3.3 \
-    --hash=sha256:398329ad4837b2ff7cbe1dd166a4c0f8900c3ca3a218de04466f38f6497f18a2 \
-    --hash=sha256:a2bf429bb3033c89fa4936ffb35d5cb471e3719e1f3c8a7c3fff0b8314305613
+click==8.4.0 \
+    --hash=sha256:40c50b7c6c6adac2823d411041ec84f3f103f1b280d5e9ce0d7f998995832f81 \
+    --hash=sha256:638f1338fe1235c8f4e008e4a8a254fb5c5fbdcbb40ece3c9142ebb78e792973
     # via flask
 configargparse==1.7.1 \
     --hash=sha256:79c2ddae836a1e5914b71d58e4b9adbd9f7779d4e6351a637b7d2d9b6c46d3d9 \
