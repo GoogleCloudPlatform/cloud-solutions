@@ -5,4 +5,4 @@ google-api-python-client==2.194.0
 google-cloud-aiplatform==1.147.0
 google-cloud-logging==3.15.0
 rapidfuzz==3.14.5
-pillow==12.2.0
+pillow==12.3.0
