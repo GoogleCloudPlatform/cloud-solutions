@@ -19,7 +19,7 @@ dependencies = [
     "moviepy==2.2.1",
     "google-cloud-texttospeech==2.33.0",
     "soundfile==0.13.1",
-    "aiohttp==3.13.4",
+    "aiohttp==3.14.1",
     "adk_common @ {root:uri}/../adk_common",
     "requests==2.33.1",
     "Pillow",
