@@ -356,7 +356,7 @@ func (r *serviceReconciler) handleDelete(ctx context.Context, logger logr.Logger
 }
 
 // finalize parses the hybrid NEG status annotation on the Service and uses the NEG names and
-// zones in the annoation value to request deletion of the hybrid NEGs associated to the Service.
+// zones in the annotation value to request deletion of the hybrid NEGs associated to the Service.
 //
 // This method returns an error if either of the following happens:
 // - There is a problem parsing the hybrid NEG status annotation value.

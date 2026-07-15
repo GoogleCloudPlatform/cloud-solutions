@@ -1,5 +1,6 @@
-apache-beam[gcp]==2.70.0
-apache-beam[tfrecord]==2.70.0
-pandas <3.0.0
-orjson > 3.11.4
-protobuf > 6.33.4
+apache-beam[gcp,dataframe]==2.74.0
+apache-beam[tfrecord]==2.74.0
+pandas
+orjson
+protobuf
+pyarrow==23.0.1

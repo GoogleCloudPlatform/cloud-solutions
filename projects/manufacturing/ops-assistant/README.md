@@ -119,8 +119,10 @@ the root directory of the project:
 uv sync
 ```
 
-> [!NOTE] Dependencies are declared and managed in `pyproject.toml` and pinned
-> in the lockfile `uv.lock`.
+> [!NOTE]
+>
+> Dependencies are declared and managed in `pyproject.toml` and pinned in the
+> lockfile `uv.lock`.
 
 ### 3. Environment Configuration (.env)
 

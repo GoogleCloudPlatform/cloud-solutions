@@ -1,0 +1,67 @@
+{
+  "name": "ffee07b4-9c96-4943-a97b-1a56b38fa91f",
+  "actions": [
+    {
+      "userUtterance": {
+        "text": "I am logging in as the CFO."
+      }
+    },
+    {
+      "agentUtterance": {
+        "text": "Welcome! It's great to have you here. Since you're logged in as the CFO, I've tailored my tools for your executive workflow. I can help you review transactions currently on hold or perform a secure vector search against the Oracle@Google Cloud Master Service Agreement. How can I assist you today?"
+      }
+    },
+    {
+      "userUtterance": {
+        "text": "What are the penalties for missing the SLA in the Google Cloud contract?"
+      }
+    },
+    {
+      "toolUse": {
+        "tool": "Oracle_FinOps_MCP",
+        "action": "execute_mcp_tool",
+        "inputActionParameters": {
+          "requestBody": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "method": "tools/call",
+            "params": {
+              "arguments": {
+                "query": "SLA miss penalties"
+              },
+              "name": "search_vendor_contract"
+            }
+          }
+        },
+        "outputActionParameters": {
+          "200": {
+            "id": "1",
+            "jsonrpc": "2.0",
+            "result": {
+              "content": [
+                {
+                  "text": "Section 4.2: Any failure to maintain 99.99% uptime targets for consecutive quarters results in a 15% service credit refund.",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "agentUtterance": {
+        "text": "Based on the Google Cloud Master Service Agreement, Section 4.2 states that any failure to maintain our 99.99% uptime target for consecutive quarters results in a 15% service credit refund."
+      }
+    }
+  ],
+  "playbookOutput": {
+    "executionSummary": "CFO logged in and audited Google Cloud SLA penalties successfully.",
+    "actionParameters": {}
+  },
+  "displayName": "Example 1: CFO Login \u0026 Contract Query",
+  "retrievalStrategy": "DEFAULT",
+  "tokenCount": 406,
+  "conversationState": "OUTPUT_STATE_OK",
+  "languageCode": "en"
+}

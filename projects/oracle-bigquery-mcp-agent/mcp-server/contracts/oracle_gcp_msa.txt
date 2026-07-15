@@ -1,0 +1,10 @@
+Oracle@GCP Cloud Partnership Master Service Agreement (MSA v12.1)
+------------------------------------------------------------------
+Section 4.2: Service Level Agreement (SLA) & Performance Targets
+Google Cloud and Oracle commit to providing a 99.99% uptime target for the co-located database services. In the event that database service availability falls below 99.99% for consecutive fiscal quarters, the Customer is entitled to a 15% service credit refund on all database virtual core licenses billed during that quarter.
+
+Section 6.1: Billing Tiers & Enterprise Core Licensing Discounts
+Under the Enterprise Tier-3 Volume Discount program, the Customer secures a flat 22% discount on standard virtual core licensing. Support tier includes Platinum 24/7/365 SRE dedicated technical response.
+
+Section 8.4: Termination, Convenience Exit, & Licensing Refunds
+Either party may terminate this agreement for convenience with a 90-day written notice. If Google Cloud terminates the agreement for convenience, all unused pre-paid database licensing credits must be fully refunded to the Customer within 30 business days.

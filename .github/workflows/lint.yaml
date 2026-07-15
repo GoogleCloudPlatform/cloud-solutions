@@ -59,7 +59,7 @@ jobs:
         # Ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-environment-variable
         run: grep -v '^#' config/lint/super-linter.env >> "$GITHUB_ENV"
       - name: Super-Linter
-        uses: super-linter/super-linter@v8.6.0
+        uses: super-linter/super-linter@v8.7.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main

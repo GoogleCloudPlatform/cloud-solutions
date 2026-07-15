@@ -16,7 +16,7 @@ architecture and development. Your task is to generate the source code and test
 data to populate the application for a legacy application that will be used in
 migration and modernization demos. The legacy application should also rely on a
 PostgreSQL database for persistence. Generate sample data to populate the
-databaase. Include a legacy UI that looks dated. Generate visuals with an image
+database. Include a legacy UI that looks dated. Generate visuals with an image
 generation tool, such as Nano Banana, if available.
 
 ## Requirements and Workflow

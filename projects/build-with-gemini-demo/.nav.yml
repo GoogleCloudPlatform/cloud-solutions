@@ -1,0 +1,45 @@
+#
+# Copyright 2026 Google LLC
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+title: Accelerate software development with Gemini
+
+nav:
+  - "Accelerate software development with Gemini": "README.md"
+  - "Agentic development with Antigravity": "build-with-gemini-demo/agentic-development-with-antigravity/README.md"
+  - "Agentic development with Gemini CLI": "build-with-gemini-demo/agentic-development-with-gemini-cli/README.md"
+  - "Automating UI tests with Playwright & Gemini CLI": "build-with-gemini-demo/automating-ui-tests/README.md"
+  - "Automated code reviews with Gemini CLI": "build-with-gemini-demo/automated-code-reviews-with-gemini-cli/README.md"
+  - "Build with Antigravity": "build-with-gemini-demo/build-with-antigravity/README.md"
+  - "Interactive code reviews with Gemini CLI": "build-with-gemini-demo/local-code-review/README.md"
+  - "Implementing UI changes with Gemini CLI": "build-with-gemini-demo/ui-changes-implementation/README.md"
+  - "Parallel Feature Development with Gemini CLI": "build-with-gemini-demo/parallel-feature-development/README.md"
+  - "Prototype ADK Agents with Gemini CLI": "build-with-gemini-demo/prototype-adk-agent-with-gemini-cli/README.md"
+  - "Prototype with Gemini CLI Custom Commands": "build-with-gemini-demo/prototype-with-gemini-cli/README.md"
+  - "Prototype with the Gemini CLI Conductor Extension": "build-with-gemini-demo/prototype-with-gemini-cli-conductor/README.md"
+  - "Scanning and fixing security issues with Gemini CLI and Snyk": "build-with-gemini-demo/security-scan-fix/README.md"
+
+flatten_single_child_sections: true
+sort:
+  by: title
+  direction: asc
+  ignore_case: true
+  sections: mixed
+  type: natural

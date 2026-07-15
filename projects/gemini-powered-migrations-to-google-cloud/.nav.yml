@@ -1,0 +1,39 @@
+#
+# Copyright 2026 Google LLC
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+title: Gemini-powered migrations to Google Cloud
+
+nav:
+  - "Overview": "README.md"
+  - Examples:
+      - "Amazon EKS container migration analysis": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-container-migration-analysis.md"
+      - "Amazon Lambda function selection plan": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-lambda-to-cloud-run-poc-plan.md"
+      - "Amazon S3 bucket selection": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-s3-poc-selection-us-east.md"
+      - "Amazon S3 migration analysis": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/aws-s3-migration-analysis.md"
+      - "Azure Blob Storage container selection": "gemini-powered-migrations-to-google-cloud/test-data/sample-selection/azure-blob-poc-selection-us-east.md"
+
+flatten_single_child_sections: true
+sort:
+  by: title
+  direction: asc
+  ignore_case: true
+  sections: mixed
+  type: natural

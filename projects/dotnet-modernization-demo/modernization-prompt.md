@@ -210,7 +210,7 @@ Perform an automated UI smoke test using the Chrome DevTools MCP tools
 (new_page, click, take_screenshot, etc.) to validate the frontend:
 
 - Follow all links to views
-- Exexute CRUD tests in views
+- Run CRUD tests in views
 - Validate pagination and sorting functionality
 - Make sure there are no missing resources that result in 404 errors, such as
   CSS files, JavaScript files, images, and any other media file.

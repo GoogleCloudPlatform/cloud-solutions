@@ -1516,7 +1516,7 @@ specific workloads such as:
   good integration with
   [Cloud SQL](https://cloud.google.com/bigquery/docs/connect-to-sql) and
   [AlloyDB](https://cloud.google.com/bigquery/docs/connect-to-alloydb).
-- **Azure Analysis Services (AAS) -** consider migrating to
+- **Azure Analysis Services** - consider migrating to
   [BigQuery BI Engine](https://cloud.google.com/bigquery/docs/bi-engine-intro)
   and Looker.
 - **SQL Server Master Data Services (MDS)** running on Azure VM - Continue to

@@ -1,0 +1,9 @@
+{
+  "name": "aae0e52e-6b4d-48be-9529-33b0707c5627",
+  "displayName": "Oracle_FinOps_MCP",
+  "description": "Direct integration to the Oracle database for financial auditing, updating ledger statuses, and DBA health checks.",
+  "openApiSpec": {
+    "ignoreUnknownFields": true
+  },
+  "toolType": "CUSTOMIZED_TOOL"
+}

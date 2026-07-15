@@ -1,7 +1,5 @@
 # Deployment
 
-<!-- markdownlint-disable MD046-->
-
 This document describes how you can deploy the
 [Confidential AI Model Serving](../README.md) in a Google Cloud project by using
 Terraform.
@@ -96,22 +94,23 @@ This section shows you how to deploy the example application by using Terraform.
 
     Make note of this URL, you'll need it later.
 
-    !!! note
-
-        If you haven't used Artifact Registry before, the command might fail with the following error:
-
-        ```text
-        denied: Unauthenticated request. Unauthenticated requests do not have permission
-        "artifactregistry.repositories.uploadArtifacts" on resource
-        ```
-
-        You can fix this error by running the following command:
-
-        ```sh
-        gcloud auth configure-docker $REGION-docker.pkg.dev
-        ```
-
-        Then re-run `terraform apply`.
+> [!NOTE]
+>
+> If you haven't used Artifact Registry before, the command might fail with the
+> following error:
+>
+> ```text
+> denied: Unauthenticated request. Unauthenticated requests do not have permission
+> "artifactregistry.repositories.uploadArtifacts" on resource
+> ```
+>
+> You can fix this error by running the following command:
+>
+> ```sh
+> gcloud auth configure-docker $REGION-docker.pkg.dev
+> ```
+>
+> Then re-run `terraform apply`.
 
 ## Test the deployment
 

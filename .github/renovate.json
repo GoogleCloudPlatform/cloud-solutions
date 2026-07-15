@@ -33,6 +33,10 @@
       "timeout": 60000
     },
     {
+      "hostType": "npm",
+      "timeout": 60000
+    },
+    {
       "hostType": "docker",
       "matchHost": "gcr.io",
       "username": "",
@@ -220,6 +224,12 @@
       "additionalBranchPrefix": "generative-media-shot-production-"
     },
     {
+      "matchFileNames": ["projects/gke-migration-agent/**"],
+      "groupName": "gke-migration-agent",
+      "commitMessagePrefix": "chore(deps): [gke-migration-agent]",
+      "additionalBranchPrefix": "gke-migration-agent-"
+    },
+    {
       "matchFileNames": ["projects/gke-optimization/**"],
       "groupName": "gke-optimization",
       "commitMessagePrefix": "chore(deps): [gke-optimization]",
@@ -304,6 +314,12 @@
       "additionalBranchPrefix": "migrate-nutanix-to-google-cloud-"
     },
     {
+      "matchFileNames": ["projects/migrate-vmware-to-gce/**"],
+      "groupName": "migrate-vmware-to-gce",
+      "commitMessagePrefix": "chore(deps): [migrate-vmware-to-gce]",
+      "additionalBranchPrefix": "migrate-vmware-to-gce-"
+    },
+    {
       "matchFileNames": ["projects/mmb-datacloud/**"],
       "groupName": "mmb-datacloud",
       "commitMessagePrefix": "chore(deps): [mmb-datacloud]",
@@ -325,6 +341,12 @@
       "matchFileNames": ["projects/operational-ai-leap/**"],
       "groupName": "operational-ai-leap",
       "commitMessagePrefix": "chore(deps): [operational-ai-leap]"
+    },
+    {
+      "matchFileNames": ["projects/oracle-bigquery-mcp-agent/**"],
+      "groupName": "oracle-bigquery-mcp-agent",
+      "commitMessagePrefix": "chore(deps): [oracle-bigquery-mcp-agent]",
+      "additionalBranchPrefix": "oracle-bigquery-mcp-agent-"
     },
     {
       "matchFileNames": ["projects/pino-logging-gcp-config/**"],

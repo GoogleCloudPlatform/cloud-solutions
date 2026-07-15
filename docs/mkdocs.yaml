@@ -1,5 +1,5 @@
 #
-# Copyright 2024 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -57,17 +57,18 @@ copyright: |
   <a href='https://cloud.google.com/'><img src='https://googlecloudplatform.github.io/cloud-solutions/common/images/cloud.svg' width='240' height='160'/></a>
 plugins:
   - search
-  - awesome-pages:
-      filename: .pages
-      collapse_single_pages: true
+  - gh-admonitions
+  - awesome-nav
   - mkdocstrings
   - mermaid2:
       # MERMAID_VERSION is replaced by current version in mkdocs.sh
       version: MERMAID_VERSION
+  - pagetree
 markdown_extensions:
   - admonition
   - attr_list
   - fenced_code
+  - mdx_breakless_lists
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.emoji:
@@ -83,7 +84,7 @@ markdown_extensions:
       line_spans: __span
       anchor_linenums: true
   - pymdownx.superfences:
-        # make exceptions to highlighting of code:
+      # make exceptions to highlighting of code:
       custom_fences:
         - name: mermaid
           class: mermaid
@@ -91,7 +92,6 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - toc:
       permalink: true
-
 not_in_nav: |
   /google13f96ebf51862cf4.html
 validation:
@@ -103,6 +103,8 @@ validation:
     # the '/...' in nav config raises an absolute_links warning
     # so downgrade to info
     absolute_links: info
+    # Not all pages are supposed to be in the nav
+    omitted_files: info
 
 exclude_docs: |
   alloydb-autoscaler/

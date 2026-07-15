@@ -23,5 +23,5 @@ To deploy NVIDIA Omniverse Farm on the GKE cluster, see
 
 ## What's next
 
-- Develop NVIDIA RTX applications on
-  [NVIDIA RTX Virtual Workstations on Google Cloud](../README.md#nvidia-rtx-virtual-workstations).
+- Develop NVIDIA Omniverse applications on
+  [NVIDIA Omniverse Development Workstations on Google Cloud](../README.md#nvidia-omniverse-workstations).

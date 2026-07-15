@@ -1,0 +1,25 @@
+{
+  "displayName": "FinAgent",
+  "defaultLanguageCode": "en",
+  "timeZone": "America/Chicago",
+  "speechToTextSettings": {},
+  "advancedSettings": {
+    "audioExportGcsDestination": {},
+    "speechSettings": {
+      "endpointerSensitivity": 90,
+      "noSpeechTimeout": {
+        "seconds": 5
+      }
+    },
+    "playbackInterruptionSettings": {},
+    "loggingSettings": {},
+    "speechAdaptationSettings": {}
+  },
+  "speakerIdSettings": {},
+  "duplexSettings": {},
+  "answerFeedbackSettings": {},
+  "startPlaybook": "Default Generative Playbook",
+  "webClientSettings": {
+    "boxBorderRadius": "0"
+  }
+}

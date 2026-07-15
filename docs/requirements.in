@@ -22,6 +22,7 @@
 ## Markdown Extensions
 pymdown-extensions
 pygments
+mdx-breakless-lists
 
 ## Mkdocs Plugins
 mkdocs
@@ -29,8 +30,10 @@ mkdocs-get-deps
 mkdocs-material
 mkdocs-redirects
 mkdocstrings[python]
-mkdocs-awesome-pages-plugin
+mkdocs-awesome-nav
 mkdocs-mermaid2-plugin
+mkdocs-pagetree-plugin
+mkdocs-github-admonitions-plugin
 
 # dependencies needed for kokoro run
 typing_extensions

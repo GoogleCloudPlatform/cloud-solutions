@@ -55,7 +55,18 @@ updates:
 
   - package-ecosystem: "pip"
     directories:
-      - "**/*"
+      - "/docs"
+      - "/projects/ai/agents/examples/deep-search"
+      - "/projects/ai/gen-media/ads-agent/release1/ads_agent"
+      - "/projects/ai/gen-media/ads-agent/release2/ads_agent"
+      - "/projects/ai/gen-media/experimental/genmedia_marketing_solution"
+      - "/projects/ai/gen-media/experimental/GetReadywithMe"
+      - "/projects/ai/gen-media/notebooks/product-recontext"
+      - "/projects/ai/gen-media/notebooks/vto_scale_workflow"
+      - "/projects/dataflow-gcs-to-alloydb"
+      - "/projects/migrate-from-aws-to-google-cloud/eks-to-gke-proxy-migration/locust"
+      - "/projects/migrate-from-aws-to-google-cloud/vm-compute-db-modernization/scripts"
+      - "/projects/oracle-bigquery-mcp-agent/mcp-server"
     schedule:
       interval: "daily"
     multi-ecosystem-group: "all-security-updates"
@@ -64,7 +75,16 @@ updates:
 
   - package-ecosystem: "uv"
     directories:
-      - "**/*"
+      - "/projects/ai/agents/examples/deep-search"
+      - "/projects/ai/agents/examples/starter-chat-agent"
+      - "/projects/ai/agents/examples/starter-genmedia-agent"
+      - "/projects/ai/agents/examples/starter-rag-agent"
+      - "/projects/ai/gen-media/ads-agent/release1/adk_common"
+      - "/projects/ai/gen-media/ads-agent/release1/marketing_agent"
+      - "/projects/ai/gen-media/ads-agent/release2/adk_common"
+      - "/projects/ai/gen-media/ads-agent/release2/marketing_agent"
+      - "/projects/manufacturing/ops-assistant"
+      - "/projects/manufacturing/tech-assistant"
     schedule:
       interval: "daily"
     multi-ecosystem-group: "all-security-updates"

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FynanceAI Enterprise Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/google-sans');
+        body { font-family: 'Google Sans', sans-serif !important; }
+
+        /* Floating Background Aura Animations */
+        @keyframes float-1 { 0%, 100% { transform: translate(-50%, -25%) scale(1); } 50% { transform: translate(-45%, -20%) scale(1.05); } }
+        @keyframes float-2 { 0%, 100% { transform: translate(33%, -50%) scale(1); } 50% { transform: translate(28%, -45%) scale(1.1); } }
+        @keyframes float-3 { 0%, 100% { transform: translate(25%, 33%) scale(1); } 50% { transform: translate(30%, 38%) scale(1.05); } }
+        @keyframes float-4 { 0%, 100% { transform: translate(-33%, 25%) scale(1); } 50% { transform: translate(-38%, 20%) scale(1.1); } }
+
+        .animate-float-1 { animation: float-1 12s ease-in-out infinite; }
+        .animate-float-2 { animation: float-2 15s ease-in-out infinite alternate; }
+        .animate-float-3 { animation: float-3 18s ease-in-out infinite; }
+        .animate-float-4 { animation: float-4 14s ease-in-out infinite alternate; }
+
+        .hidden-view { display: none !important; }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800 font-sans pb-24 h-screen overflow-y-auto relative">
+    <!-- Background Aura -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none flex justify-center items-center">
+        <div class="absolute w-[500px] h-[500px] bg-[#4285F4] rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-float-1"></div>
+        <div class="absolute w-[400px] h-[400px] bg-[#EA4335] rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-float-2"></div>
+        <div class="absolute w-[600px] h-[600px] bg-[#FBBC05] rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-float-3"></div>
+        <div class="absolute w-[450px] h-[450px] bg-[#34A853] rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-float-4"></div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="h-full flex flex-col items-center justify-center relative z-10">
+        <div class="relative bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-lg text-center overflow-hidden border border-gray-100">
+            <div class="flex h-2 w-full">
+                <div class="w-1/4 bg-[#4285F4]"></div><div class="w-1/4 bg-[#EA4335]"></div>
+                <div class="w-1/4 bg-[#FBBC05]"></div><div class="w-1/4 bg-[#34A853]"></div>
+            </div>
+            <!-- Updated Footer on Login Screen -->
+             <div class="mt-8 text-sm font-medium tracking-wide">
+                Powered by
+                <span class="text-[#4285F4]">G</span><span class="text-[#EA4335]">e</span><span class="text-[#FBBC05]">m</span><span class="text-[#4285F4]">i</span><span class="text-[#34A853]">n</span><span class="text-[#EA4335]">i</span>
+                <span class="text-gray-600">Enterprise</span>
+            </div>
+            <div class="p-10 pb-12">
+                <h2 class="text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">FynanceAI</h2>
+                <p class="text-gray-500 mb-10 font-medium">Select your workspace persona to Sign in</p>
+                <div class="flex flex-col gap-5">
+                    <button onclick="login('FinOps')" class="w-full flex items-center justify-between px-6 py-4 border-2 border-gray-100 rounded-xl hover:border-[#4285F4] transition-all">
+                        <div class="flex items-center gap-4"><span class="text-3xl">📊</span><span class="font-bold">Finance Ops</span></div>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    <button onclick="login('CFO')" class="w-full flex items-center justify-between px-6 py-4 border-2 border-gray-100 rounded-xl hover:border-[#34A853] transition-all">
+                        <div class="flex items-center gap-4"><span class="text-3xl">💼</span><span class="font-bold">CFO / Executive</span></div>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    <button onclick="login('DBA')" class="w-full flex items-center justify-between px-6 py-4 border-2 border-gray-100 rounded-xl hover:border-[#EA4335] transition-all">
+                        <div class="flex items-center gap-4"><span class="text-3xl">⚙️</span><span class="font-bold">DBRE / SRE</span></div>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="app-screen" class="hidden-view max-w-6xl mx-auto mt-10 px-4 relative z-10">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <div><h1 id="portal-title" class="text-3xl font-bold">Welcome</h1><p id="portal-subtitle" class="text-gray-500 mt-1">Enterprise FynanceAI Dashboard</p></div>
+            <div class="flex gap-4">
+                <button id="refresh-btn" onclick="fetchExpenses()" class="bg-slate-800 text-white font-bold py-2 px-4 rounded shadow">🔄 Refresh</button>
+                <button onclick="logout()" class="bg-red-50 text-red-600 font-bold py-2 px-4 rounded">Sign Out</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Active Role Status Banner -->
+        <div id="role-status-banner" class="w-full p-4 mb-8 rounded-xl shadow border-l-4 flex items-center gap-3 transition-all duration-300">
+            <span id="role-status-icon" class="text-2xl"></span>
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wider opacity-75">Active Session Persona</p>
+                <p id="role-status-indicator" class="text-lg font-bold"></p>
+            </div>
+        </div>
+
+        <!-- CFO Stats -->
+        <div id="cfo-view" class="hidden-view mb-8">
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
+                    <h3 class="text-gray-500 text-sm font-bold uppercase">Total Pending Approval</h3>
+                    <p id="cfo-pending-amt" class="text-2xl font-bold mt-2">$0.00</p>
+                </div>
+                <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
+                    <h3 class="text-gray-500 text-sm font-bold uppercase">AI Flagged (On Hold)</h3>
+                    <p id="cfo-hold-count" class="text-2xl font-bold mt-2">0</p>
+                </div>
+                <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+                    <h3 class="text-gray-500 text-sm font-bold uppercase">Budget Variance</h3>
+                    <p class="text-2xl font-bold mt-2 text-green-600">-2.4%</p>
+                </div>
+            </div>
+
+            <!-- Restored Looker Link -->
+            <a id="looker-dashboard-link" href="https://[LOOKER_INSTANCE_URL_PLACEHOLDER]"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-lg shadow-md transition-all flex items-center justify-center gap-3 text-lg border border-slate-700 LOOKER_BUTTON_HIDDEN">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                Open Looker Financial Deep-Dive
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="gray" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+        </div>
+
+        <!-- 🟢 ADD FINOPS STATS HERE -->
+        <!-- FinOps Stats (Similar to CFO but without Looker) -->
+        <div id="finops-view" class="hidden-view grid grid-cols-3 gap-6 mb-8">
+            <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
+                <h3 class="text-gray-500 text-sm font-bold uppercase">Total Pending Approval</h3>
+                <p id="finops-pending-amt" class="text-2xl font-bold mt-2">$0.00</p>
+            </div>
+            <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
+                <h3 class="text-gray-500 text-sm font-bold uppercase">AI Flagged (On Hold)</h3>
+                <p id="finops-hold-count" class="text-2xl font-bold mt-2">0</p>
+            </div>
+            <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+                <h3 class="text-gray-500 text-sm font-bold uppercase">Approval Efficiency</h3>
+                <p class="text-2xl font-bold mt-2 text-green-600">+12.5%</p>
+            </div>
+        </div>
+
+
+        <!-- DBA Stats -->
+        <div id="dba-view" class="hidden-view grid grid-cols-3 gap-6 mb-8">
+            <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-purple-500"><h3 class="text-gray-500 text-sm font-bold uppercase">Instance Status</h3><p id="dba-status" class="text-emerald-600 text-2xl font-bold mt-2">ONLINE (ORCLPDB1)</p></div>
+            <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-purple-500"><h3 class="text-gray-500 text-sm font-bold uppercase">Active Sessions</h3><p id="dba-sessions" class="text-2xl font-bold mt-2">Fetching...</p></div>
+            <div class="bg-white/90 p-6 rounded-xl shadow-lg border-l-4 border-purple-500"><h3 class="text-gray-500 text-sm font-bold uppercase">Invalid Objects</h3><p id="dba-objects" class="text-2xl font-bold mt-2">Fetching...</p></div>
+        </div>
+
+        <!-- SRE Telemetry View Panels (Side-by-Side) -->
+        <div id="sre-telemetry-view" class="hidden-view grid grid-cols-2 gap-6 mb-8">
+            <!-- Left Card: Top Active Sessions -->
+            <div class="bg-white/90 p-6 rounded-xl shadow-lg border border-gray-100">
+                <h3 class="text-slate-700 text-sm font-bold uppercase mb-4 flex items-center gap-2">⏱️ Top Active Sessions (ASH)</h3>
+                <table class="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead class="text-slate-400 text-xs font-bold uppercase">
+                        <tr>
+                            <th class="px-4 py-3 text-left">SID</th>
+                            <th class="px-4 py-3 text-left">User</th>
+                            <th class="px-4 py-3 text-left">Wait Event</th>
+                            <th class="px-4 py-3 text-left">Time(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sre-sessions-body" class="divide-y divide-gray-100 text-slate-700">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Right Card: Critical Tablespace Capacity -->
+            <div class="bg-white/90 p-6 rounded-xl shadow-lg border border-gray-100">
+                <h3 class="text-slate-700 text-sm font-bold uppercase mb-6 flex items-center gap-2">💾 Critical Tablespace Capacity</h3>
+                <div id="sre-tablespace-container" class="space-y-6">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div id="table-view" class="bg-white/90 shadow-lg rounded-xl overflow-hidden border border-gray-100">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-slate-50 text-gray-500 text-xs font-bold uppercase">
+                    <tr><th class="px-6 py-4">ID</th><th class="px-6 py-4">Amount</th><th class="px-6 py-4">Description</th><th class="px-6 py-4">Status</th></tr>
+                </thead>
+                <tbody id="expense-table-body" class="bg-white/50 divide-y divide-gray-100"></tbody>
+            </table>
+        </div>
+
+        <div id="pagination-view" class="flex justify-between items-center mt-6 bg-white/90 p-4 rounded-xl shadow">
+            <button onclick="changePage(-1)" class="bg-slate-100 py-2 px-4 rounded font-bold">Previous</button>
+            <span class="text-sm font-bold">Page <span id="current-page-display">1</span></span>
+            <button onclick="changePage(1)" class="bg-slate-100 py-2 px-4 rounded font-bold">Next</button>
+        </div>
+    </div>
+
+    <div id="chat-widget-container" class="hidden-view relative z-20">
+        <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+        <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+        <df-messenger location="us-central1" project-id="YOUR_GCP_PROJECT_ID" agent-id="YOUR_DIALOGFLOW_AGENT_ID" language-code="en" max-query-length="-1">
+            <df-messenger-chat-bubble chat-title="FinAgent"></df-messenger-chat-bubble>
+        </df-messenger>
+        <style>
+            df-messenger {
+                z-index: 999;
+                position: fixed;
+                --df-messenger-font-color: #000;
+                --df-messenger-font-family: 'Google Sans', sans-serif;
+                --df-messenger-chat-background: #f3f6fc;
+                --df-messenger-message-user-background: #d3e3fd;
+                --df-messenger-message-bot-background: #fff;
+                bottom: 16px;
+                right: 16px;
+                --df-messenger-chat-window-width: 900px;
+                --df-messenger-chat-window-height: 700px;
+            }
+        </style>
+    </div>
+
+    <script>
+        let currentPage = 1; const pageSize = 10; let currentRole = '';
+        function login(role) {
+            currentRole = role;
+            document.getElementById('login-screen').classList.add('hidden-view');
+            document.getElementById('app-screen').classList.remove('hidden-view');
+            document.getElementById('chat-widget-container').classList.remove('hidden-view');
+
+            // Update Dynamic Active Persona Banner styling and labels
+            const bannerEl = document.getElementById('role-status-banner');
+            const iconEl = document.getElementById('role-status-icon');
+            const textEl = document.getElementById('role-status-indicator');
+
+            bannerEl.className = "w-full p-4 mb-8 rounded-xl shadow border-l-4 flex items-center gap-3 transition-all duration-300 ";
+
+            if (role === 'CFO') {
+                bannerEl.classList.add('bg-slate-100/80', 'border-slate-800', 'text-slate-800');
+                iconEl.textContent = "💼";
+                textEl.textContent = "Chief Financial Officer (CFO) - Corporate Legal & Master SLA View";
+            } else if (role === 'FinOps') {
+                bannerEl.classList.add('bg-yellow-50/80', 'border-yellow-500', 'text-yellow-700');
+                iconEl.textContent = "📊";
+                textEl.textContent = "Financial Operations Auditor (FinOps) - Live Ledger Seeding & Auditing";
+            } else if (role === 'DBA') {
+                bannerEl.classList.add('bg-blue-50/80', 'border-blue-500', 'text-blue-700');
+                iconEl.textContent = "⚙️";
+                textEl.textContent = "Database Reliability Engineer (DBRE/SRE) - Oracle Telemetry & AWR Health";
+            }
+
+            // Hide all persona views first
+            document.getElementById('cfo-view').classList.add('hidden-view');
+            document.getElementById('finops-view').classList.add('hidden-view');
+            document.getElementById('dba-view').classList.add('hidden-view');
+
+            const tableEl = document.getElementById('table-view');
+            const pagEl = document.getElementById('pagination-view');
+            const sreEl = document.getElementById('sre-telemetry-view');
+
+            const bubble = document.querySelector('df-messenger-chat-bubble');
+            if (role === 'DBA') {
+                if (tableEl) tableEl.classList.add('hidden-view');
+                if (pagEl) pagEl.classList.add('hidden-view');
+                if (sreEl) sreEl.classList.remove('hidden-view');
+                document.getElementById('dba-view').classList.remove('hidden-view');
+                if (bubble) bubble.setAttribute('chat-title', 'DBRE/SRE Agent');
+                fetchDbaStats();
+                fetchSreTelemetry();
+            } else {
+                if (tableEl) tableEl.classList.remove('hidden-view');
+                if (pagEl) pagEl.classList.remove('hidden-view');
+                if (sreEl) sreEl.classList.add('hidden-view');
+                if (bubble) bubble.setAttribute('chat-title', 'FinAgent');
+
+                if (role === 'CFO') document.getElementById('cfo-view').classList.remove('hidden-view');
+                if (role === 'FinOps') document.getElementById('finops-view').classList.remove('hidden-view');
+                fetchExpenses();
+            }
+
+            const dfMessenger = document.querySelector('df-messenger');
+            if (dfMessenger) {
+                dfMessenger.startNewSession();
+                setTimeout(() => { dfMessenger.sendQuery(`I am logging in as the ${role}.`); }, 1000);
+            }
+        }
+        function logout() { location.reload(); }
+        async function fetchDbaStats() {
+            try {
+                const res = await fetch('/api/dba/stats', { credentials: 'same-origin' });
+                const stats = await res.json();
+                const statusEl = document.getElementById('dba-status');
+                const sessionsEl = document.getElementById('dba-sessions');
+                const objectsEl = document.getElementById('dba-objects');
+                if (statusEl) statusEl.innerText = `ONLINE (${stats.db_name || 'ORCLPDB1'})`;
+                if (sessionsEl) sessionsEl.innerText = `${stats.active_sessions || 0} / ${stats.total_sessions || 0}`;
+                if (objectsEl) objectsEl.innerText = `${stats.invalid_objects || 0}`;
+            } catch (e) { console.error("DBA stats fetch error:", e); }
+        }
+        async function fetchExpenses() {
+            try {
+                const response = await fetch(`/api/expenses?page=${currentPage}&size=${pageSize}`, { credentials: 'same-origin' });
+                const expenses = await response.json();
+                const tbody = document.getElementById('expense-table-body');
+                tbody.innerHTML = '';
+
+                let totalP = 0;
+                let holdC = 0;
+
+                expenses.forEach(exp => {
+                    const statusUpper = exp.status.toUpperCase();
+
+                    // Dynamic Calculation Logic
+                    if (statusUpper === 'PENDING') {
+                        totalP += parseFloat(exp.amount);
+                    }
+                    if (statusUpper.includes('HOLD')) {
+                        holdC++;
+                    }
+
+                    // Premium Badge Styling based on status codes
+                    let badgeClass = '';
+                    if (statusUpper.includes('APPROVED')) {
+                        badgeClass = 'bg-green-50 text-green-600 border-green-200';
+                    } else if (statusUpper.includes('PENDING')) {
+                        badgeClass = 'bg-blue-50 text-blue-600 border-blue-200';
+                    } else if (statusUpper.includes('HOLD')) {
+                        badgeClass = 'bg-amber-50 text-amber-600 border-amber-200';
+                    } else if (statusUpper.includes('REJECT')) {
+                        badgeClass = 'bg-red-50 text-red-600 border-red-200';
+                    } else {
+                        badgeClass = 'bg-gray-50 text-gray-600 border-gray-200';
+                    }
+
+                    const badgeHtml = `<span class="px-3 py-1 rounded-full text-xs font-bold border ${badgeClass}">${exp.status}</span>`;
+                    const formattedAmount = exp.amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+                    tbody.innerHTML += `<tr class="border-b"><td class="px-6 py-4 font-bold text-slate-500">#${exp.id}</td><td class="px-6 py-4 font-extrabold text-slate-900">$${formattedAmount}</td><td class="px-6 py-4 text-slate-600">${exp.description}</td><td class="px-6 py-4">${badgeHtml}</td></tr>`;
+                });
+
+                // Update UI for both CFO and FinOps Dashboards
+                const formattedAmt = `$${totalP.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+
+                if (currentRole === 'CFO' || currentRole === 'FinOps') {
+                    const prefix = currentRole.toLowerCase();
+                    const pendingEl = document.getElementById(`${prefix}-pending-amt`);
+                    const holdEl = document.getElementById(`${prefix}-hold-count`);
+
+                    if(pendingEl) pendingEl.innerText = formattedAmt;
+                    if(holdEl) holdEl.innerText = holdC;
+                }
+
+                // Update Page Number Display
+                const pageDisplay = document.getElementById('current-page-display');
+                if (pageDisplay) pageDisplay.innerText = currentPage;
+
+                // Toggle Pagination Button Visibility based on dataset boundaries
+                const prevBtn = document.querySelector('button[onclick="changePage(-1)"]');
+                const nextBtn = document.querySelector('button[onclick="changePage(1)"]');
+
+                if (prevBtn) {
+                    prevBtn.style.visibility = currentPage === 1 ? 'hidden' : 'visible';
+                }
+                if (nextBtn) {
+                    nextBtn.style.visibility = expenses.length < pageSize ? 'hidden' : 'visible';
+                }
+            } catch (e) { console.error("Data fetch error:", e); }
+        }
+
+        // Enforce Conventional page transitions
+        function changePage(direction) {
+            currentPage += direction;
+            if (currentPage < 1) currentPage = 1;
+            fetchExpenses();
+        }
+
+        async function fetchSreTelemetry() {
+            try {
+                const res = await fetch('/api/dba/telemetry', { credentials: 'same-origin' });
+                const data = await res.json();
+
+                // 1. Render Top Active Sessions table rows
+                const sessionsBody = document.getElementById('sre-sessions-body');
+                if (sessionsBody) {
+                    sessionsBody.innerHTML = '';
+                    data.sessions.forEach(sess => {
+                        let eventColor = 'text-amber-600';
+                        if (sess.event === 'CPU') {
+                            eventColor = 'text-emerald-600 font-bold';
+                        }
+
+                        sessionsBody.innerHTML += `
+                            <tr class="border-b border-slate-100">
+                                <td class="px-4 py-3 font-bold text-slate-400">#${sess.sid}</td>
+                                <td class="px-4 py-3 font-bold text-slate-600">${sess.user}</td>
+                                <td class="px-4 py-3 ${eventColor}">${sess.event}</td>
+                                <td class="px-4 py-3 font-bold text-slate-500">${sess.time}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                // 2. Render Critical Tablespace progress indicators
+                const tablespaceContainer = document.getElementById('sre-tablespace-container');
+                if (tablespaceContainer) {
+                    tablespaceContainer.innerHTML = '';
+                    data.tablespaces.forEach(ts => {
+                        let barColorClass = 'bg-emerald-500';
+                        let textPercentColor = 'text-emerald-600';
+                        if (ts.color === 'red') {
+                            barColorClass = 'bg-red-500';
+                            textPercentColor = 'text-red-600 font-bold';
+                        }
+
+                        tablespaceContainer.innerHTML += `
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-xs font-bold uppercase">
+                                    <span class="text-slate-600">${ts.name}</span>
+                                    <span class="${textPercentColor}">${ts.capacity}%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                    <div class="${barColorClass} h-2.5 rounded-full" style="width: ${ts.capacity}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) { console.error("SRE telemetry fetch error:", e); }
+        }
+    </script>
+</body>
+</html>

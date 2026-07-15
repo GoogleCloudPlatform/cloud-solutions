@@ -1,0 +1,42 @@
+#
+# Copyright 2026 Google LLC
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+title: Migrate from Azure to Google Cloud
+
+nav:
+  - "Get started": README.md
+  - "Migrate from Azure VMs to Compute Engine": migrate-from-azure-vms-to-compute-engine.md
+  - "Migrate from AKS to GKE": migrate-from-aks-to-gke.md
+  - "Migrate from Azure Blob Storage to Cloud Storage": migrate-from-azure-blob-storage-to-cloud-storage.md
+  - "Database Migrations":
+      - "Migrate Azure SQL Managed Instance to Cloud SQL for SQL Server": migrate-azure-sql-managed-instance-to-cloud-sql-sql-server.md
+      - "Migrate Azure SQL Database to Cloud SQL for SQL Server": migrate-azure-sql-database-to-cloud-sql-sql-server.md
+      - "Migrate Azure Database for MySQL to Cloud SQL for MySQL": migrate-azure-database-mysql-to-cloud-sql-mysql.md
+      - "Migrate Azure Database for PostgreSQL to Cloud SQL and AlloyDB for PostgreSQL": migrate-azure-database-postgresql-to-cloud-sql-and-alloydb-postgresql.md
+      - "Migrate SQL Server to Cloud SQL for PostgreSQL and AlloyDB for PostgreSQL": migrate-sql-server-to-cloud-sql-and-alloydb-postgresql.md
+
+flatten_single_child_sections: true
+sort:
+  by: title
+  direction: asc
+  ignore_case: true
+  sections: mixed
+  type: natural
