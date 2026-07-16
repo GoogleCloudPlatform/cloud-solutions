@@ -1,0 +1,119 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// Import the theme file and Angular Material functions
+@use '../../../styles.scss' as theme; // Adjust path if needed
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+$cymbal-theme: theme.$cymbal-theme;
+
+// --- Color variables ($selected-border-color, $hover-border-color, etc.) ---
+$primary-palette: map.get(map.get($cymbal-theme, color), primary);
+$accent-palette: map.get(map.get($cymbal-theme, color), accent);
+$foreground: map.get($cymbal-theme, foreground);
+$background: map.get($cymbal-theme, background);
+$selected-border-color: mat.m2-get-color-from-palette($accent-palette, default);
+$hover-border-color: mat.m2-get-color-from-palette($background, hover);
+$selection-display-bg: mat.m2-get-color-from-palette($background, card);
+$selection-display-text: mat.m2-get-color-from-palette($foreground, text);
+$selection-display-border: mat.m2-get-color-from-palette($foreground, divider);
+
+// --- Container for the images ---
+.image-selector-container {
+  display: flex;
+  flex-wrap: wrap; // <-- Important: Allows items to wrap to next line
+  gap: 16px; // Space between items
+  justify-content: center;
+  padding: 10px 0;
+}
+
+// --- Individual image container ---
+.image-container {
+  // --- Core styles (border, padding, cursor, etc.) ---
+  border-radius: 5px;
+  border: 2px solid mat.m2-get-color-from-palette($background, background);
+  padding: 4px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease-in-out,
+    transform 0.1s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  box-sizing: border-box;
+  background-color: mat.m2-get-color-from-palette($background, background);
+  position: relative; // Good practice for containers with sized content
+
+  // --- Responsive Size & Shape Control ---
+  aspect-ratio: 1 / 1; // Makes the container square (1:1 aspect ratio)
+  overflow: hidden; // Ensures image respects the container's shape/radius
+
+  // --- Flexible Width using Flexbox properties and Media Queries ---
+  // Mobile-first: Aim for 2-3 items across on small screens
+  flex: 1 1 calc(33.33% - 11px); // Allow container to grow if space is available        // Allow container to shrink // Start aiming for 3 across (adjust calc based on gap)
+  min-width: 80px; // Prevent images from becoming too small
+  max-width: 150px; // Limit max size on small screens
+
+  // Medium screens (e.g., tablets): Aim for 4 items across
+  @media (width >= 768px) {
+    flex-basis: calc(25% - 12px); // Adjust calc for 4 items and 16px gap
+    max-width: 180px;
+  }
+
+  // Larger screens (e.g., desktops): Aim for 5 items across
+  @media (width >= 1024px) {
+    flex-basis: calc(
+      20% - 13px
+    ); // Adjust calc for 5 items and 16px gap (16px * 4/5)
+
+    max-width: 200px; // Allow up to 200px width as originally intended
+  }
+  // --- End Responsive Size & Shape Control ---
+
+  // --- Image Styling ---
+  img {
+    display: block; // Removes extra space below image
+    // --- Fill the container ---
+    width: 100%;
+    height: 100%;
+    // --- End Fill ---
+    object-fit: cover; // Scale the image to maintain aspect ratio while filling the element's entire content box. Crops if necessary.
+    border-radius: 3px; // Inner radius for the image
+  }
+  // --- End Image Styling ---
+
+  // --- Hover and Selected States ---
+  &:hover {
+    border-color: $hover-border-color;
+  }
+
+  &.selected {
+    border-color: $selected-border-color;
+    transform: scale(1.05);
+    box-shadow: 0 5px 10px rgb(0 0 0 / 10%);
+  }
+  // --- End Hover and Selected States ---
+}
+
+// --- Optional display area styling ---
+.selection-display {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: $selection-display-bg;
+  color: $selection-display-text;
+  border-radius: 5px;
+  font-family: monospace;
+  border: 1px solid $selection-display-border;
+}

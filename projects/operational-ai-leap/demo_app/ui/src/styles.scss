@@ -1,0 +1,98 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* stylelint-disable */
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+// Ensure core styles are included once
+@include mat.core();
+
+// --- Define palettes based on logo colors ---
+
+// Primary: Red from logo (using mat.$m2-red-palette as base)
+// We adjust the default hue (e.g., 700) to better match the logo's intensity.
+$cymbal-primary: mat.m2-define-palette(mat.$m2-red-palette, 700);
+
+// Accent: Orange from logo (using mat.$orange-palette as base)
+// Using an accent hue (e.g., A400 or A700) often works well for vibrancy.
+$cymbal-accent: mat.m2-define-palette(mat.$m2-red-palette, 700);
+
+// Warn: Deep Purple/Maroon from logo (using mat.$purple-palette as base)
+// Using a dark shade (e.g., 700 or 800).
+// **Consider if this purple effectively conveys "warning" in your UI.**
+// Alternatively, revert to mat.$red-palette for a standard warning color:
+// $cymbal-warn: mat.m2-define-palette(mat.$m2-red-palette);
+$cymbal-warn: mat.m2-define-palette(mat.$m2-red-palette, 800);
+
+// --- Theme creation ---
+// Using the new palettes defined above
+$cymbal-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $cymbal-primary,
+      accent: $cymbal-accent,
+      warn: $cymbal-warn,
+    ),
+    typography: mat.m2-define-typography-config(
+        $subtitle-1: mat.m2-define-typography-level(
+            $font-family: 'DM Sans',
+            $font-weight: 400,
+            $font-size: 1rem,
+            $line-height: 1,
+            $letter-spacing: normal,
+          ),
+      ),
+    density: 0,
+  )
+);
+
+// --- Component Styling ---
+mat-card {
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+button.mdc-button {
+  border-radius: 25px;
+}
+
+mat-card-title {
+  padding-bottom: 8px;
+}
+
+// --- Custom Snackbar Error Styling ---
+// Update to use the new warn color from the theme dynamically
+.snackbar-error {
+  // Extract the warn palette from the theme
+  $warn-palette: map.get(map.get($cymbal-theme, color), warn);
+  // Get the default color shade we defined (800 in this case)
+  $warn-color: mat.m2-get-color-from-palette($warn-palette, 800);
+  // Get the appropriate contrast color (light or dark) for text
+  $warn-contrast-color: mat.m2-get-color-from-palette($warn-palette, 800-contrast);
+
+  --mdc-snackbar-container-color: #{$warn-color}; // Use the actual warn palette color
+  background-color: #{$warn-color}; // Use the actual warn palette color
+  span {
+    color: #{$warn-contrast-color};
+  } // Use the calculated contrast color
+  overflow: scroll;
+}
+
+// --- Apply the theme to all Angular Material components ---
+@include mat.all-component-themes($cymbal-theme);
+
+/* stylelint-enable */

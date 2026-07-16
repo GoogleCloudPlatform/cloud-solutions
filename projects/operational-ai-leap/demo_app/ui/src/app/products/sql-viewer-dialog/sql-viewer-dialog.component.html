@@ -1,0 +1,85 @@
+<!--
+ Copyright 2026 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<h2 mat-dialog-title>Executed SQL Queries</h2>
+
+<mat-dialog-content class="mat-typography">
+    <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Product Query">
+            <div style="padding-top: 10px;">
+                <app-sql-statement [query]="data.productQuery"></app-sql-statement>
+                <div *ngIf="!data.productQuery">
+                    No product query executed or available.
+                </div>
+                <div *ngIf="data.productQuery" style="margin-top: 15px;">
+                    <button mat-stroked-button color="primary" (click)="explainProductQuery()" [disabled]="productExplainLoading">
+                        <mat-icon fontSet="material-symbols-outlined">speed</mat-icon>
+                        Explain Product Query
+                        <div *ngIf="productExplainLoading" class="loading-spinner-overlay">
+                            <mat-spinner [diameter]="20"></mat-spinner>
+                        </div>
+                    </button>
+                </div>
+
+                <div *ngIf="(productExplainResult$ | async) as explainResult" style="margin-top: 10px; background-color: #f5f5f5; padding: 10px; border-radius: 4px;">
+                    <h4>Explain Plan (Product Query):</h4>
+                    <ng-container *ngIf="explainResult && explainResult.data && explainResult.data.length > 0; else noProductPlanData">
+                        <pre class="query-plan-output">
+                            <div *ngFor="let planLine of explainResult.data">{{ planLine.queryPlan }}</div>
+                        </pre>
+                    </ng-container>
+                    <ng-template #noProductPlanData>
+                        <div *ngIf="!productExplainLoading">No explain plan data available.</div>
+                    </ng-template>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Facet Query">
+             <div style="padding-top: 10px;">
+                 <app-sql-statement [query]="data.facetQuery"></app-sql-statement>
+                 <div *ngIf="!data.facetQuery">
+                     No facet query available.
+                 </div>
+                 <div *ngIf="data.facetQuery" style="margin-top: 15px;">
+                    <button mat-stroked-button color="primary" (click)="explainFacetQuery()" [disabled]="facetExplainLoading">
+                        <mat-icon fontSet="material-symbols-outlined">speed</mat-icon>
+                        Explain Facet Query
+                        <div *ngIf="facetExplainLoading" class="loading-spinner-overlay">
+                            <mat-spinner [diameter]="20"></mat-spinner>
+                        </div>
+                    </button>
+                </div>
+
+                <div *ngIf="(facetExplainResult$ | async) as explainResult" style="margin-top: 10px; background-color: #f5f5f5; padding: 10px; border-radius: 4px;">
+                    <h4>Explain Plan (Facet Query):</h4>
+                    <ng-container *ngIf="explainResult && explainResult.data && explainResult.data.length > 0; else noFacetPlanData">
+                        <pre class="query-plan-output">
+                            <div *ngFor="let planLine of explainResult.data">{{ planLine.queryPlan }}</div>
+                        </pre>
+                    </ng-container>
+                    <ng-template #noFacetPlanData>
+                        <div *ngIf="!facetExplainLoading">No explain plan data available.</div>
+                    </ng-template>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

@@ -1,0 +1,82 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+.inline-spinner ::ng-deep mat-spinner circle {
+  stroke: #82e897;
+}
+
+/* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+.inline-spinner ::ng-deep {
+  display: flex;
+}
+
+.show-sql-spacer {
+  flex: 1 1 auto;
+}
+
+.search-options-header {
+  display: flex;
+  justify-content: space-between; // Pushes radio group to left, toggle to right
+  align-items: center; // Vertically align items in the middle
+  margin-bottom: 16px; // Space below this header row
+}
+
+.search-type-radios {
+  // Takes up available space, allowing the toggle to be on the right
+  flex-grow: 1;
+}
+
+.full-width-field {
+  width: 100%;
+}
+
+.ai-filter-input {
+  flex-grow: 1;
+}
+
+.ai-filter-toggle-container {
+  font-size: 1em;
+  font-weight: 450;
+}
+
+.search-inputs-container {
+  display: flex;
+  gap: 16px; // Adjust gap between input fields as needed
+  align-items: flex-start; // Or 'center' if you prefer vertical alignment of form fields
+  margin-bottom: 16px; // Space below the input row
+}
+
+.product-search-field {
+  transition: width 0.3s ease-in-out; // Smooth transition for width change
+}
+
+.full-width-field {
+  width: 100%;
+}
+
+.half-width-field {
+  width: 50%;
+  flex-grow: 1; // Allow fields to grow if there's extra space in the flex container
+}
+
+label {
+  font-size: 20px !important;
+}
+
+.radio-text {
+  font-size: 1.1em;
+}

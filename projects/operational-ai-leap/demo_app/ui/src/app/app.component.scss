@@ -1,0 +1,102 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+* {
+  font-family: Roboto, sans-serif;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.toolbar-logo {
+  height: 120px;
+  margin-top: 15px;
+  margin-right: 0;
+}
+
+.small-toolbar-logo {
+  height: 100px;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+.subtitle {
+  margin-left: 0;
+  font-size: 1.2em;
+}
+
+.powered-by-container {
+  margin: 0 15px;
+}
+
+/* ADJUSTED: Styles for the inner span */
+.powered-by {
+  font-size: 0.85em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgb(0 0 0 / 70%);
+
+  /* Remove properties handled by parent container */
+
+  /* text-align: center; <-- Remove if parent centers */
+
+  /* padding: 10px 0; <-- Remove padding if parent centers & aligns */
+  padding: 0; /* Set padding to 0 if alignment/spacing handled by parent flex */
+}
+
+.product-logo {
+  height: 24px; /* Adjust as needed, try values between 18px and 24px */
+}
+
+/* It's also good practice to ensure the direct parent div doesn't interfere */
+
+/* You might not need this, but sometimes helpful */
+mat-toolbar > div:has(> .powered-by) {
+  display: flex; /* Make parent div flex */
+  align-items: center; /* Center the span vertically in its div slot */
+  justify-content: center; /* Center horizontally if needed */
+  height: 100%; /* Ensure it takes up toolbar height for alignment */
+}
+
+.app-title {
+  margin-left: 47px;
+}
+
+.mat-toolbar {
+  margin-bottom: 30px;
+  height: 100px;
+}
+
+.mat-button-toggle {
+  font-size: small;
+  font-weight: bold;
+}
+
+/* Adjust divider height to look balanced with smaller content */
+.mat-divider {
+  height: 50%; /* Adjust percentage as needed */
+  margin: auto 25px; /* Helps center divider vertically */ /* Helps center divider vertically */
+}
+
+.mat-icon-button {
+  flex: 2;
+}
+
+.architecture {
+  font-size: 1.1em;
+}

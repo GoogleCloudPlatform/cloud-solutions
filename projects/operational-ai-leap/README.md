@@ -28,23 +28,23 @@ months to hours while protecting primary application performance.
 ```mermaid
 flowchart TD
     subgraph Client ["Client ML Workspace (Colab Enterprise)"]
-        ColabNotebook["Colab Enterprise Notebook<br>(init_connection_pool)"]
+        ColabNotebook["fa:fa-laptop-code Colab Enterprise Notebook<br>(init_connection_pool)"]
     end
 
     subgraph AlloyDB ["AlloyDB for PostgreSQL (Operational Database)"]
         direction TB
         subgraph Extensions ["AI Extension Layer"]
-            GoogleML["google_ml_integration<br>(gemini-2.5-flash-lite-global)"]
-            BigQueryFDW["bigquery_fdw<br>(Server & User Mappings)"]
+            GoogleML["fa:fa-brain google_ml_integration<br>(gemini-2.5-flash-lite-global)"]
+            BigQueryFDW["fa:fa-network-wired bigquery_fdw<br>(Server & User Mappings)"]
         end
         subgraph Data ["Operational Schema"]
-            LiveProducts["Products Table<br>(DML ai.generate)"]
-            Indices["Multi-Index Optimizations<br>(ScaNN, HNSW, and GIN)"]
+            LiveProducts["fa:fa-database Products Table<br>(DML ai.generate)"]
+            Indices["fa:fa-bolt Multi-Index Optimizations<br>(ScaNN, HNSW, and GIN)"]
             LiveProducts -.->|"Index Mappings"| Indices
         end
         subgraph QueryEngine ["Query Planner"]
-            RRF["SQL Reciprocal Rank Fusion<br>(Outer Joins & Ranking)"]
-            ReadPools["Scaling Read Pools<br>(Offloads Analytical Compute)"]
+            RRF["fa:fa-balance-scale SQL Reciprocal Rank Fusion<br>(Outer Joins & Ranking)"]
+            ReadPools["fa:fa-server Scaling Read Pools<br>(Offloads Analytical Compute)"]
         end
 
         LiveProducts --> RRF
@@ -52,8 +52,8 @@ flowchart TD
     end
 
     subgraph DataCloud ["Google Cloud GenAI & Data Lake"]
-        VertexAI["Vertex AI API<br>(Embedding & Generative Completions)"]
-        BigQueryLake["BigQuery Analytics<br>(Historical order_items Dataset)"]
+        VertexAI["fa:fa-cloud Vertex AI API<br>(Embedding & Generative Completions)"]
+        BigQueryLake["fa:fa-database BigQuery Analytics<br>(Historical order_items Dataset)"]
     end
 
     ColabNotebook -->|"Direct connection pool (0ms lag)"| LiveProducts
@@ -76,74 +76,104 @@ flowchart TD
 
 ## Getting Started
 
+> [!NOTE] Are you taking a **Qwiklabs** lab where the environment is
+> pre-deployed? Please follow [QWIKLABS.md](QWIKLABS.md) instead!
+
 ### Prerequisites
 
 - Google Cloud Project with billing enabled.
 - [Google Cloud SDK (gcloud)](https://cloud.google.com/sdk/docs/install)
   installed and configured.
-- Permissions to enable necessary Google Cloud APIs (e.g., Alloy DB, Gemini
-  Enterprise Agent Platform)
-- Access to a Google Cloud environment where you can deploy resources and run
-  Jupyter notebooks (e.g., Colab Enterprise).
+- [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+  installed.
+- `psql` client installed.
 
-### Quick Deploy via Terraform
+### Deploy Base Infrastructure via Terraform
 
-1.  Follow **Option 1: Quick Deploy via Terraform** section from
-    [Cymbal Shops StyleSearch AlloyDB AI Demo](https://github.com/paulramsey/stylesearch-alloydb-ai-demo)'s
-    [README](https://github.com/paulramsey/stylesearch-alloydb-ai-demo/blob/main/README.md)
-    document.
+1.  Authenticate your Google Cloud account:
 
-> **NOTE**: Set `TF_VAR_argolis` to true if you are preparing this demo on
-> Argolis Environment.
+    ```bash
+    gcloud auth login
+    gcloud auth application-default login
+    ```
 
-### Configure Colab Enterprise
+1.  Set your active Google Cloud project:
 
-1.  From Google Cloud Console, search "Colab" from search box and click Colab
-    Enterprise menu.
-1.  Click `Runtime template` menu item from Colab Enterprise left sidebar.
-1.  Open menu by click three dots `Actions` menu of `Default` runtime templates
-    choose `Clone` option.
-1.  From **Create new runtime template** page's first step - **Runtime basics**,
-    input `Default with demo-vpc` as **Display name** box.
-1.  Ignore **Configure compute** and **Environment** steps and choose
-    **Networking and security** page.
-1.  Change the **Network** to `demo-vpc` by clicking the item from menu.
-1.  Change the **Subnetwork** to `demo-vpc` by clicking the item from menu.
-1.  Click **Create** button at the bottom to create new runtime template
-1.  Return to **Runtime templates** page and Open menu by click three dots
-    `Actions` menu of `Default with demo-vpc` runtime templates choose
-    `Create runtime` option.
-1.  Click **Create** button at the bottom to create new runtime.
-1.  Make a note the name of runtime that you just created.
+    ```bash
+    gcloud config set project YOUR_PROJECT_ID
+    ```
 
-> **NOTE**: This is required because Colab Enterprise runtime need to be
-> deployed in same VPC with Alloy DB Cluster and Instance for private
-> connection.
+1.  Set optional Terraform environment variables:
 
-### Import a Jupyter Notebook to Colab Enterprise
+    > [!TIP] By default, Terraform automatically detects your active GCP project
+    > ID and public IP address, and automatically generates a secure
+    > 16-character AlloyDB password.
 
-1.  From Google Cloud Console, search "Colab" from search box and click Colab
-    Enterprise menu.
-1.  Click **Import notebooks** button and choose `URL` as **Import source**
-1.  Copy below notebook URL to **Notebook URLs** input box.
+    <!-- -->
 
-- **Notebook URL**:
-  `https://raw.githubusercontent.com/GoogleCloudPlatform/cloud-solutions/refs/heads/main/projects/operational-ai-leap/001-after-quick-deploy.ipynb`
+    > [!IMPORTANT] If deploying in an internal Google **Argolis** environment,
+    > set the `TF_VAR_argolis` flag to `true` to apply necessary organization
+    > policy overrides:
 
-1.  Click **Import** button at the bottom to create new notebook file.
+    ```bash
+    export TF_VAR_argolis="true"
+    ```
 
-### Change Colab Enterprise runtime
+1.  Initialize and apply the Terraform configuration:
 
-1.  From the notebook page you imported from previous step.
-1.  Click small triangle button `▾` at the right top conner before `∧` button.
-1.  Choose `Change runtime type` menu from **Additional connection options**
-    menu.
-1.  From **Connect to Agent Platform Runtime** page, click **Runtimes** combo
-    box.
-1.  Choose the Runtime that you created from previous step.
-1.  Check the value of `Network` and `Subnetwork` is `demo-vpc`
-1.  Click **Connect** button at the bottom to connect to new runtime.
-1.  From now follow the instructions from the notebook you imported.
+    ```bash
+    terraform init
+    terraform apply
+    ```
+
+1.  When the deployment completes, note the Terraform outputs printed in your
+    terminal:
+    - `demo_app_url`: URL of the deployed Cymbal Shops eCommerce application.
+    - `notebook_gcs_uri`: GCS path to the companion Colab Enterprise notebook.
+    - `alloydb_password`: Generated AlloyDB password.
+
+---
+
+### Explore the Live Storefront Application
+
+Open the `demo_app_url` output URL in your browser to view the live Cymbal Shops
+eCommerce catalog powered by database-native vector search.
+
+---
+
+### Running the Companion Colab Enterprise Notebook
+
+Terraform automatically provisions a private VPC-peered Colab Enterprise Runtime
+Template named **Cymbal Shops Colab Template** (`stylesearch-colab-template`)
+and uploads the companion notebook to Cloud Storage (`notebook_gcs_uri`).
+
+To launch the interactive notebook:
+
+1.  In the Google Cloud Console top search bar, search for **Colab Enterprise**
+    and select **Colab Enterprise** from the results.
+1.  In the left navigation sidebar, click **My Notebooks**.
+1.  Click the **Import notebook** button at the top of the page.
+1.  Under **Import source**, select **Cloud Storage**.
+1.  In the **Cloud Storage file** field, click **Browse** and navigate to your
+    project bucket (or paste your `notebook_gcs_uri` output, e.g.,
+    `gs://YOUR_PROJECT_ID/operational-ai-leap.ipynb`) and select
+    `operational-ai-leap.ipynb`.
+1.  Click **Import** at the bottom of the dialog. The notebook will open in your
+    browser.
+1.  In the top-right corner of the imported notebook, click the dropdown
+    triangle `▾` next to the connection status indicator (next to the
+    **Connect** button).
+1.  From the dropdown menu, select **Change runtime type** (or **Connect to a
+    runtime**).
+1.  In the **Connect to Agent Platform Runtime** panel on the right side:
+    - Click the **Runtimes** (or **Runtime template**) dropdown menu.
+    - Select **Cymbal Shops Colab Template** (`stylesearch-colab-template`).
+1.  Verify that the **Network** and **Subnetwork** fields show `demo-vpc`.
+1.  Click **Connect** at the bottom of the panel.
+1.  Wait a few seconds for the runtime instance to start and indicate
+    **Connected** in green.
+1.  Once connected, run through the notebook cells sequentially from top to
+    bottom to explore database-native AI and zero-copy Lakehouse federation!
 
 ## Special thanks
 

@@ -1,0 +1,79 @@
+<!--
+ Copyright 2026 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<mat-card>
+    <mat-card-title>Product Search</mat-card-title>
+
+    <div class="search-options-header">
+        <mat-radio-group [(ngModel)]="searchType" (ngModelChange)="onSearchTypeChanged()" class="search-type-radios">
+            <mat-radio-button value="{{searchTypes.TRADITIONAL_SQL}}"><span class=radio-text>Traditional SQL</span></mat-radio-button>
+            <mat-radio-button value="{{searchTypes.FULLTEXT}}"><span class=radio-text>Full-text Search</span></mat-radio-button>
+            <mat-radio-button value="{{searchTypes.TEXT_EMBEDDINGS}}"><span class=radio-text>Vector Search</span></mat-radio-button>
+            <mat-radio-button value="{{searchTypes.HYBRID}}"><span class=radio-text>Hybrid Search</span></mat-radio-button>
+            <mat-radio-button value="{{searchTypes.IMAGE}}"><span class=radio-text>Image Search</span></mat-radio-button>
+        </mat-radio-group>
+
+        <div class="ai-filter-toggle-container">
+            Filter with <img src="../../assets/gemini_logo_small.png" alt="Gemini Logo" width="15" height="15">Gemini
+            <mat-slide-toggle [(ngModel)]="aiFilterEnabled" class="ai-filter-toggle">
+            </mat-slide-toggle>
+        </div>
+    </div>
+
+    <div class="search-inputs-container">
+        <mat-form-field [ngClass]="{'full-width-field': !aiFilterEnabled, 'half-width-field': aiFilterEnabled}"
+            floatLabel="always" class="product-search-field">
+            <mat-label>Product Search</mat-label>
+            <input matInput [(ngModel)]="productSearch" (keydown.enter)="findProducts()"
+                [placeholder]="searchType == 'image' ? SEARCH_PLACEHOLDER_IMAGE : (aiFilterEnabled ? 'Enter main search term or leave blank for AI filter only' : SEARCH_PLACEHOLDER)">
+            <mat-icon matTooltip="Sample suggestion" matSuffix fontSet="material-symbols-outlined"
+                (click)="productSearch = getSuggestion(); findProducts()">
+                prompt_suggestion
+            </mat-icon>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="aiFilterEnabled" class="half-width-field ai-filter-input" floatLabel="always">
+            <mat-label>Gemini Filter</mat-label>
+            <input matInput [(ngModel)]="aiFilterText" (keydown.enter)="findProducts()"
+                placeholder="e.g., a well-known brand">
+        </mat-form-field>
+    </div>
+
+    <app-image-selector *ngIf="searchType=='image'"
+        (imageSelected)="onImageSelectedFromChild($event)"></app-image-selector>
+    <mat-card-actions>
+        <button mat-raised-button color="primary"
+            [disabled]="productSearch.length === 0 && (!aiFilterEnabled || aiFilterText.length === 0)"
+            (click)="findProducts()">
+            {{BUTTON_TEXT}}
+        </button>
+        <span class="show-sql-spacer"></span>
+        <div class="show-sql">
+            <button mat-stroked-button color="secondary" style="margin-left: 8px;"
+                *ngIf="productResultsComponent && (productResultsComponent.interpolatedQuery || productResultsComponent.query || productResultsComponent.facetInterpolatedQuery)"
+                (click)="productResultsComponent.openSqlDialog()">
+                <mat-icon fontSet="material-symbols-outlined">info</mat-icon>
+                View SQL Queries
+            </button>
+        </div>
+
+    </mat-card-actions>
+    <app-product-results [productsResponse]="productsResponse$" [facetsResponse]="facetsResponse$"
+        [searchQuery]="productSearch" [searchType]="searchType" [productsLoading]="productsLoading"
+        [facetsLoading]="facetsLoading" [aiFilterEnabled]="aiFilterEnabled"
+        (facetSelectionChange)="onFacetSelectionChanged($event)"></app-product-results>
+
+</mat-card>

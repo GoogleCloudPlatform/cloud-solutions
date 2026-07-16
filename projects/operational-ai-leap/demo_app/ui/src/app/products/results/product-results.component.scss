@@ -1,0 +1,323 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../../styles.scss' as theme;
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+$cymbal-theme: theme.$cymbal-theme;
+
+// --- Extract necessary color palettes and properties ---
+
+$primary-palette: map.get(map.get($cymbal-theme, color), primary);
+$accent-palette: map.get(map.get($cymbal-theme, color), accent);
+$warn-palette: map.get(map.get($cymbal-theme, color), warn);
+$foreground: map.get($cymbal-theme, foreground);
+$background: map.get($cymbal-theme, background);
+
+// --- Theme Colors ---
+$primary-color: mat.m2-get-color-from-palette($primary-palette, default);
+$accent-color: mat.m2-get-color-from-palette($accent-palette, default);
+$warn-color: mat.m2-get-color-from-palette($warn-palette, default);
+$text-color: mat.m2-get-color-from-palette($foreground, text);
+$secondary-text-color: mat.m2-get-color-from-palette($foreground, secondary-text);
+$divider-color: mat.m2-get-color-from-palette($foreground, divider);
+$card-bg-color: mat.m2-get-color-from-palette($background, card);
+$background-color: mat.m2-get-color-from-palette($background, background);
+
+// --- NEW Layout Styles ---
+.results-wrapper {
+  display: flex;
+  flex-direction: row; // Arrange sidebar and content horizontally
+  align-items: flex-start;
+  gap: 20px; // Space between sidebar and content
+  margin-top: 20px; // Add some space above the results area
+}
+
+.facets-sidebar {
+  flex: 0 0 275.2px; // Fixed width sidebar (adjust as needed)
+  // Use theme background or card background for consistency
+  // background-color: $background-color;
+  padding: 15px;
+  box-sizing: border-box; // Include padding/border in width calculation
+
+  &.has-content {
+    border-right: 1px solid $divider-color; // Optional separator line
+  }
+
+  h3 {
+    // Style for "Refine By"
+    font-size: 1.1em;
+    font-weight: 900; // Slightly bolder
+    margin-bottom: 10px;
+    color: $text-color; // Use theme text color
+    border-bottom: 1px solid $divider-color; // Underline heading
+    padding-bottom: 8px;
+  }
+
+  h4 {
+    // Style for facet type headers (Brand, Category, etc.)
+    font-size: 1em;
+    font-weight: 500;
+    margin-top: 15px; // Space above each group
+    margin-bottom: 8px;
+    color: $text-color;
+  }
+
+  .facet-group {
+    margin-bottom: 15px; // Space below each group
+  }
+
+  mat-list {
+    padding-top: 0; // Remove default padding if needed
+  }
+
+  .facet-item {
+    display: flex; // Use flexbox for layout within the item
+    align-items: center; // Vertically align items
+    justify-content: space-between; // Space out checkbox/label and count
+    height: 36px !important; // Adjust height for dense list items
+    padding: 0 8px !important; // Reduce padding for dense appearance
+    cursor: pointer; // Indicate clickable
+
+    .facet-checkbox {
+      font-size: 0.9em; // Slightly smaller text
+      // The checkbox label itself will take this color
+      /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+      ::ng-deep .mdc-label {
+        // Target the label inside the checkbox
+        color: $text-color;
+      }
+    }
+
+    .facet-count {
+      font-size: 0.85em;
+      color: $secondary-text-color; // Use secondary text color for count
+      margin-left: 8px; // Space between label and count
+    }
+
+    &:hover {
+      background-color: rgba(
+        mat.m2-get-color-from-palette($foreground, base),
+        0.04
+      ); // Subtle hover effect
+    }
+  }
+
+  mat-divider {
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+} // End .facets-sidebar
+
+.products-main-content {
+  flex: 1; // Allow main content to take remaining space
+  min-width: 0; // Prevent content from overflowing flex container
+}
+
+// --- Product Card Styles ---
+.products-container {
+  padding: 0; // Reset padding if wrapper has it
+  display: grid;
+  // Adjust columns based on available space (consider fewer columns)
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(200px, 1fr)
+  ); // Responsive columns
+
+  gap: 15px; // Gap between cards
+  place-items: top;
+}
+
+.product-card {
+  background-color: $primary-color; // Use theme primary
+  color: mat.m2-get-color-from-palette(
+    $primary-palette,
+    default-contrast
+  ); // Contrast color
+
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgb(0 0 0 / 10%);
+  padding: 15px; // Reduced padding for potentially smaller cards
+  display: flex; // Use flexbox for card content layout
+  flex-direction: column; // Stack content vertically
+  position: relative; // For absolute positioning of score/method
+
+  img {
+    width: 100%;
+    height: auto; // Maintain aspect ratio
+    aspect-ratio: 1 / 1; // Make images square-ish
+    object-fit: cover;
+    padding-bottom: 10px;
+    border-radius: 3px; // Slightly rounded corners for image
+  }
+
+  mat-card-subtitle {
+    padding: 0; // Remove extra padding if needed
+    margin-top: 10px;
+    flex-grow: 1; // Allow subtitle to take up space
+  }
+}
+
+// Adjust font sizes if needed for smaller cards
+.product-subtitle {
+  font-weight: 500; // Slightly less bold than 900
+  font-size: 1.2em;
+  color: mat.m2-get-color-from-palette($primary-palette, default-contrast);
+  margin-top: 5px;
+}
+
+.price {
+  font-size: 1.2em;
+  color: gold; // Keep gold or use accent color: $accent-color;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.product-detail {
+  font-size: 1em;
+  font-weight: 300;
+  color: mat.m2-get-color-from-palette($primary-palette, default-contrast);
+  opacity: 0.9; // Slightly less prominent
+  margin-top: 5px;
+  // Add line-clamping for multi-line descriptions if desired
+  // display: -webkit-box;
+  // -webkit-line-clamp: 3;
+  // -webkit-box-orient: vertical;
+  // overflow: hidden;
+}
+
+.product-detail-extended {
+  font-size: 0.75em;
+  font-weight: 300;
+  margin-top: 10px;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+.retrieval-method,
+.score {
+  position: absolute;
+  bottom: 10px; // Position closer to bottom
+  font-size: 0.75em;
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+.retrieval-method {
+  right: 15px;
+}
+
+.score {
+  left: 15px;
+}
+
+// --- Table Styles (if used) ---
+table.mat-table {
+  width: 100%;
+  margin-top: 15px;
+}
+
+// --- No Results / Error Styles ---
+.no-results {
+  color: $warn-color; // Use theme warn color
+  font-weight: 500;
+  padding: 20px;
+  text-align: center;
+  display: block;
+}
+
+// Ensure SQL statement component has margin if needed
+app-sql-statement {
+  margin-bottom: 15px;
+}
+
+.results-summary {
+  text-align: center;
+  margin-bottom: 15px;
+  font-style: italic;
+  color: $secondary-text-color; // Use theme variable
+}
+
+.show-more-less {
+  // Reset default button padding/min-width if needed for tighter integration
+  padding: 0 8px !important; // Adjust as needed
+  min-width: auto !important;
+  margin-top: 4px; // Add some space above the button
+  margin-left: 8px; // Align slightly with checkbox text
+  line-height: normal; // Ensure icon and text align nicely
+  font-size: 0.85em; // Make it slightly smaller than facet text
+  color: $secondary-text-color; // Use secondary text color or accent
+
+  mat-icon {
+    font-size: 1.1em; // Adjust icon size if needed
+    height: auto;
+    width: auto;
+    vertical-align: middle; // Align icon vertically
+    margin-right: 2px; // Space between icon and text
+  }
+
+  &:hover {
+    background-color: rgba(
+      mat.m2-get-color-from-palette($foreground, base),
+      0.04
+    ); // Subtle hover
+  }
+}
+
+.mat-expansion-panel {
+  margin-bottom: 15px;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; // Add some padding around the spinner
+}
+
+.facets-sidebar .spinner-container {
+  height: 100px; // Give some height to the spinner in the sidebar
+}
+
+.products-main-content .spinner-container.main-results-spinner {
+  height: 300px; // Larger height for the main results area spinner
+  width: 100%; // Ensure it takes full width for centering
+}
+
+.ai-filter-toggle-container {
+  font-size: 1em;
+}
+
+.gemini-facet-notification {
+  padding: 8px;
+  font-size: 0.85em;
+  color: #555; // Slightly darker text for better readability
+  border: 1px solid #ccc; // Softer border
+  border-radius: 4px;
+  margin-bottom: 15px; // Space below the notification
+  background-color: #f7f7f7; // Light background
+  display: flex; // To align icon and text
+  align-items: center; // Vertical alignment
+
+  mat-icon {
+    font-size: 1.2em; // Adjust icon size as needed
+    vertical-align: middle; // Better alignment with text
+    margin-right: 6px; // Space between icon and text
+    color: #667; // Match text color or use accent
+    padding-right: 4px;
+  }
+}

@@ -1,0 +1,45 @@
+<!--
+ Copyright 2026 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<div>
+    <mat-toolbar>
+        @if(!isSmallScreen) {
+            <div>
+                <a href="/products"><img src="/assets/cymbal_shops_large.png" alt="Cymbal Shops" class="toolbar-logo" /></a>
+            </div>
+        } @else {
+            <div>
+                <a href="/products"><img src="/assets/cymbal_shops_small.png" alt="Cymbal Shops" class="small-toolbar-logo" /></a>
+            </div>
+        }
+        <div class="subtitle">St<i>y</i>leSearch</div>
+        <mat-divider [vertical]="true"></mat-divider>
+
+        <span class="toolbar-spacer"></span>
+
+        <div class="powered-by-container">
+            <span class="powered-by">Powered By <img src="/assets/alloydb.svg" alt="AlloyDB" class="product-logo" viewBox="0 0 24 24"/> AlloyDB <img src="/assets/vertex_ai.svg" alt="Vertex AI" class="product-logo" viewBox="0 0 24 24"/> Vertex AI</span>
+        </div>
+
+        <span class="toolbar-spacer"></span>
+
+        <mat-divider [vertical]="true"></mat-divider>
+        <button mat-button (click)="openArchitectureDialog()"><span class="architecture">Architecture</span></button>
+    </mat-toolbar>
+    <body>
+        <router-outlet></router-outlet>
+    </body>
+</div>

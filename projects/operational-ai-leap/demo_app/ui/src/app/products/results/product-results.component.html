@@ -1,0 +1,117 @@
+<!--
+ Copyright 2026 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<div class="results-wrapper">
+    <div class="facets-sidebar" [class.has-content]="groupedFacets.length > 0">
+        <div *ngIf="facetsLoading && aiFilterEnabled" class="spinner-container">
+            <mat-spinner [diameter]="50"></mat-spinner>
+        </div>
+        <div *ngIf="!facetsLoading && groupedFacets.length > 0">
+            <h3>Refine By</h3>
+
+            <div *ngFor="let group of groupedFacets; let isLastGroup = last" class="facet-group">
+                <h4>{{ group.type }}</h4>
+                <mat-list dense>
+                    <mat-list-item *ngFor="let facet of getSlicedFacets(group)" class="facet-item">
+                        <mat-checkbox [checked]="isFacetSelected(group.type, facet.value)"
+                            (change)="onFacetChange(group.type, facet.value, $event.checked)" class="facet-checkbox">
+                            {{ facet.value }}
+                        </mat-checkbox>
+                        <span class="facet-count">({{ facet.count }})</span>
+                    </mat-list-item>
+                </mat-list>
+
+                <button mat-button class="show-more-less" *ngIf="isExpandable(group)"
+                    (click)="toggleExpansion(group.type)">
+                    <mat-icon>{{ isGroupExpanded(group.type) ? 'expand_less' : 'expand_more' }}</mat-icon>
+                    {{ isGroupExpanded(group.type) ? 'Show less' : 'Show more' }}
+                </button>
+
+                <mat-divider *ngIf="!isLastGroup"></mat-divider>
+            </div>
+        </div>
+        <div *ngIf="aiFilterEnabled && groupedFacets.length > 0" class="gemini-facet-notification" style="padding: 8px; font-size: 0.85em; color: #666; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; background-color: #f9f9f9;">
+            <mat-icon>info_outline</mat-icon>
+            Gemini filtering applies to product results, not facets.
+        </div>
+    </div>
+
+    <div class="products-main-content">
+        <div *ngIf="productsLoading && aiFilterEnabled" class="spinner-container main-results-spinner">
+            <mat-spinner [diameter]="50"></mat-spinner>
+            &nbsp;&nbsp;Gemini is evaluating the first page of results...
+        </div>
+
+        <ng-container *ngIf="!productsLoading">
+            <div *ngIf="productsDisplayedCount != null && totalFacetItemsCount != null && totalFacetItemsCount > 0"
+                class="results-summary">
+                Showing {{ productsDisplayedCount }} of {{ totalFacetItemsCount }} results.
+            </div>
+            <div *ngIf="data && data.length == 0 && groupedFacets.length == 0 && totalFacetItemsCount === 0">
+                <mat-card>
+                    <span class="no-results">
+                        No results found matching your criteria.
+                    </span>
+                </mat-card>
+            </div>
+
+            <div *ngIf="errorDetail">
+                <app-sql-statement [query]="errorDetail">
+                    <p style="color:red;">ERROR: See details</p>
+                </app-sql-statement>
+            </div>
+
+            <div *ngIf="data && data.length > 0">
+                @if(data[0].hasOwnProperty('productDescription')) {
+                <div class="products-container">
+                    <mat-card *ngFor="let product of data" class="product-card">
+                        <img src='{{product.productImageUri}}' width=100%>
+                        <mat-card-subtitle>
+                            <span class="price">{{product.retailPrice}}</span>
+                            <span class="product-subtitle">{{product.name}}</span>
+                            <span class="product-detail">&nbsp; {{product.productDescription}}</span>
+                        </mat-card-subtitle>
+
+                        <span class="product-detail-extended">
+                            <br>Brand: {{product.brand}}
+                            <br>Category: {{product.category}}
+                            <br>Department: {{product.department}}
+                            <br>SKU: {{product.sku}}
+                            <br><br><br><br>
+                        </span>
+                        <span class="retrieval-method">{{product.retrievalMethod}}</span>
+                        @if(product.rrfScore != null) { <span class="score">Score: {{product.rrfScore}}</span>
+                        }
+                    </mat-card>
+                </div>
+                } @else {
+                <table mat-table [dataSource]="data">
+                    @for (col of getColumns(data[0]); track col; let i = $index) {
+                    <ng-container matColumnDef="{{ col }}">
+                        <th mat-header-cell *matHeaderCellDef> {{ col }} </th>
+                        <td mat-cell *matCellDef="let d"> {{ d[col] }} </td>
+                    </ng-container>
+                    }
+                    <tr mat-header-row *matHeaderRowDef="getColumns(data[0])"></tr>
+                    <tr mat-row *matRowDef="let myRowData; columns: getColumns(data[0])"></tr>
+                </table>
+                }
+
+            </div>
+        </ng-container>
+
+    </div>
+</div>

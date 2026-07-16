@@ -1,0 +1,80 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* Make table take full width */
+.comparison-table {
+  width: 100%;
+  margin-bottom: 1rem; // Add some space below the table
+}
+
+/* Style list items within cells */
+.comparison-list {
+  margin: 0;
+  padding-left: 20px; // Standard indentation for lists
+
+  li {
+    margin-bottom: 0.5em; // Space between list items
+    &:last-child {
+      margin-bottom: 0; // No extra space after the last item
+    }
+  }
+}
+
+/* Ensure cells align text to the top */
+
+/* Target specific columns if needed, or apply broadly */
+td.mat-mdc-cell {
+  vertical-align: top;
+}
+
+th.mat-mdc-header-cell {
+  text-align: left;
+}
+
+/* Optional: Set column widths */
+/* stylelint-disable-next-line selector-class-pattern */
+.mat-column-methodName {
+  width: 20%;
+  font-weight: bold; // Make method name stand out
+}
+
+.mat-column-strengths {
+  width: 40%;
+}
+
+.mat-column-weaknesses {
+  width: 40%;
+}
+
+/* Ensure code formatting looks distinct */
+code {
+  background-color: #f0f0f0;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.arch-diagram img {
+  width: 100%;
+}
+
+td {
+  padding: 15px;
+}
+
+mat-card-subtitle {
+  margin: 15px;
+}

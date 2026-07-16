@@ -1,0 +1,53 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+environment:
+  resources:
+    - type: gcp_project
+      id: project_1
+      variant: gcpfree
+      allowed_locations:
+        - us-central1
+        - us-west1
+        - us-west4
+        - us-east1
+        - us-east4
+      startup_script:
+        type: qwiklabs
+        path: operational-ai-leap
+      student_visible_outputs:
+        - label: "Demo Application URL"
+          reference: project_1.startup_script.demo_app_url
+        - label: "Colab Notebook GCS URI"
+          reference: project_1.startup_script.notebook_gcs_uri
+        - label: "Colab Notebook GCS URI (KR)"
+          reference: project_1.startup_script.notebook_gcs_uri_ko
+        - label: "AlloyDB Cluster Name"
+          reference: project_1.startup_script.alloydb_cluster_name
+        - label: "AlloyDB Private IP"
+          reference: project_1.startup_script.alloydb_private_ip
+        - label: "AlloyDB Public IP"
+          reference: project_1.startup_script.alloydb_public_ip
+        - label: "AlloyDB Password"
+          reference: project_1.startup_script.alloydb_password
+        - label: "VPC Network Name"
+          reference: project_1.startup_script.vpc_name
+        - label: "Colab Runtime Template ID"
+          reference: project_1.startup_script.colab_runtime_template_id
+        - label: "GCP Project ID"
+          reference: project_1.startup_script.gcp_project_id
+        - label: "GCP Region"
+          reference: project_1.startup_script.gcp_region
+        - label: "Public IP"
+          reference: project_1.startup_script.public_ip

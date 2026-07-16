@@ -1,0 +1,83 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+mat-dialog-content {
+  min-height: 300px; // Ensure some minimum height
+  max-height: 85vh; // Allow scrolling for long queries - this will be the main scroll
+  overflow-y: auto; // Ensure vertical scrolling for the content area
+  display: flex; // Use flexbox to manage inner content layout
+  flex-direction: column; // Stack children vertically
+}
+
+.query-plan-output {
+  font-family: monospace;
+  line-height: 1.4;
+  text-align: left;
+  overflow-x: auto; // Keep horizontal scroll for long lines if needed
+  overflow-y: hidden !important; // Explicitly hide vertical scroll here
+  flex-grow: 1; // Allow the pre tag to grow and fill the available space within the flex container
+}
+
+app-sql-statement {
+  margin-top: 10px;
+
+  /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+  ::ng-deep pre {
+    white-space: pre-wrap;
+    overflow-y: hidden !important;
+    overflow-x: auto;
+    max-height: none !important;
+  }
+}
+
+/* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+::ng-deep .mat-mdc-tab-body-content {
+  overflow-y: hidden !important;
+}
+
+/* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+::ng-deep div[cdkscrollable] {
+  overflow-y: hidden !important;
+}
+
+// --- New styles for spinner placement ---
+.explain-button {
+  position: relative; // Make the button a positioning context for absolute children
+
+  .loading-spinner-overlay {
+    position: absolute; // Position the spinner absolutely within the button
+    inset: 0;
+    display: flex; // Use flexbox to center the spinner
+    justify-content: center; // Center horizontally
+    align-items: center; // Center vertically
+    background-color: rgb(
+      255 255 255 / 70%
+    ); // Optional: Add a semi-transparent overlay
+
+    z-index: 1; // Ensure the spinner is above the button content
+  }
+
+  // Hide the text label when loading to only show the spinner
+  /* stylelint-disable-next-line selector-class-pattern */
+  &[disabled] .mdc-button__label {
+    visibility: hidden;
+  }
+
+  // Adjust icon visibility if needed when loading
+  &[disabled] mat-icon {
+    visibility: hidden;
+  }
+}
