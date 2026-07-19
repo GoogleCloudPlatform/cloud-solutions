@@ -36,6 +36,5 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["marketing_agent"]
 
-[tool.hatch.metadata]
-allow-direct-references = true
-
+[tool.uv.sources]
+adk_common = { path = "../adk_common", editable = true }
