@@ -37,10 +37,13 @@
       "timeout": 60000
     },
     {
+      "hostType": "pypi",
+      "timeout": 60000
+    },
+    {
       "hostType": "docker",
       "matchHost": "gcr.io",
-      "username": "",
-      "password": ""
+      "timeout": 60000
     }
   ],
   "vulnerabilityAlerts": {
