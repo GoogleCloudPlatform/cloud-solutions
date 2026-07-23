@@ -27,6 +27,7 @@
 /projects/gemini-powered-migrations-to-google-cloud/                  @aburhan @ferrarimarco @gitrey
 /projects/generative-media-shot-production/                           @gushob21
 /projects/gke-migration-agent/                                        @aburhan @rohinikrishna05
+/projects/gke-migration-agent/ingress2gateway/                        @rohinikrishna05
 /projects/gke-optimization/binpacker/                                 @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/hive-bigquery-connector-demo/                               @eyalbenivri
 /projects/imagen-object-changer/                                      @lepistom
