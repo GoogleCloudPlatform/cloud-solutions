@@ -1,0 +1,10 @@
+google-genai
+google-cloud-aiplatform
+google-cloud-bigquery
+pydantic
+fastapi
+uvicorn
+python-dotenv>=1.2.2
+gitpython>=3.1.30
+aiohttp>=3.14.1
+
