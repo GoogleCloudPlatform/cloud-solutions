@@ -1,4 +1,0 @@
-{
-  "entrypoint_module": "lj_marketing_agent.agent",
-  "entrypoint_object": "root_agent"
-}
