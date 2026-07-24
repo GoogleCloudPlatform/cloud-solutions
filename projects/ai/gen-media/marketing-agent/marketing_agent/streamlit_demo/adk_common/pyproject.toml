@@ -7,7 +7,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "google-adk==1.30.0",
-    "python-dotenv==1.1.1",
+    "python-dotenv==1.2.2",
     "google-genai==1.74.0",
     "google-cloud-aiplatform[adk,agent-engines]==1.147.0",
     "pydantic==2.12.0",
