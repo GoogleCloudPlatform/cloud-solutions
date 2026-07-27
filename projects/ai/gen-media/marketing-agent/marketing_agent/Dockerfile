@@ -31,7 +31,7 @@ RUN pip install --no-cache-dir hatchling setuptools wheel \
         adk_common/ \
         lj_marketing_agent/ \
         streamlit \
-        google-ads==30.0.0 \
+        google-ads==30.1.0 \
         rapidfuzz==3.14.5
 
 ENV PYTHONPATH=/app
