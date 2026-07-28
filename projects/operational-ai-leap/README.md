@@ -76,8 +76,9 @@ flowchart TD
 
 ## Getting Started
 
-> [!NOTE] Are you taking a **Qwiklabs** lab where the environment is
-> pre-deployed? Please follow [QWIKLABS.md](QWIKLABS.md) instead!
+> [!NOTE]
+> Are you taking a **Qwiklabs** lab where the environment is pre-deployed?
+> Please follow [QWIKLABS.md](QWIKLABS.md) instead!
 
 ### Prerequisites
 
@@ -105,15 +106,15 @@ flowchart TD
 
 1.  Set optional Terraform environment variables:
 
-    > [!TIP] By default, Terraform automatically detects your active GCP project
-    > ID and public IP address, and automatically generates a secure
-    > 16-character AlloyDB password.
+> [!TIP]
+> By default, Terraform automatically detects your active GCP project ID and
+> public IP address, and automatically generates a secure 16-character AlloyDB
+> password.
 
-    <!-- -->
-
-    > [!IMPORTANT] If deploying in an internal Google **Argolis** environment,
-    > set the `TF_VAR_argolis` flag to `true` to apply necessary organization
-    > policy overrides:
+> [!IMPORTANT]
+> If deploying in an internal Google **Argolis** environment, set the
+> `TF_VAR_argolis` flag to `true` to apply necessary organization policy
+> overrides:
 
     ```bash
     export TF_VAR_argolis="true"
