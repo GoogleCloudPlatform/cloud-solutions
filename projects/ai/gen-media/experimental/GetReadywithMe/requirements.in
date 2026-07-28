@@ -1,13 +1,13 @@
-streamlit>=1.28.0
-pandas>=2.0.0
+streamlit==1.56.0
+pandas==3.0.2
 pillow==12.3.0
-numpy>=1.24.0
-google-cloud-storage>=2.10.0
-google-genai>=0.2.0
-google-cloud-aiplatform>=1.138.0
-opencv-python>=4.8.0
-scikit-image>=0.21.0
+numpy==2.4.4
+google-cloud-storage==3.10.1
+google-genai==1.70.0
+google-cloud-aiplatform==1.145.0
+opencv-python==4.13.0.92
+scikit-image==0.26.0
 requests==2.34.2
-cryptography>=48.0.1
+cryptography==49.0.0
 gitpython==3.1.57
 
