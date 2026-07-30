@@ -1,6 +1,6 @@
 # buildtest.dockerfile is used for ci.
 
-FROM python:3.10-slim
+FROM python:3.14-slim
 
 ARG PROJECT_SUBDIRECTORY=/app
 ENV PROJECT_SUBDIRECTORY=$PROJECT_SUBDIRECTORY
