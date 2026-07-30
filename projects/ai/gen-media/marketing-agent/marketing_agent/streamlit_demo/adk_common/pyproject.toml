@@ -6,10 +6,10 @@ authors = [{ name = "GenMedia Team", email = "team@example.com" }]
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "google-adk==1.30.0",
+    "google-adk==1.36.2",
     "python-dotenv==1.2.2",
-    "google-genai==1.75.0",
-    "google-cloud-aiplatform[adk,agent-engines]==1.162.0",
+    "google-genai==2.16.0",
+    "google-cloud-aiplatform[adk,agent-engines]==1.163.0",
     "pydantic==2.13.4",
     "absl-py==2.5.0",
     "requests==2.34.2",

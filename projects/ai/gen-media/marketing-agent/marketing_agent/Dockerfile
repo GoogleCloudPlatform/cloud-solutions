@@ -25,14 +25,12 @@ COPY streamlit_app.py .
 COPY logo.jpg .
 COPY .streamlit/ .streamlit/
 
-# hadolint ignore=DL3013
-RUN pip install --no-cache-dir hatchling setuptools wheel \
-    && pip install --no-cache-dir --no-build-isolation \
-        adk_common/ \
-        lj_marketing_agent/ \
-        streamlit \
-        google-ads==30.1.0 \
-        rapidfuzz==3.14.5
+# Copy hash-verified requirements manifest
+COPY requirements.txt .
+
+# Install dependencies securely with hash verification and install local project modules
+RUN pip install --no-cache-dir --require-hashes -r requirements.txt \
+    && pip install --no-cache-dir --no-build-isolation --no-deps ./adk_common ./lj_marketing_agent
 
 ENV PYTHONPATH=/app
 
