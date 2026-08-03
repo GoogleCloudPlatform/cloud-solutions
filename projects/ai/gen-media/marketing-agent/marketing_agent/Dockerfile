@@ -30,7 +30,7 @@ COPY requirements.txt .
 
 # Install dependencies securely with hash verification and install local project modules
 RUN pip install --no-cache-dir --require-hashes -r requirements.txt \
-    && pip install --no-cache-dir --no-build-isolation --no-deps ./adk_common ./lj_marketing_agent
+    && pip install --no-cache-dir --no-index --no-build-isolation --no-deps ./adk_common ./lj_marketing_agent
 
 ENV PYTHONPATH=/app
 

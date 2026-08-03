@@ -25,7 +25,12 @@ COPY ge_video_ads.py .
 COPY google_logo.png .
 COPY .streamlit/ .streamlit/
 
-RUN pip install --no-cache-dir .
+# Copy hash-verified requirements manifest
+COPY requirements.txt .
+
+# Install dependencies verifiably with checksum hashes and install local project module
+RUN pip install --no-cache-dir --require-hashes -r requirements.txt \
+    && pip install --no-cache-dir --no-index --no-build-isolation --no-deps .
 
 ENV PYTHONPATH=/app
 
