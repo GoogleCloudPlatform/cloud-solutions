@@ -211,6 +211,14 @@
     },
     {
       "matchFileNames": [
+        "projects/gecx-ticketing-demo/**"
+      ],
+      "groupName": "gecx-ticketing-demo",
+      "commitMessagePrefix": "chore(deps): [gecx-ticketing-demo]",
+      "additionalBranchPrefix": "gecx-ticketing-demo-"
+    },
+    {
+      "matchFileNames": [
         "projects/gemini-powered-migrations-to-google-cloud/**"
       ],
       "groupName": "gemini-powered-migrations-to-google-cloud",
