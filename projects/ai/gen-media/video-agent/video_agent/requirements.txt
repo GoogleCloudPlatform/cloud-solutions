@@ -322,12 +322,12 @@ gitpython==3.1.57 \
     # via streamlit
 google-adk==2.5.0 \
     --hash=sha256:d247ca3639921a54a86feb797a88d08c1d2c9a60c3f5ff2805e49beb29a9cb8d
-    # via -r projects/ai/gen-media/video-agent/video_agent/requirements.in
-google-api-core[grpc]==2.33.0 \
+    # via -r requirements.in
+google-api-core==2.33.0 \
     --hash=sha256:3a36bcc3e319783f4c97da41f6f45ea6ffcaa55848e341de16e09cb70243c2bb \
     --hash=sha256:a2e22a0c1d0f03eafff1858b38cf46f832d5902b0c052235bf0ab8402929fbdc
     # via google-cloud-texttospeech
-google-auth[pyopenssl,requests]==2.56.2 \
+google-auth==2.56.2 \
     --hash=sha256:c8270ea95b2697b74e3d8438ae9c5b898e38b623b915c7b5c5635921e7de68a6 \
     --hash=sha256:e28f103ca8091fb7012b99c44243d7366c29863713b8e34a220c3322b7a07051
     # via
@@ -338,12 +338,12 @@ google-auth[pyopenssl,requests]==2.56.2 \
 google-cloud-texttospeech==2.37.0 \
     --hash=sha256:911f42f327027975d7781efcace1993afdf311b692b95b6814b71085750cc38a \
     --hash=sha256:db726382f393ceb6b36002c35abd62b53c4d8e17fc2f31df8b07fd0fabbe4f8b
-    # via -r projects/ai/gen-media/video-agent/video_agent/requirements.in
+    # via -r requirements.in
 google-genai==2.14.0 \
     --hash=sha256:2d1e0fc4d32fe5eb9cfdb77c617ddab9e88bf0a0c4744d03657b9e078ef40a02 \
     --hash=sha256:a9d1f4f362d76280f1be1340fcb3c86e63dbca128f6a4ae09d86ab47ff7148e8
     # via
-    #   -r projects/ai/gen-media/video-agent/video_agent/requirements.in
+    #   -r requirements.in
     #   google-adk
 googleapis-common-protos==1.75.0 \
     --hash=sha256:53a062ff3c32552fbd62c11fe23768b78e4ddf0494d5e5fd97d3f4689c75fbbd \
@@ -730,7 +730,7 @@ pillow==12.3.0 \
     --hash=sha256:6c0016e7b354317c4e9e525b937ac8596c38d2d232b419529b9cd7a1cd46e39a \
     --hash=sha256:bcc33feacfaefce60c12fd500a277533bdc02b10a19f7f6d348763d8140bbba7
     # via
-    #   -r projects/ai/gen-media/video-agent/video_agent/requirements.in
+    #   -r requirements.in
     #   streamlit
 proto-plus==1.28.2 \
     --hash=sha256:26d843eb99c1e32fdf1d20ff0faae56607f7748fe774acf9ecd5cfe6c6472501 \
@@ -959,7 +959,7 @@ python-dotenv==1.2.2 \
     --hash=sha256:1d8214789a24de455a8b8bd8ae6fe3c6b69a5e3d64aa8a8e5d68e694bbcb285a \
     --hash=sha256:2c371a91fbd7ba082c2c1dc1f8bf89ca22564a087c2c287cd9b662adde799cf3
     # via
-    #   -r projects/ai/gen-media/video-agent/video_agent/requirements.in
+    #   -r requirements.in
     #   google-adk
 python-multipart==0.0.32 \
     --hash=sha256:be54b7f3fa167bb83e4fcd936b887b708f4e57fe75911c02aebf53efaf8d938e \
@@ -1177,6 +1177,10 @@ rpds-py==2026.6.3 \
     # via
     #   jsonschema
     #   referencing
+setuptools==83.0.0 \
+    --hash=sha256:025bccbbf0fa05b6192bc64ae1e7b16e001fd6d6d4d5de03c97b1c1ade523bef \
+    --hash=sha256:29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3
+    # via -r requirements.in
 six==1.17.0 \
     --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274 \
     --hash=sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81
@@ -1199,7 +1203,7 @@ starlette==1.3.1 \
 streamlit==1.60.0 \
     --hash=sha256:09f2fdd2aabbd3b3560953795681dd675d5479ac82c21fc2dceadaf9bd484ea3 \
     --hash=sha256:d167d67cf94537600a6e378d8aa0c31eabab26beb243e2a51de9842e2872e393
-    # via -r projects/ai/gen-media/video-agent/video_agent/requirements.in
+    # via -r requirements.in
 tenacity==9.1.4 \
     --hash=sha256:6095a360c919085f28c6527de529e76a06ad89b23659fa881ae0649b867a9d55 \
     --hash=sha256:adb31d4c263f2bd041081ab33b498309a57c77f9acf2db65aadf0898179cf93a
@@ -1358,10 +1362,4 @@ websockets==15.0.1 \
 wheel==0.47.0 \
     --hash=sha256:212281cab4dff978f6cedd499cd893e1f620791ca6ff7107cf270781e587eced \
     --hash=sha256:cc72bd1009ba0cf63922e28f94d9d83b920aa2bb28f798a31d0691b02fa3c9b3
-    # via -r projects/ai/gen-media/video-agent/video_agent/requirements.in
-
-# The following packages are considered to be unsafe in a requirements file:
-setuptools==83.0.0 \
-    --hash=sha256:025bccbbf0fa05b6192bc64ae1e7b16e001fd6d6d4d5de03c97b1c1ade523bef \
-    --hash=sha256:29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3
-    # via -r projects/ai/gen-media/video-agent/video_agent/requirements.in
+    # via -r requirements.in
