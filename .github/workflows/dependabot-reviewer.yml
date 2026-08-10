@@ -36,34 +36,38 @@ jobs:
       - name: Route Reviewers
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          ADMIN_TEAM: "GoogleCloudPlatform/cloud-solutions-the-repo-admin"
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          ADMIN_TEAM_SLUG: "cloud-solutions-the-repo-admin"
         run: |
-          echo "Processing Dependabot PR: $PR_URL"
+          echo "Processing Dependabot PR #${PR_NUMBER} on ${REPO}"
 
-          # Get all currently requested reviewers (type and login)
-          CURRENT_REVIEWERS=$(gh pr view "$PR_URL" --json reviewRequests --jq '.reviewRequests[] | "\(.type):\(.login)"')
+          # Fetch currently requested reviewers (users and teams)
+          REVIEWERS_DATA=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" || true)
 
-          echo "Found reviewers: $CURRENT_REVIEWERS"
+          # Extract user logins to remove
+          USER_REVIEWERS=$(echo "$REVIEWERS_DATA" | jq -c '[.users[].login] // []' 2>/dev/null || echo "[]")
+          echo "Found user reviewers: $USER_REVIEWERS"
 
-          # Loop and remove auto-assigned reviewers
-          for r in $CURRENT_REVIEWERS; do
-            TYPE=$(echo "$r" | cut -d':' -f1)
-            LOGIN=$(echo "$r" | cut -d':' -f2)
+          # Batch remove auto-assigned user reviewers in a single API request
+          if [ "$USER_REVIEWERS" != "[]" ] && [ -n "$USER_REVIEWERS" ]; then
+            echo "Removing user reviewers: $USER_REVIEWERS"
+            gh api --method DELETE "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
+              --input - <<< "{\"reviewers\": $USER_REVIEWERS}" || true
+          fi
 
-            if [ "$TYPE" = "Team" ]; then
-              FULL_NAME="GoogleCloudPlatform/$LOGIN"
-            else
-              FULL_NAME="$LOGIN"
-            fi
+          # Extract other team reviewers to remove (excluding admin team)
+          OTHER_TEAMS=$(echo "$REVIEWERS_DATA" | jq -c --arg admin "$ADMIN_TEAM_SLUG" '[.teams[].slug | select(. != $admin)] // []' 2>/dev/null || echo "[]")
+          echo "Found non-admin team reviewers: $OTHER_TEAMS"
 
-            # Skip admin team if already present
-            if [ "$FULL_NAME" != "$ADMIN_TEAM" ] && [ "$LOGIN" != "cloud-solutions-the-repo-admin" ]; then
-              echo "Removing reviewer: $FULL_NAME"
-              gh pr edit "$PR_URL" --remove-reviewer "$FULL_NAME"
-            fi
-          done
+          # Batch remove other team reviewers in a single API request
+          if [ "$OTHER_TEAMS" != "[]" ] && [ -n "$OTHER_TEAMS" ]; then
+            echo "Removing non-admin team reviewers: $OTHER_TEAMS"
+            gh api --method DELETE "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
+              --input - <<< "{\"team_reviewers\": $OTHER_TEAMS}" || true
+          fi
 
-          # Add the admin team as the sole reviewer
-          echo "Adding admin team as reviewer: $ADMIN_TEAM"
-          gh pr edit "$PR_URL" --add-reviewer "$ADMIN_TEAM"
+          # Add the admin team as reviewer
+          echo "Adding admin team as reviewer: $ADMIN_TEAM_SLUG"
+          gh api --method POST "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
+            --input - <<< "{\"team_reviewers\": [\"$ADMIN_TEAM_SLUG\"]}"
