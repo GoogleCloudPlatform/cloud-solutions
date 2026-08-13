@@ -1,0 +1,10 @@
+cxas-scrapi~=1.8
+fastapi~=0.136
+uvicorn~=0.49
+pydantic~=2.13
+websockets~=16.0
+google-cloud-bigquery~=3.41
+google-cloud-dialogflow~=2.48
+PyJWT~=2.13
+google-auth~=2.53
+python-dotenv~=1.2

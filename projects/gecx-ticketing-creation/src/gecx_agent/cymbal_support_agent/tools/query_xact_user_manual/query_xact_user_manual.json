@@ -1,0 +1,9 @@
+{
+  "name": "16edfbf5-49f0-4ce0-b576-0f969ba96414",
+  "pythonFunction": {
+    "name": "query_xact_user_manual",
+    "pythonCode": "tools/query_xact_user_manual/python_function/python_code.py",
+    "description": "Queries the Xact Web Portal User Manual for information based on the user's question.\n\nArgs:\n    query (str): The user's question about the Xact Web Portal.\n\nReturns:\n    dict[str, Any]: A dictionary containing the answer found in the manual or a message if not found.\n          Example: {\"answer\": \"The Xact Web Portal provides a single window to all services offered by Cymbal...\"}\n          Example: {\"answer\": \"I couldn't find specific information for that query in the Xact Web Portal User Manual.\"}"
+  },
+  "displayName": "query_xact_user_manual"
+}

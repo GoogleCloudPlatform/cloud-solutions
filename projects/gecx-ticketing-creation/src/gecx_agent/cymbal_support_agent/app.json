@@ -1,0 +1,53 @@
+{
+  "name": "8e3eb80c-856b-40bd-aaf6-bfe72bdc4e1f",
+  "displayName": "Cymbal Servicing Agent",
+  "rootAgent": "Cymbal Client Service",
+  "audioProcessingConfig": {
+    "synthesizeSpeechConfigs": {
+      "de-DE": {},
+      "en-US": {},
+      "es-US": {},
+      "fr-FR": {}
+    }
+  },
+  "loggingSettings": {
+    "conversationLoggingSettings": {
+      "retentionWindow": "31536000s"
+    },
+    "metricAnalysisSettings": {}
+  },
+  "guardrails": ["Default Safety Guardrail", "Default Prompt Guardrail"],
+  "variableDeclarations": [
+    {
+      "name": "contact_id",
+      "description": "Variable \"contact_id\".",
+      "schema": {
+        "type": "STRING"
+      }
+    },
+    {
+      "name": "customer_id",
+      "description": "Variable \"customer_id\".",
+      "schema": {
+        "type": "STRING"
+      }
+    },
+    {
+      "name": "mock_ticket_db",
+      "description": "Variable \"mock_ticket_db\".",
+      "schema": {
+        "type": "OBJECT"
+      }
+    }
+  ],
+  "languageSettings": {
+    "defaultLanguageCode": "en-US",
+    "supportedLanguageCodes": ["es-US", "de-DE", "fr-FR"]
+  },
+  "defaultChannelProfile": {},
+  "timeZoneSettings": {
+    "timeZone": "America/Los_Angeles"
+  },
+  "toolExecutionMode": "PARALLEL",
+  "errorHandlingSettings": {}
+}

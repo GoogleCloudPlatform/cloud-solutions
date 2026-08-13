@@ -1,0 +1,10 @@
+{
+  "name": "01e87380-3608-421c-ad54-f9199dd9f7d0",
+  "pythonFunction": {
+    "name": "analyze_sentiment",
+    "pythonCode": "tools/analyze_sentiment/python_function/python_code.py",
+    "description": "Analyzes customer sentiment by reading live session text directly from the \nglobal context and evaluating it via an outbound Vertex AI REST call.\n\nReturns:\n    Dict[str, Any]: Conformed dictionary mapping containing the detected sentiment string."
+  },
+  "executionType": "SYNCHRONOUS",
+  "displayName": "analyze_sentiment"
+}

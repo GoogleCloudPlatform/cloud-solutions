@@ -1,0 +1,10 @@
+{
+  "name": "26f73679-7629-421c-83c2-3cf3184e37f6",
+  "pythonFunction": {
+    "name": "create_service_ticket",
+    "pythonCode": "tools/create_service_ticket/python_function/python_code.py",
+    "description": "Creates a new service ticket with the provided details.\n\nArgs:\n    service_request (str): Detailed description of the service request.\n    settlement_status (str): The current settlement status related to the request (e.g., \"Pending\", \"Settled\", \"Failed\").\n    sentiment_analysis (str): The sentiment of the user\u0027s request (e.g., \"positive\", \"neutral\", \"negative\").\n    date_time (str | None): Optional date and time the ticket is being created, in ISO format (YYYY-MM-DDTHH:MM:SS).\n                            If not provided, the current date from context will be used.\n    assigned_to (str): The name of the service team member assigned to the ticket.\n    image_url (str | None): Optional URL of an image provided by the user.\n    image_analysis (str | None): Optional analysis of the provided image.\n\nReturns:\n    dict[str, Any]: A dictionary indicating the success or failure of ticket creation, along with the new ticket ID.\n          Example: {\"success\": True, \"ticket_id\": \"NEWTICKET001\", \"message\": \"Service ticket created successfully.\"}\n          Example: {\"success\": False, \"message\": \"Failed to create ticket due to system error.\"}"
+  },
+  "executionType": "SYNCHRONOUS",
+  "displayName": "create_service_ticket"
+}

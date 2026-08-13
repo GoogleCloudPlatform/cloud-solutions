@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cymbal Agent Console (Loopback)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(20, 28, 47, 0.7);
+      --accent-color: #00adb5;
+      --accent-success: #10b981;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-family: 'Outfit', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 173, 181, 0.08) 0%, rgba(0,0,0,0) 70%);
+      top: -10%;
+      right: -10%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .agent-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1200px;
+      border-radius: 24px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+      padding: 30px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #ffffff, var(--accent-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .ticket-badge {
+      background: rgba(0, 173, 181, 0.1);
+      border: 1px solid rgba(0, 173, 181, 0.2);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: monospace;
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    /* Layout Grid */
+    .console-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .panel {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Left Panel: Chat & Call Controls */
+    .call-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      display: inline-block;
+      transition: background 0.3s;
+    }
+
+    .status-dot.connected {
+      background: var(--accent-success);
+    }
+
+    #call-status {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .btn-action {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    #accept-btn {
+      background: var(--accent-color);
+      color: #0f172a;
+    }
+
+    #accept-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    #disconnect-btn {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      display: none;
+    }
+
+    #resolve-btn {
+      background: var(--accent-success);
+      color: #0f172a;
+      display: none;
+    }
+
+    .chat-transcript-area {
+      flex: 1;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+      background: rgba(10, 15, 30, 0.5);
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bubble {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      display: inline-block;
+      word-break: break-word;
+    }
+
+    .bubble-customer {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+
+    .bubble-agent {
+      background: rgba(0, 173, 181, 0.15);
+      color: #fff;
+      border: 1px solid rgba(0, 173, 181, 0.2);
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+
+    .bubble-bot {
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .chat-input:focus {
+      border-color: var(--accent-color);
+    }
+
+    .btn-send {
+      background: var(--accent-color);
+      color: #0f172a;
+      border: none;
+      border-radius: 8px;
+      padding: 0 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Middle Panel: Suggestion Board */
+    .suggestions-board {
+      overflow-y: auto;
+      gap: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .suggestion-card {
+      background: rgba(0, 173, 181, 0.05);
+      border: 1px solid rgba(0, 173, 181, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .suggestion-card:hover {
+      background: rgba(0, 173, 181, 0.08);
+      border-color: rgba(0, 173, 181, 0.3);
+    }
+
+    .suggestion-type {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--accent-color);
+      margin-bottom: 6px;
+    }
+
+    .suggestion-q {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .suggestion-a {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .suggestion-instruction {
+      font-size: 0.85rem;
+      color: #ffd000; /* Warm golden color for instructions */
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .suggestion-action {
+      font-size: 0.85rem;
+      color: #00adb5; /* Cyan for actions */
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .suggestion-suggested-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid #10b981; /* Green border accent */
+      padding: 10px 12px;
+      border-radius: 4px;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .suggestion-suggested-text {
+      font-size: 0.9rem;
+      color: #f8fafc;
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .btn-use-suggestion {
+      align-self: flex-end;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-use-suggestion:hover {
+      background: #10b981;
+      color: #0b0f19;
+    }
+
+    .no-suggestions {
+      color: var(--text-muted);
+      text-align: center;
+      margin: auto 0;
+      font-size: 0.9rem;
+    }
+
+    /* Right Panel: Email Draft Card */
+    .email-draft-panel {
+      opacity: 0.4;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .email-draft-panel.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      color: #fff;
+      font-size: 0.88rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-color);
+    }
+
+    textarea.form-control {
+      resize: none;
+    }
+
+    #send-email-btn {
+      width: 100%;
+      background: var(--accent-success);
+      color: #0b0f19;
+      font-weight: 700;
+      padding: 12px;
+      margin-top: 8px;
+    }
+
+    /* Utilities */
+    .incoming-alert {
+      display: none;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid #fbbf24;
+      color: #fef08a;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      font-weight: 500;
+      text-align: center;
+      animation: pulse 1.5s infinite;
+    }
+
+    .alert-error {
+      display: none;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.9; }
+      50% { opacity: 1; box-shadow: 0 0 8px rgba(245, 158, 11, 0.2); }
+      100% { opacity: 0.9; }
+    }
+
+    /* Mobile Responsive Layout */
+    @media (max-width: 992px) {
+      .console-grid {
+        grid-template-columns: 1fr;
+      }
+      .panel {
+        height: auto;
+        min-height: 400px;
+      }
+      .agent-container {
+        padding: 20px;
+      }
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="agent-container">
+    <header>
+      <div>
+        <h1>Cymbal Agent Console</h1>
+        <div class="subtitle">Secure institutional voice response terminal</div>
+      </div>
+      <div class="ticket-badge" id="ticket-id-display">Loading ticket session...</div>
+    </header>
+
+    <div class="alert-error" id="mic-denied">Microphone access denied. Please allow microphone permissions in settings.</div>
+    <div class="incoming-alert" id="incoming-alert">Incoming voice request from client...</div>
+    <div class="alert-error" id="quota-error" style="display: none;"></div>
+
+    <div class="console-grid">
+      <!-- Left Panel: Chat & Controls -->
+      <div class="panel">
+        <div class="panel-title">
+          <span>Chat / Voice Channel</span>
+          <div class="call-bar">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="call-status">Disconnected</span>
+          </div>
+        </div>
+
+        <div class="call-bar" style="margin-bottom: 14px; gap: 8px;">
+          <button class="btn-action" id="accept-btn" disabled>Accept Call</button>
+          <button class="btn-action" id="mute-btn" style="display:none; background:#475569; color:white; border:none; border-radius:8px; font-weight:600; font-size:0.85rem; cursor:pointer; padding:10px 18px; transition:all 0.2s;">🎙️ Mute Mic</button>
+          <button class="btn-action" id="disconnect-btn">Hang Up</button>
+          <button class="btn-action" id="resolve-btn">Resolve</button>
+        </div>
+
+        <div class="chat-transcript-area" id="chat-transcript">
+          <div style="color: var(--text-muted); text-align: center; margin: auto 0; font-size: 0.85rem;">
+            Waiting for call connection to load transcript history...
+          </div>
+        </div>        <div id="live-caption" style="min-height: 24px; font-size: 0.85rem; color: #fbbf24; margin-bottom: 8px; font-style: italic; padding: 0 4px;"></div>
+
+        <div class="chat-input-bar">
+          <input type="text" class="chat-input" id="agent-chat-input" placeholder="Type message to customer..." disabled>
+          <button class="btn-send" id="send-agent-msg" disabled>Send</button>
+        </div>
+      </div>
+
+      <!-- Middle Panel: Suggestion Board -->
+      <div class="panel">
+        <div class="panel-title">Companion Suggestion Board</div>
+        <div class="suggestions-board" id="agent-assist-board">
+          <div class="no-suggestions" id="no-suggestions">
+            No live voice cues captured yet. Speak to trigger coaching suggestions.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Email Draft Card -->
+      <div class="panel email-draft-panel" id="email-draft-ui">
+        <div class="panel-title">Interactive Email Resolution</div>
+
+        <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
+          <div class="form-group">
+            <label for="resolution-summary">Resolution Summary (Notes)</label>
+            <textarea class="form-control" id="resolution-summary" rows="3" placeholder="Enter resolution details for database logging..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="email-recipient">Recipient Email</label>
+            <input type="email" class="form-control" id="email-recipient" value="customer@cymbal.com">
+          </div>
+
+          <div class="form-group">
+            <label for="email-subject">Email Subject</label>
+            <input type="text" class="form-control" id="email-subject" value="">
+          </div>
+
+          <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
+            <label for="email-body">Email Body</label>
+            <textarea class="form-control" id="email-body" style="flex: 1;" placeholder="Compose resolution email context..."></textarea>
+          </div>
+
+          <button class="btn-action" id="send-email-btn">Send Email & Close Ticket</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const ticketId = urlParams.get('ticket_id');
+
+    const ticketIdDisplay = document.getElementById('ticket-id-display');
+    const callStatus = document.getElementById('call-status');
+    const statusDot = document.getElementById('status-dot');
+    const acceptBtn = document.getElementById('accept-btn');
+    const muteBtn = document.getElementById('mute-btn');
+    const disconnectBtn = document.getElementById('disconnect-btn');
+    const resolveBtn = document.getElementById('resolve-btn');
+    const incomingAlert = document.getElementById('incoming-alert');
+    const errorAlert = document.getElementById('mic-denied');
+
+    // Chat components
+    const chatTranscript = document.getElementById('chat-transcript');
+    const agentChatInput = document.getElementById('agent-chat-input');
+    const sendAgentMsg = document.getElementById('send-agent-msg');
+
+    // Suggestion board
+    const agentAssistBoard = document.getElementById('agent-assist-board');
+    const noSuggestions = document.getElementById('no-suggestions');
+
+    // Email Draft components
+    const emailDraftUi = document.getElementById('email-draft-ui');
+    const resolutionSummary = document.getElementById('resolution-summary');
+    const emailRecipient = document.getElementById('email-recipient');
+    const emailSubject = document.getElementById('email-subject');
+    const emailBody = document.getElementById('email-body');
+    const sendEmailBtn = document.getElementById('send-email-btn');
+
+    let signalingWs = null;
+    let chatWs = null;
+    let assistWs = null;
+    let peerConnection = null;
+    let localStream = null;
+    let remoteOffer = null;
+    let isMuted = false;
+
+    // Web Audio Worklet variables
+    let audioContext = null;
+    let audioWorkletNode = null;
+
+    if (!ticketId) {
+      ticketIdDisplay.innerText = "Error: Missing ticket_id";
+      ticketIdDisplay.style.color = "#ef4444";
+    } else {
+      ticketIdDisplay.innerText = ticketId;
+      initSignaling();
+    }
+
+    function initSignaling() {
+      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      const wsUrl = `${protocol}//${window.location.host}/api/ws/loopback/signaling/${ticketId}?role=agent`;
+      signalingWs = new WebSocket(wsUrl);
+
+      signalingWs.onmessage = async (event) => {
+        const message = JSON.parse(event.data);
+        if (message.type === 'offer') {
+          remoteOffer = message;
+          incomingAlert.style.display = 'block';
+          acceptBtn.disabled = false;
+          callStatus.innerText = "Incoming Call";
+        } else if (message.candidate && peerConnection) {
+          try {
+            await peerConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
+          } catch (e) {
+            console.error("Error adding ice candidate:", e);
+          }
+        }
+      };
+
+      signalingWs.onclose = () => {
+        console.log("Signaling WebSocket closed.");
+      };
+    }
+
+    acceptBtn.addEventListener('click', async () => {
+      acceptBtn.disabled = true;
+      incomingAlert.style.display = 'none';
+      callStatus.innerText = "Connecting...";
+
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (err) {
+        console.error("Microphone access blocked:", err);
+        errorAlert.style.display = 'block';
+        callStatus.innerText = "Failed";
+        return;
+      }
+
+      // Eagerly initiate live Chat history backfill and Agent Assist gRPC streams
+      connectChatFlow();
+      connectAgentAssistFlow();
+
+      peerConnection = new RTCPeerConnection({ iceServers: [] });
+      localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+      /* === WEBRTC AUDIO PLAYBACK FIX (b/533523448 Review Comment #4) ===
+         This block binds the remote incoming WebRTC audio track to an Audio element
+         so that the agent can hear the customer's voice.
+         REVERSION NOTE: If WebRTC voice calls break, this block can be safely deleted. */
+      peerConnection.ontrack = (event) => {
+        console.log("[WebRTC Debug] Received remote audio track.");
+        const remoteAudio = new Audio();
+        remoteAudio.srcObject = event.streams[0];
+        remoteAudio.play().catch(err => {
+          console.error("[WebRTC Debug] Remote audio playback failed:", err);
+        });
+      };
+      /* === END WEBRTC AUDIO PLAYBACK FIX === */
+
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate && signalingWs && signalingWs.readyState === WebSocket.OPEN) {
+          signalingWs.send(JSON.stringify({ candidate: event.candidate }));
+        }
+      };
+
+      peerConnection.onconnectionstatechange = () => {
+        if (peerConnection.connectionState === 'connected') {
+          callStatus.innerText = "Connected";
+          statusDot.classList.add('connected');
+          disconnectBtn.style.display = 'block';
+          muteBtn.style.display = 'block';
+          acceptBtn.style.display = 'none';
+        } else if (['failed', 'disconnected', 'closed'].includes(peerConnection.connectionState)) {
+          handleCallHangUp();
+        }
+      };
+
+      try {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(remoteOffer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+
+        if (signalingWs && signalingWs.readyState === WebSocket.OPEN) {
+          signalingWs.send(JSON.stringify({ type: 'answer', sdp: answer.sdp }));
+        }
+      } catch (err) {
+        console.error("Error setting descriptions:", err);
+        handleCallHangUp();
+      }
+    });
+
+    disconnectBtn.addEventListener('click', () => {
+      if (signalingWs && signalingWs.readyState === WebSocket.OPEN) {
+        signalingWs.send(JSON.stringify({ type: 'disconnect' }));
+      }
+      handleCallHangUp();
+    });
+
+    function handleCallHangUp() {
+      // 1. Terminate audio capture tracks
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+      }
+      // 2. Stop Audio Worklet node
+      if (audioWorkletNode) {
+        audioWorkletNode.disconnect();
+        audioWorkletNode = null;
+      }
+      if (audioContext && audioContext.state !== "closed") {
+        audioContext.close();
+        audioContext = null;
+      }
+      // 3. Close WebRTC peer connection
+      if (peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+      }
+      // 4. Close Agent Assist stream socket
+      if (assistWs && assistWs.readyState === WebSocket.OPEN) {
+        assistWs.close();
+      }
+
+      isMuted = false;
+      callStatus.innerText = "Concluded";
+      statusDot.classList.remove('connected');
+      disconnectBtn.style.display = 'none';
+      if (muteBtn) {
+        muteBtn.style.display = 'none';
+        muteBtn.innerText = "🎙️ Mute Mic";
+        muteBtn.style.background = "#475569";
+      }
+      resolveBtn.style.display = 'block';
+
+      // Disable chat inputs
+      agentChatInput.disabled = true;
+      sendAgentMsg.disabled = true;
+    }
+
+    // Setup mute button toggle click handler for Agent Console
+    muteBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      if (localStream) {
+        const audioTrack = localStream.getAudioTracks()[0];
+        if (audioTrack) {
+          audioTrack.enabled = !isMuted;
+        }
+      }
+      if (!isMuted) {
+        muteBtn.innerText = "🎙️ Mute Mic";
+        muteBtn.style.background = "#475569";
+      } else {
+        muteBtn.innerText = "🎙️ Unmute Mic";
+        muteBtn.style.background = "#ef4444";
+      }
+    });
+
+    // ----------------------------------------
+    // Chat Relaying Flow
+    // ----------------------------------------
+    function connectChatFlow() {
+      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      const chatUrl = `${protocol}//${window.location.host}/api/ws/loopback/chat/${ticketId}?role=agent`;
+      chatWs = new WebSocket(chatUrl);
+
+      chatTranscript.innerHTML = ""; // Clear waiting text
+      agentChatInput.disabled = false;
+      sendAgentMsg.disabled = false;
+
+      chatWs.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "history") {
+          chatTranscript.innerHTML = ""; // Clear
+          data.messages.forEach(msg => appendBubble(msg.sender, msg.text));
+        } else if (data.type === "chat") {
+          appendBubble(data.sender, data.text);
+        }
+      };
+
+      chatWs.onclose = () => {
+        console.log("Chat websocket closed.");
+      };
+    }
+
+    function appendBubble(sender, text) {
+      const bubble = document.createElement('div');
+      bubble.className = `bubble bubble-${sender}`;
+      bubble.innerText = text;
+
+      const wrap = document.createElement('div');
+      wrap.style.display = "flex";
+      wrap.style.width = "100%";
+      wrap.style.justifyContent = sender === "agent" ? "flex-end" : "flex-start";
+      wrap.appendChild(bubble);
+
+      chatTranscript.appendChild(wrap);
+      chatTranscript.scrollTop = chatTranscript.scrollHeight;
+    }
+
+    // Agent sending chat messages
+    function sendChatMessage() {
+      const text = agentChatInput.value.trim();
+      if (!text) return;
+
+      if (chatWs && chatWs.readyState === WebSocket.OPEN) {
+        chatWs.send(JSON.stringify({
+          type: "chat",
+          text: text
+        }));
+        appendBubble("agent", text);
+        agentChatInput.value = "";
+      }
+    }
+
+    sendAgentMsg.addEventListener('click', sendChatMessage);
+    agentChatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendChatMessage();
+    });
+
+    // ----------------------------------------
+    // Agent Assist streaming Flow
+    // ----------------------------------------
+    async function connectAgentAssistFlow() {
+      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      const assistUrl = `${protocol}//${window.location.host}/api/ws/loopback/agent-assist/${ticketId}`;
+      assistWs = new WebSocket(assistUrl);
+
+      assistWs.onopen = async () => {
+        console.log("Agent Assist stream WebSocket opened.");
+        try {
+          // Initialize AudioContext & register downsampler Worklet script
+          audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+          await audioContext.audioWorklet.addModule('/static/loopback/pcm-processor.js');
+
+          const source = audioContext.createMediaStreamSource(localStream);
+          audioWorkletNode = new AudioWorkletNode(audioContext, 'pcm-processor');
+
+          audioWorkletNode.port.onmessage = (event) => {
+            if (assistWs && assistWs.readyState === WebSocket.OPEN) {
+              const buffer = event.data; // ArrayBuffer containing Int16 PCM data
+              if (isMuted) {
+                const int16Array = new Int16Array(buffer);
+                int16Array.fill(0);
+              }
+              assistWs.send(buffer);
+            }
+          };
+
+          source.connect(audioWorkletNode);
+          audioWorkletNode.connect(audioContext.destination);
+        } catch (e) {
+          console.error("Failed to initialize Agent Assist AudioWorklet:", e);
+        }
+      };
+
+      const liveCaption = document.getElementById('live-caption');
+      assistWs.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "suggestions") {
+          renderSuggestions(data.suggestions);
+        } else if (data.type === "transcription") {
+          console.log("[AgentAssist Debug] Live Transcription:", data);
+          const speaker = data.role === "customer" ? "Client" : "Agent";
+          const bubbleSender = data.role === "customer" ? "customer" : "agent";
+
+          if (liveCaption) {
+            liveCaption.innerText = `🎙️ ${speaker}: "${data.transcript}"`;
+          }
+          if (data.is_final) {
+            appendBubble(bubbleSender, data.transcript);
+            if (liveCaption) {
+              liveCaption.innerText = "";
+            }
+          }
+        } else if (data.type === "error") {
+          console.error("[AgentAssist WebSocket Error]:", data.message);
+          const quotaErr = document.getElementById('quota-error');
+          if (quotaErr) {
+            quotaErr.innerText = data.message;
+            quotaErr.style.display = 'block';
+          }
+          if (liveCaption) {
+            liveCaption.innerText = `⚠️ ${data.message}`;
+            liveCaption.style.color = '#ef4444';
+          }
+        }
+      };
+    }
+
+    // Expose a helper to allow injecting simulated binary chunks directly (for Playwright reliability)
+    window.injectSimulatedAudio = (arrayBuffer) => {
+      if (assistWs && assistWs.readyState === WebSocket.OPEN) {
+        assistWs.send(arrayBuffer);
+      }
+    };
+
+    window.renderSuggestions = renderSuggestions;
+
+    window.useSuggestedText = (button) => {
+      const text = button.previousElementSibling.innerText.replace(/^"|"$/g, '');
+      const input = document.getElementById('agent-chat-input');
+      if (input) {
+        input.value = text;
+        input.disabled = false;
+        input.focus();
+        const sendBtn = document.getElementById('send-agent-msg');
+        if (sendBtn) {
+          sendBtn.disabled = false;
+        }
+      }
+    };
+
+    function renderSuggestions(suggestions) {
+      if (!suggestions || suggestions.length === 0) return;
+
+      // Clear initial placeholder if suggestions exist
+      const placeholder = document.getElementById('no-suggestions');
+      if (placeholder) {
+        placeholder.remove();
+      }
+
+      suggestions.forEach(sug => {
+        const card = document.createElement('div');
+        card.className = "suggestion-card";
+
+        const type = document.createElement('div');
+        type.className = "suggestion-type";
+        type.innerText = sug.type.replace('_', ' ').toUpperCase();
+
+        const question = document.createElement('div');
+        question.className = "suggestion-q";
+        if (sug.type === 'coaching' || sug.type === 'generator') {
+          question.innerText = "Coaching Instruction";
+        } else if (sug.type === 'smart_reply') {
+          question.innerText = "Smart Reply";
+        } else {
+          question.innerText = sug.question || sug.query || "Agent Cue";
+        }
+
+        card.appendChild(type);
+        card.appendChild(question);
+
+        if (sug.type === 'coaching' || sug.type === 'generator') {
+          const rawText = sug.answer || sug.reply || "";
+          const lines = rawText.split('\n');
+          let instructionText = "";
+          let actionText = "";
+          let suggestedText = "";
+
+          lines.forEach(line => {
+            const clean = line.trim();
+            if (clean.startsWith("Instruction:")) {
+              instructionText = clean.substring("Instruction:".length).trim();
+            } else if (clean.startsWith("Action:")) {
+              actionText = clean.substring("Action:".length).trim();
+            } else if (clean.startsWith("Suggested:")) {
+              suggestedText = clean.substring("Suggested:".length).trim();
+            } else if (clean) {
+              if (!instructionText) instructionText = clean;
+              else if (!suggestedText) suggestedText = clean;
+            }
+          });
+
+          if (instructionText) {
+            const instEl = document.createElement('div');
+            instEl.className = "suggestion-instruction";
+            const labelEl = document.createElement('strong');
+            labelEl.textContent = "Instruction: ";
+            instEl.appendChild(labelEl);
+            instEl.appendChild(document.createTextNode(instructionText));
+            card.appendChild(instEl);
+          }
+
+          if (actionText) {
+            const actEl = document.createElement('div');
+            actEl.className = "suggestion-action";
+            const labelEl = document.createElement('strong');
+            labelEl.textContent = "Action: ";
+            actEl.appendChild(labelEl);
+            actEl.appendChild(document.createTextNode(actionText));
+            card.appendChild(actEl);
+          }
+
+          if (suggestedText) {
+            const suggestedBox = document.createElement('div');
+            suggestedBox.className = "suggestion-suggested-box";
+
+            const txtEl = document.createElement('div');
+            txtEl.className = "suggestion-suggested-text";
+            txtEl.innerText = `"${suggestedText}"`;
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = "btn-use-suggestion";
+            copyBtn.innerText = "Use Response";
+            copyBtn.setAttribute("onclick", "useSuggestedText(this)");
+
+            suggestedBox.appendChild(txtEl);
+            suggestedBox.appendChild(copyBtn);
+            card.appendChild(suggestedBox);
+          }
+        } else {
+          const answer = document.createElement('div');
+          answer.className = "suggestion-a";
+          answer.innerText = sug.answer || sug.reply || "Suggested response for client query.";
+          card.appendChild(answer);
+
+          // If there is suggested text, also offer Use Response button
+          const suggestedVal = sug.answer || sug.reply;
+          if (suggestedVal) {
+            const suggestedBox = document.createElement('div');
+            suggestedBox.className = "suggestion-suggested-box";
+
+            const txtEl = document.createElement('div');
+            txtEl.className = "suggestion-suggested-text";
+            txtEl.innerText = `"${suggestedVal}"`;
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = "btn-use-suggestion";
+            copyBtn.innerText = "Use Response";
+            copyBtn.setAttribute("onclick", "useSuggestedText(this)");
+
+            suggestedBox.appendChild(txtEl);
+            suggestedBox.appendChild(copyBtn);
+            card.appendChild(suggestedBox);
+          }
+        }
+
+        agentAssistBoard.appendChild(card);
+        agentAssistBoard.scrollTop = agentAssistBoard.scrollHeight;
+      });
+    }
+
+    // ----------------------------------------
+    // Ticket Resolution Draft Form Flow
+    // ----------------------------------------
+    resolveBtn.addEventListener('click', () => {
+      emailDraftUi.classList.add('active');
+      resolveBtn.disabled = true;
+
+      // Populate draft default templates
+      emailSubject.value = `[RESOLVED] Support Ticket ${ticketId} - Dispute Closed`;
+
+      // Pull metadata from loaded chat bubbles to make email smart
+      let isinCode = "US0378331005"; // Default fallback
+      let refId = "REF-29381"; // Default fallback
+
+      // Scan bubbles for metadata strings
+      const textNodes = Array.from(chatTranscript.querySelectorAll('.bubble'));
+      textNodes.forEach(el => {
+        const text = el.innerText;
+        const isinMatch = text.match(/[A-Z]{2}[A-Z0-9]{9}\d/i);
+        if (isinMatch) isinCode = isinMatch[0].toUpperCase();
+
+        const refMatch = text.match(/REF-[A-Z0-9\-]+/i);
+        if (refMatch) refId = refMatch[0].toUpperCase();
+      });
+
+      emailBody.value = `Dear Customer,
+
+We have successfully resolved the issue logged under Ticket ID: ${ticketId}.
+
+Resolution Details:
+- ISIN: ${isinCode}
+- Transaction Reference: ${refId}
+
+If you have further disputes, please contact us.
+
+Regards,
+Cymbal Ops Desk`;
+    });
+
+    sendEmailBtn.addEventListener('click', async () => {
+      const summary = resolutionSummary.value.trim();
+      const recipient = emailRecipient.value.trim();
+      const subject = emailSubject.value.trim();
+      const body = emailBody.value.trim();
+
+      if (!summary || !recipient || !subject || !body) {
+        alert("Please fill in all resolution and email fields before sending.");
+        return;
+      }
+
+      sendEmailBtn.disabled = true;
+      sendEmailBtn.innerText = "Sending...";
+
+      try {
+        const res = await fetch(`/api/loopback/tickets/${ticketId}/resolve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            resolution_summary: summary,
+            email_recipient: recipient,
+            email_subject: subject,
+            email_body: body
+          })
+        });
+
+        if (res.ok) {
+          alert("Ticket resolved and summary email dispatched successfully!");
+
+          // Reset view to original state
+          emailDraftUi.classList.remove('active');
+          resolveBtn.style.display = 'none';
+          acceptBtn.style.display = 'block';
+          acceptBtn.disabled = true;
+          callStatus.innerText = "Disconnected";
+          chatTranscript.innerHTML = `<div style="color: var(--text-muted); text-align: center; margin: auto 0; font-size: 0.85rem;">Waiting for call connection to load transcript history...</div>`;
+          agentAssistBoard.innerHTML = `<div class="no-suggestions" id="no-suggestions">No live voice cues captured yet. Speak to trigger coaching suggestions.</div>`;
+          resolutionSummary.value = "";
+
+          // Re-init signaling
+          initSignaling();
+        } else {
+          const errData = await res.json();
+          alert(`Resolution submission failed: ${errData.detail || 'Server error'}`);
+          sendEmailBtn.disabled = false;
+          sendEmailBtn.innerText = "Send Email & Close Ticket";
+        }
+      } catch (err) {
+        alert(`Error communicating with server: ${err.message}`);
+        sendEmailBtn.disabled = false;
+        sendEmailBtn.innerText = "Send Email & Close Ticket";
+      }
+    });
+  </script>
+</body>
+</html>

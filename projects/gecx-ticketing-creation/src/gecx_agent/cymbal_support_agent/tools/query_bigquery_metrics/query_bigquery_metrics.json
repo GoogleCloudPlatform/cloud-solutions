@@ -1,0 +1,10 @@
+{
+  "name": "30e2aca0-3d57-482e-a91a-40bf704f2234",
+  "pythonFunction": {
+    "name": "query_bigquery_metrics",
+    "pythonCode": "tools/query_bigquery_metrics/python_function/python_code.py",
+    "description": "Queries table robertortega-ai-demo.ds1.t1 by retrieving a short-lived\nOAuth2 token from the Google Cloud Metadata Server Bridge at runtime."
+  },
+  "executionType": "SYNCHRONOUS",
+  "displayName": "query_bigquery_metrics"
+}

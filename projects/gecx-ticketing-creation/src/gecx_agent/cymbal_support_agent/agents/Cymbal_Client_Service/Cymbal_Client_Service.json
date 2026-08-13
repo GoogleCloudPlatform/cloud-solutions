@@ -1,0 +1,29 @@
+{
+  "name": "d6b2f108-2487-4c62-9bfb-1d89121a64e1",
+  "displayName": "Cymbal Client Service",
+  "instruction": "agents/Cymbal_Client_Service/instruction.txt",
+  "tools": [
+    "assign_service_team_member",
+    "authenticate_user",
+    "check_service_ticket_status",
+    "create_service_ticket",
+    "create_ticket_id",
+    "customize_response",
+    "end_session",
+    "query_bigquery_metrics",
+    "query_xact_user_manual",
+    "search_xact_user_manual",
+    "user_manual"
+  ],
+  "beforeModelCallbacks": [
+    {
+      "pythonCode": "agents/Cymbal_Client_Service/before_model_callbacks/before_model_callbacks_01/python_code.py"
+    }
+  ],
+  "afterModelCallbacks": [
+    {
+      "pythonCode": "agents/Cymbal_Client_Service/after_model_callbacks/after_model_callbacks_01/python_code.py",
+      "disabled": true
+    }
+  ]
+}

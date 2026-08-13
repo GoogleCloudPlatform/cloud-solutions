@@ -1,0 +1,9 @@
+{
+  "name": "232eadf4-b169-4dd6-98b7-c74c76dff43b",
+  "pythonFunction": {
+    "name": "check_service_ticket_status",
+    "pythonCode": "tools/check_service_ticket_status/python_function/python_code.py",
+    "description": "Checks the status of an existing service ticket based on a summary of the issue.\n\nArgs:\n    service_request_summary (str): A brief summary or description of the service request.\n\nReturns:\n    dict[str, Any]: A dictionary indicating if a ticket exists, its ID, status, and assigned member.\n          Example: {\"ticket_exists\": True, \"ticket_id\": \"TICKET789\", \"status\": \"Open\", \"assigned_to\": \"John Doe\"}\n          Example: {\"ticket_exists\": False, \"message\": \"No matching ticket found for this issue.\"}"
+  },
+  "displayName": "check_service_ticket_status"
+}

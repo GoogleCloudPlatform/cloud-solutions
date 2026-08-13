@@ -1,0 +1,10 @@
+{
+  "name": "e60b8f81-3c99-4b1a-ad12-cb2804148ab3",
+  "pythonFunction": {
+    "name": "authenticate_user",
+    "pythonCode": "tools/authenticate_user/python_function/python_code.py",
+    "description": "Authenticates a user with the provided username and password.\n\nArgs:\n    username (str): The user\u0027s login username.\n    password (str): The user\u0027s login password.\n\nReturns:\n    dict[str, Any]: A dictionary indicating authentication status, and if successful,\n                    the customer_id and contact_id.\n          Example: {\"authenticated\": True, \"customer_id\": \"CUST123\", \"contact_id\": \"CONT456\"}\n          Example: {\"authenticated\": False, \"reason\": \"Invalid credentials\"}"
+  },
+  "executionType": "SYNCHRONOUS",
+  "displayName": "authenticate_user"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "3a9d3c99-42dc-4161-a828-c0b6dfb45b40",
+  "displayName": "search_xact_user_manual",
+  "fileSearchTool": {
+    "corpusType": "FULLY_MANAGED",
+    "name": "search_xact_user_manual",
+    "fileCorpus": "$env_var"
+  }
+}

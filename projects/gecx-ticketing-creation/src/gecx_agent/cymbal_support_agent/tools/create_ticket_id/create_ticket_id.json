@@ -1,0 +1,10 @@
+{
+  "name": "61218f86-81a4-4ff3-a41b-576759167a82",
+  "pythonFunction": {
+    "name": "create_ticket_id",
+    "pythonCode": "tools/create_ticket_id/python_function/python_code.py",
+    "description": "Generates an exactly 8-character uppercase hex string from the current time.\n\nThis function is future-proofed against 32-bit overflow until the year 2162."
+  },
+  "executionType": "SYNCHRONOUS",
+  "displayName": "create_ticket_id"
+}

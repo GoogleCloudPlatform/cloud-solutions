@@ -1,0 +1,14 @@
+{
+  "tools": {
+    "search_xact_user_manual": {
+      "fileSearchTool": {
+        "fileCorpus": "projects/947115009564/locations/europe-west3/ragCorpora/6917529027641081856"
+      }
+    },
+    "user_manual": {
+      "fileSearchTool": {
+        "fileCorpus": "projects/947115009564/locations/europe-west3/ragCorpora/2305843009213693952"
+      }
+    }
+  }
+}

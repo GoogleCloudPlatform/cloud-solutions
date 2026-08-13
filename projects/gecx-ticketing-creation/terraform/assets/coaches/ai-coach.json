@@ -1,0 +1,23 @@
+{
+  "name": "Cymbal Demo",
+  "description": "Real-time generative AI coaching for Cymbal Support human agents.",
+  "trigger_event": "END_OF_UTTERANCE",
+  "agent_coaching_context": {
+    "instructions": [
+      {
+        "display_name": "Professional Guidance",
+        "display_details": "Guide user to give detailed information",
+        "condition": "When the agent is talking with the customer",
+        "agent_action": "Agent must be professional and guide the user to give detailed information about their issues"
+      }
+    ],
+    "version": "2.5",
+    "overarching_guidance": "Provide professional customer support coaching for Cymbal Support.",
+    "output_language_code": "en-US"
+  },
+  "suggestion_deduping_config": {
+    "enable_deduping": true,
+    "similarity_threshold": 0.8
+  },
+  "coach_id": "cymbal-coach"
+}

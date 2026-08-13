@@ -1,0 +1,11 @@
+{
+  "name": "e0ebd218-37cd-4c8d-b16e-88223b4ba552",
+  "displayName": "bigquery_mcp",
+  "mcpToolset": {
+    "serverAddress": "https://ces.googleapis.com/mcp",
+    "apiAuthentication": {
+      "serviceAgentIdTokenAuthConfig": {}
+    }
+  },
+  "executionType": "SYNCHRONOUS"
+}

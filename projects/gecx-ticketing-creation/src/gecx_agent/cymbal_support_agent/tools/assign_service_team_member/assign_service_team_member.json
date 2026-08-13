@@ -1,0 +1,9 @@
+{
+  "name": "66635361-6894-4ed7-92bd-c5ed449c257d",
+  "pythonFunction": {
+    "name": "assign_service_team_member",
+    "pythonCode": "tools/assign_service_team_member/python_function/python_code.py",
+    "description": "Assigns a service team member based on the service request and sentiment.\n\nArgs:\n    service_request (str): The detailed description of the service request.\n    sentiment (str): The sentiment analysis result (e.g., \"positive\", \"neutral\", \"negative\").\n\nReturns:\n    dict[str, Any]: A dictionary with the assigned team member and their team.\n          Example: {\"assigned_to\": \"Jane Smith\", \"team\": \"Settlement Support\"}"
+  },
+  "displayName": "assign_service_team_member"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "8446a0a7-5e16-41c2-adfc-83855ebf3dcd",
+  "displayName": "user_manual",
+  "fileSearchTool": {
+    "corpusType": "FULLY_MANAGED",
+    "name": "user_manual",
+    "fileCorpus": "$env_var"
+  }
+}

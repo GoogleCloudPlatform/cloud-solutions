@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cymbal Client Portal</title>
+  <!-- Modern Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- GECX Chat Widget Client Assets -->
+  <script src="https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/chat-messenger.js" async defer></script>
+  <link rel="stylesheet" href="https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/themes/chat-messenger-layout.css">
+
+  <style>
+    :root {
+      --primary-grad: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      --accent-color: #00adb5;
+      --bg-color: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --font-family: 'Outfit', sans-serif;
+    }
+
+    /* User Profile Avatar Styles */
+    .user-avatar-container {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px 6px 8px;
+      border-radius: 30px;
+      z-index: 1000;
+      font-size: 0.9rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .user-avatar-container:hover {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(0, 173, 181, 0.3);
+    }
+
+    .user-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      color: #0f172a;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 173, 181, 0.3);
+    }
+
+    .user-avatar-email {
+      color: var(--text-main);
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Decorative Background Gradients */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 173, 181, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      top: 10%;
+      left: 10%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(44, 83, 100, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+      bottom: 10%;
+      right: 5%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Main Container */
+    .portal-container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 600px;
+      padding: 40px;
+      border-radius: 24px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, #ffffff, var(--accent-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+
+
+
+    /* WebRTC Call UI Panel Card */
+    .webrtc-card {
+      display: none;
+      margin-top: 12px;
+      background: rgba(0, 173, 181, 0.08);
+      border: 1px solid var(--accent-color);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .webrtc-title {
+      font-weight: 700;
+      color: var(--accent-color);
+      font-size: 1rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .webrtc-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .webrtc-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .btn-dial {
+      background: var(--accent-color);
+      color: #0f172a;
+      border: none;
+      padding: 10px 18px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-dial:hover {
+      opacity: 0.9;
+    }
+
+    /* Floating GECX widget layout overrides */
+    chat-messenger {
+      position: fixed !important;
+      bottom: 24px !important;
+      right: 124px !important;
+      z-index: 9999 !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- User Profile Badge -->
+  <div class="user-avatar-container" id="user-profile-badge" style="display: none;">
+    <div class="user-avatar-circle" id="user-avatar-char">U</div>
+    <div class="user-avatar-email" id="user-avatar-email">user@cymbal.com</div>
+  </div>
+
+  <div class="portal-container">
+    <h1>Cymbal Institutional Portal</h1>
+    <p class="subtitle">Secure post-trade operations and clearing dashboard</p>
+  </div>
+
+
+
+
+
+  <script>
+    const pageSessionId = "session-" + Math.random().toString(36).substring(2, 15);
+    console.log(`****** ${pageSessionId} ******`);
+
+    // Global data structures for CCaaS session state tracking
+    window.collectedData = {
+      account: '',
+      isin: '',
+      reference_id: '',
+      description: ''
+    };
+    window.activeTicketId = null;
+    window.gecxConversationId = null;
+
+    // Global capture for GECX Conversation ID to avoid race conditions
+    window.addEventListener('chat-messenger-session-id-set', (event) => {
+      window.gecxConversationId = event.detail?.sessionId;
+      console.log("[GECX Debug Global Capture] Captured GECX Conversation ID:", window.gecxConversationId);
+    }, true);
+
+    // Global interceptor hook to track and force release of hardware microphone streams
+    const activeMediaStreams = [];
+    const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+
+    navigator.mediaDevices.getUserMedia = async function (constraints) {
+      console.log("[GECX Debug Hook] getUserMedia called with constraints:", constraints);
+      try {
+        const stream = await originalGetUserMedia(constraints);
+        activeMediaStreams.push(stream);
+        return stream;
+      } catch (err) {
+        throw err;
+      }
+    };
+
+    function stopAllGecxMicStreams() {
+      console.log("[GECX Debug Hook] Stopping all active intercepted media streams. Count:", activeMediaStreams.length);
+      while (activeMediaStreams.length > 0) {
+        const stream = activeMediaStreams.pop();
+        if (stream) {
+          stream.getTracks().forEach(track => {
+            console.log("[GECX Debug Hook] Stopping active track:", track.label || track.id);
+            track.stop();
+          });
+        }
+      }
+    }
+
+    function findGecxMicButton(root) {
+      if (!root) return null;
+
+      // 1. Check if the element itself matches mic search criteria
+      if (root.tagName && (root.tagName.toLowerCase() === 'button' || root.tagName.toLowerCase() === 'div' || root.tagName.toLowerCase() === 'chat-audio-input')) {
+        const html = (root.innerHTML || '').toLowerCase();
+        const label = (root.getAttribute('aria-label') || root.getAttribute('title') || '').toLowerCase();
+        const className = (root.className || '').toLowerCase();
+        const id = (root.id || '').toLowerCase();
+
+        if (label.includes('mic') || label.includes('audio') || label.includes('voice') || label.includes('speech') ||
+          className.includes('mic') || className.includes('audio') || className.includes('voice') ||
+          id.includes('mic') || id.includes('audio') || id.includes('voice') ||
+          html.includes('mic') || html.includes('audio') || html.includes('voice') || html.includes('speech') || html.includes('svg')) {
+          return root;
+        }
+      }
+
+      // 2. Recursively traverse Shadow DOM if present
+      if (root.shadowRoot) {
+        const found = findGecxMicButton(root.shadowRoot);
+        if (found) return found;
+      }
+
+      // 3. Recursively traverse child nodes
+      if (root.childNodes) {
+        for (const child of root.childNodes) {
+          const found = findGecxMicButton(child);
+          if (found) return found;
+        }
+      }
+
+      return null;
+    }
+
+    function deactivateGecxMicUi() {
+      // Only attempt to toggle the mic button if we have active streams running
+      if (activeMediaStreams.length === 0) return;
+
+      const messenger = document.querySelector('chat-messenger');
+      if (!messenger) return;
+
+      const micBtn = findGecxMicButton(messenger);
+      if (micBtn) {
+        console.log("[GECX Debug] Found active mic button inside shadow DOM. Clicking to turn off:", micBtn);
+        micBtn.click();
+      } else {
+        console.log("[GECX Debug] Active mic stream detected but mic button was not found in shadow DOM.");
+      }
+    }
+
+    function closeGecxWidget() {
+      // 1. Deactivate GECX mic UI first to let GECX clean up internally
+      try {
+        deactivateGecxMicUi();
+      } catch (e) {
+        console.error("Error deactivating mic UI:", e);
+      }
+
+      // 2. Release hardware mic streams captured by the GECX widget
+      try {
+        stopAllGecxMicStreams();
+      } catch (e) {
+        console.error("Error stopping mic streams:", e);
+      }
+
+      console.log("[GECX Debug] Performing definitive DOM removal of GECX widgets and overlays.");
+
+      // 3. Remove all custom GECX elements starting with chat- or df-
+      try {
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+          const tag = el.tagName.toLowerCase();
+          if (tag.startsWith('chat-') || tag.startsWith('df-')) {
+            console.log("[GECX Debug] Physically removing GECX custom element from DOM:", tag);
+            el.remove();
+          }
+        });
+      } catch (e) {
+        console.error("Error removing custom tags:", e);
+      }
+
+      // 4. Remove all standard backdrop, focus-trap, or overlay divs
+      const selectorsToRemove = [
+        '.df-messenger-backdrop',
+        '.chat-messenger-backdrop',
+        '.focus-trap',
+        'div[class*="focus-trap"]',
+        'div[class*="messenger"]'
+      ];
+
+      for (const selector of selectorsToRemove) {
+        try {
+          const nodes = document.querySelectorAll(selector);
+          nodes.forEach(node => {
+            console.log("[GECX Debug] Physically removing overlay node from DOM:", selector);
+            node.remove();
+          });
+        } catch (e) {
+          console.error("Error removing overlay selector:", selector, e);
+        }
+      }
+    }
+
+    function showFloatingVoiceCard() {
+      if (document.getElementById('webrtc-call-ui')) return;
+
+      // Auto-close GECX widget first (safely wrapped to prevent halting UI rendering)
+      try {
+        closeGecxWidget();
+      } catch (close_err) {
+        console.error("[GECX Debug] Error during closeGecxWidget execution:", close_err);
+      }
+
+      // Calculate Session ID and Agent Workstation Link dynamically
+      const sessionId = window.activeTicketId || (window.collectedData && window.collectedData.account ? (window.collectedData.account + "-session") : pageSessionId);
+      const agentUrl = `${window.location.protocol}//${window.location.host}/static/loopback/agent.html?ticket_id=${sessionId}`;
+
+      let customerAssistWs = null;
+      let customerAudioCtx = null;
+      let customerWorkletNode = null;
+
+      const callCard = document.createElement('div');
+      callCard.classList.add('webrtc-card');
+      callCard.style.display = 'block';
+      callCard.id = 'webrtc-call-ui';
+      callCard.style.position = 'fixed';
+      callCard.style.bottom = '120px';
+      callCard.style.right = '20px';
+      callCard.style.zIndex = '99999';
+      callCard.style.width = '320px';
+      callCard.style.background = 'rgba(15, 23, 42, 0.95)';
+      callCard.style.backdropFilter = 'blur(12px)';
+      callCard.style.border = '1px solid var(--border-color)';
+      callCard.style.borderRadius = '12px';
+      callCard.style.padding = '16px';
+      callCard.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
+      callCard.innerHTML = `
+          <div class="webrtc-title" style="display:flex; justify-content:space-between; align-items:center; font-weight:bold; color:var(--text-color);">
+            <span>Voice Escalation Ready</span>
+            <div class="webrtc-status-dot" style="width:10px; height:10px; background:#10b981; border-radius:50%;"></div>
+          </div>
+          <div class="webrtc-body" style="margin:8px 0 12px; font-size:0.85rem; color:#94a3b8;">Voice channel authenticated securely. You can now initiate the encrypted WebRTC connection.</div>
+          <div id="call-status" style="margin-bottom:12px; font-weight:bold; color:var(--accent-color); font-size:1.1rem;">Disconnected</div>
+          <button class="btn-dial" id="call-btn" style="width:100%; padding:10px; background:var(--accent-color); color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Dial Voice Line</button>
+          <button id="mute-btn" style="width:100%; padding:10px; margin-top:8px; background:#475569; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; display:none;">🎙️ Mute Mic</button>
+          <div class="error-banner error" id="mic-denied" style="display:none; margin-top:12px; color:#ef4444; font-size:0.8rem;">Microphone access denied. Please allow microphone permissions.</div>
+          <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.1); text-align: center; font-size: 0.8rem;">
+            <a href="${agentUrl}" target="_blank" style="color: var(--accent-color); text-decoration: underline; font-weight: bold;">
+              [Demo] Open Agent Workstation ↗
+            </a>
+          </div>
+        `;
+      document.body.appendChild(callCard);
+
+      const dialBtn = document.getElementById('call-btn');
+      const muteBtn = document.getElementById('mute-btn');
+      const statusDiv = document.getElementById('call-status');
+      const micDenied = document.getElementById('mic-denied');
+
+      let localStream = null;
+      let pc = null;
+      let callWs = null;
+      let isMuted = false;
+
+      async function startWebRTCConnection() {
+        statusDiv.innerText = "Connecting...";
+        dialBtn.disabled = true;
+        dialBtn.innerText = "Connecting...";
+        micDenied.style.display = 'none';
+
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const wsUrl = `${protocol}//${window.location.host}/api/ws/loopback/signaling/${sessionId}?role=customer`;
+
+        try {
+          localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        } catch (err) {
+          console.error("Microphone permission denied:", err);
+          micDenied.style.display = 'block';
+          statusDiv.innerText = "Failed";
+          dialBtn.disabled = false;
+          dialBtn.innerText = "Retry Call";
+          return;
+        }
+
+        callWs = new WebSocket(wsUrl);
+
+        callWs.onopen = async () => {
+          console.log("Customer signaling WS connected.");
+          pc = new RTCPeerConnection({ iceServers: [] });
+
+          localStream.getTracks().forEach(track => {
+            pc.addTrack(track, localStream);
+          });
+
+          /* === WEBRTC AUDIO PLAYBACK FIX (b/533523448 Review Comment #6) ===
+             This block binds the remote incoming WebRTC audio track to an Audio element
+             so that the customer can hear the agent's voice.
+             REVERSION NOTE: If WebRTC voice calls break, this block can be safely deleted. */
+          pc.ontrack = (event) => {
+            console.log("[WebRTC Debug] Customer received remote audio track.");
+            const remoteAudio = new Audio();
+            remoteAudio.srcObject = event.streams[0];
+            remoteAudio.play().catch(err => {
+              console.error("[WebRTC Debug] Customer remote audio playback failed:", err);
+            });
+          };
+          /* === END WEBRTC AUDIO PLAYBACK FIX === */
+
+          pc.onicecandidate = (event) => {
+            if (event.candidate && callWs.readyState === WebSocket.OPEN) {
+              callWs.send(JSON.stringify({ candidate: event.candidate }));
+            }
+          };
+
+          pc.onconnectionstatechange = () => {
+            console.log("Customer WebRTC state:", pc.connectionState);
+            if (pc.connectionState === 'connected') {
+              statusDiv.innerText = "connected";
+              dialBtn.innerText = "Call Connected";
+              muteBtn.style.display = "block";
+              connectCustomerAgentAssistFlow();
+            } else if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
+              statusDiv.innerText = "Failed";
+              cleanupCustomerCall();
+            }
+          };
+
+          try {
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            callWs.send(JSON.stringify({ type: 'offer', sdp: offer.sdp }));
+          } catch (e) {
+            console.error("SDP offer creation failed:", e);
+            statusDiv.innerText = "Failed";
+            cleanupCustomerCall();
+          }
+        };
+
+        callWs.onmessage = async (event) => {
+          const msg = JSON.parse(event.data);
+          if (msg.type === 'answer') {
+            if (pc) {
+              await pc.setRemoteDescription(new RTCSessionDescription(msg));
+            }
+          } else if (msg.candidate) {
+            if (pc) {
+              try {
+                await pc.addIceCandidate(new RTCIceCandidate(msg.candidate));
+              } catch (e) {
+                console.error("Error adding ice candidate:", e);
+              }
+            }
+          } else if (msg.type === 'disconnect') {
+            cleanupCustomerCall();
+          }
+        };
+
+        callWs.onclose = () => {
+          cleanupCustomerCall();
+        };
+      }
+
+      function cleanupCustomerCall() {
+        if (localStream) {
+          localStream.getTracks().forEach(track => track.stop());
+          localStream = null;
+        }
+        if (customerWorkletNode) {
+          customerWorkletNode.disconnect();
+          customerWorkletNode = null;
+        }
+        if (customerAudioCtx && customerAudioCtx.state !== "closed") {
+          customerAudioCtx.close();
+          customerAudioCtx = null;
+        }
+        if (customerAssistWs && customerAssistWs.readyState === WebSocket.OPEN) {
+          customerAssistWs.close();
+        }
+        if (pc) {
+          pc.close();
+          pc = null;
+        }
+        isMuted = false;
+        statusDiv.innerText = "Disconnected";
+        dialBtn.disabled = false;
+        dialBtn.innerText = "Dial Voice Line";
+        if (muteBtn) {
+          muteBtn.style.display = "none";
+          muteBtn.innerText = "🎙️ Mute Mic";
+          muteBtn.style.background = "#475569";
+        }
+        if (callCard.parentNode) {
+          callCard.parentNode.removeChild(callCard);
+        }
+        const messenger = document.querySelector('chat-messenger');
+        if (messenger && typeof messenger.clearSession === 'function') {
+          console.log("[GECX Debug] Clearing chat messenger session on call disconnect.");
+          messenger.clearSession();
+        }
+      }
+
+      async function connectCustomerAgentAssistFlow() {
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const assistUrl = `${protocol}//${window.location.host}/api/ws/loopback/agent-assist/${sessionId}?role=customer`;
+        customerAssistWs = new WebSocket(assistUrl);
+
+        customerAssistWs.onopen = async () => {
+          console.log("Customer Agent Assist stream WebSocket opened.");
+          try {
+            customerAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+            await customerAudioCtx.audioWorklet.addModule('/static/loopback/pcm-processor.js');
+
+            const source = customerAudioCtx.createMediaStreamSource(localStream);
+            customerWorkletNode = new AudioWorkletNode(customerAudioCtx, 'pcm-processor');
+
+            customerWorkletNode.port.onmessage = (event) => {
+              if (customerAssistWs && customerAssistWs.readyState === WebSocket.OPEN) {
+                const buffer = event.data; // ArrayBuffer containing Int16 PCM data
+                if (isMuted) {
+                  const int16Array = new Int16Array(buffer);
+                  int16Array.fill(0);
+                }
+                customerAssistWs.send(buffer);
+              }
+            };
+
+            source.connect(customerWorkletNode);
+            customerWorkletNode.connect(customerAudioCtx.destination);
+          } catch (e) {
+            console.error("Failed to initialize Customer Agent Assist AudioWorklet:", e);
+          }
+        };
+
+        customerAssistWs.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          if (data.type === "error") {
+            console.error("[Customer AgentAssist WebSocket Error]:", data.message);
+            const statusBanner = document.getElementById('webrtc-status-banner') || document.getElementById('auth-failed');
+            if (statusBanner) {
+              statusBanner.innerText = data.message;
+              statusBanner.style.display = 'block';
+              statusBanner.style.background = '#ef4444';
+            }
+          }
+        };
+      }
+
+      // Setup mute button toggle click handler
+      muteBtn.addEventListener('click', () => {
+        isMuted = !isMuted;
+        if (localStream) {
+          const audioTrack = localStream.getAudioTracks()[0];
+          if (audioTrack) {
+            audioTrack.enabled = !isMuted;
+          }
+        }
+        if (!isMuted) {
+          muteBtn.innerText = "🎙️ Mute Mic";
+          muteBtn.style.background = "#475569";
+        } else {
+          muteBtn.innerText = "🎙️ Unmute Mic";
+          muteBtn.style.background = "#ef4444";
+        }
+      });
+
+      // Setup manual retry click handler
+      dialBtn.addEventListener('click', startWebRTCConnection);
+
+      // Auto-dial immediately!
+      console.log("[GECX Debug] Instantly initiating voice connection.");
+      startWebRTCConnection();
+    }
+
+    // Hook all events to find what GECX is dispatching
+    const originalDispatch = EventTarget.prototype.dispatchEvent;
+    EventTarget.prototype.dispatchEvent = function (event) {
+      if (event.type.startsWith('df-') || event.type.startsWith('chat-') || event.type.includes('response') || event.type.includes('bidi')) {
+        try {
+          console.log(`[GECX JSON HOOKED] ${event.type} -> ${JSON.stringify(event.detail || {})}`);
+        } catch (e) {
+          console.log(`[GECX JSON HOOKED] ${event.type} (non-stringifiable):`, event.detail);
+        }
+      }
+      return originalDispatch.apply(this, arguments);
+    };
+
+
+
+    function initGecxListener() {
+      const messenger = document.querySelector('chat-messenger');
+      if (!messenger) return;
+
+      console.log("[GECX Debug] Registering GECX custom event listeners.");
+
+      // 1. Establish Loopback BFF Chat WebSocket for customer history sync
+      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      const sessionId = window.activeTicketId || (window.collectedData && window.collectedData.account ? (window.collectedData.account + "-session") : pageSessionId);
+      const chatWsUrl = `${protocol}//${window.location.host}/api/ws/loopback/chat/${sessionId}?role=customer`;
+      const chatWs = new WebSocket(chatWsUrl);
+
+      chatWs.onopen = () => {
+        console.log("[Loopback BFF Chat] Sync WebSocket opened.");
+        if (window.gecxConversationId) {
+          console.log("[GECX Debug] Syncing pre-captured GECX Conversation ID to backend via WebSocket:", window.gecxConversationId);
+          chatWs.send(JSON.stringify({
+            type: "sync_gecx_id",
+            gecx_conversation_id: window.gecxConversationId
+          }));
+        }
+      };
+
+      // 2. Capture and Sync User inputs
+      messenger.addEventListener('chat-messenger-user-input-entered', (event) => {
+        const text = event.detail?.input;
+        if (text && chatWs.readyState === WebSocket.OPEN) {
+          chatWs.send(JSON.stringify({
+            type: "chat",
+            text: text
+          }));
+        }
+      });
+
+      // Sync spoken user inputs in bidi streaming mode
+      messenger.addEventListener('chat-messenger-bidi-transcript-updated', (event) => {
+        const text = event.detail?.transcript;
+        if (text && chatWs.readyState === WebSocket.OPEN) {
+          console.log("[GECX Debug] Syncing user spoken transcript:", text);
+          chatWs.send(JSON.stringify({
+            type: "chat",
+            sender: "user",
+            text: text
+          }));
+        }
+      });
+
+      // 3. Capture and Sync GECX Bot streamed responses (Debounced)
+      let utteranceDebounceTimer = null;
+      let lastUtteranceText = "";
+
+      messenger.addEventListener('chat-messenger-bidi-utterance-updated', (event) => {
+        const text = event.detail?.utterance;
+        if (text) {
+          lastUtteranceText = text;
+
+          if (utteranceDebounceTimer) {
+            clearTimeout(utteranceDebounceTimer);
+          }
+
+          utteranceDebounceTimer = setTimeout(() => {
+            if (lastUtteranceText && chatWs.readyState === WebSocket.OPEN) {
+              console.log("[GECX Debug] Syncing debounced bot response:", lastUtteranceText);
+              chatWs.send(JSON.stringify({
+                type: "chat",
+                sender: "bot",
+                text: lastUtteranceText
+              }));
+              lastUtteranceText = ""; // Reset
+            }
+          }, 800);
+        }
+      });
+
+      const handleResponse = (event) => {
+        console.log("[GECX Debug] Custom response event caught:", event.detail);
+
+        // Sync bot message bubbles to history
+        const messages = event.detail?.messages;
+        if (messages && chatWs.readyState === WebSocket.OPEN) {
+          for (const msg of messages) {
+            let botText = "";
+            if (typeof msg.text === 'string') {
+              botText = msg.text;
+            } else if (msg.text && Array.isArray(msg.text.text)) {
+              botText = msg.text.text[0];
+            } else if (msg.text && typeof msg.text.text === 'string') {
+              botText = msg.text.text;
+            }
+
+            if (botText) {
+              chatWs.send(JSON.stringify({
+                type: "chat",
+                sender: "bot",
+                text: botText
+              }));
+            }
+          }
+        }
+
+        const outputs = event.detail?.raw?.outputs || event.detail?.response?.outputs;
+        if (outputs) {
+          for (const output of outputs) {
+            if (output.endSession) {
+              console.log("[GECX Debug] Handoff triggered via endSession detection.");
+              showFloatingVoiceCard();
+              break;
+            }
+          }
+        }
+      };
+
+      messenger.addEventListener('chat-messenger-response-received', handleResponse);
+
+      // Trigger escalation immediately when the streaming connection is ended by the virtual agent
+      messenger.addEventListener('chat-messenger-disconnect-bidi', () => {
+        console.log("[GECX Debug] Bidirectional streaming session disconnected. Triggering voice handoff.");
+        showFloatingVoiceCard();
+      });
+
+      // Trigger escalation immediately when GECX signals session ended (Text or Voice Mode)
+      messenger.addEventListener('chat-messenger-session-ended', () => {
+        console.log("[GECX Debug] GECX session ended event caught. Triggering voice handoff.");
+        showFloatingVoiceCard();
+      });
+
+      // Capture GECX Conversation ID for completion analysis
+      messenger.addEventListener('chat-messenger-session-id-set', (event) => {
+        window.gecxConversationId = event.detail?.sessionId;
+        console.log("[GECX Debug] Captured GECX Conversation ID:", window.gecxConversationId);
+
+        // Sync GECX Conversation ID to backend via WebSocket for local logging and backup completion
+        if (chatWs && chatWs.readyState === WebSocket.OPEN) {
+          console.log("[GECX Debug] Syncing GECX Conversation ID to backend via WebSocket:", window.gecxConversationId);
+          chatWs.send(JSON.stringify({
+            type: "sync_gecx_id",
+            gecx_conversation_id: window.gecxConversationId
+          }));
+        }
+      });
+
+      // Sync human agent URI parameter once GECX context is fully registered
+      messenger.addEventListener('chat-messenger-context-registered', () => {
+        const targetSessionId = pageSessionId;
+        const agentUrl = `${window.location.protocol}//${window.location.host}/static/loopback/agent.html?ticket_id=${targetSessionId}`;
+
+        if (typeof messenger.setVariables === 'function') {
+          console.log("[GECX Debug Context Registered] Syncing human_agent_uri to GECX session:", agentUrl);
+          messenger.setVariables({
+            human_agent_uri: agentUrl
+          });
+        } else if (typeof messenger.setQueryParameters === 'function') {
+          console.log("[GECX Debug Context Registered] Syncing human_agent_uri to GECX session via setQueryParameters:", agentUrl);
+          messenger.setQueryParameters({
+            parameters: {
+              human_agent_uri: agentUrl
+            }
+          });
+        }
+
+        // Wait 300ms, then print internal state to examine if the parameter is set
+        setTimeout(() => {
+          try {
+            if (typeof messenger.getParsedServiceParams === 'function') {
+              console.log("[GECX Debug Verification] getParsedServiceParams output:", messenger.getParsedServiceParams());
+            } else {
+              console.log("[GECX Debug Verification] getParsedServiceParams method is not available.");
+            }
+            console.log("[GECX Debug Verification] GECX element properties state:", {
+              sessionId: messenger.sessionId,
+              projectId: messenger.projectId,
+              agentId: messenger.agentId,
+              conversationProfileId: messenger.conversationProfileId
+            });
+          } catch (ver_err) {
+            console.log("[GECX Debug Verification] Error reading verification states:", ver_err);
+          }
+        }, 300);
+      });
+
+
+    }
+
+    window.addEventListener("chat-messenger-loaded", () => {
+      console.log("[GECX Debug] window.chatSdk properties:", Object.keys(window.chatSdk || {}));
+      const messenger = document.querySelector('chat-messenger');
+      if (messenger) {
+        console.log("[GECX Debug] chat-messenger element properties:", Object.getOwnPropertyNames(Object.getPrototypeOf(messenger)));
+        let proto = Object.getPrototypeOf(messenger);
+        while (proto) {
+          console.log("[GECX Debug] Prototype properties:", proto.constructor.name, Object.getOwnPropertyNames(proto));
+          proto = Object.getPrototypeOf(proto);
+        }
+      }
+      initGecxListener();
+
+      chatSdk.registerContext(
+        chatSdk.prebuilts.ces.createContext({
+          deploymentName: "<<AGENT_DEPLOYMENT_NAME>>",
+          tokenBroker: {
+            enableTokenBroker: true,
+            enableRecaptcha: false
+          }
+        }),
+      );
+    });
+
+    // Load logged-in user profile from IAP headers
+    async function loadUserProfile() {
+      try {
+        const res = await fetch('/api/loopback/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.email) {
+            document.getElementById('user-avatar-email').textContent = data.email;
+            document.getElementById('user-avatar-char').textContent = data.email.charAt(0);
+            document.getElementById('user-profile-badge').style.display = 'flex';
+          }
+        }
+      } catch (err) {
+        console.warn("[Auth] Failed to load user profile:", err);
+      }
+    }
+    loadUserProfile();
+
+    // Race-condition fallback for GECX widget
+    if (window.chatSdk) {
+      initGecxListener();
+    }
+  </script>
+  <!-- Update the url-allowlist attribute with a comma-separated list of origins allowed to render images -->
+  <chat-messenger url-allowlist="*">
+    <chat-messenger-chat-bubble chat-title="Web"
+      chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
+      enable-file-upload enable-audio-input>
+      <chat-reset-session-button slot="titlebar-actions" title-text="Start new chat"></chat-reset-session-button>
+      <chat-toggle-dialog-button slot="titlebar-actions" title-text-expanded="Collapse"
+        title-text-collapsed="Expand"></chat-toggle-dialog-button>
+      <chat-messenger-close-button slot="titlebar-actions" title-text="Close"></chat-messenger-close-button>
+    </chat-messenger-chat-bubble>
+  </chat-messenger>
+</body>
+
+</html>

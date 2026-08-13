@@ -1,0 +1,9 @@
+{
+  "name": "740e1c02-ab49-4e05-88da-31d5e5e78685",
+  "pythonFunction": {
+    "name": "analyze_image",
+    "pythonCode": "tools/analyze_image/python_function/python_code.py",
+    "description": "Analyzes an image provided via a URL and returns a description.\n\nArgs:\n    image_url (str): The URL of the image to be analyzed.\n\nReturns:\n    dict[str, Any]: A dictionary containing the image analysis description.\n          Example: {\"image_analysis\": \"Screenshot of Xact Web Portal login page showing an error message.\"}"
+  },
+  "displayName": "analyze_image"
+}
