@@ -21,11 +21,20 @@ echo "Starting startup script..."
 # Update package lists
 apt-get update -y
 
-# Install gnupg, curl, etc.
-apt-get install -y gnupg curl apt-transport-https
+# Install gnupg, curl, google-cloud-cli, and Python libraries via apt
+apt-get install -y \
+  apt-transport-https \
+  curl \
+  gnupg \
+  google-cloud-cli \
+  python3 \
+  python3-pandas \
+  python3-pyodbc \
+  python3-sqlalchemy \
+  unixodbc-dev
 
 # Add Microsoft package repository for ODBC Driver 18
-curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >/usr/share/keyrings/microsoft-prod.gpg
+curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor --yes -o /usr/share/keyrings/microsoft-prod.gpg
 echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" >/etc/apt/sources.list.d/mssql-release.list
 
 apt-get update -y
@@ -34,29 +43,43 @@ apt-get update -y
 ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18
 echo "export PATH=\"\$PATH:/opt/mssql-tools18/bin\"" >>/etc/profile.d/mssql.sh
 
-# Install Python3, pip, unixodbc-dev
-apt-get install -y python3 python3-pip python3-venv unixodbc-dev
+# Export data from BigQuery public dataset to CSV files
+echo "Exporting tables from BigQuery public dataset..."
+TABLES=(
+  "distribution_centers"
+  "events"
+  "inventory_items"
+  "order_items"
+  "orders"
+  "products"
+  "users"
+)
 
-# Create python virtual environment
-python3 -m venv /opt/loader-env
+for TABLE in "${TABLES[@]}"; do
+  echo "Exporting ${TABLE} from BigQuery..."
+  if [ "${TABLE}" = "events" ]; then
+    QUERY="SELECT * FROM \`bigquery-public-data.thelook_ecommerce.${TABLE}\` LIMIT 100000"
+  else
+    QUERY="SELECT * FROM \`bigquery-public-data.thelook_ecommerce.${TABLE}\`"
+  fi
+  bq --quiet query --use_legacy_sql=false --format=csv --max_rows=1000000 "${QUERY}" >"/tmp/${TABLE}.csv"
+  if [ ! -s "/tmp/${TABLE}.csv" ]; then
+    echo "Warning: Exported CSV file /tmp/${TABLE}.csv is empty or missing."
+  fi
+done
 
-# Install python libraries
-/opt/loader-env/bin/pip install --upgrade pip
-/opt/loader-env/bin/pip install pandas sqlalchemy pyodbc google-cloud-bigquery db-dtypes
-
-# Write the python script to load data
+# Write the python script to load data into SQL Server
 cat <<'EOF' >/opt/load_data.py
 import os
+import socket
 import time
 import urllib.parse
+import urllib.request
 import pandas as pd
-from google.cloud import bigquery
-from sqlalchemy import create_engine
-from sqlalchemy.types import Integer, String, Float, DateTime
-import socket
+from sqlalchemy import create_engine, exc, text
+from sqlalchemy.types import DateTime, Float, Integer, String
 
 def get_metadata(key):
-    import urllib.request
     req = urllib.request.Request(
         f"http://metadata.google.internal/computeMetadata/v1/instance/attributes/{key}",
         headers={"Metadata-Flavor": "Google"}
@@ -100,9 +123,9 @@ engine = create_engine(f"mssql+pyodbc:///?odbc_connect={params}")
 
 # Create database
 with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
-    result = conn.execute("SELECT name FROM sys.databases WHERE name = 'thelook_ecommerce'")
+    result = conn.execute(text("SELECT name FROM sys.databases WHERE name = 'thelook_ecommerce'"))
     if not result.fetchone():
-        conn.execute("CREATE DATABASE thelook_ecommerce;")
+        conn.execute(text("CREATE DATABASE thelook_ecommerce;"))
         print("Database thelook_ecommerce created.")
     else:
         print("Database thelook_ecommerce already exists.")
@@ -210,29 +233,31 @@ dtypes_map = {
     }
 }
 
-bq_client = bigquery.Client()
-
 for table, dtypes in dtypes_map.items():
-    print(f"Loading table {table} from BigQuery...")
+    print(f"Loading table {table} into SQL Server...")
     try:
         with engine.connect() as conn:
-            result = conn.execute(f"SELECT COUNT(*) FROM {table}")
+            result = conn.execute(text(f"SELECT COUNT(*) FROM {table}"))
             count = result.fetchone()[0]
             if count > 0:
                 print(f"Table {table} already exists and has {count} rows. Skipping.")
                 continue
-    except Exception:
-        pass
+    except (exc.DBAPIError, exc.ProgrammingError) as e:
+        print(f"Notice: Querying table {table} produced: {e}")
 
-    if table == 'events':
-        query = f"SELECT * FROM `bigquery-public-data.thelook_ecommerce.{table}` LIMIT 100000"
-        print("Limiting events table to 100,000 rows.")
-    else:
-        query = f"SELECT * FROM `bigquery-public-data.thelook_ecommerce.{table}`"
+    csv_path = f"/tmp/{table}.csv"
+    if not os.path.exists(csv_path):
+        print(f"CSV file {csv_path} not found. Skipping.")
+        continue
 
     try:
-        df = bq_client.query(query).to_dataframe()
-        print(f"Downloaded {len(df)} rows. Writing to SQL Server...")
+        df = pd.read_csv(csv_path)
+        # Parse datetime columns
+        for col, col_type in dtypes.items():
+            if isinstance(col_type, DateTime) and col in df.columns:
+                df[col] = pd.to_datetime(df[col], errors='coerce')
+
+        print(f"Read {len(df)} rows from {csv_path}. Writing to SQL Server...")
         df.to_sql(
             table,
             engine,
@@ -250,6 +275,6 @@ EOF
 
 # Run the python script
 echo "Running the data loader script..."
-/opt/loader-env/bin/python3 /opt/load_data.py
+python3 /opt/load_data.py
 
 echo "Startup script finished."
