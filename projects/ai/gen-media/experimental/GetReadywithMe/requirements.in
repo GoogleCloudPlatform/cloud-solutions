@@ -8,6 +8,6 @@ google-cloud-aiplatform==1.145.0
 opencv-python==4.13.0.92
 scikit-image==0.26.0
 requests==2.34.2
-cryptography==49.0.0
+cryptography==50.0.0
 gitpython==3.1.57
 
