@@ -4,7 +4,7 @@ version = "3.20251118.1"
 description = "Common utilities for Tahoe agents"
 authors = [{ name = "GenMedia Team", email = "team@example.com" }]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = "==3.13.*"
 dependencies = [
     "google-adk==1.36.2",
     "python-dotenv==1.2.2",

@@ -4,7 +4,7 @@ version = "5.20260410.1"
 description = "Combined Marketing Campaign Agent - Image Ads and Video Ads"
 authors = [{ name = "Layolin Jesudhass" }]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = "==3.13.*"
 dependencies = [
     "google-adk==1.36.2",
     "google-cloud-aiplatform[adk,agent-engines]==1.163.0",
@@ -27,7 +27,8 @@ dependencies = [
     "tenacity==9.1.4",
     "google-ads==31.2.0",
     "rapidfuzz==3.14.5",
-    "gitpython==3.1.57",
+    "gitpython==3.1.58",
+    "cryptography==50.0.0",
 ]
 
 [tool.uv]

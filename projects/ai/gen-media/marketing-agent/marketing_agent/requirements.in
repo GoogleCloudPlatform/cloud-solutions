@@ -1,7 +1,9 @@
 hatchling==1.27.0
-setuptools==83.0.0
+setuptools==84.0.0
 wheel==0.46.2
 streamlit==1.54.0
 pillow==12.3.0
 google-ads==30.1.0
 rapidfuzz==3.14.5
+gitpython==3.1.58
+cryptography==50.0.0
