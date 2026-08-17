@@ -317,8 +317,8 @@ docstring-parser==0.18.0 \
 fastapi==0.136.3 \
     --hash=sha256:3d2a69bdf04b7e9f3afa292c3bc7a98816bbfafa10bc9b45f3f3700d2f761620 \
     --hash=sha256:e487fae93ad408e6f47641ee4dfe389864fd7bec92e547ea8498fc13f43e83ab
-    # via -r mcp-server/requirements.in
-google-api-core[grpc]==2.30.3 \
+    # via -r requirements.in
+google-api-core==2.30.3 \
     --hash=sha256:a85761ba72c444dad5d611c2220633480b2b6be2521eca69cca2dbb3ffd6bfe8 \
     --hash=sha256:e601a37f148585319b26db36e219df68c5d07b6382cff2d580e83404e44d641b
     # via
@@ -327,11 +327,11 @@ google-api-core[grpc]==2.30.3 \
     #   google-cloud-core
     #   google-cloud-resource-manager
     #   google-cloud-storage
-google-auth[requests]==2.50.0 \
+google-auth==2.50.0 \
     --hash=sha256:04382175e28b94f49694977f0a792688b59a668def1499e9d8de996dc9ce5b15 \
     --hash=sha256:f35eafb191195328e8ce10a7883970877e7aeb49c2bfaa54aa0e394316d353d0
     # via
-    #   -r mcp-server/requirements.in
+    #   -r requirements.in
     #   google-api-core
     #   google-cloud-aiplatform
     #   google-cloud-bigquery
@@ -342,7 +342,7 @@ google-auth[requests]==2.50.0 \
 google-cloud-aiplatform==1.133.0 \
     --hash=sha256:3a6540711956dd178daaab3c2c05db476e46d94ac25912b8cf4f59b00b058ae0 \
     --hash=sha256:dfc81228e987ca10d1c32c7204e2131b3c8d6b7c8e0b4e23bf7c56816bc4c566
-    # via -r mcp-server/requirements.in
+    # via -r requirements.in
 google-cloud-bigquery==3.41.0 \
     --hash=sha256:2217e488b47ed576360c9b2cc07d59d883a54b83167c0ef37f915c26b01a06fe \
     --hash=sha256:2a5b5a737b401cbd824a6e5eac7554100b878668d908e6548836b5d8aaa4dcaa
@@ -408,7 +408,7 @@ google-resumable-media==2.9.0 \
     # via
     #   google-cloud-bigquery
     #   google-cloud-storage
-googleapis-common-protos[grpc]==1.75.0 \
+googleapis-common-protos==1.75.0 \
     --hash=sha256:53a062ff3c32552fbd62c11fe23768b78e4ddf0494d5e5fd97d3f4689c75fbbd \
     --hash=sha256:961ed60399c457ceb0ee8f285a84c870aabc9c6a832b9d37bb281b5bebde43ed
     # via
@@ -529,7 +529,7 @@ jsonschema-specifications==2025.9.1 \
 mcp==1.28.1 \
     --hash=sha256:2726bca5e7193f61c5dde8b12500a6de2d9acf6d1a1c0be9e8c2e706437991df \
     --hash=sha256:d51e36a5f5644faea4f85ea649bfffa6bc6c26770d42798ad6a3de3d2ba69683
-    # via -r mcp-server/requirements.in
+    # via -r requirements.in
 oracledb==2.1.0 \
     --hash=sha256:0193975d819338e12f5faa59e8ca0954cf2f3261c375d01b7096716cd7134847 \
     --hash=sha256:0216d02856e12b085c259537d5b0d0a8ef6280041023d4ef36fc03363301c869 \
@@ -562,7 +562,7 @@ oracledb==2.1.0 \
     --hash=sha256:e6cf81c362d00cee9957a86155732b9d5dd5e2fa4b6062a6ea5a51655fc4ff7c \
     --hash=sha256:f145c1e8f52e4927f113656b5b15824c1e79ebac68e934f9997d2c595d371b3b \
     --hash=sha256:fcda142549766bbe75121459bd1366f75e8627e031adf80f71f706f4a482b870
-    # via -r mcp-server/requirements.in
+    # via -r requirements.in
 packaging==26.2 \
     --hash=sha256:5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e \
     --hash=sha256:ff452ff5a3e828ce110190feff1178bb1f2ea2281fa2075aadb987c2fb221661
@@ -611,7 +611,7 @@ pydantic==2.13.4 \
     --hash=sha256:45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba \
     --hash=sha256:c40756b57adaa8b1efeeced5c196f3f3b7c435f90e84ea7f443901bec8099ef6
     # via
-    #   -r mcp-server/requirements.in
+    #   -r requirements.in
     #   fastapi
     #   google-cloud-aiplatform
     #   google-genai
@@ -743,7 +743,7 @@ pydantic-settings==2.14.2 \
     --hash=sha256:a20c97b37910b6550d5ea50fbcc2d4187defe58cd57070b73863d069419c9440 \
     --hash=sha256:c19dd64b19097f1de80184f0cc7b0272a13ae6e170cbf240a3e27e381ed14a5f
     # via mcp
-pyjwt[crypto]==2.13.0 \
+pyjwt==2.13.0 \
     --hash=sha256:41571c89ca91598c79e8ef18a2d07367d4810fbbd6f637794879baf1b7703423 \
     --hash=sha256:66adcc2aff09b3f1bbd95fc1e1577df8ac8723c978552fd43304c8a290ac5728
     # via mcp
@@ -769,7 +769,7 @@ requests==2.33.0 \
     --hash=sha256:3324635456fa185245e24865e810cecec7b4caf933d7eb133dcde67d48cee69b \
     --hash=sha256:c7ebc5e8b0f21837386ad0e1c8fe8b829fa5f544d8df3b2253bff14ef29d7652
     # via
-    #   -r mcp-server/requirements.in
+    #   -r requirements.in
     #   google-api-core
     #   google-auth
     #   google-cloud-bigquery
@@ -921,13 +921,13 @@ sse-starlette==3.0.3 \
     --hash=sha256:88cfb08747e16200ea990c8ca876b03910a23b547ab3bd764c0d8eb81019b971 \
     --hash=sha256:af5bf5a6f3933df1d9c7f8539633dc8444ca6a97ab2e2a7cd3b6e431ac03a431
     # via
-    #   -r mcp-server/requirements.in
+    #   -r requirements.in
     #   mcp
 starlette==1.3.1 \
     --hash=sha256:05d0213193f2fbaae60e2ecb593b4add4262ad4e46536b54abe36f11a71724e0 \
     --hash=sha256:c7372aae11c3c3f26a42df7bd626cec2f47d03483d261d369516a615a53714c6
     # via
-    #   -r mcp-server/requirements.in
+    #   -r requirements.in
     #   fastapi
     #   mcp
 tenacity==9.1.4 \
@@ -962,7 +962,7 @@ uvicorn==0.32.0 \
     --hash=sha256:60b8f3a5ac027dcd31448f411ced12b5ef452c646f76f02f8cc3f25d8d26fd82 \
     --hash=sha256:f78b36b143c16f54ccdb8190d0a26b5f1901fe5a3c777e1ab29f26391af8551e
     # via
-    #   -r mcp-server/requirements.in
+    #   -r requirements.in
     #   mcp
 websockets==16.0 \
     --hash=sha256:0298d07ee155e2e9fda5be8a9042200dd2e3bb0b8a38482156576f863a9d457c \
