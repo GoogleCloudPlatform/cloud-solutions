@@ -135,6 +135,12 @@
       "additionalBranchPrefix": "awt-"
     },
     {
+      "matchFileNames": ["projects/beyond-the-chatbot/**"],
+      "groupName": "beyond-the-chatbot",
+      "commitMessagePrefix": "chore(deps): [beyond-the-chatbot]",
+      "additionalBranchPrefix": "beyond-the-chatbot-"
+    },
+    {
       "matchFileNames": ["projects/bss-ai-agent-infra/**"],
       "groupName": "bss-ai-agent-infra",
       "commitMessagePrefix": "chore(deps): [bss-ai-agent-infra]",
@@ -213,9 +219,7 @@
       "additionalBranchPrefix": "fsi-quant-assistant-"
     },
     {
-      "matchFileNames": [
-        "projects/gecx-ticketing-demo/**"
-      ],
+      "matchFileNames": ["projects/gecx-ticketing-demo/**"],
       "groupName": "gecx-ticketing-demo",
       "commitMessagePrefix": "chore(deps): [gecx-ticketing-demo]",
       "additionalBranchPrefix": "gecx-ticketing-demo-"
