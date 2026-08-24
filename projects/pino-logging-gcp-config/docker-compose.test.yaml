@@ -13,32 +13,19 @@
 # limitations under the License.
 
 # Docker compose set of services to run the tests sequentially using
-# Node 18, 20, 22, 24 LTS versions.
+# Node 22, 24, 26 LTS versions.
 #
 
 services:
-  node_20_tests:
-    container_name: node_20_tests
-    image: node:20.20.2-slim
-    working_dir: /the-repo/projects/pino-logging-gcp-config
-    entrypoint: ["/bin/bash", "-e", "-x", "-c"]
-    command:
-      - "npm ci --engine-strict=true && npm test"
-    volumes:
-      - ${THE_REPO_ROOT}:/the-repo
-
   node_22_tests:
     container_name: node_22_tests
-    image: node:22.23.1-slim
+    image: node:22.23.2-slim
     working_dir: /the-repo/projects/pino-logging-gcp-config
     entrypoint: ["/bin/bash", "-e", "-x", "-c"]
     command:
       - "npm ci --engine-strict=true && npm test"
     volumes:
       - ${THE_REPO_ROOT}:/the-repo
-    depends_on:
-      node_20_tests:
-        condition: service_completed_successfully
 
   node_24_tests:
     container_name: node_24_tests
@@ -51,4 +38,17 @@ services:
       - ${THE_REPO_ROOT}:/the-repo
     depends_on:
       node_22_tests:
+        condition: service_completed_successfully
+
+  node_26_tests:
+    container_name: node_26_tests
+    image: node:26.7.0-slim
+    working_dir: /the-repo/projects/pino-logging-gcp-config
+    entrypoint: ["/bin/bash", "-e", "-x", "-c"]
+    command:
+      - "npm ci --engine-strict=true && npm test"
+    volumes:
+      - ${THE_REPO_ROOT}:/the-repo
+    depends_on:
+      node_24_tests:
         condition: service_completed_successfully
