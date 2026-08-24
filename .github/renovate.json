@@ -87,6 +87,12 @@
       "additionalBranchPrefix": "aaa-user-guide-"
     },
     {
+      "matchFileNames": ["projects/aegis-streaming-demo/**"],
+      "groupName": "aegis-streaming-demo",
+      "commitMessagePrefix": "chore(deps): [aegis-streaming-demo]",
+      "additionalBranchPrefix": "aegis-streaming-demo-"
+    },
+    {
       "matchFileNames": ["projects/agentic-coding-with-data-agent-kit-demo/**"],
       "groupName": "agentic-coding-with-data-agent-kit-demo",
       "commitMessagePrefix": "chore(deps): [agentic-coding-with-data-agent-kit-demo]",
