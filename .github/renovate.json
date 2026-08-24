@@ -347,6 +347,12 @@
       "additionalBranchPrefix": "mmb-hero-demo-"
     },
     {
+      "matchFileNames": ["projects/new-test-project/**"],
+      "groupName": "new-test-project",
+      "commitMessagePrefix": "chore(deps): [new-test-project]",
+      "additionalBranchPrefix": "new-test-project-"
+    },
+    {
       "matchFileNames": ["projects/nvidia-omniverse-on-google-cloud/**"],
       "groupName": "nvidia-omniverse-on-google-cloud",
       "commitMessagePrefix": "chore(deps): [nvidia-omniverse-on-google-cloud]",
