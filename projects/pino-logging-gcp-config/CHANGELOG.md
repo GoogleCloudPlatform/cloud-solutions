@@ -2,7 +2,7 @@
 
 <!-- markdownlint-disable -->
 
-## [1.3.6](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.5...pino-logging-gcp-config-v1.3.6) (2026-09-01)
+## [1.3.6](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.5...pino-logging-gcp-config-v1.3.6) (2026-08-26)
 
 
 ### Bug Fixes
