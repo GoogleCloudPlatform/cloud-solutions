@@ -21,7 +21,7 @@
  */
 
 import * as pino from 'pino';
-import {EventId} from 'eventid';
+import {EventId} from '@google-cloud/logging/build/src/utils/event-id';
 import {
   Logging,
   ServiceContext,
