@@ -13,5 +13,3 @@
 # limitations under the License.
 
 """Video Ads Agent — Multi-scene video ad generation with Omni + TTS + Lyria."""
-
-from .agent import root_agent

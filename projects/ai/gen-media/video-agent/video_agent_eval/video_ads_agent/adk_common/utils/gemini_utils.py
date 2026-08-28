@@ -25,11 +25,10 @@ from google.api_core import exceptions as api_exceptions
 from google.auth import exceptions as auth_exceptions
 from google.genai import types
 from google.genai.types import HarmBlockThreshold, HarmCategory
-
-from .constants import get_required_env_var
-from .eval_result import EvalResult
-from .evaluate_media import evaluate_media
-from .utils_logging import Severity, log_message
+from video_agent_eval.constants import get_required_env_var
+from video_agent_eval.eval_result import EvalResult
+from video_agent_eval.evaluate_media import evaluate_media
+from video_agent_eval.utils_logging import Severity, log_message
 
 IMAGE_MIME_TYPE = "image/png"
 

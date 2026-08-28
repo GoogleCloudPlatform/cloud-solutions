@@ -1005,7 +1005,7 @@ with st.sidebar:
     else:
         st.info("Google logo will be used as default.")
         if os.path.exists(DEFAULT_LOGO_PATH):
-            with open(DEFAULT_LOGO_PATH, "rb") as f:
+            with open(DEFAULT_LOGO_PATH, "rb", encoding="utf-8") as f:
                 logo_raw = f.read()
             logo_bytes = remove_logo_background(logo_raw)
 

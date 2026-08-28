@@ -17,8 +17,8 @@
 import asyncio
 from typing import Any, Callable, Coroutine, List, Optional
 
-from .evaluator import EvaluationAgent
-from .models import ClipCandidate, ClipEvaluationLoopResult
+from video_agent_eval.evaluator import EvaluationAgent
+from video_agent_eval.models import ClipCandidate, ClipEvaluationLoopResult
 
 
 async def run_clip_generation_and_eval_loop(

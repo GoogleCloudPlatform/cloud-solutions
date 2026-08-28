@@ -24,10 +24,9 @@ from google.api_core.client_info import ClientInfo
 from google.api_core.exceptions import GoogleAPICallError, NotFound
 from google.cloud import storage
 from PIL import Image
-
-from ..dtos.generated_media import GeneratedMedia
-from .constants import get_required_env_var
-from .utils_logging import Severity, log_message
+from video_agent_eval.constants import get_required_env_var
+from video_agent_eval.dtos.generated_media import GeneratedMedia
+from video_agent_eval.utils_logging import Severity, log_message
 
 AGENT_VERSION = get_required_env_var("AGENT_VERSION")
 GOOGLE_CLOUD_PROJECT = get_required_env_var("GOOGLE_CLOUD_PROJECT")
@@ -663,7 +662,9 @@ def generate_min_image(source_blob_name: str):
 
     if not min_blob.exists():
         image_bytes = blob.download_as_bytes()
-        original_img = Image.open(io.BytesIO(image_bytes))
+        original_img = Image.open(
+            io.BytesIO(image_bytes, "r", encoding="utf-8")
+        )
         target_height = 200
         aspect_ratio = original_img.width / original_img.height
         target_width = int(target_height * aspect_ratio)

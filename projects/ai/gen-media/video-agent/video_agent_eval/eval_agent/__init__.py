@@ -14,10 +14,10 @@
 
 """Evaluation Agent package for multimodal video and commercial ad QA."""
 
-from .clip_eval_loop import run_clip_generation_and_eval_loop
-from .evaluator import EvaluationAgent
-from .final_ad_eval_loop import run_final_ad_eval_loop
-from .models import (
+from video_agent_eval.clip_eval_loop import run_clip_generation_and_eval_loop
+from video_agent_eval.evaluator import EvaluationAgent
+from video_agent_eval.final_ad_eval_loop import run_final_ad_eval_loop
+from video_agent_eval.models import (
     ClipCandidate,
     ClipEvaluationLoopResult,
     FinalAdCandidate,
@@ -29,12 +29,12 @@ from .models import (
     RubricDimensionScore,
     RubricScorecard,
 )
-from .prompts import (
+from video_agent_eval.prompts import (
     build_final_ad_evaluation_prompt,
     build_physion_arc_evaluation_prompt,
     build_video_clip_evaluation_prompt,
 )
-from .subagents import (
+from video_agent_eval.subagents import (
     BaseEvaluationSubagent,
     BrandLogoOutroSubagent,
     CommercialPolishSoundSubagent,

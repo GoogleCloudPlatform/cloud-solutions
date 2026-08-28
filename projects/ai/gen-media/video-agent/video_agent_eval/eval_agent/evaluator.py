@@ -21,18 +21,17 @@ from typing import List, Optional
 
 from google import genai
 from google.genai import types
-
-from .models import (
+from video_agent_eval.models import (
     FinalAdRubricScorecard,
     PhysionArcScorecard,
     RubricScorecard,
 )
-from .prompts import (
+from video_agent_eval.prompts import (
     build_final_ad_evaluation_prompt,
     build_physion_arc_evaluation_prompt,
     build_video_clip_evaluation_prompt,
 )
-from .subagents import EvaluationCoordinator
+from video_agent_eval.subagents import EvaluationCoordinator
 
 DEFAULT_EVALUATION_MODEL = os.environ.get(
     "EVALUATION_MODEL", "gemini-2.5-flash"

@@ -60,8 +60,8 @@ try:
 except ImportError:
     ClientOptions = storage = texttospeech = None
 
-from .adk_common.dtos.generated_media import GeneratedMedia
-from .adk_common.utils import utils_agents, utils_gcs
+from video_agent_eval.adk_common.dtos.generated_media import GeneratedMedia
+from video_agent_eval.adk_common.utils import utils_agents, utils_gcs
 
 # Proper Architectural Pattern: Leverage pre-compiled binaries via imageio.
 # Agent Engine installs this at build-time in container image.
@@ -411,7 +411,9 @@ def generate_title_card(
     """Generate title card clip using Pillow text rendering + ffmpeg."""
     try:
         if background_image_bytes:
-            bg = Image.open(io.BytesIO(background_image_bytes)).convert("RGB")
+            bg = Image.open(
+                io.BytesIO(background_image_bytes, "r", encoding="utf-8")
+            ).convert("RGB")
             bg = bg.resize((width, height), Image.LANCZOS)
             bg = bg.filter(ImageFilter.GaussianBlur(radius=12))
             bg = ImageEnhance.Brightness(bg).enhance(0.7)
@@ -455,7 +457,9 @@ def generate_title_card(
 
         if logo_bytes:
             try:
-                logo = Image.open(io.BytesIO(logo_bytes)).convert("RGBA")
+                logo = Image.open(
+                    io.BytesIO(logo_bytes, "r", encoding="utf-8")
+                ).convert("RGBA")
                 logo_h = height // 6
                 logo_w = int(logo.width * (logo_h / logo.height))
                 logo = logo.resize((logo_w, logo_h), Image.LANCZOS)
@@ -546,7 +550,7 @@ def generate_title_card(
                 cmd, capture_output=True, timeout=30, check=False
             )
             if result.returncode == 0:
-                with open(out_path, "rb") as f:
+                with open(out_path, "rb", encoding="utf-8") as f:
                     print(f"[TitleCard] OK: {text_line1}")
                     return f.read()
             print(f"[TitleCard] ffmpeg failed: {result.stderr.decode()[-500:]}")
@@ -589,7 +593,7 @@ def _strip_audio(video_bytes: bytes) -> bytes:
     with tempfile.TemporaryDirectory() as tmpdir:
         in_path = os.path.join(tmpdir, "in.mp4")
         out_path = os.path.join(tmpdir, "out.mp4")
-        with open(in_path, "wb") as f:
+        with open(in_path, "wb", encoding="utf-8") as f:
             f.write(video_bytes)
         result = subprocess.run(
             [
@@ -609,7 +613,7 @@ def _strip_audio(video_bytes: bytes) -> bytes:
             check=False,
         )
         if result.returncode == 0:
-            with open(out_path, "rb") as f:
+            with open(out_path, "rb", encoding="utf-8") as f:
                 return f.read()
     return video_bytes
 
@@ -727,7 +731,9 @@ async def generate_scene_video(
     initialize_ffmpeg_if_needed()
 
     try:
-        img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        img = Image.open(
+            io.BytesIO(image_bytes, "r", encoding="utf-8")
+        ).convert("RGB")
         img = img.resize((1920, 1080), Image.Resampling.LANCZOS)
         print(
             f"[Omni] Scene {scene_number}: Lanczos super-resolution "
@@ -975,7 +981,9 @@ async def generate_scene_video_veo(
 
     # Veo requires JPEG/PNG and 16:9 aspect ratio — convert and crop via Pillow
     try:
-        img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        img = Image.open(
+            io.BytesIO(image_bytes, "r", encoding="utf-8")
+        ).convert("RGB")
         w, h = img.size
         target_ratio = 16 / 9
         current_ratio = w / h
@@ -1441,9 +1449,9 @@ def trim_clip_to_voiceover(
         vo_path = os.path.join(tmpdir, "vo.wav")
         out_path = os.path.join(tmpdir, "trimmed.mp4")
 
-        with open(vid_path, "wb") as f:
+        with open(vid_path, "wb", encoding="utf-8") as f:
             f.write(video_bytes)
-        with open(vo_path, "wb") as f:
+        with open(vo_path, "wb", encoding="utf-8") as f:
             f.write(voiceover_bytes)
 
         video_duration = _probe_duration(vid_path, 8.0)
@@ -1474,7 +1482,7 @@ def trim_clip_to_voiceover(
             cmd, capture_output=True, timeout=60, check=False
         )
         if result.returncode == 0:
-            with open(out_path, "rb") as f:
+            with open(out_path, "rb", encoding="utf-8") as f:
                 return f.read()
         return video_bytes
 
@@ -1501,7 +1509,7 @@ def mix_scene_audio(
         with tempfile.TemporaryDirectory() as tmpdir:
             vid_path = os.path.join(tmpdir, "video.mp4")
             out_path = os.path.join(tmpdir, "output.mp4")
-            with open(vid_path, "wb") as f:
+            with open(vid_path, "wb", encoding="utf-8") as f:
                 f.write(video_bytes)
             cmd = [
                 _FFMPEG_EXE,
@@ -1523,7 +1531,7 @@ def mix_scene_audio(
             ]
             result = subprocess.run(cmd, capture_output=True, check=False)
             if result.returncode == 0 and os.path.exists(out_path):
-                with open(out_path, "rb") as f:
+                with open(out_path, "rb", encoding="utf-8") as f:
                     return f.read()
         return video_bytes
 
@@ -1533,7 +1541,7 @@ def mix_scene_audio(
         music_path = os.path.join(tmpdir, "music.wav")
         out_path = os.path.join(tmpdir, "output.mp4")
 
-        with open(vid_path, "wb") as f:
+        with open(vid_path, "wb", encoding="utf-8") as f:
             f.write(video_bytes)
 
         video_duration = _probe_duration(vid_path, 8.0)
@@ -1541,12 +1549,12 @@ def mix_scene_audio(
         inputs = ["-i", vid_path]
 
         if voiceover_bytes:
-            with open(vo_path, "wb") as f:
+            with open(vo_path, "wb", encoding="utf-8") as f:
                 f.write(voiceover_bytes)
             inputs.extend(["-i", vo_path])
 
         if music_bytes:
-            with open(music_path, "wb") as f:
+            with open(music_path, "wb", encoding="utf-8") as f:
                 f.write(music_bytes)
             inputs.extend(["-i", music_path])
 
@@ -1619,7 +1627,7 @@ def mix_scene_audio(
             cmd, capture_output=True, timeout=120, check=False
         )
         if result.returncode == 0:
-            with open(out_path, "rb") as f:
+            with open(out_path, "rb", encoding="utf-8") as f:
                 mixed = f.read()
                 print(
                     f"[MixAudio] Success: {len(mixed):,}"
@@ -1644,7 +1652,7 @@ def ensure_png_bytes(image_bytes: bytes) -> bytes:
     valid PNG formatted image bytes, avoiding black frames or format issues.
     """
     try:
-        img = Image.open(io.BytesIO(image_bytes))
+        img = Image.open(io.BytesIO(image_bytes, "r", encoding="utf-8"))
         if img.mode not in ("RGB", "RGBA"):
             img = img.convert("RGBA" if "A" in img.mode else "RGB")
         out_buf = io.BytesIO()
@@ -1672,7 +1680,9 @@ def remove_logo_background(logo_bytes: bytes) -> bytes:
         print("[Logo] Pillow not available, returning logo as-is")
         return logo_bytes
 
-    img = Image.open(io.BytesIO(logo_bytes)).convert("RGBA")
+    img = Image.open(io.BytesIO(logo_bytes, "r", encoding="utf-8")).convert(
+        "RGBA"
+    )
 
     if img.mode == "RGBA":
         alpha = img.getchannel("A")
@@ -1731,7 +1741,7 @@ def create_outro_clip(
         vid_path = os.path.join(tmpdir, "video.mp4")
         out_path = os.path.join(tmpdir, "output.mp4")
 
-        with open(vid_path, "wb") as f:
+        with open(vid_path, "wb", encoding="utf-8") as f:
             f.write(base_clip_bytes)
 
         last_frame_path = os.path.join(tmpdir, "last_frame.jpg")
@@ -1776,7 +1786,7 @@ def create_outro_clip(
         logo_idx = -1
         if logo_bytes:
             logo_path = os.path.join(tmpdir, "logo.png")
-            with open(logo_path, "wb") as f:
+            with open(logo_path, "wb", encoding="utf-8") as f:
                 f.write(logo_bytes)
             inputs.extend(["-i", logo_path])
             logo_idx = inputs.count("-i") - 1
@@ -1784,7 +1794,7 @@ def create_outro_clip(
         vo_idx = -1
         if voiceover_bytes:
             vo_path = os.path.join(tmpdir, "vo.wav")
-            with open(vo_path, "wb") as f:
+            with open(vo_path, "wb", encoding="utf-8") as f:
                 f.write(voiceover_bytes)
             inputs.extend(["-i", vo_path])
             vo_idx = inputs.count("-i") - 1
@@ -1934,7 +1944,7 @@ def create_outro_clip(
             cmd, capture_output=True, timeout=120, check=False
         )
         if result.returncode == 0:
-            with open(out_path, "rb") as f:
+            with open(out_path, "rb", encoding="utf-8") as f:
                 return f.read()
         print(f"[Outro] FFmpeg error: {result.stderr.decode()[-500:]}")
         return None
@@ -1966,7 +1976,7 @@ def overlay_logo_and_tagline_on_video(
         vid_path = os.path.join(tmpdir, "video.mp4")
         out_path = os.path.join(tmpdir, "output.mp4")
 
-        with open(vid_path, "wb") as f:
+        with open(vid_path, "wb", encoding="utf-8") as f:
             f.write(video_bytes)
 
         cmd = [_FFMPEG_EXE, "-y", "-i", vid_path]
@@ -1975,7 +1985,7 @@ def overlay_logo_and_tagline_on_video(
 
         if logo_bytes:
             logo_path = os.path.join(tmpdir, "logo.png")
-            with open(logo_path, "wb") as f:
+            with open(logo_path, "wb", encoding="utf-8") as f:
                 f.write(logo_bytes)
             cmd.extend(["-i", logo_path])
             logo_idx = inputs_count
@@ -2141,7 +2151,7 @@ def overlay_logo_and_tagline_on_video(
             cmd, capture_output=True, timeout=120, check=False
         )
         if result.returncode == 0:
-            with open(out_path, "rb") as f:
+            with open(out_path, "rb", encoding="utf-8") as f:
                 print("[Overlay] Logo/Tagline applied OK")
                 return f.read()
         print(f"[Overlay] ffmpeg failed: {result.stderr.decode()[-500:]}")
@@ -2159,7 +2169,7 @@ def probe_video_resolution(video_bytes: bytes) -> tuple[int, int]:
     1080)."""
     with tempfile.TemporaryDirectory() as tmpdir:
         path = os.path.join(tmpdir, "probe.mp4")
-        with open(path, "wb") as f:
+        with open(path, "wb", encoding="utf-8") as f:
             f.write(video_bytes)
         result = subprocess.run(
             [
@@ -2201,7 +2211,7 @@ def hard_concat_clips(clip_bytes_list: list[bytes]) -> bytes | None:
         clip_paths = []
         for i, clip in enumerate(clip_bytes_list):
             path = os.path.join(tmpdir, f"clip_{i}.mp4")
-            with open(path, "wb") as f:
+            with open(path, "wb", encoding="utf-8") as f:
                 f.write(clip)
             clip_paths.append(path)
 
@@ -2246,7 +2256,7 @@ def hard_concat_clips(clip_bytes_list: list[bytes]) -> bytes | None:
             cmd, capture_output=True, timeout=180, check=False
         )
         if result.returncode == 0:
-            with open(out_path, "rb") as f:
+            with open(out_path, "rb", encoding="utf-8") as f:
                 return f.read()
         print(f"[Concat] Failed: {result.stderr.decode()[-500:]}")
         return None
@@ -2279,9 +2289,9 @@ def concatenate_scenes_with_dissolve(
         with tempfile.TemporaryDirectory() as td:
             c1_path = os.path.join(td, "c1.mp4")
             c2_path = os.path.join(td, "c2.mp4")
-            with open(c1_path, "wb") as f:
+            with open(c1_path, "wb", encoding="utf-8") as f:
                 f.write(clip1_bytes)
-            with open(c2_path, "wb") as f:
+            with open(c2_path, "wb", encoding="utf-8") as f:
                 f.write(clip2_bytes)
 
             probe = subprocess.run(
@@ -2565,7 +2575,7 @@ def concatenate_scenes_with_dissolve(
                     flush=True,
                 )
                 return None
-            with open(out_path, "rb") as f:
+            with open(out_path, "rb", encoding="utf-8") as f:
                 current_clip = f.read()
 
     return current_clip
@@ -2584,9 +2594,9 @@ def add_background_music_to_final(
         music_path = os.path.join(tmpdir, "music.wav")
         out_path = os.path.join(tmpdir, "output.mp4")
 
-        with open(vid_path, "wb") as f:
+        with open(vid_path, "wb", encoding="utf-8") as f:
             f.write(video_bytes)
-        with open(music_path, "wb") as f:
+        with open(music_path, "wb", encoding="utf-8") as f:
             f.write(music_bytes)
 
         probe = subprocess.run(
@@ -2677,7 +2687,7 @@ def add_background_music_to_final(
             cmd, capture_output=True, timeout=120, check=False
         )
         if result.returncode == 0:
-            with open(out_path, "rb") as f:
+            with open(out_path, "rb", encoding="utf-8") as f:
                 return f.read()
         return video_bytes
 
@@ -2962,9 +2972,9 @@ def _wrap_mp3_as_mp4(mp3_bytes: bytes, card_png_bytes: bytes) -> bytes | None:
         mp3_path = os.path.join(tmpdir, "audio.mp3")
         out_path = os.path.join(tmpdir, "preview.mp4")
 
-        with open(card_path, "wb") as f:
+        with open(card_path, "wb", encoding="utf-8") as f:
             f.write(card_png_bytes)
-        with open(mp3_path, "wb") as f:
+        with open(mp3_path, "wb", encoding="utf-8") as f:
             f.write(mp3_bytes)
 
         cmd = [
@@ -3000,7 +3010,7 @@ def _wrap_mp3_as_mp4(mp3_bytes: bytes, card_png_bytes: bytes) -> bytes | None:
             print(f"FFmpeg wrap error: {result.stderr.decode()[-300:]}")
             return None
 
-        with open(out_path, "rb") as f:
+        with open(out_path, "rb", encoding="utf-8") as f:
             return f.read()
 
 
@@ -3552,7 +3562,7 @@ async def save_uploaded_image(
 
 
 DEFAULT_LOGO_GCS_URI = (
-    "gs://video-ads-studio-1900-video-ads-artifacts/google_logo.png"
+    "gs://your-project-id-video-ads-artifacts/google_logo.png"
 )
 
 
@@ -5677,7 +5687,8 @@ root_agent = Agent(
     model="gemini-3.1-pro-preview",
     before_model_callback=_strip_large_inline_data,
     instruction=open(
-        os.path.join(os.path.dirname(__file__), "prompt.md"), encoding="utf-8"
+        os.path.join(os.path.dirname(__file__), "prompt.md"),
+        encoding="utf-8",
     ).read(),
     description=(
         "Multi-scene Video Ads Agent — generates video clips with Omni or Veo, "

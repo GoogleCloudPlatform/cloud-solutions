@@ -23,8 +23,7 @@ import time
 from typing import Optional
 
 from google.genai import types
-
-from .constants import get_optional_env_var
+from video_agent_eval.constants import get_optional_env_var
 
 AGENT_VERSION = get_optional_env_var("AGENT_VERSION", "1.0.0")
 

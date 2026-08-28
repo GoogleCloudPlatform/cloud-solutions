@@ -17,10 +17,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict
 
-from .models import (
-    RubricDimensionScore,
-    RubricScorecard,
-)
+from video_agent_eval.models import RubricDimensionScore, RubricScorecard
 
 
 class BaseEvaluationSubagent(ABC):
@@ -36,7 +33,6 @@ class BaseEvaluationSubagent(ABC):
         dimension_data: Dict[str, Any],
     ) -> RubricDimensionScore:
         """Validates and standardizes a single dimension evaluation."""
-        pass
 
 
 # ── Clip Evaluation Subagents ────────────────────────────────

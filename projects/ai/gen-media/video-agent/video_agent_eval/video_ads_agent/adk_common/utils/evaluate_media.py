@@ -20,15 +20,14 @@ from typing import List, Optional, Tuple, cast
 from google import genai
 from google.api_core import exceptions as api_exceptions
 from google.genai import types
-
-from .constants import get_required_env_var
-from .eval_result import EvalResult
-from .evaluation_prompts import (
+from video_agent_eval.constants import get_required_env_var
+from video_agent_eval.eval_result import EvalResult
+from video_agent_eval.evaluation_prompts import (
     get_image_evaluation_prompt,
     get_video_evaluation_prompt,
 )
-from .gemini_utils import get_gemini_client
-from .utils_logging import Severity, log_message
+from video_agent_eval.gemini_utils import get_gemini_client
+from video_agent_eval.utils_logging import Severity, log_message
 
 LLM_GEMINI_MODEL_EVALUATION = get_required_env_var(
     "LLM_GEMINI_MODEL_EVALUATION"

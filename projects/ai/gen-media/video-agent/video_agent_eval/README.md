@@ -1,6 +1,6 @@
 # Video Ads Studio & Closed-Loop Multimodal Evaluation Agent
 
-**Author:** Layolin Jesudhass
+- \*Author:\*\* Layolin Jesudhass
 
 Autonomous multi-scene video ad generation and closed-loop quality assurance
 suite with an interactive **Streamlit Studio UI** and headless **Evaluation
@@ -36,6 +36,7 @@ Streamlit Studio & Evaluation Pipeline
 │   ├── Lyria                 → Cinematic Ambient Music Generation
 │   └── FFmpeg Master Mixer   → EBU R128 Audio Normalization (-14 / -24 LUFS)
 └── Batch CLI Pipeline (ge_video_ads.py) → Spreadsheet-based Batch Producer
+
 ```
 
 ---
@@ -45,26 +46,25 @@ Streamlit Studio & Evaluation Pipeline
 ### 2.1. Dual-Tier Multimodal Evaluation Gating
 
 - **Tier 1: Individual Scene Clips (`>= 92.0%` Pass Threshold):**
-    - _Subject Realism & Physical Plausibility (25 pts)_ — 100% rigid
-      architecture, zero liquid wall/furniture warping.
-    - _Calm Swimming Pool Fluid Realism_ — Glassy, tranquil water with sunlight
-      micro-sparkles (strictly penalizes unnatural violent sloshing / tidal
-      waves).
-    - _Storyboard Consistency (25 pts)_ — Strict indoor room containment (zero
-      flying out bedroom windows, zero diving down to the street).
-    - _Prompt Adherence & Action (20 pts)_ — Steady front-moving pan-in / dolly
-      glide with 100% asset preservation (palm trees, sun loungers, cabanas).
-    - _Temporal Consistency & Motion (20 pts)_ — Single unbroken continuous take
-      (zero mid-clip cuts, zero jump cuts).
-    - _Visual Polish & Sharpness (10 pts)_ — Edge-to-edge 1080p Lanczos scaling.
+- _Subject Realism & Physical Plausibility (25 pts)_ — 100% rigid architecture,
+  zero liquid wall/furniture warping.
+- _Calm Swimming Pool Fluid Realism_ — Glassy, tranquil water with sunlight
+  micro-sparkles (strictly penalizes unnatural violent sloshing / tidal waves).
+- _Storyboard Consistency (25 pts)_ — Strict indoor room containment (zero
+  flying out bedroom windows, zero diving down to the street).
+- _Prompt Adherence & Action (20 pts)_ — Steady front-moving pan-in / dolly
+  glide with 100% asset preservation (palm trees, sun loungers, cabanas).
+- _Temporal Consistency & Motion (20 pts)_ — Single unbroken continuous take
+  (zero mid-clip cuts, zero jump cuts).
+- _Visual Polish & Sharpness (10 pts)_ — Edge-to-edge 1080p Lanczos scaling.
 
 - **Tier 2: Master Commercial Ad (`>= 95.0%` Broadcast Pass Threshold):**
-    - _Voiceover Speech Clarity & Pacing (25 pts)_
-    - _Brand Identity & Outro Logo Aesthetics (20 pts)_
-    - _Typography & Tagline Legibility (15 pts)_
-    - _Multi-Scene Narrative Transitions (20 pts)_
-    - _Commercial Sound Balance (20 pts)_ — EBU R128 loudness normalization
-      (`-14 LUFS` speech, `-24 LUFS` background music).
+- _Voiceover Speech Clarity & Pacing (25 pts)_
+- _Brand Identity & Outro Logo Aesthetics (20 pts)_
+- _Typography & Tagline Legibility (15 pts)_
+- _Multi-Scene Narrative Transitions (20 pts)_
+- _Commercial Sound Balance (20 pts)_ — EBU R128 loudness normalization
+  (`-14 LUFS` speech, `-24 LUFS` background music).
 
 ### 2.2. Autonomous 3-Attempt Self-Correction Loop
 
@@ -123,6 +123,7 @@ gcloud services enable \
 # Step 4: Deploy container to Cloud Run (8 vCPU, 16GB RAM, Session Affinity)
 chmod +x deploy.sh
 ./deploy.sh
+
 ```
 
 ### 3.2. Local Development & Testing
@@ -137,6 +138,7 @@ pip install --require-hashes -r requirements.txt
 
 # Run local studio app
 streamlit run streamlit_video_ads.py --server.port 8501
+
 ```
 
 ### Step 2: Install Dependencies
@@ -145,12 +147,14 @@ streamlit run streamlit_video_ads.py --server.port 8501
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --require-hashes -r requirements.txt
+
 ```
 
 ### Step 3: Run Interactive Studio App
 
 ```bash
 streamlit run streamlit_video_ads.py --server.port 8501
+
 ```
 
 Open [http://localhost:8501](http://localhost:8501) in your browser.
@@ -163,34 +167,27 @@ Run the complete 4-scene parallel evaluation benchmark:
 
 ```bash
 python eval_agent/run_complete_campaign_eval.py
+
 ```
 
 Run spreadsheet batch generation:
 
 ```bash
 python ge_video_ads.py \
-  --spreadsheet scenes.csv \
-  --company "Hyatt Regency Maui" \
-  --voice Charon \
-  --model omni \
-  --music on \
-  --output output/
+- -spreadsheet scenes.csv \
+- -company "Hyatt Regency Maui" \
+- -voice Charon \
+- -model omni \
+- -music on \
+- -output output/
+
 ```
 
 ---
 
 ## 5. Summary of Video Models
 
-| Model                                  | Generation Latency |   Resolution    | Best For                                     |
-| :------------------------------------- | :----------------: | :-------------: | :------------------------------------------- |
-| **Omni** (`gemini-omni-flash-preview`) |    **~15–18s**     | 1080p (Lanczos) | Fast real-time multi-attempt self-correction |
-| **Veo** (`veo-3.1-generate-001`)       |    **~45–60s**     |  1080p Native   | High-end cinematic final production          |
-
----
-
-## 6. Official Benchmark Reference
-
-- **PRD Specification:**
-  [PRD v1.2 (`VIDEO_EVALUATION_SELF_CORRECTION_AGENT_PRD.md`)](../VIDEO_EVALUATION_SELF_CORRECTION_AGENT_PRD.md)
-- **Physion ARC-16 Leaderboard:**
-  [Physion Labs ARC-1.0 Benchmark](https://physionlabs.ai/)
+| Model                                  |   Resolution    | Best For                                     |
+| :------------------------------------- | :-------------: | :------------------------------------------- |
+| **Omni** (`gemini-omni-flash-preview`) | 1080p (Lanczos) | Fast real-time multi-attempt self-correction |
+| **Veo** (`veo-3.1-generate-001`)       |  1080p Native   | High-end cinematic final production          |

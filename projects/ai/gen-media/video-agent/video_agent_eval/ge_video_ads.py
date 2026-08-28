@@ -95,7 +95,7 @@ def load_image_bytes(path: str) -> bytes:
         blob = client.bucket(bucket_name).blob(blob_name)
         return blob.download_as_bytes()
     else:
-        with open(path, "rb") as f:
+        with open(path, "rb", encoding="utf-8") as f:
             return f.read()
 
 
@@ -234,7 +234,7 @@ async def run_pipeline(
             print(f"  Scene {sn}: OK ({size_kb:.0f} KB)")
             clip_results[sn] = clip
             clip_path = os.path.join(output_dir, f"scene_{sn}_clip.mp4")
-            with open(clip_path, "wb") as f:
+            with open(clip_path, "wb", encoding="utf-8") as f:
                 f.write(clip)
 
     valid_scenes = [
@@ -282,7 +282,7 @@ async def run_pipeline(
         mixed = mix_scene_audio(clip, vo, None, vo_delay=pad_before)
         assembled_clips.append(mixed)
         mixed_path = os.path.join(output_dir, f"scene_{sn}_with_vo.mp4")
-        with open(mixed_path, "wb") as f:
+        with open(mixed_path, "wb", encoding="utf-8") as f:
             f.write(mixed)
         print(f"  Scene {sn}: OK ({len(mixed) // 1024} KB)")
 
@@ -314,7 +314,7 @@ async def run_pipeline(
         if music_bytes:
             print(f"  Music: OK ({len(music_bytes) // 1024} KB)")
             music_path = os.path.join(output_dir, "background_music.mp3")
-            with open(music_path, "wb") as f:
+            with open(music_path, "wb", encoding="utf-8") as f:
                 f.write(music_bytes)
         else:
             print("  Music: FAILED (continuing without music)")
@@ -362,7 +362,7 @@ async def run_pipeline(
         print("  Overlay: Skipped (no logo or tagline)")
 
     final_path = os.path.join(output_dir, "final_video_ad.mp4")
-    with open(final_path, "wb") as f:
+    with open(final_path, "wb", encoding="utf-8") as f:
         f.write(final_video)
 
     elapsed = time.time() - start_time

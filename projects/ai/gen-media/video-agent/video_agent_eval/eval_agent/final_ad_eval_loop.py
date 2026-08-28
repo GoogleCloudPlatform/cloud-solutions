@@ -16,11 +16,8 @@
 
 from typing import Any, Callable, Coroutine, Dict, List, Optional
 
-from .evaluator import EvaluationAgent
-from .models import (
-    FinalAdCandidate,
-    FinalAdLoopResult,
-)
+from video_agent_eval.evaluator import EvaluationAgent
+from video_agent_eval.models import FinalAdCandidate, FinalAdLoopResult
 
 
 async def run_final_ad_eval_loop(
