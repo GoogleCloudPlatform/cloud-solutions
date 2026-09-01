@@ -2,6 +2,13 @@
 
 <!-- markdownlint-disable -->
 
+## [1.3.6](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.5...pino-logging-gcp-config-v1.3.6) (2026-09-01)
+
+
+### Bug Fixes
+
+* **deps:** remove dependency on eventID ([29595c1](https://github.com/GoogleCloudPlatform/cloud-solutions/commit/29595c1c4dffd8aa944129c01f269f9539a9c06a)), refs [#677](https://github.com/GoogleCloudPlatform/cloud-solutions/issues/677)
+
 ## [1.3.5](https://github.com/GoogleCloudPlatform/cloud-solutions/compare/pino-logging-gcp-config-v1.3.4...pino-logging-gcp-config-v1.3.5) (2026-05-06)
 
 
