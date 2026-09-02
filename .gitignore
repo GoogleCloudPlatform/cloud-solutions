@@ -38,6 +38,8 @@ coverage/
 .env.test.local
 .env.production.local
 *.local
+# TS buildinfo
+**/*.tsbuildinfo
 ### Python Proto ###
 **/*_pb2.py
 **/*_pb.py
