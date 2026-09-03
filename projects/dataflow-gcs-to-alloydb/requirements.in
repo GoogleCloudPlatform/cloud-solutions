@@ -1,6 +1,6 @@
-apache-beam[gcp,dataframe]==2.74.0
-apache-beam[tfrecord]==2.74.0
+apache-beam[gcp,dataframe]==2.76.0
+apache-beam[tfrecord]==2.76.0
 pandas
 orjson
 protobuf
-pyarrow==23.0.1
+pyarrow
