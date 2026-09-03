@@ -97,7 +97,7 @@ wait_for_serverless_ips() {
     # Format output for printing
     local ips_clean
     ips_clean=$(echo "$reserved_ips" | tr '\n' ' ')
-    echo "Waiting for GCP to garbage collect serverless IPs in $subnet_name: $ips_clean(elapsed $((i * 10))s)..."
+    echo "Waiting for Google Cloud to garbage collect serverless IPs in $subnet_name: $ips_clean(elapsed $((i * 10))s)..."
     sleep 10
   done
 

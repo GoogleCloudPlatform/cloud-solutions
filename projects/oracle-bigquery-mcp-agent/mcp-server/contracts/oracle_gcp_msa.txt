@@ -1,4 +1,4 @@
-Oracle@GCP Cloud Partnership Master Service Agreement (MSA v12.1)
+Oracle@Google Cloud Partnership Master Service Agreement (MSA v12.1)
 ------------------------------------------------------------------
 Section 4.2: Service Level Agreement (SLA) & Performance Targets
 Google Cloud and Oracle commit to providing a 99.99% uptime target for the co-located database services. In the event that database service availability falls below 99.99% for consecutive fiscal quarters, the Customer is entitled to a 15% service credit refund on all database virtual core licenses billed during that quarter.

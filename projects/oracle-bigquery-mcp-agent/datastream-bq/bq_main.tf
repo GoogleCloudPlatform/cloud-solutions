@@ -36,7 +36,7 @@ data "google_compute_instance" "oracle_vm" {
   project = var.project_id
 }
 
-# Establishes a private VPC peering link for GCP Datastream, ensuring replication queries route completely privately and securely inside the VPC.
+# Establishes a private VPC peering link for Google Cloud Datastream, ensuring replication queries route completely privately and securely inside the VPC.
 resource "google_datastream_private_connection" "oracle_priv_vpc_conn" {
   display_name          = "Datastream Private Connection"
   private_connection_id = "oracle-priv-vpc-conn"

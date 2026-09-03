@@ -199,6 +199,44 @@ agents:
 
 ---
 
+## Security & Access Control (RBAC)
+
+> [!WARNING]
+>
+> **Reference Architecture Notice**: This project is an educational reference
+> implementation without end-user authentication. The web portal allows
+> selecting roles via UI tabs. In production, do not permit client-asserted
+> roles. Gate the frontend behind an Identity Provider like **Google Cloud
+> Identity-Aware Proxy (IAP)** or OAuth 2.0/OIDC.
+
+The MCP server enforces multi-layer defenses against prompt injection and
+unauthorized tool execution:
+
+- **Server-Side RBAC**: Validates caller roles (`FinOps`, `CFO`, `DBA`) against
+  a permissions matrix (`ROLE_PERMISSIONS`) before executing database tools.
+  Unauthorized actions return JSON-RPC `-32003 Access Denied`.
+- **Direct API Bypass Protection**: Enforces a shared webhook secret token
+  (`X-MCP-Webhook-Token`). Direct HTTP calls to `/tools/call` without the token
+  are rejected with `HTTP 403 Forbidden`.
+- **Automated Secret Management**: In `mcp-server-tf`, Terraform automatically
+  generates a secure token via `random_password`, storing it directly in Google
+  Cloud Secret Manager (`oracle-mcp-webhook-token`) and mounting it into Cloud
+  Run via `value_source.secret_key_ref`.
+
+### Production Considerations
+
+- **Authentication (Tier 1)**: Use Google Cloud IAP or OAuth 2.0 to bind
+  verified identities to session roles.
+- **Transport Security (Tier 3)**: Mutual TLS (mTLS) is the enterprise standard
+  for M2M auth. This demo uses a Secret Manager token because Dialogflow CX
+  tools authenticate via headers, avoiding Application Load Balancer and private
+  CA overhead.
+- **Policy Storage (Tier 4)**: For dynamic role management without redeploying
+  containers, externalize permissions to a database table or policy engine (such
+  as Google Cloud IAM or Open Policy Agent).
+
+---
+
 ## Schema Updates (SRE Speed Run)
 
 If you modify SQL files (`app_setup.sql` or `seed_primary.sql`), you can apply

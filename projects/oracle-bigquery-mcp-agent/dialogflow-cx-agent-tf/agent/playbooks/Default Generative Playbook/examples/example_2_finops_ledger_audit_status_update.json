@@ -3,16 +3,6 @@
   "actions": [
     {
       "userUtterance": {
-        "text": "I am logging in as the FinOps."
-      }
-    },
-    {
-      "agentUtterance": {
-        "text": "Welcome! It's great to have you here. Since you're logged in as a FinOps Manager, I've tailored my tools for your audit workflow. I can help you audit pending transactions, fetch transaction details by ID, or put a hold on suspicious expenses. What would you like to investigate first?"
-      }
-    },
-    {
-      "userUtterance": {
         "text": "Audit pending transactions"
       }
     },
@@ -27,7 +17,8 @@
             "method": "tools/call",
             "params": {
               "arguments": {},
-              "name": "audit_pending_transactions"
+              "name": "audit_pending_transactions",
+              "role": "FinOps"
             }
           }
         },
@@ -70,7 +61,8 @@
               "arguments": {
                 "expense_id": 48300
               },
-              "name": "update_expense_status"
+              "name": "update_expense_status",
+              "role": "FinOps"
             }
           }
         },

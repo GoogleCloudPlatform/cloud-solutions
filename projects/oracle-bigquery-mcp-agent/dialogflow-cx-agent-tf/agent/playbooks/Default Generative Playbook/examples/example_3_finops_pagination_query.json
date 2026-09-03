@@ -3,16 +3,6 @@
   "actions": [
     {
       "userUtterance": {
-        "text": "I am logging in as the FinOps."
-      }
-    },
-    {
-      "agentUtterance": {
-        "text": "Welcome! Since you're logged in as a FinOps Manager, I've tailored my tools for your audit workflow. I can help you audit pending transactions or review transactions currently on hold. What would you like to investigate first?"
-      }
-    },
-    {
-      "userUtterance": {
         "text": "Audit pending transactions"
       }
     },
@@ -30,7 +20,8 @@
                 "limit": 20,
                 "offset": 0
               },
-              "name": "audit_pending_transactions"
+              "name": "audit_pending_transactions",
+              "role": "FinOps"
             }
           }
         },
@@ -74,7 +65,8 @@
                 "limit": 20,
                 "offset": 20
               },
-              "name": "audit_pending_transactions"
+              "name": "audit_pending_transactions",
+              "role": "FinOps"
             }
           }
         },

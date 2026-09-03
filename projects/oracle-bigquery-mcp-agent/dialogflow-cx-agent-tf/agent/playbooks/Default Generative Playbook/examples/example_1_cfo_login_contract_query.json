@@ -3,16 +3,6 @@
   "actions": [
     {
       "userUtterance": {
-        "text": "I am logging in as the CFO."
-      }
-    },
-    {
-      "agentUtterance": {
-        "text": "Welcome! It's great to have you here. Since you're logged in as the CFO, I've tailored my tools for your executive workflow. I can help you review transactions currently on hold or perform a secure vector search against the Oracle@Google Cloud Master Service Agreement. How can I assist you today?"
-      }
-    },
-    {
-      "userUtterance": {
         "text": "What are the penalties for missing the SLA in the Google Cloud contract?"
       }
     },
@@ -29,7 +19,8 @@
               "arguments": {
                 "query": "SLA miss penalties"
               },
-              "name": "search_vendor_contract"
+              "name": "search_vendor_contract",
+              "role": "CFO"
             }
           }
         },
@@ -56,12 +47,12 @@
     }
   ],
   "playbookOutput": {
-    "executionSummary": "CFO logged in and audited Google Cloud SLA penalties successfully.",
+    "executionSummary": "CFO audited Google Cloud SLA penalties successfully via authenticated session context.",
     "actionParameters": {}
   },
-  "displayName": "Example 1: CFO Login \u0026 Contract Query",
+  "displayName": "Example 1: CFO Contract Vector Query",
   "retrievalStrategy": "DEFAULT",
-  "tokenCount": 406,
+  "tokenCount": 350,
   "conversationState": "OUTPUT_STATE_OK",
   "languageCode": "en"
 }

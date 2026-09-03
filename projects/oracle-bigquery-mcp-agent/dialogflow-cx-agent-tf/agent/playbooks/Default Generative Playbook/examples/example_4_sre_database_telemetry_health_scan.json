@@ -3,16 +3,6 @@
   "actions": [
     {
       "userUtterance": {
-        "text": "I am logging in as the DBA."
-      }
-    },
-    {
-      "agentUtterance": {
-        "text": "Welcome! Since you're logged in as a Database Administrator, I've tailored my tools for your operational workflow. I can help you check database health, monitor active sessions, or check tablespace capacity. What would you like to investigate first?"
-      }
-    },
-    {
-      "userUtterance": {
         "text": "Check database health"
       }
     },
@@ -27,7 +17,8 @@
             "method": "tools/call",
             "params": {
               "arguments": {},
-              "name": "check_database_health"
+              "name": "check_database_health",
+              "role": "DBA"
             }
           }
         },
@@ -68,7 +59,8 @@
             "method": "tools/call",
             "params": {
               "arguments": {},
-              "name": "list_active_sessions"
+              "name": "list_active_sessions",
+              "role": "DBA"
             }
           }
         },
