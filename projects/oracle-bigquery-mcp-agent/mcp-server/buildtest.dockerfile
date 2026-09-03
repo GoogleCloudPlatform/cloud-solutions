@@ -12,12 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-output "mcp_service_url" {
-  value       = google_cloud_run_v2_service.mcp_connector.uri
-  description = "The absolute public HTTPS endpoint URL of the active FastAPI Model Context Protocol connector service"
-}
+# buildtest.dockerfile is used for CI unit testing.
 
-output "mcp_webhook_token_secret_name" {
-  value       = google_secret_manager_secret.mcp_webhook_token.secret_id
-  description = "The Secret Manager secret identifier containing the shared MCP webhook authentication token"
-}
+FROM python:3.12-slim
+
+ARG PROJECT_SUBDIRECTORY=/app
+ENV PROJECT_SUBDIRECTORY=$PROJECT_SUBDIRECTORY
+WORKDIR ${PROJECT_SUBDIRECTORY}
+
+COPY requirements.txt ./
+RUN python3 -m pip install \
+    --no-cache-dir \
+    --require-hashes \
+    -r requirements.txt
+
+ENTRYPOINT [ "/bin/bash", "-e", "-x", "-c" ]
+CMD [ " \
+  python3 -m unittest discover -s tests -p 'test*.py' -v \
+  " ]

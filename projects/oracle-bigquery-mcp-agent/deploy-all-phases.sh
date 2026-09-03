@@ -179,15 +179,17 @@ ORA_IP=$(terraform -chdir="$ROOT_DIR/ora-vm-tf-19c" output -raw oracle_db_privat
 
 # Credentials are already secured in Secret Manager during Step 2
 
-run_terraform_step "Step 5/7" "Instantiating Phase 4 Cloud Run service and Dialogflow webhook via Terraform..." "mcp-server-tf" -var="agent_id=$AGENT_UUID"
+run_terraform_step "Step 5/7" "Instantiating Phase 4 Cloud Run service and Dialogflow webhook using Terraform..." "mcp-server-tf" -var="agent_id=$AGENT_UUID"
 MCP_URI=$(terraform -chdir="$ROOT_DIR/mcp-server-tf" output -raw mcp_service_url)
 echo "Baseline Cloud Run Service successfully provisioned at: $MCP_URI"
+
+MCP_SECRET_NAME=$(terraform -chdir="$ROOT_DIR/mcp-server-tf" output -raw mcp_webhook_token_secret_name 2>/dev/null || echo "oracle-mcp-webhook-token")
 
 echo "Waiting 15s for IAM service account permissions to propagate globally..."
 sleep 15
 
 cd "$ROOT_DIR/mcp-server"
-echo "Compiling and updating active operational service code revision via Google Cloud serverless source buildpacks..."
+echo "Compiling and updating active operational service code revision using Google Cloud serverless source buildpacks..."
 gcloud run deploy oracle-mcp-server \
   --source . \
   --platform managed \
@@ -196,7 +198,7 @@ gcloud run deploy oracle-mcp-server \
   --vpc-egress private-ranges-only \
   --subnet "$SUBNETWORK_NAME" \
   --set-env-vars "PROJECT_ID=${ACTIVE_PROJECT},AGENT_ID=${AGENT_UUID},DB_USER=c##datastream,DB_DSN=${ORA_IP}:1521/ORCLPDB1,VERTEX_REGION=${DEPLOY_REGION}" \
-  --set-secrets "DB_PASSWORD=oracle-db-password:latest" \
+  --set-secrets "DB_PASSWORD=oracle-db-password:latest,MCP_WEBHOOK_TOKEN=${MCP_SECRET_NAME}:latest" \
   --quiet || exit 1
 
 echo "Operational Cloud Run MCP Service successfully live at: $MCP_URI"
@@ -205,19 +207,18 @@ echo "--------------------------------------------------------------------------
 echo "UPDATING DIALOGFLOW CX CUSTOM TOOL OPENAPI SCHEMAS"
 echo "Replacing tool server placeholder with live service endpoint: $MCP_URI"
 echo "-----------------------------------------------------------------------------"
-python3 -c '
-import sys, re
-mcp_uri = sys.argv[1]
-files = sys.argv[2:]
-for filepath in files:
-    with open(filepath, "r") as f:
-        text = f.read()
-    text_updated = re.sub(r"url:\s*https://\S+", f"url: {mcp_uri}", text)
-    with open(filepath, "w") as f:
-        f.write(text_updated)
-' "$MCP_URI" "$ROOT_DIR/dialogflow-cx-agent-tf/agent/tools/Oracle_FinOps_MCP/schema.yaml" "$ROOT_DIR/dialogflow-cx-agent-tf/mcp_openapi_schema.yaml"
+# Retrieve webhook token from Secret Manager if provisioned; default to empty string if not yet created.
+MCP_TOKEN=$(gcloud secrets versions access latest --secret="$MCP_SECRET_NAME" --project="$ACTIVE_PROJECT" 2>/dev/null || echo "")
 
-# Re-run Step 4/7 via Terraform to packaging and restore updated OpenAPI custom tools.
+# Inject live Cloud Run MCP endpoint and webhook authentication token into
+# the Dialogflow CX OpenAPI schema files prior to packaging into the agent.
+python3 "$ROOT_DIR/update_tool_schemas.py" \
+  "$MCP_URI" \
+  "$MCP_TOKEN" \
+  "$ROOT_DIR/dialogflow-cx-agent-tf/agent/tools/Oracle_FinOps_MCP/schema.yaml" \
+  "$ROOT_DIR/dialogflow-cx-agent-tf/mcp_openapi_schema.yaml"
+
+# Re-run Step 4/7 using Terraform to package and restore updated OpenAPI custom tools.
 run_terraform_step "Step 5.1/7" "Refreshing Phase 3 Dialogflow CX agent customized tool schema configuration..." "dialogflow-cx-agent-tf"
 
 # Reset local schema files back to placeholders to keep local Git status 100% clean and prevent URI leakage.

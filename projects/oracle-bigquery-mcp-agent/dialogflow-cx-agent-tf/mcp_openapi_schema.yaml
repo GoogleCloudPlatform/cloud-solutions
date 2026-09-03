@@ -23,6 +23,13 @@ paths:
     post:
       operationId: execute_mcp_tool
       description: "Use this tool to execute any database action. You MUST format your request as a valid JSON-RPC 2.0 object."
+      parameters:
+        - name: X-MCP-Webhook-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            default: "YOUR_MCP_WEBHOOK_TOKEN"
       requestBody:
         required: true
         content:
@@ -45,6 +52,9 @@ paths:
                     name:
                       type: string
                       description: "The exact name of the tool to run. MUST be one of: audit_pending_transactions, get_expense_by_id, fetch_held_transactions, update_expense_status, reject_expense, check_database_health, list_active_sessions, list_top_sql_by_resource, list_tablespace_usage, list_invalid_objects, generate_explain_plan."
+                    role:
+                      type: string
+                      description: "The authenticated role of the active session (FinOps, CFO, or DBA) bound to $session.params.role."
                     arguments:
                       type: object
                       description: "The JSON arguments required for the specific tool."

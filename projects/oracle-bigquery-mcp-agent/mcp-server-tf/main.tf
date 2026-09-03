@@ -19,11 +19,19 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 7.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
   }
 }
 
 locals {
   resolved_region = coalesce(var.region, "us-central1")
+  mcp_webhook_token = coalesce(
+    var.mcp_webhook_token_value,
+    one(random_password.webhook_token[*].result)
+  )
 }
 
 provider "google" {
@@ -101,6 +109,15 @@ resource "google_cloud_run_v2_service" "mcp_connector" {
         }
       }
       env {
+        name = "MCP_WEBHOOK_TOKEN"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.mcp_webhook_token.secret_id
+            version = "latest"
+          }
+        }
+      }
+      env {
         name  = "DB_DSN"
         value = "${data.google_compute_instance.oracle_vm.network_interface[0].network_ip}:1521/ORCLPDB1"
       }
@@ -138,6 +155,39 @@ data "google_project" "project" {
 resource "google_secret_manager_secret_iam_member" "mcp_secret_accessor" {
   project   = var.project_id
   secret_id = var.db_password_secret_name
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.mcp_sa.email}"
+}
+
+# Declarative Secret Manager resource holding the shared webhook authentication token
+resource "google_secret_manager_secret" "mcp_webhook_token" {
+  secret_id = var.mcp_webhook_token_secret_name
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  depends_on = [google_project_service.secretmanager_api]
+}
+
+# Automatically generates a webhook token if none is supplied
+resource "random_password" "webhook_token" {
+  count   = var.mcp_webhook_token_value == null ? 1 : 0
+  length  = 32
+  special = false
+}
+
+# Declarative Secret Manager secret version containing the shared webhook token value
+resource "google_secret_manager_secret_version" "mcp_webhook_token_val" {
+  secret      = google_secret_manager_secret.mcp_webhook_token.id
+  secret_data = local.mcp_webhook_token
+}
+
+# Grants Secret Manager Accessor permission on the webhook token secret to the MCP Service Account
+resource "google_secret_manager_secret_iam_member" "mcp_token_accessor" {
+  project   = var.project_id
+  secret_id = google_secret_manager_secret.mcp_webhook_token.id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.mcp_sa.email}"
 }
@@ -184,5 +234,8 @@ resource "google_dialogflow_cx_webhook" "mcp_webhook" {
 
   generic_web_service {
     uri = "${google_cloud_run_v2_service.mcp_connector.uri}/tools/call"
+    request_headers = {
+      "X-MCP-Webhook-Token" = local.mcp_webhook_token
+    }
   }
 }

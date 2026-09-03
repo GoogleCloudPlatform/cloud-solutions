@@ -18,6 +18,7 @@ Provides CDC pipeline telemetry, legal vector search, and oracle query actions.
 """
 
 import asyncio
+import hmac
 import json
 import logging
 import os
@@ -48,6 +49,81 @@ is_indexing_completed = False
 
 SQL_QUERIES = {}
 RISK_KEYWORDS = ["personal", "macbook", "urgent", "gift"]
+
+# ==========================================
+# SERVER-SIDE RBAC AUTHORIZATION MATRIX
+# ==========================================
+ROLE_PERMISSIONS = {
+    "FinOps": {
+        "audit_pending_transactions",
+        "get_expense_by_id",
+        "update_expense_status",
+        "reject_expense",
+        "fetch_held_transactions",
+    },
+    "CFO": {
+        "search_vendor_contract",
+        "audit_pending_transactions",
+        "fetch_held_transactions",
+    },
+    "DBA": {
+        "check_database_health",
+        "list_active_sessions",
+        "list_top_sql_by_resource",
+        "list_tablespace_usage",
+        "list_invalid_objects",
+        "generate_explain_plan",
+    },
+}
+
+
+def extract_authenticated_role(request: Request, body: dict) -> str | None:
+    """Extracts and validates the authenticated caller role from request
+
+    headers or structured JSON-RPC payloads (supporting both user_role and
+    role aliases).
+    """
+    params = body.get("params", {}) if isinstance(body, dict) else {}
+    args = params.get("arguments", {}) if isinstance(params, dict) else {}
+
+    raw_role = (
+        request.headers.get("x-user-role")
+        or request.headers.get("x-authenticated-role")
+        or (isinstance(params, dict) and params.get("user_role"))
+        or (isinstance(params, dict) and params.get("role"))
+        or (isinstance(args, dict) and args.get("user_role"))
+        or (isinstance(args, dict) and args.get("role"))
+        or (isinstance(body, dict) and body.get("user_role"))
+        or (isinstance(body, dict) and body.get("role"))
+    )
+
+    if raw_role and isinstance(raw_role, str):
+        for known_role in ROLE_PERMISSIONS:
+            if raw_role.strip().lower() == known_role.lower():
+                return known_role
+
+    return None
+
+
+def make_rpc_error(msg_id, message: str, code: int = -32003) -> dict:
+    """Builds a standardized JSON-RPC error response payload."""
+    return {
+        "jsonrpc": "2.0",
+        "id": msg_id,
+        "error": {
+            "code": code,
+            "message": message,
+        },
+        "result": {
+            "content": [
+                {
+                    "type": "text",
+                    "text": message,
+                    "isError": True,
+                }
+            ]
+        },
+    }
 
 
 def load_sql_queries():
@@ -289,6 +365,37 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+EXPECTED_WEBHOOK_TOKEN = os.getenv(
+    "MCP_WEBHOOK_TOKEN", "oracle_mcp_secure_token_2026"
+)
+
+
+@app.middleware("http")
+async def verify_webhook_token(request: Request, call_next):
+    """
+    Middleware: Authenticates incoming requests to tool execution endpoints.
+    Protects against Direct API Bypass / BOLA by requiring X-MCP-Webhook-Token.
+    """
+    if request.method == "POST" and request.url.path in ["/", "/tools/call"]:
+        token = request.headers.get("X-MCP-Webhook-Token")
+        if not token or not hmac.compare_digest(token, EXPECTED_WEBHOOK_TOKEN):
+            logger.warning(
+                "Direct API Access Denied: Missing or invalid webhook token "
+                "from %s on %s",
+                request.client.host if request.client else "unknown",
+                request.url.path,
+            )
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "error": (
+                        "Unauthorized direct access: Invalid or missing "
+                        "webhook token"
+                    )
+                },
+            )
+    return await call_next(request)
 
 
 def get_db_connection():
@@ -684,8 +791,64 @@ async def handle_mcp(request: Request):
         }
 
     elif method == "tools/call":
-        tool_name = body.get("params", {}).get("name")
-        args = body.get("params", {}).get("arguments", {})
+        params = body.get("params", {})
+        tool_name = params.get("name")
+        args = params.get("arguments", {})
+
+        # Defense-in-Depth: Validate webhook secret token
+        webhook_token = request.headers.get("X-MCP-Webhook-Token")
+        if not webhook_token or not hmac.compare_digest(
+            webhook_token, EXPECTED_WEBHOOK_TOKEN
+        ):
+            logger.warning(
+                "Direct API Access Denied: Missing or invalid webhook token "
+                "in handle_mcp for tool '%s'",
+                tool_name,
+            )
+            return make_rpc_error(
+                msg_id,
+                "Access Denied: Unauthorized direct access. A valid "
+                "X-MCP-Webhook-Token is required.",
+            )
+
+        # Extract caller role using centralized helper
+        caller_role = extract_authenticated_role(request, body)
+
+        # Strict RBAC Authentication & Authorization Enforcement
+        if not caller_role:
+            logger.warning(
+                "RBAC Authorization Failure: Unauthenticated tool call '%s'",
+                tool_name,
+            )
+            return make_rpc_error(
+                msg_id,
+                "Access Denied: Unauthenticated. A valid authenticated role "
+                "(FinOps, CFO, or DBA) is required to execute database tools.",
+            )
+
+        allowed_tools = ROLE_PERMISSIONS[caller_role]
+        if tool_name not in allowed_tools:
+            authorized_roles = [
+                r
+                for r, tools in ROLE_PERMISSIONS.items()
+                if tool_name in tools
+            ]
+            auth_roles_str = (
+                ", ".join(authorized_roles) if authorized_roles else "None"
+            )
+            logger.warning(
+                "RBAC Authorization Failure: Role '%s' attempted unauthorized"
+                " tool '%s'. Allowed roles: %s",
+                caller_role,
+                tool_name,
+                auth_roles_str,
+            )
+            return make_rpc_error(
+                msg_id,
+                f"Access Denied: Role '{caller_role}' is not authorized to"
+                f" execute tool '{tool_name}'. This tool is restricted to:"
+                f" {auth_roles_str}.",
+            )
 
         # Default response to prevent agent confusion
         text = "I processed your request, but the database returned no data."

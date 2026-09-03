@@ -11,13 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-output "mcp_service_url" {
-  value       = google_cloud_run_v2_service.mcp_connector.uri
-  description = "The absolute public HTTPS endpoint URL of the active FastAPI Model Context Protocol connector service"
-}
-
-output "mcp_webhook_token_secret_name" {
-  value       = google_secret_manager_secret.mcp_webhook_token.secret_id
-  description = "The Secret Manager secret identifier containing the shared MCP webhook authentication token"
-}
