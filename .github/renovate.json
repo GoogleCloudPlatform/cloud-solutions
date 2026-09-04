@@ -105,6 +105,12 @@
       "additionalBranchPrefix": "agentic-customer-engagement-fsi-demo-"
     },
     {
+      "matchFileNames": ["projects/agentic-knowledge-catalog/**"],
+      "groupName": "agentic-knowledge-catalog",
+      "commitMessagePrefix": "chore(deps): [agentic-knowledge-catalog]",
+      "additionalBranchPrefix": "agentic-knowledge-catalog-"
+    },
+    {
       "matchFileNames": ["projects/ai/**"],
       "groupName": "ai",
       "commitMessagePrefix": "chore(deps): [ai]",
