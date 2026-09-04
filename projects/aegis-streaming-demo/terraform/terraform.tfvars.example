@@ -1,0 +1,21 @@
+# =============================================================================
+# Project Aegis - Infrastructure Variable Overrides Example
+# Copy this file to terraform.tfvars and set your specific GCP configuration.
+# =============================================================================
+
+# GCP Project ID where infrastructure will be deployed
+project_id                  = "YOUR_PROJECT_ID"
+
+# GCP Region for regional resources (Cloud Run, BigQuery, Artifact Registry)
+region                      = "us-central1"
+
+# GCP Zone for regional resources (Cloud Run, BigQuery, Artifact Registry)
+zone                      = "us-central1-a"
+
+# Environment tag (dev, staging, prod)
+environment                 = "dev"
+
+# Authorized IAM member principals for Cloud Run service invocation
+# Expected member format patterns: domain:<DOMAIN>, user:<EMAIL>, group:<EMAIL>, serviceAccount:<EMAIL>
+authorized_invokers         = ["domain:example.com", "user:admin@example.com"]
+

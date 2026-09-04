@@ -1,0 +1,37 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "--build-arg"
+      - "NEXT_PUBLIC_GCP_PROJECT=${_NEXT_PUBLIC_GCP_PROJECT}"
+      - "--build-arg"
+      - "NEXT_PUBLIC_GCP_REGION=${_NEXT_PUBLIC_GCP_REGION}"
+      - "--build-arg"
+      - "NEXT_PUBLIC_KAFKA_CLUSTER=${_NEXT_PUBLIC_KAFKA_CLUSTER}"
+      - "--build-arg"
+      - "NEXT_PUBLIC_KAFKA_TOPIC=${_NEXT_PUBLIC_KAFKA_TOPIC}"
+      - "--build-arg"
+      - "NEXT_PUBLIC_BIGTABLE_INSTANCE=${_NEXT_PUBLIC_BIGTABLE_INSTANCE}"
+      - "--build-arg"
+      - "NEXT_PUBLIC_BIGQUERY_DATASET=${_NEXT_PUBLIC_BIGQUERY_DATASET}"
+      - "--build-arg"
+      - "NEXT_PUBLIC_GEAP_AGENT_ID=${_NEXT_PUBLIC_GEAP_AGENT_ID}"
+      - "-t"
+      - "${_IMAGE_TAG}"
+      - "."
+images:
+  - "${_IMAGE_TAG}"
