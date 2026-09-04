@@ -13,21 +13,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
+SCRIPT_DIRECTORY_PATH="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+
 # Configuration
 REGION="us-central1" # Or your desired region
-PROJECT_ID=$(gcloud config get-value project 2>/dev/null)
+# Fall back to empty string if gcloud has no active project set
+PROJECT_ID="$(gcloud config get-value project 2>/dev/null || true)"
 SERVICE_NAME="tech-assistant" # Set your desired service name
 
 # Ensure we have a project
-if [ -z "$PROJECT_ID" ]; then
+if [[ -z "${PROJECT_ID}" ]]; then
   echo "No Google Cloud project found. Please set your project first:"
   echo "  gcloud config set project YOUR_PROJECT_ID"
   exit 1
 fi
 
 # Deploy
-echo "Deploying Tech Assistant to $PROJECT_ID in $REGION..."
-gcloud run deploy "$SERVICE_NAME" \
-  --source . \
-  --region "$REGION" \
-  --project "$PROJECT_ID"
+echo "Deploying Tech Assistant to ${PROJECT_ID} in ${REGION}..."
+gcloud run deploy "${SERVICE_NAME}" \
+  --source "${SCRIPT_DIRECTORY_PATH}" \
+  --region "${REGION}" \
+  --project "${PROJECT_ID}"

@@ -20,6 +20,7 @@ import io
 import json
 import logging
 import os
+import sys
 import warnings
 from pathlib import Path
 
@@ -39,6 +40,7 @@ from google.adk.agents.run_config import RunConfig, StreamingMode
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.cloud import storage
+from google.cloud.exceptions import GoogleCloudError
 from google.genai import types
 from pypdf import PdfReader
 
@@ -52,6 +54,10 @@ load_dotenv(Path(__file__).parent / ".env")
 #     from tech_assistant_agent.agent import agent  # noqa: E402
 # else:
 #     from google_search_agent.agent import agent  # noqa: E402
+
+app_dir = str(Path(__file__).parent)
+if app_dir not in sys.path:
+    sys.path.insert(0, app_dir)
 
 from tech_assistant_agent.tech_assistant_agent import agent
 
@@ -67,6 +73,12 @@ warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
 # Application name constant
 APP_NAME = "bidi-demo"
+
+# Upload restrictions and limits
+ALLOWED_EXTENSIONS = {".pdf", ".txt", ".md"}
+MAX_FILE_SIZE_MB = int(os.getenv("MAX_FILE_SIZE_MB", "10"))
+MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
+MAX_PROMPT_SIZE_BYTES = 1 * 1024 * 1024  # 1 MB
 
 # ========================================
 # Phase 1: Application Initialization (once at startup)
@@ -183,7 +195,12 @@ async def upload_context(
     gcs_path: str = Form(...),
     files: list[UploadFile] = File([]),
 ):
-    """Handle file uploads from the popup and save them to GCS."""
+    """Handle file uploads from the popup and save them to GCS.
+
+    Validates that the destination path matches the server-configured
+    GCS_STORAGE, enforces allowed file extensions, checks payload and
+    file size limits, and performs pre-upload validation before writing.
+    """
     logger.debug(
         "Received upload request: prompt=%s..., gcs_path=%s, files count=%d",
         prompt[:50],
@@ -191,17 +208,102 @@ async def upload_context(
         len(files),
     )
 
-    if not gcs_path.startswith("gs://"):
+    # 1. Enforce Server Path Control (Confused Deputy Mitigation)
+    server_gcs_storage = os.getenv("GCS_STORAGE", "").strip()
+    if not server_gcs_storage or not server_gcs_storage.startswith("gs://"):
+        logger.error(
+            "Upload rejected: GCS_STORAGE is not configured on the server"
+        )
         return {
             "status": "error",
-            "message": "Invalid GCS path. Must start with gs://",
+            "message": "GCS storage is not configured on the server.",
         }
 
-    try:
-        uri_parts = gcs_path[5:].split("/", 1)
-        bucket_name = uri_parts[0]
-        blob_prefix = uri_parts[1] if len(uri_parts) > 1 else ""
+    # Validate that submitted gcs_path matches the server's configured
+    # storage path
+    if gcs_path.strip().rstrip("/") != server_gcs_storage.rstrip("/"):
+        logger.warning(
+            "Upload rejected: Submitted gcs_path '%s' does not match server "
+            "GCS_STORAGE '%s'",
+            gcs_path,
+            server_gcs_storage,
+        )
+        return {
+            "status": "error",
+            "message": (
+                "Invalid GCS path. Upload destination must match the "
+                "configured server storage path."
+            ),
+        }
 
+    # Parse destination bucket and prefix directly from server GCS_STORAGE
+    uri_parts = server_gcs_storage[5:].split("/", 1)
+    bucket_name = uri_parts[0]
+    blob_prefix = uri_parts[1] if len(uri_parts) > 1 else ""
+
+    # 2. File & Payload Size Limits (Prompt check)
+    prompt_bytes = prompt.encode("utf-8")
+    if len(prompt_bytes) > MAX_PROMPT_SIZE_BYTES:
+        logger.warning(
+            "Upload rejected: Prompt size %d bytes exceeds limit of %d bytes",
+            len(prompt_bytes),
+            MAX_PROMPT_SIZE_BYTES,
+        )
+        return {
+            "status": "error",
+            "message": "Prompt payload exceeds maximum allowed size of 1 MB.",
+        }
+
+    # 3. Pre-upload Validation (File Extensions, Sanitization, and Size Limits)
+    validated_files: list[tuple[str, bytes]] = []
+    for file in files:
+        if not file.filename:
+            continue
+
+        safe_filename = os.path.basename(file.filename)
+        if not safe_filename:
+            return {
+                "status": "error",
+                "message": "Invalid filename provided.",
+            }
+
+        ext = Path(safe_filename).suffix.lower()
+        if ext not in ALLOWED_EXTENSIONS:
+            logger.warning(
+                "Upload rejected: File '%s' has disallowed extension '%s'",
+                safe_filename,
+                ext,
+            )
+            allowed_exts = ", ".join(sorted(ALLOWED_EXTENSIONS))
+            return {
+                "status": "error",
+                "message": (
+                    f"File '{safe_filename}' has unsupported extension "
+                    f"'{ext}'. Allowed extensions: {allowed_exts}"
+                ),
+            }
+
+        file_content = await file.read()
+        if len(file_content) > MAX_FILE_SIZE_BYTES:
+            logger.warning(
+                "Upload rejected: File '%s' size %d bytes exceeds limit of "
+                "%d bytes",
+                safe_filename,
+                len(file_content),
+                MAX_FILE_SIZE_BYTES,
+            )
+            return {
+                "status": "error",
+                "message": (
+                    f"File '{safe_filename}' exceeds maximum allowed size of "
+                    f"{MAX_FILE_SIZE_MB} MB."
+                ),
+            }
+
+        validated_files.append((safe_filename, file_content))
+
+    # 4. Initiate GCS Writes after all pre-upload validations pass
+    try:
         client = storage.Client()
         bucket = client.bucket(bucket_name)
 
@@ -212,19 +314,22 @@ async def upload_context(
         logger.info("Saved prompt to GCS: %s", prompt_blob_name)
 
         # Save additional files
-        for file in files:
-            if file.filename:
-                file_blob_name = os.path.join(blob_prefix, file.filename).strip(
-                    "/"
-                )
-                file_blob = bucket.blob(file_blob_name)
-                file_blob.upload_from_file(file.file)
-                logger.info("Saved file to GCS: %s", file_blob_name)
+        for safe_filename, file_content in validated_files:
+            file_blob_name = os.path.join(blob_prefix, safe_filename).strip("/")
+            file_blob = bucket.blob(file_blob_name)
+            file_blob.upload_from_string(file_content)
+            logger.info("Saved file to GCS: %s", file_blob_name)
 
         return {"status": "success", "message": "Context saved to GCS"}
+    except GoogleCloudError as e:
+        logger.error("Google Cloud Storage error saving context: %s", e)
+        return {
+            "status": "error",
+            "message": "Failed to save context to GCS due to a storage error.",
+        }
     except Exception as e:  # pylint: disable=broad-exception-caught
-        logger.error("Error saving context to GCS: %s", e)
-        return {"status": "error", "message": str(e)}
+        logger.error("Unexpected error saving context to GCS: %s", e)
+        return {"status": "error", "message": "Failed to save context to GCS."}
 
 
 @app.get("/get-context")
