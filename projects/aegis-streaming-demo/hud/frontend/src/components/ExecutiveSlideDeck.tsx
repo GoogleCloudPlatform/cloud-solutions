@@ -48,7 +48,6 @@ export const ExecutiveSlideDeck: React.FC<ExecutiveSlideDeckProps> = ({ onNaviga
     <SlideDeckViewer
       pdfUrl="/aegis_autonomous_streaming.pdf"
       title="AEGIS Autonomous Streaming Presentation"
-      subtitle="Executive Architecture, C++ Velox Accelerated Compute & Agentic AI Mitigation Deck"
       onNavigate={onNavigate}
     />
   );

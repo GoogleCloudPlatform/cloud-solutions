@@ -18,6 +18,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH="/app/src" \
     PORT=8080
 
 # Set working directory
@@ -45,4 +46,4 @@ EXPOSE 8080
 
 # Run uvicorn web server
 ENTRYPOINT ["uvicorn"]
-CMD ["agent:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["agent:app", "--app-dir", "src", "--host", "0.0.0.0", "--port", "8080"]

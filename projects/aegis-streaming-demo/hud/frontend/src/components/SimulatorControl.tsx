@@ -21,6 +21,7 @@ import Link from 'next/link';
 import { Play, Square, AlertTriangle, RefreshCw, Flame, CheckCircle, Activity, Cpu, Layers, Zap, ArrowRight } from 'lucide-react';
 import { PageNavigation } from './PageNavigation';
 import { useHUD } from '@/context/HUDContext';
+import { getStackConfig } from '../utils/stackConfig';
 
 interface SimulatorControlProps {
   onInjectAnomaly: (targetAssetId?: string) => Promise<void>;
@@ -45,6 +46,8 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
   const onToggleSimulator = propToggleSimulator || hud.handleToggleSimulator;
   const isSimulatorRunning = propSimulatorRunning ?? hud.isSimulatorRunning;
   const onTogglePipeline = parentTogglePipeline || hud.handleTogglePipeline;
+  const stackConfig = getStackConfig();
+  const stackType = stackConfig.stackType;
 
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -198,11 +201,11 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
         const res = await fetch(endpoint, { method: 'POST' });
         if (res.ok) {
           const data = await res.json();
-          showToast(data.message || (start ? 'Managed Spark Pipeline starting...' : 'Managed Spark Pipeline stopped'));
+          showToast(data.message || (start ? `${stackConfig.pipelineShort} starting...` : `${stackConfig.pipelineShort} stopped`));
           await fetchPipelineStatus();
           window.dispatchEvent(new Event('pipeline-status-changed'));
         } else {
-          showToast('Error toggling Managed Spark pipeline');
+          showToast(`Error toggling ${stackConfig.pipelineShort}`);
         }
       }
     } catch (e) {
@@ -226,7 +229,7 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
             </h2>
           </div>
           <p className="text-xs text-[#c1c6d6] font-sans mt-1">
-            Operate real-time CDC message generators and Serverless C++ Lightning Engine (Velox) ETL stream processing from the HUD
+            Operate real-time CDC message generators and {stackConfig.pipelineName} stream processing from the HUD
           </p>
         </div>
       </div>
@@ -245,9 +248,9 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
               </span>
             </h4>
             <div className="text-xs text-[#dae2fd] font-sans leading-relaxed space-y-0.5">
-              <p>1. Click <strong className="text-white font-mono font-semibold">START CDC SIMULATOR</strong> below to stream synthetic IIoT telemetry into Managed Kafka.</p>
-              <p>2. Verify the <strong className="text-white font-mono font-semibold">Managed Spark Streaming Job</strong> is RUNNING with native C++ Velox acceleration.</p>
-              <p>3. Click <strong className="text-[#adc7ff] font-mono font-semibold">Proceed to 3. Demo Guide ↗</strong> to review the customer presentation talk track and inspect live GCP Console links.</p>
+              <p>1. {stackConfig.quickStartStep1}</p>
+              <p>2. {stackConfig.quickStartStep2}</p>
+              <p>3. Click <strong className="text-[#adc7ff] font-mono font-semibold">Proceed to 3. Demo Guide ↗</strong> to review the customer presentation talk track and inspect live Google Cloud Console links.</p>
             </div>
           </div>
         </div>
@@ -263,14 +266,14 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
       {/* Grid of Two Operation Controllers */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        {/* Card 1: Kafka CDC Stream Generator */}
+        {/* Card 1: CDC Stream Generator */}
         <div className="p-5 rounded-xl bg-[#131b2e]/80 border border-[#2d3449] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-[#adc7ff]" />
                 <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
-                  1. CDC Kafka Stream Generator
+                  {stackConfig.generatorTitle}
                 </h3>
               </div>
               {/* Status Badge */}
@@ -284,15 +287,15 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
               </div>
             </div>
             <p className="text-xs text-[#c1c6d6] font-sans mb-4">
-              Continuously produces simulated IIoT industrial machinery sensor payloads and pushes authenticated OAuth messages directly into Google Cloud Managed Kafka (<code className="text-[#adc7ff]">telemetry-raw</code>).
+              {stackConfig.generatorDescription}
             </p>
 
-            {/* Live Kafka Throughput Metric Card & Graph */}
+            {/* Live Throughput Metric Card & Graph */}
             <div className="mb-4 p-3 rounded-lg bg-[#0a0f1d] border border-[#334155]/60 flex items-center justify-between gap-4">
               <div>
                 <div className="text-[11px] font-mono text-[#adc7ff] uppercase tracking-wider flex items-center gap-1.5">
                   <span className={`w-1.5 h-1.5 rounded-full ${effectiveSimulatorRunning ? 'bg-[#6ddd81] animate-ping' : 'bg-[#8b909f]'}`} />
-                  <span>Kafka Message Rate (5m)</span>
+                  <span>{stackConfig.ingestionRateLabel}</span>
                 </div>
                 <div className="text-2xl font-mono font-bold text-white mt-0.5 flex items-baseline gap-2">
                   <span>{kafkaRate > 0 ? kafkaRate.toFixed(1) : (effectiveSimulatorRunning && kafkaCount > 0 ? (kafkaCount / 300.0).toFixed(1) : '0.0')}</span>
@@ -396,7 +399,7 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
 
               {effectiveSimulatorRunning && (
                 <p className="text-[10px] font-sans text-[#8b909f] italic">
-                  💡 To test different backpressure rates, click <strong>STOP GENERATOR</strong>, select a new rate, and restart.
+                  Tip: To test different backpressure rates, click <strong>STOP GENERATOR</strong>, select a new rate, and restart.
                 </p>
               )}
             </div>
@@ -439,7 +442,7 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
               <div className="flex items-center gap-2">
                 <Layers className="w-4 h-4 text-[#adc7ff]" />
                 <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
-                  2. Managed Spark Streaming Job
+                  {stackConfig.pipelineName}
                 </h3>
               </div>
               {/* Status Badge */}
@@ -461,7 +464,7 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
               </div>
             </div>
             <p className="text-xs text-[#c1c6d6] font-sans mb-3">
-              Dataproc Serverless PySpark ETL job with C++ Velox Lightning Engine. Consumes from Managed Kafka and computes 10s tumbling windows directly into Cloud Bigtable &amp; BigQuery.
+              {stackConfig.pipelineDescription}
             </p>
 
             {/* Batch ID Banner */}
@@ -479,7 +482,7 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
                   <span>BATCH EXECUTION FAILED</span>
                 </div>
                 <div className="text-[11px] leading-relaxed text-[#dae2fd]/90 break-words">
-                  {pipelineError || pipelineMessage || 'Spark Serverless batch execution failed. Check GCP resource quotas or configuration.'}
+                  {pipelineError || pipelineMessage || stackConfig.pipelineErrorDesc}
                 </div>
               </div>
             )}
@@ -488,9 +491,9 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
               <div className="p-3 mb-3 rounded-lg bg-[#0b1b36] border border-[#1a73e8]/50 text-[#adc7ff] text-xs font-mono flex items-start gap-2.5">
                 <RefreshCw className="w-4 h-4 text-[#60a5fa] animate-spin shrink-0 mt-0.5" />
                 <div>
-                  <div className="font-bold text-white mb-0.5">INITIALIZING SPARK CLUSTER</div>
+                  <div className="font-bold text-white mb-0.5">{stackConfig.pipelineInitTitle}</div>
                   <div className="text-[11px] text-[#c1c6d6] leading-relaxed">
-                    {pipelineMessage || 'Provisioning serverless compute nodes, configuring Velox C++ engine, and subscribing to Kafka partition consumers (~60–90s)...'}
+                    {pipelineMessage || stackConfig.pipelineInitDesc}
                   </div>
                 </div>
               </div>
@@ -499,14 +502,14 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
             {(pipelineStatus === 'RUNNING' || pipelineStatus === 'ACTIVE') && (
               <div className="p-2.5 mb-3 rounded-lg bg-[#0d2215] border border-[#30a550]/40 text-[#6ddd81] text-[11px] font-mono flex items-center gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-[#6ddd81] shrink-0" />
-                <span className="truncate">{pipelineMessage || 'Ingestion active: Kafka (telemetry-raw) ➔ Spark C++ Velox ➔ Bigtable & BigQuery'}</span>
+                <span className="truncate">{pipelineMessage || stackConfig.pipelineRunningDesc}</span>
               </div>
             )}
 
             {(pipelineStatus === 'STOPPED' || pipelineStatus === 'CANCELLED') && (
               <div className="p-2.5 mb-3 rounded-lg bg-[#1a1c24] border border-[#334155]/60 text-[#c1c6d6] text-[11px] font-mono flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#FBBC04] shrink-0" />
-                <span>{pipelineMessage || 'Pipeline stopped. Click START SPARK PIPELINE to launch Serverless ETL.'}</span>
+                <span>{pipelineMessage || stackConfig.pipelineStoppedDesc}</span>
               </div>
             )}
           </div>
@@ -523,7 +526,7 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
               ) : (
                 <Play className="w-3.5 h-3.5 fill-white" />
               )}
-              <span>{pipelineStatus === 'FAILED' ? 'RETRY SPARK PIPELINE' : 'START SPARK PIPELINE'}</span>
+              <span>{pipelineStatus === 'FAILED' ? stackConfig.pipelineButtonRetry : stackConfig.pipelineButtonStart}</span>
             </button>
 
             <button
@@ -536,7 +539,7 @@ export const SimulatorControl: React.FC<Partial<SimulatorControlProps>> = ({
               ) : (
                 <Square className="w-3.5 h-3.5 fill-[#dae2fd]" />
               )}
-              <span>STOP PIPELINE</span>
+              <span>{stackConfig.pipelineButtonStop}</span>
             </button>
 
             <button

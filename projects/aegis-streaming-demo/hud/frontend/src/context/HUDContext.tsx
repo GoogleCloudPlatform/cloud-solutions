@@ -20,10 +20,12 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 import { AssetState, MitigationResponse, TelemetryStreamPayload, AgentApprovalResponse } from '@/types';
 import { ToastItem, ToastContainer } from '@/components/ToastNotification';
 import { getActiveAnomalies, isFleetStale as checkFleetStale } from '@/utils/telemetryUtils';
+import { getStackConfig, StackConfig } from '@/utils/stackConfig';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 interface HUDContextType {
+  stackConfig: StackConfig;
   assets: AssetState[];
   isConnected: boolean;
   selectedAsset: AssetState | null;
@@ -63,6 +65,22 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [simulatorRate, setSimulatorRate] = useState<number>(100);
   const [pipelineStatus, setPipelineStatus] = useState<string>('RUNNING');
   const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const [stackConfig, setStackConfig] = useState<StackConfig>(getStackConfig());
+
+  useEffect(() => {
+    fetch('/api/config')
+      .then((res) => res.json())
+      .then((cfg) => {
+        if (cfg && cfg.stackType && typeof window !== 'undefined') {
+          window.__AEGIS_RUNTIME_CONFIG__ = {
+            ...(window.__AEGIS_RUNTIME_CONFIG__ || {}),
+            ...cfg,
+          };
+          setStackConfig(getStackConfig());
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const isPipelineActive =
     pipelineStatus === 'RUNNING' ||
@@ -218,7 +236,7 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addToast({
       type: 'info',
       title: `${actionText} Pipeline Stream`,
-      message: `Dispatching request to ${shouldStart ? 'launch' : 'drain'} Dataproc Serverless Lightning Engine job...`,
+      message: `Dispatching request to ${shouldStart ? 'launch' : 'drain'} ${stackConfig.pipelineName}...`,
       timestamp: new Date().toLocaleTimeString(),
     });
 
@@ -231,7 +249,7 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addToast({
           type: 'success',
           title: `Pipeline ${shouldStart ? 'Active' : 'Drained'}`,
-          message: data.message || `C++ Velox Spark execution engine is now ${shouldStart ? 'RUNNING' : 'STOPPED'}.`,
+          message: data.message || `${stackConfig.pipelineShort} is now ${shouldStart ? 'RUNNING' : 'STOPPED'}.`,
           timestamp: new Date().toLocaleTimeString(),
         });
       } else {
@@ -306,7 +324,7 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addToast({
           type: 'error',
           title: 'Fleet Anomaly Injected',
-          message: 'Critical telemetry emitted to Managed Kafka. Spark C++ Velox streaming ETL will detect the anomaly and update Bigtable.',
+          message: stackConfig.toastAnomalyEmitted,
           timestamp: new Date().toLocaleTimeString(),
         });
       } else {
@@ -413,11 +431,6 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         setMitigationData((prev) => prev ? { ...prev, status: 'RESOLVED', severity: 'LOW' } : null);
 
-        if (selectedAsset && selectedAsset.asset_id === assetId) {
-          setSelectedAsset((prev) => prev ? { ...prev, status: 'OK', is_anomaly: false, cpu_utilization: 35.0, temperature_c: 52.0 } : null);
-        }
-        setAssets((prev) => prev.map(a => a.asset_id === assetId ? { ...a, status: 'OK', is_anomaly: false, cpu_utilization: 35.0, temperature_c: 52.0 } : a));
-
         setTimeout(() => {
           addToast({
             type: 'step',
@@ -445,8 +458,8 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             type: 'step',
             stepNumber: 4,
             totalSteps: 6,
-            title: 'Kafka Telemetry Streaming',
-            message: `Sensor simulator resumed emitting healthy telemetry payloads to Kafka topic 'telemetry-raw'.`,
+            title: `${stackConfig.ingestionShort} Telemetry Streaming`,
+            message: stackConfig.toastMitigationResumed,
             timestamp: new Date().toLocaleTimeString(),
           });
         }, 1150);
@@ -468,7 +481,7 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             stepNumber: 6,
             totalSteps: 6,
             title: 'Closed-Loop Remediation Complete',
-            message: `Spark Streaming (C++ Velox) dual-sink synchronized to Bigtable and BigQuery.`,
+            message: stackConfig.toastPipelineSync,
             timestamp: new Date().toLocaleTimeString(),
           });
         }, 1950);
@@ -501,6 +514,7 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   return (
     <HUDContext.Provider
       value={{
+        stackConfig,
         assets,
         isConnected,
         selectedAsset,

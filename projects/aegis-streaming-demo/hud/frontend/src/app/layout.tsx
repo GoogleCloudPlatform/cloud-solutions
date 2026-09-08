@@ -44,13 +44,48 @@ export const metadata = {
   description: 'Autonomous Real-Time Streaming Telemetry Operations Dashboard with Gemini 2.5 Flash Agent Co-Pilot',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const stackTypeRaw = (
+    process.env.STACK_TYPE ||
+    process.env.NEXT_PUBLIC_STACK_TYPE ||
+    'oss'
+  ).toLowerCase().trim();
+
+  const stackType =
+    stackTypeRaw === 'first_party' || stackTypeRaw === 'low_code'
+      ? stackTypeRaw
+      : 'oss';
+
+  const runtimeConfig = {
+    stackType,
+    project: process.env.GCP_PROJECT || process.env.NEXT_PUBLIC_GCP_PROJECT || '',
+    region: process.env.GCP_REGION || process.env.NEXT_PUBLIC_GCP_REGION || 'us-central1',
+    kafkaCluster: process.env.KAFKA_CLUSTER_ID || process.env.NEXT_PUBLIC_KAFKA_CLUSTER || '',
+    kafkaTopic: process.env.KAFKA_TOPIC_ID || process.env.NEXT_PUBLIC_KAFKA_TOPIC || 'telemetry-raw',
+    pubsubTopic: process.env.PUBSUB_TOPIC || process.env.NEXT_PUBLIC_PUBSUB_TOPIC || 'telemetry-raw',
+    pubsubSubscription:
+      process.env.PUBSUB_SUBSCRIPTION || process.env.NEXT_PUBLIC_PUBSUB_SUBSCRIPTION || 'telemetry-raw-dataflow-sub',
+    bigtableInstance: process.env.BIGTABLE_INSTANCE_ID || process.env.NEXT_PUBLIC_BIGTABLE_INSTANCE || 'aegis-bigtable',
+    bigqueryDataset: process.env.BIGQUERY_DATASET_ID || process.env.NEXT_PUBLIC_BIGQUERY_DATASET || 'analytics',
+    geapAgentId: process.env.GEAP_AGENT_ID || process.env.NEXT_PUBLIC_GEAP_AGENT_ID || '',
+  };
+
   return (
     <html lang="en" className={`${hanken.variable} ${inter.variable} ${jetbrains.variable}`}>
+      <head>
+        <script
+          id="aegis-runtime-config"
+          dangerouslySetInnerHTML={{
+            __html: `window.__AEGIS_RUNTIME_CONFIG__ = ${JSON.stringify(runtimeConfig)};`,
+          }}
+        />
+      </head>
       <body className="bg-[#0b1326] text-[#dae2fd] min-h-screen antialiased font-sans flex flex-col">
         <HUDProvider>
           {/* Top Sticky Header */}

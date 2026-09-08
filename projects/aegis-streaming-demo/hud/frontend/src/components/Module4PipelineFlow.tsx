@@ -38,6 +38,7 @@ import {
   Lock
 } from 'lucide-react';
 import { getConsoleLinks } from '../utils/gcpConsoleLinks';
+import { getStackConfig } from '../utils/stackConfig';
 
 interface Module4PipelineFlowProps {
   criticalCount?: number;
@@ -81,24 +82,36 @@ export const Module4PipelineFlow: React.FC<Module4PipelineFlowProps> = ({
     }
   };
 
+  const stackConfig = getStackConfig();
+
+  const step1Subtitle = stackConfig.module4Step1Subtitle;
+  const step1Desc = stackConfig.module4Step1Desc;
+  const step1Tech = stackConfig.module4Step1Tech;
+  const ingestionStoppedLabel = stackConfig.ingestionPausedLabel;
+  const pipelineStoppedLabel = stackConfig.pipelineStoppedLabel;
+
+  const step3Subtitle = stackConfig.module4Step3Subtitle;
+  const step3Desc = stackConfig.module4Step3Desc;
+  const step3Tech = stackConfig.module4Step3Tech;
+
   const steps = [
     {
       step: 1,
       title: 'Dual-Sink Streaming Ingestion',
-      subtitle: 'Managed Kafka → Dataproc Spark (C++ Velox)',
-      description: 'Kafka sensor events are ingested by Spark Streaming with native C++ acceleration and written continuously to a dual sink: Cloud Bigtable (operational state) & BigQuery (analytical history).',
-      tech: 'Managed Kafka • Dataproc C++ • Bigtable • BigQuery',
+      subtitle: step1Subtitle,
+      description: step1Desc,
+      tech: step1Tech,
       status: !isSimulatorRunning
-        ? 'KAFKA PAUSED'
+        ? ingestionStoppedLabel
         : !isPipelineActive
-        ? 'SPARK STOPPED'
+        ? pipelineStoppedLabel
         : 'STREAMING ACTIVE',
       statusColor: isDemoFullyActive
         ? 'text-[#6ddd81] bg-[#30a550]/20 border-[#30a550]/50'
         : 'text-[#FBBC04] bg-[#FBBC04]/20 border-[#FBBC04]/50',
       icon: <Layers className="w-5 h-5 text-[#adc7ff]" />,
-      consoleUrl: consoleLinks.kafkaCluster,
-      consoleLabel: 'Kafka Console',
+      consoleUrl: consoleLinks.ingestionConsole,
+      consoleLabel: consoleLinks.ingestionLabel,
     },
     {
       step: 2,
@@ -115,9 +128,9 @@ export const Module4PipelineFlow: React.FC<Module4PipelineFlowProps> = ({
     {
       step: 3,
       title: 'In-Stream Anomaly Detection & AI Agent',
-      subtitle: 'Spark Detection → Gemini 2.5 Flash RCA',
-      description: 'When an anomaly is detected in Spark tumbling windows, Spark approaches our Anomaly Mitigation Agent. Powered by Gemini 2.5 Flash on GEAP, the agent formulates a structured Root Cause Analysis & remediation plan for the user.',
-      tech: 'Dataproc Anomaly Hook • Gemini 2.5 Flash • GEAP',
+      subtitle: step3Subtitle,
+      description: step3Desc,
+      tech: step3Tech,
       status: criticalCount > 0 ? `${criticalCount} ANOMALY DETECTED` : 'MONITORING',
       statusColor: criticalCount > 0
         ? 'text-[#ffdad6] bg-[#D93025] border-[#ffdad6]/40 animate-pulse font-bold'
@@ -130,7 +143,7 @@ export const Module4PipelineFlow: React.FC<Module4PipelineFlowProps> = ({
       step: 4,
       title: 'Human-in-the-Loop Approval & Tool Action',
       subtitle: 'Operator Approval → Industrial Control Tool',
-      description: 'After the operator reviews and approves the mitigation steps, the Agent executes "IndustrialActuatorTool.throttle_and_cool", which signals the Kafka simulator to emit non-anomaly healthy payloads—simulating physical remediation on the asset itself.',
+      description: 'After the operator reviews and approves the mitigation steps, the Agent executes "IndustrialActuatorTool.throttle_and_cool", which signals the telemetry simulator to emit non-anomaly healthy payloads—simulating physical remediation on the asset itself.',
       tech: 'Human-in-the-Loop • IndustrialActuatorTool • Simulator Signal',
       status: hasMitigation && criticalCount > 0 ? 'AWAITING / EXECUTING' : (hasMitigation ? 'RESOLVED • APPLIED' : 'READY'),
       statusColor: hasMitigation && criticalCount > 0
@@ -172,17 +185,17 @@ export const Module4PipelineFlow: React.FC<Module4PipelineFlowProps> = ({
               </span>
             </div>
             <p className="text-xs text-[#dae2fd] max-w-3xl font-sans">
-              To experience the true closed-loop demo—where Kafka streams sensor data, Spark detects anomalies in real-time, and the Agent&apos;s mitigation signals the machine generator—both the <strong>Kafka CDC Generator</strong> and <strong>Managed Spark Streaming Job</strong> must be running.
+              To experience the true closed-loop demo—where {stackConfig.ingestionShort} streams sensor data, {stackConfig.pipelineShort} detects anomalies in real-time, and the Agent&apos;s mitigation signals the machine generator—both the <strong>{stackConfig.generatorShort}</strong> and <strong>{stackConfig.pipelineName}</strong> must be running.
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-1 text-xs font-mono">
               <span className="flex items-center gap-1">
                 <span className={`w-2 h-2 rounded-full ${isSimulatorRunning ? 'bg-[#6ddd81]' : 'bg-[#D93025]'}`} />
-                <span>Kafka CDC Generator: <strong className={isSimulatorRunning ? 'text-[#6ddd81]' : 'text-[#ffb4ab]'}>{isSimulatorRunning ? 'RUNNING' : 'STOPPED'}</strong></span>
+                <span>{stackConfig.generatorShort}: <strong className={isSimulatorRunning ? 'text-[#6ddd81]' : 'text-[#ffb4ab]'}>{isSimulatorRunning ? 'RUNNING' : 'STOPPED'}</strong></span>
               </span>
               <span className="text-[#8b909f]">|</span>
               <span className="flex items-center gap-1">
                 <span className={`w-2 h-2 rounded-full ${isPipelineActive ? 'bg-[#6ddd81]' : 'bg-[#D93025]'}`} />
-                <span>Managed Spark Pipeline: <strong className={isPipelineActive ? 'text-[#6ddd81]' : 'text-[#ffb4ab]'}>{isPipelineActive ? 'RUNNING' : 'STOPPED'}</strong></span>
+                <span>{stackConfig.pipelineShort}: <strong className={isPipelineActive ? 'text-[#6ddd81]' : 'text-[#ffb4ab]'}>{isPipelineActive ? 'RUNNING' : 'STOPPED'}</strong></span>
               </span>
             </div>
           </div>
@@ -227,13 +240,13 @@ export const Module4PipelineFlow: React.FC<Module4PipelineFlowProps> = ({
               </span>
             </div>
             <p className="text-xs text-[#c1c6d6] font-sans mt-0.5">
-              How Project Aegis ingests, monitors, detects anomalies, engages AI reasoning, and executes closed-loop remediation across GCP.
+              How Project Aegis ingests, monitors, detects anomalies, engages AI reasoning, and executes closed-loop remediation across Google Cloud.
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono text-[#dae2fd] bg-[#0a0f1d] px-3 py-1.5 rounded-lg border border-[#334155]">
             <span className={`w-2 h-2 rounded-full ${isDemoFullyActive ? 'bg-[#6ddd81] animate-pulse' : 'bg-[#FBBC04]'}`} />
-            <span>Infrastructure: <strong>Bigtable + Spark (C++ Velox) + GEAP + BigQuery</strong></span>
+            <span>Infrastructure: <strong>{stackConfig.infraSummary}</strong></span>
           </div>
         </div>
 

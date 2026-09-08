@@ -18,12 +18,17 @@
 import {NextRequest, NextResponse} from 'next/server';
 
 let cachedIdToken: string | null = null;
+let cachedAudience: string | null = null;
 let tokenExpiryTimestamp: number = 0;
 let inFlightTokenPromise: Promise<string | null> | null = null;
 
 async function getGcpIdToken(audience: string): Promise<string | null> {
   const now = Date.now();
-  if (cachedIdToken && now < tokenExpiryTimestamp) {
+  if (
+    cachedIdToken &&
+    cachedAudience === audience &&
+    now < tokenExpiryTimestamp
+  ) {
     return cachedIdToken;
   }
   if (inFlightTokenPromise) {
@@ -47,6 +52,7 @@ async function getGcpIdToken(audience: string): Promise<string | null> {
       if (res.ok) {
         const token = (await res.text()).trim();
         cachedIdToken = token;
+        cachedAudience = audience;
         tokenExpiryTimestamp = Date.now() + 50 * 60 * 1000;
         console.log(
           '[Proxy] Metadata Server ID Token refreshed & cached for audience ' +
@@ -59,7 +65,7 @@ async function getGcpIdToken(audience: string): Promise<string | null> {
     } finally {
       inFlightTokenPromise = null;
     }
-    return cachedIdToken;
+    return null;
   })();
 
   return inFlightTokenPromise;
@@ -105,6 +111,11 @@ async function proxyRequest(
 
   const resolvedParams = await context.params;
   const pathSegments = resolvedParams?.path || [];
+  if (
+    pathSegments.some(segment => segment === '..' || segment.includes('..'))
+  ) {
+    return NextResponse.json({error: 'Invalid API path'}, {status: 400});
+  }
   const path = pathSegments.join('/');
   const searchParams = request.nextUrl.search;
   const targetUrl = `${backendUrl}/api/${path}${searchParams}`;
@@ -173,7 +184,10 @@ async function proxyRequest(
   } catch (err: unknown) {
     console.error('Error proxying request to backend:', err);
     return NextResponse.json(
-      {error: 'Backend proxy error', details: String(err)},
+      {
+        error: 'Backend proxy error',
+        details: 'Failed to proxy request to backend service.',
+      },
       {status: 500}
     );
   }

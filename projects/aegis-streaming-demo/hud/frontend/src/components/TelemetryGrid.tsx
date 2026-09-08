@@ -21,6 +21,7 @@ import { AssetState } from '../types';
 import { Cpu, Thermometer, Gauge, HardDrive, AlertOctagon, Bot, ShieldCheck, Flame, RefreshCw, Database, ExternalLink, Activity, Lock, Clock, AlertTriangle, ArrowRight } from 'lucide-react';
 import { getConsoleLinks } from '../utils/gcpConsoleLinks';
 import { isDataStale, getDataAgeInfo, isFleetStale } from '../utils/telemetryUtils';
+import { getStackConfig } from '../utils/stackConfig';
 
 interface TelemetryGridProps {
   assets: AssetState[];
@@ -44,6 +45,7 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
   const [isRefreshingBt, setIsRefreshingBt] = useState<boolean>(false);
   const [, setTick] = useState<number>(0);
   const consoleLinks = getConsoleLinks();
+  const stackConfig = getStackConfig();
 
   // 1-second interval to keep relative time strings ("6 seconds ago") fresh
   useEffect(() => {
@@ -166,7 +168,7 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
                 fleetStale
                   ? 'Telemetry is stale (>60m). Activate the demo stream to enable live anomaly injection.'
                   : !isDemoActive
-                  ? 'Demo locked: Start Kafka generator & Spark pipeline above to enable anomaly injection'
+                  ? stackConfig.lockBannerText
                   : 'Inject thermal and compute anomaly into a random industrial asset'
               }
             >
@@ -227,7 +229,7 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
         {displayAssets.map((asset) => {
           const ageInfo = getDataAgeInfo(asset.timestamp);
           const isStale = ageInfo.isStale;
-          const isCritical = !isStale && (asset.cpu_utilization > 90 || asset.temperature_c > 90 || asset.status === 'CRITICAL');
+          const isCritical = !isStale && (asset.cpu_utilization > 90 || asset.temperature_c > 90 || asset.status === 'CRITICAL' || asset.is_anomaly);
           const isWarning = !isStale && !isCritical && (asset.cpu_utilization > 75 || asset.temperature_c > 75 || asset.status === 'WARNING');
           const isSelected = selectedAssetId === asset.asset_id;
 
@@ -277,7 +279,7 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
                       ? 'bg-[#FBBC04]/20 text-[#FBBC04] border border-[#FBBC04]/50'
                       : 'bg-[#30a550]/20 text-[#6ddd81] border border-[#30a550]/50'
                   }`}>
-                    {isStale ? 'EXPIRED' : asset.status}
+                    {isStale ? 'EXPIRED' : isCritical ? 'CRITICAL' : isWarning ? 'WARNING' : (asset.status || 'OK')}
                   </span>
                 </div>
 
@@ -359,7 +361,7 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
                   <button
                     disabled
                     className="w-full py-1.5 rounded bg-[#1e293b] border border-[#334155]/60 text-[#64748b] font-mono text-[11px] tracking-wider flex items-center justify-center gap-1 cursor-not-allowed opacity-50 shadow-none"
-                    title="Demo locked: Start Kafka generator & Spark pipeline above to enable"
+                    title={stackConfig.lockBannerText}
                   >
                     <Lock className="w-3 h-3 text-[#64748b]" />
                     <span>LOCKED</span>

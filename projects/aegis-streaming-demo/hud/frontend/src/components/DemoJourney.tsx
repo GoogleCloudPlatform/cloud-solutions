@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { getConsoleLinks } from '../utils/gcpConsoleLinks';
+import { getStackConfig } from '../utils/stackConfig';
 import { PageNavigation } from './PageNavigation';
 
 interface DemoStep {
@@ -65,6 +66,7 @@ interface DemoStep {
 
 export const DemoJourney: React.FC<{ onNavigate?: (tabId: string) => void }> = ({ onNavigate }) => {
   const links = getConsoleLinks();
+  const stackConfig = getStackConfig();
 
   const demoSteps: DemoStep[] = [
     {
@@ -73,15 +75,19 @@ export const DemoJourney: React.FC<{ onNavigate?: (tabId: string) => void }> = (
       icon: <Radio className="w-5 h-5 text-[#adc7ff]" />,
       demoActionTitle: 'Start Stream on Previous Page',
       demoScript:
-        '“The telemetry simulation service we started on the previous page is continuously streaming real-time IIoT sensor packets—such as core temperature, pressure, RPM, and vibration—from 15 industrial assets directly into Google Cloud Managed Apache Kafka.”',
-      screenTip: 'Show active message rate in Stream Simulator or Kafka console.',
+        stackConfig.stackType === 'first_party'
+          ? '“The telemetry simulation service we started on the previous page is continuously streaming real-time IIoT sensor packets—such as core temperature, pressure, RPM, and vibration—from 15 industrial assets directly into Google Cloud Pub/Sub.”'
+          : stackConfig.stackType === 'low_code'
+          ? '“The telemetry simulation service we started on the previous page is continuously streaming real-time IIoT sensor packets—such as core temperature, pressure, RPM, and vibration—from 15 industrial assets directly into Google Cloud Pub/Sub.”'
+          : '“The telemetry simulation service we started on the previous page is continuously streaming real-time IIoT sensor packets—such as core temperature, pressure, RPM, and vibration—from 15 industrial assets directly into Google Cloud Managed Apache Kafka.”',
+      screenTip: `Show active message rate in Stream Simulator or ${stackConfig.ingestionShort} console.`,
       techTitle: 'High-Throughput Elastic Ingestion',
-      techSubtitle: 'Managed Apache Kafka & Cloud Pub/Sub',
+      techSubtitle: stackConfig.ingestionName,
       techDescription:
         'Fully managed, multi-zone distributed event streaming capable of absorbing millions of IoT events per second with sub-second delivery guarantees and zero infrastructure overhead.',
-      gcpServices: ['Managed Apache Kafka', 'Cloud Pub/Sub'],
-      consoleLink: links.kafkaCluster,
-      consoleLinkLabel: 'View Kafka Cluster ↗',
+      gcpServices: [stackConfig.ingestionName],
+      consoleLink: links.ingestionConsole,
+      consoleLinkLabel: `View ${stackConfig.ingestionShort} Console ↗`,
       businessMetric: '99.99%',
       businessMetricLabel: 'Ingestion Reliability',
       businessImpactTitle: 'Eliminates Data Silos & Blindspots',
@@ -95,15 +101,28 @@ export const DemoJourney: React.FC<{ onNavigate?: (tabId: string) => void }> = (
       icon: <Cpu className="w-5 h-5 text-[#93b2ff]" />,
       demoActionTitle: 'Automated Tumbling-Window Evaluation',
       demoScript:
-        '“In the background, Google Cloud Managed Spark continuously processes the stream in 10-second tumbling windows, calculating baseline statistical drift and detecting threshold anomalies the instant equipment begins to fail.”',
+        stackConfig.stackType === 'first_party'
+          ? '“In the background, Google Cloud Dataflow continuously processes the stream in 10-second fixed tumbling windows, calculating baseline statistical drift and detecting threshold anomalies the instant equipment begins to fail.”'
+          : stackConfig.stackType === 'low_code'
+          ? '“In the background, BigQuery Continuous Queries continuously process the stream in 10-second tumbling SQL windows, calculating baseline statistical drift and detecting threshold anomalies the instant equipment begins to fail.”'
+          : '“In the background, Google Cloud Managed Spark continuously processes the stream in 10-second tumbling windows, calculating baseline statistical drift and detecting threshold anomalies the instant equipment begins to fail.”',
       screenTip: 'Point out sub-second latency from ingestion to evaluation.',
       techTitle: 'Serverless Stream Processing',
-      techSubtitle: 'Managed Spark with C++ Lightning Engine (Velox)',
+      techSubtitle: stackConfig.pipelineName,
       techDescription:
-        'Serverless stream processing engine accelerated by native C++ vectorization (Velox/Gluten), evaluating rolling anomaly detection windows without managing clusters.',
-      gcpServices: ['Dataproc Serverless Spark', 'Velox C++ Engine'],
-      consoleLink: links.dataprocBatches,
-      consoleLinkLabel: 'View Managed Spark Jobs ↗',
+        stackConfig.stackType === 'first_party'
+          ? 'Serverless Apache Beam stream processing engine evaluating 10s fixed tumbling windows directly into Bigtable and BigQuery without managing clusters.'
+          : stackConfig.stackType === 'low_code'
+          ? 'Serverless continuous SQL evaluation engine processing 10s tumbling windows directly into Bigtable and BigQuery without managing infrastructure.'
+          : 'Serverless stream processing engine accelerated by native C++ vectorization (Velox/Gluten), evaluating rolling anomaly detection windows without managing clusters.',
+      gcpServices:
+        stackConfig.stackType === 'first_party'
+          ? ['Cloud Dataflow', 'Apache Beam']
+          : stackConfig.stackType === 'low_code'
+          ? ['BigQuery Continuous Queries', 'Serverless SQL']
+          : ['Dataproc Serverless Spark', 'Velox C++ Engine'],
+      consoleLink: links.pipelineConsole,
+      consoleLinkLabel: `View ${stackConfig.pipelineShort} Jobs ↗`,
       businessMetric: '73% Cut',
       businessMetricLabel: 'Compute TCO Reduction',
       businessImpactTitle: '4x Faster Streaming at Fraction of Cost',
@@ -283,7 +302,7 @@ export const DemoJourney: React.FC<{ onNavigate?: (tabId: string) => void }> = (
           </div>
           <div className="col-span-4 flex items-center gap-2 text-[#adc7ff]">
             <Cpu className="w-4 h-4 text-[#adc7ff]" />
-            <span>2. GCP Technical Capability</span>
+            <span>2. Google Cloud Technical Capability</span>
           </div>
           <div className="col-span-3 flex items-center gap-2 text-[#6ddd81]">
             <DollarSign className="w-4 h-4 text-[#6ddd81]" />
@@ -327,13 +346,13 @@ export const DemoJourney: React.FC<{ onNavigate?: (tabId: string) => void }> = (
 
                   {step.screenTip && (
                     <div className="text-[11px] font-sans text-[#8b909f] flex items-center gap-1.5 pl-1">
-                      <span className="text-[#FBBC04] font-bold">💡 Tip:</span>
+                      <span className="text-[#FBBC04] font-bold">Tip:</span>
                       <span>{step.screenTip}</span>
                     </div>
                   )}
                 </div>
 
-                {/* Column 2 (4 cols): GCP Technical Capability */}
+                {/* Column 2 (4 cols): Google Cloud Technical Capability */}
                 <div className="lg:col-span-4 space-y-3 lg:border-l lg:border-[#334155]/60 lg:pl-6 pt-3 lg:pt-0 border-t lg:border-t-0 border-[#334155]/40">
                   <div className="space-y-1">
                     <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#adc7ff] block">
@@ -351,7 +370,7 @@ export const DemoJourney: React.FC<{ onNavigate?: (tabId: string) => void }> = (
                     {step.techDescription}
                   </p>
 
-                  {/* GCP Tech Badges & Console Deep Link */}
+                  {/* Google Cloud Tech Badges & Console Deep Link */}
                   <div className="pt-2 flex flex-wrap items-center justify-between gap-2">
                     <div className="flex flex-wrap gap-1">
                       {step.gcpServices.map((svc, sIdx) => (
@@ -372,7 +391,7 @@ export const DemoJourney: React.FC<{ onNavigate?: (tabId: string) => void }> = (
                         className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#1a73e8] hover:bg-[#005bc0] text-white font-mono text-[10px] uppercase tracking-wider font-bold transition-all shadow-sm shrink-0"
                       >
                         <ExternalLink className="w-3 h-3" />
-                        <span>{step.consoleLinkLabel || 'GCP Console ↗'}</span>
+                        <span>{step.consoleLinkLabel || 'Google Cloud Console ↗'}</span>
                       </a>
                     )}
                   </div>

@@ -36,6 +36,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { isDataStale, getDataAgeInfo } from '../utils/telemetryUtils';
+import { getStackConfig } from '../utils/stackConfig';
 
 interface AgentCoPilotProps {
   selectedAsset: AssetState | null;
@@ -57,13 +58,20 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
   const [isApplying, setIsApplying] = useState(false);
   const [appliedSuccess, setAppliedSuccess] = useState(false);
   const [approvalDetails, setApprovalDetails] = useState<AgentApprovalResponse | null>(null);
+  const stackConfig = getStackConfig();
 
   React.useEffect(() => {
-    if (selectedAsset && (selectedAsset.status === 'CRITICAL' || selectedAsset.is_anomaly) && mitigationData?.status !== 'RESOLVED') {
+    const isCrit = selectedAsset && (
+      selectedAsset.status === 'CRITICAL' ||
+      selectedAsset.is_anomaly ||
+      selectedAsset.cpu_utilization > 90 ||
+      selectedAsset.temperature_c > 90
+    );
+    if (isCrit && mitigationData?.status !== 'RESOLVED') {
       setAppliedSuccess(false);
       setApprovalDetails(null);
     }
-  }, [selectedAsset?.asset_id, selectedAsset?.status, selectedAsset?.is_anomaly, mitigationData?.status]);
+  }, [selectedAsset?.asset_id, selectedAsset?.status, selectedAsset?.is_anomaly, selectedAsset?.cpu_utilization, selectedAsset?.temperature_c, mitigationData?.status]);
 
   const handleApprove = async () => {
     if (!mitigationData || !isDemoActive) return;
@@ -145,7 +153,7 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
           <h3 className="text-base font-headline font-bold text-[#dae2fd]">No Asset Selected</h3>
           <p className="text-xs text-[#c1c6d6] max-w-md mt-1 font-sans">
             {!isDemoActive
-              ? 'Start the Kafka generator and Spark streaming job above to unlock the live operational grid and Co-Pilot.'
+              ? stackConfig.copilotEmptyState
               : 'Select any asset tile in the Live Telemetry Grid and click "RUN GEMINI 2.5 RCA" to generate Root Cause Analysis and review the remediation plan.'}
           </p>
         </div>
@@ -157,6 +165,17 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
             {effectiveAsset && (() => {
               const ageInfo = getDataAgeInfo(effectiveAsset.timestamp);
               const isStale = ageInfo.isStale;
+              const isCritical = !isStale && !isMitigated && (
+                effectiveAsset.status === 'CRITICAL' ||
+                effectiveAsset.is_anomaly ||
+                effectiveAsset.cpu_utilization > 90 ||
+                effectiveAsset.temperature_c > 90
+              );
+              const isWarning = !isStale && !isMitigated && !isCritical && (
+                effectiveAsset.status === 'WARNING' ||
+                effectiveAsset.cpu_utilization > 75 ||
+                effectiveAsset.temperature_c > 75
+              );
 
               return (
                 <div className="space-y-3">
@@ -182,11 +201,13 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
                             ? 'bg-[#1e293b] text-[#94a3b8] border border-[#475569]/60'
                             : !isDemoActive
                             ? 'bg-[#1e293b] text-[#64748b] border border-[#334155]'
-                            : effectiveAsset.status === 'CRITICAL'
-                            ? 'bg-[#D93025] text-white animate-pulse'
+                            : isCritical
+                            ? 'bg-[#D93025] text-white animate-pulse shadow-[0_0_8px_rgba(217,48,37,0.8)]'
+                            : isWarning
+                            ? 'bg-[#FBBC04]/20 text-[#FBBC04] border border-[#FBBC04]/50'
                             : 'bg-[#30a550]/20 text-[#6ddd81] border border-[#30a550]'
                         }`}>
-                          {isMitigated ? 'NOMINAL' : isStale ? 'EXPIRED' : effectiveAsset.status}
+                          {isMitigated ? 'NOMINAL' : isStale ? 'EXPIRED' : isCritical ? 'CRITICAL' : isWarning ? 'WARNING' : (effectiveAsset.status || 'OK')}
                         </span>
                         <span className="text-[11px] font-mono font-normal flex items-center gap-1 ml-2">
                           <Clock className={`w-3 h-3 ${isStale && !isMitigated ? 'text-[#f59e0b]' : 'text-[#adc7ff]'}`} />
@@ -337,9 +358,9 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
                       { step: 1, title: 'Agent Service Dispatch', detail: 'Dispatched approval to Reasoning Engine / Cloud Run Agent.', status: 'SUCCESS' },
                       { step: 2, title: 'Industrial Actuator Tool Invocation', detail: `Agent activated tool 'IndustrialActuatorTool.throttle_and_cool' targeting ${effectiveAsset?.asset_id || 'asset'}.`, status: 'SUCCESS' },
                       { step: 3, title: 'Physical Asset Actuation', detail: 'Actuator signal received. Engine load throttled to nominal baseline (~32% CPU, ~50°C).', status: 'SUCCESS' },
-                      { step: 4, title: 'Kafka Telemetry Streaming Resumed', detail: 'Sensor simulator broadcasting healthy non-anomaly metrics to Kafka topic.', status: 'SUCCESS' },
+                      { step: 4, title: `${stackConfig.ingestionShort} Telemetry Streaming Resumed`, detail: `Sensor simulator broadcasting healthy non-anomaly metrics to ${stackConfig.ingestionShort} topic '${stackConfig.ingestionTopic}'.`, status: 'SUCCESS' },
                       { step: 5, title: 'BigQuery Governance Audit', detail: 'Incident resolution audit record & tokenomics logged to BigQuery table rca_events.', status: 'SUCCESS' },
-                      { step: 6, title: 'Spark Dual-Sink Ingestion Convergence', detail: 'Dataproc PySpark (C++ Velox engine) synchronized state to Bigtable & BigQuery.', status: 'SUCCESS' },
+                      { step: 6, title: `${stackConfig.pipelineShort} Dual-Sink Ingestion Convergence`, detail: `${stackConfig.pipelineEngine} synchronized state to Bigtable & BigQuery.`, status: 'SUCCESS' },
                     ]).map((step: any) => (
                       <div
                         key={step.step}
@@ -429,7 +450,7 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
                       Step 4 &amp; 5: Human-in-the-Loop Tool Activation
                     </span>
                     <p className="text-[11px] text-[#c1c6d6] font-sans mt-0.5">
-                      Approving activates Agent tool calling to signal the Kafka simulator and log tokenomics to BigQuery.
+                      Approving activates Agent tool calling to signal the physical actuator and log tokenomics to BigQuery.
                     </p>
                   </div>
 

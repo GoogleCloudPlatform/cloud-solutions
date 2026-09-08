@@ -45,6 +45,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { PageNavigation } from './PageNavigation';
+import { getStackConfig, StackConfig } from '../utils/stackConfig';
 
 interface SlideMeta {
   number: number;
@@ -55,7 +56,8 @@ interface SlideMeta {
   keyHighlights: string[];
 }
 
-const SLIDES_DATA: SlideMeta[] = [
+export const getSlidesData = (stackConfig: StackConfig): SlideMeta[] => {
+  const coreSlides: SlideMeta[] = [
   {
     number: 1,
     title: 'The Agentic Data Cloud: Project Aegis',
@@ -103,8 +105,16 @@ const SLIDES_DATA: SlideMeta[] = [
     description: 'An orchestrating autonomous closed-loop mitigation journey powered by Google Cloud and Gemini 2.5 Flash.',
     keyHighlights: [
       'Mock Fleet: Sub-second asynchronous publishing to telemetry-raw',
-      'Managed Kafka: Partition-isolated high-throughput buffering',
-      'Spark Serverless: 10s rolling window anomaly detection (>90% CPU / Temp / Pressure)',
+      stackConfig.stackType === 'first_party'
+        ? 'Cloud Pub/Sub: Low-latency distributed message buffering'
+        : stackConfig.stackType === 'low_code'
+        ? 'Cloud Pub/Sub: Real-time streaming ingestion directly to BigQuery'
+        : 'Managed Kafka: Partition-isolated high-throughput buffering',
+      stackConfig.stackType === 'first_party'
+        ? 'Cloud Dataflow: 10s fixed tumbling window anomaly detection (>90% CPU / Temp / Pressure)'
+        : stackConfig.stackType === 'low_code'
+        ? 'Continuous Queries: 10s tumbling SQL anomaly detection (>90% CPU / Temp / Pressure)'
+        : 'Spark Serverless: 10s rolling window anomaly detection (>90% CPU / Temp / Pressure)',
       'Bigtable: Sub-millisecond state store for live control loops',
       'Experience Layer: Reactive Next.js & FastAPI Operations HUD with Human-in-the-Loop'
     ]
@@ -136,24 +146,84 @@ const SLIDES_DATA: SlideMeta[] = [
       'C++ Vectorized Compute: 4.9x faster execution without cold starts or GC pauses',
       'Dynamic Model Armor: Zero-day prompt injection and PII leak protection'
     ]
-  },
-  {
-    number: 7,
-    title: 'Aegis Telemetry Streaming GCP Topology',
-    category: 'End-to-End Blueprint',
-    image: '/slides/slide-7.png',
-    description: '7-Step End-to-End Reference Architecture: Bridging physical IIoT telemetry with real-time stream compute and closed-loop Gemini 2.5 Flash agent remediation.',
-    keyHighlights: [
-      '1. Ingestion: Monitored fleet streams real-time telemetry into Managed Apache Kafka topics.',
-      '2. Stream Processing: Managed Spark continuously evaluates 10s windows and flags threshold anomalies.',
-      '3. Dual-Sink Persistence: Sub-ms operational state lands in Bigtable; analytical audits sink to BigQuery.',
-      '4. Operations HUD: Real-time command tower for live monitoring and on-demand fault injection.',
-      '5. Cognitive RCA (HITL): Gemini 2.5 Flash performs root-cause analysis and formulates mitigation directives.',
-      '6. Agentic Governance: Approved actions invoke connected tools and record financial ROI to BigQuery.',
-      '7. Closed-Loop Mitigation: Actuator tools dispatch corrective commands to restore nominal equipment baseline.'
-    ]
   }
-];
+  ];
+
+  const ossTopologySlide: Omit<SlideMeta, 'number'> = {
+    title: 'Aegis Telemetry Streaming - Open Source Stack',
+    category:
+      stackConfig.stackType === 'oss'
+        ? 'Active Blueprint: Open Source Stack'
+        : 'Alternative Blueprint: Open Source Stack',
+    image: '/slides/slide-7.png',
+    description:
+      '7-Step Open Source Reference Architecture: Managed Apache Kafka + Dataproc Serverless (Spark with C++ Lightning Engine) + Dual-Sink Bigtable/BigQuery + Vertex AI Remediation Agent.',
+    keyHighlights: [
+      '1. Ingestion: Monitored fleet streams real-time telemetry into Managed Apache Kafka (telemetry-raw).',
+      '2. Stream Processing: Managed Spark with C++ Lightning Engine evaluates 10s tumbling windows.',
+      '3. Dual-Sink Persistence: Sub-ms operational state lands in Cloud Bigtable; analytical audits sink to BigQuery.',
+      '4. Operations HUD: Cloud Run command tower for live SSE monitoring and on-demand fault injection.',
+      '5. Cognitive RCA (HITL): Vertex AI Gemini 2.5 Flash performs root-cause analysis and proposes remediation.',
+      '6. Agentic Governance: Approved actions invoke Mitigation Tools and record financial ROI to BigQuery.',
+      '7. Closed-Loop Mitigation: Cloud Run actuator dispatches corrective commands to restore equipment baseline.',
+    ],
+  };
+
+  const firstPartyTopologySlide: Omit<SlideMeta, 'number'> = {
+    title: 'Aegis Telemetry Streaming - First Party',
+    category:
+      stackConfig.stackType === 'first_party'
+        ? 'Active Blueprint: First-Party Stack'
+        : 'Alternative Blueprint: First-Party Stack',
+    image: '/slides/slide-8.png',
+    description:
+      '7-Step Google Cloud Native Reference Architecture: Cloud Pub/Sub + Cloud Dataflow (Apache Beam Streaming Engine) + Dual-Sink Bigtable/BigQuery + Vertex AI Remediation Agent.',
+    keyHighlights: [
+      '1. Ingestion: Monitored fleet streams real-time telemetry into Google Cloud Pub/Sub (telemetry-raw).',
+      '2. Stream Processing: Cloud Dataflow continuously evaluates 10s fixed windows and flags threshold anomalies.',
+      '3. Dual-Sink Persistence: Sub-ms operational state lands in Cloud Bigtable; analytical audits sink to BigQuery.',
+      '4. Operations HUD: Cloud Run command tower for live SSE monitoring and on-demand fault injection.',
+      '5. Cognitive RCA (HITL): Vertex AI Gemini 2.5 Flash performs root-cause analysis and proposes remediation.',
+      '6. Agentic Governance: Approved actions invoke Mitigation Tools and record financial ROI to BigQuery.',
+      '7. Closed-Loop Mitigation: Cloud Run actuator dispatches corrective commands to restore equipment baseline.',
+    ],
+  };
+
+  const lowCodeTopologySlide: Omit<SlideMeta, 'number'> = {
+    title: 'Aegis Telemetry Streaming - Low-Code',
+    category:
+      stackConfig.stackType === 'low_code'
+        ? 'Active Blueprint: Low-Code Stack'
+        : 'Alternative Blueprint: Low-Code Stack',
+    image: '/slides/slide-9.png',
+    description:
+      '7-Step Serverless SQL Reference Architecture: Cloud Pub/Sub + BigQuery Continuous Queries + Dual-Sink Bigtable/BigQuery + Vertex AI Remediation Agent.',
+    keyHighlights: [
+      '1. Ingestion: Monitored fleet streams real-time telemetry into Google Cloud Pub/Sub (telemetry-raw).',
+      '2. Stream Processing: BigQuery Continuous Queries evaluate 10s SQL windows over active streams.',
+      '3. Dual-Sink Persistence: Sub-ms operational state lands in Cloud Bigtable; analytical audits sink to BigQuery.',
+      '4. Operations HUD: Cloud Run command tower for live SSE monitoring and on-demand fault injection.',
+      '5. Cognitive RCA (HITL): Vertex AI Gemini 2.5 Flash performs root-cause analysis and proposes remediation.',
+      '6. Agentic Governance: Approved actions invoke Mitigation Tools and record financial ROI to BigQuery.',
+      '7. Closed-Loop Mitigation: Cloud Run actuator dispatches corrective commands to restore equipment baseline.',
+    ],
+  };
+
+  const orderedTopologySlides =
+    stackConfig.stackType === 'first_party'
+      ? [firstPartyTopologySlide, ossTopologySlide, lowCodeTopologySlide]
+      : stackConfig.stackType === 'low_code'
+      ? [lowCodeTopologySlide, firstPartyTopologySlide, ossTopologySlide]
+      : [ossTopologySlide, firstPartyTopologySlide, lowCodeTopologySlide];
+
+  return [
+    ...coreSlides,
+    ...orderedTopologySlides.map((slide, idx) => ({
+      ...slide,
+      number: 7 + idx,
+    })),
+  ];
+};
 
 interface SlideDeckViewerProps {
   pdfUrl?: string;
@@ -165,7 +235,7 @@ interface SlideDeckViewerProps {
 export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
   pdfUrl = '/aegis_autonomous_streaming.pdf',
   title = 'AEGIS Autonomous Streaming Presentation',
-  subtitle = 'Executive Architecture, C++ Velox Accelerated Compute & Agentic AI Mitigation Deck',
+  subtitle: customSubtitle,
   onNavigate,
 }) => {
   const [currentSlide, setCurrentSlide] = useState<number>(1);
@@ -174,9 +244,19 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
   const [showThumbnails, setShowThumbnails] = useState<boolean>(false);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
+  const stackConfig = getStackConfig();
+  const subtitle =
+    customSubtitle ||
+    (stackConfig.stackType === 'first_party'
+      ? 'Executive Architecture, Cloud Dataflow Streaming & Agentic AI Mitigation Deck'
+      : stackConfig.stackType === 'low_code'
+      ? 'Executive Architecture, BigQuery Continuous Queries & Agentic AI Mitigation Deck'
+      : 'Executive Architecture, C++ Velox Accelerated Compute & Agentic AI Mitigation Deck');
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const totalSlides = SLIDES_DATA.length;
-  const activeSlideMeta = SLIDES_DATA[currentSlide - 1] || SLIDES_DATA[0];
+  const slidesData = React.useMemo(() => getSlidesData(stackConfig), [stackConfig]);
+  const totalSlides = slidesData.length;
+  const activeSlideMeta = slidesData[currentSlide - 1] || slidesData[0];
 
   // Fullscreen change listener
   useEffect(() => {
@@ -365,7 +445,7 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
               <span>{totalSlides}</span>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5">
-              {SLIDES_DATA.map((slide) => {
+              {slidesData.map((slide) => {
                 const isSelected = slide.number === currentSlide;
                 return (
                   <button

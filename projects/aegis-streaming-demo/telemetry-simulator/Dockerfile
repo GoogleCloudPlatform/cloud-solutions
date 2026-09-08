@@ -19,12 +19,19 @@ WORKDIR /app
 # Prevent Python from writing bytecode and buffer stdout/stderr
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH="/app/src"
+
+RUN groupadd -g 1000 appuser \
+    && useradd -u 1000 -g appuser -d /app -s /bin/bash appuser
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir --require-hashes -r requirements.txt
 
-COPY . .
+COPY --chown=appuser:appuser . .
+
+USER appuser
 
 EXPOSE 8080
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["uvicorn"]
+CMD ["main:app", "--app-dir", "src", "--host", "0.0.0.0", "--port", "8080"]

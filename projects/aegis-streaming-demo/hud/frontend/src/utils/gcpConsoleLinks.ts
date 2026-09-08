@@ -15,20 +15,60 @@
  */
 
 export const getGcpConfig = () => {
+  const winConfig =
+    typeof window !== 'undefined' ? window.__AEGIS_RUNTIME_CONFIG__ : undefined;
+
   const project =
-    process.env.NEXT_PUBLIC_GCP_PROJECT || process.env.GCP_PROJECT || '';
-  const region = process.env.NEXT_PUBLIC_GCP_REGION || '';
-  const kafkaCluster = process.env.NEXT_PUBLIC_KAFKA_CLUSTER || '';
-  const kafkaTopic = process.env.NEXT_PUBLIC_KAFKA_TOPIC || '';
-  const bigtableInstance = process.env.NEXT_PUBLIC_BIGTABLE_INSTANCE || '';
-  const bigqueryDataset = process.env.NEXT_PUBLIC_BIGQUERY_DATASET || '';
-  const geapAgentId = process.env.NEXT_PUBLIC_GEAP_AGENT_ID || '';
+    winConfig?.project ||
+    process.env.GCP_PROJECT ||
+    process.env.NEXT_PUBLIC_GCP_PROJECT ||
+    '';
+  const region =
+    winConfig?.region ||
+    process.env.GCP_REGION ||
+    process.env.NEXT_PUBLIC_GCP_REGION ||
+    '';
+  const stackType = (
+    winConfig?.stackType ||
+    process.env.STACK_TYPE ||
+    process.env.NEXT_PUBLIC_STACK_TYPE ||
+    'oss'
+  )
+    .toLowerCase()
+    .trim();
+  const kafkaCluster =
+    winConfig?.kafkaCluster || process.env.NEXT_PUBLIC_KAFKA_CLUSTER || '';
+  const kafkaTopic =
+    winConfig?.kafkaTopic ||
+    process.env.NEXT_PUBLIC_KAFKA_TOPIC ||
+    'telemetry-raw';
+  const pubsubTopic =
+    winConfig?.pubsubTopic ||
+    process.env.NEXT_PUBLIC_PUBSUB_TOPIC ||
+    'telemetry-raw';
+  const pubsubSubscription =
+    winConfig?.pubsubSubscription ||
+    process.env.NEXT_PUBLIC_PUBSUB_SUBSCRIPTION ||
+    'telemetry-raw-sub';
+  const bigtableInstance =
+    winConfig?.bigtableInstance ||
+    process.env.NEXT_PUBLIC_BIGTABLE_INSTANCE ||
+    '';
+  const bigqueryDataset =
+    winConfig?.bigqueryDataset ||
+    process.env.NEXT_PUBLIC_BIGQUERY_DATASET ||
+    '';
+  const geapAgentId =
+    winConfig?.geapAgentId || process.env.NEXT_PUBLIC_GEAP_AGENT_ID || '';
 
   return {
     project,
     region,
+    stackType,
     kafkaCluster,
     kafkaTopic,
+    pubsubTopic,
+    pubsubSubscription,
     bigtableInstance,
     bigqueryDataset,
     geapAgentId,
@@ -39,8 +79,11 @@ export const getConsoleLinks = () => {
   const {
     project,
     region,
+    stackType,
     kafkaCluster,
     kafkaTopic,
+    pubsubTopic,
+    pubsubSubscription,
     bigtableInstance,
     bigqueryDataset,
     geapAgentId,
@@ -50,10 +93,44 @@ export const getConsoleLinks = () => {
     ? `https://console.cloud.google.com/agent-platform/runtimes/locations/${region}/agent-engines/${geapAgentId}/dashboard?project=${project}`
     : `https://console.cloud.google.com/agent-platform?project=${project}`;
 
+  const kafkaClusterUrl = `https://console.cloud.google.com/managedkafka/${region}/clusters/${kafkaCluster}?project=${project}`;
+  const kafkaTopicUrl = `https://console.cloud.google.com/managedkafka/${region}/clusters/${kafkaCluster}/topics/${kafkaTopic}?project=${project}`;
+  const pubsubTopicUrl = `https://console.cloud.google.com/cloudpubsub/topic/detail/${pubsubTopic}?project=${project}`;
+  const pubsubSubscriptionUrl = `https://console.cloud.google.com/cloudpubsub/subscription/detail/${pubsubSubscription}?project=${project}`;
+
+  const dataprocBatchesUrl = `https://console.cloud.google.com/dataproc/batches?project=${project}&region=${region}`;
+  const dataflowJobsUrl = `https://console.cloud.google.com/dataflow/jobs?project=${project}&region=${region}`;
+  const continuousQueriesUrl = `https://console.cloud.google.com/bigquery/continuous-queries?project=${project}`;
+
+  const ingestionConsole =
+    stackType === 'oss' ? kafkaClusterUrl : pubsubTopicUrl;
+  const ingestionLabel =
+    stackType === 'oss' ? 'Kafka Console' : 'Pub/Sub Console';
+
+  let pipelineConsole = dataprocBatchesUrl;
+  let pipelineLabel = 'Dataproc Batches';
+
+  if (stackType === 'first_party') {
+    pipelineConsole = dataflowJobsUrl;
+    pipelineLabel = 'Dataflow Console';
+  } else if (stackType === 'low_code') {
+    pipelineConsole = continuousQueriesUrl;
+    pipelineLabel = 'Continuous Query Studio';
+  }
+
   return {
-    kafkaCluster: `https://console.cloud.google.com/managedkafka/${region}/clusters/${kafkaCluster}?project=${project}`,
-    kafkaTopic: `https://console.cloud.google.com/managedkafka/${region}/clusters/${kafkaCluster}/topics/${kafkaTopic}?project=${project}`,
-    dataprocBatches: `https://console.cloud.google.com/dataproc/batches?project=${project}&region=${region}`,
+    stackType,
+    kafkaCluster: kafkaClusterUrl,
+    kafkaTopic: kafkaTopicUrl,
+    pubsubTopic: pubsubTopicUrl,
+    pubsubSubscription: pubsubSubscriptionUrl,
+    dataprocBatches: dataprocBatchesUrl,
+    dataflowJobs: dataflowJobsUrl,
+    continuousQueries: continuousQueriesUrl,
+    ingestionConsole,
+    ingestionLabel,
+    pipelineConsole,
+    pipelineLabel,
     bigtableOverview: `https://console.cloud.google.com/bigtable/instances/${bigtableInstance}/overview?project=${project}`,
     bigtableTable: `https://console.cloud.google.com/bigtable/instances/${bigtableInstance}/tables/telemetry_metrics/overview?project=${project}`,
     bigqueryDataset: `https://console.cloud.google.com/bigquery?project=${project}&ws=!1m4!1m3!3m2!1s${project}!2s${bigqueryDataset}`,
