@@ -438,6 +438,12 @@
       "additionalBranchPrefix": "sa-tools-performance-testing-"
     },
     {
+      "matchFileNames": ["projects/secured-agents-solutions/**"],
+      "groupName": "secured-agents-solutions",
+      "commitMessagePrefix": "chore(deps): [secured-agents-solutions]",
+      "additionalBranchPrefix": "secured-agents-solutions-"
+    },
+    {
       "matchFileNames": ["projects/serverless-event-processing/**"],
       "groupName": "serverless-event-processing",
       "commitMessagePrefix": "chore(deps): [serverless-event-processing]",
