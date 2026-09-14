@@ -33,15 +33,15 @@ apt-get install -y \
   python3-sqlalchemy \
   unixodbc-dev
 
-# Add Microsoft package repository for ODBC Driver 18
+# Add package repository for SQL Server ODBC Driver 18
 curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor --yes -o /usr/share/keyrings/microsoft-prod.gpg
-echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" >/etc/apt/sources.list.d/mssql-release.list
+echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" >/etc/apt/sources.list.d/sqlserver-release.list
 
 apt-get update -y
 
-# Install Microsoft ODBC Driver 18 (accept EULA)
+# Install SQL Server ODBC Driver 18 (accept EULA)
 ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18
-echo "export PATH=\"\$PATH:/opt/mssql-tools18/bin\"" >>/etc/profile.d/mssql.sh
+echo "export PATH=\"\$PATH:/opt/mssql-tools18/bin\"" >>/etc/profile.d/sqlserver.sh
 
 # Export data from BigQuery public dataset to CSV files
 echo "Exporting tables from BigQuery public dataset..."
@@ -267,8 +267,44 @@ for table, dtypes in dtypes_map.items():
             chunksize=5000
         )
         print(f"Table {table} successfully loaded.")
+        pk_col = 'order_id' if table == 'orders' else 'id'
+        try:
+            with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
+                conn.execute(text(f"ALTER TABLE {table} ALTER COLUMN {pk_col} INT NOT NULL"))
+                conn.execute(text(f"ALTER TABLE {table} ADD CONSTRAINT pk_{table} PRIMARY KEY ({pk_col})"))
+                print(f"Primary key constraint added to {table}({pk_col}).")
+        except (exc.DBAPIError, exc.ProgrammingError) as e:
+            print(f"Notice: Adding primary key constraint to {table} produced: {e}")
     except Exception as e:
         print(f"Error loading table {table}: {e}")
+        raise
+
+print("Configuring SQL Server Change Data Capture (CDC) and Snapshot Isolation...")
+with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
+    try:
+        conn.execute(text("EXEC msdb.dbo.gcloudsql_cdc_enable_db 'thelook_ecommerce'"))
+        conn.execute(text("ALTER DATABASE thelook_ecommerce SET ALLOW_SNAPSHOT_ISOLATION ON"))
+    except (exc.DBAPIError, exc.ProgrammingError) as e:
+        print(f"Notice: Configuring database-level CDC produced: {e}")
+
+    for table in dtypes_map.keys():
+        try:
+            is_tracked = conn.execute(
+                text("SELECT is_tracked_by_cdc FROM sys.tables WHERE name = :t"),
+                {"t": table},
+            ).scalar()
+            if is_tracked:
+                print(f"CDC already enabled for table {table}.")
+                continue
+            conn.execute(
+                text(
+                    f"EXEC sys.sp_cdc_enable_table @source_schema = N'dbo', "
+                    f"@source_name = N'{table}', @role_name = NULL"
+                )
+            )
+            print(f"CDC enabled for table {table}.")
+        except (exc.DBAPIError, exc.ProgrammingError) as e:
+            print(f"Notice: Configuring CDC for table {table} produced: {e}")
 
 print("Data loading process complete.")
 EOF

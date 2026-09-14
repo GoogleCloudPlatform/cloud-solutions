@@ -30,12 +30,12 @@ output "gcp_zone" {
 }
 
 output "sql_server_instance_name" {
-  value       = google_sql_database_instance.mssql_source.name
+  value       = google_sql_database_instance.sqlserver_source.name
   description = "The Cloud SQL SQL Server instance name"
 }
 
 output "sql_server_private_ip" {
-  value       = google_sql_database_instance.mssql_source.private_ip_address
+  value       = google_sql_database_instance.sqlserver_source.private_ip_address
   description = "The private IP address of the source SQL Server instance"
 }
 
@@ -45,6 +45,31 @@ output "sql_server_password" {
 }
 
 output "loader_vm_name" {
-  value       = google_compute_instance.mssql_loader_vm.name
+  value       = google_compute_instance.sqlserver_loader_vm.name
   description = "The helper loader VM instance name"
+}
+
+output "tcp_proxy_private_ip" {
+  value       = google_compute_instance.tcp_proxy_vm.network_interface[0].network_ip
+  description = "The internal IP address of the TCP proxy VM in vpc-1"
+}
+
+output "alloydb_private_ip" {
+  value       = google_compute_address.alloydb_psc_endpoint_ip.address
+  description = "The internal IP address of the AlloyDB PSC endpoint in vpc-2"
+}
+
+output "alloydb_psc_dns_name" {
+  value       = google_alloydb_instance.alloydb_destination_primary.psc_instance_config[0].psc_dns_name
+  description = "The Private Service Connect (PSC) DNS name of the target AlloyDB primary instance"
+}
+
+output "alloydb_service_attachment" {
+  value       = google_alloydb_instance.alloydb_destination_primary.psc_instance_config[0].service_attachment_link
+  description = "The Private Service Connect (PSC) Service Attachment URI of the target AlloyDB primary instance"
+}
+
+output "alloydb_password" {
+  value       = nonsensitive(random_password.sql_server_password.result)
+  description = "The admin password for the AlloyDB 'postgres' user"
 }

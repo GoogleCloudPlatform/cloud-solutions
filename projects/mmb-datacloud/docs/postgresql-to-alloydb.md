@@ -7,39 +7,54 @@ AlloyDB for PostgreSQL using Database Migration Service.
 
 ### System Architecture
 
-```mermaid
+<!-- markdownlint-disable MD013 -->
+<!-- MERMAID-DIAGRAM-START
+%%{init: {"flowchart": {"wrappingWidth": 400}}}%%
 flowchart TD
     subgraph VPC1 ["VPC 1 - Source Network (10.10.0.0/24)"]
-        PGVM["fa:fa-server Self-managed PostgreSQL VM: self-managed-postgres-vm<br>(Port 5432 | DB: fraud_detection | pglogical)"]
+        PGVM["<div style='display:flex;align-items:center;gap:12px;text-align:left;padding:4px;'><div style='width:40px;max-width:40px;flex-shrink:0;'><img src='{{gcp:ComputeEngine}}' width='40' height='40' style='max-width:40px!important;height:40px;display:block;'/></div><div style='line-height:1.3;white-space:nowrap;'><b style='font-size:14px;color:#202124;'>Compute Engine: self-managed-postgres-vm</b><br/><span style='font-size:11px;color:#5F6368;'>Port 5432 | DB: fraud_detection | pglogical</span></div></div>"]
     end
 
     subgraph PEERING ["VPC Peering (vpc1-to-vpc2)"]
-        ROUTES["fa:fa-route Bidirectional Route Exchange<br>(Auto-created routes)"]
+        ROUTES["<div style='display:flex;align-items:center;gap:12px;text-align:left;padding:4px;'><div style='width:40px;max-width:40px;flex-shrink:0;'><img src='{{gcp:Networking}}' width='40' height='40' style='max-width:40px!important;height:40px;display:block;'/></div><div style='line-height:1.3;white-space:nowrap;'><b style='font-size:14px;color:#202124;'>VPC Network Peering</b><br/><span style='font-size:11px;color:#5F6368;'>Bidirectional Route Exchange</span></div></div>"]
     end
 
     subgraph DMS ["Database Migration Service (Serverless Control Plane)"]
-        JOB["fa:fa-sync Continuous Migration Job<br>(Logical Replication Stream)"]
+        SRC_CP["<div style='display:flex;align-items:center;gap:12px;text-align:left;padding:4px;'><div style='width:40px;max-width:40px;flex-shrink:0;'><img src='{{gcp:Databases}}' width='40' height='40' style='max-width:40px!important;height:40px;display:block;'/></div><div style='line-height:1.3;white-space:nowrap;'><b style='font-size:14px;color:#202124;'>DMS Source Connection Profile</b><br/><span style='font-size:11px;color:#5F6368;'>self-managed-cp | PostgreSQL Source</span></div></div>"]
+        JOB["<div style='display:flex;align-items:center;gap:12px;text-align:left;padding:4px;'><div style='width:40px;max-width:40px;flex-shrink:0;'><img src='{{gcp:Migration}}' width='40' height='40' style='max-width:40px!important;height:40px;display:block;'/></div><div style='line-height:1.3;white-space:nowrap;'><b style='font-size:14px;color:#202124;'>DMS Continuous Migration Job</b><br/><span style='font-size:11px;color:#5F6368;'>self-managed-to-alloydb | pglogical Replication</span></div></div>"]
+        SRC_CP --&gt; JOB
     end
 
     subgraph VPC2 ["VPC 2 - Destination Network (10.20.0.0/24)"]
-        PROXY["fa:fa-network-wired TCP Proxy VM: tcp-proxy-vm<br>(Port 5432 Bridge)"]
-        ALLOYDB["fa:fa-database AlloyDB Cluster: managed-alloydb-cluster<br>(PostgreSQL 16 Compatible)"]
-        STUDIO["fa:fa-terminal AlloyDB Studio<br>(Query Verification & Cutover)"]
-        PROXY --> ALLOYDB
-        STUDIO --> ALLOYDB
+        PROXY["<div style='display:flex;align-items:center;gap:12px;text-align:left;padding:4px;'><div style='width:40px;max-width:40px;flex-shrink:0;'><img src='{{gcp:ComputeEngine}}' width='40' height='40' style='max-width:40px!important;height:40px;display:block;'/></div><div style='line-height:1.3;white-space:nowrap;'><b style='font-size:14px;color:#202124;'>Compute Engine: tcp-proxy-vm</b><br/><span style='font-size:11px;color:#5F6368;'>TCP Proxy Port 5432 Bridge</span></div></div>"]
+        ALLOYDB["<div style='display:flex;align-items:center;gap:12px;text-align:left;padding:4px;'><div style='width:40px;max-width:40px;flex-shrink:0;'><img src='{{gcp:AlloyDB}}' width='40' height='40' style='max-width:40px!important;height:40px;display:block;'/></div><div style='line-height:1.3;white-space:nowrap;'><b style='font-size:14px;color:#202124;'>AlloyDB for PostgreSQL: managed-alloydb-cluster</b><br/><span style='font-size:11px;color:#5F6368;'>PostgreSQL 16 Compatible</span></div></div>"]
+        STUDIO["<div style='display:flex;align-items:center;gap:12px;text-align:left;padding:4px;'><div style='width:40px;max-width:40px;flex-shrink:0;'><img src='{{mdi:terminal:#EA4335}}' width='40' height='40' style='max-width:40px!important;height:40px;display:block;'/></div><div style='line-height:1.3;white-space:nowrap;'><b style='font-size:14px;color:#202124;'>AlloyDB Studio</b><br/><span style='font-size:11px;color:#5F6368;'>Query Verification & Cutover</span></div></div>"]
+        PROXY ==&gt;|"Forward Port 5432"| ALLOYDB
+        STUDIO --&gt; ALLOYDB
     end
 
-    VPC1 <--> PEERING
-    PEERING <--> VPC2
-    PGVM ==>|"pglogical Change Stream"| PROXY
+    VPC1 <--&gt; PEERING
+    PEERING <--&gt; VPC2
+    PGVM -.-&gt;|"Source Metadata"| SRC_CP
+    PGVM ==&gt;|"pglogical Change Stream"| PROXY
+    JOB -.-&gt;|"Orchestrate Replication & Cutover"| ALLOYDB
 
-    style PGVM fill:#34A853,stroke:#3c4043,color:#FFFFFF
-    style ROUTES fill:#F8F9FA,stroke:#4285F4,color:#202124
-    style JOB fill:#FBBC04,stroke:#3c4043,color:#202124
-    style PROXY fill:#4285F4,stroke:#3c4043,color:#FFFFFF
-    style ALLOYDB fill:#34A853,stroke:#3c4043,color:#FFFFFF
-    style STUDIO fill:#EA4335,stroke:#3c4043,color:#FFFFFF
-```
+    style VPC1 fill:#F8F9FA,stroke:#dadce0,color:#202124,stroke-width:1.5px,rx:10px,ry:10px
+    style PEERING fill:#F8F9FA,stroke:#dadce0,color:#202124,stroke-width:1.5px,rx:10px,ry:10px
+    style DMS fill:#F8F9FA,stroke:#dadce0,color:#202124,stroke-width:1.5px,rx:10px,ry:10px
+    style VPC2 fill:#F8F9FA,stroke:#dadce0,color:#202124,stroke-width:1.5px,rx:10px,ry:10px
+
+    style PGVM fill:#FFFFFF,stroke:#4285F4,color:#202124,stroke-width:2px,rx:8px,ry:8px
+    style ROUTES fill:#FFFFFF,stroke:#4285F4,color:#202124,stroke-width:2px,rx:8px,ry:8px
+    style SRC_CP fill:#FFFFFF,stroke:#FBBC04,color:#202124,stroke-width:2px,rx:8px,ry:8px
+    style JOB fill:#FFFFFF,stroke:#FBBC04,color:#202124,stroke-width:2px,rx:8px,ry:8px
+    style PROXY fill:#FFFFFF,stroke:#4285F4,color:#202124,stroke-width:2px,rx:8px,ry:8px
+    style ALLOYDB fill:#FFFFFF,stroke:#34A853,color:#202124,stroke-width:2px,rx:8px,ry:8px
+    style STUDIO fill:#FFFFFF,stroke:#EA4335,color:#202124,stroke-width:2px,rx:8px,ry:8px
+MERMAID-DIAGRAM-SOURCE -->
+![Mermaid Architecture Diagram](./postgresql-to-alloydb.svg)
+<!-- MERMAID-DIAGRAM-END -->
+<!-- markdownlint-enable MD013 -->
 
 ## Objectives
 
@@ -115,7 +130,8 @@ created.
     gcloud compute networks peerings create vpc1-to-vpc2 \
        --network=vpc-1 \
        --peer-network=vpc-2 \
-       --auto-create-routes
+       --export-custom-routes \
+       --import-custom-routes
     ```
 
 1.  Create another VPC Peering from VPC2 to VPC1
@@ -124,7 +140,8 @@ created.
     gcloud compute networks peerings create vpc2-to-vpc1 \
        --network=vpc-2 \
        --peer-network=vpc-1 \
-       --auto-create-routes
+       --export-custom-routes \
+       --import-custom-routes
     ```
 
 1.  Verify VPC Peering has been created correctly.
@@ -138,9 +155,9 @@ created.
 
     ```text
     NAME          NETWORK  PEER_PROJECT                  PEER_NETWORK  STACK_TYPE  PEER_MTU  IMPORT_CUSTOM_ROUTES  EXPORT_CUSTOM_ROUTES  UPDATE_STRATEGY  STATE   STATE_DETAILS
-    vpc1-to-vpc2  vpc-1    qwiklabs-gcp-00-0eaff2ed73b0  vpc-2         IPV4_ONLY             False                 False                 INDEPENDENT      ACTIVE  [2026-03-26T02:02:24.666-07:00]: Connected.
+    vpc1-to-vpc2  vpc-1    qwiklabs-gcp-00-0eaff2ed73b0  vpc-2         IPV4_ONLY             True                  True                  INDEPENDENT      ACTIVE  [2026-03-26T02:02:24.666-07:00]: Connected.
     NAME          NETWORK  PEER_PROJECT                  PEER_NETWORK  STACK_TYPE  PEER_MTU  IMPORT_CUSTOM_ROUTES  EXPORT_CUSTOM_ROUTES  UPDATE_STRATEGY  STATE   STATE_DETAILS
-    vpc2-to-vpc1  vpc-2    qwiklabs-gcp-00-0eaff2ed73b0  vpc-1         IPV4_ONLY             False                 False                 INDEPENDENT      ACTIVE  [2026-03-26T02:02:24.666-07:00]: Connected.
+    vpc2-to-vpc1  vpc-2    qwiklabs-gcp-00-0eaff2ed73b0  vpc-1         IPV4_ONLY             True                  True                  INDEPENDENT      ACTIVE  [2026-03-26T02:02:24.666-07:00]: Connected.
     ```
 
 ### Enable Database Migration API
@@ -164,7 +181,7 @@ created.
 ### Create a migration job
 
 1.  On **Create a Database Migration job** page’s 1st **Get started** step,
-    please enter **Migration job name** as `self-managed-to-allydb`. **Migration
+    please enter **Migration job name** as `self-managed-to-alloydb`. **Migration
     Job ID** will automatically add the same as the job name.
 
 1.  Choose `PostgreSQL` as **Source database engine** from **Source database

@@ -32,11 +32,17 @@ environment:
           reference: project_1.startup_script.gcp_project_id
         - label: "GCP Region"
           reference: project_1.startup_script.gcp_region
+        - label: "GCP Zone"
+          reference: project_1.startup_script.gcp_zone
         - label: "SQL Server Instance Name"
           reference: project_1.startup_script.sql_server_instance_name
         - label: "SQL Server Private IP"
           reference: project_1.startup_script.sql_server_private_ip
         - label: "SQL Server Password"
           reference: project_1.startup_script.sql_server_password
-        - label: "Loader VM Name"
-          reference: project_1.startup_script.loader_vm_name
+        - label: "TCP Proxy Private IP"
+          reference: project_1.startup_script.tcp_proxy_private_ip
+        - label: "AlloyDB PSC DNS Name"
+          reference: project_1.startup_script.alloydb_psc_dns_name
+        - label: "AlloyDB Password"
+          reference: project_1.startup_script.alloydb_password
