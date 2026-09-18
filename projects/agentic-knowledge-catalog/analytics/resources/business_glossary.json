@@ -1,0 +1,286 @@
+[
+  {
+    "category": "Customer Analytics",
+    "category_id": "customer-analytics",
+    "sub_category": "Customer Behavior",
+    "sub_category_id": "customer-behavior",
+    "term": "VIP Customer",
+    "term_id": "vip-customer",
+    "description": "High-value customer segment with cumulative order spend of $500 or more, or 5 or more orders.",
+    "overview": "A key metric for measuring customer loyalty, filtering the top segment by combining average order value and purchase frequency. Serves as the primary criteria for exclusive promotions and differentiated tier benefits.",
+    "synonyms": [
+      "Top Customer",
+      "Key Customer",
+      "High Value Customer",
+      "VIP"
+    ],
+    "related_terms": [
+      "churned-customer",
+      "profit-margin-rate"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.users",
+      "thelook_ecommerce.orders",
+      "thelook_ecommerce.order_items"
+    ],
+    "sql_mapping": {
+      "type": "SQL_Filter",
+      "table": "thelook_ecommerce.users",
+      "condition": "id IN (SELECT user_id FROM thelook_ecommerce.order_items GROUP BY user_id HAVING SUM(sale_price) >= 500 OR COUNT(DISTINCT order_id) >= 5)"
+    }
+  },
+  {
+    "category": "Customer Analytics",
+    "category_id": "customer-analytics",
+    "sub_category": "Customer Behavior",
+    "sub_category_id": "customer-behavior",
+    "term": "Acquisition Channel",
+    "term_id": "traffic-source",
+    "description": "The initial marketing channel through which a customer accessed the website.",
+    "overview": "Identifies which marketing touchpoint (search, ads, email, etc.) brought the user at the time of registration or first order. Used for attribution analysis of new customer acquisition.",
+    "synonyms": [
+      "Marketing Channel",
+      "Traffic Source",
+      "Signup Channel",
+      "Acquisition Source"
+    ],
+    "related_terms": [
+      "newly-registered-customer",
+      "cart-abandonment-rate"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.users",
+      "thelook_ecommerce.events"
+    ],
+    "sql_mapping": {
+      "type": "Node_Attribute",
+      "table": "thelook_ecommerce.users",
+      "attribute": "traffic_source"
+    }
+  },
+  {
+    "category": "Customer Analytics",
+    "category_id": "customer-analytics",
+    "sub_category": "Customer Behavior",
+    "sub_category_id": "customer-behavior",
+    "term": "Churned Customer",
+    "term_id": "churned-customer",
+    "description": "Inactive customer group with no purchase history in the last 90 days.",
+    "overview": "Customers defined as churned because the elapsed time since their last order exceeds the benchmark threshold. Primary target for win-back and retargeting email campaigns.",
+    "synonyms": [
+      "Dormant Customer",
+      "Inactive User",
+      "Dormant User",
+      "Churned User"
+    ],
+    "related_terms": [
+      "vip-customer",
+      "cart-abandonment-rate"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.users",
+      "thelook_ecommerce.orders"
+    ],
+    "sql_mapping": {
+      "type": "SQL_Filter",
+      "table": "thelook_ecommerce.users",
+      "condition": "id NOT IN (SELECT DISTINCT user_id FROM thelook_ecommerce.orders WHERE created_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 90 DAY))"
+    }
+  },
+  {
+    "category": "Customer Analytics",
+    "category_id": "customer-analytics",
+    "sub_category": "Customer Profile",
+    "sub_category_id": "customer-profile",
+    "term": "Newly Registered Customer",
+    "term_id": "newly-registered-customer",
+    "description": "New members who created an account within the last 30 days.",
+    "overview": "Cohort used when planning welcome coupons or onboarding campaigns to drive initial purchase conversion for newly registered members.",
+    "synonyms": [
+      "New Member",
+      "New User",
+      "Recent Signup"
+    ],
+    "related_terms": [
+      "traffic-source"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.users"
+    ],
+    "sql_mapping": {
+      "type": "SQL_Filter",
+      "table": "thelook_ecommerce.users",
+      "condition": "created_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY)"
+    }
+  },
+  {
+    "category": "Customer Analytics",
+    "category_id": "customer-analytics",
+    "sub_category": "Customer Behavior",
+    "sub_category_id": "customer-behavior",
+    "term": "Cart Abandonment Rate",
+    "term_id": "cart-abandonment-rate",
+    "description": "Percentage of sessions where items were added to the cart but did not lead to a completed purchase.",
+    "overview": "Calculates the proportion of web log event sessions containing a \"cart\" event that lack a corresponding \"purchase\" completion event, used as a UI/UX optimization metric.",
+    "synonyms": [
+      "Cart Drop-off Rate",
+      "Cart Abandonment",
+      "Checkout Drop Rate"
+    ],
+    "related_terms": [
+      "traffic-source",
+      "profit-margin-rate"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.events"
+    ],
+    "sql_mapping": {
+      "type": "Web_Analytics",
+      "table": "thelook_ecommerce.events",
+      "expression": "COUNT(DISTINCT CASE WHEN event_type = 'Cart' AND session_id NOT IN (SELECT DISTINCT session_id FROM thelook_ecommerce.events WHERE event_type = 'Purchase') THEN session_id END) / COUNT(DISTINCT CASE WHEN event_type = 'Cart' THEN session_id END) * 100"
+    }
+  },
+  {
+    "category": "Products and Merchandising",
+    "category_id": "products-recommendation",
+    "sub_category": "Financial Analysis",
+    "sub_category_id": "financial-analysis",
+    "term": "Profit Margin Rate",
+    "term_id": "profit-margin-rate",
+    "description": "Ratio of product profit margin relative to product retail selling price.",
+    "overview": "The proportion of selling price represented by retail price minus cost. Serves as a performance metric for product sourcing and a benchmark for marginal pricing in discount campaigns.",
+    "synonyms": [
+      "Product Margin",
+      "Profit Margin",
+      "Margin Rate",
+      "Margin"
+    ],
+    "related_terms": [
+      "vip-customer"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.products",
+      "thelook_ecommerce.order_items"
+    ],
+    "sql_mapping": {
+      "type": "SQL_Expression",
+      "table": "thelook_ecommerce.products",
+      "expression": "(retail_price - cost) / retail_price * 100"
+    }
+  },
+  {
+    "category": "Logistics and Supply Chain",
+    "category_id": "logistics-supply-chain",
+    "sub_category": "Logistics Operations",
+    "sub_category_id": "logistics-operations",
+    "term": "Distribution Center",
+    "term_id": "distribution-center",
+    "description": "Physical logistics facility where products are initially received, packed, and dispatched for delivery.",
+    "overview": "Global distribution warehouses operated by TheLook eCommerce where product inventory is stored. Contains latitude/longitude coordinates to serve as origin points for shipping distance calculations.",
+    "synonyms": [
+      "Warehouse",
+      "Fulfillment Center",
+      "DC",
+      "Dispatch Center"
+    ],
+    "related_terms": [
+      "returned-cancelled-items",
+      "avg-shipping-lead-time"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.distribution_centers",
+      "thelook_ecommerce.products"
+    ],
+    "sql_mapping": {
+      "type": "Node_Attribute",
+      "table": "thelook_ecommerce.distribution_centers",
+      "attribute": "name"
+    }
+  },
+  {
+    "category": "Logistics and Supply Chain",
+    "category_id": "logistics-supply-chain",
+    "sub_category": "Logistics Operations",
+    "sub_category_id": "logistics-operations",
+    "term": "Returned/Cancelled Items",
+    "term_id": "returned-cancelled-items",
+    "description": "Order items that were returned by customers after delivery or cancelled prior to delivery completion.",
+    "overview": "Transactions where order delivery status is confirmed as \"Returned\" or \"Cancelled\". Essential for anomaly detection and return logistics cost estimation.",
+    "synonyms": [
+      "Cancelled Orders",
+      "Returned Products",
+      "Order Cancellations",
+      "Refunded Items"
+    ],
+    "related_terms": [
+      "distribution-center",
+      "return-rate"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.orders",
+      "thelook_ecommerce.order_items"
+    ],
+    "sql_mapping": {
+      "type": "SQL_Filter",
+      "table": "thelook_ecommerce.order_items",
+      "condition": "status IN ('Returned', 'Cancelled')"
+    }
+  },
+  {
+    "category": "Logistics and Supply Chain",
+    "category_id": "logistics-supply-chain",
+    "sub_category": "Logistics Operations",
+    "sub_category_id": "logistics-operations",
+    "term": "Average Shipping Lead Time",
+    "term_id": "avg-shipping-lead-time",
+    "description": "Number of days from the actual ship date of an order item until delivery is completed to the customer.",
+    "overview": "Monitors regional shipping delays and courier performance by calculating average elapsed days between ship timestamp (shipped_at) and delivery timestamp (delivered_at).",
+    "synonyms": [
+      "Delivery Lead Time",
+      "Delivery Time",
+      "Shipping Duration",
+      "Shipping Lead Time"
+    ],
+    "related_terms": [
+      "distribution-center",
+      "return-rate"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.orders",
+      "thelook_ecommerce.order_items"
+    ],
+    "sql_mapping": {
+      "type": "SQL_Expression",
+      "table": "thelook_ecommerce.orders",
+      "expression": "AVG(TIMESTAMP_DIFF(delivered_at, shipped_at, DAY))"
+    }
+  },
+  {
+    "category": "Logistics and Supply Chain",
+    "category_id": "logistics-supply-chain",
+    "sub_category": "Logistics Operations",
+    "sub_category_id": "logistics-operations",
+    "term": "Cancellation and Return Rate",
+    "term_id": "return-rate",
+    "description": "Proportion of total completed order items that were cancelled or returned.",
+    "overview": "Proportion of ordered items refunded due to customer change of mind or defects, used to assess brand/category quality and customer service logistics workload.",
+    "synonyms": [
+      "Return Rate",
+      "Cancellation Rate",
+      "Refund Rate"
+    ],
+    "related_terms": [
+      "returned-cancelled-items",
+      "avg-shipping-lead-time"
+    ],
+    "related_tables": [
+      "thelook_ecommerce.orders",
+      "thelook_ecommerce.order_items"
+    ],
+    "sql_mapping": {
+      "type": "SQL_Expression",
+      "table": "thelook_ecommerce.order_items",
+      "expression": "COUNTIF(status IN ('Returned', 'Cancelled')) / COUNT(*) * 100"
+    }
+  }
+]

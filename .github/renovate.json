@@ -376,6 +376,12 @@
       "additionalBranchPrefix": "oracle-bigquery-mcp-agent-"
     },
     {
+      "matchFileNames": ["projects/oracle-ebs-agentic-ai/**"],
+      "groupName": "oracle-ebs-agentic-ai",
+      "commitMessagePrefix": "chore(deps): [oracle-ebs-agentic-ai]",
+      "additionalBranchPrefix": "oracle-ebs-agentic-ai-"
+    },
+    {
       "matchFileNames": ["projects/pino-logging-gcp-config/**"],
       "groupName": "pino-logging-gcp-config",
       "commitMessagePrefix": "chore(deps): [pino-logging-gcp-config]",
