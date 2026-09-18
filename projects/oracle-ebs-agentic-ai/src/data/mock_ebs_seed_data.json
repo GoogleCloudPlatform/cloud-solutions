@@ -1,0 +1,188 @@
+{
+  "ap_invoices": [
+    {
+      "INVOICE_ID": 1001,
+      "INVOICE_NUM": "INV-2024-001",
+      "VENDOR_ID": 501,
+      "INVOICE_AMOUNT": 12500.0,
+      "PAYMENT_STATUS_FLAG": "Y",
+      "WFAPPROVAL_STATUS": "APPROVED",
+      "DUE_DATE": "2026-09-15"
+    },
+    {
+      "INVOICE_ID": 1002,
+      "INVOICE_NUM": "INV-2024-002",
+      "VENDOR_ID": 502,
+      "INVOICE_AMOUNT": 8400.0,
+      "PAYMENT_STATUS_FLAG": "Y",
+      "WFAPPROVAL_STATUS": "APPROVED",
+      "DUE_DATE": "2026-09-20"
+    },
+    {
+      "INVOICE_ID": 1003,
+      "INVOICE_NUM": "INV-2024-003",
+      "VENDOR_ID": 503,
+      "INVOICE_AMOUNT": 15200.0,
+      "PAYMENT_STATUS_FLAG": "N",
+      "WFAPPROVAL_STATUS": "PENDING",
+      "DUE_DATE": "2026-10-01"
+    },
+    {
+      "INVOICE_ID": 1005,
+      "INVOICE_NUM": "INV-2026-9901",
+      "VENDOR_ID": 105,
+      "INVOICE_AMOUNT": 25000.0,
+      "PAYMENT_STATUS_FLAG": "N",
+      "WFAPPROVAL_STATUS": "APPROVED",
+      "DUE_DATE": "2026-08-31"
+    },
+    {
+      "INVOICE_ID": 1006,
+      "INVOICE_NUM": "INV-2026-9902",
+      "VENDOR_ID": 106,
+      "INVOICE_AMOUNT": 3150.0,
+      "PAYMENT_STATUS_FLAG": "Y",
+      "WFAPPROVAL_STATUS": "APPROVED",
+      "DUE_DATE": "2026-08-15"
+    },
+    {
+      "INVOICE_ID": 1007,
+      "INVOICE_NUM": "INV-2026-001",
+      "VENDOR_ID": 501,
+      "INVOICE_AMOUNT": 12500.0,
+      "PAYMENT_STATUS_FLAG": "Y",
+      "WFAPPROVAL_STATUS": "APPROVED",
+      "DUE_DATE": "2026-09-15"
+    }
+  ],
+  "inventory": [
+    {
+      "INVENTORY_ITEM_ID": 149,
+      "ITEM_ID": "AS54888",
+      "ITEM_CODE": "AS54888",
+      "ORGANIZATION_ID": 204,
+      "TRANSACTION_QUANTITY": 450.0,
+      "PRIMARY_TRANSACTION_QUANTITY": 450.0,
+      "TOTAL_ON_HAND": 450.0,
+      "DESCRIPTION": "Sentinel Standard Desktop"
+    },
+    {
+      "INVENTORY_ITEM_ID": 150,
+      "ITEM_ID": "AS54889",
+      "ITEM_CODE": "AS54889",
+      "ORGANIZATION_ID": 204,
+      "TRANSACTION_QUANTITY": 120.0,
+      "PRIMARY_TRANSACTION_QUANTITY": 120.0,
+      "TOTAL_ON_HAND": 120.0,
+      "DESCRIPTION": "Sentinel Workstation Server"
+    },
+    {
+      "INVENTORY_ITEM_ID": 151,
+      "ITEM_ID": "AS54890",
+      "ITEM_CODE": "AS54890",
+      "ORGANIZATION_ID": 204,
+      "TRANSACTION_QUANTITY": 8.0,
+      "PRIMARY_TRANSACTION_QUANTITY": 8.0,
+      "TOTAL_ON_HAND": 8.0,
+      "DESCRIPTION": "Sentinel 27-inch 4K Monitor"
+    },
+    {
+      "INVENTORY_ITEM_ID": 152,
+      "ITEM_ID": "CM18471",
+      "ITEM_CODE": "CM18471",
+      "ORGANIZATION_ID": 204,
+      "TRANSACTION_QUANTITY": 350.0,
+      "PRIMARY_TRANSACTION_QUANTITY": 350.0,
+      "TOTAL_ON_HAND": 350.0,
+      "DESCRIPTION": "Capacitor 100uF 25V Surface Mount"
+    },
+    {
+      "INVENTORY_ITEM_ID": 153,
+      "ITEM_ID": "CM18472",
+      "ITEM_CODE": "CM18472",
+      "ORGANIZATION_ID": 204,
+      "TRANSACTION_QUANTITY": 5.0,
+      "PRIMARY_TRANSACTION_QUANTITY": 5.0,
+      "TOTAL_ON_HAND": 5.0,
+      "DESCRIPTION": "Resistor Network Array 10k Ohm"
+    },
+    {
+      "INVENTORY_ITEM_ID": 154,
+      "ITEM_ID": "AS54888-KEYBOARD",
+      "ITEM_CODE": "AS54888-KEYBOARD",
+      "ORGANIZATION_ID": 204,
+      "TRANSACTION_QUANTITY": 85.0,
+      "PRIMARY_TRANSACTION_QUANTITY": 85.0,
+      "TOTAL_ON_HAND": 85.0,
+      "DESCRIPTION": "Sentinel USB Ergonomic Keyboard"
+    },
+    {
+      "INVENTORY_ITEM_ID": 149,
+      "ITEM_ID": "AS54888",
+      "ITEM_CODE": "AS54888",
+      "ORGANIZATION_ID": 205,
+      "TRANSACTION_QUANTITY": 25.0,
+      "PRIMARY_TRANSACTION_QUANTITY": 25.0,
+      "TOTAL_ON_HAND": 25.0,
+      "DESCRIPTION": "Sentinel Standard Desktop"
+    }
+  ],
+  "ar_summary": {
+    "TOTAL_AR": 500000.0,
+    "TOTAL_SALES": 1200000.0
+  },
+  "organizations": [
+    {
+      "ORGANIZATION_ID": 204,
+      "ORGANIZATION_CODE": "V1",
+      "ORGANIZATION_NAME": "Vision Operations"
+    },
+    {
+      "ORGANIZATION_ID": 205,
+      "ORGANIZATION_CODE": "V2",
+      "ORGANIZATION_NAME": "Vision Services"
+    },
+    {
+      "ORGANIZATION_ID": 207,
+      "ORGANIZATION_CODE": "M1",
+      "ORGANIZATION_NAME": "Seattle Manufacturing"
+    },
+    {
+      "ORGANIZATION_ID": 208,
+      "ORGANIZATION_CODE": "M2",
+      "ORGANIZATION_NAME": "Dallas Logistics Hub"
+    }
+  ],
+  "suppliers": [
+    {
+      "VENDOR_ID": 301,
+      "VENDOR_NUMBER": "SUP-301",
+      "VENDOR_NAME": "Acme Industrial Supplies",
+      "ENABLED_FLAG": "Y"
+    },
+    {
+      "VENDOR_ID": 302,
+      "VENDOR_NUMBER": "SUP-302",
+      "VENDOR_NAME": "Global Components Inc",
+      "ENABLED_FLAG": "Y"
+    },
+    {
+      "VENDOR_ID": 303,
+      "VENDOR_NUMBER": "SUP-303",
+      "VENDOR_NAME": "Apex Logistics & Parts",
+      "ENABLED_FLAG": "Y"
+    },
+    {
+      "VENDOR_ID": 105,
+      "VENDOR_NUMBER": "SUP-105",
+      "VENDOR_NAME": "Vision Vendor Corp",
+      "ENABLED_FLAG": "Y"
+    },
+    {
+      "VENDOR_ID": 106,
+      "VENDOR_NUMBER": "SUP-106",
+      "VENDOR_NAME": "Standard Supply Co",
+      "ENABLED_FLAG": "Y"
+    }
+  ]
+}

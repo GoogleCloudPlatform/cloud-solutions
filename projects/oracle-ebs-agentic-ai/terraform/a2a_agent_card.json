@@ -1,0 +1,57 @@
+{
+  "capabilities": {
+    "pushNotifications": false,
+    "streaming": false
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["application/json", "text/plain"],
+  "description": "Autonomous Enterprise A2A Gateway for Oracle EBS Inventory stock checks, AP invoices, DSO metrics, and PO supplier negotiations.",
+  "name": "Oracle EBS Autonomous Assistant",
+  "protocolVersion": "0.3.0",
+  "skills": [
+    {
+      "description": "Query on-hand stock, safety thresholds, inventory items, and operating organizations in Oracle Inventory (MTL_SYSTEM_ITEMS_B, MTL_ONHAND_QUANTITIES_DETAIL, ORG_ORGANIZATION_DEFINITIONS).",
+      "examples": [
+        "List items for Organization code AD1",
+        "Check stock for item AS54888 in Organization code V1",
+        "Check stock for item AS54888 in Organization 204",
+        "List operating organizations",
+        "Show inventory items in organization 204",
+        "Which supplier supplies item AS54888?",
+        "Who is the supplier for item AS54888?"
+      ],
+      "id": "inventory_management",
+      "name": "Inventory Management",
+      "tags": ["inventory", "stock", "items", "organizations", "oracle_ebs"]
+    },
+    {
+      "description": "Inspect AP invoice approval status, payment due dates, and calculate Days Sales Outstanding (DSO) metrics.",
+      "examples": [
+        "Inspect AP invoice status for invoice ERS-9163-109073",
+        "Calculate DSO metrics for the current quarter"
+      ],
+      "id": "financial_operations",
+      "name": "Financial Operations",
+      "tags": ["finance", "invoices", "dso", "accounts_payable"]
+    },
+    {
+      "description": "Dynamic restock PO negotiations with suppliers for volume discounts, delivery terms, and vendor item catalog lookups.",
+      "examples": [
+        "Give me the items for supplier 515",
+        "Negotiate restock for 500 units of item 45 with Acme Industrial Supplies",
+        "Request volume discount quotation for inventory restock"
+      ],
+      "id": "procurement_negotiation",
+      "name": "Procurement Negotiation",
+      "tags": [
+        "procurement",
+        "purchase_orders",
+        "negotiation",
+        "suppliers",
+        "vendor_items"
+      ]
+    }
+  ],
+  "url": "https://a2a-server-PROJECT_ID.REGION.run.app",
+  "version": "1.0.0"
+}

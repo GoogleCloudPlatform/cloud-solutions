@@ -1,0 +1,29 @@
+[
+  {
+    "supplier_id": 301,
+    "supplier_name": "Acme Industrial Supplies",
+    "item_id": "AS54888",
+    "unit_price": 48.5,
+    "lead_time_days": 3,
+    "min_order_qty": 50.0,
+    "available_stock": 500.0
+  },
+  {
+    "supplier_id": 302,
+    "supplier_name": "Global Components Inc",
+    "item_id": "AS54888",
+    "unit_price": 44.0,
+    "lead_time_days": 7,
+    "min_order_qty": 100.0,
+    "available_stock": 1000.0
+  },
+  {
+    "supplier_id": 303,
+    "supplier_name": "Apex Logistics & Parts",
+    "item_id": "AS54888",
+    "unit_price": 52.0,
+    "lead_time_days": 1,
+    "min_order_qty": 10.0,
+    "available_stock": 200.0
+  }
+]
