@@ -3,6 +3,8 @@
   "extends": ["config:recommended", ":semanticCommits", ":docker"],
   "osvVulnerabilityAlerts": true,
   "dependencyDashboardApproval": true,
+  "assigneesFromCodeOwners": true,
+  "assigneesSampleSize": 1,
   "rangeStrategy": "bump",
   "rebaseWhen": "behind-base-branch",
   "npm": {
