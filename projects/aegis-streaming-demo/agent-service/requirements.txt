@@ -8,9 +8,9 @@ annotated-types==0.8.0 \
     --hash=sha256:13b2beaad985e05e2d6407ee4c4f35590b11f8d693a258a561055cac8f64cab7 \
     --hash=sha256:f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0
     # via pydantic
-anyio==4.14.2 \
-    --hash=sha256:9f505dda5ac9f0c8309b5e8bd445a8c2bf7246f3ce950121e45ea15bc41d1494 \
-    --hash=sha256:cfa139f3ed1a23ee8f88a145ddb5ac7605b8bbfd8592baacd7ce3d8bb4313c7f
+anyio==4.15.0 \
+    --hash=sha256:7ecd9937369ffce8bba0b5ccb9b3a9507b101b0ed50256aecfbab27e6c2acb99 \
+    --hash=sha256:b5c620ed540725e2579c31b17bb995b3bf02c9281c9cace04c7d186380bab85e
     # via
     #   google-genai
     #   httpx
@@ -358,7 +358,7 @@ distro==1.9.0 \
 fastapi==0.141.1 \
     --hash=sha256:bfb91aa2d334c61cb35ba9a116fc123b3d3df31640b801cf57a7a78ec3f603b3 \
     --hash=sha256:e8822fc40db1e1858054d7a949a888695bc9bdce70139178e33bd2871a453ca1
-    # via -r agent-service/requirements.in
+    # via -r requirements.in
 google-api-core==2.34.0 \
     --hash=sha256:98a779fe72de956eb1c9c2f47ff4c4432a668ece1a002ec38bed07ec2698ae59 \
     --hash=sha256:cdf9c67e7ca2402d86ccbfde5f2503fc83e3cc3f58cc78456ae96cad24a6d2de
@@ -388,7 +388,7 @@ google-cloud-audit-log==0.6.2 \
 google-cloud-bigquery==3.44.0 \
     --hash=sha256:30651ae469b419f450b9c96581fd4942e2e060490df1ac0314bf379f16883215 \
     --hash=sha256:ac2f0a6ab61a3c742ba4674dc220fb98461c13e1def96fe7a980ef7d5e0c0285
-    # via -r agent-service/requirements.in
+    # via -r requirements.in
 google-cloud-core==2.7.0 \
     --hash=sha256:874aaf89765db87a9b911b7a2ca7c5068554868eed9e75c7766affe342a2913d \
     --hash=sha256:c18a250904cfdda021eb3ae8b8238c9f9ca272a4cbbfb5cba946b3fe3022eed1
@@ -398,7 +398,7 @@ google-cloud-core==2.7.0 \
 google-cloud-logging==3.16.3 \
     --hash=sha256:5d7924bbb33c066bb43f70d33ba66749ff1c29b207de4c80b2bce1aacd53f676 \
     --hash=sha256:6275384f21d4b142d25731de3107de38408e807742290a9939e19ea68de8c283
-    # via -r agent-service/requirements.in
+    # via -r requirements.in
 google-crc32c==1.8.0 \
     --hash=sha256:014a7e68d623e9a4222d663931febc3033c5c7c9730785727de2a81f87d5bab8 \
     --hash=sha256:01f126a5cfddc378290de52095e2c7052be2ba7656a9f0caf4bcd1bfb1833f8a \
@@ -437,7 +437,7 @@ google-crc32c==1.8.0 \
 google-genai==2.20.0 \
     --hash=sha256:49bddeccd29a4e6bf1706c5de67735f7115f537f08b6c36a70b8023c99399095 \
     --hash=sha256:d382186f024e9050a7a4b25af6eacba9aa16c6e09594f5d1b530f22ff7f9d76f
-    # via -r agent-service/requirements.in
+    # via -r requirements.in
 google-resumable-media==2.10.2 \
     --hash=sha256:1de441703cd298d75a419bfdc0066e9fc7b0a1de630df96eea8ce8f5c759358c \
     --hash=sha256:e3cedc827a4ea41e216582d74346f1fb9fceb625a8c3c53912f2ca1d663334d7
@@ -639,7 +639,7 @@ pydantic==2.13.4 \
     --hash=sha256:45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba \
     --hash=sha256:c40756b57adaa8b1efeeced5c196f3f3b7c435f90e84ea7f443901bec8099ef6
     # via
-    #   -r agent-service/requirements.in
+    #   -r requirements.in
     #   fastapi
     #   google-genai
 pydantic-core==2.46.4 \
@@ -772,7 +772,7 @@ python-dotenv==1.2.3 \
     --hash=sha256:904552145e8bfed22162c09dab1c2b9b54fefa7b23ba780f4f26ca0316b0f0d9 \
     --hash=sha256:a20a594dabeaa385725aa239d5244871c143ecb356add8a20fcf23773a6c3a35
     # via
-    #   -r agent-service/requirements.in
+    #   -r requirements.in
     #   uvicorn
 pyyaml==6.0.3 \
     --hash=sha256:00c4bdeba853cc34e7dd471f16b4114f4162dc03e6b7afcc2128711f0eca823c \
@@ -877,6 +877,7 @@ typing-extensions==4.16.0 \
     --hash=sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8 \
     --hash=sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5
     # via
+    #   anyio
     #   fastapi
     #   google-genai
     #   grpcio
@@ -897,7 +898,7 @@ urllib3==2.7.0 \
 uvicorn==0.52.4 \
     --hash=sha256:73acfee47a0b133c5de13d219492d62d8a31e935f4fe6e41a232451a15379f86 \
     --hash=sha256:f86e41a149d7d05a9969337e3946a9c171c06a5d42680896daaba624aeac8da1
-    # via -r agent-service/requirements.in
+    # via -r requirements.in
 uvloop==0.22.1 \
     --hash=sha256:017bd46f9e7b78e81606329d07141d3da446f8798c6baeec124260e22c262772 \
     --hash=sha256:0530a5fbad9c9e4ee3f2b33b148c6a64d47bbad8000ea63704fa8260f4cf728e \

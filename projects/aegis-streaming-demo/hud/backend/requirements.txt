@@ -8,9 +8,9 @@ annotated-types==0.8.0 \
     --hash=sha256:13b2beaad985e05e2d6407ee4c4f35590b11f8d693a258a561055cac8f64cab7 \
     --hash=sha256:f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0
     # via pydantic
-anyio==4.14.2 \
-    --hash=sha256:9f505dda5ac9f0c8309b5e8bd445a8c2bf7246f3ce950121e45ea15bc41d1494 \
-    --hash=sha256:cfa139f3ed1a23ee8f88a145ddb5ac7605b8bbfd8592baacd7ce3d8bb4313c7f
+anyio==4.15.0 \
+    --hash=sha256:7ecd9937369ffce8bba0b5ccb9b3a9507b101b0ed50256aecfbab27e6c2acb99 \
+    --hash=sha256:b5c620ed540725e2579c31b17bb995b3bf02c9281c9cace04c7d186380bab85e
     # via
     #   google-genai
     #   httpx
@@ -340,7 +340,7 @@ confluent-kafka==2.15.0 \
     --hash=sha256:fd833dab1392f456b9dd52b7ed9ac65b2cc36871ed5e3ebe8d53486c965b6453 \
     --hash=sha256:ff43508f8e929d83545272ef4f17e27fdaa9cc8397f77cf2236b22d67de4edc4 \
     --hash=sha256:ff6d0041e7d5318af548d90d67bb3a72410a77fe616a05564c3fa1ea13f23453
-    # via -r hud/backend/requirements.in
+    # via -r requirements.in
 cryptography==50.0.1 \
     --hash=sha256:01f41478cf33fc605a6a089cd56d28b45c6c0b45a1928b61797f2621a04bac71 \
     --hash=sha256:05ba322c4da95b262a212c345af888ef2c37c88c0509756ea00a0e6d68850f23 \
@@ -400,7 +400,7 @@ docstring-parser==0.18.0 \
 fastapi==0.141.1 \
     --hash=sha256:bfb91aa2d334c61cb35ba9a116fc123b3d3df31640b801cf57a7a78ec3f603b3 \
     --hash=sha256:e8822fc40db1e1858054d7a949a888695bc9bdce70139178e33bd2871a453ca1
-    # via -r hud/backend/requirements.in
+    # via -r requirements.in
 google-api-core==2.34.0 \
     --hash=sha256:98a779fe72de956eb1c9c2f47ff4c4432a668ece1a002ec38bed07ec2698ae59 \
     --hash=sha256:cdf9c67e7ca2402d86ccbfde5f2503fc83e3cc3f58cc78456ae96cad24a6d2de
@@ -430,17 +430,17 @@ google-auth==2.57.0 \
 google-cloud-aiplatform==1.165.1 \
     --hash=sha256:93874bd7993d1d901291595df693a8b9d4d7c89b93d4f41f8664d73f088dec89 \
     --hash=sha256:bd62ba7590255cacd66f9d0439eb731060af460d35bb48dbbeeefce9dfc0a359
-    # via -r hud/backend/requirements.in
+    # via -r requirements.in
 google-cloud-bigquery==3.44.0 \
     --hash=sha256:30651ae469b419f450b9c96581fd4942e2e060490df1ac0314bf379f16883215 \
     --hash=sha256:ac2f0a6ab61a3c742ba4674dc220fb98461c13e1def96fe7a980ef7d5e0c0285
     # via
-    #   -r hud/backend/requirements.in
+    #   -r requirements.in
     #   google-cloud-aiplatform
 google-cloud-bigtable==2.43.0 \
     --hash=sha256:1e5b846424d0694b2249475c4a5bec157c2f82e516d2601ea961f5b61dc162bb \
     --hash=sha256:e6724b66f3924f0cb96e92dea42c033b6bd71714f02e86b69a5d548425c6699e
-    # via -r hud/backend/requirements.in
+    # via -r requirements.in
 google-cloud-core==2.7.0 \
     --hash=sha256:874aaf89765db87a9b911b7a2ca7c5068554868eed9e75c7766affe342a2913d \
     --hash=sha256:c18a250904cfdda021eb3ae8b8238c9f9ca272a4cbbfb5cba946b3fe3022eed1
@@ -451,7 +451,7 @@ google-cloud-core==2.7.0 \
 google-cloud-dataproc==5.30.0 \
     --hash=sha256:2a3c44cc3d6a3d7a680dc9331f1f97cd57c5934a1357aee77a07607276644e6d \
     --hash=sha256:9b51d37b91ae2c300effd4cf645d57c9484fa601d47a34a30d01fd822b63fd1a
-    # via -r hud/backend/requirements.in
+    # via -r requirements.in
 google-cloud-monitoring==2.31.0 \
     --hash=sha256:64f3d56ead48f0a0674f650cb2828c47b936582a02a27c55f2836681a86281c3 \
     --hash=sha256:b4c9d3528c8643d4eb4b9d688cbb3c5914bc5f69b314ff7c5e1b47bdc073a9ae
@@ -605,7 +605,7 @@ httpx==0.28.1 \
     --hash=sha256:75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc \
     --hash=sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad
     # via
-    #   -r hud/backend/requirements.in
+    #   -r requirements.in
     #   google-genai
 idna==3.19 \
     --hash=sha256:5e0811a4383b21dc5838069f801c4fb62113b7447663d2530d2bd6e77b49bf15 \
@@ -683,7 +683,7 @@ pydantic==2.13.4 \
     --hash=sha256:45a282cde31d808236fd7ea9d919b128653c8b38b393d1c4ab335c62924d9aba \
     --hash=sha256:c40756b57adaa8b1efeeced5c196f3f3b7c435f90e84ea7f443901bec8099ef6
     # via
-    #   -r hud/backend/requirements.in
+    #   -r requirements.in
     #   fastapi
     #   google-cloud-aiplatform
     #   google-genai
@@ -816,7 +816,7 @@ python-dateutil==2.9.0.post0 \
 python-dotenv==1.2.3 \
     --hash=sha256:904552145e8bfed22162c09dab1c2b9b54fefa7b23ba780f4f26ca0316b0f0d9 \
     --hash=sha256:a20a594dabeaa385725aa239d5244871c143ecb356add8a20fcf23773a6c3a35
-    # via -r hud/backend/requirements.in
+    # via -r requirements.in
 requests==2.34.2 \
     --hash=sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0 \
     --hash=sha256:f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed
@@ -846,6 +846,7 @@ typing-extensions==4.16.0 \
     --hash=sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8 \
     --hash=sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5
     # via
+    #   anyio
     #   fastapi
     #   google-cloud-aiplatform
     #   google-genai
@@ -869,7 +870,7 @@ urllib3==2.7.0 \
 uvicorn==0.52.4 \
     --hash=sha256:73acfee47a0b133c5de13d219492d62d8a31e935f4fe6e41a232451a15379f86 \
     --hash=sha256:f86e41a149d7d05a9969337e3946a9c171c06a5d42680896daaba624aeac8da1
-    # via -r hud/backend/requirements.in
+    # via -r requirements.in
 websockets==16.1.1 \
     --hash=sha256:01fbdcbac298efe19360b94bc0039c8f746f0220ba570f327577bfee81059175 \
     --hash=sha256:024193f8551a2b0eafbdd160911012c4e6c228c28430c84433253299a9e42d6a \
