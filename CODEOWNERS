@@ -42,6 +42,7 @@
 /projects/migrate-from-aws-to-google-cloud/                           @aburhan @ferrarimarco
 /projects/migrate-from-azure-to-google-cloud/                         @ferrarimarco
 /projects/migrate-nutanix-to-google-cloud/                            @ferrarimarco
+/projects/migrate-vmware-to-gce/                                      @aburhan
 /projects/mmb-datacloud/                                              @zunhoyi
 /projects/mmb-hero-demo/                                              @aburhan @gitrey @ferrarimarco @idofl
 /projects/nvidia-omniverse-on-google-cloud/                           @ferrarimarco
