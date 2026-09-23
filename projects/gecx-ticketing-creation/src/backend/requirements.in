@@ -7,4 +7,4 @@ google-cloud-dialogflow~=2.48
 PyJWT~=2.13
 google-auth~=2.53
 python-dotenv~=1.2
-httpx2~=2.9
+httpx2~=2.12
