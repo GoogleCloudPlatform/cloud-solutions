@@ -55,17 +55,8 @@ updates:
           - "*"
 
   - package-ecosystem: "pip"
-    # Explicitly listing pip dependencies because of a Dependabot bug.
-    # Revert to "*" once the bug is resolved
     directories:
-      - "/docs"
-      - "/projects/ai/agents/examples/deep-search"
-      - "/projects/ai/gen-media/marketing-agent/release/ads_agent"
-      - "/projects/ai/gen-media/experimental/GetReadywithMe"
-      - "/projects/dataflow-gcs-to-alloydb"
-      - "/projects/migrate-from-aws-to-google-cloud/eks-to-gke-proxy-migration/locust"
-      - "/projects/migrate-from-aws-to-google-cloud/vm-compute-db-modernization/scripts"
-      - "/projects/oracle-bigquery-mcp-agent/mcp-server"
+      - "**/*"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 0
@@ -80,17 +71,8 @@ updates:
           - "*"
 
   - package-ecosystem: "uv"
-    # Explicitly listing uv dependencies because of a Dependabot bug.
-    # Revert to "*" once the bug is resolved
     directories:
-      - "/projects/ai/agents/examples/deep-search"
-      - "/projects/ai/agents/examples/starter-chat-agent"
-      - "/projects/ai/agents/examples/starter-genmedia-agent"
-      - "/projects/ai/agents/examples/starter-rag-agent"
-      - "/projects/ai/gen-media/marketing-agent/release/adk_common"
-      - "/projects/ai/gen-media/marketing-agent/release/marketing_agent"
-      - "/projects/manufacturing/ops-assistant"
-      - "/projects/manufacturing/tech-assistant"
+      - "**/*"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 0
