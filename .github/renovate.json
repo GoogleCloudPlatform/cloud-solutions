@@ -233,10 +233,10 @@
       "additionalBranchPrefix": "fsi-quant-assistant-"
     },
     {
-      "matchFileNames": ["projects/gecx-ticketing-demo/**"],
-      "groupName": "gecx-ticketing-demo",
-      "commitMessagePrefix": "chore(deps): [gecx-ticketing-demo]",
-      "additionalBranchPrefix": "gecx-ticketing-demo-"
+      "matchFileNames": ["projects/gecx-ticketing-creation/**"],
+      "groupName": "gecx-ticketing-creation",
+      "commitMessagePrefix": "chore(deps): [gecx-ticketing-creation]",
+      "additionalBranchPrefix": "gecx-ticketing-creation-"
     },
     {
       "matchFileNames": [
@@ -369,7 +369,8 @@
     {
       "matchFileNames": ["projects/operational-ai-leap/**"],
       "groupName": "operational-ai-leap",
-      "commitMessagePrefix": "chore(deps): [operational-ai-leap]"
+      "commitMessagePrefix": "chore(deps): [operational-ai-leap]",
+      "additionalBranchPrefix": "operational-ai-leap-"
     },
     {
       "matchFileNames": ["projects/oracle-bigquery-mcp-agent/**"],
