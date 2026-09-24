@@ -32,6 +32,15 @@ To deploy this demo, you need:
 1.  Open
     [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell).
 
+1.  Set up your Google Cloud environment:
+
+    ```bash
+    export PROJECT_ID="[YOUR_PROJECT_ID]"
+    export REGION="[YOUR_REGION]" # e.g., us-central1
+    gcloud config set project $PROJECT_ID
+    gcloud config set run/region $REGION
+    ```
+
 1.  Install the
     [codmod CLI](https://docs.cloud.google.com/migration-center/docs/app-modernization-assessment#set_up_codmod)
 
@@ -68,13 +77,18 @@ following:
     codmod create full \
       --codebase ./dotnet-migration-sample \
       --output-path ./codmod-full-report-dotnet-mod.html \
-      --experiments=enable_pdf,enable_images \
+      --project "${PROJECT_ID}" \
+      --region "${REGION}" \
       --improve-fidelity \
       --intent=MICROSOFT_MODERNIZATION \
       --optional-sections "files,classes"
     ```
 
     This command takes about 15 minutes to run.
+
+    If you get `codmod: command not found`, add the executable to your `PATH`,
+    for example by running `sudo mv codmod /usr/local/bin/`. Alternatively,
+    create an alias: `alias codmod=./codmod`.
 
 1.  Open the generated report with a web browser, such as Google Chrome.
 
@@ -95,7 +109,10 @@ following:
 1.  Copy the prompt defined in `modernization-prompt.md`, and paste the prompt
     in the Gemini CLI user interface, and press the Enter key.
 
-To complete the execution, Gemini CLI takes about 25 minutes.
+    To complete the execution, Gemini CLI takes about 25 minutes.
+
+1.  After execution completes, exit Gemini CLI by entering `/quit` or by
+    pressing `CTRL+C` twice.
 
 ### Sample modernized application
 
@@ -133,27 +150,17 @@ combination.
 
 ## Deploy the application to Google Cloud
 
-To deploy the the example modernized application to Google Cloud using Cloud
-Run, Artifact Registry, and Cloud SQL for PostgreSQL, follow the guidance in
-this section.
+To deploy the example modernized application to Google Cloud using Cloud Run,
+Artifact Registry, and Cloud SQL for PostgreSQL, follow the guidance in this
+section.
 
 You can follow similar steps to deploy your own modernized .NET application.
 
-### 1. Set up your Google Cloud environment
+### 1. Enable necessary Google Cloud APIs
 
-Set your project ID and region as environment variables in your shell.
-
-```bash
-export PROJECT_ID="[YOUR_PROJECT_ID]"
-export REGION="[YOUR_REGION]" # e.g., us-central1
-gcloud config set project $PROJECT_ID
-gcloud config set run/region $REGION
-```
-
-### 2. Enable necessary Google Cloud APIs
-
-Enable the APIs for Artifact Registry, Cloud SQL, Cloud Build, and Cloud Run.
-This allows the services to work together.
+Enable the APIs that this demo requires: Identity and Access Management (IAM),
+Artifact Registry, Cloud SQL Admin, Cloud Run, Cloud Build, Vertex AI, and Cloud
+Resource Manager.
 
 ```bash
 gcloud services enable \
@@ -161,8 +168,46 @@ gcloud services enable \
     artifactregistry.googleapis.com \
     sqladmin.googleapis.com \
     run.googleapis.com \
-    cloudbuild.googleapis.com
+    cloudbuild.googleapis.com \
+    aiplatform.googleapis.com \
+    cloudresourcemanager.googleapis.com
 ```
+
+### 2. Create and configure a dedicated service account
+
+1.  Create the service account:
+
+    ```bash
+    export SA_NAME="dotnet-demo-sa"
+    gcloud iam service-accounts create $SA_NAME \
+        --display-name "Dotnet Modernization Demo Service Account"
+
+    export SA_EMAIL="${SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+    ```
+
+1.  Grant the necessary roles to the service account:
+
+    ```bash
+    # For Cloud Run to connect to Cloud SQL
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="serviceAccount:${SA_EMAIL}" \
+        --role="roles/cloudsql.client"
+
+    # For Cloud Build to write logs
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="serviceAccount:${SA_EMAIL}" \
+        --role="roles/logging.logWriter"
+
+    # For Cloud Build to push images to Artifact Registry
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="serviceAccount:${SA_EMAIL}" \
+        --role="roles/artifactregistry.writer"
+
+    # For Cloud Build to manage storage buckets for artifacts
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="serviceAccount:${SA_EMAIL}" \
+        --role="roles/storage.admin"
+    ```
 
 ### 3. Create an Artifact Registry repository
 
@@ -192,7 +237,7 @@ gcloud sql instances create $INSTANCE_NAME \
     --root-password=$DB_PASSWORD
 ```
 
-After the instance is created, create a database for the application.
+After Cloud SQL creates the instance, create a database for the application.
 
 ```bash
 gcloud sql databases create contosouniversity --instance=$INSTANCE_NAME
@@ -200,13 +245,16 @@ gcloud sql databases create contosouniversity --instance=$INSTANCE_NAME
 
 ### 5. Build and push the container image
 
-Use Google Cloud Build to build your container image and push it to the Artifact
+Use Cloud Build to build your container image and push it to the Artifact
 Registry repository you created. Cloud Build uses the `Dockerfile` in your
 project root.
 
 ```bash
 cd "$(git rev-parse --show-toplevel)/projects/dotnet-modernization-demo/dotnet-migration-sample-modernized"
-gcloud builds submit --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/contoso-university:latest .
+gcloud builds submit \
+    --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/contoso-university:latest \
+    --service-account="projects/${PROJECT_ID}/serviceAccounts/${SA_EMAIL}" \
+    --default-buckets-behavior=regional-user-owned-bucket .
 ```
 
 ### 6. Deploy the application to Cloud Run
@@ -229,11 +277,13 @@ gcloud run deploy contoso-university \
     --allow-unauthenticated \
     --add-cloudsql-instances=$INSTANCE_CONNECTION_NAME \
     --region "${REGION}" \
+    --no-invoker-iam-check \
+    --service-account="${SA_EMAIL}" \
     --set-env-vars "ConnectionStrings__SchoolContext=Host=/cloudsql/${INSTANCE_CONNECTION_NAME};Database=contosouniversity;Username=postgres;Password=${DB_PASSWORD}"
 ```
 
-This command will prompt you to confirm the deployment. After it completes, it
-will output the URL for your deployed service.
+The command prompts you to confirm the deployment. After the deployment
+completes, the command outputs the URL for your deployed service.
 
 ### 7. Test the application
 
@@ -245,6 +295,7 @@ Once the deployment is complete, you can test the application:
     through the site to view students, courses, instructors, and departments.
     The application is now running live on Cloud Run and connected to your Cloud
     SQL database.
+
 1.  Optionally, you can go back to the Gemini CLI and ask it to run the
     automated UI tests again, this time against the deployed application's URL.
 
@@ -269,4 +320,10 @@ resources provisioned for this demo.
 
     ```bash
     gcloud sql instances delete $INSTANCE_NAME --quiet
+    ```
+
+1.  Delete the custom service account
+
+    ```bash
+    gcloud iam service-accounts delete $SA_EMAIL --quiet
     ```
