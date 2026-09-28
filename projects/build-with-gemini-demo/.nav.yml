@@ -35,6 +35,7 @@ nav:
   - "Prototype with Gemini CLI Custom Commands": "build-with-gemini-demo/prototype-with-gemini-cli/README.md"
   - "Prototype with the Gemini CLI Conductor Extension": "build-with-gemini-demo/prototype-with-gemini-cli-conductor/README.md"
   - "Scanning and fixing security issues with Gemini CLI and Snyk": "build-with-gemini-demo/security-scan-fix/README.md"
+  - "Secure coding with Antigravity CLI and Snyk": "build-with-gemini-demo/secure-coding-with-antigravity-cli-snyk/README.md"
 
 flatten_single_child_sections: true
 sort:
