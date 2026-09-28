@@ -23,19 +23,14 @@ import {
   BrainCircuit,
   CheckCircle2,
   AlertTriangle,
-  DollarSign,
   ShieldAlert,
-  TrendingUp,
-  Clock,
   Coins,
   ShieldCheck,
   RefreshCw,
   Lock,
-  Server,
-  Layers,
   AlertCircle
 } from 'lucide-react';
-import { isDataStale, getDataAgeInfo } from '../utils/telemetryUtils';
+import { getDataAgeInfo } from '../utils/telemetryUtils';
 import { getStackConfig } from '../utils/stackConfig';
 
 interface AgentCoPilotProps {
@@ -80,8 +75,8 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
       const res = await onApproveAndApply(mitigationData.asset_id);
       if (res && typeof res === 'object' && res.success) {
         setApprovalDetails(res);
+        setAppliedSuccess(true);
       }
-      setAppliedSuccess(true);
     } catch (e) {
       console.error('Failed approving mitigation:', e);
     } finally {
@@ -104,43 +99,54 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
     appliedSuccess || mitigationData?.status === 'RESOLVED';
 
   return (
-    <section className={`w-full glass-panel rounded-2xl p-6 border transition-all duration-300 shadow-xl ${
-      !isDemoActive ? 'border-[#334155]/60 bg-[#060e20]/90' : 'border-[#334155]'
-    }`}>
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-[#334155]">
+    <section
+      className={`w-full glass-panel rounded-2xl p-5 transition-all duration-300 space-y-4 ${
+        !isDemoActive ? 'border-white/[0.06] bg-[#070d19]/90' : ''
+      }`}
+    >
+      {/* Header */}
+      <div className="flex flex-wrap items-start justify-between gap-3 pb-3.5 border-b border-white/[0.08]">
         <div>
-          <div className="flex items-center gap-2">
-            <Bot className="w-5 h-5 text-[#adc7ff]" />
-            <h2 className="text-lg font-headline font-bold text-white uppercase tracking-wide">
-              Module 4b: Agent Execution Co-Pilot
+          <div className="flex flex-wrap items-center gap-2">
+            <Bot className="w-4 h-4 text-[#68abff]" />
+            <h2 className="text-base font-headline font-bold text-white uppercase tracking-wide">
+              AI Agent Co-Pilot
             </h2>
-            <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider border flex items-center gap-1 ${
-              isDemoActive
-                ? 'bg-[#1a73e8]/20 text-[#adc7ff] border-[#1a73e8]/50'
-                : 'bg-[#2d3449] text-[#8b909f] border-[#334155]'
-            }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${isDemoActive ? 'bg-[#6ddd81] animate-pulse' : 'bg-[#8b909f]'}`} />
-              {isDemoActive ? 'GEMINI 2.5 FLASH • CLOSED-LOOP' : 'AGENT CONTROLS LOCKED'}
+            <span
+              className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider border flex items-center gap-1 ${
+                isDemoActive
+                  ? 'bg-[#1a73e8]/15 text-[#68abff] border-[#1a73e8]/35'
+                  : 'bg-white/[0.04] text-[#94a3b8] border-white/[0.08]'
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  isDemoActive ? 'bg-emerald-400 animate-pulse' : 'bg-[#64748b]'
+                }`}
+              />
+              {isDemoActive ? 'GEMINI 2.5 FLASH • GEAP' : 'LOCKED'}
             </span>
           </div>
-          <p className="text-xs text-[#c1c6d6] font-sans mt-1">
-            Gemini Enterprise Agent Platform (GEAP) Root Cause Analysis, Chain-of-Thought &amp; Autonomous Remediation Tools
+          <p className="text-xs text-[#94a3b8] font-sans mt-0.5">
+            Model Armor Sanitized RCA &bull; Human-in-the-Loop Actuation
           </p>
         </div>
 
         {mitigationData && (
-          <div className="flex items-center gap-3">
+          <div>
             {isMitigated ? (
-              <span className="px-3 py-1 rounded text-xs font-mono uppercase tracking-widest font-bold flex items-center gap-1.5 border bg-[#30a550]/20 text-[#6ddd81] border-[#30a550]">
-                <ShieldCheck className="w-3.5 h-3.5" /> STATUS: RESOLVED • NOMINAL
+              <span className="px-2.5 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1 border bg-emerald-500/15 text-emerald-400 border-emerald-500/35">
+                <ShieldCheck className="w-3.5 h-3.5" /> RESOLVED
               </span>
             ) : (
-              <span className={`px-3 py-1 rounded text-xs font-mono uppercase tracking-widest font-bold flex items-center gap-1.5 border ${
-                mitigationData.severity === 'CRITICAL'
-                  ? 'bg-[#93000a] text-[#ffdad6] border-[#D93025] animate-pulse shadow-[0_0_12px_rgba(217,48,37,0.5)]'
-                  : 'bg-[#FBBC04]/20 text-[#FBBC04] border-[#FBBC04]'
-              }`}>
-                <AlertTriangle className="w-3.5 h-3.5" /> SEVERITY: {mitigationData.severity}
+              <span
+                className={`px-2.5 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1 border ${
+                  mitigationData.severity === 'CRITICAL'
+                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse'
+                    : 'bg-amber-500/15 text-amber-400 border-amber-500/35'
+                }`}
+              >
+                <AlertTriangle className="w-3.5 h-3.5" /> {mitigationData.severity}
               </span>
             )}
           </div>
@@ -148,390 +154,307 @@ export const AgentCoPilot: React.FC<AgentCoPilotProps> = ({
       </div>
 
       {!effectiveAsset && !mitigationData && !isLoadingMitigation ? (
-        <div className="mt-8 p-12 rounded-xl bg-[#131b2e]/50 border border-dashed border-[#334155] text-center flex flex-col items-center justify-center">
-          <BrainCircuit className="w-12 h-12 text-[#8b909f] mb-3" />
-          <h3 className="text-base font-headline font-bold text-[#dae2fd]">No Asset Selected</h3>
-          <p className="text-xs text-[#c1c6d6] max-w-md mt-1 font-sans">
+        <div className="p-10 rounded-xl bg-[#070d19]/80 border border-dashed border-white/[0.1] text-center flex flex-col items-center justify-center space-y-2">
+          <BrainCircuit className="w-10 h-10 text-[#68abff]/70 mb-1" />
+          <h3 className="text-sm font-headline font-bold text-white">
+            Select an Asset or Inject an Anomaly
+          </h3>
+          <p className="text-xs text-[#94a3b8] max-w-sm font-sans leading-relaxed">
             {!isDemoActive
               ? stackConfig.copilotEmptyState
-              : 'Select any asset tile in the Live Telemetry Grid and click "RUN GEMINI 2.5 RCA" to generate Root Cause Analysis and review the remediation plan.'}
+              : 'Click any asset tile on the left or click "Inject Anomaly" to trigger real-time Gemini 2.5 Flash Root Cause Analysis.'}
           </p>
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column: RCA & Chain of Thought */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Target Asset Banner */}
-            {effectiveAsset && (() => {
+        <div className="space-y-4">
+          {/* Target Asset Header Card */}
+          {effectiveAsset &&
+            (() => {
               const ageInfo = getDataAgeInfo(effectiveAsset.timestamp);
               const isStale = ageInfo.isStale;
-              const isCritical = !isStale && !isMitigated && (
-                effectiveAsset.status === 'CRITICAL' ||
-                effectiveAsset.is_anomaly ||
-                effectiveAsset.cpu_utilization > 90 ||
-                effectiveAsset.temperature_c > 90
-              );
-              const isWarning = !isStale && !isMitigated && !isCritical && (
-                effectiveAsset.status === 'WARNING' ||
-                effectiveAsset.cpu_utilization > 75 ||
-                effectiveAsset.temperature_c > 75
-              );
+              const isCritical =
+                !isStale &&
+                !isMitigated &&
+                (effectiveAsset.status === 'CRITICAL' ||
+                  effectiveAsset.is_anomaly ||
+                  effectiveAsset.cpu_utilization > 90 ||
+                  effectiveAsset.temperature_c > 90);
+              const isWarning =
+                !isStale &&
+                !isMitigated &&
+                !isCritical &&
+                (effectiveAsset.status === 'WARNING' ||
+                  effectiveAsset.cpu_utilization > 75 ||
+                  effectiveAsset.temperature_c > 75);
 
               return (
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {isStale && (
-                    <div className="p-3 rounded-lg bg-[#f59e0b]/15 border border-[#f59e0b]/50 text-xs font-sans text-[#dae2fd] flex items-start gap-2.5">
-                      <AlertCircle className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-[#fbbf24] font-mono uppercase">Telemetry Expired (&gt;60m):</strong>{' '}
-                        <span>Selected asset data is too old. Activate the demonstration stream in Module 2 to ingest fresh sensor telemetry.</span>
-                      </div>
+                    <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/40 text-xs font-sans text-[#e2e8f0] flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="text-amber-300 font-mono uppercase">
+                          Stale Data (&gt;60m):
+                        </strong>{' '}
+                        Start the stream in Module 2 to run live RCA.
+                      </span>
                     </div>
                   )}
 
-                  <div className="p-4 rounded-xl bg-[#131b2e]/90 border border-[#334155] flex items-center justify-between">
+                  <div className="p-3.5 rounded-xl bg-[#070d19] border border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#8b909f]">Target Asset</span>
-                      <div className="text-base font-mono font-bold text-white flex items-center gap-2 mt-0.5">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#64748b] block">
+                        Target Asset
+                      </span>
+                      <div className="text-sm font-mono font-bold text-white flex items-center gap-2 mt-0.5">
                         <span>{effectiveAsset.asset_id}</span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded uppercase tracking-widest font-bold ${
-                          isMitigated
-                            ? 'bg-[#30a550]/20 text-[#6ddd81] border border-[#30a550]'
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold ${
+                            isMitigated
+                              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/35'
+                              : isStale || !isDemoActive
+                              ? 'bg-white/[0.04] text-[#64748b] border border-white/[0.08]'
+                              : isCritical
+                              ? 'bg-rose-600 text-white animate-pulse'
+                              : isWarning
+                              ? 'bg-amber-500/15 text-amber-400 border border-amber-500/35'
+                              : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/35'
+                          }`}
+                        >
+                          {isMitigated
+                            ? 'NOMINAL'
                             : isStale
-                            ? 'bg-[#1e293b] text-[#94a3b8] border border-[#475569]/60'
-                            : !isDemoActive
-                            ? 'bg-[#1e293b] text-[#64748b] border border-[#334155]'
+                            ? 'STALE'
                             : isCritical
-                            ? 'bg-[#D93025] text-white animate-pulse shadow-[0_0_8px_rgba(217,48,37,0.8)]'
+                            ? 'CRITICAL'
                             : isWarning
-                            ? 'bg-[#FBBC04]/20 text-[#FBBC04] border border-[#FBBC04]/50'
-                            : 'bg-[#30a550]/20 text-[#6ddd81] border border-[#30a550]'
-                        }`}>
-                          {isMitigated ? 'NOMINAL' : isStale ? 'EXPIRED' : isCritical ? 'CRITICAL' : isWarning ? 'WARNING' : (effectiveAsset.status || 'OK')}
+                            ? 'WARNING'
+                            : effectiveAsset.status || 'OK'}
                         </span>
-                        <span className="text-[11px] font-mono font-normal flex items-center gap-1 ml-2">
-                          <Clock className={`w-3 h-3 ${isStale && !isMitigated ? 'text-[#f59e0b]' : 'text-[#adc7ff]'}`} />
-                          <span className={isStale && !isMitigated ? 'text-[#f59e0b]' : 'text-[#8b909f]'}>
-                            {ageInfo.relativeText}{isStale && !isMitigated ? ' (stale)' : ''}
-                          </span>
+                        <span className="text-[10px] font-mono font-normal text-[#64748b] tabular-nums">
+                          {effectiveAsset.cpu_utilization.toFixed(1)}% CPU &bull;{' '}
+                          {effectiveAsset.temperature_c.toFixed(1)}°C
                         </span>
                       </div>
                     </div>
 
                     <button
-                      disabled={isLoadingMitigation || !isDemoActive || (isStale && !isMitigated) || !effectiveAsset}
+                      type="button"
+                      disabled={
+                        isLoadingMitigation ||
+                        !isDemoActive ||
+                        (isStale && !isMitigated) ||
+                        !effectiveAsset
+                      }
                       onClick={() => {
                         if (!isDemoActive || (isStale && !isMitigated) || !effectiveAsset) return;
                         onExecuteMitigation(effectiveAsset);
                       }}
-                      className={`px-4 py-2.5 rounded font-mono text-xs uppercase tracking-widest font-bold flex items-center gap-2 transition-all border ${
-                        isStale && !isMitigated
-                          ? 'bg-[#1e293b] border-[#475569]/40 text-[#64748b] cursor-not-allowed opacity-50 shadow-none'
-                          : !isDemoActive
-                          ? 'bg-[#1e293b] border-[#475569]/40 text-[#64748b] cursor-not-allowed opacity-50 shadow-none'
-                          : 'bg-[#1a73e8] hover:bg-[#005bc0] text-white border-[#adc7ff]/40 shadow-lg shadow-[#1a73e8]/30 disabled:opacity-50'
+                      className={`px-3.5 py-2 rounded-xl font-mono text-xs uppercase tracking-wider font-bold flex items-center gap-1.5 transition-all border ${
+                        (isStale && !isMitigated) || !isDemoActive
+                          ? 'bg-[#0f172a] border-white/[0.08] text-[#64748b] cursor-not-allowed opacity-50'
+                          : 'bg-[#1a73e8] hover:bg-[#1557b0] text-white border-[#adc7ff]/30 shadow-md shadow-[#1a73e8]/25 cursor-pointer disabled:opacity-50'
                       }`}
-                      title={isStale && !isMitigated ? 'Data too old (>60m). Activate demo stream to run live RCA.' : !isDemoActive ? 'Demo locked: Start pipeline above to enable' : 'Run Gemini 2.5 Flash Root Cause Analysis'}
                     >
                       {isLoadingMitigation ? (
-                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                       ) : (isStale && !isMitigated) || !isDemoActive ? (
-                        <Lock className="w-4 h-4 text-[#64748b]" />
+                        <Lock className="w-3.5 h-3.5 text-[#64748b]" />
                       ) : (
-                        <BrainCircuit className="w-4 h-4" />
+                        <BrainCircuit className="w-3.5 h-3.5" />
                       )}
-                      <span>{isStale && !isMitigated ? 'DATA TOO OLD' : 'RUN GEMINI 2.5 RCA'}</span>
+                      <span>{isStale && !isMitigated ? 'Stale' : 'Run Gemini RCA'}</span>
                     </button>
                   </div>
                 </div>
               );
             })()}
 
-            {/* Root Cause Analysis Summary */}
-            {mitigationData ? (
-              <div className="p-5 rounded-xl bg-[#131b2e]/90 border border-[#1a73e8]/50 space-y-4">
-                <div className="flex items-center gap-2 mb-1">
-                  <ShieldAlert className="w-4 h-4 text-[#adc7ff]" />
-                  <h3 className="text-sm font-headline font-bold text-white uppercase tracking-wide">
-                    Root Cause Analysis Summary
-                  </h3>
+          {/* RCA & Remediation Section */}
+          {mitigationData ? (
+            <div className="space-y-4">
+              {/* Root Cause + Chain-of-Thought + 3-Step Plan */}
+              <div className="p-4 rounded-xl bg-[#070d19]/90 border border-white/[0.08] space-y-3.5">
+                <div>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <ShieldAlert className="w-4 h-4 text-[#68abff]" />
+                    <h3 className="text-xs font-headline font-bold text-white uppercase tracking-wider">
+                      Root Cause Analysis
+                    </h3>
+                  </div>
+                  <p className="text-xs text-[#cbd5e1] leading-relaxed font-sans">
+                    {mitigationData.root_cause_summary}
+                  </p>
                 </div>
-                <p className="text-xs text-[#dae2fd] leading-relaxed font-sans">
-                  {mitigationData.root_cause_summary}
-                </p>
 
                 {/* Chain of Thought Reasoning Box */}
-                <div className="p-4 rounded-xl bg-[#060e20] border border-[#334155]">
-                  <span className="text-[10px] font-mono text-[#adc7ff] uppercase tracking-widest font-bold block mb-2">
-                    Gemini 2.5 Flash — Chain-of-Thought Diagnostic Trail
+                <div className="p-3 rounded-lg bg-[#0b1326] border border-white/[0.08]">
+                  <span className="text-[10px] font-mono text-[#68abff] uppercase tracking-widest font-bold block mb-1.5">
+                    Chain-of-Thought Diagnostic Trail
                   </span>
-                  <pre className="text-xs font-mono text-[#dae2fd] whitespace-pre-wrap leading-relaxed">
+                  <pre className="text-[11px] font-mono text-[#cbd5e1] whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto scrollbar-thin">
                     {mitigationData.chain_of_thought}
                   </pre>
                 </div>
 
                 {/* Ordered Remediation Steps */}
-                <div>
-                  <span className="text-[10px] font-mono text-[#8b909f] uppercase tracking-widest font-bold block mb-2">
-                    Autonomous Remediation Plan:
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-mono text-[#94a3b8] uppercase tracking-widest font-bold block">
+                    Recommended Mitigation Plan
                   </span>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {mitigationData.mitigation_steps.map((step, idx) => (
                       <div
                         key={idx}
-                        className="p-3 rounded-lg bg-[#060e20] border border-[#334155]/60 flex items-start gap-2.5 text-xs text-[#dae2fd] font-mono"
+                        className="px-3 py-2 rounded-lg bg-[#0b1326]/70 border border-white/[0.06] flex items-start gap-2.5 text-xs text-[#e2e8f0] font-mono"
                       >
-                        <span className="w-5 h-5 rounded-full bg-[#1a73e8]/20 border border-[#1a73e8] text-[#adc7ff] flex items-center justify-center text-[10px] font-bold shrink-0">
+                        <span className="w-4 h-4 rounded-full bg-[#1a73e8]/20 border border-[#1a73e8]/50 text-[#68abff] flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 tabular-nums">
                           {idx + 1}
                         </span>
-                        <span className="mt-0.5">{step}</span>
+                        <span className="leading-snug">{step}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-            ) : isLoadingMitigation ? (
-              <div className="p-12 rounded-xl bg-[#131b2e]/90 border border-[#1a73e8]/30 flex flex-col items-center justify-center text-center">
-                <RefreshCw className="w-8 h-8 text-[#adc7ff] animate-spin mb-3" />
-                <h4 className="text-sm font-mono font-bold text-white">
-                  Gemini 2.5 Flash Reasoning Engine In Progress...
-                </h4>
-                <p className="text-xs text-[#c1c6d6] font-sans mt-1">
-                  Executing Model Armor sanitization &amp; diagnostic Chain of
-                  Thought
-                </p>
-              </div>
-            ) : (
-              <div className="p-8 rounded-xl bg-[#131b2e]/60 border border-[#334155] text-center flex flex-col items-center justify-center space-y-2">
-                <Bot className="w-10 h-10 text-[#adc7ff]" />
-                <h4 className="text-sm font-headline font-bold text-white uppercase">
-                  Asset Telemetry Inspected • Ready for RCA
-                </h4>
-                <p className="text-xs text-[#c1c6d6] max-w-lg font-sans">
-                  Click{' '}
-                  <strong className="text-[#adc7ff]">
-                    &quot;RUN GEMINI 2.5 RCA&quot;
-                  </strong>{' '}
-                  to approach Gemini 2.5 Flash on GEAP to analyze telemetry
-                  anomalies and formulate an autonomous remediation plan.
-                </p>
-              </div>
-            )}
 
-            {/* Behind-The-Scenes Live Closed-Loop Execution Trail */}
-            {(appliedSuccess || isMitigated) && (
-              <div className="p-5 rounded-xl bg-[#061e12]/90 border border-[#30a550] space-y-4 animate-fade-in shadow-xl shadow-[#30a550]/15">
-                <div className="flex items-center justify-between border-b border-[#30a550]/40 pb-3">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-[#6ddd81]" />
-                    <h3 className="text-sm font-headline font-bold text-white uppercase tracking-wide">
-                      Live Behind-The-Scenes Closed-Loop Execution Trail
-                    </h3>
-                  </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#30a550]/20 text-[#6ddd81] border border-[#30a550]">
-                    {approvalDetails?.execution_mode || 'AUTONOMOUS'}
+              {/* 3-Column ROI Hero Strip + Compact Tokenomics Subtitle */}
+              <div className="p-4 rounded-xl bg-[#070d19]/90 border border-white/[0.08] space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-1.5">
+                    <Coins className="w-3.5 h-3.5" />
+                    <span>Tokenomics &amp; Financial ROI</span>
+                  </span>
+                  <span className="text-[10px] font-mono text-[#64748b] tabular-nums">
+                    {mitigationData.tokenomics?.total_tokens ?? 452} tokens (
+                    {mitigationData.tokenomics?.prompt_tokens ?? 168} in /{' '}
+                    {mitigationData.tokenomics?.completion_tokens ?? 284} out) &bull;{' '}
+                    {(mitigationData.tokenomics?.latency_ms ?? 342.5).toFixed(0)} ms
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-                  <div className="p-2.5 rounded bg-[#060e20] border border-[#334155]">
-                    <span className="text-[#8b909f] block text-[10px] uppercase">Agent Target Route</span>
-                    <span className="text-[#adc7ff] font-bold truncate block mt-0.5">
-                      {approvalDetails?.execution_target || 'Vertex AI Reasoning Engine / Cloud Run'}
+                <div className="grid grid-cols-3 gap-2.5">
+                  <div className="p-2.5 rounded-lg bg-[#0b1326] border border-white/[0.06]">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#64748b] block">
+                      AI Cost
+                    </span>
+                    <span className="text-sm font-mono font-bold text-white tabular-nums mt-0.5 block">
+                      ${(mitigationData.tokenomics?.cost_usd ?? 0.00018).toFixed(5)}
                     </span>
                   </div>
-                  <div className="p-2.5 rounded bg-[#060e20] border border-[#334155]">
-                    <span className="text-[#8b909f] block text-[10px] uppercase">Tool Activated</span>
-                    <span className="text-[#6ddd81] font-bold block mt-0.5">
-                      {approvalDetails?.tool_executed || 'IndustrialActuatorTool.throttle_and_cool'}
-                    </span>
-                  </div>
-                </div>
 
-                {/* Step Trace Timeline */}
-                <div className="space-y-2 pt-1">
-                  <span className="text-[10px] font-mono text-[#8b909f] uppercase tracking-widest font-bold block">
-                    Execution Steps Timeline:
-                  </span>
-                  <div className="space-y-2">
-                    {(approvalDetails?.steps || [
-                      { step: 1, title: 'Agent Service Dispatch', detail: 'Dispatched approval to Reasoning Engine / Cloud Run Agent.', status: 'SUCCESS' },
-                      { step: 2, title: 'Industrial Actuator Tool Invocation', detail: `Agent activated tool 'IndustrialActuatorTool.throttle_and_cool' targeting ${effectiveAsset?.asset_id || 'asset'}.`, status: 'SUCCESS' },
-                      { step: 3, title: 'Physical Asset Actuation', detail: 'Actuator signal received. Engine load throttled to nominal baseline (~32% CPU, ~50°C).', status: 'SUCCESS' },
-                      { step: 4, title: `${stackConfig.ingestionShort} Telemetry Streaming Resumed`, detail: `Sensor simulator broadcasting healthy non-anomaly metrics to ${stackConfig.ingestionShort} topic '${stackConfig.ingestionTopic}'.`, status: 'SUCCESS' },
-                      { step: 5, title: 'BigQuery Governance Audit', detail: 'Incident resolution audit record & tokenomics logged to BigQuery table rca_events.', status: 'SUCCESS' },
-                      { step: 6, title: `${stackConfig.pipelineShort} Dual-Sink Ingestion Convergence`, detail: `${stackConfig.pipelineEngine} synchronized state to Bigtable & BigQuery.`, status: 'SUCCESS' },
-                    ]).map((step: any) => (
-                      <div
-                        key={step.step}
-                        className="p-3 rounded-lg bg-[#060e20] border border-[#334155]/80 flex items-start gap-3 text-xs font-mono"
-                      >
-                        <div className="w-5 h-5 rounded-full bg-[#30a550]/20 border border-[#30a550] text-[#6ddd81] flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
-                          {step.step}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-white">{step.title}</span>
-                            <span className="text-[10px] text-[#8b909f]">{step.status}</span>
-                          </div>
-                          <p className="text-[11px] text-[#c1c6d6] font-sans mt-0.5">
-                            {step.detail}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/25">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400/80 block">
+                      Saved
+                    </span>
+                    <span className="text-sm font-mono font-bold text-emerald-400 tabular-nums mt-0.5 block">
+                      $
+                      {(
+                        mitigationData.tokenomics?.prevented_downtime_usd ?? 5000
+                      ).toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-[#1a73e8]/15 border border-[#1a73e8]/35">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#68abff] block">
+                      Net ROI
+                    </span>
+                    <span className="text-sm font-mono font-bold text-[#68abff] tabular-nums mt-0.5 block">
+                      {(mitigationData.tokenomics?.roi_multiplier ?? 27777).toLocaleString()}x
+                    </span>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Right Column: Financial Tokenomics & Human-in-the-Loop Action */}
-          <div className="space-y-6">
-            {mitigationData ? (
-              <>
-                {/* Tokenomics Card */}
-                <div className="p-5 rounded-xl bg-[#131b2e]/90 border border-[#334155]">
-                  <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[#334155]/60">
-                    <Coins className="w-4 h-4 text-[#6ddd81]" />
-                    <h3 className="text-sm font-headline font-bold text-white uppercase tracking-wide">
-                      Tokenomics &amp; Financial Metrics
-                    </h3>
-                  </div>
-
-                  <div className="space-y-2.5 font-mono text-xs">
-                    <div className="flex items-center justify-between p-2.5 rounded bg-[#060e20] border border-[#334155]/60">
-                      <span className="text-[#8b909f] uppercase tracking-wider text-[11px]">Prompt Tokens:</span>
-                      <span className="text-white font-bold">{mitigationData.tokenomics?.prompt_tokens ?? 168}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2.5 rounded bg-[#060e20] border border-[#334155]/60">
-                      <span className="text-[#8b909f] uppercase tracking-wider text-[11px]">Completion Tokens:</span>
-                      <span className="text-white font-bold">{mitigationData.tokenomics?.completion_tokens ?? 284}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2.5 rounded bg-[#060e20] border border-[#334155]/60">
-                      <span className="text-[#8b909f] uppercase tracking-wider text-[11px]">Total Tokens:</span>
-                      <span className="text-[#adc7ff] font-bold">{mitigationData.tokenomics?.total_tokens ?? 452}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2.5 rounded bg-[#060e20] border border-[#334155]/60">
-                      <span className="text-[#8b909f] flex items-center gap-1 uppercase tracking-wider text-[11px]">
-                        <Clock className="w-3 h-3 text-[#FBBC04]" /> Latency:
-                      </span>
-                      <span className="text-[#FBBC04] font-bold">{(mitigationData.tokenomics?.latency_ms ?? 342.5).toFixed(1)} ms</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2.5 rounded bg-[#060e20] border border-[#334155]/60">
-                      <span className="text-[#8b909f] flex items-center gap-1 uppercase tracking-wider text-[11px]">
-                        <DollarSign className="w-3 h-3 text-[#6ddd81]" /> Inference Cost:
-                      </span>
-                      <span className="text-[#6ddd81] font-bold">${(mitigationData.tokenomics?.cost_usd ?? 0.00018).toFixed(5)}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2.5 rounded bg-[#30a550]/20 border border-[#30a550]">
-                      <span className="text-[#6ddd81] font-bold flex items-center gap-1 uppercase tracking-wider text-[11px]">
-                        <TrendingUp className="w-3 h-3 text-[#6ddd81]" /> Prevented Downtime:
-                      </span>
-                      <span className="text-[#6ddd81] font-extrabold">${(mitigationData.tokenomics?.prevented_downtime_usd ?? 5000).toLocaleString()}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-2.5 rounded bg-[#1a73e8]/25 border border-[#1a73e8]">
-                      <span className="text-[#adc7ff] font-bold uppercase tracking-wider text-[11px]">ROI Multiplier:</span>
-                      <span className="text-[#adc7ff] font-extrabold">{(mitigationData.tokenomics?.roi_multiplier ?? 27777).toLocaleString()}x</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Human-In-The-Loop Approve & Apply Button */}
-                <div className="p-5 rounded-xl bg-[#131b2e]/90 border border-[#334155] space-y-3">
-                  <div>
-                    <span className="text-[10px] font-mono font-bold text-[#8b909f] uppercase tracking-widest block">
-                      Step 4 &amp; 5: Human-in-the-Loop Tool Activation
-                    </span>
-                    <p className="text-[11px] text-[#c1c6d6] font-sans mt-0.5">
-                      Approving activates Agent tool calling to signal the physical actuator and log tokenomics to BigQuery.
-                    </p>
-                  </div>
-
-                  <button
-                    disabled={isApplying || appliedSuccess || isMitigated || !isDemoActive}
-                    onClick={handleApprove}
-                    className={`w-full py-3.5 rounded font-mono text-xs uppercase tracking-widest font-bold transition-all border flex items-center justify-center gap-2 ${
-                      !isDemoActive
-                        ? 'bg-[#1e293b] border-[#475569]/40 text-[#64748b] cursor-not-allowed opacity-50 shadow-none'
-                        : (isMitigated || appliedSuccess)
-                        ? 'bg-[#30a550]/20 text-[#6ddd81] border-[#30a550] cursor-default'
-                        : 'bg-[#30a550] hover:bg-[#6ddd81] hover:text-[#003210] text-white border-[#6ddd81]/40 shadow-lg shadow-[#30a550]/30 disabled:opacity-50'
-                    }`}
-                    title={!isDemoActive ? 'Demo locked: Start pipeline above to enable' : 'Approve and execute industrial actuator tools'}
-                  >
-                    {isApplying ? (
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                    ) : !isDemoActive ? (
-                      <Lock className="w-4 h-4 text-[#64748b]" />
-                    ) : (isMitigated || appliedSuccess) ? (
-                      <CheckCircle2 className="w-4 h-4 text-[#6ddd81]" />
-                    ) : (
-                      <ShieldCheck className="w-4 h-4 text-white" />
-                    )}
-                    <span>
-                      {!isDemoActive
-                        ? 'CONTROLS LOCKED (PIPELINE REQUIRED)'
-                        : (isMitigated || appliedSuccess)
-                        ? 'AGENT TOOLS EXECUTED & RESOLVED'
-                        : 'APPROVE & EXECUTE AGENT TOOLS'}
-                    </span>
-                  </button>
-
-                  {/* Summary Status Box */}
-                  {(appliedSuccess || isMitigated) && (
-                    <div className="p-3 rounded-lg bg-[#060e20] border border-[#30a550] space-y-2 text-xs font-mono">
-                      <div className="flex items-center gap-1.5 text-[#6ddd81] font-bold">
-                        <CheckCircle2 className="w-4 h-4 text-[#6ddd81]" />
-                        <span>Closed-Loop Action Succeeded</span>
-                      </div>
-                      <ul className="text-[11px] text-[#c1c6d6] space-y-1 pl-1">
-                        <li>• Tool: <code className="text-[#adc7ff]">IndustrialActuatorTool.throttle_and_cool</code></li>
-                        <li>• Route: <span className="text-[#adc7ff]">{approvalDetails?.execution_mode || 'Agent Service'}</span></li>
-                        <li>• Physical State: <span className="text-[#6ddd81]">Simulator emitting healthy telemetry</span></li>
-                        <li>• Governance: <span className="text-[#6ddd81]">Audit &amp; Tokenomics logged to BigQuery</span></li>
-                      </ul>
-                    </div>
+              {/* Human-in-the-Loop Primary Action CTA */}
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  disabled={isApplying || appliedSuccess || isMitigated || !isDemoActive}
+                  onClick={handleApprove}
+                  className={`w-full py-3.5 px-4 rounded-xl font-mono text-xs uppercase tracking-widest font-bold transition-all border flex items-center justify-center gap-2 ${
+                    !isDemoActive
+                      ? 'bg-[#0f172a] border-white/[0.08] text-[#64748b] cursor-not-allowed opacity-50'
+                      : isMitigated || appliedSuccess
+                      ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/35 cursor-default'
+                      : 'bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-400/40 shadow-lg shadow-emerald-600/25 cursor-pointer disabled:opacity-50'
+                  }`}
+                >
+                  {isApplying ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : !isDemoActive ? (
+                    <Lock className="w-4 h-4 text-[#64748b]" />
+                  ) : isMitigated || appliedSuccess ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  ) : (
+                    <ShieldCheck className="w-4 h-4 text-white" />
                   )}
-                </div>
-              </>
-            ) : (
-              <div className="p-5 rounded-xl bg-[#131b2e]/90 border border-[#334155] space-y-3">
-                <div className="flex items-center gap-2 pb-2 border-b border-[#334155]/60">
-                  <Coins className="w-4 h-4 text-[#6ddd81]" />
-                  <h3 className="text-sm font-headline font-bold text-white uppercase tracking-wide">
-                    Human-in-the-Loop Operations
-                  </h3>
-                </div>
-                <div className="space-y-2.5 text-xs text-[#c1c6d6] font-sans">
-                  <p>
-                    <strong className="text-white font-mono">
-                      1. Approach Agent:
-                    </strong>{' '}
-                    Request Gemini 2.5 Flash Root Cause Analysis.
-                  </p>
-                  <p>
-                    <strong className="text-white font-mono">
-                      2. Review Plan:
-                    </strong>{' '}
-                    Verify multi-step diagnostic reasoning &amp; tokenomics ROI.
-                  </p>
-                  <p>
-                    <strong className="text-white font-mono">
-                      3. Authorize:
-                    </strong>{' '}
-                    Execute industrial actuator tools to restore nominal state.
-                  </p>
-                </div>
+                  <span>
+                    {!isDemoActive
+                      ? 'Controls Locked (Pipeline Required)'
+                      : isMitigated || appliedSuccess
+                      ? 'Mitigation Executed & Asset Restored'
+                      : 'Approve & Execute Mitigation'}
+                  </span>
+                </button>
+
+                {/* Compact Closed-Loop Execution Trail on Resolution */}
+                {(appliedSuccess || isMitigated) && (
+                  <div className="p-3.5 rounded-xl bg-emerald-950/25 border border-emerald-500/35 space-y-2 animate-fade-in">
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Closed-Loop Actuation Complete</span>
+                      </span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                        {approvalDetails?.execution_mode || 'AUTONOMOUS'}
+                      </span>
+                    </div>
+                    <div className="text-[11px] font-mono text-[#cbd5e1] space-y-1">
+                      <div>
+                        • Tool:{' '}
+                        <code className="text-[#68abff]">
+                          {approvalDetails?.tool_executed ||
+                            'IndustrialActuatorTool.throttle_and_cool'}
+                        </code>
+                      </div>
+                      <div>
+                        • Telemetry: Healthy baseline resumed on{' '}
+                        <strong className="text-white">{ stackConfig.ingestionShort }</strong> &amp;{' '}
+                        <strong className="text-emerald-400">Cloud Bigtable</strong>
+                      </div>
+                      <div>
+                        • Governance: Audit &amp; ROI logged to BigQuery{' '}
+                        <code className="text-emerald-400">analytics.rca_events</code>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          ) : isLoadingMitigation ? (
+            <div className="p-10 rounded-xl bg-[#070d19]/90 border border-[#1a73e8]/30 flex flex-col items-center justify-center text-center">
+              <RefreshCw className="w-7 h-7 text-[#68abff] animate-spin mb-2.5" />
+              <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                Gemini 2.5 Flash Reasoning in Progress...
+              </h4>
+              <p className="text-xs text-[#94a3b8] font-sans mt-1">
+                Sanitizing payload through Model Armor &amp; synthesizing 3-step mitigation plan
+              </p>
+            </div>
+          ) : (
+            <div className="p-6 rounded-xl bg-[#070d19]/80 border border-white/[0.08] text-center flex flex-col items-center justify-center space-y-2">
+              <Bot className="w-8 h-8 text-[#68abff]" />
+              <h4 className="text-xs font-headline font-bold text-white uppercase tracking-wider">
+                Asset Selected • Ready for Diagnostic RCA
+              </h4>
+              <p className="text-xs text-[#94a3b8] max-w-sm font-sans leading-relaxed">
+                Click <strong className="text-[#68abff]">Run Gemini RCA</strong> above to diagnose{' '}
+                <strong className="text-white">{effectiveAsset?.asset_id}</strong> and generate an
+                operator-approved mitigation plan.
+              </p>
+            </div>
+          )}
         </div>
       )}
     </section>

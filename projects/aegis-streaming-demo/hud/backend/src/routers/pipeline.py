@@ -16,6 +16,7 @@
 
 import asyncio
 import os
+from typing import Any
 
 from fastapi import APIRouter
 from pipeline_clients import get_pipeline_client
@@ -23,25 +24,32 @@ from pipeline_clients import get_pipeline_client
 router = APIRouter(tags=["Pipeline"])
 
 
-@router.get("/api/pipeline/status")
-async def pipeline_status():
+def _get_project_and_region() -> tuple[str, str]:
+    """Return the configured Google Cloud project ID and deployment region."""
     project_id = os.getenv("GCP_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", ""))
     region = os.getenv("GCP_REGION", "us-central1")
+    return project_id, region
+
+
+@router.get("/api/pipeline/status")
+async def pipeline_status() -> dict[str, Any]:
+    """Returns the current stream processing pipeline status."""
+    project_id, region = _get_project_and_region()
     client = get_pipeline_client()
     return client.get_status(project_id, region)
 
 
 @router.post("/api/pipeline/start")
-async def start_pipeline():
-    project_id = os.getenv("GCP_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", ""))
-    region = os.getenv("GCP_REGION", "us-central1")
+async def start_pipeline() -> dict[str, Any]:
+    """Starts the active stack's stream processing pipeline."""
+    project_id, region = _get_project_and_region()
     client = get_pipeline_client()
     return await asyncio.to_thread(client.start_pipeline, project_id, region)
 
 
 @router.post("/api/pipeline/stop")
-async def stop_pipeline():
-    project_id = os.getenv("GCP_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", ""))
-    region = os.getenv("GCP_REGION", "us-central1")
+async def stop_pipeline() -> dict[str, Any]:
+    """Stops the active stack's stream processing pipeline."""
+    project_id, region = _get_project_and_region()
     client = get_pipeline_client()
     return await asyncio.to_thread(client.stop_pipeline, project_id, region)

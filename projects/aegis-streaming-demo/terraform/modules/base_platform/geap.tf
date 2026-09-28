@@ -16,6 +16,33 @@
 # Gemini Enterprise Agent Platform (GEAP) Reasoning Engine Provisioner
 # =============================================================================
 
+# Dedicated staging bucket created when a stack (such as low-code) does not
+# pass its own staging_bucket variable, ensuring fresh installations on new
+# projects always have a valid Cloud Storage bucket for Vertex AI staging.
+resource "google_storage_bucket" "geap_staging" {
+  count                       = var.staging_bucket == "" ? 1 : 0
+  name                        = "${var.project_id}-geap-staging"
+  location                    = var.region
+  project                     = var.project_id
+  uniform_bucket_level_access = true
+  force_destroy               = true
+
+  labels = {
+    environment = var.environment
+    component   = "geap-staging"
+  }
+
+  depends_on = [google_project_service.enabled_apis]
+}
+
+locals {
+  resolved_geap_staging_bucket = (
+    var.staging_bucket != ""
+    ? (startswith(var.staging_bucket, "gs://") ? var.staging_bucket : "gs://${var.staging_bucket}")
+    : "gs://${google_storage_bucket.geap_staging[0].name}"
+  )
+}
+
 resource "null_resource" "deploy_geap_agent" {
   triggers = {
     source_hash = sha256(join("", [
@@ -23,7 +50,8 @@ resource "null_resource" "deploy_geap_agent" {
       filesha256("${path.module}/../../../agent-service/${f}")
       if !can(regex("(__pycache__|\\.pyc$|\\.git/|/tests/)", f))
     ]))
-    simulator_url = google_cloud_run_v2_service.telemetry_simulator.uri
+    simulator_url  = google_cloud_run_v2_service.telemetry_simulator.uri
+    staging_bucket = local.resolved_geap_staging_bucket
   }
 
   provisioner "local-exec" {
@@ -31,7 +59,7 @@ resource "null_resource" "deploy_geap_agent" {
     environment = {
       GCP_PROJECT           = var.project_id
       GCP_REGION            = var.region
-      STAGING_BUCKET        = startswith(var.staging_bucket, "gs://") ? var.staging_bucket : "gs://${var.staging_bucket != "" ? var.staging_bucket : "${var.project_id}-dataproc-deps"}"
+      STAGING_BUCKET        = local.resolved_geap_staging_bucket
       SIMULATOR_SERVICE_URL = google_cloud_run_v2_service.telemetry_simulator.uri
       FORCE_RECREATE        = "true"
     }
@@ -39,6 +67,8 @@ resource "null_resource" "deploy_geap_agent" {
 
   depends_on = [
     google_project_service.enabled_apis,
+    google_project_iam_member.aegis_sa_roles,
+    google_storage_bucket.geap_staging,
     google_cloud_run_v2_service.telemetry_simulator,
   ]
 }

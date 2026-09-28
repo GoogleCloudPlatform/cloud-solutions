@@ -66,5 +66,9 @@ export async function GET() {
       'analytics',
     geapAgentId:
       process.env.GEAP_AGENT_ID || process.env.NEXT_PUBLIC_GEAP_AGENT_ID || '',
+    dataprocCluster:
+      process.env.DATAPROC_CLUSTER_NAME ||
+      process.env.NEXT_PUBLIC_DATAPROC_CLUSTER ||
+      'aegis-spark-cluster',
   });
 }

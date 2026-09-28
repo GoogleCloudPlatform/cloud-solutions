@@ -25,20 +25,12 @@ import google.auth.exceptions
 import google.auth.transport.requests
 import google.oauth2.id_token
 import httpx
+import vertexai
 from fastapi import APIRouter, HTTPException
 from google.api_core.exceptions import GoogleAPICallError
 from models import AgentApproveRequest, AgentMitigateRequest
 from state import state_manager
-
-try:
-    import vertexai
-    from vertexai.preview import reasoning_engines
-
-    VERTEXAI_AVAILABLE = True
-except ImportError:
-    vertexai = None  # type: ignore[assignment]
-    reasoning_engines = None  # type: ignore[assignment]
-    VERTEXAI_AVAILABLE = False
+from vertexai.preview import reasoning_engines
 
 logger = logging.getLogger("aegis-hud-backend")
 router = APIRouter(tags=["Agent Proxy"])
@@ -66,6 +58,116 @@ _HTTP_AGENT_EXCEPTIONS = (
     KeyError,
     OSError,
 )
+
+_PUBSUB_INGESTION_TYPES = frozenset({"pubsub", "cloud_pubsub"})
+_DATAFLOW_ENGINES = frozenset({"dataflow", "beam", "apache_beam"})
+_CONTINUOUS_QUERY_ENGINES = frozenset(
+    {"bq_continuous", "continuous_query", "low_code", "bigquery_continuous"}
+)
+
+
+def _build_remediation_steps(
+    asset_id: str,
+    execution_target: str,
+    execution_mode: str,
+    bq_logged: bool,
+    now_iso: str,
+) -> List[Dict[str, Any]]:
+    """Build stack-aware remediation execution timeline steps."""
+    is_pubsub = os.getenv(
+        "INGESTION_TYPE", ""
+    ).strip().lower() in _PUBSUB_INGESTION_TYPES or os.getenv(
+        "STACK_TYPE", ""
+    ).strip().lower() in (
+        "first_party",
+        "low_code",
+    )
+    engine = os.getenv("PIPELINE_ENGINE", "dataproc").strip().lower()
+    if engine in _DATAFLOW_ENGINES:
+        step6_title = "Dataflow Dual-Sink Ingestion Convergence"
+        step6_detail = (
+            "Cloud Dataflow (Apache Beam engine) ingests non-anomaly "
+            "stream and updates Cloud Bigtable & BigQuery."
+        )
+    elif engine in _CONTINUOUS_QUERY_ENGINES:
+        step6_title = "BigQuery Continuous Query Convergence"
+        step6_detail = (
+            "BigQuery Continuous Queries ingest non-anomaly stream "
+            "and update Cloud Bigtable & BigQuery."
+        )
+    else:
+        step6_title = "Spark Dual-Sink Ingestion Convergence"
+        step6_detail = (
+            "Dataproc PySpark (Vectorized Spark engine) ingests "
+            "non-anomaly stream and updates Cloud Bigtable & BigQuery."
+        )
+
+    return [
+        {
+            "step": 1,
+            "title": "Agent Service Dispatch",
+            "detail": (
+                f"Dispatched approval to {execution_target} "
+                f"(Mode: {execution_mode})."
+            ),
+            "status": "SUCCESS",
+            "timestamp": now_iso,
+        },
+        {
+            "step": 2,
+            "title": "Industrial Actuator Tool Invocation",
+            "detail": (
+                f'Agent activated tool "throttle_and_cool" '
+                f"targeting asset {asset_id}."
+            ),
+            "status": "SUCCESS",
+            "timestamp": now_iso,
+        },
+        {
+            "step": 3,
+            "title": "Physical Asset Actuation",
+            "detail": (
+                f"Signal received by {asset_id} simulator. CPU throttled to "
+                "~32%, temp reduced to ~50°C, status returned to OK."
+            ),
+            "status": "SUCCESS",
+            "timestamp": now_iso,
+        },
+        {
+            "step": 4,
+            "title": (
+                "Pub/Sub Telemetry Streaming Resumed"
+                if is_pubsub
+                else "Kafka Telemetry Streaming Resumed"
+            ),
+            "detail": (
+                "Asset simulator resumed broadcasting healthy metrics to "
+                "Pub/Sub topic 'telemetry-raw'."
+                if is_pubsub
+                else "Asset simulator resumed broadcasting healthy metrics to "
+                "Kafka topic 'telemetry-raw'."
+            ),
+            "status": "SUCCESS",
+            "timestamp": now_iso,
+        },
+        {
+            "step": 5,
+            "title": "BigQuery Governance Audit",
+            "detail": (
+                f"Incident resolution audit record & tokenomics logged to "
+                f"BigQuery 'analytics.rca_events' (Logged: {bq_logged})."
+            ),
+            "status": "SUCCESS" if bq_logged else "INFO",
+            "timestamp": now_iso,
+        },
+        {
+            "step": 6,
+            "title": step6_title,
+            "detail": step6_detail,
+            "status": "SUCCESS",
+            "timestamp": now_iso,
+        },
+    ]
 
 
 async def get_gcp_id_token(audience: str) -> Optional[str]:
@@ -97,14 +199,17 @@ async def get_gcp_id_token(audience: str) -> Optional[str]:
 def _normalize_mitigation_payload(
     result: Dict[str, Any], request: AgentMitigateRequest
 ) -> Dict[str, Any]:
-    """Guarantees required fields and tokenomics are fully populated."""
+    """Normalizes the agent's mitigation response structure."""
     if not isinstance(result, dict):
-        result = {}
+        raise ValueError("Agent returned a non-dictionary RCA response.")
 
-    severity = result.get("severity") or (
-        "CRITICAL"
-        if request.cpu_utilization > 90 or request.temperature_c > 90
-        else "HIGH"
+    severity = str(
+        result.get("severity")
+        or (
+            "CRITICAL"
+            if request.cpu_utilization > 90 or request.temperature_c > 90
+            else "HIGH"
+        )
     )
 
     tokenomics = result.get("tokenomics")
@@ -121,15 +226,19 @@ def _normalize_mitigation_payload(
             "roi_multiplier": 27777.7,
         }
 
-    raw_steps = result.get("mitigation_steps") or [
-        (
-            f"1. Issue dynamic frequency scaling (DVFS) command to reduce "
-            f"CPU clock speed to 60% on {request.asset_id}."
-        ),
-        "2. Trigger secondary coolant pump and increase fan speed to 100%.",
-        "3. Rebalance incoming streaming partitions to secondary worker pool.",
-        "4. Verify thermal dissipation and monitor until CPU < 65%.",
-    ]
+    raw_steps = (
+        result.get("mitigation_steps")
+        or result.get("steps")
+        or [
+            (
+                f"1. Issue dynamic frequency scaling (DVFS) command to reduce "
+                f"CPU clock speed to 60% on {request.asset_id}."
+            ),
+            "2. Trigger secondary coolant pump and increase fan speed to 100%.",
+            "3. Rebalance incoming streaming partitions to secondary pool.",
+            "4. Verify thermal dissipation and monitor until CPU < 65%.",
+        ]
+    )
     mitigation_steps = (
         [str(s) for s in raw_steps]
         if isinstance(raw_steps, list)
@@ -142,30 +251,34 @@ def _normalize_mitigation_payload(
         f"{incident_suffix}"
     )
 
-    default_root_cause = (
-        f"Severe thermal and compute overload detected on {request.asset_id} "
-        f"(CPU: {request.cpu_utilization}%, Temp: {request.temperature_c}°C)."
-    )
+    root_cause_summary = str(
+        result.get("root_cause_summary")
+        or result.get("root_cause")
+        or result.get("summary")
+        or ""
+    ).strip()
+    if not root_cause_summary:
+        raise ValueError("Agent RCA response is missing 'root_cause_summary'.")
 
-    default_cot = (
-        "[Gemini 2.5 Flash Co-Pilot Reasoning]\n"
-        f"1. Telemetry Ingestion: Anomaly spike received for "
-        f'"{request.asset_id}". CPU at {request.cpu_utilization}%, '
-        f"Temp at {request.temperature_c}°C.\n"
-        "2. Security Verification: Model Armor guard checked telemetry input "
-        "payload -> Clean (No prompt injection detected).\n"
-        "3. Root Cause Analysis: CPU core load saturated due to unthrottled "
-        "streaming batch processing, causing junction temp to cross 90°C.\n"
-        "4. Formulating Remediation Strategy: Throttling CPU clock rate, "
-        "activating auxiliary liquid cooling pumps, and throttling streaming "
-        "tasks."
-    )
+    chain_of_thought = str(
+        result.get("chain_of_thought")
+        or result.get("reasoning")
+        or result.get("cot")
+        or (
+            f"Evaluated anomaly on {request.asset_id} "
+            f"(CPU: {request.cpu_utilization}%, "
+            f"Temp: {request.temperature_c}°C)."
+        )
+    ).strip()
 
-    default_action = (
-        f"Throttle dynamic CPU clock frequency on {request.asset_id} to 60%, "
-        "engage high-rate liquid cooling pump, and throttle high-load "
-        "streaming tasks."
-    )
+    recommended_action = str(
+        result.get("recommended_action")
+        or result.get("action")
+        or (
+            f"Throttle dynamic CPU clock frequency on {request.asset_id} "
+            "and engage active cooling."
+        )
+    ).strip()
 
     return {
         "incident_id": (result.get("incident_id") or default_incident_id),
@@ -174,21 +287,9 @@ def _normalize_mitigation_payload(
             result.get("timestamp") or datetime.now(timezone.utc).isoformat()
         ),
         "severity": severity,
-        "root_cause_summary": (
-            result.get("root_cause_summary")
-            or result.get("root_cause")
-            or default_root_cause
-        ),
-        "chain_of_thought": (
-            result.get("chain_of_thought")
-            or result.get("reasoning")
-            or default_cot
-        ),
-        "recommended_action": (
-            result.get("recommended_action")
-            or result.get("action")
-            or default_action
-        ),
+        "root_cause_summary": root_cause_summary,
+        "chain_of_thought": chain_of_thought,
+        "recommended_action": recommended_action,
         "mitigation_steps": mitigation_steps,
         "status": result.get("status") or "MITIGATION_INITIATED",
         "tokenomics": tokenomics,
@@ -198,12 +299,19 @@ def _normalize_mitigation_payload(
 @router.post("/api/agent/recommendation")
 @router.post("/api/agent/rca")
 async def proxy_agent_recommendation(request: AgentMitigateRequest):
-    """Query Gemini 2.5 Flash for Root Cause Analysis & recommendation."""
+    """Query Gemini 2.5 Flash for Root Cause Analysis & recommendation.
+
+    In Cloud Run production, AGENT_SERVICE_URL points to the Vertex AI
+    Reasoning Engine resource (`projects/.../reasoningEngines/...`). In local
+    development and CI unit tests (`test_pipeline_clients.py`), it defaults to
+    `http://agent-service:8080/mitigate`. Fails loudly with HTTP 502 if the
+    configured agent service fails.
+    """
     raw_agent_url = os.getenv(
         "AGENT_SERVICE_URL", "http://agent-service:8080/mitigate"
     )
 
-    if VERTEXAI_AVAILABLE and (
+    if (
         raw_agent_url.startswith("projects/")
         or "reasoningEngines" in raw_agent_url
     ):
@@ -211,7 +319,11 @@ async def proxy_agent_recommendation(request: AgentMitigateRequest):
             logger.info(
                 "Connecting to GEAP Reasoning Engine: %s", raw_agent_url
             )
-            project_id = os.environ.get("GCP_PROJECT", "aegis-streaming-1001")
+            project_id = (
+                os.environ.get("GCP_PROJECT")
+                or os.environ.get("GOOGLE_CLOUD_PROJECT")
+                or state_manager.project_id
+            )
             region = os.environ.get("GCP_REGION", "us-central1")
             vertexai.init(project=project_id, location=region)
             engine = reasoning_engines.ReasoningEngine(raw_agent_url)
@@ -220,23 +332,34 @@ async def proxy_agent_recommendation(request: AgentMitigateRequest):
                 asset_id=request.asset_id,
                 cpu_utilization=request.cpu_utilization,
                 temperature_c=request.temperature_c,
+                pressure_psi=request.pressure_psi,
+                memory_utilization_pct=request.memory_utilization_pct,
+                status=request.status,
                 event_type=request.event_type,
+                additional_context=request.additional_context or "",
             )
             result = _normalize_mitigation_payload(raw_result, request)
             logger.info(
-                "Successfully executed mitigation via GEAP Reasoning Engine "
+                "Successfully executed mitigation using GEAP Reasoning Engine "
                 "(%s).",
                 raw_agent_url,
             )
             state_manager.store_mitigation(request.asset_id, result)
             return result
         except _GEAP_EXCEPTIONS as exc:
-            logger.warning(
-                "Could not query GEAP Reasoning Engine at %s: %s. "
-                "Executing local agent fallback.",
+            logger.error(
+                "Failed to query GEAP Reasoning Engine at %s: %s",
                 raw_agent_url,
                 exc,
+                exc_info=True,
             )
+            raise HTTPException(
+                status_code=502,
+                detail=(
+                    "Failed to obtain Root Cause Analysis from the Vertex AI "
+                    "Reasoning Engine."
+                ),
+            ) from exc
 
     base_agent_url = raw_agent_url.replace("/mitigate", "").rstrip("/")
     agent_url = f"{base_agent_url}/mitigate"
@@ -263,79 +386,27 @@ async def proxy_agent_recommendation(request: AgentMitigateRequest):
                 )
                 state_manager.store_mitigation(request.asset_id, result)
                 return result
-            logger.warning(
+            logger.error(
                 "agent-service returned non-200 status %d: %s",
                 resp.status_code,
                 resp.text,
             )
     except _HTTP_AGENT_EXCEPTIONS as exc:
-        logger.warning(
-            "Could not reach agent-service at %s: %s. "
-            "Executing local agent fallback.",
+        logger.error(
+            "Could not reach agent-service at %s: %s",
             agent_url,
             exc,
+            exc_info=True,
         )
+        raise HTTPException(
+            status_code=502,
+            detail="Failed to obtain Root Cause Analysis from agent-service.",
+        ) from exc
 
-    incident_id = (
-        f'INC-{datetime.now(timezone.utc).strftime("%Y%m%d")}-'
-        f"{uuid.uuid4().hex[:6].upper()}"
+    raise HTTPException(
+        status_code=502,
+        detail="Failed to obtain Root Cause Analysis from agent-service.",
     )
-
-    result = {
-        "incident_id": incident_id,
-        "asset_id": request.asset_id,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "severity": (
-            "CRITICAL"
-            if request.cpu_utilization > 90 or request.temperature_c > 90
-            else "HIGH"
-        ),
-        "root_cause_summary": (
-            f"Severe thermal throttling and compute surge detected on "
-            f"{request.asset_id} (CPU: {request.cpu_utilization}%, "
-            f"Temp: {request.temperature_c}°C). Operating temperature exceeds "
-            f"safe hardware limits."
-        ),
-        "chain_of_thought": (
-            "[Gemini 2.5 Flash Co-Pilot Reasoning]\n"
-            f"1. Telemetry Ingestion: Anomaly spike received for asset "
-            f'"{request.asset_id}". CPU at {request.cpu_utilization}%, '
-            f"Temp at {request.temperature_c}°C.\n"
-            "2. Security Verification: Model Armor guard checked telemetry "
-            "input payload -> Clean (No prompt injection detected).\n"
-            "3. Root Cause Analysis: CPU core load saturated due to "
-            "unthrottled streaming batch processing, causing junction "
-            "temp to cross 90°C threshold.\n"
-            "4. Formulating Remediation Strategy: Throttling dynamic CPU clock "
-            "rate, activating auxiliary cooling pumps, and rerouting jobs."
-        ),
-        "recommended_action": (
-            f"Throttle dynamic CPU clock frequency on {request.asset_id} to "
-            f"60%, engage high-rate liquid cooling pump, and shift tasks."
-        ),
-        "mitigation_steps": [
-            (
-                f"1. Issue dynamic frequency scaling (DVFS) command to reduce "
-                f"CPU clock speed to 60% on {request.asset_id}."
-            ),
-            "2. Trigger secondary coolant pump and increase fan speed to 100%.",
-            "3. Rebalance incoming streaming partitions to secondary pool.",
-            "4. Verify thermal dissipation and monitor until CPU < 65%.",
-        ],
-        "status": "MITIGATION_INITIATED",
-        "tokenomics": {
-            "prompt_tokens": 168,
-            "completion_tokens": 284,
-            "total_tokens": 452,
-            "latency_ms": 342.5,
-            "cost_usd": 0.00018,
-            "prevented_downtime_usd": 5000.0,
-            "roi_multiplier": 27777.7,
-        },
-    }
-
-    state_manager.store_mitigation(request.asset_id, result)
-    return result
 
 
 @router.get("/api/agent/recommendations")
@@ -375,9 +446,11 @@ async def approve_and_execute_mitigation(body: AgentApproveRequest):
     raw_agent_url = os.getenv(
         "AGENT_SERVICE_URL", "http://agent-service:8080/execute"
     )
+    # Defaults to http://localhost:8080 strictly for local dev and CI unit
+    # tests when SIMULATOR_SERVICE_URL is not injected by Cloud Run.
     simulator_url = os.getenv(
         "SIMULATOR_SERVICE_URL",
-        "https://telemetry-simulator-yww5w7x2xa-uc.a.run.app",
+        "http://localhost:8080",
     )
     execution_mode = "UNKNOWN"
     execution_target = raw_agent_url
@@ -385,19 +458,22 @@ async def approve_and_execute_mitigation(body: AgentApproveRequest):
     bq_logged = False
     action_taken_desc = ""
 
-    if VERTEXAI_AVAILABLE and (
+    if (
         raw_agent_url.startswith("projects/")
         or "reasoningEngines" in raw_agent_url
     ):
         try:
-            # First try though GEAP endpoint
             logger.info(
                 "[Approval] Querying GEAP Reasoning Engine (%s) to "
                 "execute remediation...",
                 raw_agent_url,
             )
-            project_id = os.environ["GCP_PROJECT"]
-            region = os.environ["GCP_REGION"]
+            project_id = (
+                os.environ.get("GCP_PROJECT")
+                or os.environ.get("GOOGLE_CLOUD_PROJECT")
+                or state_manager.project_id
+            )
+            region = os.environ.get("GCP_REGION", "us-central1")
             vertexai.init(project=project_id, location=region)
             engine = reasoning_engines.ReasoningEngine(raw_agent_url)
             sim_token = await get_gcp_id_token(simulator_url)
@@ -431,20 +507,17 @@ async def approve_and_execute_mitigation(body: AgentApproveRequest):
                     ),
                 )
             else:
-                logger.warning(
-                    "[Approval] GEAP execution did not succeed: %s. "
-                    "Attempting HTTP agent service...",
+                logger.error(
+                    "[Approval] GEAP execution failed: %s",
                     result,
                 )
         except _GEAP_EXCEPTIONS as exc:
-            logger.warning(
-                "[Approval] GEAP execution warning: %s. "
-                "Attempting HTTP agent service...",
+            logger.error(
+                "[Approval] GEAP execution error: %s",
                 exc,
+                exc_info=True,
             )
-
-    if not execution_mode or execution_mode == "UNKNOWN":
-        # if GEAP failed, try http request
+    else:
         base_agent_url = (
             raw_agent_url.replace("/mitigate", "")
             .replace("/execute", "")
@@ -494,19 +567,19 @@ async def approve_and_execute_mitigation(body: AgentApproveRequest):
                             data,
                         )
                     else:
-                        logger.warning(
+                        logger.error(
                             "[Approval] HTTP agent service reported "
                             "failure: %s",
                             data,
                         )
                 else:
-                    logger.warning(
+                    logger.error(
                         "[Approval] HTTP Agent service returned %d: %s",
                         resp.status_code,
                         resp.text,
                     )
         except _HTTP_AGENT_EXCEPTIONS as exc:
-            logger.warning(
+            logger.error(
                 "[Approval] Could not reach HTTP agent-service at %s: %s.",
                 exec_url,
                 exc,
@@ -524,115 +597,13 @@ async def approve_and_execute_mitigation(body: AgentApproveRequest):
             detail="Remediation tool execution failed.",
         )
 
-    steps: List[Dict[str, Any]] = [
-        {
-            "step": 1,
-            "title": "Agent Service Dispatch",
-            "detail": (
-                f"Dispatched approval to {execution_target} "
-                f"(Mode: {execution_mode})."
-            ),
-            "status": "SUCCESS",
-            "timestamp": now_iso,
-        },
-        {
-            "step": 2,
-            "title": "Industrial Actuator Tool Invocation",
-            "detail": (
-                f'Agent activated tool "throttle_and_cool" '
-                f"targeting asset {asset_id}."
-            ),
-            "status": "SUCCESS",
-            "timestamp": now_iso,
-        },
-        {
-            "step": 3,
-            "title": "Physical Asset Actuation",
-            "detail": (
-                f"Signal received by {asset_id} simulator. CPU throttled to "
-                "~32%, temp reduced to ~50°C, status returned to OK."
-            ),
-            "status": "SUCCESS",
-            "timestamp": now_iso,
-        },
-        {
-            "step": 4,
-            "title": (
-                "Pub/Sub Telemetry Streaming Resumed"
-                if (
-                    os.getenv("INGESTION_TYPE", "").strip().lower()
-                    in ["pubsub", "cloud_pubsub"]
-                    or os.getenv("STACK_TYPE", "").strip().lower()
-                    in ["first_party", "low_code"]
-                )
-                else "Kafka Telemetry Streaming Resumed"
-            ),
-            "detail": (
-                "Asset simulator resumed broadcasting healthy metrics to "
-                "Pub/Sub topic 'telemetry-raw'."
-                if (
-                    os.getenv("INGESTION_TYPE", "").strip().lower()
-                    in ["pubsub", "cloud_pubsub"]
-                    or os.getenv("STACK_TYPE", "").strip().lower()
-                    in ["first_party", "low_code"]
-                )
-                else "Asset simulator resumed broadcasting healthy metrics to "
-                "Kafka topic 'telemetry-raw'."
-            ),
-            "status": "SUCCESS",
-            "timestamp": now_iso,
-        },
-        {
-            "step": 5,
-            "title": "BigQuery Governance Audit",
-            "detail": (
-                f"Incident resolution audit record & tokenomics logged to "
-                f"BigQuery 'analytics.rca_events' (Logged: {bq_logged})."
-            ),
-            "status": "SUCCESS" if bq_logged else "INFO",
-            "timestamp": now_iso,
-        },
-        {
-            "step": 6,
-            "title": (
-                "Dataflow Dual-Sink Ingestion Convergence"
-                if os.getenv("PIPELINE_ENGINE", "dataproc").strip().lower()
-                in ["dataflow", "beam", "apache_beam"]
-                else (
-                    "BigQuery Continuous Query Convergence"
-                    if os.getenv("PIPELINE_ENGINE", "dataproc").strip().lower()
-                    in [
-                        "bq_continuous",
-                        "continuous_query",
-                        "low_code",
-                        "bigquery_continuous",
-                    ]
-                    else "Spark Dual-Sink Ingestion Convergence"
-                )
-            ),
-            "detail": (
-                "Cloud Dataflow (Apache Beam engine) ingests non-anomaly "
-                "stream and updates Cloud Bigtable & BigQuery."
-                if os.getenv("PIPELINE_ENGINE", "dataproc").strip().lower()
-                in ["dataflow", "beam", "apache_beam"]
-                else (
-                    "BigQuery Continuous Queries ingest non-anomaly stream "
-                    "and update Cloud Bigtable & BigQuery."
-                    if os.getenv("PIPELINE_ENGINE", "dataproc").strip().lower()
-                    in [
-                        "bq_continuous",
-                        "continuous_query",
-                        "low_code",
-                        "bigquery_continuous",
-                    ]
-                    else "Dataproc PySpark (C++ Velox engine) ingests "
-                    "non-anomaly stream and updates Cloud Bigtable & BigQuery."
-                )
-            ),
-            "status": "SUCCESS",
-            "timestamp": now_iso,
-        },
-    ]
+    steps = _build_remediation_steps(
+        asset_id=asset_id,
+        execution_target=execution_target,
+        execution_mode=execution_mode,
+        bq_logged=bq_logged,
+        now_iso=now_iso,
+    )
 
     return {
         "success": True,

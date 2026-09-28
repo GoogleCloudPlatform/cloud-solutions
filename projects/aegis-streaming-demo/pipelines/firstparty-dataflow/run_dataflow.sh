@@ -24,6 +24,8 @@ REGION="${GCP_REGION:-us-central1}"
 RUNNER="${RUNNER:-FlexTemplate}"
 STAGING_BUCKET="${STAGING_BUCKET:-${PROJECT_ID}-dataflow-staging}"
 TOPIC_NAME="projects/${PROJECT_ID}/topics/telemetry-raw"
+SUBSCRIPTION_NAME="${PUBSUB_SUBSCRIPTION:-projects/${PROJECT_ID}/subscriptions/telemetry-raw-dataflow-sub}"
+WORKER_MACHINE_TYPE="${DATAFLOW_MACHINE_TYPE:-n2-standard-2}"
 BIGTABLE_INSTANCE="aegis-bigtable"
 BIGTABLE_TABLE="telemetry_metrics"
 BIGQUERY_TABLE="${PROJECT_ID}:analytics.telemetry_events"
@@ -35,7 +37,8 @@ echo "================================================================="
 echo " - Project ID:         ${PROJECT_ID}"
 echo " - Region:             ${REGION}"
 echo " - Runner:             ${RUNNER}"
-echo " - Input Topic:        ${TOPIC_NAME}"
+echo " - Input Subscription: ${SUBSCRIPTION_NAME}"
+echo " - Worker Machine:     ${WORKER_MACHINE_TYPE}"
 echo " - Bigtable Sink:      ${BIGTABLE_INSTANCE}.${BIGTABLE_TABLE}"
 echo " - BigQuery Sink:      ${BIGQUERY_TABLE}"
 echo " - Staging Bucket:     gs://${STAGING_BUCKET}"
@@ -51,9 +54,10 @@ if [ "${RUNNER}" == "FlexTemplate" ]; then
     --project="${PROJECT_ID}" \
     --region="${REGION}" \
     --template-file-gcs-location="gs://${STAGING_BUCKET}/templates/aegis_dataflow_template.json" \
-    --parameters="input_topic=${TOPIC_NAME},bigtable_project=${PROJECT_ID},bigtable_instance=${BIGTABLE_INSTANCE},bigtable_table=${BIGTABLE_TABLE},bigquery_table=${BIGQUERY_TABLE},window_seconds=10" \
+    --parameters="input_subscription=${SUBSCRIPTION_NAME},bigtable_project=${PROJECT_ID},bigtable_instance=${BIGTABLE_INSTANCE},bigtable_table=${BIGTABLE_TABLE},bigquery_table=${BIGQUERY_TABLE},window_seconds=10,trigger_interval_seconds=1" \
     --service-account-email="aegis-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
     --subnetwork="https://www.googleapis.com/compute/v1/projects/${PROJECT_ID}/regions/${REGION}/subnetworks/aegis-subnet" \
+    --worker-machine-type="${WORKER_MACHINE_TYPE}" \
     --disable-public-ips \
     --enable-streaming-engine \
     --max-workers=5 \
@@ -61,12 +65,13 @@ if [ "${RUNNER}" == "FlexTemplate" ]; then
     "$@"
 elif [ "${RUNNER}" == "DataflowRunner" ]; then
   python3 "${SCRIPT_DIR}/src/pipeline.py" \
-    --input_topic="${TOPIC_NAME}" \
+    --input_subscription="${SUBSCRIPTION_NAME}" \
     --bigtable_project="${PROJECT_ID}" \
     --bigtable_instance="${BIGTABLE_INSTANCE}" \
     --bigtable_table="${BIGTABLE_TABLE}" \
     --bigquery_table="${BIGQUERY_TABLE}" \
     --window_seconds=10 \
+    --trigger_interval_seconds=1 \
     --runner=DataflowRunner \
     --project="${PROJECT_ID}" \
     --region="${REGION}" \
@@ -75,6 +80,7 @@ elif [ "${RUNNER}" == "DataflowRunner" ]; then
     --job_name="${JOB_NAME}" \
     --service_account_email="aegis-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
     --subnetwork="https://www.googleapis.com/compute/v1/projects/${PROJECT_ID}/regions/${REGION}/subnetworks/aegis-subnet" \
+    --machine_type="${WORKER_MACHINE_TYPE}" \
     --no_use_public_ips \
     --streaming \
     --max_num_workers=5 \
@@ -90,6 +96,7 @@ else
     --bigtable_table="${BIGTABLE_TABLE}" \
     --bigquery_table="${BIGQUERY_TABLE}" \
     --window_seconds=10 \
+    --trigger_interval_seconds=1 \
     --runner=DirectRunner \
     --streaming \
     "$@"

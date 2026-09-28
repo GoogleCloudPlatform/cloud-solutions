@@ -18,27 +18,29 @@ import functools
 import logging
 import os
 import pathlib
+import re
 import time
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 import google.auth.exceptions
 from google.api_core.exceptions import GoogleAPICallError
-from pipeline_clients.base import BasePipelineClient
 
 try:
-    from google.cloud import bigquery  # pylint: disable=ungrouped-imports
+    from google.cloud import bigquery
 
     BIGQUERY_AVAILABLE = True
 except ImportError:
     BIGQUERY_AVAILABLE = False
 
 try:
-    from google.cloud import bigtable  # pylint: disable=ungrouped-imports
+    from google.cloud import bigtable
 
     BIGTABLE_AVAILABLE = True
 except ImportError:
     BIGTABLE_AVAILABLE = False
+
+from pipeline_clients.base import BasePipelineClient
 
 logger = logging.getLogger("aegis-hud-backend")
 
@@ -70,9 +72,13 @@ def _load_continuous_sql() -> str:
 class ContinuousQueryPipelineClient(BasePipelineClient):
     """Pipeline controller for BigQuery Continuous Queries (Low-Code SQL)."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._active: bool = True
         self._job_id: Optional[str] = "aegis-cq-continuous-sql"
+        self._bq_client: Any = None
+        self._bq_project: Optional[str] = None
+        self._bt_table: Any = None
+        self._bt_project: Optional[str] = None
         self._status_cache: Dict[str, Any] = {
             "status": "RUNNING",
             "batch_id": self._job_id,
@@ -90,7 +96,37 @@ class ContinuousQueryPipelineClient(BasePipelineClient):
 
     @property
     def engine_name(self) -> str:
+        """Returns the engine identifier ('bq_continuous')."""
         return "bq_continuous"
+
+    def _worker_loop(self) -> None:
+        """Background worker loop hook for continuous window synchronization."""
+        if not self._active:
+            return
+        project_id = (
+            os.getenv("GCP_PROJECT") or os.getenv("GOOGLE_CLOUD_PROJECT") or ""
+        ).strip()
+        dataset_id = os.getenv("BIGQUERY_DATASET_ID", "analytics")
+        self._sync_window_aggregates_to_bigtable(project_id, dataset_id)
+
+    def _get_bq_client(self, project_id: str) -> Any:
+        """Returns a cached BigQuery client for project_id."""
+        if self._bq_client is None or self._bq_project != project_id:
+            self._bq_client = bigquery.Client(project=project_id)
+            self._bq_project = project_id
+        return self._bq_client
+
+    def _get_bt_table(self, project_id: str) -> Any:
+        """Returns a cached Bigtable table handle for project_id."""
+        if self._bt_table is None or self._bt_project != project_id:
+            bt_instance_id = os.getenv("BIGTABLE_INSTANCE_ID", "aegis-bigtable")
+            bt_table_id = os.getenv("BIGTABLE_TABLE_ID", "telemetry_metrics")
+            bt_client = bigtable.Client(project=project_id, admin=False)
+            self._bt_table = bt_client.instance(bt_instance_id).table(
+                bt_table_id
+            )
+            self._bt_project = project_id
+        return self._bt_table
 
     def _sync_window_aggregates_to_bigtable(
         self, project_id: str, dataset_id: str
@@ -98,9 +134,16 @@ class ContinuousQueryPipelineClient(BasePipelineClient):
         """Executes 10s SQL window aggregation and writes state to Bigtable."""
         if not BIGQUERY_AVAILABLE or not BIGTABLE_AVAILABLE or not project_id:
             return 0
+        if not re.fullmatch(r"[a-zA-Z0-9_-]+", project_id) or not re.fullmatch(
+            r"[a-zA-Z0-9_]+", dataset_id
+        ):
+            logger.warning(
+                "Rejected invalid BigQuery identifier for continuous SQL sync."
+            )
+            return 0
 
         try:
-            bq_client = bigquery.Client(project=project_id)
+            bq_client = self._get_bq_client(project_id)
             sql = _load_continuous_sql().format(
                 project_id=project_id, dataset_id=dataset_id
             )
@@ -108,12 +151,10 @@ class ContinuousQueryPipelineClient(BasePipelineClient):
             if not rows:
                 return 0
 
-            bt_instance_id = os.getenv("BIGTABLE_INSTANCE_ID", "aegis-bigtable")
-            bt_table_id = os.getenv("BIGTABLE_TABLE_ID", "telemetry_metrics")
-            bt_client = bigtable.Client(project=project_id, admin=False)
-            table = bt_client.instance(bt_instance_id).table(bt_table_id)
+            table = self._get_bt_table(project_id)
 
             now_utc = datetime.now(timezone.utc)
+            db_insert_timestamp_ms = int(time.time() * 1000)
             mutations = []
             for r in rows:
                 asset_id = r.get("asset_id")
@@ -122,6 +163,7 @@ class ContinuousQueryPipelineClient(BasePipelineClient):
                 window_ts = str(r.get("window_end") or now_utc.isoformat())
                 is_anom = str(bool(r.get("is_anomaly", False)))
                 temp_val = r.get("avg_temp", r.get("max_temp", 52.0))
+                ingested_ms = r.get("ingestion_timestamp_ms")
                 direct_row = table.direct_row(str(asset_id).encode("utf-8"))
                 direct_row.set_cell(
                     "metrics",
@@ -171,6 +213,19 @@ class ContinuousQueryPipelineClient(BasePipelineClient):
                     window_ts.encode("utf-8"),
                     timestamp=now_utc,
                 )
+                if ingested_ms is not None:
+                    direct_row.set_cell(
+                        "metrics",
+                        b"ingestion_timestamp_ms",
+                        str(int(ingested_ms)).encode("utf-8"),
+                        timestamp=now_utc,
+                    )
+                direct_row.set_cell(
+                    "metrics",
+                    b"db_insert_timestamp_ms",
+                    str(db_insert_timestamp_ms).encode("utf-8"),
+                    timestamp=now_utc,
+                )
                 mutations.append(direct_row)
 
             if mutations:
@@ -181,7 +236,7 @@ class ContinuousQueryPipelineClient(BasePipelineClient):
             return 0
 
     def refresh_status_sync(
-        self, project_id: str, region: str
+        self, project_id: str, _region: str
     ) -> Dict[str, Any]:
         """Refreshes Continuous Query status and syncs 10s SQL windows."""
         if not self._active:
@@ -204,7 +259,7 @@ class ContinuousQueryPipelineClient(BasePipelineClient):
 
         if BIGQUERY_AVAILABLE and project_id:
             try:
-                client = bigquery.Client(project=project_id, location=region)
+                client = self._get_bq_client(project_id)
                 jobs = list(
                     client.list_jobs(
                         max_results=10,
@@ -250,6 +305,7 @@ class ContinuousQueryPipelineClient(BasePipelineClient):
         return self._status_cache
 
     def get_status(self, _project_id: str, _region: str) -> Dict[str, Any]:
+        """Returns cached Continuous Query pipeline status."""
         return self._status_cache
 
     def start_pipeline(self, project_id: str, _region: str) -> Dict[str, Any]:

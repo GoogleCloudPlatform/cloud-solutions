@@ -21,7 +21,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Presentation,
-  Cpu,
   BookOpen,
   Radio,
   Activity,
@@ -97,29 +96,38 @@ export const NavigationMenu: React.FC<NavigationMenuProps> = ({
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-[#0b1326]/95 backdrop-blur-md border-b border-[#334155] py-2.5 px-4 md:px-6 shadow-2xl transition-all">
-      <div className="max-w-7xl mx-auto flex items-center justify-center md:justify-between gap-3 overflow-x-auto no-scrollbar py-1">
-        {navItems.map((item) => {
-          const active = isItemActive(item);
-          return (
-            <Link
-              key={item.id}
-              href={item.href}
-              onClick={() => onSelectTab && onSelectTab(item.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-xs transition-all duration-200 whitespace-nowrap border shrink-0 group cursor-pointer ${
-                active
-                  ? 'bg-[#1a73e8] text-white border-[#adc7ff] shadow-lg shadow-[#1a73e8]/40 font-bold scale-[1.02]'
-                  : 'bg-[#131b2e]/80 hover:bg-[#1e293b] text-[#c1c6d6] border-[#334155]/60 hover:border-[#8b909f]/60 hover:text-white font-medium'
-              }`}
-            >
-              <span className={active ? 'text-white' : 'text-[#adc7ff] group-hover:text-white transition-colors'}>
-                {item.icon}
-              </span>
-              <span className="hidden md:inline">{item.label}</span>
-              <span className="inline md:hidden">{item.shortLabel}</span>
-            </Link>
-          );
-        })}
+    <nav className="sticky top-0 z-50 w-full bg-[#070d19]/90 backdrop-blur-md border-b border-white/[0.08] py-2 px-4 md:px-6 transition-all">
+      <div className="max-w-[1600px] mx-auto flex items-center justify-center">
+        <div className="w-full flex items-center justify-between gap-1.5 p-1 rounded-xl bg-[#0b1326]/90 border border-white/[0.08] overflow-x-auto no-scrollbar">
+          {navItems.map((item) => {
+            const active = isItemActive(item);
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                aria-current={active ? 'page' : undefined}
+                onClick={() => onSelectTab && onSelectTab(item.id)}
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-mono text-xs transition-all duration-200 whitespace-nowrap shrink-0 group cursor-pointer ${
+                  active
+                    ? 'bg-[#1a73e8] text-white shadow-md shadow-[#1a73e8]/30 font-bold border border-[#adc7ff]/40'
+                    : 'bg-transparent hover:bg-white/[0.05] text-[#94a3b8] hover:text-white font-medium border border-transparent'
+                }`}
+              >
+                <span
+                  className={
+                    active
+                      ? 'text-white'
+                      : 'text-[#68abff] group-hover:text-white transition-colors'
+                  }
+                >
+                  {item.icon}
+                </span>
+                <span className="hidden md:inline">{item.label}</span>
+                <span className="inline md:hidden">{item.shortLabel}</span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );

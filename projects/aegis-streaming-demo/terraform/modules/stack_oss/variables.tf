@@ -29,5 +29,28 @@ variable "environment" {
 
 variable "subnet_id" {
   type        = string
-  description = "The VPC Subnetwork ID where Managed Apache Kafka will connect."
+  description = "The VPC Subnetwork ID where Managed Apache Kafka and Dataproc will connect."
+}
+
+variable "service_account_email" {
+  type        = string
+  description = "The service account email attached to the Dataproc Standard Spark cluster nodes."
+}
+
+variable "bigtable_instance_id" {
+  type        = string
+  description = "The Cloud Bigtable instance ID for streaming operational state."
+  default     = "aegis-bigtable"
+}
+
+variable "bigquery_dataset_id" {
+  type        = string
+  description = "The BigQuery dataset ID for analytical streaming events."
+  default     = "analytics"
+}
+
+variable "dataproc_cluster_name" {
+  type        = string
+  description = "The name of the warm Dataproc Standard Spark cluster for PySpark streaming."
+  default     = "aegis-spark-cluster"
 }

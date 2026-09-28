@@ -40,7 +40,9 @@ locals {
     "roles/pubsub.editor",
     "roles/dataflow.worker",
     "roles/dataflow.admin",
-    "roles/artifactregistry.reader",
+    "roles/artifactregistry.reader"
+  ]
+  sa_self_roles = [
     "roles/iam.serviceAccountTokenCreator",
     "roles/iam.serviceAccountOpenIdTokenCreator",
     "roles/iam.serviceAccountUser"
@@ -54,11 +56,11 @@ resource "google_project_iam_member" "aegis_sa_roles" {
   member   = "serviceAccount:${google_service_account.aegis_sa.email}"
 }
 
-resource "google_project_iam_member" "sa_token_creators" {
-  for_each = toset(var.authorized_invokers)
-  project  = var.project_id
-  role     = "roles/iam.serviceAccountTokenCreator"
-  member   = each.value
+resource "google_service_account_iam_member" "aegis_sa_self_roles" {
+  for_each           = toset(local.sa_self_roles)
+  service_account_id = google_service_account.aegis_sa.name
+  role               = each.key
+  member             = "serviceAccount:${google_service_account.aegis_sa.email}"
 }
 
 resource "google_service_account_iam_member" "sa_token_creators" {
@@ -87,7 +89,7 @@ locals {
   cloudbuild_builder_roles = [
     "roles/logging.logWriter",
     "roles/artifactregistry.writer",
-    "roles/storage.admin"
+    "roles/storage.objectAdmin"
   ]
   cloudbuild_builder_accounts = [
     "serviceAccount:${data.google_project.current.number}-compute@developer.gserviceaccount.com",

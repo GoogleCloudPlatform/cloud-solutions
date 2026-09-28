@@ -100,7 +100,10 @@ class KafkaTelemetryPublisher(BaseTelemetryPublisher):
             or getattr(creds, "account", None)
         )
         if not sa_email:
-            sa_email = "aegis-sa@aegis-streaming-1001.iam.gserviceaccount.com"
+            raise RuntimeError(
+                "Service account email (SERVICE_ACCOUNT) is required to mint "
+                "Managed Kafka OAuth2 JWT token."
+            )
 
         header = {"alg": "GOOG_OAUTH2_TOKEN", "typ": "JWT"}
         payload = {

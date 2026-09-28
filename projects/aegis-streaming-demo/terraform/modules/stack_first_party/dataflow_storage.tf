@@ -34,4 +34,3 @@ resource "google_storage_bucket_object" "dataflow_requirements_txt" {
   bucket = google_storage_bucket.dataflow_staging.name
   source = "${path.module}/../../../pipelines/firstparty-dataflow/requirements.txt"
 }
-

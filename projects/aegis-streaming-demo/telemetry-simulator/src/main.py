@@ -51,10 +51,14 @@ app = FastAPI(
     version="1.0.0",
 )
 
+_cors_origins_raw = os.getenv("CORS_ALLOWED_ORIGINS", "*").strip()
+_cors_origins = [
+    origin.strip() for origin in _cors_origins_raw.split(",") if origin.strip()
+] or ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials="*" not in _cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -65,6 +69,7 @@ fleet_simulator = FleetSimulator()
 @app.get("/health", tags=["Health"])
 @app.get("/", tags=["Health"])
 def health_check() -> Dict[str, str]:
+    """Return telemetry simulator health status and streaming state."""
     return {
         "status": "healthy",
         "service": "aegis-telemetry-simulator",

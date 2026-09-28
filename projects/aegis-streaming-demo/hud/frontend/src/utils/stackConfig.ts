@@ -18,6 +18,9 @@ export type StackType = 'oss' | 'first_party' | 'low_code';
 
 export interface StackConfig {
   stackType: StackType;
+  stackBadgeTitle: string;
+  stackTechFlow: string[];
+  stackTheme: 'emerald' | 'blue' | 'purple';
 
   // Ingestion Plane Terminology
   ingestionName: string;
@@ -64,6 +67,7 @@ export interface StackConfig {
   toastAnomalyEmitted: string;
   toastMitigationResumed: string;
   toastPipelineSync: string;
+  dataprocCluster: string;
 }
 
 declare global {
@@ -79,6 +83,7 @@ declare global {
       bigtableInstance?: string;
       bigqueryDataset?: string;
       geapAgentId?: string;
+      dataprocCluster?: string;
     };
   }
 }
@@ -96,12 +101,27 @@ export const getStackConfig = (): StackConfig => {
     .toLowerCase()
     .trim();
 
+  const dataprocCluster =
+    winConfig?.dataprocCluster ||
+    process.env.DATAPROC_CLUSTER_NAME ||
+    process.env.NEXT_PUBLIC_DATAPROC_CLUSTER ||
+    'aegis-spark-cluster';
+
   const stackType: StackType =
     rawType === 'first_party' || rawType === 'low_code' ? rawType : 'oss';
 
   if (stackType === 'first_party') {
     return {
       stackType: 'first_party',
+      stackBadgeTitle: '1ST-PARTY MANAGED STREAMING',
+      stackTechFlow: [
+        'Cloud Pub/Sub',
+        'Cloud Dataflow',
+        'Bigtable & BQ',
+        'GEAP',
+      ],
+      stackTheme: 'blue',
+      dataprocCluster,
 
       ingestionName: 'Google Cloud Pub/Sub',
       ingestionShort: 'Pub/Sub',
@@ -149,7 +169,7 @@ export const getStackConfig = (): StackConfig => {
       module4Step1Tech: 'Cloud Pub/Sub • Cloud Dataflow • Bigtable • BigQuery',
       module4Step3Subtitle: 'Dataflow Anomaly → Gemini 2.5 Flash RCA',
       module4Step3Desc:
-        'When an anomaly is detected in Dataflow tumbling windows, our Anomaly Mitigation Agent is approached. Powered by Gemini 2.5 Flash on GEAP, the agent formulates a structured Root Cause Analysis & remediation plan for the user.',
+        'When an anomaly is detected in Dataflow tumbling windows, the Anomaly Mitigation Agent is invoked. Powered by Gemini 2.5 Flash on GEAP, the agent formulates a structured Root Cause Analysis & remediation plan for the operator.',
       module4Step3Tech: 'Dataflow Window Hook • Gemini 2.5 Flash • GEAP',
 
       toastAnomalyEmitted:
@@ -164,6 +184,15 @@ export const getStackConfig = (): StackConfig => {
   if (stackType === 'low_code') {
     return {
       stackType: 'low_code',
+      stackBadgeTitle: 'LOW-CODE SERVERLESS',
+      stackTechFlow: [
+        'Pub/Sub Direct',
+        'BQ Continuous SQL',
+        'Bigtable & BQ',
+        'GEAP',
+      ],
+      stackTheme: 'purple',
+      dataprocCluster,
 
       ingestionName: 'Google Cloud Pub/Sub',
       ingestionShort: 'Pub/Sub',
@@ -212,7 +241,7 @@ export const getStackConfig = (): StackConfig => {
         'Cloud Pub/Sub • BigQuery Continuous Queries • Bigtable',
       module4Step3Subtitle: 'Continuous SQL Anomaly → Gemini 2.5 Flash RCA',
       module4Step3Desc:
-        'When an anomaly is flagged by BigQuery Continuous Query SQL windows, our Anomaly Mitigation Agent is approached. Powered by Gemini 2.5 Flash on GEAP, the agent formulates a structured Root Cause Analysis & remediation plan for the user.',
+        'When an anomaly is flagged by BigQuery Continuous Query SQL windows, the Anomaly Mitigation Agent is invoked. Powered by Gemini 2.5 Flash on GEAP, the agent formulates a structured Root Cause Analysis & remediation plan for the operator.',
       module4Step3Tech: 'BigQuery CQ Hook • Gemini 2.5 Flash • GEAP',
 
       toastAnomalyEmitted:
@@ -227,6 +256,10 @@ export const getStackConfig = (): StackConfig => {
   // Default: OSS Stack
   return {
     stackType: 'oss',
+    stackBadgeTitle: 'OSS / DIGITAL NATIVE',
+    stackTechFlow: ['Managed Kafka', 'Dataproc Spark', 'Bigtable & BQ', 'GEAP'],
+    stackTheme: 'emerald',
+    dataprocCluster,
 
     ingestionName: 'Managed Apache Kafka',
     ingestionShort: 'Kafka',
@@ -238,50 +271,46 @@ export const getStackConfig = (): StackConfig => {
     generatorDescription:
       'Continuously produces simulated IIoT industrial machinery sensor payloads and pushes authenticated OAuth messages directly into Google Cloud Managed Kafka (telemetry-raw).',
 
-    pipelineName: 'Managed Spark Streaming Job',
+    pipelineName: 'Dataproc Standard Spark Streaming',
     pipelineShort: 'Managed Spark',
-    pipelineEngine: 'Dataproc PySpark (C++ Velox engine)',
-    pipelineEngineBadge: 'C++ Velox',
+    pipelineEngine: 'Dataproc Standard (Vectorized Spark)',
+    pipelineEngineBadge: 'Vectorized Spark',
     pipelineStoppedLabel: 'SPARK STOPPED',
     pipelineButtonStart: 'START SPARK PIPELINE',
     pipelineButtonRetry: 'RETRY SPARK PIPELINE',
     pipelineButtonStop: 'STOP SPARK PIPELINE',
-    pipelineInitTitle: 'INITIALIZING SPARK CLUSTER',
-    pipelineInitDesc:
-      'Provisioning serverless compute nodes, configuring Velox C++ engine, and subscribing to Kafka partition consumers (~60–90s)...',
-    pipelineRunningDesc:
-      'Ingestion active: Kafka (telemetry-raw) ➔ Spark C++ Velox ➔ Bigtable & BigQuery',
-    pipelineStoppedDesc:
-      'Pipeline stopped. Click START SPARK PIPELINE to launch Serverless ETL.',
-    pipelineErrorDesc:
-      'Spark Serverless batch execution failed. Check Google Cloud resource quotas or configuration.',
-    pipelineDescription:
-      'Dataproc Serverless PySpark ETL job with C++ Velox Lightning Engine. Consumes from Managed Kafka and computes 10s tumbling windows directly into Cloud Bigtable & BigQuery.',
+    pipelineInitTitle: 'SUBMITTING SPARK STREAMING JOB',
+    pipelineInitDesc: `Submitting PySpark Structured Streaming job to warm Dataproc Standard Spark cluster (${dataprocCluster}) (~5–10s)...`,
+    pipelineRunningDesc: `Auto-started by Terraform on warm cluster (${dataprocCluster}): Kafka (telemetry-raw) ➔ Vectorized Spark Engine ➔ Bigtable & BigQuery`,
+    pipelineStoppedDesc: `Streaming job stopped (warm cluster ${dataprocCluster} remains active). Click START SPARK PIPELINE to re-launch in ~5–10s.`,
+    pipelineErrorDesc: `Spark streaming job execution failed on ${dataprocCluster}. Check Dataproc cluster logs or configuration.`,
+    pipelineDescription: `Dataproc Standard PySpark Structured Streaming job on warm vectorized Spark cluster (${dataprocCluster}). Pre-provisioned and auto-started by Terraform. Consumes from Managed Kafka and computes 10s tumbling windows directly into Cloud Bigtable & BigQuery.`,
 
     quickStartStep1:
       'Click START CDC SIMULATOR below to stream synthetic IIoT telemetry into Managed Kafka.',
-    quickStartStep2:
-      'Verify the Managed Spark Streaming Job is RUNNING with native C++ Velox acceleration.',
+    quickStartStep2: `Verify the Dataproc Standard Spark Streaming Job is already RUNNING (pre-warmed and auto-started by Terraform on cluster ${dataprocCluster}, or click START SPARK PIPELINE to restart in ~5–10s).`,
     lockBannerText:
       'Demo locked: Start Kafka generator & Spark pipeline above to enable anomaly injection',
     copilotEmptyState:
-      'Start the Kafka generator and Spark streaming job above to unlock the live operational grid and Co-Pilot.',
-    infraSummary: 'Bigtable + Spark (C++ Velox) + GEAP + BigQuery',
+      'Start the Kafka generator and verify the Spark streaming job is running above to unlock the live operational grid and Co-Pilot.',
+    infraSummary:
+      'Bigtable + Dataproc Standard (Vectorized Spark) + GEAP + BigQuery',
 
-    module4Step1Subtitle: 'Managed Kafka → Dataproc Spark (C++ Velox)',
-    module4Step1Desc:
-      'Kafka sensor events are ingested by Spark Streaming with native C++ acceleration and written continuously to a dual sink: Cloud Bigtable (operational state) & BigQuery (analytical history).',
-    module4Step1Tech: 'Managed Kafka • Dataproc C++ • Bigtable • BigQuery',
+    module4Step1Subtitle:
+      'Managed Kafka → Dataproc Standard Spark (Vectorized)',
+    module4Step1Desc: `Kafka sensor events are ingested by PySpark Structured Streaming on a warm Dataproc Standard cluster (${dataprocCluster}) with vectorized Spark execution and written continuously to Cloud Bigtable & BigQuery.`,
+    module4Step1Tech:
+      'Managed Kafka • Dataproc Standard Spark • Bigtable • BigQuery',
     module4Step3Subtitle: 'Spark Detection → Gemini 2.5 Flash RCA',
     module4Step3Desc:
-      'When an anomaly is detected in Spark tumbling windows, our Anomaly Mitigation Agent is approached. Powered by Gemini 2.5 Flash on GEAP, the agent formulates a structured Root Cause Analysis & remediation plan for the user.',
+      'When an anomaly is detected in Spark tumbling windows, the Anomaly Mitigation Agent is invoked. Powered by Gemini 2.5 Flash on GEAP, the agent formulates a structured Root Cause Analysis & remediation plan for the operator.',
     module4Step3Tech: 'Dataproc Anomaly Hook • Gemini 2.5 Flash • GEAP',
 
     toastAnomalyEmitted:
-      'Critical telemetry emitted to Managed Kafka. Spark C++ Velox streaming ETL will detect the anomaly and update Bigtable.',
+      'Critical telemetry emitted to Managed Kafka. Dataproc Standard Spark (Vectorized Spark) will detect the anomaly and update Bigtable.',
     toastMitigationResumed:
       "Sensor simulator resumed emitting healthy telemetry payloads to Kafka topic 'telemetry-raw'.",
     toastPipelineSync:
-      'Spark Streaming (C++ Velox) dual-sink synchronized to Bigtable and BigQuery.',
+      'Dataproc Standard Spark (Vectorized Spark) dual-sink synchronized to Bigtable and BigQuery.',
   };
 };

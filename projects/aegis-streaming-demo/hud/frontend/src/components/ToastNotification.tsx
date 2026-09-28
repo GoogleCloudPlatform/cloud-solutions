@@ -126,6 +126,8 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onDismis
           </div>
 
           <button
+            type="button"
+            aria-label="Dismiss notification"
             onClick={() => onDismiss(t.id)}
             className="text-[#8b909f] hover:text-white transition-colors p-1 -mr-1 -mt-1 rounded hover:bg-white/10 shrink-0"
             title="Dismiss"

@@ -183,6 +183,10 @@ resource "google_cloud_run_v2_service" "hud_backend" {
         value = var.deps_bucket
       }
       env {
+        name  = "DATAPROC_CLUSTER_NAME"
+        value = var.dataproc_cluster_name
+      }
+      env {
         name  = "STAGING_BUCKET"
         value = var.staging_bucket
       }
@@ -313,6 +317,14 @@ resource "google_cloud_run_v2_service" "hud_frontend" {
       env {
         name  = "NEXT_PUBLIC_GEAP_AGENT_ID"
         value = data.external.geap_agent.result["agent_id"]
+      }
+      env {
+        name  = "DATAPROC_CLUSTER_NAME"
+        value = var.dataproc_cluster_name
+      }
+      env {
+        name  = "NEXT_PUBLIC_DATAPROC_CLUSTER"
+        value = var.dataproc_cluster_name
       }
       env {
         name  = "ENVIRONMENT"

@@ -23,7 +23,11 @@ resource "null_resource" "model_armor_template" {
   }
 
   provisioner "local-exec" {
-    command = "bash ${path.module}/scripts/create_model_armor_template.sh ${var.project_id} ${var.environment}"
+    command = "bash ${path.module}/scripts/create_model_armor_template.sh"
+    environment = {
+      PROJECT_ID  = var.project_id
+      ENVIRONMENT = var.environment
+    }
   }
 
   depends_on = [google_project_service.enabled_apis]

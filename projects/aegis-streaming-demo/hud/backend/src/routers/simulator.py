@@ -53,9 +53,12 @@ _PROXY_EXCEPTIONS = (
 
 
 def get_simulator_service_url() -> str:
+    # In Cloud Run production, SIMULATOR_SERVICE_URL is injected by Terraform.
+    # Defaults to http://localhost:8080 strictly for local dev and CI unit
+    # tests where SIMULATOR_SERVICE_URL is unset.
     return os.getenv(
         "SIMULATOR_SERVICE_URL",
-        "https://telemetry-simulator-yww5w7x2xa-uc.a.run.app",
+        "http://localhost:8080",
     ).rstrip("/")
 
 
@@ -148,7 +151,7 @@ async def start_stream(
     payload: Optional[StartStreamRequest] = None,
 ) -> Dict[str, Any]:
     """Starts simulating telemetry data streaming."""
-    data = payload.dict() if payload else {"rate_msgs_per_sec": 100}
+    data = payload.model_dump() if payload else {"rate_msgs_per_sec": 100}
     return await _proxy_request("POST", "/api/start-stream", json_data=data)
 
 

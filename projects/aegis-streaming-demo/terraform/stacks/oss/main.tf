@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # =============================================================================
-# Project Aegis - OSS Stack (Managed Apache Kafka + Dataproc Serverless PySpark)
+# Project Aegis - OSS Stack (Managed Apache Kafka + Dataproc Enterprise PySpark)
 # =============================================================================
 
 module "base_platform" {
@@ -25,21 +25,25 @@ module "base_platform" {
   environment         = var.environment
   authorized_invokers = var.authorized_invokers
 
-  stack_type       = "oss"
-  ingestion_type   = "kafka"
-  pipeline_engine  = "dataproc"
-  kafka_cluster_id = module.stack_oss.kafka_cluster_id
-  kafka_topic_id   = module.stack_oss.kafka_topic_id
-  kafka_brokers    = module.stack_oss.kafka_brokers
-  deps_bucket      = module.stack_oss.dataproc_deps_bucket
-  staging_bucket   = module.stack_oss.dataproc_deps_bucket
+  stack_type            = "oss"
+  ingestion_type        = "kafka"
+  pipeline_engine       = "dataproc"
+  kafka_cluster_id      = module.stack_oss.kafka_cluster_id
+  kafka_topic_id        = module.stack_oss.kafka_topic_id
+  kafka_brokers         = module.stack_oss.kafka_brokers
+  deps_bucket           = module.stack_oss.dataproc_deps_bucket
+  staging_bucket        = module.stack_oss.dataproc_deps_bucket
+  dataproc_cluster_name = module.stack_oss.dataproc_cluster_name
 }
 
 module "stack_oss" {
   source = "../../modules/stack_oss"
 
-  project_id  = var.project_id
-  region      = var.region
-  environment = var.environment
-  subnet_id   = module.base_platform.subnet_id
+  project_id            = var.project_id
+  region                = var.region
+  environment           = var.environment
+  subnet_id             = module.base_platform.subnet_id
+  service_account_email = module.base_platform.service_account_email
+  bigtable_instance_id  = module.base_platform.bigtable_instance_id
+  bigquery_dataset_id   = module.base_platform.bigquery_dataset_id
 }

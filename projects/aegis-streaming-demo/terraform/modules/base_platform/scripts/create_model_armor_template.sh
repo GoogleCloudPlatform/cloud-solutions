@@ -15,15 +15,16 @@
 
 set -euo pipefail
 
-PROJECT_ID="${1:?Missing PROJECT_ID}"
-ENVIRONMENT="${2:-production}"
-LOCATION="${3:-us}"
+PROJECT_ID="${PROJECT_ID:-${1:?Missing PROJECT_ID}}"
+ENVIRONMENT="${ENVIRONMENT:-${2:-production}}"
+LOCATION="${LOCATION:-${3:-us}}"
 
-TOKEN="$(gcloud auth print-access-token)"
+RESP_FILE="$(mktemp /tmp/model_armor_resp.XXXXXX.json)"
+trap 'rm -f "${RESP_FILE}"' EXIT
 
-# Create or ignore if the Model Armor template already exists (HTTP 409)
-curl -s -X POST \
-  -H "Authorization: Bearer ${TOKEN}" \
+# Create the Model Armor template, or accept HTTP 409 if it already exists.
+HTTP_CODE="$(curl -s -o "${RESP_FILE}" -w "%{http_code}" -X POST \
+  -H @- \
   -H "Content-Type: application/json" \
   "https://modelarmor.${LOCATION}.rep.googleapis.com/v1/projects/${PROJECT_ID}/locations/${LOCATION}/templates?template_id=aegis-defense-shield" \
   -d "{
@@ -48,4 +49,15 @@ curl -s -X POST \
       \"system\": \"project-aegis\",
       \"environment\": \"${ENVIRONMENT}\"
     }
-  }" || true # Ignore conflict if template already exists in the project
+  }" <<<"Authorization: Bearer $(gcloud auth print-access-token)")"
+
+case "${HTTP_CODE}" in
+200 | 201 | 409)
+  echo "Model Armor template aegis-defense-shield ready (HTTP ${HTTP_CODE})."
+  ;;
+*)
+  echo "WARNING: Unexpected HTTP status ${HTTP_CODE} from Model Armor API:" >&2
+  cat "${RESP_FILE}" >&2
+  exit 1
+  ;;
+esac

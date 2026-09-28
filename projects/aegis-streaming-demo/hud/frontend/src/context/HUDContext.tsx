@@ -16,7 +16,7 @@
 
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { AssetState, MitigationResponse, TelemetryStreamPayload, AgentApprovalResponse } from '@/types';
 import { ToastItem, ToastContainer } from '@/components/ToastNotification';
 import { getActiveAnomalies, isFleetStale as checkFleetStale } from '@/utils/telemetryUtils';
@@ -437,7 +437,7 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             stepNumber: 2,
             totalSteps: 6,
             title: 'Actuator Tool Invoked',
-            message: `Agent activated tool 'IndustrialActuatorTool.throttle_and_cool' via ${data.execution_mode || 'Agent Service'}.`,
+            message: `Agent activated tool 'IndustrialActuatorTool.throttle_and_cool' through ${data.execution_mode || 'Agent Service'}.`,
             timestamp: new Date().toLocaleTimeString(),
           });
         }, 350);
@@ -496,15 +496,30 @@ export const HUDProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }, 2500);
 
         return data;
+      } else {
+        const err = await res.json().catch(() => ({}));
+        const errMsg =
+          err.detail ||
+          `Agent remediation returned status ${res.status}. Please retry.`;
+        addToast({
+          type: 'error',
+          title: 'Mitigation Execution Failed',
+          message: errMsg,
+          timestamp: new Date().toLocaleTimeString(),
+        });
+        throw new Error(errMsg);
       }
     } catch (err) {
       console.error('Failed to execute agent mitigation tools:', err);
-      addToast({
-        type: 'error',
-        title: 'Mitigation Failed',
-        message: 'Could not complete closed-loop agent execution.',
-        timestamp: new Date().toLocaleTimeString(),
-      });
+      if (!(err instanceof Error && err.message)) {
+        addToast({
+          type: 'error',
+          title: 'Mitigation Failed',
+          message: 'Could not complete closed-loop agent execution.',
+          timestamp: new Date().toLocaleTimeString(),
+        });
+      }
+      throw err;
     }
   };
 

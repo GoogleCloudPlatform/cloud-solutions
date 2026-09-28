@@ -43,14 +43,14 @@ export const PageNavigation: React.FC<PageNavigationProps> = ({
   };
 
   return (
-    <div className="pt-6 mt-6 border-t border-[#334155]/60 flex items-center justify-between gap-4">
+    <div className="pt-6 mt-6 border-t border-white/[0.08] flex items-center justify-between gap-4">
       {prevTab ? (
         <Link
           href={getHref(prevTab)}
           onClick={() => onNavigate && onNavigate(prevTab.id)}
-          className="px-4 py-2.5 rounded-xl bg-[#131b2e] hover:bg-[#1e293b] text-[#dae2fd] hover:text-white border border-[#334155] hover:border-[#adc7ff] font-mono text-xs uppercase tracking-wider font-bold transition-all shadow-md flex items-center gap-2 group cursor-pointer"
+          className="px-4 py-2.5 rounded-xl bg-[#0f172a] hover:bg-[#1e293b] text-[#cbd5e1] hover:text-white border border-white/[0.08] hover:border-white/20 font-mono text-xs uppercase tracking-wider font-bold transition-all flex items-center gap-2 group cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4 text-[#adc7ff] group-hover:-translate-x-0.5 transition-transform" />
+          <ArrowLeft className="w-4 h-4 text-[#68abff] group-hover:-translate-x-0.5 transition-transform" />
           <span>Previous: {prevTab.label}</span>
         </Link>
       ) : (
@@ -61,7 +61,7 @@ export const PageNavigation: React.FC<PageNavigationProps> = ({
         <Link
           href={getHref(nextTab)}
           onClick={() => onNavigate && onNavigate(nextTab.id)}
-          className="ml-auto px-5 py-2.5 rounded-xl bg-[#1a73e8] hover:bg-[#005bc0] text-white border border-[#adc7ff]/40 font-mono text-xs uppercase tracking-wider font-bold transition-all shadow-lg shadow-[#1a73e8]/30 flex items-center gap-2 group cursor-pointer"
+          className="ml-auto px-5 py-2.5 rounded-xl bg-[#1a73e8] hover:bg-[#1557b0] text-white border border-[#adc7ff]/30 font-mono text-xs uppercase tracking-wider font-bold transition-all shadow-md shadow-[#1a73e8]/25 flex items-center gap-2 group cursor-pointer"
         >
           <span>Next: {nextTab.label}</span>
           <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />

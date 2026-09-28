@@ -45,3 +45,21 @@ resource "google_bigtable_table" "telemetry_metrics" {
     family = "metrics"
   }
 }
+
+# Retain 24 hours of historical cell versions in Cloud Bigtable for real-time
+# time-series dashboarding while automatically expiring older versions during
+# background compaction (long-term history remains in BigQuery).
+resource "google_bigtable_gc_policy" "telemetry_metrics_gc_policy" {
+  project       = var.project_id
+  instance_name = google_bigtable_instance.aegis_bigtable.name
+  table         = google_bigtable_table.telemetry_metrics.name
+  column_family = "metrics"
+
+  gc_rules = jsonencode({
+    rules = [
+      {
+        max_age = "24h"
+      }
+    ]
+  })
+}

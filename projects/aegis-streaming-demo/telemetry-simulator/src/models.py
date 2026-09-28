@@ -18,7 +18,7 @@ Pydantic schemas for request payloads, responses, and asset telemetry data.
 """
 
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -47,6 +47,10 @@ class AssetState(BaseModel):
         description="Flag indicating if asset is in anomalous state",
     )
     timestamp: str = Field(..., description="ISO 8601 UTC timestamp")
+    ingestion_timestamp_ms: Optional[int] = Field(
+        default=None,
+        description="Epoch timestamp in ms when message was generated",
+    )
 
 
 class StartStreamRequest(BaseModel):

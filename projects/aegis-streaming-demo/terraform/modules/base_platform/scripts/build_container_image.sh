@@ -15,9 +15,9 @@
 
 set -euo pipefail
 
-PROJECT_ID="${1:?Missing PROJECT_ID}"
-IMAGE_TAG="${2:?Missing IMAGE_TAG}"
-SOURCE_DIR="${3:?Missing SOURCE_DIR}"
+PROJECT_ID="${PROJECT_ID:-${1:?Missing PROJECT_ID}}"
+IMAGE_TAG="${IMAGE_TAG:-${2:?Missing IMAGE_TAG}}"
+SOURCE_DIR="${SOURCE_DIR:-${3:?Missing SOURCE_DIR}}"
 
 gcloud builds submit \
   --project="${PROJECT_ID}" \

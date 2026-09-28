@@ -32,17 +32,8 @@ import {
   Play,
   Pause,
   Grid,
-  Layers,
   Sparkles,
-  CheckCircle2,
-  FileText,
-  Activity,
-  Cpu,
-  Database,
-  Bot,
-  ShieldCheck,
-  Zap,
-  ArrowRight
+  CheckCircle2
 } from 'lucide-react';
 import { PageNavigation } from './PageNavigation';
 import { getStackConfig, StackConfig } from '../utils/stackConfig';
@@ -342,25 +333,25 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
       ref={containerRef}
       className={`w-full flex flex-col transition-all ${
         isFullscreen
-          ? 'bg-[#060e20] text-white h-screen p-4 overflow-y-auto'
-          : 'glass-panel rounded-2xl p-4 md:p-8 border border-[#334155] shadow-2xl space-y-6'
+          ? 'bg-[#070d19] text-white h-screen p-4 overflow-y-auto'
+          : 'glass-panel rounded-2xl p-4 md:p-7 space-y-5'
       }`}
     >
       {/* Header Banner */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between pb-4 border-b border-[#334155] gap-4">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between pb-4 border-b border-white/[0.08] gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-[#1a73e8]/20 border border-[#1a73e8]/40 text-[#adc7ff]">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-[#1a73e8]/15 border border-[#1a73e8]/30 text-[#68abff]">
               <Presentation className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg md:text-xl font-headline font-bold text-white tracking-wide flex items-center gap-2">
+              <h2 className="text-lg md:text-xl font-headline font-bold text-white tracking-tight flex items-center gap-2.5">
                 {title}
-                <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest rounded bg-[#131b2e] text-[#6ddd81] border border-[#334155]">
+                <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
                   HD Pitch Deck
                 </span>
               </h2>
-              <p className="text-xs md:text-sm text-[#c1c6d6] font-sans mt-0.5">
+              <p className="text-xs md:text-sm text-[#94a3b8] font-sans mt-0.5">
                 {subtitle}
               </p>
             </div>
@@ -373,10 +364,10 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
           <button
             type="button"
             onClick={() => setIsPlaying(!isPlaying)}
-            className={`px-3 py-1.5 rounded-lg border text-xs font-mono font-semibold flex items-center gap-1.5 transition-all shadow-sm ${
+            className={`px-3 py-1.5 rounded-lg border text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
               isPlaying
-                ? 'bg-[#FBBC04]/20 border-[#FBBC04] text-[#FBBC04]'
-                : 'bg-[#131b2e] hover:bg-[#1e293b] border-[#334155] text-[#dae2fd]'
+                ? 'bg-amber-500/15 border-amber-500/40 text-amber-400'
+                : 'bg-[#0f172a] hover:bg-[#1e293b] border-white/[0.08] text-[#cbd5e1]'
             }`}
             title={isPlaying ? 'Pause Auto-Play (6s/slide)' : 'Start Auto-Play Slideshow'}
           >
@@ -388,10 +379,10 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
           <button
             type="button"
             onClick={() => setShowThumbnails(!showThumbnails)}
-            className={`px-3 py-1.5 rounded-lg border text-xs font-mono font-semibold flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-lg border text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
               showThumbnails
-                ? 'bg-[#1a73e8] border-[#adc7ff] text-white shadow-md shadow-[#1a73e8]/30'
-                : 'bg-[#131b2e] hover:bg-[#1e293b] border-[#334155] text-[#dae2fd]'
+                ? 'bg-[#1a73e8] border-[#adc7ff]/40 text-white shadow-sm'
+                : 'bg-[#0f172a] hover:bg-[#1e293b] border-white/[0.08] text-[#cbd5e1]'
             }`}
             title="Toggle Slide Grid / Thumbnails"
           >
@@ -404,10 +395,10 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
             href={pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1.5 rounded-lg bg-[#131b2e] hover:bg-[#1e293b] border border-[#334155] text-[#dae2fd] hover:text-white text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
+            className="px-3 py-1.5 rounded-lg bg-[#0f172a] hover:bg-[#1e293b] border border-white/[0.08] text-[#cbd5e1] hover:text-white text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
             title="Open original PDF document in new browser tab"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-[#adc7ff]" />
+            <ExternalLink className="w-3.5 h-3.5 text-[#68abff]" />
             <span className="hidden sm:inline">Raw PDF</span>
           </a>
 
@@ -415,10 +406,10 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
           <a
             href={pdfUrl}
             download="aegis_autonomous_streaming.pdf"
-            className="px-3 py-1.5 rounded-lg bg-[#131b2e] hover:bg-[#1e293b] border border-[#334155] text-[#dae2fd] hover:text-white text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
+            className="px-3 py-1.5 rounded-lg bg-[#0f172a] hover:bg-[#1e293b] border border-white/[0.08] text-[#cbd5e1] hover:text-white text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
             title="Download original PDF presentation"
           >
-            <Download className="w-3.5 h-3.5 text-[#6ddd81]" />
+            <Download className="w-3.5 h-3.5 text-emerald-400" />
             <span className="hidden sm:inline">Download</span>
           </a>
 
@@ -426,7 +417,7 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
           <button
             type="button"
             onClick={toggleFullscreen}
-            className="px-3 py-1.5 rounded-lg bg-[#1a73e8]/80 hover:bg-[#1a73e8] border border-[#adc7ff]/40 text-white text-xs font-mono font-semibold flex items-center gap-1.5 transition-all shadow-md shadow-[#1a73e8]/20"
+            className="px-3 py-1.5 rounded-lg bg-[#1a73e8] hover:bg-[#1557b0] border border-[#adc7ff]/30 text-white text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
             title={isFullscreen ? 'Exit Fullscreen (F)' : 'Enter Fullscreen (F)'}
           >
             {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -439,12 +430,12 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Thumbnail Sidebar */}
         {showThumbnails && (
-          <aside className="w-full lg:w-56 max-h-[700px] overflow-y-auto rounded-xl bg-[#060e20]/90 border border-[#334155] p-3 space-y-3 shrink-0 scrollbar-thin animate-fade-in">
-            <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#8b909f] pb-2 border-b border-[#334155]/60 flex items-center justify-between">
+          <aside className="w-full lg:w-56 max-h-[700px] overflow-y-auto rounded-xl bg-[#090f1e] border border-white/[0.08] p-3 space-y-2.5 shrink-0 scrollbar-thin animate-fade-in">
+            <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#94a3b8] pb-2 border-b border-white/[0.08] flex items-center justify-between">
               <span>All Slides</span>
-              <span>{totalSlides}</span>
+              <span className="tabular-nums">{totalSlides}</span>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5">
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-2">
               {slidesData.map((slide) => {
                 const isSelected = slide.number === currentSlide;
                 return (
@@ -455,10 +446,10 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
                       setCurrentSlide(slide.number);
                       setIsPlaying(false);
                     }}
-                    className={`group relative rounded-lg overflow-hidden border text-left transition-all p-1.5 ${
+                    className={`group relative rounded-lg overflow-hidden border text-left transition-all p-1.5 cursor-pointer ${
                       isSelected
-                        ? 'border-[#adc7ff] bg-[#1a73e8]/30 shadow-md ring-2 ring-[#adc7ff]/50'
-                        : 'border-[#334155] bg-[#131b2e]/60 hover:border-[#8b909f] hover:bg-[#1e293b]'
+                        ? 'border-[#1a73e8] bg-[#1a73e8]/20 ring-1 ring-[#68abff]/40'
+                        : 'border-white/[0.06] bg-[#0f172a]/60 hover:border-white/20 hover:bg-[#1e293b]/60'
                     }`}
                   >
                     <div className="aspect-[16/9] w-full overflow-hidden rounded bg-black/60 relative">
@@ -473,17 +464,17 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
                     <div className="mt-1.5 px-0.5">
                       <div className="flex items-center justify-between">
                         <span
-                          className={`text-[10px] font-mono font-bold ${
-                            isSelected ? 'text-[#adc7ff]' : 'text-[#8b909f] group-hover:text-white'
+                          className={`text-[10px] font-mono font-bold tabular-nums ${
+                            isSelected ? 'text-[#68abff]' : 'text-[#94a3b8] group-hover:text-white'
                           }`}
                         >
                           Slide {slide.number}
                         </span>
-                        <span className="text-[9px] font-mono text-[#8b909f] truncate max-w-[90px]">
+                        <span className="text-[9px] font-mono text-[#64748b] truncate max-w-[90px]">
                           {slide.category}
                         </span>
                       </div>
-                      <p className="text-[11px] text-[#dae2fd] font-sans font-medium line-clamp-1 mt-0.5">
+                      <p className="text-[11px] text-[#e2e8f0] font-sans font-medium line-clamp-1 mt-0.5">
                         {slide.title}
                       </p>
                     </div>
@@ -495,9 +486,9 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
         )}
 
         {/* Primary Presentation Stage */}
-        <div className="flex-1 w-full flex flex-col items-center space-y-4">
-          {/* Active Slide Canvas with 16:9 Aspect Ratio */}
-          <div className="relative w-full rounded-2xl bg-black border border-[#334155] shadow-2xl overflow-hidden flex items-center justify-center aspect-[16/9] max-h-[780px] group">
+        <div className="flex-1 w-full flex flex-col items-center space-y-3.5">
+          {/* Active Slide Canvas with 16:9 Aspect Ratio (unobstructed corners) */}
+          <div className="relative w-full rounded-2xl bg-[#030712] border border-white/[0.1] shadow-2xl overflow-hidden flex items-center justify-center aspect-[16/9] max-h-[780px] group">
             <div
               className="relative w-full h-full transition-transform duration-200"
               style={{ transform: `scale(${zoom})` }}
@@ -518,7 +509,7 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
               onClick={prevSlide}
               disabled={currentSlide <= 1}
               aria-label="Previous Slide"
-              className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 opacity-0 group-hover:opacity-100 disabled:opacity-0 transition-all shadow-xl backdrop-blur-sm"
+              className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/70 hover:bg-black/90 text-white border border-white/15 opacity-0 group-hover:opacity-100 disabled:opacity-0 transition-all shadow-xl backdrop-blur-sm cursor-pointer"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -528,25 +519,14 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
               onClick={nextSlide}
               disabled={currentSlide >= totalSlides}
               aria-label="Next Slide"
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 opacity-0 group-hover:opacity-100 disabled:opacity-0 transition-all shadow-xl backdrop-blur-sm"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/70 hover:bg-black/90 text-white border border-white/15 opacity-0 group-hover:opacity-100 disabled:opacity-0 transition-all shadow-xl backdrop-blur-sm cursor-pointer"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
-
-            {/* Slide Index Badge in Bottom-Right */}
-            <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 text-xs font-mono font-bold text-white shadow-lg pointer-events-none flex items-center gap-2">
-              <span className="text-[#adc7ff]">{currentSlide}</span> / {totalSlides}
-            </div>
-
-            {/* Slide Category Pill in Top-Left */}
-            <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-white/20 text-[11px] font-mono font-bold text-[#6ddd81] shadow-lg pointer-events-none flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-[#FBBC04]" />
-              <span>{activeSlideMeta.category}</span>
-            </div>
           </div>
 
-          {/* Navigation Control Bar */}
-          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-3 rounded-xl bg-[#131b2e]/90 border border-[#334155] shadow-lg">
+          {/* Unified Navigation & Metadata Control Bar */}
+          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-2.5 rounded-xl bg-[#0b1326] border border-white/[0.08]">
             {/* Left: Previous / First */}
             <div className="flex items-center gap-2">
               <button
@@ -556,7 +536,7 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
                   setIsPlaying(false);
                 }}
                 disabled={currentSlide <= 1}
-                className="px-2.5 py-1.5 rounded-lg bg-[#060e20] hover:bg-[#1e293b] disabled:opacity-30 border border-[#334155] text-xs font-mono text-[#dae2fd] transition-all"
+                className="px-2.5 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] disabled:opacity-30 border border-white/[0.08] text-xs font-mono text-[#cbd5e1] transition-all cursor-pointer"
                 title="First Slide (Home)"
               >
                 First
@@ -568,7 +548,7 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
                   setIsPlaying(false);
                 }}
                 disabled={currentSlide <= 1}
-                className="px-4 py-2 rounded-lg bg-[#1a73e8] hover:bg-[#005bc0] disabled:opacity-30 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md shadow-[#1a73e8]/20"
+                className="px-3.5 py-1.5 rounded-lg bg-[#1a73e8] hover:bg-[#1557b0] disabled:opacity-30 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer"
                 title="Previous Slide (Left Arrow / PageUp)"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -576,14 +556,20 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
               </button>
             </div>
 
-            {/* Center: Slide Position & Scrub Slider */}
-            <div className="flex items-center gap-3 w-full sm:w-auto justify-center">
-              <span className="text-xs font-mono font-bold text-[#dae2fd] whitespace-nowrap">
-                Slide <span className="text-[#adc7ff]">{currentSlide}</span> of {totalSlides}
+            {/* Center: Slide Category Pill, Position & Scrub Slider */}
+            <div className="flex items-center gap-3 w-full sm:w-auto justify-center flex-wrap">
+              <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono text-emerald-400">
+                <Sparkles className="w-3 h-3 text-amber-400" />
+                {activeSlideMeta.category}
+              </span>
+
+              <span className="text-xs font-mono font-bold text-[#e2e8f0] whitespace-nowrap tabular-nums">
+                Slide <span className="text-[#68abff]">{currentSlide}</span> / {totalSlides}
               </span>
 
               <input
                 type="range"
+                aria-label="Scrub slides"
                 min={1}
                 max={totalSlides}
                 value={currentSlide}
@@ -591,30 +577,29 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
                   setCurrentSlide(Number(e.target.value));
                   setIsPlaying(false);
                 }}
-                className="w-28 sm:w-48 h-1.5 bg-[#060e20] rounded-lg appearance-none cursor-pointer accent-[#1a73e8]"
+                className="w-28 sm:w-44 h-1.5 bg-[#070d19] rounded-lg appearance-none cursor-pointer accent-[#1a73e8]"
                 title="Scrub slides"
               />
             </div>
 
-            {/* Right: Next / Zoom */}
+            {/* Right: Zoom & Next */}
             <div className="flex items-center gap-2">
-              {/* Zoom Controls */}
-              <div className="hidden md:flex items-center gap-1 bg-[#060e20] p-1 rounded-lg border border-[#334155]">
+              <div className="hidden md:flex items-center gap-1 bg-[#070d19] p-1 rounded-lg border border-white/[0.08]">
                 <button
                   type="button"
                   onClick={() => setZoom((z) => Math.max(0.8, Number((z - 0.1).toFixed(1))))}
-                  className="p-1 text-[#8b909f] hover:text-white hover:bg-[#1e293b] rounded transition"
+                  className="p-1 text-[#94a3b8] hover:text-white hover:bg-white/[0.06] rounded transition cursor-pointer"
                   title="Zoom Out"
                 >
                   <ZoomOut className="w-3.5 h-3.5" />
                 </button>
-                <span className="text-[11px] font-mono px-1 text-[#adc7ff] font-bold">
+                <span className="text-[11px] font-mono px-1 text-[#68abff] font-bold tabular-nums">
                   {Math.round(zoom * 100)}%
                 </span>
                 <button
                   type="button"
                   onClick={() => setZoom((z) => Math.min(1.5, Number((z + 0.1).toFixed(1))))}
-                  className="p-1 text-[#8b909f] hover:text-white hover:bg-[#1e293b] rounded transition"
+                  className="p-1 text-[#94a3b8] hover:text-white hover:bg-white/[0.06] rounded transition cursor-pointer"
                   title="Zoom In"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
@@ -622,14 +607,13 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
                 <button
                   type="button"
                   onClick={() => setZoom(1.0)}
-                  className="p-1 text-[#8b909f] hover:text-white hover:bg-[#1e293b] rounded transition"
+                  className="p-1 text-[#94a3b8] hover:text-white hover:bg-white/[0.06] rounded transition cursor-pointer"
                   title="Reset Zoom"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                 </button>
               </div>
 
-              {/* Next Slide Button */}
               <button
                 type="button"
                 onClick={() => {
@@ -637,7 +621,7 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
                   setIsPlaying(false);
                 }}
                 disabled={currentSlide >= totalSlides}
-                className="px-4 py-2 rounded-lg bg-[#1a73e8] hover:bg-[#005bc0] disabled:opacity-30 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md shadow-[#1a73e8]/20"
+                className="px-3.5 py-1.5 rounded-lg bg-[#1a73e8] hover:bg-[#1557b0] disabled:opacity-30 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer"
                 title="Next Slide (Right Arrow / Space / PageDown)"
               >
                 <span>Next</span>
@@ -646,36 +630,23 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
             </div>
           </div>
 
-          {/* Keyboard Shortcuts Helper Bar */}
-          <div className="w-full flex items-center justify-between text-[11px] font-mono text-[#8b909f] px-2">
-            <div className="flex items-center gap-4 flex-wrap">
-              <span><kbd className="bg-[#131b2e] px-1.5 py-0.5 rounded border border-[#334155] text-[#dae2fd]">←</kbd> <kbd className="bg-[#131b2e] px-1.5 py-0.5 rounded border border-[#334155] text-[#dae2fd]">→</kbd> or <kbd className="bg-[#131b2e] px-1.5 py-0.5 rounded border border-[#334155] text-[#dae2fd]">Space</kbd> Navigate</span>
-              <span><kbd className="bg-[#131b2e] px-1.5 py-0.5 rounded border border-[#334155] text-[#dae2fd]">F</kbd> Fullscreen</span>
-              <span><kbd className="bg-[#131b2e] px-1.5 py-0.5 rounded border border-[#334155] text-[#dae2fd]">Home</kbd> / <kbd className="bg-[#131b2e] px-1.5 py-0.5 rounded border border-[#334155] text-[#dae2fd]">End</kbd> First/Last</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-[#6ddd81]">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>High-DPI Retina Rendering</span>
-            </div>
-          </div>
-
-          {/* Active Slide Detailed Overview & Executive Notes */}
-          <div className="w-full p-5 rounded-2xl bg-[#131b2e]/80 border border-[#334155] space-y-3 mt-2 shadow-xl">
-            <div className="flex items-center justify-between border-b border-[#334155]/60 pb-2.5">
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded bg-[#1a73e8]/20 border border-[#1a73e8]/40 text-[#adc7ff] font-mono text-xs font-bold">
-                  Slide {activeSlideMeta.number} Notes
+          {/* Active Slide Key Takeaways */}
+          <div className="w-full p-5 rounded-xl bg-[#0b1326]/90 border border-white/[0.08] space-y-3">
+            <div className="flex flex-wrap items-center justify-between border-b border-white/[0.08] pb-2.5 gap-2">
+              <div className="flex items-center gap-2.5">
+                <span className="px-2 py-0.5 rounded bg-[#1a73e8]/15 border border-[#1a73e8]/30 text-[#68abff] font-mono text-xs font-bold tabular-nums">
+                  Slide {activeSlideMeta.number}
                 </span>
                 <h3 className="font-headline font-bold text-white text-base">
                   {activeSlideMeta.title}
                 </h3>
               </div>
-              <span className="text-xs font-mono text-[#8b909f]">
-                {activeSlideMeta.category}
+              <span className="text-[11px] font-mono text-[#64748b]">
+                Use ← / → or Space to navigate • F for Fullscreen
               </span>
             </div>
 
-            <p className="text-xs md:text-sm text-[#c1c6d6] font-sans leading-relaxed">
+            <p className="text-xs md:text-sm text-[#94a3b8] font-sans leading-relaxed">
               {activeSlideMeta.description}
             </p>
 
@@ -683,9 +654,9 @@ export const SlideDeckViewer: React.FC<SlideDeckViewerProps> = ({
               {activeSlideMeta.keyHighlights.map((highlight, idx) => (
                 <div
                   key={`hl-${idx}`}
-                  className="flex items-start gap-2 p-2.5 rounded-lg bg-[#060e20]/60 border border-[#334155]/50 text-xs text-[#dae2fd]"
+                  className="flex items-start gap-2.5 px-3 py-2 rounded-lg bg-[#070d19]/70 border border-white/[0.06] text-xs text-[#e2e8f0]"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-[#6ddd81] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                   <span>{highlight}</span>
                 </div>
               ))}

@@ -25,8 +25,9 @@ Apache Beam Python streaming pipeline that:
 import argparse
 import json
 import logging
+import time
 from datetime import datetime, timezone
-from typing import Any, Dict, Iterable, Tuple
+from typing import Any, Dict, Iterable, Optional, Tuple
 
 try:
     import google.auth.exceptions
@@ -61,7 +62,7 @@ try:
         PipelineOptions,
         StandardOptions,
     )
-    from apache_beam.transforms import window
+    from apache_beam.transforms import trigger, window
 
     HAVE_BEAM = True
 except ImportError:
@@ -70,17 +71,24 @@ except ImportError:
     class _MockDoFn:
         WindowParam = object()
 
+    class _MockWriteToBigQuery:
+        class Method:
+            STREAMING_INSERTS = "STREAMING_INSERTS"
+
+        def __new__(cls, **_kw):
+            return None
+
     class _MockBeam:
         DoFn = _MockDoFn
         Pipeline = object
         ParDo = staticmethod(lambda fn: fn)
         Map = staticmethod(lambda fn: fn)
         GroupByKey = staticmethod(lambda: None)
-        WindowInto = staticmethod(lambda w: None)
+        WindowInto = staticmethod(lambda *args, **kwargs: None)
 
         class io:
             ReadFromPubSub = staticmethod(lambda **kw: None)
-            WriteToBigQuery = staticmethod(lambda **kw: None)
+            WriteToBigQuery = _MockWriteToBigQuery
             BigQueryDisposition = type(
                 "BigQueryDisposition",
                 (),
@@ -93,8 +101,21 @@ except ImportError:
     class _MockWindow:
         FixedWindows = staticmethod(lambda s: None)
 
+    class _MockTrigger:
+        AfterWatermark = staticmethod(lambda **kw: None)
+        AfterProcessingTime = staticmethod(lambda delay=0: None)
+        AccumulationMode = type(
+            "AccumulationMode",
+            (),
+            {
+                "ACCUMULATING": "ACCUMULATING",
+                "DISCARDING": "DISCARDING",
+            },
+        )
+
     beam = _MockBeam()
     window = _MockWindow()
+    trigger = _MockTrigger()
     PipelineOptions = object
     GoogleCloudOptions = object
     StandardOptions = object
@@ -105,11 +126,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger("AegisDataflowPipeline")
 
+CRITICAL_CPU_THRESHOLD = 90.0
+CRITICAL_TEMP_THRESHOLD = 90.0
+CRITICAL_PRESSURE_THRESHOLD = 140.0
+WARNING_CPU_THRESHOLD = 75.0
+WARNING_TEMP_THRESHOLD = 75.0
+WARNING_PRESSURE_THRESHOLD = 125.0
+
 
 class ParseTelemetryJsonDoFn(beam.DoFn):
     """Parses incoming Pub/Sub messages into validated telemetry dicts."""
 
     def process(self, element: Any) -> Iterable[Dict[str, Any]]:
+        """Parses a raw Pub/Sub message into a structured telemetry dict."""
         try:
             if isinstance(element, bytes):
                 data = json.loads(element.decode("utf-8"))
@@ -133,6 +162,10 @@ class ParseTelemetryJsonDoFn(beam.DoFn):
             timestamp = (
                 data.get("timestamp") or datetime.now(timezone.utc).isoformat()
             )
+            raw_ing_ms = data.get("ingestion_timestamp_ms")
+            ingestion_timestamp_ms: Optional[int] = (
+                int(raw_ing_ms) if raw_ing_ms is not None else None
+            )
 
             # Ensure UTC ISO format ending in Z
             if isinstance(timestamp, str):
@@ -154,6 +187,7 @@ class ParseTelemetryJsonDoFn(beam.DoFn):
                 "pressure_psi": pressure,
                 "memory_utilization_pct": memory,
                 "status": status,
+                "ingestion_timestamp_ms": ingestion_timestamp_ms,
             }
         except (
             json.JSONDecodeError,
@@ -169,6 +203,7 @@ class FormatBigQueryRecordFn(beam.DoFn):
     """Formats telemetry records for BigQuery analytics.telemetry_events."""
 
     def process(self, element: Dict[str, Any]) -> Iterable[Dict[str, Any]]:
+        """Formats a parsed telemetry dict for BigQuery streaming insertion."""
         cpu = float(element.get("cpu_utilization", 0.0))
         temp = float(element.get("temperature_c", 0.0))
         pressure = float(element.get("pressure_psi", 0.0))
@@ -176,9 +211,9 @@ class FormatBigQueryRecordFn(beam.DoFn):
 
         is_anomaly = (
             status == "CRITICAL"
-            or cpu > 90.0
-            or temp > 85.0
-            or pressure > 140.0
+            or cpu > CRITICAL_CPU_THRESHOLD
+            or temp > CRITICAL_TEMP_THRESHOLD
+            or pressure > CRITICAL_PRESSURE_THRESHOLD
         )
 
         yield {
@@ -206,8 +241,9 @@ class ComputeWindowAggregatesDoFn(beam.DoFn):
     def process(
         self,
         element: Tuple[str, Iterable[Dict[str, Any]]],
-        window_param=beam.DoFn.WindowParam,
+        window_param: Any = beam.DoFn.WindowParam,
     ) -> Iterable[Dict[str, Any]]:
+        """Computes 10s window averages and anomaly status for an asset."""
         asset_id, records_iter = element
         records = list(records_iter)
         if not records:
@@ -224,11 +260,28 @@ class ComputeWindowAggregatesDoFn(beam.DoFn):
         avg_pressure = round(sum_pressure / count, 2)
         avg_memory = round(sum_memory / count, 2)
 
+        ingested_vals = [
+            int(r["ingestion_timestamp_ms"])
+            for r in records
+            if r.get("ingestion_timestamp_ms") is not None
+        ]
+        max_ingestion_ms: Optional[int] = (
+            max(ingested_vals) if ingested_vals else None
+        )
+
         # Anomaly evaluation rules matching Project Aegis baseline
-        if avg_cpu > 90.0 or avg_temp > 85.0 or avg_pressure > 140.0:
+        if (
+            avg_cpu > CRITICAL_CPU_THRESHOLD
+            or avg_temp > CRITICAL_TEMP_THRESHOLD
+            or avg_pressure > CRITICAL_PRESSURE_THRESHOLD
+        ):
             status = "CRITICAL"
             is_anomaly = True
-        elif avg_cpu > 80.0 or avg_temp > 75.0 or avg_pressure > 125.0:
+        elif (
+            avg_cpu > WARNING_CPU_THRESHOLD
+            or avg_temp > WARNING_TEMP_THRESHOLD
+            or avg_pressure > WARNING_PRESSURE_THRESHOLD
+        ):
             status = "WARNING"
             is_anomaly = False
         else:
@@ -248,6 +301,7 @@ class ComputeWindowAggregatesDoFn(beam.DoFn):
             "status": status,
             "is_anomaly": is_anomaly,
             "window_end": iso_end,
+            "ingestion_timestamp_ms": max_ingestion_ms,
             "record_count": count,
         }
 
@@ -261,15 +315,29 @@ class WriteToBigtableDoFn(beam.DoFn):
         instance_id: str,
         table_id: str = "telemetry_metrics",
         column_family: str = "metrics",
-    ):
+    ) -> None:
         self.project_id = project_id
         self.instance_id = instance_id
         self.table_id = table_id
         self.column_family = column_family
         self.client = None
         self.table = None
+        self._pending_records: Dict[str, Dict[str, Any]] = {}
+        self._last_committed: Dict[str, Tuple[str, int, int]] = {}
 
-    def setup(self):
+    @staticmethod
+    def _record_sort_key(
+        record: Dict[str, Any],
+    ) -> Tuple[str, int, int]:
+        """Returns (window_end, ingestion_timestamp_ms, record_count)."""
+        return (
+            str(record.get("window_end", "")),
+            int(record.get("ingestion_timestamp_ms") or 0),
+            int(record.get("record_count") or 0),
+        )
+
+    def setup(self) -> None:
+        """Initializes the Cloud Bigtable client and table handle per worker."""
         if not HAVE_BIGTABLE or bigtable is None:
             logger.warning("google-cloud-bigtable package unavailable.")
             self.client = None
@@ -289,53 +357,125 @@ class WriteToBigtableDoFn(beam.DoFn):
             self.client = None
             self.table = None
 
-    def process(self, element: Dict[str, Any]) -> Iterable[Dict[str, Any]]:
-        asset_id = element["asset_id"]
-        if self.table:
-            try:
-                row = self.table.direct_row(asset_id.encode("utf-8"))
-                row.set_cell(
-                    self.column_family,
-                    b"cpu",
-                    str(element["avg_cpu"]).encode("utf-8"),
-                )
-                row.set_cell(
-                    self.column_family,
-                    b"temp",
-                    str(element["avg_temp"]).encode("utf-8"),
-                )
-                row.set_cell(
-                    self.column_family,
-                    b"pressure",
-                    str(element["avg_pressure"]).encode("utf-8"),
-                )
-                row.set_cell(
-                    self.column_family,
-                    b"memory",
-                    str(element["avg_memory"]).encode("utf-8"),
-                )
-                row.set_cell(
-                    self.column_family,
-                    b"status",
-                    element["status"].encode("utf-8"),
-                )
-                row.set_cell(
-                    self.column_family,
-                    b"is_anomaly",
-                    str(element["is_anomaly"]).encode("utf-8"),
-                )
-                row.set_cell(
-                    self.column_family,
-                    b"timestamp",
-                    element["window_end"].encode("utf-8"),
-                )
-                row.commit()
-            except _BIGTABLE_EXCEPTIONS as exc:
-                logger.warning(
-                    "Error mutating Bigtable row for '%s': %s", asset_id, exc
-                )
+    def start_bundle(self) -> None:
+        """Resets the per-bundle record buffer before processing a bundle."""
+        self._pending_records = {}
 
+    def process(self, element: Dict[str, Any]) -> Iterable[Dict[str, Any]]:
+        """Buffers the freshest pane per asset within the current bundle."""
+        asset_id = str(element["asset_id"])
+        candidate_key = self._record_sort_key(element)
+        existing = self._pending_records.get(asset_id)
+        if existing is None or candidate_key >= self._record_sort_key(existing):
+            self._pending_records[asset_id] = element
         yield element
+
+    def _build_direct_row(
+        self,
+        asset_id: str,
+        element: Dict[str, Any],
+        db_insert_timestamp_ms: int,
+    ) -> Any:
+        """Constructs a Bigtable DirectRow mutation for a single asset."""
+        row = self.table.direct_row(asset_id.encode("utf-8"))
+        row.set_cell(
+            self.column_family,
+            b"cpu",
+            str(element["avg_cpu"]).encode("utf-8"),
+        )
+        row.set_cell(
+            self.column_family,
+            b"temp",
+            str(element["avg_temp"]).encode("utf-8"),
+        )
+        row.set_cell(
+            self.column_family,
+            b"pressure",
+            str(element["avg_pressure"]).encode("utf-8"),
+        )
+        row.set_cell(
+            self.column_family,
+            b"memory",
+            str(element["avg_memory"]).encode("utf-8"),
+        )
+        row.set_cell(
+            self.column_family,
+            b"status",
+            str(element["status"]).encode("utf-8"),
+        )
+        row.set_cell(
+            self.column_family,
+            b"is_anomaly",
+            str(element["is_anomaly"]).encode("utf-8"),
+        )
+        row.set_cell(
+            self.column_family,
+            b"timestamp",
+            str(element["window_end"]).encode("utf-8"),
+        )
+        ingested_ms = element.get("ingestion_timestamp_ms")
+        if ingested_ms is not None:
+            row.set_cell(
+                self.column_family,
+                b"ingestion_timestamp_ms",
+                str(int(ingested_ms)).encode("utf-8"),
+            )
+        row.set_cell(
+            self.column_family,
+            b"db_insert_timestamp_ms",
+            str(db_insert_timestamp_ms).encode("utf-8"),
+        )
+        return row
+
+    def finish_bundle(self) -> None:
+        """Flushes the buffered asset rows to Cloud Bigtable in a single RPC."""
+        if not self._pending_records:
+            return
+        pending = self._pending_records
+        self._pending_records = {}
+        if not self.table:
+            return
+
+        rows = []
+        committed_keys: Dict[str, Tuple[str, int, int]] = {}
+        db_insert_timestamp_ms = int(time.time() * 1000)
+
+        for asset_id, element in pending.items():
+            cand_win, cand_ing_ms, cand_count = self._record_sort_key(element)
+            last = self._last_committed.get(asset_id)
+            if last is not None:
+                last_win, last_ing_ms, last_count = last
+                if cand_win < last_win:
+                    continue
+                if (
+                    cand_win == last_win
+                    and cand_ing_ms <= last_ing_ms
+                    and cand_count <= last_count
+                ):
+                    continue
+
+            rows.append(
+                self._build_direct_row(
+                    asset_id, element, db_insert_timestamp_ms
+                )
+            )
+            committed_keys[asset_id] = (cand_win, cand_ing_ms, cand_count)
+
+        if not rows:
+            return
+
+        try:
+            statuses = self.table.mutate_rows(rows)
+            failed_errors = [
+                err for err in (statuses or []) if getattr(err, "code", 0) != 0
+            ]
+            if failed_errors:
+                for err in failed_errors:
+                    logger.warning("Bigtable batch mutation error: %s", err)
+            else:
+                self._last_committed.update(committed_keys)
+        except _BIGTABLE_EXCEPTIONS as exc:
+            logger.warning("Error mutating Bigtable rows batch: %s", exc)
 
 
 def build_pipeline(
@@ -348,8 +488,9 @@ def build_pipeline(
     bigtable_column_family: str = "metrics",
     bigquery_table: str = "",
     window_seconds: int = 10,
-    source_pcollection=None,
-):
+    trigger_interval_seconds: int = 1,
+    source_pcollection: Any = None,
+) -> Any:
     """Constructs the Apache Beam streaming pipeline graph."""
     if source_pcollection is not None:
         raw_events = source_pcollection
@@ -383,15 +524,26 @@ def build_pipeline(
                 "temperature_c:FLOAT,pressure_psi:FLOAT,"
                 "memory_utilization_pct:FLOAT,status:STRING,is_anomaly:BOOLEAN"
             ),
+            method=beam.io.WriteToBigQuery.Method.STREAMING_INSERTS,
             write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,
             create_disposition=beam.io.BigQueryDisposition.CREATE_NEVER,
         )
 
     # Sink 2: 10-Second Tumbling Window Aggregation to Cloud Bigtable
+    # Uses an early processing-time trigger (default 1s) with ACCUMULATING mode
+    # so Bigtable receives sub-2s real-time pane updates throughout each 10s
+    # window rather than waiting for the end-of-window watermark lag.
     windowed_aggregates = (
         parsed_events
         | "10sFixedWindow"
-        >> beam.WindowInto(window.FixedWindows(window_seconds))
+        >> beam.WindowInto(
+            window.FixedWindows(window_seconds),
+            trigger=trigger.AfterWatermark(
+                early=trigger.AfterProcessingTime(trigger_interval_seconds)
+            ),
+            accumulation_mode=trigger.AccumulationMode.ACCUMULATING,
+            allowed_lateness=0,
+        )
         | "KeyByAssetId" >> beam.Map(extract_asset_key)
         | "GroupPerAsset" >> beam.GroupByKey()
         | "ComputeAggregates" >> beam.ParDo(ComputeWindowAggregatesDoFn())
@@ -410,7 +562,7 @@ def build_pipeline(
     return windowed_aggregates
 
 
-def run(argv=None):
+def run(argv: Optional[list[str]] = None) -> None:
     """Main CLI entry point for deploying the Cloud Dataflow streaming job."""
     parser = argparse.ArgumentParser(
         description="Project Aegis - Cloud Dataflow Streaming Pipeline"
@@ -459,6 +611,12 @@ def run(argv=None):
         default=10,
         help="Fixed tumbling window size in seconds (default: 10)",
     )
+    parser.add_argument(
+        "--trigger_interval_seconds",
+        type=int,
+        default=1,
+        help="Early processing-time trigger interval in seconds (default: 1)",
+    )
 
     known_args, pipeline_args = parser.parse_known_args(argv)
 
@@ -480,6 +638,7 @@ def run(argv=None):
             bigtable_column_family=known_args.bigtable_column_family,
             bigquery_table=known_args.bigquery_table,
             window_seconds=known_args.window_seconds,
+            trigger_interval_seconds=known_args.trigger_interval_seconds,
         )
 
 

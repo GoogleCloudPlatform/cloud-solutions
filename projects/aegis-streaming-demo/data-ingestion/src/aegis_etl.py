@@ -15,10 +15,9 @@
 
 """Project Aegis - Streaming Telemetry ETL Pipeline.
 
-PySpark Structured Streaming pipeline designed for Dataproc Serverless
-execution with:
-- Lightning Engine (C++ Velox/Gluten vectorized execution)
-- OpenLineage native data lineage tracking
+PySpark Structured Streaming pipeline designed for Dataproc execution with:
+- Vectorized Spark execution (and optional C++ Lightning Engine on Enterprise)
+- OpenLineage built-in data lineage tracking
 - Google Cloud Pub/Sub & Apache Kafka ingestion sources
 - 10-second Tumbling Window aggregation & anomaly detection
 - Cloud Bigtable state sink for live asset status & rolling averages
@@ -30,12 +29,15 @@ import json
 import logging
 import os
 import sys
+import time
 import urllib.error
 import urllib.request
 from typing import Any
 
 try:
     import google.auth.exceptions
+    import google.auth.transport.requests
+    import google.oauth2.id_token
     from google.api_core.exceptions import GoogleAPICallError
     from google.cloud import bigtable
     from google.cloud.bigtable.row import DirectRow
@@ -44,6 +46,7 @@ try:
     _GCP_EXCEPTIONS: tuple[type[Exception], ...] = (
         GoogleAPICallError,
         google.auth.exceptions.GoogleAuthError,
+        AttributeError,
         ValueError,
         TypeError,
         KeyError,
@@ -55,6 +58,7 @@ except ImportError:
     DirectRow = None  # type: ignore[assignment]
     HAVE_BIGTABLE = False
     _GCP_EXCEPTIONS = (
+        AttributeError,
         ValueError,
         TypeError,
         KeyError,
@@ -68,6 +72,7 @@ try:
     from pyspark.sql import functions as F
     from pyspark.sql.types import (
         DoubleType,
+        LongType,
         StringType,
         StructField,
         StructType,
@@ -90,6 +95,9 @@ except ImportError:
 
     def DoubleType():
         return _MockType("double")
+
+    def LongType():
+        return _MockType("long")
 
     def StringType():
         return _MockType("string")
@@ -120,6 +128,7 @@ TELEMETRY_SCHEMA: StructType = StructType(
     [
         StructField("asset_id", StringType(), False),
         StructField("timestamp", StringType(), False),
+        StructField("ingestion_timestamp_ms", LongType(), True),
         StructField("cpu_utilization", DoubleType(), False),
         StructField("temperature_c", DoubleType(), False),
         StructField("pressure_psi", DoubleType(), False),
@@ -210,23 +219,54 @@ def parse_args() -> argparse.Namespace:
         default="10 seconds",
         help="Tumbling window size for aggregation",
     )
+    parser.add_argument(
+        "--shuffle-partitions",
+        type=int,
+        default=int(os.getenv("SPARK_SHUFFLE_PARTITIONS", "8")),
+        help=(
+            "Number of Spark SQL shuffle and state store partitions. "
+            "Scale proportionally with Dataproc worker vCPUs "
+            "(num_workers * vcpus_per_worker, e.g. 8 for 2x n2-standard-4)."
+        ),
+    )
     return parser.parse_args()
 
 
-def create_spark_session(app_name: str = "AegisTelemetryETL") -> SparkSession:
-    """Initialize PySpark SparkSession configured for Dataproc Serverless."""
-    logger.info("Initializing SparkSession with Lightning Engine & Lineage...")
+def create_spark_session(
+    app_name: str = "AegisTelemetryETL", shuffle_partitions: int = 8
+) -> SparkSession:
+    """Initialize PySpark SparkSession configured for Dataproc.
+
+    Partition & Cluster Scaling Guidance:
+    -------------------------------------
+    In Spark Structured Streaming, stateful operations (such as `groupBy` on a
+    10-second tumbling window) persist state-store delta files to Cloud Storage
+    for every shuffle partition on every micro-batch. Leaving
+    `shuffle.partitions` at the Spark default (200) forces 200 Cloud Storage
+    state commits per batch, causing severe micro-batch latency on compact
+    clusters.
+
+    Rule of Thumb when scaling `aegis-spark-cluster`:
+      `spark.sql.shuffle.partitions = dataproc_num_workers * vcpus_per_worker`
+      - 2x n2-standard-4 workers (8 vCPUs total) -> shuffle_partitions = 8
+      - 4x n2-standard-4 workers (16 vCPUs total) -> shuffle_partitions = 16
+    """
+    logger.info(
+        "Initializing SparkSession (shuffle.partitions=%d)...",
+        shuffle_partitions,
+    )
     builder = (
         SparkSession.builder.appName(app_name)
-        # OpenLineage Data Lineage Properties
+        # Dataproc Data Lineage Properties
         .config("spark.dataproc.lineage.enabled", "true")
-        .config(
-            "spark.extraListeners",
-            "io.openlineage.spark.agent.OpenLineageSparkListener",
+        # Vectorized Execution Properties
+        .config("spark.sql.execution.vectorized.enabled", "true").config(
+            "spark.sql.parquet.enableVectorizedReader", "true"
         )
-        # C++ Vectorized Lightning Engine (Velox / Gluten) Properties
-        .config("spark.spark.vectorized.enabled", "true")
-        .config("spark.sql.execution.vectorized.enabled", "true")
+        # Shuffle & State Store Partitioning (matched to cluster worker vCPUs)
+        .config("spark.sql.shuffle.partitions", str(shuffle_partitions))
+        # Fair scheduler so BigQuery and Bigtable sinks run concurrently
+        .config("spark.scheduler.mode", "FAIR")
         # Timezone standardization
         .config("spark.sql.session.timeZone", "UTC")
     )
@@ -311,6 +351,7 @@ def compute_tumbling_window_aggregations(
             F.avg("memory_utilization_pct").alias("avg_memory"),
             F.max("cpu_utilization").alias("max_cpu"),
             F.max("temperature_c").alias("max_temp"),
+            F.max("ingestion_timestamp_ms").alias("ingestion_timestamp_ms"),
             F.count(F.lit(1)).alias("count_events"),
         )
         .select(
@@ -323,6 +364,7 @@ def compute_tumbling_window_aggregations(
             F.round(F.col("avg_memory"), 2).alias("avg_memory"),
             F.round(F.col("max_cpu"), 2).alias("max_cpu"),
             F.round(F.col("max_temp"), 2).alias("max_temp"),
+            F.col("ingestion_timestamp_ms"),
             F.col("count_events"),
             ((F.col("avg_cpu") > 90.0) | (F.col("avg_temp") > 90.0)).alias(
                 "is_anomaly"
@@ -341,6 +383,180 @@ def compute_tumbling_window_aggregations(
     )
 
 
+_BT_TABLES: dict[tuple[str, str, str], Any] = {}
+
+
+def _get_bigtable_table(
+    project_id: str, instance_id: str, table_id: str
+) -> Any:
+    """Return a cached Cloud Bigtable table handle for the given identifiers."""
+    if not HAVE_BIGTABLE or bigtable is None or DirectRow is None:
+        raise RuntimeError("google-cloud-bigtable SDK is not available")
+    key = (project_id, instance_id, table_id)
+    if key not in _BT_TABLES:
+        client = bigtable.Client(project=project_id, admin=False)
+        instance = client.instance(instance_id)
+        _BT_TABLES[key] = instance.table(table_id)
+    return _BT_TABLES[key]
+
+
+def _build_bigtable_row(
+    record: dict[str, Any], column_family: str, db_insert_timestamp_ms: int
+) -> Any:
+    """Construct a Bigtable DirectRow mutation for a single asset window."""
+    row_key = str(record["asset_id"]).encode("utf-8")
+    row = DirectRow(row_key=row_key)
+
+    row.set_cell(column_family, b"cpu", str(record["avg_cpu"]).encode("utf-8"))
+    row.set_cell(
+        column_family, b"temp", str(record["avg_temp"]).encode("utf-8")
+    )
+    row.set_cell(
+        column_family,
+        b"pressure",
+        str(record["avg_pressure"]).encode("utf-8"),
+    )
+    row.set_cell(
+        column_family,
+        b"memory",
+        str(record["avg_memory"]).encode("utf-8"),
+    )
+    row.set_cell(
+        column_family,
+        b"status",
+        str(record["status"]).encode("utf-8"),
+    )
+
+    w_end = record["window_end"]
+    if hasattr(w_end, "isoformat"):
+        iso_ts = w_end.isoformat()
+    else:
+        iso_ts = str(w_end).replace(" ", "T")
+    if not iso_ts.endswith("Z") and "+" not in iso_ts:
+        iso_ts += "Z"
+
+    row.set_cell(column_family, b"timestamp", iso_ts.encode("utf-8"))
+    row.set_cell(
+        column_family,
+        b"is_anomaly",
+        str(record["is_anomaly"]).encode("utf-8"),
+    )
+
+    ingested_ms = record.get("ingestion_timestamp_ms")
+    if ingested_ms is not None:
+        row.set_cell(
+            column_family,
+            b"ingestion_timestamp_ms",
+            str(int(ingested_ms)).encode("utf-8"),
+        )
+    row.set_cell(
+        column_family,
+        b"db_insert_timestamp_ms",
+        str(db_insert_timestamp_ms).encode("utf-8"),
+    )
+    return row
+
+
+def _notify_agent_of_critical_anomalies(
+    records: list[dict[str, Any]],
+) -> None:
+    """Notify the Anomaly Mitigation Agent of critical anomalies in records."""
+    for r in records:
+        is_critical = (
+            str(r.get("is_anomaly", "")).lower() == "true"
+            or r.get("status") == "CRITICAL"
+            or (r.get("avg_cpu") is not None and float(r["avg_cpu"]) > 90.0)
+            or (r.get("avg_temp") is not None and float(r["avg_temp"]) > 90.0)
+        )
+        if not is_critical:
+            continue
+
+        asset_id = str(r["asset_id"])
+        logger.warning(
+            "[Spark Streaming] Anomaly on %s (CPU: %s, Temp: %s).",
+            asset_id,
+            r.get("avg_cpu"),
+            r.get("avg_temp"),
+        )
+        try:
+            agent_endpoint = (
+                os.getenv("AGENT_SERVICE_URL")
+                or os.getenv("AGENT_ENDPOINT_URL")
+                or ""
+            ).strip()
+            if not agent_endpoint:
+                continue
+
+            if (
+                agent_endpoint.startswith("projects/")
+                or "reasoningEngines" in agent_endpoint
+            ):
+                logger.debug(
+                    "[Spark Streaming] GEAP Reasoning Engine configured (%s); "
+                    "RCA is triggered via HUD Backend on anomaly detection.",
+                    agent_endpoint,
+                )
+                continue
+
+            if agent_endpoint.startswith(("http://", "https://")):
+                clean_url = agent_endpoint.rstrip("/")
+                target_url = (
+                    clean_url
+                    if clean_url.endswith("/recommendation")
+                    else f"{clean_url}/api/agent/recommendation"
+                )
+                payload = json.dumps(
+                    {
+                        "asset_id": asset_id,
+                        "cpu_utilization": float(r.get("avg_cpu", 95.0)),
+                        "temperature_c": float(r.get("avg_temp", 94.0)),
+                        "pressure_psi": float(r.get("avg_pressure", 115.0)),
+                        "memory_utilization_pct": float(
+                            r.get("avg_memory", 85.0)
+                        ),
+                        "status": "CRITICAL",
+                    }
+                ).encode("utf-8")
+                headers = {"Content-Type": "application/json"}
+                is_local = (
+                    "localhost" in clean_url
+                    or "127.0.0.1" in clean_url
+                    or os.getenv("NO_GCE_CHECK") == "true"
+                )
+                if not is_local and google is not None:
+                    try:
+                        auth_req = google.auth.transport.requests.Request()
+                        token = google.oauth2.id_token.fetch_id_token(
+                            auth_req, clean_url
+                        )
+                        headers["Authorization"] = f"Bearer {token}"
+                    except _GCP_EXCEPTIONS as auth_err:
+                        logger.debug(
+                            "[Spark Streaming] Could not mint OIDC token: %s",
+                            auth_err,
+                        )
+                req = urllib.request.Request(
+                    target_url,
+                    data=payload,
+                    headers=headers,
+                )
+                with urllib.request.urlopen(req, timeout=3):
+                    pass
+                logger.info(
+                    "[Spark Streaming] Consulted Agent for %s.",
+                    asset_id,
+                )
+        except (
+            urllib.error.URLError,
+            ValueError,
+            TypeError,
+            OSError,
+        ) as ex:
+            logger.warning(
+                "[Spark Streaming] Agent notification skipped: %s", ex
+            )
+
+
 def write_batch_to_bigtable(
     batch_df: DataFrame,
     batch_id: int,
@@ -350,9 +566,21 @@ def write_batch_to_bigtable(
     column_family: str,
 ) -> None:
     """ForeachBatch writer for updating live state in Cloud Bigtable."""
-    records = batch_df.collect()
-    if not records:
+    raw_records = batch_df.collect()
+    if not raw_records:
         return
+
+    all_records: list[dict[str, Any]] = [
+        r.asDict() if hasattr(r, "asDict") else dict(r) for r in raw_records
+    ]
+
+    # Sort ascending by window_end and keep only the latest window per asset_id
+    # so older windows in a multi-window micro-batch never overwrite newer ones.
+    all_records.sort(key=lambda item: str(item.get("window_end", "")))
+    latest_by_asset: dict[str, dict[str, Any]] = {}
+    for item in all_records:
+        latest_by_asset[str(item["asset_id"])] = item
+    records = list(latest_by_asset.values())
 
     logger.info(
         "[Batch %s] Writing %d records to Bigtable table '%s'...",
@@ -362,59 +590,19 @@ def write_batch_to_bigtable(
     )
 
     try:
-        if not HAVE_BIGTABLE or bigtable is None or DirectRow is None:
-            raise RuntimeError("google-cloud-bigtable SDK is not available")
-        client = bigtable.Client(project=project_id, admin=False)
-        instance = client.instance(instance_id)
-        table = instance.table(table_id)
+        table = _get_bigtable_table(project_id, instance_id, table_id)
+        db_insert_timestamp_ms = int(time.time() * 1000)
+        rows = [
+            _build_bigtable_row(r, column_family, db_insert_timestamp_ms)
+            for r in records
+        ]
 
-        rows = []
-        for r in records:
-            row_key = str(r["asset_id"]).encode("utf-8")
-            row = DirectRow(row_key=row_key)
-
-            row.set_cell(
-                column_family, b"cpu", str(r["avg_cpu"]).encode("utf-8")
-            )
-            row.set_cell(
-                column_family, b"temp", str(r["avg_temp"]).encode("utf-8")
-            )
-            row.set_cell(
-                column_family,
-                b"pressure",
-                str(r["avg_pressure"]).encode("utf-8"),
-            )
-            row.set_cell(
-                column_family,
-                b"memory",
-                str(r["avg_memory"]).encode("utf-8"),
-            )
-            row.set_cell(
-                column_family,
-                b"status",
-                str(r["status"]).encode("utf-8"),
-            )
-
-            w_end = r["window_end"]
-            if hasattr(w_end, "isoformat"):
-                iso_ts = w_end.isoformat()
-            else:
-                iso_ts = str(w_end).replace(" ", "T")
-            if not iso_ts.endswith("Z") and "+" not in iso_ts:
-                iso_ts += "Z"
-
-            row.set_cell(column_family, b"timestamp", iso_ts.encode("utf-8"))
-            row.set_cell(
-                column_family,
-                b"is_anomaly",
-                str(r["is_anomaly"]).encode("utf-8"),
-            )
-
-            rows.append(row)
-
-        errors = table.mutate_rows(rows)
-        if errors:
-            for err in errors:
+        statuses = table.mutate_rows(rows)
+        failed_errors = [
+            err for err in (statuses or []) if getattr(err, "code", 0) != 0
+        ]
+        if failed_errors:
+            for err in failed_errors:
                 logger.error(
                     "[Batch %s] Bigtable row mutation error: %s",
                     batch_id,
@@ -427,67 +615,7 @@ def write_batch_to_bigtable(
                 len(rows),
             )
 
-        # Hook: consult Anomaly Mitigation Agent if critical anomaly detected
-        for r in records:
-            is_critical = (
-                str(r.get("is_anomaly", "")).lower() == "true"
-                or r.get("status") == "CRITICAL"
-                or (r.get("avg_cpu") is not None and float(r["avg_cpu"]) > 90.0)
-                or (
-                    r.get("avg_temp") is not None
-                    and float(r["avg_temp"]) > 90.0
-                )
-            )
-            if is_critical:
-                asset_id = str(r["asset_id"])
-                logger.warning(
-                    "[Spark Streaming] Anomaly on %s (CPU: %s, Temp: %s).",
-                    asset_id,
-                    r.get("avg_cpu"),
-                    r.get("avg_temp"),
-                )
-                try:
-                    default_url = (
-                        "https://hud-backend-yww5w7x2xa-uc.a.run.app"
-                        "/api/agent/recommendation"
-                    )
-                    agent_endpoint = os.getenv("AGENT_SERVICE_URL", default_url)
-                    if not agent_endpoint.endswith("/recommendation"):
-                        clean_url = agent_endpoint.rstrip("/")
-                        agent_endpoint = f"{clean_url}/api/agent/recommendation"
-
-                    payload = json.dumps(
-                        {
-                            "asset_id": asset_id,
-                            "cpu_utilization": float(r.get("avg_cpu", 95.0)),
-                            "temperature_c": float(r.get("avg_temp", 94.0)),
-                            "pressure_psi": float(r.get("avg_pressure", 115.0)),
-                            "memory_utilization_pct": float(
-                                r.get("avg_memory", 85.0)
-                            ),
-                            "status": "CRITICAL",
-                        }
-                    ).encode("utf-8")
-                    headers = {"Content-Type": "application/json"}
-                    req = urllib.request.Request(
-                        agent_endpoint,
-                        data=payload,
-                        headers=headers,
-                    )
-                    urllib.request.urlopen(req, timeout=3)
-                    logger.info(
-                        "[Spark Streaming] Consulted Agent for %s.",
-                        asset_id,
-                    )
-                except (
-                    urllib.error.URLError,
-                    ValueError,
-                    TypeError,
-                    OSError,
-                ) as ex:
-                    logger.warning(
-                        "[Spark Streaming] Agent notification skipped: %s", ex
-                    )
+        _notify_agent_of_critical_anomalies(records)
 
     except _SPARK_EXCEPTIONS as e:
         logger.error(
@@ -536,7 +664,7 @@ def main() -> None:
         args.project_id,
     )
 
-    spark = create_spark_session()
+    spark = create_spark_session(shuffle_partitions=args.shuffle_partitions)
 
     try:
         json_stream = read_input_stream(spark, args)

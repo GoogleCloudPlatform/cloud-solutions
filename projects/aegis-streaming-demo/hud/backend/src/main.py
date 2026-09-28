@@ -27,6 +27,7 @@ import asyncio
 import logging
 import os
 import sys
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 
 import uvicorn
@@ -54,6 +55,56 @@ _BACKGROUND_SYNC_EXCEPTIONS = (
     OSError,
 )
 
+
+async def _bigtable_sync_loop() -> None:
+    """Background loop polling Cloud Bigtable for live asset telemetry."""
+    logger.info("Background Bigtable telemetry sync loop started.")
+    while True:
+        try:
+            await asyncio.to_thread(state_manager.read_from_bigtable)
+        except _BACKGROUND_SYNC_EXCEPTIONS as exc:
+            logger.debug("Error in background Bigtable sync loop: %s", exc)
+        await asyncio.sleep(1.0)
+
+
+async def _pipeline_sync_loop() -> None:
+    """Background loop continuously refreshing active streaming pipeline."""
+    project_id = (
+        os.getenv("GCP_PROJECT") or os.getenv("GOOGLE_CLOUD_PROJECT") or ""
+    ).strip()
+    region = os.getenv("GCP_REGION", "us-central1")
+    while True:
+        try:
+            if project_id and region:
+                client = get_pipeline_client()
+                status = await asyncio.to_thread(
+                    client.refresh_status_sync, project_id, region
+                )
+                logger.debug(
+                    "Pipeline background sync (%s): status=%s",
+                    client.engine_name,
+                    status.get("status"),
+                )
+        except _BACKGROUND_SYNC_EXCEPTIONS as e:
+            logger.debug(
+                "Non-critical error in background pipeline sync: %s", e
+            )
+        await asyncio.sleep(10.0)
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    """Manage background telemetry and pipeline status synchronization tasks."""
+    bt_task = asyncio.create_task(_bigtable_sync_loop())
+    pipe_task = asyncio.create_task(_pipeline_sync_loop())
+    try:
+        yield
+    finally:
+        bt_task.cancel()
+        pipe_task.cancel()
+        await asyncio.gather(bt_task, pipe_task, return_exceptions=True)
+
+
 # Initialize FastAPI App
 app = FastAPI(
     title="Project Aegis Operations HUD API",
@@ -62,13 +113,18 @@ app = FastAPI(
         "controls, and AI agent execution proxy."
     ),
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 # Enable CORS for Next.js frontend (default port 3000)
+_cors_origins_raw = os.getenv("CORS_ALLOWED_ORIGINS", "*").strip()
+_cors_origins = [
+    origin.strip() for origin in _cors_origins_raw.split(",") if origin.strip()
+] or ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials="*" not in _cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -81,53 +137,9 @@ app.include_router(agent.router)
 app.include_router(analytics.router)
 
 
-@app.on_event("startup")
-async def start_background_telemetry_sync():
-    async def sync_loop():
-        logger.info("Background Bigtable telemetry sync loop started.")
-        while True:
-            try:
-                await asyncio.to_thread(state_manager.read_from_bigtable)
-            except _BACKGROUND_SYNC_EXCEPTIONS as exc:
-                logger.debug("Error in background Bigtable sync loop: %s", exc)
-            await asyncio.sleep(1.0)
-
-    asyncio.create_task(sync_loop())
-
-
-@app.on_event("startup")
-async def initialize_pipeline_discovery():
-    """Continuously refresh active streaming pipeline status in background."""
-
-    async def pipeline_sync_loop():
-        project_id = os.getenv(
-            "GCP_PROJECT",
-            os.getenv("GOOGLE_CLOUD_PROJECT", "aegis-streaming-1001"),
-        )
-        region = os.getenv("GCP_REGION", "us-central1")
-        while True:
-            try:
-                if project_id and region:
-                    client = get_pipeline_client()
-                    status = await asyncio.to_thread(
-                        client.refresh_status_sync, project_id, region
-                    )
-                    logger.debug(
-                        "Pipeline background sync (%s): status=%s",
-                        client.engine_name,
-                        status.get("status"),
-                    )
-            except _BACKGROUND_SYNC_EXCEPTIONS as e:
-                logger.debug(
-                    "Non-critical error in background pipeline sync: %s", e
-                )
-            await asyncio.sleep(10.0)
-
-    asyncio.create_task(pipeline_sync_loop())
-
-
 @app.get("/health", tags=["Health"])
 def health_check():
+    """Return HUD backend health status and simulator running state."""
     return {
         "status": "healthy",
         "service": "aegis-hud-backend",

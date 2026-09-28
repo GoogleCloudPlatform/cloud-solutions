@@ -49,7 +49,7 @@ export const getGcpConfig = () => {
   const pubsubSubscription =
     winConfig?.pubsubSubscription ||
     process.env.NEXT_PUBLIC_PUBSUB_SUBSCRIPTION ||
-    'telemetry-raw-sub';
+    'telemetry-raw-dataflow-sub';
   const bigtableInstance =
     winConfig?.bigtableInstance ||
     process.env.NEXT_PUBLIC_BIGTABLE_INSTANCE ||
@@ -60,6 +60,11 @@ export const getGcpConfig = () => {
     '';
   const geapAgentId =
     winConfig?.geapAgentId || process.env.NEXT_PUBLIC_GEAP_AGENT_ID || '';
+  const dataprocCluster =
+    winConfig?.dataprocCluster ||
+    process.env.DATAPROC_CLUSTER_NAME ||
+    process.env.NEXT_PUBLIC_DATAPROC_CLUSTER ||
+    'aegis-spark-cluster';
 
   return {
     project,
@@ -72,6 +77,7 @@ export const getGcpConfig = () => {
     bigtableInstance,
     bigqueryDataset,
     geapAgentId,
+    dataprocCluster,
   };
 };
 
@@ -87,6 +93,7 @@ export const getConsoleLinks = () => {
     bigtableInstance,
     bigqueryDataset,
     geapAgentId,
+    dataprocCluster,
   } = getGcpConfig();
 
   const geapDirectUrl = geapAgentId
@@ -98,7 +105,8 @@ export const getConsoleLinks = () => {
   const pubsubTopicUrl = `https://console.cloud.google.com/cloudpubsub/topic/detail/${pubsubTopic}?project=${project}`;
   const pubsubSubscriptionUrl = `https://console.cloud.google.com/cloudpubsub/subscription/detail/${pubsubSubscription}?project=${project}`;
 
-  const dataprocBatchesUrl = `https://console.cloud.google.com/dataproc/batches?project=${project}&region=${region}`;
+  const dataprocClusterJobsUrl = `https://console.cloud.google.com/dataproc/clusters/${dataprocCluster}/jobs?region=${region}&project=${project}`;
+  const dataprocBatchesUrl = dataprocClusterJobsUrl;
   const dataflowJobsUrl = `https://console.cloud.google.com/dataflow/jobs?project=${project}&region=${region}`;
   const continuousQueriesUrl = `https://console.cloud.google.com/bigquery/continuous-queries?project=${project}`;
 
@@ -107,8 +115,8 @@ export const getConsoleLinks = () => {
   const ingestionLabel =
     stackType === 'oss' ? 'Kafka Console' : 'Pub/Sub Console';
 
-  let pipelineConsole = dataprocBatchesUrl;
-  let pipelineLabel = 'Dataproc Batches';
+  let pipelineConsole = dataprocClusterJobsUrl;
+  let pipelineLabel = 'Dataproc Cluster & Jobs';
 
   if (stackType === 'first_party') {
     pipelineConsole = dataflowJobsUrl;
@@ -124,6 +132,7 @@ export const getConsoleLinks = () => {
     kafkaTopic: kafkaTopicUrl,
     pubsubTopic: pubsubTopicUrl,
     pubsubSubscription: pubsubSubscriptionUrl,
+    dataprocCluster: dataprocClusterJobsUrl,
     dataprocBatches: dataprocBatchesUrl,
     dataflowJobs: dataflowJobsUrl,
     continuousQueries: continuousQueriesUrl,

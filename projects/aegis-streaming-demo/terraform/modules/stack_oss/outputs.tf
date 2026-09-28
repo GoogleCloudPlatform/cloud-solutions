@@ -31,3 +31,8 @@ output "dataproc_deps_bucket" {
   description = "The Cloud Storage bucket name storing Dataproc dependency artifacts."
   value       = google_storage_bucket.dataproc_deps.name
 }
+
+output "dataproc_cluster_name" {
+  description = "The name of the warm Dataproc Standard Spark cluster (Vectorized Spark Execution)."
+  value       = google_dataproc_cluster.aegis_spark_cluster.name
+}

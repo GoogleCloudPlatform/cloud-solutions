@@ -27,11 +27,13 @@ from google.api_core.exceptions import GoogleAPICallError
 try:
     from google.cloud import bigtable
     from google.cloud.bigtable.row import DirectRow
+    from google.cloud.bigtable.row_filters import CellsColumnLimitFilter
 
     BIGTABLE_AVAILABLE = True
 except ImportError:
     bigtable = None  # type: ignore
     DirectRow = None  # type: ignore
+    CellsColumnLimitFilter = None  # type: ignore
     BIGTABLE_AVAILABLE = False
 
 try:
@@ -50,6 +52,11 @@ _BIGTABLE_EXCEPTIONS = (
     RuntimeError,
     OSError,
 )
+
+
+STALE_THRESHOLD_SECONDS = 3600.0
+CRITICAL_THRESHOLD = 90.0
+WARNING_THRESHOLD = 75.0
 
 
 def normalize_utc_iso_timestamp(ts_val: Any) -> str:
@@ -72,16 +79,72 @@ def normalize_utc_iso_timestamp(ts_val: Any) -> str:
         return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
+def _evaluate_staleness_and_status(
+    state_dict: dict[str, Any], now_epoch: float
+) -> None:
+    """Evaluates timestamp staleness and updates status and anomaly flags."""
+    ts_str = str(state_dict.get("timestamp", ""))
+    is_stale = False
+    data_age_sec = 0.0
+    try:
+        clean_ts = ts_str.replace("Z", "+00:00")
+        dt = datetime.fromisoformat(clean_ts)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        data_age_sec = now_epoch - dt.timestamp()
+        if data_age_sec > STALE_THRESHOLD_SECONDS:
+            is_stale = True
+    except (ValueError, TypeError):
+        is_stale = True
+
+    cur_status = str(state_dict.get("status", "OK")).upper()
+    if cur_status != "EXPIRED":
+        state_dict["raw_status"] = state_dict.get("raw_status", cur_status)
+
+    state_dict["is_stale"] = is_stale
+    state_dict["data_age_seconds"] = round(max(0.0, data_age_sec), 1)
+    if is_stale:
+        state_dict["is_anomaly"] = False
+        state_dict["status"] = "EXPIRED"
+        return
+
+    cpu = float(state_dict.get("cpu_utilization", 0.0))
+    temp = float(state_dict.get("temperature_c", 0.0))
+    raw_anom = state_dict.get("is_anomaly", False)
+    is_anom = (
+        raw_anom.lower() == "true"
+        if isinstance(raw_anom, str)
+        else bool(raw_anom)
+    )
+    if (
+        is_anom
+        or cur_status == "CRITICAL"
+        or cpu > CRITICAL_THRESHOLD
+        or temp > CRITICAL_THRESHOLD
+    ):
+        state_dict["status"] = "CRITICAL"
+        state_dict["is_anomaly"] = True
+    elif (
+        cur_status == "WARNING"
+        or cpu > WARNING_THRESHOLD
+        or temp > WARNING_THRESHOLD
+    ):
+        state_dict["status"] = "WARNING"
+        state_dict["is_anomaly"] = False
+    else:
+        state_dict["status"] = "OK"
+        state_dict["is_anomaly"] = False
+
+
 class TelemetryStateManager:
     """Manages real-time state for 15 industrial assets backed by Bigtable."""
 
     def __init__(self):
         self.simulator_running: bool = False
         self.asset_ids: List[str] = [f"Asset-{i:02d}" for i in range(1, 16)]
-        self.project_id: str = os.getenv(
-            "GCP_PROJECT",
-            os.getenv("GOOGLE_CLOUD_PROJECT", "aegis-streaming-1001"),
-        )
+        self.project_id: str = (
+            os.getenv("GCP_PROJECT") or os.getenv("GOOGLE_CLOUD_PROJECT") or ""
+        ).strip()
         self.bigtable_instance_id: str = os.getenv(
             "BIGTABLE_INSTANCE_ID", "aegis-bigtable"
         )
@@ -106,21 +169,36 @@ class TelemetryStateManager:
                 "status": "OK",
                 "is_anomaly": False,
                 "timestamp": datetime.now(timezone.utc).isoformat(),
+                "ingestion_timestamp_ms": None,
+                "db_insert_timestamp_ms": None,
+                "pipeline_latency_ms": None,
             }
 
         self._sync_initial_bigtable_state()
 
     def store_mitigation(self, asset_id: str, data: Dict[str, Any]):
+        """Store the latest AI agent mitigation payload for an asset."""
         self.latest_mitigations[asset_id] = data
 
     def get_mitigation(self, asset_id: str) -> Optional[Dict[str, Any]]:
+        """Return the latest stored mitigation payload for an asset, if any."""
         return self.latest_mitigations.get(asset_id)
 
     def get_all_mitigations(self) -> Dict[str, Any]:
+        """Return all stored asset mitigation payloads."""
         return self.latest_mitigations
 
     def _init_bigtable(self):
-        if not BIGTABLE_AVAILABLE or bigtable is None:
+        # Note for reviewers: In offline CI/local unit tests
+        # (`NO_GCE_CHECK="true"` or when `project_id` is unset), live Bigtable
+        # client initialization is skipped and unit tests inject a mocked
+        # `bt_table`.
+        if (
+            not BIGTABLE_AVAILABLE
+            or bigtable is None
+            or not self.project_id
+            or os.getenv("NO_GCE_CHECK") == "true"
+        ):
             self.bt_client = None
             self.bt_table = None
             return
@@ -165,12 +243,21 @@ class TelemetryStateManager:
                     "Failed to persist simulator state to Bigtable: %s", e
                 )
 
+    def _latest_cell_filter(self) -> Any:
+        """Return a Bigtable row filter limiting reads to the latest version."""
+        if CellsColumnLimitFilter is not None:
+            return CellsColumnLimitFilter(1)
+        return None
+
     def sync_simulator_running_from_bigtable(self):
         """Syncs simulator running state from Bigtable."""
         if not self.bt_table:
             return
         try:
-            row = self.bt_table.read_row("_simulator_control".encode("utf-8"))
+            row = self.bt_table.read_row(
+                "_simulator_control".encode("utf-8"),
+                filter_=self._latest_cell_filter(),
+            )
             if row:
                 cols = row.cells.get(self.column_family, {})
                 cell_list = cols.get(b"running")
@@ -190,7 +277,9 @@ class TelemetryStateManager:
             return
 
         try:
-            rows = list(self.bt_table.read_rows())
+            rows = list(
+                self.bt_table.read_rows(filter_=self._latest_cell_filter())
+            )
             if rows:
                 logger.info(
                     "Synchronized %d asset rows from Cloud Bigtable.", len(rows)
@@ -223,6 +312,8 @@ class TelemetryStateManager:
         status = get_val("status", "OK")
         is_anomaly_raw = get_val("is_anomaly", "False")
         ts = get_val("timestamp", datetime.now(timezone.utc).isoformat())
+        ingestion_ms_raw = get_val("ingestion_timestamp_ms", None)
+        db_insert_ms_raw = get_val("db_insert_timestamp_ms", None)
 
         try:
             cpu = round(float(cpu_raw), 2)
@@ -241,56 +332,62 @@ class TelemetryStateManager:
         except ValueError:
             memory = 40.0
 
+        ingestion_timestamp_ms: Optional[int] = None
+        if ingestion_ms_raw is not None:
+            try:
+                val = int(float(ingestion_ms_raw))
+                if val > 0:
+                    ingestion_timestamp_ms = val
+            except (ValueError, TypeError):
+                ingestion_timestamp_ms = None
+
+        db_insert_timestamp_ms: Optional[int] = None
+        if db_insert_ms_raw is not None:
+            try:
+                val = int(float(db_insert_ms_raw))
+                if val > 0:
+                    db_insert_timestamp_ms = val
+            except (ValueError, TypeError):
+                db_insert_timestamp_ms = None
+
+        pipeline_latency_ms: Optional[int] = None
+        if (
+            ingestion_timestamp_ms is not None
+            and db_insert_timestamp_ms is not None
+        ):
+            pipeline_latency_ms = max(
+                0, db_insert_timestamp_ms - ingestion_timestamp_ms
+            )
+
         ts_normalized = normalize_utc_iso_timestamp(ts)
-
-        is_stale = False
-        data_age_seconds = 0.0
-        try:
-            clean_ts = ts_normalized.replace("Z", "+00:00")
-            dt = datetime.fromisoformat(clean_ts)
-            if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=timezone.utc)
-            data_age_seconds = (datetime.now(timezone.utc) - dt).total_seconds()
-            if data_age_seconds > 3600.0:
-                is_stale = True
-        except (ValueError, TypeError):
-            is_stale = True
-
-        is_anomaly = (
-            str(is_anomaly_raw).lower() == "true"
-            or status == "CRITICAL"
-            or cpu > 90.0
-            or temp > 90.0
-        ) and not is_stale
-        if is_stale:
-            effective_status = "EXPIRED"
-        elif is_anomaly or status == "CRITICAL" or cpu > 90.0 or temp > 90.0:
-            effective_status = "CRITICAL"
-        elif status == "WARNING" or cpu > 75.0 or temp > 75.0:
-            effective_status = "WARNING"
-        else:
-            effective_status = "OK"
-
-        return {
+        state_dict: Dict[str, Any] = {
             "cpu_utilization": cpu,
             "temperature_c": temp,
             "pressure_psi": pressure,
             "memory_utilization_pct": memory,
-            "status": effective_status,
+            "status": status,
             "raw_status": status,
-            "is_anomaly": is_anomaly,
-            "is_stale": is_stale,
-            "data_age_seconds": round(max(0.0, data_age_seconds), 1),
+            "is_anomaly": str(is_anomaly_raw).lower() == "true",
             "timestamp": ts_normalized,
+            "ingestion_timestamp_ms": ingestion_timestamp_ms,
+            "db_insert_timestamp_ms": db_insert_timestamp_ms,
+            "pipeline_latency_ms": pipeline_latency_ms,
         }
+        _evaluate_staleness_and_status(state_dict, time.time())
+        return state_dict
 
     def _persist_all_to_bigtable(self):
         """Write current states for all assets to Cloud Bigtable."""
         if not self.bt_table or DirectRow is None:
             return
         try:
+            now_ms = int(time.time() * 1000)
             rows = []
             for asset_id, state in self.states.items():
+                ing_ms = state.get("ingestion_timestamp_ms") or now_ms
+                db_ms = state.get("db_insert_timestamp_ms") or now_ms
+                state["ingestion_timestamp_ms"] = ing_ms
+                state["db_insert_timestamp_ms"] = db_ms
                 row = DirectRow(row_key=asset_id.encode("utf-8"))
                 row.set_cell(
                     self.column_family,
@@ -327,11 +424,24 @@ class TelemetryStateManager:
                     b"timestamp",
                     str(state["timestamp"]).encode("utf-8"),
                 )
+                row.set_cell(
+                    self.column_family,
+                    b"ingestion_timestamp_ms",
+                    str(ing_ms).encode("utf-8"),
+                )
+                row.set_cell(
+                    self.column_family,
+                    b"db_insert_timestamp_ms",
+                    str(db_ms).encode("utf-8"),
+                )
                 rows.append(row)
 
-            errors = self.bt_table.mutate_rows(rows)
-            if errors:
-                for err in errors:
+            statuses = self.bt_table.mutate_rows(rows)
+            failed_errors = [
+                err for err in (statuses or []) if getattr(err, "code", 0) != 0
+            ]
+            if failed_errors:
+                for err in failed_errors:
                     logger.error("Error seeding Bigtable row: %s", err)
             else:
                 logger.info("Persisted %d rows to Bigtable.", len(rows))
@@ -373,7 +483,9 @@ class TelemetryStateManager:
         self._maybe_sync_continuous_query()
 
         try:
-            rows = list(self.bt_table.read_rows())
+            rows = list(
+                self.bt_table.read_rows(filter_=self._latest_cell_filter())
+            )
             if not rows:
                 return self.get_cached_snapshot()
 
@@ -381,6 +493,8 @@ class TelemetryStateManager:
             found_ids = set()
             for row in rows:
                 asset_id = row.row_key.decode("utf-8")
+                if asset_id not in self.asset_ids:
+                    continue
                 parsed = self._parse_bigtable_row(row)
                 self.states[asset_id] = parsed
                 found_ids.add(asset_id)
@@ -399,48 +513,12 @@ class TelemetryStateManager:
             return self.get_cached_snapshot()
 
     def get_cached_snapshot(self) -> List[Dict[str, Any]]:
+        """Return the sorted in-memory telemetry snapshot."""
         snapshot = []
-        now_utc = datetime.now(timezone.utc)
+        now_epoch = time.time()
         for asset_id in self.asset_ids:
             state = dict(self.states[asset_id])
-            ts_str = state.get("timestamp", "")
-            is_stale = False
-            data_age_sec = 0.0
-            try:
-                clean_ts = ts_str.replace("Z", "+00:00")
-                dt = datetime.fromisoformat(clean_ts)
-                if dt.tzinfo is None:
-                    dt = dt.replace(tzinfo=timezone.utc)
-                data_age_sec = (now_utc - dt).total_seconds()
-                if data_age_sec > 3600.0:
-                    is_stale = True
-            except (ValueError, TypeError):
-                is_stale = True
-
-            state["is_stale"] = is_stale
-            state["data_age_seconds"] = round(max(0.0, data_age_sec), 1)
-            if is_stale:
-                state["is_anomaly"] = False
-                state["raw_status"] = state.get("status", "OK")
-                state["status"] = "EXPIRED"
-            else:
-                cpu = float(state.get("cpu_utilization", 0.0))
-                temp = float(state.get("temperature_c", 0.0))
-                is_anom = bool(state.get("is_anomaly", False))
-                cur_status = str(state.get("status", "OK")).upper()
-                if (
-                    is_anom
-                    or cur_status == "CRITICAL"
-                    or cpu > 90.0
-                    or temp > 90.0
-                ):
-                    state["status"] = "CRITICAL"
-                    state["is_anomaly"] = True
-                elif cur_status == "WARNING" or cpu > 75.0 or temp > 75.0:
-                    state["status"] = "WARNING"
-                else:
-                    state["status"] = "OK"
-
+            _evaluate_staleness_and_status(state, now_epoch)
             snapshot.append({"asset_id": asset_id, **state})
         snapshot.sort(key=lambda a: a["asset_id"])
         return snapshot
@@ -527,6 +605,7 @@ class TelemetryStateManager:
             raise KeyError(f"Unknown asset_id: {asset_id}")
 
         now_str = datetime.now(timezone.utc).isoformat()
+        now_ms = int(time.time() * 1000)
         self.states[asset_id].update(
             {
                 "cpu_utilization": cpu,
@@ -536,6 +615,9 @@ class TelemetryStateManager:
                 "status": "CRITICAL",
                 "is_anomaly": True,
                 "timestamp": now_str,
+                "ingestion_timestamp_ms": now_ms,
+                "db_insert_timestamp_ms": now_ms,
+                "pipeline_latency_ms": 0,
             }
         )
 
@@ -558,6 +640,16 @@ class TelemetryStateManager:
                 row.set_cell(self.column_family, b"is_anomaly", b"True")
                 row.set_cell(
                     self.column_family, b"timestamp", now_str.encode("utf-8")
+                )
+                row.set_cell(
+                    self.column_family,
+                    b"ingestion_timestamp_ms",
+                    str(now_ms).encode("utf-8"),
+                )
+                row.set_cell(
+                    self.column_family,
+                    b"db_insert_timestamp_ms",
+                    str(now_ms).encode("utf-8"),
                 )
                 self.bt_table.mutate_rows([row])
                 logger.info(

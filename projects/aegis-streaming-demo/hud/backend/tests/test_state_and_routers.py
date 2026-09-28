@@ -16,11 +16,14 @@
 
 import os
 import sys
-import types
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
+# NOTE FOR REVIEWERS (Local & CI Unit Testing):
+# Set NO_GCE_CHECK="true" and GOOGLE_APPLICATION_CREDENTIALS="/dev/null" before
+# importing backend modules so Google Cloud client libraries do not block on
+# Compute Engine metadata server probes during offline unit test execution.
 os.environ.setdefault("NO_GCE_CHECK", "true")
 os.environ.setdefault("GOOGLE_APPLICATION_CREDENTIALS", "/dev/null")
 
@@ -28,42 +31,7 @@ SRC_DIR = Path(__file__).resolve().parent.parent / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-try:
-    # Probe whether FastAPI is installed before registering a test stub.
-    import fastapi  # pylint: disable=unused-import
-except ImportError:
-    mock_fastapi = types.ModuleType("fastapi")
-
-    class DummyAPIRouter:
-        """Minimal router stub for offline unit testing."""
-
-        def __init__(self, **_kwargs):
-            pass
-
-        def get(self, *_args, **_kwargs):
-            return lambda fn: fn
-
-        def post(self, *_args, **_kwargs):
-            return lambda fn: fn
-
-    class DummyHTTPException(Exception):
-        """Minimal HTTPException stub for offline unit testing."""
-
-        def __init__(self, status_code=500, detail=""):
-            super().__init__(detail)
-            self.status_code = status_code
-            self.detail = detail
-
-    mock_fastapi.APIRouter = DummyAPIRouter
-    mock_fastapi.HTTPException = DummyHTTPException
-    mock_fastapi.status = MagicMock(
-        HTTP_400_BAD_REQUEST=400,
-        HTTP_404_NOT_FOUND=404,
-        HTTP_502_BAD_GATEWAY=502,
-    )
-    sys.modules["fastapi"] = mock_fastapi
-
-# Local src/ directory and FastAPI stub must be set before importing modules.
+# Local src/ directory must be on sys.path before importing backend modules.
 # pylint: disable=wrong-import-position
 from models import AgentMitigateRequest
 from routers.agent import _normalize_mitigation_payload
@@ -95,6 +63,16 @@ class TestStateAndRouters(unittest.TestCase):
             self.assertEqual(mgr.get_mitigation("Asset-04"), payload)
             self.assertIn("Asset-04", mgr.get_all_mitigations())
 
+            injected = mgr.inject_anomaly("Asset-04")
+            self.assertEqual(injected["status"], "CRITICAL")
+            self.assertIsNotNone(injected["ingestion_timestamp_ms"])
+            self.assertIsNotNone(injected["db_insert_timestamp_ms"])
+            snapshot = {
+                item["asset_id"]: item for item in mgr.get_cached_snapshot()
+            }
+            self.assertEqual(snapshot["Asset-04"]["status"], "CRITICAL")
+            self.assertFalse(snapshot["Asset-04"]["is_stale"])
+
     def test_predefined_queries_and_sql_loading(self):
         queries = get_predefined_queries("demo-proj", "analytics")
         self.assertEqual(len(queries), 3)
@@ -121,11 +99,17 @@ class TestStateAndRouters(unittest.TestCase):
             temperature_c=92.0,
             event_type="THERMAL_OVERLOAD",
         )
-        normalized = _normalize_mitigation_payload({}, req)
+        normalized = _normalize_mitigation_payload(
+            {"root_cause_summary": "Thermal overload detected on Asset-04."},
+            req,
+        )
         self.assertEqual(normalized["asset_id"], "Asset-04")
         self.assertEqual(normalized["severity"], "CRITICAL")
         self.assertIn("tokenomics", normalized)
         self.assertIsInstance(normalized["mitigation_steps"], list)
+
+        with self.assertRaises(ValueError):
+            _normalize_mitigation_payload({}, req)
 
 
 if __name__ == "__main__":

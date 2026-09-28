@@ -18,9 +18,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { AssetState } from '../types';
-import { Cpu, Thermometer, Gauge, HardDrive, AlertOctagon, Bot, ShieldCheck, Flame, RefreshCw, Database, ExternalLink, Activity, Lock, Clock, AlertTriangle, ArrowRight } from 'lucide-react';
-import { getConsoleLinks } from '../utils/gcpConsoleLinks';
-import { isDataStale, getDataAgeInfo, isFleetStale } from '../utils/telemetryUtils';
+import {
+  Cpu,
+  Thermometer,
+  Gauge,
+  HardDrive,
+  Flame,
+  RefreshCw,
+  Database,
+  Lock,
+  Clock,
+  ArrowRight
+} from 'lucide-react';
+import { getDataAgeInfo, isFleetStale } from '../utils/telemetryUtils';
 import { getStackConfig } from '../utils/stackConfig';
 
 interface TelemetryGridProps {
@@ -28,7 +38,6 @@ interface TelemetryGridProps {
   selectedAssetId: string | null;
   onSelectAsset: (asset: AssetState) => void;
   onInjectAnomaly?: (assetId?: string) => Promise<void> | void;
-  onNavigateToSimulator?: () => void;
   isInjecting?: boolean;
   isDemoActive?: boolean;
 }
@@ -38,13 +47,10 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
   selectedAssetId,
   onSelectAsset,
   onInjectAnomaly,
-  onNavigateToSimulator,
   isInjecting = false,
   isDemoActive = true,
 }) => {
-  const [isRefreshingBt, setIsRefreshingBt] = useState<boolean>(false);
   const [, setTick] = useState<number>(0);
-  const consoleLinks = getConsoleLinks();
   const stackConfig = getStackConfig();
 
   // 1-second interval to keep relative time strings ("6 seconds ago") fresh
@@ -75,94 +81,80 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
   const fleetStale = isFleetStale(displayAssets);
 
   return (
-    <section className={`w-full glass-panel rounded-2xl p-6 border transition-all duration-300 shadow-xl space-y-4 ${
-      fleetStale
-        ? 'border-[#f59e0b]/40 bg-[#060e20]/95'
-        : !isDemoActive
-        ? 'border-[#334155]/60 bg-[#060e20]/90'
-        : 'border-[#334155]'
-    }`}>
-      {/* Header with Cloud Bigtable Provenance */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-[#334155]">
+    <section
+      className={`w-full glass-panel rounded-2xl p-5 transition-all duration-300 space-y-4 ${
+        fleetStale
+          ? 'border-amber-500/35 bg-[#070d19]/95'
+          : !isDemoActive
+          ? 'border-white/[0.06] bg-[#070d19]/90'
+          : ''
+      }`}
+    >
+      {/* Header with Cloud Bigtable Provenance & Inject Anomaly CTA */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3.5 border-b border-white/[0.08]">
         <div>
-          <div className="flex items-center gap-2">
-            <Database className="w-5 h-5 text-[#adc7ff]" />
-            <h2 className="text-lg font-headline font-bold text-white uppercase tracking-wide">
-              Module 4a: Cloud Bigtable Operational Telemetry Grid
+          <div className="flex flex-wrap items-center gap-2">
+            <Database className="w-4 h-4 text-[#68abff]" />
+            <h2 className="text-base font-headline font-bold text-white uppercase tracking-wide">
+              Cloud Bigtable Telemetry Grid
             </h2>
-            <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider border flex items-center gap-1 ${
-              fleetStale
-                ? 'bg-[#f59e0b]/20 text-[#fbbf24] border-[#f59e0b]/50'
-                : isDemoActive
-                ? 'bg-[#1a73e8]/20 text-[#adc7ff] border-[#1a73e8]/50'
-                : 'bg-[#2d3449] text-[#8b909f] border-[#334155]'
-            }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${
+            <span
+              className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider border flex items-center gap-1 ${
                 fleetStale
-                  ? 'bg-[#f59e0b]'
+                  ? 'bg-amber-500/15 text-amber-400 border-amber-500/40'
                   : isDemoActive
-                  ? 'bg-[#6ddd81] animate-pulse'
-                  : 'bg-[#8b909f]'
-              }`} />
+                  ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                  : 'bg-white/[0.04] text-[#94a3b8] border-white/[0.08]'
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  fleetStale
+                    ? 'bg-amber-400'
+                    : isDemoActive
+                    ? 'bg-emerald-400 animate-pulse'
+                    : 'bg-[#64748b]'
+                }`}
+              />
               {fleetStale
-                ? 'TELEMETRY EXPIRED (>60M)'
+                ? 'STALE (>60M)'
                 : isDemoActive
-                ? 'LIVE BIGTABLE SINK'
-                : 'INGESTION INACTIVE (LOCKED)'}
+                ? 'LIVE • telemetry_metrics'
+                : 'LOCKED'}
             </span>
           </div>
-          <p className="text-xs text-[#c1c6d6] font-sans mt-1">
-            Real-Time State Table: <code className="text-[#adc7ff] font-mono">telemetry_metrics</code> (Family: <code className="text-[#6ddd81] font-mono">metrics</code>) — Sub-Millisecond Point Lookups &amp; State Serving
+          <p className="text-xs text-[#94a3b8] font-sans mt-0.5">
+            Click any asset tile to inspect in the AI Co-Pilot &bull; RowKey:{' '}
+            <code className="text-[#68abff] font-mono">Asset-01..15</code>
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Bigtable Console Link */}
-          <a
-            href={consoleLinks.bigtableTable}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3 py-1.5 rounded bg-[#131b2e] hover:bg-[#1f2b48] border border-[#334155] text-xs font-mono text-[#adc7ff] flex items-center gap-1.5 transition-all"
-            title="Open Cloud Bigtable Table in Google Cloud Console"
-          >
-            <Database className="w-3.5 h-3.5" />
-            <span>Bigtable Console</span>
-            <ExternalLink className="w-3 h-3 text-[#c1c6d6]" />
-          </a>
-
-          {/* Status Legend */}
-          <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-wider px-2 py-1 rounded bg-[#0a0f1d] border border-[#334155]/60">
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-[#6ddd81]" />
-              <span className="text-[#dae2fd]">OK</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-[#FBBC04]" />
-              <span className="text-[#dae2fd]">&gt;75%</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-[#D93025]" />
-              <span className="text-[#ffb4ab] font-bold">&gt;90% CRITICAL</span>
-            </div>
-            <div className="flex items-center gap-1 pl-1 border-l border-[#334155]">
-              <span className="w-2 h-2 rounded-full bg-[#8b909f]" />
-              <span className="text-[#8b909f]">&gt;60m STALE</span>
-            </div>
+        <div className="flex flex-wrap items-center gap-2.5 self-end sm:self-auto">
+          {/* Compact Legend */}
+          <div className="hidden md:flex items-center gap-2.5 text-[10px] font-mono uppercase tracking-wider px-2.5 py-1.5 rounded-lg bg-[#070d19] border border-white/[0.08]">
+            <span className="flex items-center gap-1 text-[#cbd5e1]">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" /> OK
+            </span>
+            <span className="flex items-center gap-1 text-[#cbd5e1]">
+              <span className="w-2 h-2 rounded-full bg-amber-400" /> &gt;75%
+            </span>
+            <span className="flex items-center gap-1 text-rose-300 font-bold">
+              <span className="w-2 h-2 rounded-full bg-rose-500" /> &gt;90% CRIT
+            </span>
           </div>
 
           {onInjectAnomaly && (
             <button
+              type="button"
               disabled={isInjecting || !isDemoActive || fleetStale}
               onClick={() => {
                 if (!isDemoActive || fleetStale) return;
                 onInjectAnomaly();
               }}
-              className={`px-3.5 py-1.5 rounded font-mono text-xs uppercase tracking-wider font-bold transition-all duration-200 flex items-center gap-1.5 border ${
-                fleetStale
-                  ? 'bg-[#1e293b] border-[#475569]/50 text-[#64748b] cursor-not-allowed opacity-50 shadow-none'
-                  : !isDemoActive
-                  ? 'bg-[#1e293b] border-[#475569]/50 text-[#64748b] cursor-not-allowed opacity-50 shadow-none'
-                  : 'bg-[#D93025] hover:bg-[#ff6b60] text-white border-[#ffdad6]/40 shadow-[0_0_15px_rgba(217,48,37,0.4)] animate-pulse disabled:opacity-50 disabled:cursor-not-allowed'
+              className={`px-3.5 py-2 rounded-xl font-mono text-xs uppercase tracking-wider font-bold transition-all duration-200 flex items-center gap-1.5 border ${
+                fleetStale || !isDemoActive
+                  ? 'bg-[#0f172a] border-white/[0.08] text-[#64748b] cursor-not-allowed opacity-50'
+                  : 'bg-rose-600 hover:bg-rose-500 text-white border-rose-400/40 shadow-[0_0_18px_-3px_rgba(225,29,72,0.55)] cursor-pointer disabled:opacity-50'
               }`}
               title={
                 fleetStale
@@ -177,9 +169,9 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
               ) : fleetStale || !isDemoActive ? (
                 <Lock className="w-3.5 h-3.5 text-[#64748b]" />
               ) : (
-                <Flame className="w-3.5 h-3.5 text-[#FBBC04]" />
+                <Flame className="w-3.5 h-3.5 text-amber-300" />
               )}
-              <span>INJECT ANOMALY</span>
+              <span>Inject Anomaly</span>
             </button>
           )}
         </div>
@@ -187,206 +179,203 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({
 
       {/* Stale Telemetry Notice Banner when Fleet is Idle / Stale */}
       {fleetStale && (
-        <div className="p-4 rounded-xl bg-[#131b2e]/95 border border-[#f59e0b]/50 shadow-[0_0_20px_rgba(245,158,11,0.15)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-fade-in">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 rounded-lg bg-[#f59e0b]/20 border border-[#f59e0b]/50 text-[#fbbf24] shrink-0 mt-0.5">
-              <Clock className="w-5 h-5 text-[#f59e0b] animate-pulse" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-headline font-bold text-white uppercase tracking-wider">
-                  Telemetry Stream Idle — Data Too Old (&gt;60 Minutes)
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#f59e0b]/20 text-[#fbbf24] border border-[#f59e0b]/50">
-                  DEMO IDLE
-                </span>
-              </div>
-              <p className="text-xs text-[#dae2fd] mt-1 font-sans">
-                The demonstration pipeline has not ingested new events for more than 60 minutes. Asset metrics below are grayed out. <strong>Activate the demo in Module 2 and wait for new streaming data to arrive.</strong>
-              </p>
-            </div>
+        <div className="p-3.5 rounded-xl bg-amber-950/30 border border-amber-500/40 flex items-start gap-3 animate-fade-in">
+          <Clock className="w-4 h-4 text-amber-400 shrink-0 mt-0.5 animate-pulse" />
+          <div className="text-xs text-[#e2e8f0] font-sans">
+            <strong className="text-amber-300 font-mono uppercase">
+              Telemetry Stream Idle (&gt;60m):
+            </strong>{' '}
+            Activate the stream in Module 2 and wait for fresh sensor windows to arrive.
           </div>
         </div>
       )}
 
-      {/* Bigtable Storage Architecture Banner */}
-      <div className="p-3 rounded-lg bg-[#0a0f1d]/80 border border-[#2d3449] flex flex-col md:flex-row items-start md:items-center justify-between gap-2 text-xs font-mono text-[#c1c6d6]">
-        <div className="flex items-center gap-2">
-          <Activity className="w-4 h-4 text-[#6ddd81]" />
-          <span>Operational Bigtable Instance: <strong className="text-white">aegis-bigtable</strong></span>
-          <span className="text-[#8b909f]">|</span>
-          <span>Dual Sink: <strong className="text-[#adc7ff]">Bigtable (Operational) + BigQuery (Analytics)</strong></span>
-        </div>
-        <div className="text-[11px] text-[#8b909f] flex items-center gap-2">
-          <span>RowKey: <code className="text-[#adc7ff]">Asset-XX</code></span>
-          <span>•</span>
-          <span>Column Family: <code className="text-[#6ddd81]">metrics:cpu,temp,pressure,memory,status</code></span>
-        </div>
-      </div>
-
-      {/* 15 Asset Responsive Grid with tight data-density-sm (gap-2) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+      {/* 15 Asset Responsive Grid (3x5 on Desktop Split View) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
         {displayAssets.map((asset) => {
           const ageInfo = getDataAgeInfo(asset.timestamp);
           const isStale = ageInfo.isStale;
-          const isCritical = !isStale && (asset.cpu_utilization > 90 || asset.temperature_c > 90 || asset.status === 'CRITICAL' || asset.is_anomaly);
-          const isWarning = !isStale && !isCritical && (asset.cpu_utilization > 75 || asset.temperature_c > 75 || asset.status === 'WARNING');
+          const isCritical =
+            !isStale &&
+            (asset.cpu_utilization > 90 ||
+              asset.temperature_c > 90 ||
+              asset.status === 'CRITICAL' ||
+              asset.is_anomaly);
+          const isWarning =
+            !isStale &&
+            !isCritical &&
+            (asset.cpu_utilization > 75 ||
+              asset.temperature_c > 75 ||
+              asset.status === 'WARNING');
           const isSelected = selectedAssetId === asset.asset_id;
 
           return (
             <div
               key={asset.asset_id}
+              role="button"
+              tabIndex={isStale || !isDemoActive ? -1 : 0}
+              aria-pressed={isSelected}
               onClick={() => {
                 if (!isDemoActive || isStale) return;
                 onSelectAsset(asset);
               }}
-              className={`relative rounded-lg p-3.5 transition-all duration-300 border flex flex-col justify-between ${
+              onKeyDown={(e) => {
+                if (!isDemoActive || isStale) return;
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onSelectAsset(asset);
+                }
+              }}
+              className={`group relative rounded-xl p-3.5 transition-all duration-200 border flex flex-col justify-between ${
                 isStale
-                  ? 'bg-[#060e20]/60 border-[#334155]/50 opacity-60 cursor-not-allowed select-none'
+                  ? 'bg-[#070d19]/60 border-white/[0.05] opacity-55 cursor-not-allowed select-none'
                   : !isDemoActive
-                  ? 'bg-[#131b2e]/40 border-[#334155]/40 opacity-60 cursor-not-allowed'
+                  ? 'bg-[#0b1326]/40 border-white/[0.05] opacity-60 cursor-not-allowed'
                   : isCritical
-                  ? 'border-2 border-[#D93025] bg-[#93000a]/30 shadow-[0_0_20px_rgba(217,48,37,0.5)] animate-anomaly-glow text-white cursor-pointer'
+                  ? 'border-rose-500 bg-rose-950/35 shadow-[0_0_22px_-4px_rgba(239,68,68,0.55)] animate-anomaly-glow text-white cursor-pointer'
                   : isWarning
-                  ? 'bg-[#2d3449]/80 border-[#FBBC04] text-white hover:border-[#FBBC04] cursor-pointer'
+                  ? 'bg-amber-950/20 border-amber-500/50 text-white hover:border-amber-400 cursor-pointer'
                   : isSelected
-                  ? 'bg-[#1a73e8]/25 border-2 border-[#adc7ff] shadow-[0_0_15px_rgba(173,199,255,0.25)] cursor-pointer'
-                  : 'bg-[#131b2e]/70 border-[#334155] hover:border-[#adc7ff]/60 hover:bg-[#171f33]/80 cursor-pointer'
+                  ? 'bg-[#1a73e8]/15 border-[#68abff] ring-1 ring-[#68abff]/40 cursor-pointer'
+                  : 'bg-[#070d19]/90 border-white/[0.08] hover:border-white/25 hover:bg-[#0d182e] cursor-pointer'
               }`}
             >
               {/* Tile Header */}
-              <div>
-                <div className="flex items-center justify-between pb-1.5 border-b border-[#334155]/60">
-                  <div>
-                    <span className={`font-mono font-bold text-sm tracking-widest ${isStale ? 'text-[#8b909f]' : 'text-white'}`}>
-                      {asset.asset_id}
-                    </span>
-                    <div className="text-[10px] font-mono flex items-center gap-1 mt-0.5">
-                      <Clock className={`w-2.5 h-2.5 ${isStale ? 'text-[#f59e0b]' : 'text-[#adc7ff]'}`} />
-                      <span className={isStale ? 'text-[#f59e0b]' : 'text-[#8b909f]'}>
-                        {ageInfo.relativeText}{isStale ? ' (stale)' : ''}
-                      </span>
-                    </div>
-                  </div>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-widest ${
-                    isStale
-                      ? 'bg-[#1e293b] text-[#94a3b8] border border-[#475569]/60'
-                      : !isDemoActive
-                      ? 'bg-[#1e293b] text-[#64748b] border border-[#334155]'
-                      : isCritical
-                      ? 'bg-[#D93025] text-white animate-pulse shadow-[0_0_8px_rgba(217,48,37,0.8)]'
-                      : isWarning
-                      ? 'bg-[#FBBC04]/20 text-[#FBBC04] border border-[#FBBC04]/50'
-                      : 'bg-[#30a550]/20 text-[#6ddd81] border border-[#30a550]/50'
-                  }`}>
-                    {isStale ? 'EXPIRED' : isCritical ? 'CRITICAL' : isWarning ? 'WARNING' : (asset.status || 'OK')}
+              <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+                <div>
+                  <span
+                    className={`font-mono font-bold text-xs tracking-wider ${
+                      isStale ? 'text-[#64748b]' : 'text-white'
+                    }`}
+                  >
+                    {asset.asset_id}
                   </span>
+                  <div className="text-[10px] font-mono flex items-center gap-1 mt-0.5 tabular-nums">
+                    <Clock
+                      className={`w-2.5 h-2.5 ${
+                        isStale ? 'text-amber-400' : 'text-[#64748b]'
+                      }`}
+                    />
+                    <span className={isStale ? 'text-amber-400' : 'text-[#64748b]'}>
+                      {ageInfo.relativeText}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Stale Asset In-Card Notice */}
-                {isStale && (
-                  <div className="my-2.5 p-2 rounded-lg bg-[#0b1326]/90 border border-[#334155] text-center space-y-0.5">
-                    <div className="flex items-center justify-center gap-1 text-[#fbbf24] font-mono text-[10px] font-bold uppercase tracking-wider">
-                      <Clock className="w-3 h-3 text-[#f59e0b]" />
-                      <span>Data Too Old (&gt;60m)</span>
-                    </div>
-                    <p className="text-[10px] text-[#94a3b8] font-sans leading-tight">
-                      Activate demo &amp; wait for new data
-                    </p>
-                  </div>
-                )}
+                <span
+                  className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider ${
+                    isStale
+                      ? 'bg-white/[0.04] text-[#64748b] border border-white/[0.08]'
+                      : !isDemoActive
+                      ? 'bg-white/[0.04] text-[#64748b] border border-white/[0.08]'
+                      : isCritical
+                      ? 'bg-rose-600 text-white animate-pulse shadow-sm'
+                      : isWarning
+                      ? 'bg-amber-500/15 text-amber-400 border border-amber-500/40'
+                      : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/25'
+                  }`}
+                >
+                  {isStale
+                    ? 'STALE'
+                    : isCritical
+                    ? 'CRITICAL'
+                    : isWarning
+                    ? 'WARNING'
+                    : asset.status || 'OK'}
+                </span>
+              </div>
 
-                {/* Metric Gauges */}
-                <div className={`mt-2.5 space-y-2 text-xs font-mono ${isStale ? 'opacity-40 grayscale' : ''}`}>
-                  {/* CPU */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#c1c6d6] flex items-center gap-1">
-                      <Cpu className="w-3.5 h-3.5 text-[#adc7ff]" /> CPU:
+              {/* Metric Gauges with Tabular Numerals & Calm Nominal Bars */}
+              <div
+                className={`mt-2.5 space-y-2 text-xs font-mono tabular-nums ${
+                  isStale ? 'opacity-40 grayscale' : ''
+                }`}
+              >
+                {/* CPU */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[#94a3b8] flex items-center gap-1 text-[11px]">
+                      <Cpu className="w-3 h-3 text-[#68abff]" /> CPU
                     </span>
-                    <span className={`font-bold ${isStale ? 'text-[#8b909f]' : !isDemoActive ? 'text-[#8b909f]' : asset.cpu_utilization > 90 ? 'text-[#ffb4ab] font-extrabold' : 'text-[#dae2fd]'}`}>
+                    <span
+                      className={`font-bold text-[11px] ${
+                        isCritical && asset.cpu_utilization > 90
+                          ? 'text-rose-300'
+                          : 'text-[#e2e8f0]'
+                      }`}
+                    >
                       {asset.cpu_utilization.toFixed(1)}%
                     </span>
                   </div>
-                  <div className="w-full bg-[#060e20] h-1.5 rounded-full overflow-hidden border border-[#334155]/40">
+                  <div className="w-full bg-white/[0.06] h-1.5 rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all duration-300 ${
-                        isStale ? 'bg-[#475569]' : !isDemoActive ? 'bg-[#475569]' : asset.cpu_utilization > 90 ? 'bg-[#D93025]' : asset.cpu_utilization > 75 ? 'bg-[#FBBC04]' : 'bg-[#adc7ff]'
+                        isStale || !isDemoActive
+                          ? 'bg-[#475569]'
+                          : asset.cpu_utilization > 90
+                          ? 'bg-rose-500'
+                          : asset.cpu_utilization > 75
+                          ? 'bg-amber-400'
+                          : 'bg-blue-500/55'
                       }`}
                       style={{ width: `${Math.min(100, asset.cpu_utilization)}%` }}
                     />
                   </div>
+                </div>
 
-                  {/* Temp */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#c1c6d6] flex items-center gap-1">
-                      <Thermometer className="w-3.5 h-3.5 text-[#ffb691]" /> Temp:
+                {/* Temp */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[#94a3b8] flex items-center gap-1 text-[11px]">
+                      <Thermometer className="w-3 h-3 text-[#68abff]" /> Temp
                     </span>
-                    <span className={`font-bold ${isStale ? 'text-[#8b909f]' : !isDemoActive ? 'text-[#8b909f]' : asset.temperature_c > 90 ? 'text-[#ffb4ab] font-extrabold' : 'text-[#dae2fd]'}`}>
+                    <span
+                      className={`font-bold text-[11px] ${
+                        isCritical && asset.temperature_c > 90
+                          ? 'text-rose-300'
+                          : 'text-[#e2e8f0]'
+                      }`}
+                    >
                       {asset.temperature_c.toFixed(1)}°C
                     </span>
                   </div>
-                  <div className="w-full bg-[#060e20] h-1.5 rounded-full overflow-hidden border border-[#334155]/40">
+                  <div className="w-full bg-white/[0.06] h-1.5 rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all duration-300 ${
-                        isStale ? 'bg-[#475569]' : !isDemoActive ? 'bg-[#475569]' : asset.temperature_c > 90 ? 'bg-[#D93025]' : asset.temperature_c > 75 ? 'bg-[#FBBC04]' : 'bg-[#ffb691]'
+                        isStale || !isDemoActive
+                          ? 'bg-[#475569]'
+                          : asset.temperature_c > 90
+                          ? 'bg-rose-500'
+                          : asset.temperature_c > 75
+                          ? 'bg-amber-400'
+                          : 'bg-blue-500/55'
                       }`}
                       style={{ width: `${Math.min(100, (asset.temperature_c / 120) * 100)}%` }}
                     />
                   </div>
-
-                  {/* Pressure & Memory */}
-                  <div className="pt-1.5 flex items-center justify-between text-[11px] text-[#8b909f] border-t border-[#334155]/40">
-                    <span className="flex items-center gap-1">
-                      <Gauge className="w-3 h-3 text-[#6ddd81]" /> {asset.pressure_psi.toFixed(0)} PSI
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <HardDrive className="w-3 h-3 text-[#adc7ff]" /> {asset.memory_utilization_pct.toFixed(0)}%
-                    </span>
-                  </div>
                 </div>
-              </div>
 
-              {/* Action Button */}
-              <div className="mt-3 pt-2 border-t border-[#334155]/60">
-                {isStale ? (
-                  <button
-                    disabled
-                    className="w-full py-1.5 rounded bg-[#1e293b]/70 border border-[#334155]/60 text-[#64748b] font-mono text-[11px] tracking-wider flex items-center justify-center gap-1.5 cursor-not-allowed opacity-70"
-                    title="Data is older than 60 minutes. Activate the demo and wait for new data to come in."
-                  >
-                    <Clock className="w-3 h-3 text-[#64748b]" />
-                    <span>DATA TOO OLD</span>
-                  </button>
-                ) : !isDemoActive ? (
-                  <button
-                    disabled
-                    className="w-full py-1.5 rounded bg-[#1e293b] border border-[#334155]/60 text-[#64748b] font-mono text-[11px] tracking-wider flex items-center justify-center gap-1 cursor-not-allowed opacity-50 shadow-none"
-                    title={stackConfig.lockBannerText}
-                  >
-                    <Lock className="w-3 h-3 text-[#64748b]" />
-                    <span>LOCKED</span>
-                  </button>
-                ) : isCritical ? (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSelectAsset(asset);
-                    }}
-                    className="w-full py-1.5 rounded bg-[#D93025] hover:bg-[#ff6b60] text-white font-mono text-[11px] font-bold tracking-widest flex items-center justify-center gap-1.5 transition-all shadow-md shadow-[#93000a]"
-                  >
-                    <span>Inspect Asset</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSelectAsset(asset);
-                    }}
-                    className="w-full py-1 rounded border border-[#8b909f]/60 hover:border-[#adc7ff] hover:bg-[#1a73e8] text-[#dae2fd] hover:text-white font-mono text-[11px] tracking-wider flex items-center justify-center gap-1 transition-all"
-                  >
-                    <span>Inspect Asset</span>
-                  </button>
-                )}
+                {/* Pressure, Memory & Contextual Diagnose Indicator */}
+                <div className="pt-1.5 flex items-center justify-between text-[10px] text-[#64748b] border-t border-white/[0.06]">
+                  <span className="flex items-center gap-1">
+                    <Gauge className="w-3 h-3 text-[#64748b]" /> {asset.pressure_psi.toFixed(0)} PSI
+                  </span>
+                  {isCritical ? (
+                    <span className="inline-flex items-center gap-1 text-rose-300 font-bold uppercase tracking-wider">
+                      <span>Diagnose</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </span>
+                  ) : isSelected ? (
+                    <span className="text-[#68abff] font-bold uppercase tracking-wider">
+                      Selected
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1">
+                      <HardDrive className="w-3 h-3 text-[#64748b]" />{' '}
+                      {asset.memory_utilization_pct.toFixed(0)}%
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           );

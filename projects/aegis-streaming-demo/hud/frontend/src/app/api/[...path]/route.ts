@@ -106,7 +106,7 @@ async function proxyRequest(
   const backendUrl = (
     process.env.BACKEND_API_URL ||
     process.env.NEXT_PUBLIC_HUD_BACKEND_URL ||
-    'https://hud-backend-yww5w7x2xa-uc.a.run.app'
+    'http://localhost:8000'
   ).replace(/\/$/, '');
 
   const resolvedParams = await context.params;

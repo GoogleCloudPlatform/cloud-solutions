@@ -31,6 +31,7 @@ SELECT
   LOGICAL_OR(COALESCE(is_anomaly, FALSE))
     OR AVG(temperature_c) > 90.0
     OR AVG(cpu_utilization) > 90.0 AS is_anomaly,
+  UNIX_MILLIS(MAX(timestamp)) AS ingestion_timestamp_ms,
   FORMAT_TIMESTAMP('%Y-%m-%dT%H:%M:%SZ', MAX(timestamp)) AS window_end
 FROM
   `{project_id}.{dataset_id}.telemetry_events`

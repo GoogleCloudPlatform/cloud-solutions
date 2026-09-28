@@ -90,3 +90,9 @@ variable "staging_bucket" {
   description = "The Cloud Storage bucket name for GEAP Reasoning Engine staging."
   default     = ""
 }
+
+variable "dataproc_cluster_name" {
+  type        = string
+  description = "The name of the warm Dataproc Enterprise cluster for Spark streaming."
+  default     = "aegis-spark-cluster"
+}

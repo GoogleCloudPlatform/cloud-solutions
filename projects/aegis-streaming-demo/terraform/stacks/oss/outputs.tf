@@ -86,3 +86,8 @@ output "dataproc_deps_bucket" {
   description = "The Cloud Storage bucket name storing Dataproc dependency artifacts."
   value       = module.stack_oss.dataproc_deps_bucket
 }
+
+output "dataproc_cluster_name" {
+  description = "The name of the warm Dataproc Standard Spark cluster (Vectorized Spark Execution)."
+  value       = module.stack_oss.dataproc_cluster_name
+}

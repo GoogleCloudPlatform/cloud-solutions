@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # =============================================================================
-# Dataproc Serverless PySpark Dependency Staging (OSS Stack)
+# Dataproc Standard Spark Cluster PySpark Dependency Staging (OSS Stack)
 # =============================================================================
 
 resource "google_storage_bucket" "dataproc_deps" {
@@ -39,4 +39,10 @@ resource "google_storage_bucket_object" "requirements_txt" {
   name   = "dependencies/requirements.txt"
   bucket = google_storage_bucket.dataproc_deps.name
   source = "${path.module}/../../../data-ingestion/requirements.txt"
+}
+
+resource "google_storage_bucket_object" "init_spark_deps_sh" {
+  name   = "dependencies/init_spark_deps.sh"
+  bucket = google_storage_bucket.dataproc_deps.name
+  source = "${path.module}/../../../data-ingestion/src/init_spark_deps.sh"
 }

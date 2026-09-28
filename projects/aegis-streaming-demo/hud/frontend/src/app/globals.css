@@ -21,8 +21,10 @@
 /* stylelint-enable at-rule-no-unknown */
 
 :root {
-  --background: #0b1326;
-  --foreground: #dae2fd;
+  --background: #070d19;
+  --foreground: #e2e8f0;
+
+  color-scheme: dark;
 }
 
 body {
@@ -31,17 +33,36 @@ body {
   overflow-x: hidden;
 }
 
-/* Glassmorphism utility following Stitch Aegis Command HUD specifications */
+/* Modern Web Guidance typography legibility & wrapping */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+/* Accessible keyboard focus ring */
+:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+/* Refined dark-mode glassmorphic surfaces with subtle hairline borders */
 .glass-panel {
-  background: rgb(30 41 59 / 70%);
-  backdrop-filter: blur(12px);
-  border: 1px solid #334155;
+  background: rgb(15 23 42 / 82%);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgb(255 255 255 / 8%);
 }
 
 .glass-card {
-  background: rgb(19 27 46 / 75%);
+  background: rgb(10 16 31 / 85%);
   backdrop-filter: blur(12px);
-  border: 1px solid #334155;
+  border: 1px solid rgb(255 255 255 / 7%);
 }
 
 /* Custom scrollbars */
@@ -51,14 +72,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #060e20;
+  background: #050a14;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2d3449;
+  background: #1e293b;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1a73e8;
+  background: #3b82f6;
 }

@@ -27,18 +27,10 @@ from typing import Any, Dict, List
 import google.auth.exceptions
 from fastapi import APIRouter, HTTPException
 from google.api_core.exceptions import GoogleAPICallError
+from google.cloud import bigquery
 from models import RunAnalyticsQueryRequest
 
-try:
-    from google.cloud import bigquery  # pylint: disable=ungrouped-imports
-
-    BQ_AVAILABLE = True
-except ImportError:
-    BQ_AVAILABLE = False
-
 logger = logging.getLogger("aegis-hud-backend")
-if not BQ_AVAILABLE:
-    logger.warning("google-cloud-bigquery package not available.")
 router = APIRouter(tags=["Analytics"])
 
 SQL_DIR = pathlib.Path(__file__).resolve().parent.parent / "sql"
@@ -241,10 +233,9 @@ def _execute_bq_query(
     columns = target["columns"]
     start_time = time.time()
 
-    if not BQ_AVAILABLE or not project_id:
+    if not project_id:
         logger.info(
-            "BigQuery unavailable or project_id missing. Using fallback "
-            "for %s.",
+            "project_id missing. Using fallback for %s.",
             query_id,
         )
         rows = generate_fallback_rows(query_id)

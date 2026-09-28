@@ -22,15 +22,19 @@ resource "google_project_service_identity" "pubsub_agent" {
   service  = "pubsub.googleapis.com"
 }
 
-resource "google_project_iam_member" "pubsub_bq_data_editor" {
+resource "google_bigquery_table_iam_member" "pubsub_bq_data_editor" {
   project    = var.project_id
+  dataset_id = var.bigquery_dataset_id
+  table_id   = var.telemetry_table_id
   role       = "roles/bigquery.dataEditor"
   member     = "serviceAccount:${google_project_service_identity.pubsub_agent.email}"
   depends_on = [google_pubsub_topic.telemetry_raw]
 }
 
-resource "google_project_iam_member" "pubsub_bq_metadata_viewer" {
+resource "google_bigquery_table_iam_member" "pubsub_bq_metadata_viewer" {
   project    = var.project_id
+  dataset_id = var.bigquery_dataset_id
+  table_id   = var.telemetry_table_id
   role       = "roles/bigquery.metadataViewer"
   member     = "serviceAccount:${google_project_service_identity.pubsub_agent.email}"
   depends_on = [google_pubsub_topic.telemetry_raw]
@@ -65,7 +69,7 @@ resource "google_pubsub_subscription" "telemetry_bigquery" {
 
   depends_on = [
     google_pubsub_topic.telemetry_raw,
-    google_project_iam_member.pubsub_bq_data_editor,
-    google_project_iam_member.pubsub_bq_metadata_viewer
+    google_bigquery_table_iam_member.pubsub_bq_data_editor,
+    google_bigquery_table_iam_member.pubsub_bq_metadata_viewer
   ]
 }

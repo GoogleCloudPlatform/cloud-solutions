@@ -54,7 +54,7 @@ _DATAFLOW_API_EXCEPTIONS = (
 class DataflowPipelineClient(BasePipelineClient):
     """Pipeline controller for Google Cloud Dataflow (Apache Beam)."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._status_cache: Dict[str, Any] = {
             "status": "STOPPED",
             "batch_id": None,
@@ -69,9 +69,11 @@ class DataflowPipelineClient(BasePipelineClient):
 
     @property
     def engine_name(self) -> str:
+        """Returns the engine identifier ('dataflow')."""
         return "dataflow"
 
     def _get_auth_headers(self) -> Dict[str, str]:
+        """Fetches Google Cloud OAuth2 bearer headers for Dataflow API calls."""
         if not GOOGLE_AUTH_AVAILABLE:
             return {}
         try:
@@ -124,52 +126,53 @@ class DataflowPipelineClient(BasePipelineClient):
                 if resp.status_code == 200:
                     data = resp.json()
                     jobs: List[Dict[str, Any]] = data.get("jobs", [])
+                    aegis_jobs = [
+                        j
+                        for j in jobs
+                        if "aegis" in j.get("name", "").lower()
+                        or "streaming" in j.get("name", "").lower()
+                    ]
 
-                    for job in jobs:
+                    for job in aegis_jobs:
                         job_state = job.get("currentState", "")
                         job_name = job.get("name", "")
                         job_id = job.get("id", "")
-                        if (
-                            "aegis" in job_name.lower()
-                            or "streaming" in job_name.lower()
-                        ):
-                            if job_state in [
-                                "JOB_STATE_RUNNING",
-                                "JOB_STATE_STARTING",
-                                "JOB_STATE_PENDING",
-                            ]:
-                                is_running = job_state == "JOB_STATE_RUNNING"
-                                active_msg = (
-                                    "Cloud Dataflow Apache Beam streaming "
-                                    "active."
-                                )
-                                pending_msg = (
-                                    "Provisioning Cloud Dataflow worker VMs..."
-                                )
-                                result = {
-                                    "status": (
-                                        "RUNNING" if is_running else "PENDING"
-                                    ),
-                                    "batch_id": job_id,
-                                    "job_id": job_id,
-                                    "job_name": job_name,
-                                    "engine": "dataflow",
-                                    "create_time": job.get("createTime"),
-                                    "state_name": job_state,
-                                    "message": (
-                                        active_msg
-                                        if is_running
-                                        else pending_msg
-                                    ),
-                                    "error": None,
-                                }
-                                self._status_cache = result
-                                self._cache_timestamp = time.time()
-                                return result
+                        if job_state in [
+                            "JOB_STATE_RUNNING",
+                            "JOB_STATE_STARTING",
+                            "JOB_STATE_PENDING",
+                            "JOB_STATE_QUEUED",
+                        ]:
+                            is_running = job_state == "JOB_STATE_RUNNING"
+                            active_msg = (
+                                "Cloud Dataflow Apache Beam streaming "
+                                "active."
+                            )
+                            pending_msg = (
+                                "Provisioning Cloud Dataflow worker VMs..."
+                            )
+                            result = {
+                                "status": (
+                                    "RUNNING" if is_running else "PENDING"
+                                ),
+                                "batch_id": job_id,
+                                "job_id": job_id,
+                                "job_name": job_name,
+                                "engine": "dataflow",
+                                "create_time": job.get("createTime"),
+                                "state_name": job_state,
+                                "message": (
+                                    active_msg if is_running else pending_msg
+                                ),
+                                "error": None,
+                            }
+                            self._status_cache = result
+                            self._cache_timestamp = time.time()
+                            return result
 
-                    # If no active job found, inspect latest
-                    if jobs:
-                        latest_job = jobs[0]
+                    # If no active job found, inspect latest Aegis job
+                    if aegis_jobs:
+                        latest_job = aegis_jobs[0]
                         latest_state = latest_job.get("currentState", "STOPPED")
                         latest_name = latest_job.get("name")
                         status = (
@@ -210,10 +213,71 @@ class DataflowPipelineClient(BasePipelineClient):
             return self._status_cache
 
     def get_status(self, _project_id: str, _region: str) -> Dict[str, Any]:
+        """Returns cached Dataflow pipeline status."""
         return self._status_cache
 
+    def _cancel_active_aegis_jobs(
+        self,
+        client: httpx.Client,
+        project_id: str,
+        region: str,
+        headers: Dict[str, str],
+    ) -> int:
+        """Cancels any running or pending Aegis Dataflow jobs."""
+        stopped_count = 0
+        list_url = (
+            f"https://dataflow.googleapis.com/v1b3/projects/{project_id}/"
+            f"locations/{region}/jobs"
+        )
+        try:
+            resp = client.get(list_url, headers=headers)
+            if resp.status_code != 200:
+                return 0
+            jobs: List[Dict[str, Any]] = resp.json().get("jobs", [])
+            for job in jobs:
+                job_state = job.get("currentState", "")
+                job_name = job.get("name", "")
+                job_id = job.get("id", "")
+                if (
+                    "aegis" in job_name.lower()
+                    or "streaming" in job_name.lower()
+                ) and job_state in [
+                    "JOB_STATE_RUNNING",
+                    "JOB_STATE_STARTING",
+                    "JOB_STATE_PENDING",
+                    "JOB_STATE_QUEUED",
+                ]:
+                    job_url = f"{list_url}/{job_id}"
+                    client.put(
+                        job_url,
+                        headers=headers,
+                        json={"requestedState": "JOB_STATE_CANCELLED"},
+                    )
+                    stopped_count += 1
+        except _DATAFLOW_API_EXCEPTIONS as exc:
+            logger.warning("Error cancelling active Dataflow jobs: %s", exc)
+        return stopped_count
+
+    def _seek_subscription_to_now(
+        self,
+        client: httpx.Client,
+        subscription_path: str,
+        headers: Dict[str, str],
+    ) -> None:
+        """Seeks the Pub/Sub subscription to current UTC time."""
+        seek_url = f"https://pubsub.googleapis.com/v1/{subscription_path}:seek"
+        now_iso = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        try:
+            client.post(seek_url, headers=headers, json={"time": now_iso})
+        except _DATAFLOW_API_EXCEPTIONS as exc:
+            logger.debug(
+                "Non-fatal error seeking subscription %s: %s",
+                subscription_path,
+                exc,
+            )
+
     def start_pipeline(self, project_id: str, region: str) -> Dict[str, Any]:
-        """Starts the Dataflow streaming pipeline via Flex Template launch."""
+        """Starts the Dataflow streaming pipeline using Flex Template launch."""
         self._cache_timestamp = 0.0
         now_str = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
         job_name = f"aegis-dataflow-streaming-{now_str}"
@@ -233,10 +297,13 @@ class DataflowPipelineClient(BasePipelineClient):
             or os.getenv("DEPS_BUCKET")
             or f"{project_id}-dataflow-staging"
         )
-        pubsub_topic = os.getenv("PUBSUB_TOPIC", "telemetry-raw")
-        if "/" not in pubsub_topic:
-            pubsub_topic = f"projects/{project_id}/topics/{pubsub_topic}"
+        pubsub_sub = os.getenv(
+            "PUBSUB_SUBSCRIPTION", "telemetry-raw-dataflow-sub"
+        )
+        if "/" not in pubsub_sub:
+            pubsub_sub = f"projects/{project_id}/subscriptions/{pubsub_sub}"
 
+        machine_type = os.getenv("DATAFLOW_MACHINE_TYPE", "n2-standard-2")
         bigtable_inst = os.getenv("BIGTABLE_INSTANCE_ID", "aegis-bigtable")
         bigquery_ds = os.getenv("BIGQUERY_DATASET_ID", "analytics")
         service_account_email = os.getenv(
@@ -266,7 +333,7 @@ class DataflowPipelineClient(BasePipelineClient):
                     "aegis_dataflow_template.json"
                 ),
                 "parameters": {
-                    "input_topic": pubsub_topic,
+                    "input_subscription": pubsub_sub,
                     "bigtable_project": project_id,
                     "bigtable_instance": bigtable_inst,
                     "bigtable_table": "telemetry_metrics",
@@ -274,6 +341,7 @@ class DataflowPipelineClient(BasePipelineClient):
                         f"{project_id}:{bigquery_ds}.telemetry_events"
                     ),
                     "window_seconds": "10",
+                    "trigger_interval_seconds": "1",
                 },
                 "environment": {
                     "tempLocation": f"gs://{staging_bucket}/temp",
@@ -281,6 +349,7 @@ class DataflowPipelineClient(BasePipelineClient):
                     "serviceAccountEmail": service_account_email,
                     "subnetwork": subnetwork_full_url,
                     "ipConfiguration": "WORKER_IP_PRIVATE",
+                    "machineType": machine_type,
                     "enableStreamingEngine": True,
                     "maxWorkers": 5,
                     "numWorkers": 1,
@@ -290,6 +359,10 @@ class DataflowPipelineClient(BasePipelineClient):
 
         try:
             with httpx.Client(timeout=25.0) as client:
+                self._cancel_active_aegis_jobs(
+                    client, project_id, region, headers
+                )
+                self._seek_subscription_to_now(client, pubsub_sub, headers)
                 resp = client.post(url, headers=headers, json=payload)
                 if resp.status_code == 200:
                     data = resp.json()
@@ -356,38 +429,10 @@ class DataflowPipelineClient(BasePipelineClient):
 
         if headers and project_id:
             try:
-                list_url = (
-                    f"https://dataflow.googleapis.com/v1b3/projects/{project_id}/"
-                    f"locations/{region}/jobs"
-                )
                 with httpx.Client(timeout=10.0) as client:
-                    resp = client.get(list_url, headers=headers)
-                    if resp.status_code == 200:
-                        jobs: List[Dict[str, Any]] = resp.json().get("jobs", [])
-                        for job in jobs:
-                            job_state = job.get("currentState", "")
-                            job_name = job.get("name", "")
-                            job_id = job.get("id", "")
-                            if (
-                                "aegis" in job_name.lower()
-                                or "streaming" in job_name.lower()
-                            ) and job_state in [
-                                "JOB_STATE_RUNNING",
-                                "JOB_STATE_STARTING",
-                                "JOB_STATE_PENDING",
-                            ]:
-                                job_url = f"{list_url}/{job_id}"
-                                target_state = (
-                                    "JOB_STATE_CANCELLED"
-                                    if job_state != "JOB_STATE_RUNNING"
-                                    else "JOB_STATE_CANCELLED"
-                                )
-                                client.put(
-                                    job_url,
-                                    headers=headers,
-                                    json={"requestedState": target_state},
-                                )
-                                stopped_count += 1
+                    stopped_count = self._cancel_active_aegis_jobs(
+                        client, project_id, region, headers
+                    )
             except _DATAFLOW_API_EXCEPTIONS as exc:
                 logger.warning("Error cancelling Dataflow jobs: %s", exc)
 

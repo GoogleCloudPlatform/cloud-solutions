@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM hashicorp/terraform:1.11.1
+FROM hashicorp/terraform:1.16.4
 
 ARG PROJECT_SUBDIRECTORY=/app
 ENV PROJECT_SUBDIRECTORY=${PROJECT_SUBDIRECTORY}

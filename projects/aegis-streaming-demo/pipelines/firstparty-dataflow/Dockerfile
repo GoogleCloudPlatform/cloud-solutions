@@ -21,16 +21,15 @@ COPY requirements.txt .
 COPY src/ ./src/
 
 ENV FLEX_TEMPLATE_PYTHON_PY_FILE="${WORKDIR}/src/pipeline.py"
-ENV FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE="${WORKDIR}/requirements.txt"
+ENV FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE="${WORKDIR}/beam-requirements.txt"
 
-RUN apt-get update && apt-get install -y --no-install-recommends git \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd -g 1000 appuser \
-    && useradd -u 1000 -g appuser -d ${WORKDIR} -s /bin/bash appuser \
-    && pip install --no-cache-dir --require-hashes -r ${FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE} \
-    && pip download --no-cache-dir --require-hashes --dest /tmp/dataflow-requirements-cache -r ${FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE} \
-    && chown -R appuser:appuser ${WORKDIR} /tmp/dataflow-requirements-cache
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN pip install --no-cache-dir --require-hashes -r ${WORKDIR}/requirements.txt \
+    && pip download --no-cache-dir --require-hashes --dest /tmp/beam-requirements-cache -r ${WORKDIR}/requirements.txt \
+    && grep -E '^google-cloud-(bigtable|bigquery|pubsub)==' ${WORKDIR}/requirements.txt | sed 's/ .*//' > ${WORKDIR}/beam-requirements.txt
 
 ENV PIP_NO_DEPS=True
-
-USER appuser
+# NOTE: Dataflow Flex Template launcher images (python311-template-launcher-base)
+# must run as the default base image user (root) because the Dataflow GCE
+# Launcher VM bind-mounts /var/log/dataflow/template_launcher from the host as
+# root:root (0755) for python_template_launcher to create runner-json.log.

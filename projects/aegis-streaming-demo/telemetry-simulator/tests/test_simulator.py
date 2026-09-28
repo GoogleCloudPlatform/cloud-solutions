@@ -38,7 +38,7 @@ class TestSimulatorService(unittest.TestCase):
 
     # Resetting internal simulator task and state attributes between unit tests.
     # pylint: disable=protected-access
-    def setUp(self):
+    def setUp(self) -> None:
         """Ensure clean state before each test."""
         fleet_simulator.running = False
         if (
@@ -50,16 +50,27 @@ class TestSimulatorService(unittest.TestCase):
         fleet_simulator.message_timestamps.clear()
         self.client = TestClient(app)
 
+    def tearDown(self) -> None:
+        """Stop background streaming task after each test."""
+        fleet_simulator.running = False
+        if (
+            fleet_simulator._streaming_task
+            and not fleet_simulator._streaming_task.done()
+        ):
+            fleet_simulator._streaming_task.cancel()
+
     # pylint: enable=protected-access
 
-    def test_health_check(self):
+    def test_health_check(self) -> None:
+        """Verifies /health returns 200 healthy response."""
         response = self.client.get("/health")
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertEqual(data["status"], "healthy")
         self.assertEqual(data["service"], "aegis-telemetry-simulator")
 
-    def test_initial_status_stopped(self):
+    def test_initial_status_stopped(self) -> None:
+        """Verifies initial stream status is stopped with 15 assets."""
         response = self.client.get("/api/stream-status")
         self.assertEqual(response.status_code, 200)
         data = response.json()
@@ -70,19 +81,22 @@ class TestSimulatorService(unittest.TestCase):
         self.assertEqual(len(data["active_anomalies"]), 0)
         self.assertEqual(data["assets_count"], 15)
 
-    def test_create_anomaly_fails_when_stopped(self):
+    def test_create_anomaly_fails_when_stopped(self) -> None:
+        """Verifies /api/create-anomoly returns 400 when stream is stopped."""
         response = self.client.post("/api/create-anomoly")
         self.assertEqual(response.status_code, 400)
         data = response.json()
         self.assertIn("stream is stopped", data["detail"].lower())
 
-    def test_fix_anomaly_empty_asset(self):
+    def test_fix_anomaly_empty_asset(self) -> None:
+        """Verifies /api/fix-anomoly returns 400 when asset_id is empty."""
         response = self.client.post("/api/fix-anomoly", json={"asset_id": ""})
         self.assertEqual(response.status_code, 400)
         data = response.json()
         self.assertIn("asset_id must be provided", data["detail"].lower())
 
-    def test_start_and_stop_stream(self):
+    def test_start_and_stop_stream(self) -> None:
+        """Verifies starting and stopping the telemetry stream."""
         # Start stream
         start_resp = self.client.post("/api/start-stream")
         self.assertEqual(start_resp.status_code, 200)
@@ -103,7 +117,8 @@ class TestSimulatorService(unittest.TestCase):
         self.assertEqual(stop_data["status"], "stopped")
         self.assertFalse(stop_data["running"])
 
-    def test_create_and_fix_anomaly_flow(self):
+    def test_create_and_fix_anomaly_flow(self) -> None:
+        """Verifies end-to-end anomaly creation and remediation flow."""
         # Start stream
         self.client.post("/api/start-stream")
 
@@ -135,7 +150,8 @@ class TestSimulatorService(unittest.TestCase):
         status_resp2 = self.client.get("/api/stream-status")
         self.assertNotIn(chosen_id, status_resp2.json()["active_anomalies"])
 
-    def test_fix_anomaly_invalid_asset(self):
+    def test_fix_anomaly_invalid_asset(self) -> None:
+        """Verifies /api/fix-anomoly returns 404 for unknown asset_id."""
         self.client.post("/api/start-stream")
         response = self.client.post(
             "/api/fix-anomoly", json={"asset_id": "NonExistentAsset"}

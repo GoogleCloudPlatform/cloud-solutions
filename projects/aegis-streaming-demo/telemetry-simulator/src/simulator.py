@@ -58,6 +58,7 @@ class FleetSimulator:
     def _reset_all_assets_normalized(self):
         """Initializes or resets all 15 assets to healthy parameters."""
         now_str = datetime.now(timezone.utc).isoformat()
+        now_ms = int(time.time() * 1000)
         for asset_id in self.asset_ids:
             self.states[asset_id] = {
                 "asset_id": asset_id,
@@ -68,11 +69,13 @@ class FleetSimulator:
                 "status": "OK",
                 "is_anomaly": False,
                 "timestamp": now_str,
+                "ingestion_timestamp_ms": now_ms,
             }
 
     def _normalize_asset(self, asset_id: str) -> Dict[str, Any]:
         """Normalizes a single asset back to healthy baseline parameters."""
         now_str = datetime.now(timezone.utc).isoformat()
+        now_ms = int(time.time() * 1000)
         self.states[asset_id].update(
             {
                 "cpu_utilization": round(random.uniform(28.0, 38.0), 2),
@@ -82,6 +85,7 @@ class FleetSimulator:
                 "status": "OK",
                 "is_anomaly": False,
                 "timestamp": now_str,
+                "ingestion_timestamp_ms": now_ms,
             }
         )
         return self.states[asset_id]
@@ -163,6 +167,7 @@ class FleetSimulator:
         pressure = round(random.uniform(110.0, 125.0), 1)
         memory = round(random.uniform(85.0, 95.0), 1)
         now_str = datetime.now(timezone.utc).isoformat()
+        now_ms = int(time.time() * 1000)
 
         self.states[chosen_id].update(
             {
@@ -173,6 +178,7 @@ class FleetSimulator:
                 "status": "CRITICAL",
                 "is_anomaly": True,
                 "timestamp": now_str,
+                "ingestion_timestamp_ms": now_ms,
             }
         )
 
@@ -234,8 +240,10 @@ class FleetSimulator:
     def _update_drift(self):
         """Applies realistic natural sensor drift to all assets."""
         now_str = datetime.now(timezone.utc).isoformat()
+        now_ms = int(time.time() * 1000)
         for state in self.states.values():
             state["timestamp"] = now_str
+            state["ingestion_timestamp_ms"] = now_ms
 
             if state["is_anomaly"]:
                 state["cpu_utilization"] = round(
@@ -330,6 +338,7 @@ class FleetSimulator:
                             "event_id": evt_id,
                             "asset_id": asset_id,
                             "timestamp": now_str,
+                            "ingestion_timestamp_ms": evt_ts,
                             "cpu_utilization": st["cpu_utilization"],
                             "temperature_c": st["temperature_c"],
                             "pressure_psi": st["pressure_psi"],
@@ -343,6 +352,14 @@ class FleetSimulator:
                         self.message_timestamps.append(now_ts)
 
                 self.publisher.publish_messages(batch_messages)
+                cutoff_5m = now_ts - 300.0
+                if (
+                    self.message_timestamps
+                    and self.message_timestamps[0] < cutoff_5m
+                ):
+                    self.message_timestamps = [
+                        ts for ts in self.message_timestamps if ts >= cutoff_5m
+                    ]
 
                 elapsed = time.time() - loop_start
                 sleep_time = max(0.01, sleep_interval - elapsed)

@@ -17,22 +17,15 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import {
   Layers,
   Database,
   Sparkles,
-  ShieldCheck,
   TrendingUp,
-  ArrowRight,
   ExternalLink,
-  Cpu,
   Bot,
   Activity,
-  CheckCircle2,
-  Zap,
-  Flame,
-  FileText,
-  AlertOctagon,
   Play,
   RefreshCw,
   Lock
@@ -54,7 +47,6 @@ interface Module4PipelineFlowProps {
 
 export const Module4PipelineFlow: React.FC<Module4PipelineFlowProps> = ({
   criticalCount = 0,
-  selectedAssetId = null,
   hasMitigation = false,
   isSimulatorRunning = false,
   isPipelineActive = false,
@@ -85,87 +77,75 @@ export const Module4PipelineFlow: React.FC<Module4PipelineFlowProps> = ({
   const stackConfig = getStackConfig();
 
   const step1Subtitle = stackConfig.module4Step1Subtitle;
-  const step1Desc = stackConfig.module4Step1Desc;
-  const step1Tech = stackConfig.module4Step1Tech;
   const ingestionStoppedLabel = stackConfig.ingestionPausedLabel;
   const pipelineStoppedLabel = stackConfig.pipelineStoppedLabel;
 
   const step3Subtitle = stackConfig.module4Step3Subtitle;
-  const step3Desc = stackConfig.module4Step3Desc;
-  const step3Tech = stackConfig.module4Step3Tech;
 
   const steps = [
     {
       step: 1,
-      title: 'Dual-Sink Streaming Ingestion',
+      title: 'Streaming Ingestion',
       subtitle: step1Subtitle,
-      description: step1Desc,
-      tech: step1Tech,
       status: !isSimulatorRunning
         ? ingestionStoppedLabel
         : !isPipelineActive
         ? pipelineStoppedLabel
-        : 'STREAMING ACTIVE',
-      statusColor: isDemoFullyActive
-        ? 'text-[#6ddd81] bg-[#30a550]/20 border-[#30a550]/50'
-        : 'text-[#FBBC04] bg-[#FBBC04]/20 border-[#FBBC04]/50',
-      icon: <Layers className="w-5 h-5 text-[#adc7ff]" />,
+        : 'STREAMING',
+      isActive: isDemoFullyActive,
+      isAlert: false,
+      icon: <Layers className="w-4 h-4 text-[#68abff]" />,
       consoleUrl: consoleLinks.ingestionConsole,
       consoleLabel: consoleLinks.ingestionLabel,
     },
     {
       step: 2,
-      title: 'Sub-Millisecond Operational HUD',
-      subtitle: 'Cloud Bigtable Direct Read',
-      description: 'The Operations HUD reads operational telemetry directly from Cloud Bigtable (telemetry_metrics) to render near-real-time asset states with sub-10ms point lookup latency.',
-      tech: 'Cloud Bigtable • telemetry_metrics • SSE Streaming',
-      status: 'BIGTABLE P99 <10ms',
-      statusColor: 'text-[#adc7ff] bg-[#1a73e8]/20 border-[#1a73e8]/50',
-      icon: <Database className="w-5 h-5 text-[#6ddd81]" />,
+      title: 'Bigtable State',
+      subtitle: 'telemetry_metrics (<5ms)',
+      status: 'P99 < 5ms',
+      isActive: isDemoFullyActive,
+      isAlert: false,
+      icon: <Database className="w-4 h-4 text-emerald-400" />,
       consoleUrl: consoleLinks.bigtableTable,
       consoleLabel: 'Bigtable Console',
     },
     {
       step: 3,
-      title: 'In-Stream Anomaly Detection & AI Agent',
+      title: 'Anomaly Detection',
       subtitle: step3Subtitle,
-      description: step3Desc,
-      tech: step3Tech,
-      status: criticalCount > 0 ? `${criticalCount} ANOMALY DETECTED` : 'MONITORING',
-      statusColor: criticalCount > 0
-        ? 'text-[#ffdad6] bg-[#D93025] border-[#ffdad6]/40 animate-pulse font-bold'
-        : 'text-[#6ddd81] bg-[#30a550]/20 border-[#30a550]/50',
-      icon: <Sparkles className="w-5 h-5 text-[#ffb4ab]" />,
+      status: criticalCount > 0 ? `${criticalCount} CRITICAL` : 'MONITORING',
+      isActive: isDemoFullyActive,
+      isAlert: criticalCount > 0,
+      icon: <Sparkles className="w-4 h-4 text-amber-400" />,
       consoleUrl: consoleLinks.geminiEnterpriseAgentPlatform,
-      consoleLabel: 'GEAP Agent Console',
+      consoleLabel: 'GEAP Agent',
     },
     {
       step: 4,
-      title: 'Human-in-the-Loop Approval & Tool Action',
-      subtitle: 'Operator Approval → Industrial Control Tool',
-      description: 'After the operator reviews and approves the mitigation steps, the Agent executes "IndustrialActuatorTool.throttle_and_cool", which signals the telemetry simulator to emit non-anomaly healthy payloads—simulating physical remediation on the asset itself.',
-      tech: 'Human-in-the-Loop • IndustrialActuatorTool • Simulator Signal',
-      status: hasMitigation && criticalCount > 0 ? 'AWAITING / EXECUTING' : (hasMitigation ? 'RESOLVED • APPLIED' : 'READY'),
-      statusColor: hasMitigation && criticalCount > 0
-        ? 'text-[#FBBC04] bg-[#FBBC04]/20 border-[#FBBC04]/50 animate-pulse'
-        : hasMitigation
-        ? 'text-[#6ddd81] bg-[#30a550]/20 border-[#30a550]/50'
-        : 'text-[#adc7ff] bg-[#1a73e8]/20 border-[#1a73e8]/50',
-      icon: <Bot className="w-5 h-5 text-[#FBBC04]" />,
+      title: 'HITL Mitigation',
+      subtitle: 'IndustrialActuatorTool',
+      status:
+        hasMitigation && criticalCount > 0
+          ? 'AWAITING APPROVAL'
+          : hasMitigation
+          ? 'RESOLVED'
+          : 'READY',
+      isActive: hasMitigation,
+      isAlert: hasMitigation && criticalCount > 0,
+      icon: <Bot className="w-4 h-4 text-[#68abff]" />,
       consoleUrl: consoleLinks.hudBackendRun,
-      consoleLabel: 'Cloud Run Backend',
+      consoleLabel: 'Cloud Run API',
     },
     {
       step: 5,
-      title: 'Governance Audit & Tokenomics',
-      subtitle: 'BigQuery Historical Analytics & ROI Log',
-      description: 'The Agent writes every action taken, incident RCA, LLM token consumption ($0.00018), and prevented downtime value ($5,000) directly to BigQuery (rca_events) for compliance and executive auditing.',
-      tech: 'BigQuery • rca_events • Tokenomics ROI',
-      status: 'AUDIT STREAMING',
-      statusColor: 'text-[#6ddd81] bg-[#30a550]/20 border-[#30a550]/50',
-      icon: <TrendingUp className="w-5 h-5 text-[#6ddd81]" />,
+      title: 'BigQuery ROI Audit',
+      subtitle: 'analytics.rca_events',
+      status: 'AUDIT ACTIVE',
+      isActive: isDemoFullyActive,
+      isAlert: false,
+      icon: <TrendingUp className="w-4 h-4 text-emerald-400" />,
       consoleUrl: consoleLinks.bigqueryRcaTable,
-      consoleLabel: 'BigQuery RCA Table',
+      consoleLabel: 'BigQuery Table',
     },
   ];
 
@@ -173,135 +153,153 @@ export const Module4PipelineFlow: React.FC<Module4PipelineFlowProps> = ({
     <div className="space-y-4">
       {/* Inactive Pipeline Warning / Activation Banner */}
       {!isDemoFullyActive && (
-        <div className="p-5 rounded-2xl bg-[#93000a]/20 border-2 border-[#D93025] shadow-[0_0_25px_rgba(217,48,37,0.3)] animate-fade-in flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-          <div className="space-y-1.5">
+        <div className="p-4 rounded-2xl bg-rose-950/40 border border-rose-500/40 shadow-[0_0_24px_-6px_rgba(239,68,68,0.25)] animate-fade-in flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+          <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Lock className="w-5 h-5 text-[#ffb4ab]" />
-              <h3 className="text-base font-headline font-bold text-white uppercase tracking-wider">
+              <Lock className="w-4 h-4 text-rose-400" />
+              <h3 className="text-sm font-headline font-bold text-white uppercase tracking-wider">
                 Live Closed-Loop Demo Locked — Ingestion Pipeline Required
               </h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#D93025] text-white">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-rose-500/20 text-rose-300 border border-rose-500/40">
                 INACTIVE
               </span>
             </div>
-            <p className="text-xs text-[#dae2fd] max-w-3xl font-sans">
-              To experience the true closed-loop demo—where {stackConfig.ingestionShort} streams sensor data, {stackConfig.pipelineShort} detects anomalies in real-time, and the Agent&apos;s mitigation signals the machine generator—both the <strong>{stackConfig.generatorShort}</strong> and <strong>{stackConfig.pipelineName}</strong> must be running.
+            <p className="text-xs text-[#cbd5e1] max-w-3xl font-sans">
+              Start both the <strong>{stackConfig.generatorShort}</strong> and{' '}
+              <strong>{stackConfig.pipelineName}</strong> to stream live telemetry and unlock chaos anomaly injection.
             </p>
-            <div className="flex flex-wrap items-center gap-3 pt-1 text-xs font-mono">
-              <span className="flex items-center gap-1">
-                <span className={`w-2 h-2 rounded-full ${isSimulatorRunning ? 'bg-[#6ddd81]' : 'bg-[#D93025]'}`} />
-                <span>{stackConfig.generatorShort}: <strong className={isSimulatorRunning ? 'text-[#6ddd81]' : 'text-[#ffb4ab]'}>{isSimulatorRunning ? 'RUNNING' : 'STOPPED'}</strong></span>
+            <div className="flex flex-wrap items-center gap-3 pt-0.5 text-xs font-mono">
+              <span className="flex items-center gap-1.5">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    isSimulatorRunning ? 'bg-emerald-400' : 'bg-rose-400'
+                  }`}
+                />
+                <span>
+                  {stackConfig.generatorShort}:{' '}
+                  <strong className={isSimulatorRunning ? 'text-emerald-400' : 'text-rose-400'}>
+                    {isSimulatorRunning ? 'RUNNING' : 'STOPPED'}
+                  </strong>
+                </span>
               </span>
-              <span className="text-[#8b909f]">|</span>
-              <span className="flex items-center gap-1">
-                <span className={`w-2 h-2 rounded-full ${isPipelineActive ? 'bg-[#6ddd81]' : 'bg-[#D93025]'}`} />
-                <span>{stackConfig.pipelineShort}: <strong className={isPipelineActive ? 'text-[#6ddd81]' : 'text-[#ffb4ab]'}>{isPipelineActive ? 'RUNNING' : 'STOPPED'}</strong></span>
+              <span className="text-[#475569]">|</span>
+              <span className="flex items-center gap-1.5">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    isPipelineActive ? 'bg-emerald-400' : 'bg-rose-400'
+                  }`}
+                />
+                <span>
+                  {stackConfig.pipelineShort}:{' '}
+                  <strong className={isPipelineActive ? 'text-emerald-400' : 'text-rose-400'}>
+                    {isPipelineActive ? 'RUNNING' : 'STOPPED'}
+                  </strong>
+                </span>
               </span>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <button
+              type="button"
               disabled={isStartingAll}
               onClick={handleActivateAll}
-              className="px-4 py-2.5 rounded-lg bg-[#30a550] hover:bg-[#25853e] text-white font-mono text-xs uppercase tracking-wider font-bold transition-all shadow-lg shadow-[#30a550]/30 flex items-center gap-2 disabled:opacity-50"
+              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs uppercase tracking-wider font-bold transition-all shadow-md shadow-emerald-600/20 flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {isStartingAll ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
               ) : (
-                <Play className="w-4 h-4 fill-white" />
+                <Play className="w-3.5 h-3.5 fill-white" />
               )}
-              <span>START ALL &amp; UNLOCK DEMO</span>
+              <span>Start All &amp; Unlock Demo</span>
             </button>
 
-            {onNavigateToSimulator && (
-              <button
-                onClick={onNavigateToSimulator}
-                className="px-3.5 py-2 rounded-lg border border-[#334155] hover:border-[#adc7ff] hover:bg-[#131b2e] text-[#dae2fd] text-xs font-mono tracking-wider transition-all"
-              >
-                <span>Go to Module 2 Controls ↗</span>
-              </button>
-            )}
+            <Link
+              href="/simulator"
+              onClick={onNavigateToSimulator}
+              className="px-3.5 py-2 rounded-xl border border-white/[0.08] hover:border-white/20 bg-[#0b1326] text-[#cbd5e1] text-xs font-mono tracking-wider transition-all cursor-pointer"
+            >
+              <span>Module 2 Controls ↗</span>
+            </Link>
           </div>
         </div>
       )}
 
-      {/* Active System Architecture Banner */}
-      <section className="w-full glass-panel rounded-2xl p-6 border border-[#334155] shadow-xl space-y-4">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 pb-3 border-b border-[#334155]">
-          <div>
-            <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-[#adc7ff]" />
-              <h2 className="text-lg font-headline font-bold text-white uppercase tracking-wide">
-                Module 4: Live Operational Lifecycle Architecture
-              </h2>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#1a73e8]/20 text-[#adc7ff] border border-[#1a73e8]/50">
-                5-STEP CLOSED-LOOP SYSTEM
-              </span>
+      {/* Compact 5-Step Operational Lifecycle Stepper */}
+      <section className="w-full glass-panel rounded-2xl px-5 py-4 space-y-3">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 rounded-lg bg-[#1a73e8]/15 border border-[#1a73e8]/30 text-[#68abff]">
+              <Activity className="w-4 h-4" />
             </div>
-            <p className="text-xs text-[#c1c6d6] font-sans mt-0.5">
-              How Project Aegis ingests, monitors, detects anomalies, engages AI reasoning, and executes closed-loop remediation across Google Cloud.
-            </p>
+            <div>
+              <h2 className="text-sm md:text-base font-headline font-bold text-white uppercase tracking-wide flex items-center gap-2">
+                <span>Module 4: Live Operations &amp; Cognitive Co-Pilot</span>
+                <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#1a73e8]/15 text-[#68abff] border border-[#1a73e8]/30">
+                  CLOSED-LOOP PIPELINE
+                </span>
+              </h2>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-[#dae2fd] bg-[#0a0f1d] px-3 py-1.5 rounded-lg border border-[#334155]">
-            <span className={`w-2 h-2 rounded-full ${isDemoFullyActive ? 'bg-[#6ddd81] animate-pulse' : 'bg-[#FBBC04]'}`} />
-            <span>Infrastructure: <strong>{stackConfig.infraSummary}</strong></span>
+          <div className="flex items-center gap-2 text-[11px] font-mono text-[#cbd5e1] bg-[#070d19] px-3 py-1 rounded-lg border border-white/[0.08]">
+            <span
+              className={`w-2 h-2 rounded-full ${
+                isDemoFullyActive ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+              }`}
+            />
+            <span>{stackConfig.infraSummary}</span>
           </div>
         </div>
 
-        {/* 5-Step Process Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 pt-2">
+        {/* 5-Stage Horizontal Progress Strip */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
           {steps.map((item) => (
             <div
               key={item.step}
-              className="relative rounded-xl p-4 bg-[#131b2e]/80 border border-[#334155] hover:border-[#adc7ff]/60 transition-all flex flex-col justify-between group shadow-md"
+              className={`rounded-xl px-3.5 py-2.5 border transition-all flex flex-col justify-between gap-2 ${
+                item.isAlert
+                  ? 'bg-rose-950/35 border-rose-500/50 shadow-[0_0_16px_-4px_rgba(239,68,68,0.3)]'
+                  : 'bg-[#070d19]/90 border-white/[0.08] hover:border-white/20'
+              }`}
             >
-              <div>
-                {/* Step Badge & Status */}
-                <div className="flex items-center justify-between gap-1 mb-2.5">
-                  <span className="px-2 py-0.5 rounded bg-[#060e20] text-[#adc7ff] text-[10px] font-mono font-bold uppercase tracking-wider border border-[#334155]/60">
-                    STEP {item.step}
+              <div className="flex items-center justify-between gap-1.5">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="text-[10px] font-mono font-bold text-[#68abff] tabular-nums shrink-0">
+                    0{item.step}
                   </span>
-                  <span className={`px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider border ${item.statusColor}`}>
-                    {item.status}
+                  {item.icon}
+                  <span className="text-xs font-headline font-bold text-white truncate">
+                    {item.title}
                   </span>
                 </div>
 
-                {/* Title & Subtitle */}
-                <div className="flex items-start gap-2 mb-2">
-                  <div className="p-1.5 rounded bg-[#060e20] border border-[#334155]/60 shrink-0 mt-0.5">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-mono font-bold text-white leading-tight">
-                      {item.title}
-                    </h3>
-                    <span className="text-[10px] font-mono text-[#8b909f] block">
-                      {item.subtitle}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-[11px] text-[#c1c6d6] font-sans leading-relaxed mb-3">
-                  {item.description}
-                </p>
+                <span
+                  className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider shrink-0 border ${
+                    item.isAlert
+                      ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse'
+                      : item.isActive
+                      ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                      : 'bg-white/[0.04] text-[#94a3b8] border-white/[0.08]'
+                  }`}
+                >
+                  {item.status}
+                </span>
               </div>
 
-              {/* Bottom Tech & Console Deep Link */}
-              <div className="pt-2 border-t border-[#334155]/50 space-y-2">
-                <div className="text-[10px] font-mono text-[#8b909f] truncate" title={item.tech}>
-                  {item.tech}
-                </div>
+              <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/[0.06]">
+                <span className="text-[10px] font-mono text-[#64748b] truncate" title={item.subtitle}>
+                  {item.subtitle}
+                </span>
                 <a
                   href={item.consoleUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-1 px-2 rounded bg-[#060e20] hover:bg-[#1a73e8]/20 border border-[#334155] hover:border-[#adc7ff] text-[10px] font-mono text-[#adc7ff] flex items-center justify-between transition-all"
+                  className="inline-flex items-center gap-1 text-[10px] font-mono text-[#68abff] hover:text-white shrink-0 transition-colors"
+                  title={`Open ${item.consoleLabel}`}
                 >
                   <span>{item.consoleLabel}</span>
-                  <ExternalLink className="w-3 h-3 text-[#8b909f]" />
+                  <ExternalLink className="w-2.5 h-2.5" />
                 </a>
               </div>
             </div>

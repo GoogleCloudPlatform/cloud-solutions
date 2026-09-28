@@ -39,7 +39,12 @@ resource "null_resource" "build_telemetry_simulator" {
   }
 
   provisioner "local-exec" {
-    command = "bash ${path.module}/scripts/build_container_image.sh ${var.project_id} ${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_registry_repo_name}/telemetry-simulator:latest ${path.module}/../../../telemetry-simulator"
+    command = "bash ${path.module}/scripts/build_container_image.sh"
+    environment = {
+      PROJECT_ID = var.project_id
+      IMAGE_TAG  = "${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_registry_repo_name}/telemetry-simulator:latest"
+      SOURCE_DIR = "${path.module}/../../../telemetry-simulator"
+    }
   }
 
   depends_on = [
@@ -59,7 +64,12 @@ resource "null_resource" "build_hud_backend" {
   }
 
   provisioner "local-exec" {
-    command = "bash ${path.module}/scripts/build_container_image.sh ${var.project_id} ${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_registry_repo_name}/hud-backend:latest ${path.module}/../../../hud/backend"
+    command = "bash ${path.module}/scripts/build_container_image.sh"
+    environment = {
+      PROJECT_ID = var.project_id
+      IMAGE_TAG  = "${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_registry_repo_name}/hud-backend:latest"
+      SOURCE_DIR = "${path.module}/../../../hud/backend"
+    }
   }
 
   depends_on = [
@@ -79,7 +89,12 @@ resource "null_resource" "build_hud_frontend" {
   }
 
   provisioner "local-exec" {
-    command = "bash ${path.module}/scripts/build_container_image.sh ${var.project_id} ${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_registry_repo_name}/hud-frontend:latest ${path.module}/../../../hud/frontend"
+    command = "bash ${path.module}/scripts/build_container_image.sh"
+    environment = {
+      PROJECT_ID = var.project_id
+      IMAGE_TAG  = "${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_registry_repo_name}/hud-frontend:latest"
+      SOURCE_DIR = "${path.module}/../../../hud/frontend"
+    }
   }
 
   depends_on = [
@@ -101,7 +116,12 @@ resource "null_resource" "build_dataflow_pipeline" {
   }
 
   provisioner "local-exec" {
-    command = "bash ${path.module}/scripts/build_container_image.sh ${var.project_id} ${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_registry_repo_name}/dataflow-pipeline:latest ${path.module}/../../../pipelines/firstparty-dataflow"
+    command = "bash ${path.module}/scripts/build_container_image.sh"
+    environment = {
+      PROJECT_ID = var.project_id
+      IMAGE_TAG  = "${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_registry_repo_name}/dataflow-pipeline:latest"
+      SOURCE_DIR = "${path.module}/../../../pipelines/firstparty-dataflow"
+    }
   }
 
   depends_on = [
@@ -124,5 +144,31 @@ resource "google_storage_bucket_object" "dataflow_template_spec" {
 
   depends_on = [
     null_resource.build_dataflow_pipeline
+  ]
+}
+
+resource "null_resource" "redeploy_dataflow_pipeline" {
+  count = var.pipeline_engine == "dataflow" && var.staging_bucket != "" ? 1 : 0
+
+  triggers = {
+    source_hash = null_resource.build_dataflow_pipeline[0].triggers.source_hash
+    template_id = google_storage_bucket_object.dataflow_template_spec[0].id
+  }
+
+  provisioner "local-exec" {
+    command = "bash ${path.module}/scripts/redeploy_dataflow_job.sh"
+    environment = {
+      PROJECT_ID     = var.project_id
+      REGION         = var.region
+      STAGING_BUCKET = var.staging_bucket
+    }
+  }
+
+  depends_on = [
+    google_storage_bucket_object.dataflow_template_spec,
+    google_compute_subnetwork.aegis_subnet,
+    google_service_account.aegis_sa,
+    google_bigtable_table.telemetry_metrics,
+    google_bigquery_table.telemetry_events
   ]
 }

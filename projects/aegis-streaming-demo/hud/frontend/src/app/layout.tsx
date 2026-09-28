@@ -74,6 +74,8 @@ export default function RootLayout({
     bigtableInstance: process.env.BIGTABLE_INSTANCE_ID || process.env.NEXT_PUBLIC_BIGTABLE_INSTANCE || 'aegis-bigtable',
     bigqueryDataset: process.env.BIGQUERY_DATASET_ID || process.env.NEXT_PUBLIC_BIGQUERY_DATASET || 'analytics',
     geapAgentId: process.env.GEAP_AGENT_ID || process.env.NEXT_PUBLIC_GEAP_AGENT_ID || '',
+    dataprocCluster:
+      process.env.DATAPROC_CLUSTER_NAME || process.env.NEXT_PUBLIC_DATAPROC_CLUSTER || 'aegis-spark-cluster',
   };
 
   return (
@@ -86,7 +88,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-[#0b1326] text-[#dae2fd] min-h-screen antialiased font-sans flex flex-col">
+      <body className="bg-[#070d19] text-[#e2e8f0] min-h-screen antialiased font-sans flex flex-col">
         <HUDProvider>
           {/* Top Sticky Header */}
           <Header />
@@ -95,12 +97,12 @@ export default function RootLayout({
           <NavigationMenu />
 
           {/* Page Workspace Container */}
-          <main className="flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-8 animate-fade-in">
+          <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 py-5 md:px-8 md:py-6 animate-fade-in">
             {children}
           </main>
 
           {/* Shared Footer */}
-          <footer className="w-full border-t border-[#334155] py-6 px-6 text-center text-xs text-[#8b909f] font-mono tracking-wider">
+          <footer className="w-full border-t border-white/[0.07] py-5 px-6 text-center text-xs text-slate-400 font-mono tracking-wider">
             Project Aegis Operations HUD | Cloud Solutions Team | Eyal Ben Ivri
           </footer>
         </HUDProvider>

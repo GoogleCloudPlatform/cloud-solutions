@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-google-cloud-bigtable>=2.46.0,<3.0.0
+google-cloud-bigtable>=2.48.0,<3.0.0
 google-cloud-bigquery>=3.45.2,<4.0.0
 google-cloud-pubsub>=2.41.0,<3.0.0
+cryptography>=50.0.2,<51.0.0
