@@ -133,13 +133,13 @@ annotated-types==0.8.0 \
     --hash=sha256:13b2beaad985e05e2d6407ee4c4f35590b11f8d693a258a561055cac8f64cab7 \
     --hash=sha256:f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0
     # via pydantic
-anyio==4.15.0 \
-    --hash=sha256:7ecd9937369ffce8bba0b5ccb9b3a9507b101b0ed50256aecfbab27e6c2acb99 \
-    --hash=sha256:b5c620ed540725e2579c31b17bb995b3bf02c9281c9cace04c7d186380bab85e
+anyio==4.15.1 \
+    --hash=sha256:6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101 \
+    --hash=sha256:9f28306018cbd6d329e64a36d58256edff76dd996fe423bc957326e578b82a94
     # via
     #   google-genai
     #   httpx
-apache-beam==2.76.0 \
+apache-beam[dataframe,gcp,tfrecord]==2.76.0 \
     --hash=sha256:0a925bae21078e06917ac798951eaf3c8e62cda2343062c5d61ac151e5f6a21c \
     --hash=sha256:12b6a1919c9cd89c66e4c4f6b3c0a846278845e837ccf630230c7618c66cfb5d \
     --hash=sha256:16169415c42054ce457d6cf1d52f4a1d7ddef23b50089f1493c40f2c8b303004 \
@@ -736,7 +736,7 @@ frozenlist==1.8.0 \
     # via
     #   aiohttp
     #   aiosignal
-google-api-core==2.34.0 \
+google-api-core[grpc]==2.34.0 \
     --hash=sha256:98a779fe72de956eb1c9c2f47ff4c4432a668ece1a002ec38bed07ec2698ae59 \
     --hash=sha256:cdf9c67e7ca2402d86ccbfde5f2503fc83e3cc3f58cc78456ae96cad24a6d2de
     # via
@@ -765,7 +765,7 @@ google-apitools==0.5.35 \
     --hash=sha256:0f6f67fbe6f228f4777ae7e9d00e01476f7b8a48dca3a4353a1c32369437bbd0 \
     --hash=sha256:911bc3698686c74187414c610ae30bd6e3c0a7404178fc6479ead6c420d2dd94
     # via apache-beam
-google-auth==2.57.0 \
+google-auth[pyopenssl,requests]==2.57.0 \
     --hash=sha256:180dafe015cfb62193bea26b677500fab5b9fd51a1e825ebf3ad9b182047ae59 \
     --hash=sha256:9b4f96d6a1feb5f7201231f47cfb3de08d8f176f8a61f9e461555116e95a8789
     # via
@@ -941,7 +941,7 @@ google-resumable-media==2.10.2 \
     # via
     #   google-cloud-bigquery
     #   google-cloud-storage
-googleapis-common-protos==1.75.2 \
+googleapis-common-protos[grpc]==1.75.2 \
     --hash=sha256:6b83302f554ea93a0f48409c7fc2050f954bcbcddb7e3a9c76d4a823cb22920e \
     --hash=sha256:8829a3d1e4508c5b7b9a6b9525f7fccff611f8531644579a76466c29295d4bb2
     # via
