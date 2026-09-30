@@ -30,6 +30,7 @@ nav:
   - "Automated code reviews with Gemini CLI": "build-with-gemini-demo/automated-code-reviews-with-gemini-cli/README.md"
   - "Build with Antigravity": "build-with-gemini-demo/build-with-antigravity/README.md"
   - "Interactive code reviews with Gemini CLI": "build-with-gemini-demo/local-code-review/README.md"
+  - "Implementing features with Antigravity CLI and JIRA": "build-with-gemini-demo/implementing-features-with-antigravity-cli-jira/README.md"
   - "Implementing UI changes with Gemini CLI": "build-with-gemini-demo/ui-changes-implementation/README.md"
   - "Parallel Feature Development with Gemini CLI": "build-with-gemini-demo/parallel-feature-development/README.md"
   - "Prototype ADK Agents with Gemini CLI": "build-with-gemini-demo/prototype-adk-agent-with-gemini-cli/README.md"
