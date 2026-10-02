@@ -19,55 +19,103 @@
 # under the License.
 #
 
-name: Dependabot Reviewer Router
+name: Dependabot and Renovate Reviewer Router
 
 on: # yamllint disable-line rule:truthy
   pull_request:
     types: [opened]
+  # renovate-bot opens pull requests from a fork, where pull_request runs are
+  # blocked in action_required with a read-only GITHUB_TOKEN and
+  # pull_request_target is flagged by zizmor (dangerous-triggers). A scheduled
+  # run executes in the base repository context with write permissions.
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
 
-permissions:
-  pull-requests: write
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || 'schedule' }}
+  cancel-in-progress: false
 
 jobs:
   route-reviewer:
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
-      - name: Route Reviewers
+      - name: Route Reviewers and Assignees
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           ADMIN_TEAM_SLUG: "cloud-solutions-the-repo-admin"
         run: |
-          echo "Processing Dependabot PR #${PR_NUMBER} on ${REPO}"
+          set -o errexit
+          set -o nounset
+          set -o pipefail
 
-          # Fetch currently requested reviewers (users and teams)
-          REVIEWERS_DATA=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" || true)
+          if [ "${EVENT_NAME}" = "pull_request" ]; then
+            echo "Processing Dependabot PR #${PR_NUMBER} on ${REPO}"
 
-          # Extract user logins to remove
-          USER_REVIEWERS=$(echo "$REVIEWERS_DATA" | jq -c '[.users[].login] // []' 2>/dev/null || echo "[]")
-          echo "Found user reviewers: $USER_REVIEWERS"
+            # Default to empty JSON if the lookup fails so error stdout is not passed to jq.
+            if ! REVIEWERS_DATA=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers"); then
+              echo "::warning::Failed to fetch requested reviewers for PR #${PR_NUMBER} on ${REPO}"
+              REVIEWERS_DATA="{}"
+            fi
 
-          # Batch remove auto-assigned user reviewers in a single API request
-          if [ "$USER_REVIEWERS" != "[]" ] && [ -n "$USER_REVIEWERS" ]; then
-            echo "Removing user reviewers: $USER_REVIEWERS"
-            gh api --method DELETE "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
-              --input - <<< "{\"reviewers\": $USER_REVIEWERS}" || true
+            USER_REVIEWERS=$(jq -c '[.users[]?.login] // []' <<< "${REVIEWERS_DATA}")
+            if [ "${USER_REVIEWERS}" != "[]" ]; then
+              echo "Removing user reviewers: ${USER_REVIEWERS}"
+              # Ignore removal errors if a reviewer was already removed.
+              gh api --method DELETE "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
+                --input - <<< "{\"reviewers\": ${USER_REVIEWERS}}" || true
+            fi
+
+            OTHER_TEAMS=$(jq -c --arg admin "${ADMIN_TEAM_SLUG}" '[.teams[]?.slug | select(. != $admin)] // []' <<< "${REVIEWERS_DATA}")
+            if [ "${OTHER_TEAMS}" != "[]" ]; then
+              echo "Removing non-admin team reviewers: ${OTHER_TEAMS}"
+              # Ignore removal errors if a team reviewer was already removed.
+              gh api --method DELETE "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
+                --input - <<< "{\"team_reviewers\": ${OTHER_TEAMS}}" || true
+            fi
+
+            echo "Adding admin team as reviewer: ${ADMIN_TEAM_SLUG}"
+            # Ignore 422 errors when GITHUB_TOKEN lacks read:org scope to resolve closed teams.
+            gh api --method POST "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
+              --input - <<< "{\"team_reviewers\": [\"${ADMIN_TEAM_SLUG}\"]}" || true
+          elif [ "${EVENT_NAME}" = "schedule" ] || [ "${EVENT_NAME}" = "workflow_dispatch" ]; then
+            echo "Checking for unassigned renovate-bot pull requests on ${REPO}"
+
+            # Default to empty output if the lookup fails so error stdout is not passed to jq.
+            if ! UNASSIGNED_PRS=$(
+              gh api --paginate "repos/${REPO}/pulls?state=open&per_page=100" \
+                --jq '.[] | select(.user.login == "renovate-bot" and (.assignees | length) == 0) | {number, reviewers: [.requested_reviewers[]?.login]}'
+            ); then
+              echo "::warning::Failed to fetch open pull requests for ${REPO}"
+              UNASSIGNED_PRS=""
+            fi
+
+            if [ -z "${UNASSIGNED_PRS}" ]; then
+              echo "No unassigned renovate-bot pull requests found."
+              exit 0
+            fi
+
+            while IFS= read -r pr_json; do
+              PR_NUM=$(jq -r '.number' <<< "${pr_json}")
+              SELECTED_ASSIGNEE=$(jq -r '.reviewers[]? // empty' <<< "${pr_json}" | shuf -n 1)
+              if [ -n "${SELECTED_ASSIGNEE}" ]; then
+                echo "Assigning PR #${PR_NUM} to ${SELECTED_ASSIGNEE}"
+                # Ignore assignment errors if the user cannot be assigned to the PR.
+                gh api --method POST "repos/${REPO}/issues/${PR_NUM}/assignees" \
+                  --input - <<< "{\"assignees\": [\"${SELECTED_ASSIGNEE}\"]}" || true
+              else
+                echo "No user reviewers found to assign on PR #${PR_NUM}."
+              fi
+            done <<< "${UNASSIGNED_PRS}"
           fi
-
-          # Extract other team reviewers to remove (excluding admin team)
-          OTHER_TEAMS=$(echo "$REVIEWERS_DATA" | jq -c --arg admin "$ADMIN_TEAM_SLUG" '[.teams[].slug | select(. != $admin)] // []' 2>/dev/null || echo "[]")
-          echo "Found non-admin team reviewers: $OTHER_TEAMS"
-
-          # Batch remove other team reviewers in a single API request
-          if [ "$OTHER_TEAMS" != "[]" ] && [ -n "$OTHER_TEAMS" ]; then
-            echo "Removing non-admin team reviewers: $OTHER_TEAMS"
-            gh api --method DELETE "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
-              --input - <<< "{\"team_reviewers\": $OTHER_TEAMS}" || true
-          fi
-
-          # Add the admin team as reviewer
-          echo "Adding admin team as reviewer: $ADMIN_TEAM_SLUG"
-          gh api --method POST "repos/${REPO}/pulls/${PR_NUMBER}/requested_reviewers" \
-            --input - <<< "{\"team_reviewers\": [\"$ADMIN_TEAM_SLUG\"]}"
