@@ -107,18 +107,22 @@ flowchart TD
 1.  Set optional Terraform environment variables:
 
 > [!TIP]
+>
 > By default, Terraform automatically detects your active GCP project ID and
 > public IP address, and automatically generates a secure 16-character AlloyDB
 > password.
 
+<!-- Separate 2 blockquotes for MD028 -->
+
 > [!IMPORTANT]
+>
 > If deploying in an internal Google **Argolis** environment, set the
 > `TF_VAR_argolis` flag to `true` to apply necessary organization policy
 > overrides:
-
-    ```bash
-    export TF_VAR_argolis="true"
-    ```
+>
+> ```bash
+> export TF_VAR_argolis="true"
+> ```
 
 1.  Initialize and apply the Terraform configuration:
 

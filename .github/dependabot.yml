@@ -37,6 +37,9 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
 
   - package-ecosystem: "gomod"
     directories:
@@ -53,6 +56,9 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
 
   - package-ecosystem: "pip"
     directories:
@@ -72,6 +78,9 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
 
   - package-ecosystem: "uv"
     directories:
@@ -92,6 +101,9 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
 
   - package-ecosystem: "maven"
     directories:
@@ -108,6 +120,9 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
 
   - package-ecosystem: "gradle"
     directories:
@@ -124,6 +139,9 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
 
   - package-ecosystem: "terraform"
     directories:
@@ -140,6 +158,9 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
 
   - package-ecosystem: "docker"
     directories:
@@ -156,6 +177,9 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -171,3 +195,6 @@ updates:
         applies-to: "security-updates"
         patterns:
           - "*"
+    # Set a 3-day cooldown (the Dependabot default).
+    cooldown:
+      default-days: 3
