@@ -57,6 +57,9 @@ updates:
   - package-ecosystem: "pip"
     directories:
       - "**/*"
+    exclude-paths:
+      - "**/pyproject.toml"
+      - "**/uv.lock"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 0
@@ -73,6 +76,10 @@ updates:
   - package-ecosystem: "uv"
     directories:
       - "**/*"
+    exclude-paths:
+      - "**/*requirements*.txt"
+      - "**/*requirements*.in"
+      - "**/*constraints*.txt"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 0
