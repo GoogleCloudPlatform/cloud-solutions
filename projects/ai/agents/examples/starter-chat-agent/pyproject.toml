@@ -22,7 +22,7 @@ url = "https://pypi.python.org/simple/"
 [dependency-groups]
 dev = [
     "pytest==9.1.1",
-    "pytest-asyncio==0.23.8",
+    "pytest-asyncio>=0.24.0",
     "nest-asyncio>=1.6.0,<2.0.0",
 ]
 
