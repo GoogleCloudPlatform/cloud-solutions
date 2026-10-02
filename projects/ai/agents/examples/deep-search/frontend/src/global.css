@@ -1,4 +1,4 @@
-/* stylelint-disable at-rule-no-unknown, keyframes-name-pattern, declaration-block-single-line-max-declarations, selector-class-pattern */
+/* stylelint-disable at-rule-no-unknown, at-rule-prelude-no-invalid, keyframes-name-pattern, declaration-block-single-line-max-declarations, selector-class-pattern */
 
 @import url('tailwindcss');
 @import url('tw-animate-css');

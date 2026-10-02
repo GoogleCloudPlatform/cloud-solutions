@@ -44,7 +44,7 @@ ensure it works as expected.
 
 ```bash
 # Install dependencies
-pip install -r requirements.txt
+pip install -r requirements.txt --require-hashes
 ```
 
 ### Daily Development

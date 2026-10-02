@@ -104,7 +104,7 @@ These custom commands help you in both planning and implementing ADK agents.
     ```bash
     python -m venv .venv
     source .venv/bin/activate
-    pip install -r requirements.txt
+    pip install -r requirements.txt --require-hashes
     ```
 
 1.  Start ADK Web Server to test the agent:

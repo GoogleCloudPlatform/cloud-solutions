@@ -37,7 +37,7 @@ COPY src/ /app/src/
 RUN chown -R appuser:appuser /app
 
 # Switch to the non-root user
-USER appuser
+USER 1000
 
 # Expose port (Cloud Run sets PORT env var)
 EXPOSE 8080

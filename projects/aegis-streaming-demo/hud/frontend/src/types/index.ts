@@ -83,11 +83,7 @@ export interface ArchitectureComponent {
   id: string;
   title: string;
   category:
-    | 'Ingestion'
-    | 'Compute'
-    | 'Storage'
-    | 'Agent'
-    | 'Security & Governance';
+    'Ingestion' | 'Compute' | 'Storage' | 'Agent' | 'Security & Governance';
   tech: string;
   description: string;
   status: 'Healthy' | 'Active' | 'Optimal' | 'Guarded';

@@ -212,7 +212,7 @@ Run commands to set up a virtual environment and install required dependencies:
 ```text
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt --require-hashes
 ```
 
 Start the application:

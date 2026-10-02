@@ -29,7 +29,7 @@ RUN pip install --no-cache-dir --require-hashes -r requirements.txt
 
 COPY --chown=appuser:appuser . .
 
-USER appuser
+USER 1000
 
 EXPOSE 8080
 

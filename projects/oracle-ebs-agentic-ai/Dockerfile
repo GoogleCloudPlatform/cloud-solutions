@@ -29,6 +29,4 @@ RUN chmod +x /app/scripts/entrypoint.sh
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8080
 
-USER nobody
-
 ENTRYPOINT ["/app/scripts/entrypoint.sh"]

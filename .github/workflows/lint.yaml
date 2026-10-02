@@ -60,7 +60,7 @@ jobs:
         # Ref: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-an-environment-variable
         run: grep -v '^#' config/lint/super-linter.env >> "$GITHUB_ENV"
       - name: Super-Linter
-        uses: super-linter/super-linter@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8.7.0
+        uses: super-linter/super-linter@2da136927bd4a73596db63044b504547c62cb854 # v9.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
@@ -70,6 +70,5 @@ jobs:
           VALIDATE_JSON_PRETTIER: true
           VALIDATE_JSONC_PRETTIER: true
           VALIDATE_MARKDOWN_PRETTIER: true
-          VALIDATE_JUPYTER_NBQA_BLACK: true
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_YAML_PRETTIER: true

@@ -105,7 +105,7 @@ specific tasks.
     ```bash
     python -m venv .venv
     source .venv/bin/activate
-    pip install -r requirements.txt
+    pip install -r requirements.txt --require-hashes
     ```
 
 1.  Start the application:

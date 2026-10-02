@@ -39,7 +39,7 @@ RUN pip install --no-cache-dir --require-hashes -r requirements.txt
 COPY --chown=appuser:appuser . .
 
 # Switch to non-root user for defense-in-depth
-USER appuser
+USER 1000
 
 # Expose port 8080 for Cloud Run execution
 EXPOSE 8080

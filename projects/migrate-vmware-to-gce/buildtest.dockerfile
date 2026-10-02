@@ -27,6 +27,4 @@ ENV TF_DATA_DIR=/tmp/terraform.d
 COPY validate.sh ./
 RUN chmod +x validate.sh
 
-USER nobody
-
 ENTRYPOINT [ "./validate.sh" ]
