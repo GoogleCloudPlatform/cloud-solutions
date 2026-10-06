@@ -13,6 +13,7 @@
 # limitations under the License.
 
 data "google_compute_default_service_account" "default" {
+  depends_on = [google_project_service.gcp_services["compute.googleapis.com"]]
 }
 
 # Cloud SQL Client role for the Kubernetes Service Account
@@ -44,11 +45,11 @@ resource "google_artifact_registry_repository_iam_member" "comput_engine_service
 }
 
 # Grant the default Compute Engine service account (that Cloud Build uses)
-# access to the Cloud Build bucket
-resource "google_storage_bucket_iam_member" "compute_engine_service_account_cloud_build_bucket" {
-  bucket = "${var.project_id}_cloudbuild"
-  role   = "roles/storage.objectViewer"
-  member = data.google_compute_default_service_account.default.member
+# access to read build source archives from Cloud Storage
+resource "google_project_iam_member" "compute_engine_service_account_storage_viewer" {
+  project = data.google_project.project.project_id
+  role    = "roles/storage.objectViewer"
+  member  = data.google_compute_default_service_account.default.member
 
   depends_on = [google_project_service.gcp_services["cloudbuild.googleapis.com"]]
 }

@@ -1,8 +1,8 @@
-# Gemini-powered Java modernization
+# Java application modernization with Antigravity
 
-This guide demonstrates how to use Gemini to modernize a legacy Struts and Java
-Server Pages (JSP) application to a modern Spring Boot and Thymeleaf stack. It
-preserves business logic and data while upgrading the tech stack.
+This guide demonstrates how to use Antigravity to modernize a legacy Struts and
+JavaServer Pages (JSP) application to a modern Spring Boot and Thymeleaf stack.
+It preserves business logic and data while upgrading the tech stack.
 
 Follow these steps to run the demo:
 
@@ -12,32 +12,32 @@ Follow these steps to run the demo:
     modernize.
 1.  **Modernize the backend and upgrade the toolchain** - Upgrade the Java
     runtime and framework to Spring Boot.
-1.  **Modernize the UI** - Replace JSP with Thymeleaf.
+1.  **Modernize the user interface (UI)** - Replace JSP with Thymeleaf.
 1.  **Test the application locally** - Verify the local application.
 1.  **Provision Google Cloud infrastructure** - Use Terraform to provision
     resources.
 1.  **Build container images** - Build container images using Cloud Build.
 1.  **Create deployment and Google Cloud infrastructure context** - Capture
     Google Cloud context in a file for reuse.
-1.  **Generate Kubernetes Deployment descriptors** - Create Kubernetes
+1.  **Generate Kubernetes deployment descriptors** - Create Kubernetes
     manifests.
 1.  **Deploy the application** - Deploy to Google Kubernetes Engine (GKE).
 1.  **Test the application** - Verify the application on GKE.
 
 > [!NOTE]
 >
-> **Gemini Pro model**: This demo uses the latest Gemini Pro model.
+> **Gemini Flash model**: This demo uses the latest Gemini Flash model.
 
 ## Requirements
 
 You need the following dependencies and tools to run the demo:
 
-- **Docker:** Tested with version 29.3.1
+- **Docker:** Tested with version 29.8.2
 - **Docker Compose:** Tested with version v5.1.1
-- **Google Cloud CLI (gcloud):** Tested with version 562.0.0
+- **Google Cloud CLI (gcloud):** Tested with version 587.0.0
 - **kubectl:** Tested with version 1.34.5
 - **GKE Kubectl auth plugin:** Tested with version v1.34.2
-- **Terraform:** Tested with version 1.11.1
+- **Terraform:** Tested with version 1.14.8
 - **A Linux shell**. Tested with Bash version 5.3 and ZSH version 5.9
 
 For infrastructure provisioning and deployment:
@@ -47,14 +47,14 @@ For infrastructure provisioning and deployment:
       the GKE cluster.
     - Cloud SQL Admin (`roles/cloudsql.admin`): To provision and manage the
       Cloud SQL instance.
-    - Compute Network Admin (`roles/compute.networkAdmin`): To manage VPC
-      networks and firewall rules.
+    - Compute Network Admin (`roles/compute.networkAdmin`): To manage Virtual
+      Private Cloud (VPC) networks and firewall rules.
     - Artifact Registry Admin (`roles/artifactregistry.admin`): To create a
       repository for container images.
     - Service Account Admin (`roles/iam.serviceAccountAdmin`): To create service
       accounts for GKE nodes and other resources.
-    - Project IAM Admin (`roles/resourcemanager.projectIamAdmin`): To grant IAM
-      roles to service accounts.
+    - Project IAM Admin (`roles/resourcemanager.projectIamAdmin`): To grant
+      Identity and Access Management (IAM) roles to service accounts.
 
 > [!NOTE]
 >
@@ -63,10 +63,12 @@ For infrastructure provisioning and deployment:
 
 ## Set up your environment and workspace
 
-In this demo guide, you use [Gemini CLI](https://geminicli.com/docs/) to
-modernize a legacy Java application.
+In this demo guide, you use
+[Antigravity CLI](https://antigravity.google/docs/cli/overview/) to modernize a
+legacy Java application.
 
-1.  Install and configure [Gemini CLI](https://geminicli.com/docs/get-started/).
+1.  Install and configure
+    [Antigravity CLI](https://antigravity.google/docs/cli/install/).
 1.  Install and configure the
     [GKE Kubectl auth plugin](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#install_plugin).
 1.  Clone the `cloud-solutions` repository:
@@ -81,11 +83,11 @@ modernize a legacy Java application.
     mkdir java-modernization-demo
     ```
 
-1.  Configure Gemini CLI to load the
+1.  Configure Antigravity CLI to load the
     [`legacy-app-generator` skill](../gemini-powered-migrations-to-google-cloud/README.md#create-legacy-applications-for-demos).
     For more information about where to store Agent Skills to load them with
-    Gemini CLI, see
-    [Skill discovery tiers](https://geminicli.com/docs/cli/skills/#skill-discovery-tiers).
+    Antigravity CLI, see
+    [CLI skill locations](https://antigravity.google/docs/skills/#skills-by-surface).
     Copy the `legacy-app-generator` skill to the `java-modernization-demo`
     directory:
 
@@ -117,13 +119,13 @@ From your shell:
     cd java-modernization-demo
     ```
 
-1.  Run Gemini CLI:
+1.  Launch Antigravity CLI:
 
     ```bash
-    gemini
+    agy
     ```
 
-1.  Enter the following prompt in the Gemini CLI interface and press Enter:
+1.  Enter the following prompt in the Antigravity CLI interface and press Enter:
 
     ```markdown
     Generate a legacy Java 8 application for an Employee Directory. Use Struts
@@ -131,7 +133,7 @@ From your shell:
     the following operations: list employees, add a new employee, remove an
     employee.
 
-    Include a legacy PostgreSQL 10 container configured via Docker Compose.
+    Include a legacy PostgreSQL 10 container configured using Docker Compose.
     Generate the application in the current directory, after creating a new Git
     repository in that directory, if it's not already a Git repository. The app
     must have a dated User interface (UI), and must be seeded with sample data.
@@ -167,10 +169,11 @@ From your shell:
     successfully, commit the changes to the Git repository.
     ```
 
-    Depending on your configuration, Gemini CLI might prompt you to activate the
-    `legacy-app-generator` skill. Proceed by selecting "Allow once".
+    Depending on your configuration, Antigravity CLI might prompt you to
+    activate the `legacy-app-generator` skill. Proceed by selecting "Allow
+    once".
 
-Wait for Gemini CLI to:
+Wait for Antigravity CLI to:
 
 - Scaffold the legacy application
 - Write the Maven build file
@@ -178,12 +181,48 @@ Wait for Gemini CLI to:
   data
 - Verify that the legacy application starts successfully.
 
+Sample output:
+
+```markdown
+### Summary of Implementation
+
+1. Git Repository Initialization:
+    • Initialized Git repository in the current directory.
+    • Configured .gitignore to exclude build artifacts.
+2. Tech Stack & Architecture:
+    • Framework: Apache Struts 2 (EmployeeAction.java, struts.xml, web.xml).
+    • View: JSP & JSTL with Struts 2 tags (employees.jsp).
+    • Root Routing: index.jsp performs an HTTP redirect (302) to employees.action, which forwards to employees.jsp.
+    • Persistence: Plain JDBC DAO (EmployeeDAO.java, DatabaseUtil.java, Employee.java) connecting to PostgreSQL.
+    • Operations: List employees, Add new employee, and Remove employee.
+    • Dated UI Styling: Styled with Windows 95/Web 1.0 aesthetics (style.css), bevel tables, scrolling marquee banner, visitor counter,
+    and a retro intranet header logo (retro_banner.jpg).
+3. Database & Seeding:
+    • PostgreSQL 10 Alpine configured with compose.yaml.
+    • Database schema and 8 sample seed records provided in init.sql with read permissions (644).
+    • PostgreSQL container includes a health check using pg_isready.
+4. Containerization & Cgroups v2 Compatibility:
+    • Multi-stage Dockerfile using maven:3.8-eclipse-temurin-8 for builds and tomcat:9.0-jdk8-temurin for runtime, ensuring cgroups v2
+    compatibility on modern Docker hosts.
+    • All builds and runtimes confined to Docker containers.
+    • Web application exposed on host port 8090 (mapped to container port 8080).
+    • compose.yaml configured with depends_on: postgres: condition: service_healthy.
+5. Verification:
+    • Docker build succeeded on the first attempt.
+    • curl -i http://localhost:8090/ returned HTTP/1.1 302 redirecting to /employees.action.
+    • curl -L http://localhost:8090/ returned HTTP/1.1 200 OK with the rendered employee table.
+    • End-to-end tests verified adding and deleting records through the Struts Actions.
+    • Containers stopped cleanly with docker compose down -v.
+6. Git Commit:
+    • All files staged and committed to branch main (commit 763cf75).
+```
+
 ## Modernize the backend and upgrade the toolchain
 
 In this section, you upgrade the Java runtime to Java 21 and migrate the backend
 framework from Struts to Spring Boot, without modifying the UI.
 
-Enter the following prompt in the Gemini CLI interface and press Enter:
+In the same Antigravity CLI session, enter the following prompt and press Enter:
 
 ```markdown
 We are going to modernize this legacy Struts application in place. First,
@@ -218,10 +257,10 @@ stable Spring Boot version.
 11. Ensure the `spring-boot-starter-actuator` dependency is added to the
     `pom.xml` so the health endpoints are actually served.
 12. Update the Dockerfile and `compose.yaml` to run the Spring Boot executable
-    JAR instead of a legacy Tomcat WAR. Try to fix any build errors by running
-    the container, but if it takes more than 3 attempts, pause and explain the
-    error so I can guide you. Ensure all builds and runtimes are strictly
-    confined to the Docker containers.
+    WAR (`app.war`) instead of a legacy Tomcat WAR. Try to fix any build errors
+    by running the container, but if it takes more than 3 attempts, pause and
+    explain the error so I can guide you. Ensure all builds and runtimes are
+    strictly confined to the Docker containers.
 13. Verify the modernization is successful by running
     `docker compose up --build -d`, waiting for the application to start, and
     executing `curl -v http://localhost:8090/employees` to ensure it returns an
@@ -231,16 +270,77 @@ stable Spring Boot version.
 15. After building and running the application successfully, commit the changes.
 ```
 
-Wait for Gemini CLI to modernize the application backend, and successfully build
-the new executable running inside the updated Docker container. The legacy
+Wait for Antigravity CLI to modernize the application backend, and successfully
+build the new executable running inside the updated Docker container. The legacy
 database remains intact.
+
+Sample output:
+
+```markdown
+### Key Modernization Highlights
+
+1. Java 21 & Spring Boot 3 Upgrade:
+    • Modernized pom.xml with spring-boot-starter-parent (3.3.4), targeting Java 21.
+    • Added spring-boot-starter-web, spring-boot-starter-data-jpa, and spring-boot-starter-actuator.
+    • Included tomcat-embed-jasper and jakarta.servlet.jsp.jstl for native embedded Tomcat JSP compilation.
+    • Preserved war packaging for the executable archive (app.war).
+2. Persistence Migration (Jakarta JPA & PostgreSQL):
+    • Updated Employee.java using the modern jakarta.persistence.* namespace.
+    • Configured exact snake_case schema mappings with @Table(name = "employees") and @Column annotations (first_name, last_name,
+    job_title, hire_date, etc.).
+    • Explicitly configured spring.jpa.hibernate.ddl-auto=validate in application.properties to ensure schema validation passes without
+    altering existing tables or sample records.
+    • Created EmployeeRepository.java extending JpaRepository.
+3. Controller & Routing (Replacing Struts 2):
+    • Stripped out Struts Actions, struts.xml, and legacy web.xml.
+    • Implemented EmployeeController.java providing 1:1 functional mappings:
+        • Root redirect: @GetMapping("/") -> redirect:/employees
+        • Directory listing: @GetMapping("/employees")
+        • Add employee: @PostMapping({"/employees/add", "/addEmployee"})
+        • Remove employee: @GetMapping("/deleteEmployee")
+    • Added Application.java extending SpringBootServletInitializer.
+4. UI & JSP Preservation:
+    • Relocated JSP to the standard directory: employees.jsp.
+    • Configured Spring MVC view prefix (/WEB-INF/jsp/) and suffix (.jsp).
+    • Replaced all legacy <s:*> Struts tags with standard JSTL tags (<c:forEach>, <c:if>, <c:out>) using jakarta.tags.core.
+    • Maintained the exact retro HTML layout, Windows 95 table styling, CSS, and corporate banner.
+5. Containerization & Build:
+    • Updated Dockerfile to multi-stage:
+        • Builder: maven:3.9-eclipse-temurin-21
+        • Runtime: eclipse-temurin:21-jre running java -jar /app/app.war
+    • Kept internal container port on 8080 mapped to host port 8090 in compose.yaml.
+
+──────
+### Verification Results
+
+• Build & Launch: Built and started cleanly on the first attempt with docker compose up --build -d.
+• Root Redirect:
+curl -i http://localhost:8090/
+# HTTP/1.1 302 Found -> Location: http://localhost:8090/employees
+
+• Employee Directory:
+curl -v http://localhost:8090/employees
+# HTTP/1.1 200 OK with rendered HTML content and 8 seeded records
+
+• Actuator Health:
+curl -i http://localhost:8090/actuator/health
+# HTTP/1.1 200 OK -> {"status":"UP","components":{"db":{"status":"UP",...}}}
+
+• CRUD Operations: Verified adding new employees and removing records.
+──────
+### Git Commit
+
+All changes have been committed:
+
+• Commit: 31e2964 (Modernize backend to Java 21 and Spring Boot 3 with Spring Data JPA and Actuator)
+```
 
 ## Modernize the UI
 
 In this section, you replace the legacy JSP pages with modern Thymeleaf
 templates placed in the standard `src/main/resources/templates` directory.
 
-Enter the following prompt in the Gemini CLI interface and press Enter:
+Enter the following prompt in the Antigravity CLI interface and press Enter:
 
 ```markdown
 Now, let's modernize the UI. Replace the legacy JSP pages with modern
@@ -271,21 +371,70 @@ directory. Make the design look modern, clean, and professional.
 8.  Commit the changes to the Git repository.
 ```
 
-Wait for Gemini CLI to remove the legacy view layer and implement a clean,
+Wait for Antigravity CLI to remove the legacy view layer and implement a clean,
 responsive Thymeleaf UI.
+
+Sample output:
+
+```markdown
+### Summary of Changes
+
+1. Thymeleaf Template:
+    • Created employees.html replacing the legacy JSP pages.
+    • Designed a modern, clean, and professional layout with metrics cards, responsive table styling, status pills, and accessible form
+    controls.
+    • Added standard HTML IDs on key elements for testing:
+        • id="employee-list" (Directory table)
+        • id="employee-count" (Total employee metric badge)
+        • id="add-employee-form" (Enrollment form)
+        • id="first-name", id="last-name", id="email", id="department", id="job-title", id="extension", id="hire-date" (Input fields)
+        • id="submit-btn" (Submit button)
+        • id="success-message" and id="error-message" (Alert notifications)
+        • id="delete-employee-${emp.id}" (Action buttons)
+
+2. Cleaned Up Legacy JSP & View Configuration:
+    • Deleted all legacy JSP files and the src/main/webapp hierarchy.
+    • Removed legacy spring.mvc.view.prefix and spring.mvc.view.suffix settings from application.properties.
+3. Maven & Packaging Update:
+    • Updated pom.xml:
+        • Added spring-boot-starter-thymeleaf.
+        • Removed legacy tomcat-embed-jasper and Jakarta JSTL dependencies.
+        • Changed <packaging> from war back to jar.
+
+4. Styling & Asset Migration:
+    • Created dedicated external stylesheet main.css linked via th:href="@{/css/main.css}".
+    • Preserved all static assets in src/main/resources/static/.
+5. Controller & Main Class:
+    • Verified EmployeeController.java maps cleanly to template employees and supports flash messages/parameters.
+    • Cleaned up Application.java for executable JAR packaging.
+6. Containerization:
+    • Updated Dockerfile to build and run the executable JAR: java -jar /app/app.jar.
+
+──────
+### Verification & Testing
+
+• Built and ran with docker compose up --build -d.
+• Executed curl -v http://localhost:8090/employees, verifying HTTP/1.1 200 OK and modern HTML markup containing all designated testing
+IDs.
+• Tore down containers and volumes with docker compose down -v.
+──────
+### Git Commit
+
+• Commit: 4dc6a2f (Modernize UI: Replace legacy JSP with modern Thymeleaf templates, clean CSS, and JAR packaging)
+```
 
 ## Test the application locally
 
-In this section, you instruct Gemini to act as an end-user and verify the
+In this section, you instruct Antigravity to act as an end-user and verify the
 modernization was successful.
 
-1.  Enter the following prompt in the Gemini CLI interface and press Enter:
+Enter the following prompt in the Antigravity CLI interface and press Enter:
 
 ```markdown
 1. Start the application with `docker compose up --build -d`.
 2. Interact with the application running at `http://localhost:8090`.
 3. Use curl to send a POST request to `/employees/add` with the form data:
-   `name=Jane Doe, department=Engineering, and email=jane.doe@example.com`.
+   `firstName=Jane, lastName=Doe, department=Engineering, and email=jane.doe@example.com`.
 4. Verify the addition was successful by curling the `GET /employees` endpoint
    and checking that 'Jane Doe' is present in the returned HTML.
 
@@ -293,7 +442,70 @@ After verifying, tear down the application and its database volume using
 `docker compose down -v`.
 ```
 
-Wait for Gemini CLI to finish verifying the application.
+Wait for Antigravity CLI to finish verifying the application.
+
+Sample output:
+
+```markdown
+### Step-by-Step Execution & Results
+
+#### 1. Start Application
+docker compose up --build -d
+• Both employee-directory-db (healthy) and employee-directory-app started up in ~6 seconds.
+#### 2. Interact with Application
+
+curl -i http://localhost:8090/
+Response:
+HTTP/1.1 302
+Location: http://localhost:8090/employees
+Content-Length: 0
+#### 3. Send POST Request to Add Jane Doe
+
+curl -i -X POST http://localhost:8090/employees/add \
+    -d "firstName=Jane" \
+    -d "lastName=Doe" \
+    -d "department=Engineering" \
+    -d "email=jane.doe@example.com"
+
+Response:
+
+HTTP/1.1 302
+Location: http://localhost:8090/employees;jsessionid=...?...
+Content-Length: 0
+
+#### 4. Verify 'Jane Doe' in Returned HTML
+
+curl -s http://localhost:8090/employees | grep -C 3 "Jane Doe"
+
+Returned HTML Snippet:
+
+<tr>
+    <td><span class="badge-id">#9</span></td>
+    <td class="emp-name">Jane Doe</td>
+    <td>
+        <a href="mailto:jane.doe@example.com" class="emp-email">jane.doe@example.com</a>
+    </td>
+    <td>
+        <span class="department-pill">Engineering</span>
+    </td>
+    <td>Staff Member</td>
+    <td><span class="ext-badge">x1000</span></td>
+    <td>2026-10-06</td>
+    <td style="text-align: center;">
+        <a id="delete-employee-9"
+            href="/deleteEmployee?id=9"
+            class="delete-btn" onclick="return confirmDeletion(9, 'Jane Doe');">
+            &#128465; Delete
+        </a>
+    </td>
+</tr>
+
+#### 5. Teardown
+
+docker compose down -v
+
+All containers, volumes, and network resources were stopped and removed.
+```
 
 ## Provision Google Cloud infrastructure
 
@@ -312,7 +524,8 @@ The Terraform configuration in the `terraform` directory provisions:
 
 ### Execute Terraform scripts to provision GKE and database resources
 
-Leave the Gemini CLI terminal running, and open a new terminal in your shell:
+Leave the Antigravity CLI terminal running, and open a new terminal in your
+shell:
 
 1.  Change the working directory to the `java-modernization-demo` directory:
 
@@ -327,7 +540,6 @@ Leave the Gemini CLI terminal running, and open a new terminal in your shell:
     ```
 
     Where:
-
     - `YOUR_PROJECT_ID` is the ID of the Google Cloud project where you want to
       provision resources for this demo.
 
@@ -341,8 +553,8 @@ Leave the Gemini CLI terminal running, and open a new terminal in your shell:
     gcloud config set project $TF_VAR_project_id
     gcloud config set billing/quota_project $TF_VAR_project_id
 
-    # Enable required APIs for Cloud Resource Manager
-    gcloud services enable cloudresourcemanager.googleapis.com
+    # Enable required APIs for Cloud Resource Manager and Compute Engine
+    gcloud services enable cloudresourcemanager.googleapis.com compute.googleapis.com
 
     # Authenticate to manage Google Cloud resources with Terraform
     gcloud auth application-default login
@@ -402,10 +614,11 @@ In your terminal:
 
 In this section, you collect all infrastructure details from Terraform outputs
 and build artifacts into a single context file named `kubernetes-context.md` in
-Markdown format. Gemini CLI uses this file to get the necessary context to
+Markdown format. Antigravity CLI uses this file to get the necessary context to
 interact with the Google Cloud infrastructure.
 
-Go back to the Gemini CLI interface, enter the following prompt and press Enter:
+Go back to the Antigravity CLI interface, enter the following prompt and press
+Enter:
 
 ```markdown
 Create a file named `kubernetes-context.md` in Markdown format with the
@@ -429,14 +642,14 @@ The outputs are defined in
 `terraform/output.tf`.
 ```
 
-Wait for Gemini CLI to create the `kubernetes-context.md` file.
+Wait for Antigravity CLI to create the `kubernetes-context.md` file.
 
 ## Generate Kubernetes deployment descriptors
 
 In this section, you generate the Kubernetes Deployment and Service manifests
 for running the application on GKE.
 
-Enter the following prompt in the Gemini CLI interface and press Enter:
+Enter the following prompt in the Antigravity CLI interface and press Enter:
 
 ```markdown
 We are now going to prepare the modernized Spring Boot application for
@@ -452,6 +665,8 @@ deployment on Google Kubernetes Engine (GKE).
 **Critical constraints:**
 
 1.  Place all Kubernetes descriptor files in a new `kubernetes/` directory.
+    Do not create a `kustomization.yaml` file; use standalone Kubernetes manifests
+    so they can be applied directly with `kubectl apply -f kubernetes/`.
 2.  Refer to `kubernetes-context.md` for information about infrastructure.
 3.  Namespace: Use a dedicated namespace named `java-modernization-demo` for all
     resources.
@@ -523,15 +738,15 @@ External Access (Gateway):
     Google Cloud Load Balancer doesn't fail by checking the root `/` path.
 ```
 
-Wait for Gemini CLI to generate Kubernetes configuration files to deploy the
-application on GKE.
+Wait for Antigravity CLI to generate Kubernetes configuration files to deploy
+the application on GKE.
 
 ## Deploy the application
 
 In this section, you authenticate and configure `kubectl` to deploy the
 application to the GKE cluster.
 
-Enter the following prompt in the Gemini CLI interface and press Enter:
+Enter the following prompt in the Antigravity CLI interface and press Enter:
 
 ```markdown
 Deploy all resources in the /kubernetes folder. Ensure the namespace is created
@@ -544,28 +759,30 @@ let me know when all of them (including the sidecars) are Running and Ready.
 2.  Refer to `kubernetes-context.md` for information about infrastructure.
 3.  Configure `kubectl` to authenticate with the GKE cluster with the
     `gcloud container clusters get-credentials` command.
-3.  Don't build and push container images locally because they are already
+4.  Don't build and push container images locally because they are already
     available in the Artifact Registry repository.
-4.  Prefer using the pre-built container images in the Artifact Registry
+5.  Prefer using the pre-built container images in the Artifact Registry
     repository. However, if the deployment fails because the pre-built image is
     outdated or missing required dependencies (like Actuator), you MUST tell the
     user, suggesting to rebuild and push the images using Cloud Build.
-5.  After you apply the resources, wait for the pods in the new namespace to be
-    Running and Ready. Use a timeout of at least 5 minutes (--timeout=60s) to
-    account for the 5-minute initialDelaySeconds configured in the probes.
-6.  In addition to the pods, verify that the Gateway resource has successfully
+6.  After you apply the resources, wait for the pods in the new namespace to be
+    Running and Ready. Use a timeout of at least 5 minutes (--timeout=300s) to
+    account for the 60-second initialDelaySeconds configured in the probes.
+7.  In addition to the pods, verify that the Gateway resource has successfully
     acquired an IP and reached the Programmed: True status, and ensure the
-    HTTPRoute is accepted.
+    HTTPRoute is accepted. (Note: Reaching Programmed: True may take 3-5 minutes
+    while Google Cloud provisions the load balancer; you can use
+    `kubectl wait --for=condition=Programmed gateway/employee-gateway -n java-modernization-demo --timeout=5m`).
 ```
 
-Wait for Gemini CLI to deploy the application on GKE.
+Wait for Antigravity CLI to deploy the application on GKE.
 
 ## Test the application
 
 In this section, you verify that the application works as expected when deployed
 to Google Cloud.
 
-Enter the following prompt in the Gemini CLI interface and press Enter:
+Enter the following prompt in the Antigravity CLI interface and press Enter:
 
 ```markdown
 Test the application deployed on GKE:
@@ -582,7 +799,7 @@ Test the application deployed on GKE:
 2. Perform an end-to-end transaction:
 
     - Create an employee: Send an HTTP POST request to `/employees/add` with
-      form data (e.g., `name`, `department`, and `email`).
+      form data (e.g., `firstName`, `lastName`, `department`, and `email`).
     - Verify: Fetch the `/employees` list and verify the newly created
       employee's name appears in the HTML response.
 
@@ -591,11 +808,11 @@ Test the application deployed on GKE:
 1.  Refer to `kubernetes-context.md` for information about infrastructure.
 ```
 
-Wait for the Gemini CLI to finish testing.
+Wait for the Antigravity CLI to finish testing.
 
 ## Clean up resources
 
-To avoid incurring charges, destroy the demo infrastructure.
+To avoid incurring charges, delete the demo infrastructure.
 
 Go back to your terminal and run the following command:
 
@@ -610,6 +827,7 @@ terraform -chdir=terraform destroy
 
 ## What's next
 
-- Learn more about [Gemini CLI](https://geminicli.com/docs/).
+- Learn more about
+  [Antigravity CLI](https://antigravity.google/docs/cli/overview/).
 - Discover how you can use
   [Gemini to accelerate your migrations and modernization efforts](../gemini-powered-migrations-to-google-cloud/README.md).
