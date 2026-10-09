@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Visual Bar Chart Generator for GE Video Agent Evaluation.
+"""Visual Bar Chart Generator for Gemini Video Agent Evaluation.
 
 Generates high-definition, dark-themed visual bar charts for inline rendering
 in Google Chat and Agent Engine interfaces using Pillow.

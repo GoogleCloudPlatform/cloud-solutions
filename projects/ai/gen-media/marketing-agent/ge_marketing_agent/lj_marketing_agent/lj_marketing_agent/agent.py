@@ -4271,7 +4271,7 @@ def _dynamic_instruction_provider(context: ReadonlyContext) -> str:
         else "No reference documents provided"
     )
 
-    prompt = prompt_template.replace("{{AGENT_NAME}}", "LayoAgent")
+    prompt = prompt_template.replace("{{AGENT_NAME}}", "MarketingAgent")
     prompt = prompt.replace("{{DEMO_COMPANY_NAME}}", str(company_name))
     prompt = prompt.replace(
         "{{SELECTED_CAMPAIGN_NAME}}", str(selected_campaign)

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-Script 2: Agent Engine + GE Integration — Spreadsheet-driven video ad
+Script 2: Agent Engine + Gemini Integration — Spreadsheet-driven video ad
 pipeline.
 
 Usage:
@@ -391,7 +391,7 @@ async def run_pipeline(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Video Ads Agent — GE Integration (spreadsheet-driven)"
+        description="Video Ads Agent — Gemini Integration (spreadsheet-driven)"
     )
     parser.add_argument(
         "--template", action="store_true", help="Generate a blank CSV template"

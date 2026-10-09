@@ -2798,7 +2798,7 @@ async def generate_video_ad(
 
 
 # ============================================================
-# GE / Agent Engine Integration — Tool Wrappers
+# Gemini / Agent Engine Integration — Tool Wrappers
 # ============================================================
 
 GOOGLE_CLOUD_BUCKET_ARTIFACTS = os.environ.get(

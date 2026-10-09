@@ -21,7 +21,7 @@ Provides marketing agent workflows and interactive UI.
 import os
 import sys
 
-# Add paths — works both standalone (nest_demo/) and from parent (LayoAgent/)
+# Add paths — works both standalone (nest_demo/) and from marketing_agent/
 _this_dir = os.path.dirname(os.path.abspath(__file__))
 _root = os.path.dirname(_this_dir)
 # Try local streamlit_demo first (self-contained), then parent

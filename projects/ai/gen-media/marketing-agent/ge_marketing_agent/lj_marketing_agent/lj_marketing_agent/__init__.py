@@ -1,4 +1,3 @@
-# pylint: disable=line-too-long,broad-exception-caught,wrong-import-position,import-outside-toplevel,inconsistent-quotes,redefined-outer-name,logging-fstring-interpolation,missing-module-docstring,wrong-import-order,protected-access,undefined-variable
 # Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""LayoAgent - Combined Marketing Campaign Agent for Image Ads and Video Ads."""
+"""Marketing Agent - Combined campaign agent for image and video ads."""
 
 from .agent import root_agent
+
+__all__ = ["root_agent"]

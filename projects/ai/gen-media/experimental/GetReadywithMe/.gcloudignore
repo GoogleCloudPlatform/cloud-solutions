@@ -1,8 +1,0 @@
-.gcloudignore
-.git
-.gitignore
-assets/
-*.zip
-__pycache__/
-*.pyc
-README.md

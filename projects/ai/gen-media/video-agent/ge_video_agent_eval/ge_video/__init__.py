@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""GE Video Ads Agent — Multi-scene video ad generation for Agent Engine."""
+"""Gemini Video Ads Agent — Multi-scene video ad generation for Agent Engine."""

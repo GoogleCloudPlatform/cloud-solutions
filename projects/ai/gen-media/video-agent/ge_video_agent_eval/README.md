@@ -1,15 +1,15 @@
-# GE Video Ads Agent & Closed-Loop Evaluation Suite
+# Gemini Video Ads Agent & Closed-Loop Evaluation Suite
 
 **Author:** Layolin Jesudhass
 
 Multi-scene video ad generation and autonomous self-correction agent for **Agent
-Engine + Gemini Enterprise (GE)** aligned with the
+Engine + Gemini** aligned with the
 [Physion Labs ARC-1.0 Benchmark](https://physionlabs.ai/).
 
 Generates cinematic 1080p video ads from storyboard scene images with AI
 voiceover, Lyria background music, EBU R128 audio normalization, title cards,
 and dissolve transitions — all self-corrected through a 3-attempt multimodal
-evaluation loop and displayed inline in GE chat.
+evaluation loop and displayed inline in Gemini chat.
 
 ---
 
@@ -28,15 +28,14 @@ gemini-3.1-pro-preview (global)  ←  reasoning & tool dispatch
 │   │   └── prompts.py            → Forensic Rubrics & Fatal Defect Gating
 │   ├── chart_generator.py        → Pillow Visual Analytics Chart Engine
 │   ├── agent.py                  → Omni / Veo 3.1 Video Diffusion & Lanczos Scaling
-│   └── prompt.md                 → Full GE Conversational System Prompt
+│   └── prompt.md                 → Full Gemini Conversational System Prompt
 ├── Gemini TTS (Charon/Aoede) → Broadcast Voiceover Narration (16 Male / 14 Female)
 ├── Lyria                     → Cinematic Ambient Music Generation
 └── FFmpeg Master Mixer       → EBU R128 Audio Normalization (-14 / -24 LUFS)
     ↓
 GCS Artifacts Bucket          ← stores video clips, audio, master ad MP4
     ↓
-Gemini Enterprise (GE) Chat   ← inline media playback & scorecard display
-
+Gemini Chat                   ← inline media playback & scorecard display
 ```
 
 ---
@@ -120,7 +119,7 @@ gcloud storage buckets add-iam-policy-binding \
 ```
 
 - (Optional for Public/Demo Preview in Chat)\*: If you want inline video players
-  in GE chat to render publicly without signed cookie hurdles:
+  in Gemini chat to render publicly without signed cookie hurdles:
 
 ```bash
 gcloud storage buckets add-iam-policy-binding \

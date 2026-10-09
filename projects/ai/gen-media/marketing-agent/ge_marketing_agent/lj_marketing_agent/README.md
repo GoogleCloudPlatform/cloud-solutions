@@ -14,6 +14,7 @@ uv sync --frozen
 
 # 2. Configure environment
 cp ../.env.example ../.env
+
 ```
 
 Open the `.env` file in a text editor and update the values:
@@ -22,18 +23,21 @@ Open the `.env` file in a text editor and update the values:
 
 ```bash
 open -e ../.env
+
 ```
 
 **On Linux:**
 
 ```bash
 nano ../.env
+
 ```
 
 **On Windows:**
 
 ```bash
 notepad ..\.env
+
 ```
 
 Inside the file, find and replace these values with your own:
@@ -44,6 +48,7 @@ GOOGLE_CLOUD_BUCKET_ARTIFACTS=your-gcs-bucket-name
 DEVELOPER_TOKEN=your-google-ads-developer-token
 PROJECT_ID=your-gcp-project-id
 BQ_DATASET=your-bigquery-dataset
+
 ```
 
 ```bash
@@ -53,6 +58,7 @@ gcloud config set project <YOUR_PROJECT_ID>
 
 # 4. Run the agent
 uv run adk web marketing_agent
+
 ```
 
 Open `http://localhost:8000` in your browser.
@@ -139,6 +145,7 @@ marketing_agent/
 │   └── platform-specs/
 └── prompts/
     └── trend_spotter.md
+
 ```
 
 ### Dependencies
@@ -154,6 +161,7 @@ marketing_agent/
 Product Selection → Trend Research → Campaign Setup → Personalization
 → Asset Sheets → Text Ads (RSA) → Image Ads → Video Ads (10s cinematic)
 → Publish to Google Ads (PMAX)
+
 ```
 
 Each asset type includes user approval — the user can request regeneration of
@@ -185,6 +193,7 @@ Single-Shot Video Generation [gemini-omni-flash-preview] ── 10s
 ├── Includes built-in background music
 └── Produces 10-second 16:9 commercial video ad
 Post-production [ffmpeg] ─────────────────────────── Text overlays & brand formatting
+
 ```
 
 Post-production includes: audio mix (voiceover + background music), text
@@ -210,12 +219,14 @@ overlays (brand, product, tagline, price), end card overlay, logo overlay.
 
 ```bash
 gcloud auth application-default login
+
 ```
 
 ### Production (deployed)
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/sa-key.json
+
 ```
 
 ### Service Account Impersonation
@@ -223,6 +234,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/sa-key.json
 ```bash
 gcloud auth application-default login \
   --impersonate-service-account=<sa-name>@<project>.iam.gserviceaccount.com
+
 ```
 
 ## Deployment
@@ -273,6 +285,7 @@ cd ~/nest_demo/streamlit_demo
   --region=us-central1 \
   --display_name="genmedia-ad-studio-ae" \
   lj_marketing_agent
+
 ```
 
 On success you'll see the deployed agent in Cloud Console > Agent Engine.
@@ -287,6 +300,7 @@ gcloud logging read \
   --project=<YOUR_PROJECT_ID> \
   --limit=5 \
   --format="value(textPayload)"
+
 ```
 
 Common issues:
@@ -298,15 +312,16 @@ Common issues:
 - **`requires-python` mismatch** — Set `requires-python = ">=3.11"` in
   `pyproject.toml`.
 
-### Integrate with Gemini Enterprise (GE)
+### Integrate with Gemini
 
-Once deployed to Agent Engine, register the agent in Gemini Enterprise.
+Once deployed to Agent Engine, register the agent in Gemini.
 
 #### Step 1: Enable APIs
 
 ```bash
 gcloud services enable discoveryengine.googleapis.com --project=<PROJECT_ID>
 gcloud services enable dialogflow.googleapis.com --project=<PROJECT_ID>
+
 ```
 
 #### Step 2: IAM Roles
@@ -320,9 +335,9 @@ Grant these roles to the user registering the agent:
 | `roles/aiplatform.user`                   | Access reasoning engines                |
 | `roles/serviceusage.serviceUsageConsumer` | API quota/billing                       |
 
-#### Step 3: Create or Use a Gemini Enterprise App
+#### Step 3: Create or Use a Gemini App
 
-If you already have a GE app, skip to Step 4. Otherwise:
+If you already have a Gemini app, skip to Step 4. Otherwise:
 
 1.  Go to **Cloud Console** > **Agent Builder**
 1.  Click **Create App** > **Conversational Agent**
@@ -334,6 +349,7 @@ If you already have a GE app, skip to Step 4. Otherwise:
 pip install google-agents-cli
 
 agents-cli publish gemini-enterprise --interactive
+
 ```
 
 Follow the prompts:
@@ -341,13 +357,13 @@ Follow the prompts:
 - **Registration type**: `2` (ADK)
 - **Agent Runtime ID**:
   `projects/<PROJECT_ID>/locations/us-central1/reasoningEngines/<ENGINE_ID>`
-- **GE App**: select from the list
+- **Gemini App**: select from the list
 - **Display Name**: `GenMedia Ad Studio`
 
 **Alternative — Console UI:**
 
-1.  In your GE app, go to **Agents** > **Add agent** > **Custom agent via Agent
-    Runtime**
+1.  In your Gemini app, go to **Agents** > **Add agent** > **Custom agent via
+    Agent Runtime**
 1.  Set the Reasoning Engine path:
     `projects/<PROJECT_ID>/locations/us-central1/reasoningEngines/<ENGINE_ID>`
 1.  Skip Authorization (can add later)
@@ -355,13 +371,13 @@ Follow the prompts:
 
 #### Step 5: Add User Permissions
 
-1.  In the GE app > **Agents** > click on your agent
+1.  In the Gemini app > **Agents** > click on your agent
 1.  Go to **User permissions** > **Add user**
 1.  Add the user's email with **Agent User** role
 
 #### Step 6: Set Up Identity Provider
 
-1.  In the GE app, go to **Integration**
+1.  In the Gemini app, go to **Integration**
 1.  Select **Use Google Identity**
 1.  Note the webapp URL provided
 
@@ -369,12 +385,13 @@ Follow the prompts:
 
 ```bash
 gcloud ai reasoning-engines list --project=<PROJECT_ID> --region=us-central1
+
 ```
 
 Access the agent via:
 
-- **GE webapp URL** from Step 6
-- **`@genmedia-ad-studio-ae`** mention in the GE chat box
+- **Gemini web app URL** from Step 6
+- **`@genmedia-ad-studio-ae`** mention in the Gemini chat box
 - **Agents sidebar** (if pinned by admin)
 
 ### Package Structure
@@ -413,6 +430,7 @@ gcloud run deploy marketing-agent \
   --concurrency 1 \
   --set-env-vars "GOOGLE_CLOUD_PROJECT=${PROJECT_ID},GOOGLE_GENAI_USE_VERTEXAI=TRUE" \
   --service-account <sa-name>@${PROJECT_ID}.iam.gserviceaccount.com
+
 ````
 
 ## Verification

@@ -521,10 +521,10 @@ The following are available **on user request**:
 - **Ad Editing:** Use `generate_display_ad` ONLY to modify/edit a specific
   existing ad with new instructions
 
-# 5. Formatting Rules (Gemini Enterprise Compatible)
+# 5. Formatting Rules (Gemini Compatible)
 
 - **NEVER use markdown tables** (`| col | col |` syntax). Tables render as raw
-  text in GE. Use **bold labels** with bullet lists instead.
+  text in Gemini. Use **bold labels** with bullet lists instead.
 - **NEVER use `![](url)` image syntax.** Images display via the artifact system
   automatically.
 - **NEVER paste raw GCS URIs** in your text response. Say "the image/video will
@@ -534,7 +534,7 @@ The following are available **on user request**:
 - Use **bold headers** with line breaks for sections.
 - Use **numbered lists** for choices the user must pick from.
 - Use **bullet lists** for information display.
-- Keep responses concise and scannable — GE is a chat, not a document.
+- Keep responses concise and scannable — Gemini is a chat, not a document.
 - **Describe generated media in text** (e.g. "Here are your 2 image ad concepts
   for the Urban Explorers segment:").
 - When referencing a specific image or video, describe it by its concept or
