@@ -312,6 +312,12 @@
       "additionalBranchPrefix": "hpa-recommender-"
     },
     {
+      "matchFileNames": ["projects/insurance-claim-live-agent/**"],
+      "groupName": "insurance-claim-live-agent",
+      "commitMessagePrefix": "chore(deps): [insurance-claim-live-agent]",
+      "additionalBranchPrefix": "insurance-claim-live-agent-"
+    },
+    {
       "matchFileNames": ["projects/java-modernization-demo/**"],
       "groupName": "java-modernization-demo",
       "commitMessagePrefix": "chore(deps): [java-modernization-demo]",
