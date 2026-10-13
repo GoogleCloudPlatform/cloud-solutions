@@ -244,6 +244,12 @@
       "additionalBranchPrefix": "fsi-quant-assistant-"
     },
     {
+      "matchFileNames": ["projects/gcp-diagrams/**"],
+      "groupName": "gcp-diagrams",
+      "commitMessagePrefix": "chore(deps): [gcp-diagrams]",
+      "additionalBranchPrefix": "gcp-diagrams-"
+    },
+    {
       "matchFileNames": ["projects/gecx-ticketing-creation/**"],
       "groupName": "gecx-ticketing-creation",
       "commitMessagePrefix": "chore(deps): [gecx-ticketing-creation]",

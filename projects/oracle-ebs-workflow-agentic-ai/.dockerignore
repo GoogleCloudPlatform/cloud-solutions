@@ -1,0 +1,13 @@
+.git
+.gitignore
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+terraform/
+tests/
+scratch/
+docs/

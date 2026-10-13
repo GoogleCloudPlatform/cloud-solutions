@@ -1,0 +1,90 @@
+{
+  "capabilities": {
+    "pushNotifications": false,
+    "streaming": false
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "application/json",
+    "text/plain"
+  ],
+  "description": "Autonomous Policy-Aware Enterprise A2A Gateway for Oracle EBS Workflow and Approval Triage across APEXP, POAPPR, and REQAPPR.",
+  "name": "Oracle EBS Workflow AI Assistant",
+  "protocolVersion": "0.3.0",
+  "skills": [
+    {
+      "description": "Retrieve and inspect pending Oracle EBS workflow notifications for AP Expenses, PO Approvals, and Requisitions through certified Oracle ISG REST and PL/SQL APIs.",
+      "examples": [
+        "List pending approvals for user JSMITH",
+        "Show my pending notifications",
+        "Inspect workflow notification 10294",
+        "What are the details of notification 99482?"
+      ],
+      "id": "workflow_inspection",
+      "name": "Workflow Inspection",
+      "tags": [
+        "workflow",
+        "notifications",
+        "apex_expenses",
+        "purchase_orders",
+        "requisitions",
+        "oracle_ebs"
+      ]
+    },
+    {
+      "description": "Verify workflow notifications against corporate compliance and financial policy rules with risk tier assessment (LOW, MEDIUM, HIGH, CRITICAL).",
+      "examples": [
+        "Verify policy compliance for notification 10294",
+        "Check expense policy violations for notification 8472",
+        "Evaluate approval risk for PO notification 99120"
+      ],
+      "id": "policy_verification",
+      "name": "Policy Verification",
+      "tags": [
+        "policy",
+        "compliance",
+        "risk_assessment",
+        "audit",
+        "governance"
+      ]
+    },
+    {
+      "description": "Triage pending notifications with policy evaluation, generate Markdown summary tables with risk badges, and propose actions requiring explicit manager confirmation.",
+      "examples": [
+        "Triage pending notifications for JSMITH",
+        "Analyze pending workflow items and suggest actions",
+        "Summarize workflow items needing my approval"
+      ],
+      "id": "workflow_triage",
+      "name": "Workflow Triage",
+      "tags": [
+        "triage",
+        "batch_analysis",
+        "approval_management",
+        "human_gate"
+      ]
+    },
+    {
+      "description": "Execute certified workflow responses (APPROVE, REJECT) through Path A (PL/SQL apps.wf_notification.respond) or Path B (ISG REST) with human confirmation gate enforcement.",
+      "examples": [
+        "Approve notification 10294 with confirmation",
+        "Reject notification 99120 due to budget overrun",
+        "Execute approved batch response"
+      ],
+      "id": "workflow_execution",
+      "name": "Workflow Execution",
+      "tags": [
+        "execute",
+        "approve",
+        "reject",
+        "plsql",
+        "isg_rest",
+        "audit_trail"
+      ]
+    }
+  ],
+  "url": "https://a2a-workflow-server-PROJECT_ID.REGION.run.app",
+  "version": "1.0.0"
+}

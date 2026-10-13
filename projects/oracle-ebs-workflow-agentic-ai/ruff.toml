@@ -1,0 +1,2 @@
+[lint.isort]
+no-lines-before = ["first-party"]

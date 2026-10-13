@@ -1,0 +1,6 @@
+fastapi~=0.143
+uvicorn~=0.54
+pydantic~=2.14
+oracledb~=26.0
+httpx~=0.28
+google-genai~=2.29

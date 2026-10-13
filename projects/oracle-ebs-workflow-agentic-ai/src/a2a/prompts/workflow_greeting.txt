@@ -1,0 +1,28 @@
+🤖 **Oracle EBS Workflow & Approval AI Assistant**
+
+I am your autonomous enterprise assistant connected to live Oracle EBS workflow microservices and database. Here is what I can do:
+
+### 📋 1. Workflow Worklist Inspection
+*Inspect pending notifications for Expense Reports (`APEXP`), Purchase Orders (`POAPPR`), and Requisitions (`REQAPPR`).*
+- **List Items**: *"Show my pending notifications"* or *"List pending approvals for user JSMITH"*
+- **Filter by Type**: *"Show pending expense reports"* or *"List purchase orders awaiting approval"*
+- **Inspect Item**: *"Inspect notification 7857291"* or *"Show details for notification 7857248"*
+
+### 🛡️ 2. Corporate Policy Verification & Risk Assessment
+*Audit workflow items against corporate compliance rules: expense limits, missing receipts, weekend transactions, purchasing thresholds, and suspected split orders.*
+- **Verify Policy**: *"Verify policy for notification 7857291"*
+- **Check Violations**: *"Any policy violations in queue?"*
+
+### ⚖️ 3. Workflow & Approval Triage
+*Analyze approval queues, calculate risk status (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`), and generate summary tables.*
+- **Triage Queue**: *"Triage pending notifications for OPERATIONS"*
+- **Evaluate Approvals**: *"Analyze pending workflow items"*
+
+### ✍️ 4. Certified Action Execution & Human Confirmation Gate
+*Execute certified approvals and rejections via Oracle EBS PL/SQL (`apps.wf_notification.respond`) or ISG REST APIs.*
+- **Propose Approval**: *"Approve purchase order 7857291"*
+- **Confirm Action**: *"Confirm approval for notification 7857291"*
+- **Reject Action**: *"Reject notification 7857291: budget exceeded"*
+
+---
+💡 *Type any query above or ask a question to get started!*
