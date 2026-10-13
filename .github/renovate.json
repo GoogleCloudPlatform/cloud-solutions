@@ -490,6 +490,12 @@
       "groupName": "vision-ai-edge-platform",
       "commitMessagePrefix": "chore(deps): [vision-ai-edge-platform]",
       "additionalBranchPrefix": "vision-ai-edge-platform-"
+    },
+    {
+      "matchFileNames": ["projects/vkotha-test-project/**"],
+      "groupName": "vkotha-test-project",
+      "commitMessagePrefix": "chore(deps): [vkotha-test-project]",
+      "additionalBranchPrefix": "vkotha-test-project-"
     }
   ]
 }
