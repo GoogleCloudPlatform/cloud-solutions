@@ -11,7 +11,7 @@ dependencies = [
     "google-cloud-bigquery==3.42.2",
     "google-genai==2.16.0",
     "pydantic==2.13.4",
-    "pydantic-settings==2.14.2",
+    "pydantic-settings==2.15.0",
     "absl-py==2.5.0",
     "python-dotenv==1.2.2",
     "pandas==3.0.5",
