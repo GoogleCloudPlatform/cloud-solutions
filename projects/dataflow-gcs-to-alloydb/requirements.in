@@ -1,5 +1,5 @@
-apache-beam[gcp,dataframe]==2.76.0
-apache-beam[tfrecord]==2.76.0
+apache-beam[gcp,dataframe]>=2.77.0,<3.0.0
+apache-beam[tfrecord]>=2.77.0,<3.0.0
 pandas
 orjson
 protobuf

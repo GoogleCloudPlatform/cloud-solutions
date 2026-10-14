@@ -5,7 +5,7 @@
   "dependencyDashboardApproval": true,
   "assigneesFromCodeOwners": true,
   "assigneesSampleSize": 1,
-  "rangeStrategy": "bump",
+  "rangeStrategy": "auto",
   "rebaseWhen": "behind-base-branch",
   "ignorePaths": [
     "**/node_modules/**",
@@ -17,8 +17,7 @@
     "**/__fixtures__/**"
   ],
   "npm": {
-    "minimumReleaseAge": "3 days",
-    "rangeStrategy": "auto"
+    "minimumReleaseAge": "3 days"
   },
   "pip-compile": {
     "managerFilePatterns": ["/(^|/)[\\w-]*requirements([-.]\\w+)?\\.txt$/"],
@@ -38,7 +37,7 @@
   },
   "hostRules": [
     {
-      "timeout": 5000
+      "timeout": 15000
     },
     {
       "hostType": "github",
