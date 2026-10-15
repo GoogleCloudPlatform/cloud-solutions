@@ -37,7 +37,5 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV HOME=/tmp
 
-USER nobody
-
 ENTRYPOINT ["pytest"]
 CMD ["tests/", "-o", "cache_dir=/tmp/.pytest_cache"]

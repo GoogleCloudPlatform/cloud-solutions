@@ -111,12 +111,12 @@ requirements:
 
 ### 2. Installation & Dependency Resolution
 
-To set up your virtual environment and download dependencies, run `uv sync` in
-the root directory of the project:
+To set up your virtual environment and download dependencies, run
+`uv sync --frozen` in the root directory of the project:
 
 ```bash
 # Sync project and resolve virtual environment dependencies
-uv sync
+uv sync --frozen
 ```
 
 > [!NOTE]

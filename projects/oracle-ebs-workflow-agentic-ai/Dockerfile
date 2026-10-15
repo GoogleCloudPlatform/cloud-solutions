@@ -62,7 +62,7 @@ ENV PYTHONUNBUFFERED=1
 ENV HOME=/tmp
 ENV PORT=8080
 
-USER nobody
+USER 65534
 
 ENTRYPOINT ["uvicorn"]
 CMD ["src.a2a.a2a_server:app", "--host", "0.0.0.0", "--port", "8080"]

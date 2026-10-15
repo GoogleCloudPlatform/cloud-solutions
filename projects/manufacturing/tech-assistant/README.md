@@ -98,7 +98,7 @@ context files. Use the `prompt.txt` and `work-order.md` as the context files.
 1.  **Create a virtual environment** and install dependencies:
 
     ```bash
-    uv sync
+    uv sync --frozen
     ```
 
 ## Configuration
