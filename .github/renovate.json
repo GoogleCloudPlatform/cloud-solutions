@@ -238,6 +238,12 @@
       "additionalBranchPrefix": "dotnet-modernization-demo-"
     },
     {
+      "matchFileNames": ["projects/dual-graph-system-of-action/**"],
+      "groupName": "dual-graph-system-of-action",
+      "commitMessagePrefix": "chore(deps): [dual-graph-system-of-action]",
+      "additionalBranchPrefix": "dual-graph-system-of-action-"
+    },
+    {
       "matchFileNames": ["projects/fsi-quant-assistant/**"],
       "groupName": "fsi-quant-assistant",
       "commitMessagePrefix": "chore(deps): [fsi-quant-assistant]",
