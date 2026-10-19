@@ -44,11 +44,18 @@
       "timeout": 60000
     },
     {
-      "hostType": "npm",
+      "matchHost": "registry.npmjs.org",
+      "abortOnError": false,
+      "concurrentRequestLimit": 16,
       "timeout": 60000
     },
     {
       "hostType": "pypi",
+      "timeout": 120000
+    },
+    {
+      "matchHost": "repo.maven.apache.org",
+      "concurrentRequestLimit": 4,
       "timeout": 60000
     },
     {
