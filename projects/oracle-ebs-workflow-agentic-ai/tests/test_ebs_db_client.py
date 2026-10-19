@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# When Pylint runs across the monorepo, it may resolve
+# src.mcp.ebs_db_client to oracle-ebs-agentic-ai's EBSDatabaseClient, whose
+# __init__ and initialize_apps_context signatures differ from this project's.
+# pylint: disable=unexpected-keyword-arg,redundant-keyword-arg
 """Unit tests for EBSDatabaseClient pooled connections and PL/SQL execution."""
 
 from typing import Any

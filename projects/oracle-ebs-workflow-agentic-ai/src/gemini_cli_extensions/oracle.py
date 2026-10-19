@@ -39,6 +39,9 @@ class ExecutionEngine:
     def db_client(self) -> EBSDatabaseClient:
         """Lazy load database client."""
         if self._db_client is None:
+            # When Pylint runs across the monorepo, it may resolve
+            # src.mcp.ebs_db_client to oracle-ebs-agentic-ai's definition.
+            # pylint: disable-next=unexpected-keyword-arg
             self._db_client = EBSDatabaseClient(
                 user=self.user, password=self.password, dsn=self.dsn
             )

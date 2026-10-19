@@ -61,6 +61,9 @@ def get_db_client(
     settings: Annotated[Settings, Depends(get_settings)],
 ) -> EBSDatabaseClient:
     """Dependency provider for EBSDatabaseClient."""
+    # When Pylint runs across the monorepo, it may resolve
+    # src.mcp.ebs_db_client to oracle-ebs-agentic-ai's definition.
+    # pylint: disable-next=unexpected-keyword-arg
     return EBSDatabaseClient(
         user=settings.oracle_user,
         password=settings.oracle_password,
