@@ -28,6 +28,7 @@ from src.agents.financial_agent import app as financial_app
 from src.agents.financial_agent import register_with_a2a as register_financial
 from src.agents.inventory_agent import app as inventory_app
 from src.agents.inventory_agent import register_with_a2a as register_inventory
+from src.agents.inventory_agent import worker_get_item_suppliers
 from src.agents.supplier_agent import app as supplier_app
 from src.agents.supplier_agent import register_with_a2a as register_supplier
 from src.gemini_cli_extensions.oracle import ExecutionEngine
@@ -877,15 +878,53 @@ def test_oracle_skills_and_gemini_extension_engine() -> None:
     skills_engine = NLToSQLEngine(execution_engine=ext_engine)
 
     sql_inv = skills_engine.translate_prompt(
-        "Show me AP invoices", context={"tables": ["AP_INVOICES_ALL"]}
+        "Show me AP invoices",
+        context={
+            "tables": ["AP_INVOICES_ALL"],
+            "invoice_num": "INV-2024",
+            "invoice_id": 1001,
+            "vendor_id": 501,
+        },
     )
     assert "AP_INVOICES_ALL" in sql_inv
+    assert "INVOICE_ID = 1001" in sql_inv
+    assert "VENDOR_ID = 501" in sql_inv
+
+    # Verify invalid invoice_id raises ValueError
+    with pytest.raises(ValueError, match="Invalid integer parameter"):
+        skills_engine.translate_prompt(
+            "Show invoice",
+            context={"tables": ["AP_INVOICES_ALL"], "invoice_id": "INV-1234"},
+        )
+
+    # Verify invalid vendor_id raises ValueError
+    with pytest.raises(ValueError, match="Invalid integer parameter"):
+        skills_engine.translate_prompt(
+            "Show invoice",
+            context={"tables": ["AP_INVOICES_ALL"], "vendor_id": "NOT_AN_INT"},
+        )
 
     sql_stock = skills_engine.translate_prompt(
         "Check stock levels",
-        context={"tables": ["MTL_ONHAND_QUANTITIES_DETAIL"]},
+        context={
+            "tables": ["MTL_ONHAND_QUANTITIES_DETAIL"],
+            "item_id": 54888,
+            "organization_id": 204,
+        },
     )
     assert "MTL_ONHAND_QUANTITIES_DETAIL" in sql_stock
+    assert "INVENTORY_ITEM_ID = 54888" in sql_stock
+    assert "ORGANIZATION_ID = 204" in sql_stock
+
+    # Verify invalid organization_id raises ValueError
+    with pytest.raises(ValueError, match="Invalid integer parameter"):
+        skills_engine.translate_prompt(
+            "Check stock",
+            context={
+                "tables": ["MTL_ONHAND_QUANTITIES_DETAIL"],
+                "organization_id": "INVALID_ORG",
+            },
+        )
 
 
 def test_custom_invoice_and_item_extraction_handling(
@@ -1059,7 +1098,7 @@ def test_database_error_response_sanitization(monkeypatch: Any) -> None:
 
     def _mock_raise_db_err(*args: Any, **kwargs: Any) -> None:
         raise RuntimeError(
-            "ORA-00942: table or view does not exist at 10.115.0.30"
+            "ORA-00942: table or view does not exist at 10.0.0.1"
         )
 
     monkeypatch.setattr(
@@ -1076,7 +1115,7 @@ def test_database_error_response_sanitization(monkeypatch: Any) -> None:
     detail = res.json().get("detail", "")
     assert detail == "Database operation failed"
     assert "ORA-00942" not in detail
-    assert "10.115.0.30" not in detail
+    assert "10.0.0.1" not in detail
 
 
 def test_non_existent_entity_resolution_handling(
@@ -1371,3 +1410,111 @@ def test_items_by_organization_code_a2a_dispatch(
         assert data["jsonrpc"] == "2.0"
         assert received_payload.get("organization_code") == "AD1"
         assert "AD100" in data["result"]["text"]
+
+
+def test_inventory_agent_item_suppliers_deduplication(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Verify get_item_suppliers deduplicates records and preserves
+    best price.
+    """
+    inv_client = TestClient(inventory_app)
+
+    # Return multiple supplier records with differing PO lines and unit prices
+    mock_suppliers_payload = {
+        "item_code": "AS54888",
+        "organization_id": 204,
+        "total_suppliers": 5,
+        "suppliers": [
+            {
+                "supplier_id": 3,
+                "supplier_name": "General Electric",
+                "unit_price": 1107.86,
+                "lead_time_days": None,
+                "po_number": "PO-1001",
+            },
+            {
+                "supplier_id": 3,
+                "supplier_name": "General Electric",
+                "unit_price": 1200.00,
+                "lead_time_days": None,
+                "po_number": "PO-1002",
+            },
+            {
+                "supplier_id": 105,
+                "supplier_name": "Allied Manufacturing",
+                "unit_price": 950.00,
+                "lead_time_days": None,
+                "po_number": "PO-1005",
+            },
+            {
+                "supplier_id": 3,
+                "supplier_name": "General Electric",
+                "unit_price": 1107.86,
+                "lead_time_days": None,
+                "po_number": "PO-1001",
+            },
+        ],
+    }
+
+    # Only mock generate_content_with_models which supplies the payload;
+    # get_ai_client only needs to return a non-None sentinel.
+    monkeypatch.setattr(
+        "src.agents.inventory_agent.get_ai_client",
+        MagicMock,
+    )
+    monkeypatch.setattr(
+        "src.agents.inventory_agent.generate_content_with_models",
+        lambda **kwargs: MagicMock(text=json.dumps(mock_suppliers_payload)),
+    )
+
+    res = inv_client.post("/item-suppliers", json={"item_code": "AS54888"})
+    assert res.status_code == 200
+    data = res.json()
+    assert data["item_code"] == "AS54888"
+    assert data["total_suppliers"] == 2
+    assert len(data["suppliers"]) == 2
+    supplier_ids = [s["supplier_id"] for s in data["suppliers"]]
+    assert supplier_ids == [3, 105]
+    # Verify fields of retained supplier[0] (preserving lowest price 1107.86)
+    assert data["suppliers"][0]["supplier_id"] == 3
+    assert data["suppliers"][0]["supplier_name"] == "General Electric"
+    assert data["suppliers"][0]["unit_price"] == 1107.86
+    assert data["suppliers"][1]["supplier_id"] == 105
+    assert data["suppliers"][1]["unit_price"] == 950.00
+
+
+def test_worker_get_item_suppliers_deduplication(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Verify worker_get_item_suppliers preserves deduplication logic."""
+    mock_payload = {
+        "item_code": "AS54888",
+        "organization_id": 204,
+        "total_suppliers": 2,
+        "suppliers": [
+            {
+                "supplier_id": 5,
+                "supplier_name": "Acme Industrial Supplies",
+                "unit_price": 100.0,
+            },
+            {
+                "supplier_id": 5,
+                "supplier_name": "Acme Industrial Supplies",
+                "unit_price": 120.0,
+            },
+        ],
+    }
+    monkeypatch.setattr(
+        "src.agents.inventory_agent.get_ai_client",
+        MagicMock,
+    )
+    monkeypatch.setattr(
+        "src.agents.inventory_agent.generate_content_with_models",
+        lambda **kwargs: MagicMock(text=json.dumps(mock_payload)),
+    )
+    result = worker_get_item_suppliers("AS54888")
+    assert result["total_suppliers"] == 1
+    assert len(result["suppliers"]) == 1
+    assert result["suppliers"][0]["supplier_id"] == 5
+    assert result["suppliers"][0]["unit_price"] == 100.0

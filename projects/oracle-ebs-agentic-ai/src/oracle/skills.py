@@ -15,6 +15,7 @@
 """Oracle EBS Skills and NL2SQL LLM Engine."""
 
 import logging
+import re
 from typing import Any, Callable, Dict, List, Optional
 
 from src.gemini_cli_extensions.oracle import ExecutionEngine
@@ -37,6 +38,21 @@ ORACLE_EBS_SCHEMA_PROMPT = (
     "Convert the natural language request into a valid Oracle SQL query with "
     "appropriate WHERE clauses."
 )
+
+
+def _sanitize_sql_literal(val: Any) -> str:
+    """Sanitize string literal for offline SQL query builder WHERE clauses."""
+    return re.sub(r"[^\w\-\.]", "", str(val).strip()).replace("'", "''")
+
+
+def _parse_sql_int(val: Any, field_name: str) -> int:
+    """Validate and parse integer query parameters, raising ValueError."""
+    try:
+        return int(val)
+    except (ValueError, TypeError) as exc:
+        raise ValueError(
+            f"Invalid integer parameter for '{field_name}': {val}"
+        ) from exc
 
 
 class NLToSQLEngine:
@@ -91,15 +107,17 @@ class NLToSQLEngine:
         )
         where_clauses: List[str] = []
         if ctx.get("invoice_num"):
-            inv_num = str(ctx["invoice_num"]).strip()
+            clean_inv_num = _sanitize_sql_literal(ctx["invoice_num"])
             where_clauses.append(
-                f"(UPPER(INVOICE_NUM) = UPPER('{inv_num}') OR "
-                f"UPPER(INVOICE_NUM) LIKE UPPER('%{inv_num}%'))"
+                f"(UPPER(INVOICE_NUM) = UPPER('{clean_inv_num}') OR "
+                f"UPPER(INVOICE_NUM) LIKE UPPER('%{clean_inv_num}%'))"
             )
         if ctx.get("invoice_id") is not None:
-            where_clauses.append(f'INVOICE_ID = {ctx["invoice_id"]}')
+            inv_id = _parse_sql_int(ctx["invoice_id"], "invoice_id")
+            where_clauses.append(f"INVOICE_ID = {inv_id}")
         if ctx.get("vendor_id") is not None:
-            where_clauses.append(f'VENDOR_ID = {ctx["vendor_id"]}')
+            v_id = _parse_sql_int(ctx["vendor_id"], "vendor_id")
+            where_clauses.append(f"VENDOR_ID = {v_id}")
 
         if where_clauses:
             return sql + " WHERE " + " AND ".join(where_clauses)
@@ -115,15 +133,17 @@ class NLToSQLEngine:
         if ctx.get("item_id"):
             item_id = str(ctx["item_id"]).strip()
             if item_id.isdigit():
-                where_clauses.append(f"INVENTORY_ITEM_ID = {item_id}")
+                where_clauses.append(f"INVENTORY_ITEM_ID = {int(item_id)}")
             else:
+                clean_item = _sanitize_sql_literal(item_id)
                 where_clauses.append(
                     "(UPPER(TO_CHAR(INVENTORY_ITEM_ID)) ="
-                    f" UPPER('{item_id}') OR UPPER(SUBINVENTORY_CODE) ="
-                    f" UPPER('{item_id}'))"
+                    f" UPPER('{clean_item}') OR UPPER(SUBINVENTORY_CODE) ="
+                    f" UPPER('{clean_item}'))"
                 )
         if ctx.get("organization_id") is not None:
-            where_clauses.append(f'ORGANIZATION_ID = {ctx["organization_id"]}')
+            org_id = _parse_sql_int(ctx["organization_id"], "organization_id")
+            where_clauses.append(f"ORGANIZATION_ID = {org_id}")
 
         if where_clauses:
             return sql + " WHERE " + " AND ".join(where_clauses)

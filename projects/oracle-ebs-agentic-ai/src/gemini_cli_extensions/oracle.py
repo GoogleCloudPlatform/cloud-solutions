@@ -15,6 +15,7 @@
 """Gemini CLI Extension Execution Engine for Oracle Databases."""
 
 import logging
+import re
 import sqlite3
 from types import ModuleType
 from typing import Any, Dict, List, Optional
@@ -34,6 +35,22 @@ DB_EXCEPTIONS = (
     if oracledb_module and hasattr(oracledb_module, "Error")
     else (RuntimeError, AttributeError, ValueError, OSError)
 )
+
+
+def sanitize_oracle_sql(sql: str) -> str:
+    """Sanitize SQL query for Oracle Database compliance.
+
+    Removes trailing semicolons and translates generic LIMIT syntax into
+    Oracle standard FETCH FIRST N ROWS ONLY syntax to prevent ORA-00933.
+    """
+    cleaned = re.sub(r";+\s*$", "", sql.strip())
+    cleaned = re.sub(
+        r"\bLIMIT\s+(\d+)\s*$",
+        r"FETCH FIRST \1 ROWS ONLY",
+        cleaned,
+        flags=re.IGNORECASE,
+    )
+    return cleaned
 
 
 class ExecutionEngine:
@@ -121,7 +138,8 @@ class ExecutionEngine:
             if not conn:
                 return []
             cursor = conn.cursor()
-            cursor.execute(sql, params or {})
+            clean_sql = sanitize_oracle_sql(sql)
+            cursor.execute(clean_sql, params or {})
             if cursor.description:
                 columns = [col[0] for col in cursor.description]
                 records = [dict(zip(columns, row)) for row in cursor.fetchall()]
@@ -144,7 +162,11 @@ class ExecutionEngine:
             RuntimeError,
             *DB_EXCEPTIONS,
         ) as exc:
-            logger.warning("SQL execution error: %s", exc)
+            logger.warning(
+                "SQL execution error on query '%s': %s",
+                clean_sql if "clean_sql" in locals() else sql,
+                exc,
+            )
             if conn and is_pooled and pool:
                 try:
                     pool.release(conn)

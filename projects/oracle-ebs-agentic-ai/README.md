@@ -136,28 +136,40 @@ Deploy stack using the automated scripts:
     [Gemini Enterprise Apps](https://console.cloud.google.com/gemini-enterprise/apps)
     in Google Cloud Console.
 1.  Click **Create App**, enter application details, and select region.
+1.  When prompted under **Authentication & Identity**, select
+    **Use Google Identity** to allow organization users to sign in.
 1.  Click **Agents** ➡️ **+ New Agent** ➡️ **Import A2A Agent Card**.
 1.  Paste the contents of `terraform/a2a_agent_card.json` (Display Name:
     `Oracle EBS Autonomous Assistant`).
-1.  Preview and interact with the agent under **Agents from your organization**.
 
 #### Accessing the agent across your organization
 
 Once published, team members across your organization can interact with the
-agent without accessing Google Cloud Console:
+agent directly without accessing Google Cloud Console or using preview mode:
 
-1.  Open Gemini Enterprise in your web browser.
+1.  In the Gemini Enterprise console, select your app from the list.
+1.  In the left navigation menu, click **Overview**.
+1.  Under **Application details**, locate the **Web app URL** field
+    (e.g., `https://<app-id>.<region>.gemini.cloud.google.com/`) and click
+    **Copy URL** (or click **Go to Gemini Enterprise**).
+1.  Share the URL with authorized users in your domain to sign in with their
+    corporate Google credentials.
 1.  Select **Agents** in the navigation panel.
 1.  Under **Agents from your organization**, select **Oracle EBS Autonomous
     Assistant** to start a session.
 
 > [!NOTE]
 >
-> **Production security and OIDC IAM**: Cloud Run microservices restrict
-> unauthenticated access. Gemini Enterprise authenticates requests via Google
-> OIDC ID tokens issued for the dedicated service account
-> (`gemini-enterprise-agent-sa`). Internal database traffic routes securely
-> through Direct VPC Egress subnets.
+> **Gateway security and perimeter IAM**: The front-door A2A gateway service
+> (`a2a-server`) handles incoming A2A webhooks from Gemini Enterprise. All
+> backend worker microservices (`inventory-agent`, `financial-agent`,
+> `supplier-agent`, and `mcp-server`) enforce an IAM security perimeter: they
+> prohibit unauthenticated public access and remain private, invocable only by
+> internal services (`ebs-cloud-run-sa`), the Gemini Enterprise extension
+> service account (`gemini-enterprise-agent-sa`), or authorized developer
+> accounts. The underlying `.run.app` URLs remain network-routable unless
+> configured with internal-only ingress via VPC. Internal database traffic
+> routes securely through Direct VPC Egress subnets.
 
 ## Recommended prompts for testing
 

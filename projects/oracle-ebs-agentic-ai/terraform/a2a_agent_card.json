@@ -1,4 +1,8 @@
 {
+  "authentication": {
+    "serviceAccountEmail": "gemini-enterprise-agent-sa@PROJECT_ID.iam.gserviceaccount.com",
+    "type": "OIDC"
+  },
   "capabilities": {
     "pushNotifications": false,
     "streaming": false

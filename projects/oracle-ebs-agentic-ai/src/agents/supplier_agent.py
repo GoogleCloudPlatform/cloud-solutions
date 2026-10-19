@@ -90,6 +90,13 @@ def make_execute_oracle_sql(
             query: SQL query string to execute against Oracle EBS.
         """
         clean_query = query.strip()
+        clean_query = re.sub(r";+\s*$", "", clean_query)
+        clean_query = re.sub(
+            r"\bLIMIT\s+(\d+)\s*$",
+            r"FETCH FIRST \1 ROWS ONLY",
+            clean_query,
+            flags=re.IGNORECASE,
+        )
         upper_query = clean_query.upper()
 
         if not (
@@ -143,9 +150,9 @@ def make_execute_oracle_sql(
             ) as exc:
                 logger.warning("Apps context initialization warning: %s", exc)
 
-        logger.info("LLM generating SQL execution: %s", query)
+        logger.info("LLM generating SQL execution: %s", clean_query)
         params = args[0] if args else kwargs.get("params")
-        return db_client.execute_query(query, params)
+        return db_client.execute_query(clean_query, params)
 
     return execute_oracle_sql
 

@@ -295,12 +295,12 @@ data "google_project" "project" {
   project_id = var.project_id
 }
 
-# Allow unauthenticated / public access to Cloud Run endpoints
-resource "google_cloud_run_v2_service_iam_member" "vertex_ai_invoker" {
-  for_each = local.agent_services
+
+# Allow Gemini Enterprise / A2A clients to reach the public A2A gateway endpoint
+resource "google_cloud_run_v2_service_iam_member" "a2a_server_public_invoker" {
   project  = var.project_id
   location = var.region
-  name     = google_cloud_run_v2_service.agents[each.key].name
+  name     = google_cloud_run_v2_service.agents["a2a-server"].name
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
@@ -341,6 +341,8 @@ resource "local_file" "gemini_extension_manifest" {
       }
     ]
   })}\n"
+
+  depends_on = [google_cloud_run_v2_service.agents]
 }
 
 # Automatically generate OpenAPI 3.0 YAML file for Vertex AI Extensions Console
@@ -349,6 +351,8 @@ resource "local_file" "gemini_extension_openapi_yaml" {
   content = templatefile("${path.module}/a2a_gateway_openapi.yaml", {
     a2a_server_url = google_cloud_run_v2_service.agents["a2a-server"].uri
   })
+
+  depends_on = [google_cloud_run_v2_service.agents]
 }
 
 # Dedicated Service Account for Gemini Enterprise Extension OIDC Authentication
@@ -356,6 +360,17 @@ resource "google_service_account" "gemini_agent_sa" {
   account_id   = "gemini-enterprise-agent-sa"
   display_name = "Gemini Enterprise Extension Service Account"
   project      = var.project_id
+}
+
+# Allow Gemini Enterprise / Discovery Engine Service Agents to mint OIDC tokens for gemini_agent_sa
+resource "google_service_account_iam_member" "gemini_agent_sa_token_creator" {
+  for_each = toset([
+    "serviceAccount:service-${data.google_project.project.number}@gcp-sa-discoveryengine.iam.gserviceaccount.com",
+    "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudaicompanion.iam.gserviceaccount.com",
+  ])
+  service_account_id = google_service_account.gemini_agent_sa.name
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = each.value
 }
 
 # Service Account IAM invoker bindings for OIDC authenticated Cloud Run execution
@@ -368,16 +383,27 @@ resource "google_cloud_run_v2_service_iam_member" "sa_invokers" {
   member   = "serviceAccount:${google_service_account.gemini_agent_sa.email}"
 }
 
+# Allow Cloud Run Service Account (ebs-cloud-run-sa) to invoke downstream worker microservices (A2A proxying)
+resource "google_cloud_run_v2_service_iam_member" "cloud_run_internal_invokers" {
+  for_each = local.agent_services
+  project  = var.project_id
+  location = var.region
+  name     = google_cloud_run_v2_service.agents[each.key].name
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.cloud_run_sa.email}"
+}
+
 # Automated registration of extension into Google Cloud Vertex AI Extension Registry
 resource "null_resource" "vertex_ai_extension_registration" {
   depends_on = [
     google_cloud_run_v2_service.agents,
-    google_cloud_run_v2_service_iam_member.vertex_ai_invoker,
+    google_cloud_run_v2_service_iam_member.sa_invokers,
+    google_cloud_run_v2_service_iam_member.cloud_run_internal_invokers,
     local_file.gemini_extension_manifest,
   ]
 
   provisioner "local-exec" {
-    command = "echo 'Automated Vertex AI Extension registered for project ${var.project_id} in region ${var.region}'"
+    command = "echo 'Vertex AI Extension configuration files have been generated. Manual registration via Google Cloud Console or Vertex AI API is required.'"
   }
 }
 
@@ -387,6 +413,7 @@ resource "google_storage_bucket" "agent_assets" {
   location                    = var.region
   force_destroy               = true
   uniform_bucket_level_access = true
+  public_access_prevention    = "enforced"
 }
 
 resource "google_storage_bucket_object" "openapi_spec" {
@@ -395,17 +422,23 @@ resource "google_storage_bucket_object" "openapi_spec" {
   content = templatefile("${path.module}/a2a_gateway_openapi.yaml", {
     a2a_server_url = google_cloud_run_v2_service.agents["a2a-server"].uri
   })
+
+  depends_on = [google_cloud_run_v2_service.agents]
 }
 
 # Automated generation of A2A Agent Card for Gemini Enterprise Console
 resource "local_file" "a2a_agent_card" {
   filename = "${path.module}/a2a_agent_card.json"
   content = "${jsonencode({
-    name               = "Oracle EBS Autonomous Assistant"
-    description        = "Autonomous Enterprise A2A Gateway for Oracle EBS Inventory stock checks, AP invoices, DSO metrics, and PO supplier negotiations."
-    version            = "1.0.0"
-    protocolVersion    = "0.3.0"
-    url                = google_cloud_run_v2_service.agents["a2a-server"].uri
+    name            = "Oracle EBS Autonomous Assistant"
+    description     = "Autonomous Enterprise A2A Gateway for Oracle EBS Inventory stock checks, AP invoices, DSO metrics, and PO supplier negotiations."
+    version         = "1.0.0"
+    protocolVersion = "0.3.0"
+    url             = google_cloud_run_v2_service.agents["a2a-server"].uri
+    authentication = {
+      type                = "OIDC"
+      serviceAccountEmail = google_service_account.gemini_agent_sa.email
+    }
     defaultInputModes  = ["text/plain"]
     defaultOutputModes = ["application/json", "text/plain"]
     capabilities = {
@@ -451,6 +484,8 @@ resource "local_file" "a2a_agent_card" {
       }
     ]
   })}\n"
+
+  depends_on = [google_cloud_run_v2_service.agents]
 }
 
 resource "google_storage_bucket_object" "a2a_agent_card" {

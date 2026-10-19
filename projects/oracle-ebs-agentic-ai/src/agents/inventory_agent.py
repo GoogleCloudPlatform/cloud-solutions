@@ -19,6 +19,7 @@ import os
 import re
 from contextlib import asynccontextmanager
 from functools import lru_cache
+from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 import httpx
@@ -338,6 +339,9 @@ You have access to the `execute_oracle_sql` tool to query inventory tables:
 
 OPERATING RULES:
 1. Always formulate precise read-only SELECT queries using JOINs and bind variables where needed.
+   CRITICAL ORACLE SQL COMPATIBILITY:
+   - Oracle SQL does NOT support the LIMIT keyword. Use `FETCH FIRST <N> ROWS ONLY` or `WHERE ROWNUM <= <N>`.
+   - Never append trailing semicolons (;) to queries executed via `execute_oracle_sql`.
 2. If an organization does not exist in apps.ORG_ORGANIZATION_DEFINITIONS, do NOT default to 204 or fabricate an organization. Report organization not found or organization_id = 0.
 3. If an item does not exist in apps.MTL_SYSTEM_ITEMS_B for the requested organization, do NOT fabricate data. Set status to ITEM_NOT_FOUND.
 4. Output strictly adheres to the requested JSON response schema.
@@ -373,6 +377,13 @@ def make_execute_oracle_sql(
             query: SQL query string to execute against Oracle EBS.
         """
         clean_query = query.strip()
+        clean_query = re.sub(r";+\s*$", "", clean_query)
+        clean_query = re.sub(
+            r"\bLIMIT\s+(\d+)\s*$",
+            r"FETCH FIRST \1 ROWS ONLY",
+            clean_query,
+            flags=re.IGNORECASE,
+        )
         upper_query = clean_query.upper()
 
         if not (
@@ -413,10 +424,10 @@ def make_execute_oracle_sql(
                     }
                 ]
 
-        logger.info("LLM generating SQL execution: %s", query)
+        logger.info("LLM generating SQL execution: %s", clean_query)
         params = args[0] if args else kwargs.get("params")
         try:
-            return db_client.execute_query(query, params)
+            return db_client.execute_query(clean_query, params)
         except SAFE_EXCEPTIONS as exc:
             setattr(execute_oracle_sql, "db_error", exc)
             raise
@@ -562,6 +573,26 @@ def check_stock(
     )
 
 
+@lru_cache(maxsize=1)
+def _load_organizations_prompt_template() -> str:
+    """Loads and caches the organizations prompt template."""
+    prompt_path = (
+        Path(__file__).resolve().parent / "prompts" / "organizations.txt"
+    )
+    with open(prompt_path, "r", encoding="utf-8") as f:
+        return f.read().strip()
+
+
+@lru_cache(maxsize=1)
+def _load_inventory_items_prompt_template() -> str:
+    """Loads and caches the inventory items prompt template."""
+    prompt_path = (
+        Path(__file__).resolve().parent / "prompts" / "inventory_items.txt"
+    )
+    with open(prompt_path, "r", encoding="utf-8") as f:
+        return f.read().strip()
+
+
 @app.post("/organizations", response_model=Dict[str, Any])
 @app.get("/organizations", response_model=Dict[str, Any])
 def list_organizations(
@@ -587,14 +618,8 @@ def list_organizations(
         )
 
     execute_oracle_sql = make_execute_oracle_sql(db_client)
-    prompt = (
-        "Query apps.ORG_ORGANIZATION_DEFINITIONS to retrieve a paginated list "
-        f"of active warehouse organizations (limit: {rec_limit}). In the "
-        "response, populate the `organizations` list with every retrieved "
-        "organization, including organization_id, organization_code, and "
-        "organization_name. Note the count of records shown, indicating if "
-        "the 100-record query limit capped a larger request."
-    )
+    template = _load_organizations_prompt_template()
+    prompt = template.format(rec_limit=rec_limit)
 
     response = generate_content_with_models(
         ai_client=ai_client,
@@ -660,16 +685,8 @@ def get_inventory_items(
         )
 
     execute_oracle_sql = make_execute_oracle_sql(db_client)
-    prompt = (
-        "Query apps.MTL_SYSTEM_ITEMS_B and "
-        "apps.MTL_ONHAND_QUANTITIES_DETAIL to retrieve inventory items with "
-        "descriptions, organization IDs, and aggregated on-hand quantities "
-        f'for organization "{org_spec}" (limit: {rec_limit}). Set status '
-        'to "SUCCESS". Populate the `items` list with every retrieved item '
-        "record including inventory_item_id, item_code, description, "
-        "organization_id, and total_on_hand. Indicate the count of records "
-        "shown, clarifying if the 100-record limit capped a larger request."
-    )
+    template = _load_inventory_items_prompt_template()
+    prompt = template.format(org_spec=org_spec, rec_limit=rec_limit)
 
     response = generate_content_with_models(
         ai_client=ai_client,
@@ -711,6 +728,16 @@ def get_inventory_items(
     )
 
 
+@lru_cache(maxsize=1)
+def _load_item_suppliers_prompt_template() -> str:
+    """Loads and caches the item suppliers prompt template."""
+    prompt_path = (
+        Path(__file__).resolve().parent / "prompts" / "item_suppliers.txt"
+    )
+    with open(prompt_path, "r", encoding="utf-8") as f:
+        return f.read().strip()
+
+
 @app.post("/item-suppliers", response_model=ItemSuppliersResponse)
 @app.get("/item-suppliers")
 def get_item_suppliers(
@@ -735,19 +762,8 @@ def get_item_suppliers(
         )
 
     execute_oracle_sql = make_execute_oracle_sql(db_client)
-    prompt = (
-        "Find approved suppliers and purchase order pricing for item code "
-        f'"{target_code}". Query apps.MTL_SYSTEM_ITEMS_B (segment1 = '
-        f'"{target_code}") and join with apps.PO_LINES_ALL (on item_id = '
-        "inventory_item_id), apps.PO_HEADERS_ALL (on po_header_id), and "
-        "apps.AP_SUPPLIERS (on vendor_id). Select only vendor_id, "
-        "vendor_name, and unit_price from these tables. Do not query "
-        "PRIMARY_VENDOR_ID or LEAD_TIME from the database. Set "
-        "primary_supplier_id, primary_supplier_name, and lead_time_days to "
-        "null. Populate the `suppliers` list with every retrieved supplier "
-        "record including supplier_id (vendor_id), supplier_name "
-        "(vendor_name), unit_price, and lead_time_days."
-    )
+    template = _load_item_suppliers_prompt_template()
+    prompt = template.format(target_code=target_code)
 
     response = generate_content_with_models(
         ai_client=ai_client,
@@ -761,7 +777,28 @@ def get_item_suppliers(
         ),
     )
     if response and response.text:
-        return ItemSuppliersResponse.model_validate_json(response.text)
+        validated = ItemSuppliersResponse.model_validate_json(response.text)
+        seen_suppliers: Dict[Any, ItemSupplierItem] = {}
+        for s in validated.suppliers:
+            key = (
+                s.supplier_id
+                if s.supplier_id
+                else s.supplier_name.strip().lower()
+            )
+            if key not in seen_suppliers:
+                seen_suppliers[key] = s
+            else:
+                existing = seen_suppliers[key]
+                if s.unit_price is not None:
+                    if (
+                        existing.unit_price is None
+                        or s.unit_price < existing.unit_price
+                    ):
+                        seen_suppliers[key] = s
+        unique_suppliers = list(seen_suppliers.values())
+        validated.suppliers = unique_suppliers
+        validated.total_suppliers = len(unique_suppliers)
+        return validated
     raise HTTPException(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         detail="AI reasoning unavailable or failed",

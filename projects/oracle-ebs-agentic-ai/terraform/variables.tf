@@ -26,7 +26,6 @@ variable "image_tag" {
 variable "region" {
   type        = string
   description = "Google Cloud Region for compute and network resources."
-  default     = "us-central1"
 }
 
 variable "environment" {
