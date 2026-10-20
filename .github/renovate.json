@@ -329,12 +329,6 @@
       "additionalBranchPrefix": "legacy-detox-demo-"
     },
     {
-      "matchFileNames": ["projects/like-scelsius-but-better/**"],
-      "groupName": "like-scelsius-but-better",
-      "commitMessagePrefix": "chore(deps): [like-scelsius-but-better]",
-      "additionalBranchPrefix": "like-scelsius-but-better-"
-    },
-    {
       "matchFileNames": ["projects/log-scoping-tool/**"],
       "groupName": "log-scoping-tool",
       "commitMessagePrefix": "chore(deps): [log-scoping-tool]",
