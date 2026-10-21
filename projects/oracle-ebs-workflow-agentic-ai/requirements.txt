@@ -15,9 +15,9 @@ anyio==4.15.1 \
     #   google-genai
     #   httpx
     #   starlette
-certifi==2026.7.22 \
-    --hash=sha256:62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775 \
-    --hash=sha256:741e2c3b351ddf169a738da9f2c048608ff7f2c5cc02f1ebc6b118bb090d5d55
+certifi==2026.10.19 \
+    --hash=sha256:035c1e85572b141bf1c3a3eff0e33a8eb74917522f2559075ff8d2fea780a1ae \
+    --hash=sha256:42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b
     # via
     #   httpcore
     #   httpx
@@ -373,7 +373,7 @@ fastapi==0.143.0 \
     --hash=sha256:1acffe48206a80917cf7dac21992b5c44b25384e8902bf745c1fd9dabcf6c51f \
     --hash=sha256:3e9395fd35276425b61b516a31fdd7c77fe2af83e41b4da22e30696fb1304c5d
     # via -r requirements.in
-google-auth==2.61.0 \
+google-auth[requests]==2.61.0 \
     --hash=sha256:37f0815967322e8c32b12bf422531e8b637cafdaae0acbb9141117cfe6a96f23 \
     --hash=sha256:ca60266a37475ae68b63bac007272f46094b3d571abe92aded329b6cfb568025
     # via google-genai
