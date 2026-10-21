@@ -209,9 +209,44 @@ FROM AI.SEARCH(
 # ### 2. Cost Minimization with Knowledge Distillation (`optimization_mode => 'MINIMIZE_COST'`)
 # When evaluating large datasets (at least 3,000 rows recommended) with `AI.IF` or `AI.CLASSIFY`:
 # - **How it works**:
-#   1. BigQuery samples a small subset of rows and labels them using the remote Gemini model.
-#   2. It uses pre-computed text embeddings and LLM labels to train a lightweight local distilled model Just-In-Time (JIT).
-#   3. Once validation passes, the local distilled model evaluates the remaining rows rapidly at a fraction of the cost.
+#   1. BigQuery samples **1,350 rows** (`1,050` training + `300` test evaluation) and labels them using the remote Gemini model.
+#   2. It uses pre-computed text embeddings (`task_type => 'CLASSIFICATION'`) and LLM labels to train a lightweight local distilled model Just-In-Time (JIT).
+#   3. Once validation passes ($\ge 95\%$ training accuracy and $\ge 85\%$ test precision/recall), the local distilled model evaluates the remaining rows in memory at a fraction of the cost.
+#
+# ```sql
+# -- Step A: Pre-compute classification embeddings (3,100+ rows)
+# CREATE OR REPLACE TABLE thelook_ecommerce.products_jit_embeddings AS
+# SELECT
+#   id AS product_id,
+#   name,
+#   category,
+#   CONCAT('Category: ', category, ' | Product: ', name) AS product_info,
+#   AI.EMBED(
+#     CONCAT('Category: ', category, ' | Product: ', name),
+#     endpoint => 'text-embedding-005',
+#     task_type => 'CLASSIFICATION'
+#   ).result AS product_embedding
+# FROM thelook_ecommerce.products
+# WHERE name IS NOT NULL
+# LIMIT 3100;
+#
+# -- Step B: Evaluate with JIT Knowledge Distillation
+# SELECT
+#   name,
+#   category,
+#   AI.IF(
+#     ('Is this product an upper-body garment (such as a top, t-shirt, sweater, hoodie, coat, or jacket)? ', product_info),
+#     embeddings => product_embedding,
+#     optimization_mode => 'MINIMIZE_COST'
+#   ) AS is_upper_body_garment
+# FROM thelook_ecommerce.products_jit_embeddings;
+# ```
+#
+# > [!WARNING]
+# >
+# > **Qwiklabs Quota Notice**: When `optimization_mode => 'MINIMIZE_COST'` runs on $\ge 3,000$ rows, BigQuery sends **1,350 individual Gemini requests** to label the initial training and validation sample. Because Qwiklabs student projects enforce strict Vertex AI quotas (**100 regional input tokens/min**, **30 global requests/min**, and **600 requests/day**), running a 3,100-row distillation job in this lab environment exceeds the regional token and daily request caps (`429 RESOURCE_EXHAUSTED`) and hangs in retry backoff.
+# >
+# > The executable cell below evaluates a 2-row sample (`WHERE id IN (120, 5600)`) so it completes in a few seconds within lab quota limits.
 
 # %%
 # %%bigquery
@@ -248,15 +283,15 @@ FROM prompt_tokens;
 
 # %%
 # %%bigquery
--- 2. Just-In-Time (JIT) Knowledge Distillation Optimization Mode
--- Evaluates 3,100 rows using a locally trained distilled model to reduce LLM calls and latency.
-SELECT 
+-- 2. AI.IF Condition Evaluation (Qwiklabs Quota-Safe Sample)
+-- Evaluates 2 rows to stay within Qwiklabs regional token and daily request caps (100 TPM / 600 RPD).
+-- For production environments with standard Vertex AI quotas, use the 3,100-row MINIMIZE_COST pattern shown above.
+SELECT
   name,
   category,
   AI.IF(
-    ('Does this product belong to the Clothing category? ', name),
-    embeddings => AI.EMBED(name, endpoint => 'text-embedding-005').result,
-    optimization_mode => 'MINIMIZE_COST'
-  ) AS is_clothing
+    ('Is this product an upper-body garment (such as a top, t-shirt, sweater, hoodie, coat, or jacket)? ',
+     CONCAT('Category: ', category, ', Product: ', name))
+  ) AS is_upper_body_garment
 FROM thelook_ecommerce.products
-LIMIT 3100;
+WHERE id IN (120, 5600);

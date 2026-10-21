@@ -70,7 +70,7 @@ create_models_query = f"""
 -- 1. Gemini Text 모델 생성
 CREATE OR REPLACE MODEL thelook_ecommerce.gemini_flash
 REMOTE WITH CONNECTION `{PROJECT_ID}.{LOCATION}.vertex-connection`
-OPTIONS(ENDPOINT = 'gemini-2.5-flash');
+OPTIONS(ENDPOINT = 'gemini-3.8-flash');
 
 -- 2. Text Embedding 모델 생성
 CREATE OR REPLACE MODEL thelook_ecommerce.text_embedding
