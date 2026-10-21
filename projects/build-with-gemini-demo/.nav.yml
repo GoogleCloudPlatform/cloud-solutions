@@ -28,7 +28,7 @@ nav:
   - "Automating UI tests with Playwright & Antigravity CLI": "build-with-gemini-demo/automating-ui-tests-with-antigravity/README.md"
   - "Automating UI tests with Playwright & Gemini CLI": "build-with-gemini-demo/automating-ui-tests/README.md"
   - "Automated code reviews with Antigravity CLI": "build-with-gemini-demo/automated-code-reviews-with-gemini-cli/README.md"
-  - "Build with Antigravity": "build-with-gemini-demo/build-with-antigravity/README.md"
+  - "Build applications with the Antigravity IDE extension and Agent Skills": "build-with-gemini-demo/build-with-antigravity/README.md"
   - "Interactive code reviews with Antigravity CLI": "build-with-gemini-demo/local-code-review/README.md"
   - "Implementing features with Antigravity CLI and JIRA": "build-with-gemini-demo/implementing-features-with-antigravity-cli-jira/README.md"
   - "Implementing UI changes with Gemini CLI": "build-with-gemini-demo/ui-changes-implementation/README.md"

@@ -1,10 +1,14 @@
 # Required at this level for the last step in the guide to open pull request.
 # Users will create/init new git repository in this folder and push the changes.
 venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .db
 *.db
+*.sqlite3
+.env
+.agents/mcp_config.json
 .DS_Store
