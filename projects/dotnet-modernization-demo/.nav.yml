@@ -19,12 +19,10 @@
 # under the License.
 #
 
-title: Gemini-powered .NET modernization demo
+title: Antigravity-powered .NET modernization demo
 
 nav:
   - "Get started": "README.md"
-  - "Gemini prompt": "modernization-prompt.md"
-  - "Sample modernization report": "dotnet-modernization-demo/dotnet-migration-sample-modernized/MODERNIZATION.md"
 
 flatten_single_child_sections: true
 sort:
