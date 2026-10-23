@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,26 +13,28 @@
 # limitations under the License.
 
 services:
-  app:
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__SchoolContext=Server=db;Port=5432;Database=contosouniversity;User Id=postgres;Password=postgres;
-    depends_on:
-      db:
-        condition: service_healthy
-
   db:
-    image: postgres:16
+    image: postgres:16-alpine
+    restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      ConnectionStrings__SchoolContext: "Host=db;Port=5432;Database=contosouniversity;Username=postgres;Password=postgres"
+    depends_on:
+      db:
+        condition: service_healthy

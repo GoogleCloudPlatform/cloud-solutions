@@ -16,16 +16,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net;
 using ContosoUniversity.DAL;
 using ContosoUniversity.Models;
-using PagedList.Core;
-using System.Data.Entity.Infrastructure;
+using ContosoUniversity.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace ContosoUniversity.Controllers
 {
@@ -39,71 +35,9 @@ namespace ContosoUniversity.Controllers
         }
 
         // GET: Student
-        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ViewResult Index()
         {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
-
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewBag.CurrentFilter = searchString;
-
-            var students = from s in db.Students
-                           select s;
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                students = students.Where(s => s.LastName.Contains(searchString)
-                                       || s.FirstMidName.Contains(searchString));
-            }
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    students = students.OrderByDescending(s => s.LastName);
-                    break;
-                case "Date":
-                    students = students.OrderBy(s => s.EnrollmentDate);
-                    break;
-                case "date_desc":
-                    students = students.OrderByDescending(s => s.EnrollmentDate);
-                    break;
-                default:  // Name ascending
-                    students = students.OrderBy(s => s.LastName);
-                    break;
-            }
-
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            return View(students.ToPagedList(pageNumber, pageSize));
-        }
-
-
-        // GET: Student/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new BadRequestResult();
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return new NotFoundResult();
-            }
-            return View(student);
-        }
-
-        // GET: Student/Create
-        public ActionResult Create()
-        {
-            return View();
+            return View(BuildIndexData(new Student()));
         }
 
         // POST: Student/Create
@@ -111,7 +45,7 @@ namespace ContosoUniversity.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("LastName, FirstMidName, EnrollmentDate")]Student student)
+        public ActionResult Create([Bind("LastName, FirstMidName, EnrollmentDate", Prefix = "NewStudent")]Student student)
         {
             try
             {
@@ -127,91 +61,39 @@ namespace ContosoUniversity.Controllers
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
-            return View(student);
+            return View("Index", BuildIndexData(student));
         }
 
-
-        // GET: Student/Edit/5
-        public ActionResult Edit(int? id)
+        private StudentIndexData BuildIndexData(Student newStudent)
         {
-            if (id == null)
+            return new StudentIndexData
             {
-                return new BadRequestResult();
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return new NotFoundResult();
-            }
-            return View(student);
+                Students = db.Students.OrderBy(s => s.LastName).ToList(),
+                EnrollmentSummary = GetEnrollmentSummary(),
+                NewStudent = newStudent
+            };
         }
 
-        // POST: Student/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ActionName("Edit")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditPost(int? id)
+        private List<EnrollmentDateGroup> GetEnrollmentSummary()
         {
-            if (id == null)
-            {
-                return new BadRequestResult();
-            }
-            var studentToUpdate = db.Students.Find(id);
-            if (await TryUpdateModelAsync(studentToUpdate))
-            {
-                try
-                {
-                    db.SaveChanges();
+            // Commenting out LINQ to show how to do the same thing in SQL.
+            //IQueryable<EnrollmentDateGroup> = from student in db.Students
+            //           group student by student.EnrollmentDate into dateGroup
+            //           select new EnrollmentDateGroup()
+            //           {
+            //               EnrollmentDate = dateGroup.Key,
+            //               StudentCount = dateGroup.Count()
+            //           };
 
-                    return RedirectToAction("Index");
-                }
-                catch (RetryLimitExceededException /* dex */)
-                {
-                    //Log the error (uncomment dex variable name and add a line here to write a log.
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                }
-            }
-            return View(studentToUpdate);
+            // SQL version of the above LINQ code.
+            string query = "SELECT EnrollmentDate, COUNT(*) AS StudentCount "
+                + "FROM Student "
+                + "GROUP BY EnrollmentDate";
+            IEnumerable<EnrollmentDateGroup> data = db.Database.SqlQuery<EnrollmentDateGroup>(query);
+
+            return data.ToList();
         }
 
-        // GET: Student/Delete/5
-        public ActionResult Delete(int? id, bool? saveChangesError = false)
-        {
-            if (id == null)
-            {
-                return new BadRequestResult();
-            }
-            if (saveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return new NotFoundResult();
-            }
-            return View(student);
-        }
-
-        // POST: Student/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
-        {
-            try
-            {
-                Student student = db.Students.Find(id);
-                db.Students.Remove(student);
-                db.SaveChanges();
-            }
-            catch (RetryLimitExceededException/* dex */)
-            {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
-                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
-            }
-            return RedirectToAction("Index");
-        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

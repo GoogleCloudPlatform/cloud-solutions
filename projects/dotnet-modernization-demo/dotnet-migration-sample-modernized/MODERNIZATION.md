@@ -1,133 +1,212 @@
-# Modernization Notes
+# .NET Application Modernization Report: ContosoUniversity
 
-This document details the modernization of the Contoso University application
-from .NET Framework to .NET 8, with a focus on containerization for Google Cloud
-Run and a database migration from SQL Server to PostgreSQL.
+## Modernization Notes
 
-## Application Layer
+### 1. Target Framework & Project System Modernization
 
-- **.NET 8 Migration**: The project was upgraded from .NET 5 to .NET 8.
-- **Configuration**: The application was already using `appsettings.json`, so no
-  changes were needed in that regard.
-- **Dependency Injection**: The application was already using the built-in
-  dependency injection container in ASP.NET Core. The `Startup.cs` file was
-  removed and its logic was merged into `Program.cs`.
-- **Entity Framework Core**: The data access layer was migrated from Entity
-  Framework 6 to Entity Framework Core. The `SchoolContext` was updated to use
-  `DbContext` from `Microsoft.EntityFrameworkCore` and the `DbInitializer` class
-  was created to handle database creation and seeding.
-- **PostgreSQL**: The database provider was switched from SQL Server to
-  PostgreSQL using the `Npgsql.EntityFrameworkCore.PostgreSQL` package.
-- **Cloud Run Container Contract**: The application was updated to listen on
-  `0.0.0.0` on the port defined by the `PORT` environment variable (defaulting
-  to 8080). Structured JSON logging to the console was also enabled.
-- **Graceful Shutdown**: A signal handler for `SIGTERM` was added to allow for
-  graceful shutdown.
+- **Port to .NET 8 (LTS):** Migrated `ContosoUniversity.csproj` from legacy
+  `net5.0` to `net8.0`.
+- **SDK & Package Cleanup:**
+    - Retained the modern `Microsoft.NET.Sdk.Web` SDK project format.
+    - Replaced legacy Entity Framework 6 (`EntityFramework 6.4.4`) with
+      `Microsoft.EntityFrameworkCore` (`8.0.11`).
+    - Added PostgreSQL provider `Npgsql.EntityFrameworkCore.PostgreSQL`
+      (`8.0.11`).
+    - Updated `Microsoft.AspNetCore.Mvc.NewtonsoftJson` to `8.0.11`.
+    - Retained `BuildBundlerMinifier` (`3.2.449`) to compile and minify CSS
+      bundles during `dotnet publish`.
+    - Removed deprecated analyzers and obsolete packages
+      (`System.ComponentModel.Annotations`,
+      `System.Configuration.ConfigurationManager`,
+      `Google.Cloud.Diagnostics.AspNetCore`, `Grpc.AspNetCore`).
+    - Added
+      `<EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>`
+      to ensure reproducible builds across varied container and git reftable
+      environments.
+
+### 2. Data Layer Migration (SQL Server to PostgreSQL)
+
+- **SchoolContext Refactoring:**
+    - Migrated `ContosoUniversity.DAL.SchoolContext` from
+      `System.Data.Entity.DbContext` to
+      `Microsoft.EntityFrameworkCore.DbContext`.
+    - Configured DI options via `DbContextOptions<SchoolContext>`.
+    - Mapped entity table name explicitly in `OnModelCreating`
+      (`modelBuilder.Entity<Student>().ToTable("Student")`).
+- **Database Initialization & Seeding:**
+    - Refactored `SchoolInitializer` into `DbInitializer` implementing
+      `context.Database.EnsureCreated()` and idempotent seed data population.
+    - Retained `SchoolInitializer` as an alias wrapper for backward
+      compatibility.
+    - At startup, the application creates the database and populates seed
+      students if the table is empty.
+- **PostgreSQL Case Sensitivity & Raw SQL:**
+    - PostgreSQL folds unquoted SQL identifiers to lowercase, whereas EF Core
+      creates quoted table and column identifiers.
+    - Refactored the raw SQL query in `StudentController.GetEnrollmentSummary`
+      from unquoted SQL to quoted identifiers:
+
+        ```sql
+        SELECT "EnrollmentDate", COUNT(*) AS "StudentCount"
+        FROM "Student" GROUP BY "EnrollmentDate"
+        ```
+
+    - Switched from EF6's `Database.SqlQuery<T>` to EF Core 8's
+      `Database.SqlQueryRaw<T>`.
+
+- **Timestamp Compatibility:**
+    - Enabled
+      `AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true)` in
+      `Program.cs` to allow seamless persistence of `DateTime` values (with
+      `Kind=Unspecified` produced by HTML form bindings) into PostgreSQL
+      timestamp columns.
+- **Exception Handling:**
+    - In `StudentController.Create`, replaced EF6 `RetryLimitExceededException`
+      with EF Core's `DbUpdateException` and injected
+      `ILogger<StudentController>` for structured error logging.
+    - Removed manual `Dispose` override in `StudentController` so the scoped
+      `SchoolContext` lifetime is managed by ASP.NET Core dependency injection.
+
+### 3. Google Cloud Run Container Contract Compliance
+
+- **Port Binding:**
+    - Dynamically binds to `http://0.0.0.0:${PORT:-8080}` as required by Cloud
+      Run.
+    - Configured both `ASPNETCORE_HTTP_PORTS` and `PORT` environment variables
+      in the container image.
+- **Structured JSON Logging:**
+    - Removed all legacy or file-based logging configurations.
+    - Configured `ILogger` with `logging.AddJsonConsole()` to output single-line
+      structured JSON logs to stdout/console for native Google Cloud Logging
+      ingestion.
+- **Graceful Shutdown & Signal Handling:**
+    - Relies on the .NET Generic Host (`Host.CreateDefaultBuilder`) native
+      `SIGTERM` handling and registered a structured logging lifecycle listener
+      on `IHostApplicationLifetime.ApplicationStopping` for clean shutdown.
+- **Concurrency & In-Memory State Warning:**
+    - Registered `IMemoryCache` in `Startup.cs` with architectural documentation
+      warning that in-memory cache is local to each container instance and does
+      not persist across Cloud Run horizontal auto-scaling or scale-to-zero
+      events. Cloud Memorystore (Redis) is recommended for distributed caching.
+
+### 4. Containerization & Dockerfile Best Practices
+
+- **Multi-Stage Build:**
+    - Build stage: `mcr.microsoft.com/dotnet/sdk:8.0`.
+    - Runtime stage: `mcr.microsoft.com/dotnet/aspnet:8.0`.
+- **Build Checks:** Verified against Docker Build Checks with
+  `docker build --check .` (0 errors, 0 warnings).
+- **Static Asset Serving:** Bundler generates `wwwroot/css/styles.css` during
+  publish, and `favicon.ico` is placed in `wwwroot`, serving all static assets
+  with `200 OK`.
+
+---
 
 ## Local Testing
 
-### Build the Docker image
+### Container Build
+
+Build the container image using Docker:
 
 ```bash
-docker build -t contoso-university .
+docker build -t contosouniversity:latest .
 ```
 
-### Run the application
+To run Docker build checks without building:
 
 ```bash
-docker run --rm -p 8080:8080 contoso-university
+docker build --check .
 ```
 
-### Run with Docker Compose
+### Direct Container Run
+
+Run the container directly (ensure an accessible PostgreSQL instance is
+running):
+
+```bash
+docker run --rm \
+  -p 8080:8080 \
+  -e PORT=8080 \
+  -e ConnectionStrings__SchoolContext="Host=host.docker.internal;Port=5432;Database=contosouniversity;Username=postgres;Password=postgres" \
+  contosouniversity:latest
+```
+
+_(Note: all `docker run` commands use the `--rm` flag to remove the container
+upon exit)._
+
+### Docker Compose
+
+Start the application and PostgreSQL database with build and detach options:
 
 ```bash
 docker compose up --build --detach
 ```
 
-### View logs
+Wait for the application to become ready:
 
 ```bash
-docker compose logs -f
+for i in $(seq 60); do curl -sf -o /dev/null http://localhost:8080/ && break; sleep 2; done; docker compose logs --tail 50
 ```
+
+### Viewing Logs
+
+View aggregate or service-specific logs:
+
+```bash
+# View combined logs
+docker compose logs
+
+# Tail last 50 lines of logs
+docker compose logs --tail 50
+
+# Follow live logs in real time
+docker compose logs -f
+
+# View application logs only
+docker compose logs web
+
+# View database logs only
+docker compose logs db
+```
+
+### Stopping and Cleaning Up
+
+```bash
+# Stop running containers
+docker compose stop
+
+# Remove stopped containers
+docker compose rm --force
+```
+
+---
 
 ## Endpoints
 
-| Method | Path                     | Description                  |
-| ------ | ------------------------ | ---------------------------- |
-| GET    | /                        | Home page                    |
-| GET    | /Home/About              | About page                   |
-| GET    | /Home/Contact            | Contact page                 |
-| GET    | /Student                 | List all students            |
-| GET    | /Student/Create          | Create a new student         |
-| POST   | /Student/Create          | Create a new student         |
-| GET    | /Student/Edit/{id}       | Edit a student               |
-| POST   | /Student/Edit/{id}       | Edit a student               |
-| GET    | /Student/Details/{id}    | View a student's details     |
-| GET    | /Student/Delete/{id}     | Delete a student             |
-| POST   | /Student/Delete/{id}     | Delete a student             |
-| GET    | /Course                  | List all courses             |
-| GET    | /Course/Create           | Create a new course          |
-| POST   | /Course/Create           | Create a new course          |
-| GET    | /Course/Edit/{id}        | Edit a course                |
-| POST   | /Course/Edit/{id}        | Edit a course                |
-| GET    | /Course/Details/{id}     | View a course's details      |
-| GET    | /Course/Delete/{id}      | Delete a course              |
-| POST   | /Course/Delete/{id}      | Delete a course              |
-| GET    | /Instructor              | List all instructors         |
-| GET    | /Instructor/Create       | Create a new instructor      |
-| POST   | /Instructor/Create       | Create a new instructor      |
-| GET    | /Instructor/Edit/{id}    | Edit an instructor           |
-| POST   | /Instructor/Edit/{id}    | Edit an instructor           |
-| GET    | /Instructor/Details/{id} | View an instructor's details |
-| GET    | /Instructor/Delete/{id}  | Delete an instructor         |
-| POST   | /Instructor/Delete/{id}  | Delete an instructor         |
-| GET    | /Department              | List all departments         |
-| GET    | /Department/Create       | Create a new department      |
-| POST   | /Department/Create       | Create a new department      |
-| GET    | /Department/Edit/{id}    | Edit a department            |
-| POST   | /Department/Edit/{id}    | Edit a department            |
-| GET    | /Department/Details/{id} | View a department's details  |
-| GET    | /Department/Delete/{id}  | Delete a department          |
-| POST   | /Department/Delete/{id}  | Delete a department          |
+The application exposes the following HTTP endpoints:
 
-## Tested Endpoints
+| Endpoint          | HTTP Method | Description                                                                                                                                               |
+| ----------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`               | GET         | Default application route (maps to `StudentController.Index`). Displays the student roster table, student creation form, and enrollment date summary.     |
+| `/Student`        | GET         | Student controller root view (maps to `StudentController.Index`).                                                                                         |
+| `/Student/Index`  | GET         | Explicit student index view.                                                                                                                              |
+| `/Student/Create` | POST        | Handles new student creation (`LastName`, `FirstMidName`, `EnrollmentDate`). Protected with ASP.NET Core Anti-Forgery Token. Redirects to `/` on success. |
+| `/css/styles.css` | GET         | Bundled and minified CSS stylesheet containing Bootstrap and application styles.                                                                          |
+| `/favicon.ico`    | GET         | Application favicon.                                                                                                                                      |
 
-The following HTTP endpoints were tested using `curl` and all returned a `200`
-status code for GET requests. CRUD operations were also verified via browser
-testing.
+---
 
-| Endpoint                | Method | Test Command                                                                        | Output |
-| :---------------------- | :----- | :---------------------------------------------------------------------------------- | :----- |
-| `/`                     | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080`                      | `200`  |
-| `/Home/About`           | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Home/About`           | `200`  |
-| `/Home/Contact`         | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Home/Contact`         | `200`  |
-| `/Student`              | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Student`              | `200`  |
-| `/Student/Create`       | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Student/Create`       | `200`  |
-| `/Student/Edit/1`       | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Student/Edit/1`       | `200`  |
-| `/Student/Details/1`    | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Student/Details/1`    | `200`  |
-| `/Student/Delete/1`     | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Student/Delete/1`     | `200`  |
-| `/Course`               | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Course`               | `200`  |
-| `/Course/Create`        | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Course/Create`        | `200`  |
-| `/Course/Edit/1050`     | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Course/Edit/1050`     | `200`  |
-| `/Course/Details/1050`  | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Course/Details/1050`  | `200`  |
-| `/Course/Delete/1050`   | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Course/Delete/1050`   | `200`  |
-| `/Instructor`           | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Instructor`           | `200`  |
-| `/Instructor/Create`    | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Instructor/Create`    | `200`  |
-| `/Instructor/Edit/9`    | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Instructor/Edit/9`    | `200`  |
-| `/Instructor/Details/9` | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Instructor/Details/9` | `200`  |
-| `/Instructor/Delete/9`  | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Instructor/Delete/9`  | `200`  |
-| `/Department`           | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Department`           | `200`  |
-| `/Department/Create`    | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Department/Create`    | `200`  |
-| `/Department/Edit/1`    | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Department/Edit/1`    | `200`  |
-| `/Department/Details/1` | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Department/Details/1` | `200`  |
-| `/Department/Delete/1`  | GET    | `curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/Department/Delete/1`  | `200`  |
+## Tested Endpoints Report
 
-All endpoints were tested and returned a `200` status code. All `POST` endpoints
-were tested and returned a `302` status code.
+I tested all supported HTTP endpoints and main user flows against the running
+Docker Compose environment using `curl`.
 
-## Browser Testing
-
-The application was tested in a web browser and all pages were rendered
-correctly. All CRUD operations for all entities were tested and worked as
-expected. Pagination and sorting were also tested and worked as expected. No
-issues were found during browser testing.
+| Endpoint                                      | HTTP Method | Command Used to Test                                                                                                                                                                                                                                                                               | Command Output / Verification Result                                                                                                                                                           |
+| --------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                                           | GET         | `curl -s -i http://localhost:8080/`                                                                                                                                                                                                                                                                | `HTTP/1.1 200 OK`; `Content-Type: text/html; charset=utf-8`; HTML rendered containing student table, creation form, and enrollment date summary.                                               |
+| `/Student`                                    | GET         | `curl -s -i http://localhost:8080/Student`                                                                                                                                                                                                                                                         | `HTTP/1.1 200 OK`; `Content-Type: text/html; charset=utf-8`; HTML rendered with anti-forgery token and initial seed data (8 students).                                                         |
+| `/Student/Index`                              | GET         | `curl -s -i http://localhost:8080/Student/Index`                                                                                                                                                                                                                                                   | `HTTP/1.1 200 OK`; `Content-Type: text/html; charset=utf-8`; Full student index view matching default route.                                                                                   |
+| `/css/styles.css`                             | GET         | `curl -s -i http://localhost:8080/css/styles.css`                                                                                                                                                                                                                                                  | `HTTP/1.1 200 OK`; `Content-Type: text/css`; `Content-Length: 122329`; CSS stylesheet successfully served.                                                                                     |
+| `/favicon.ico`                                | GET         | `curl -s -i http://localhost:8080/favicon.ico`                                                                                                                                                                                                                                                     | `HTTP/1.1 200 OK`; `Content-Type: image/x-icon`; `Content-Length: 32038`; Favicon successfully served.                                                                                         |
+| `/Student/Create`                             | POST        | `curl -s -i -c cookies.txt -b cookies.txt --data-urlencode "__RequestVerificationToken=$TOKEN" --data-urlencode "NewStudent.LastName=Curie" --data-urlencode "NewStudent.FirstMidName=Marie" --data-urlencode "NewStudent.EnrollmentDate=2024-09-01" -X POST http://localhost:8080/Student/Create` | `HTTP/1.1 302 Found`; `Location: /`; Form submission processed successfully with anti-forgery validation and redirected to `/`.                                                                |
+| `/Student/Index` (Post-Creation Verification) | GET         | `curl -s -b cookies.txt http://localhost:8080/Student/Index`                                                                                                                                                                                                                                       | `HTTP/1.1 200 OK`; Verified that new student **"Curie, Marie"** (Enrollment Date: `2024-09-01`) is persisted in PostgreSQL and rendered in both the student table and enrollment date summary. |

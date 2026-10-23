@@ -109,15 +109,13 @@ the `export` commands again.
     "${CODMOD}" --version
     ```
 
-1.  Clone the sample applications and the modernization skill, and set the demo
-    directory. The sparse checkout downloads only the
-    `applications/dotnet-modernize-demo` directory:
+1.  Clone the repository:
 
     ```bash
     git clone --depth 1 --filter=blob:none --sparse \
-      https://github.com/GoogleCloudPlatform/dotnet-docs-samples
-    git -C dotnet-docs-samples sparse-checkout set applications/dotnet-modernize-demo
-    export DEMO_DIR="${PWD}/dotnet-docs-samples/applications/dotnet-modernize-demo"
+      https://github.com/GoogleCloudPlatform/cloud-solutions
+    git -C cloud-solutions sparse-checkout set projects/dotnet-modernization-demo
+    export DEMO_DIR="${PWD}/cloud-solutions/projects/dotnet-modernization-demo"
     ls -A "${DEMO_DIR}"
     ```
 
@@ -173,7 +171,7 @@ following:
     defaults.
 
 1.  At the Antigravity CLI prompt, run the
-    [`modernize-dotnet-cloudrun` skill](https://github.com/GoogleCloudPlatform/dotnet-docs-samples/blob/main/applications/dotnet-modernize-demo/.agents/skills/modernize-dotnet-cloudrun/SKILL.md),
+    [`modernize-dotnet-cloudrun` skill](https://github.com/GoogleCloudPlatform/cloud-solutions/blob/main/projects/dotnet-modernization-demo/.agents/skills/modernize-dotnet-cloudrun/SKILL.md),
     which the Antigravity CLI discovers in the parent directory:
 
     ```text
@@ -193,7 +191,7 @@ following:
 The `dotnet-migration-sample-modernized` directory contains an example of the
 modernized .NET application resulting from running the Antigravity CLI with the
 modernization skill. For a summary of the changes, see the
-[modernization report](https://github.com/GoogleCloudPlatform/dotnet-docs-samples/blob/main/applications/dotnet-modernize-demo/dotnet-migration-sample-modernized/MODERNIZATION.md).
+[modernization report](dotnet-migration-sample-modernized/MODERNIZATION.md).
 
 To run the example modernized application locally, you do the following:
 
