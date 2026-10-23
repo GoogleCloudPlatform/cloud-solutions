@@ -9,7 +9,7 @@ dependencies = [
     "google-cloud-texttospeech==2.37.0",
     "google-cloud-storage==3.13.0",
     "streamlit==1.60.0",
-    "Pillow==12.3.0",
+    "Pillow==13.0.0",
     "python-dotenv==1.2.2",
 ]
 

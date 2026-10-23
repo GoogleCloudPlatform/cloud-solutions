@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = "==3.13.*"
 resolution-markers = [
     "sys_platform == 'win32'",
@@ -1229,7 +1229,7 @@ requires-dist = [
     { name = "httpx", specifier = "==0.28.1" },
     { name = "lxml", specifier = "==6.1.1" },
     { name = "pandas", specifier = "==3.0.5" },
-    { name = "pillow", specifier = "==12.3.0" },
+    { name = "pillow", specifier = "==13.0.0" },
     { name = "pydantic", specifier = "==2.13.4" },
     { name = "pydantic-settings", specifier = "==2.14.2" },
     { name = "python-dotenv", specifier = "==1.2.2" },
