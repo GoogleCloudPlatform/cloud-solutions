@@ -366,6 +366,12 @@
       "additionalBranchPrefix": "migrate-nutanix-to-google-cloud-"
     },
     {
+      "matchFileNames": ["projects/migrate-persistent-disks-to-hyperdisks/**"],
+      "groupName": "migrate-persistent-disks-to-hyperdisks",
+      "commitMessagePrefix": "chore(deps): [migrate-persistent-disks-to-hyperdisks]",
+      "additionalBranchPrefix": "migrate-persistent-disks-to-hyperdisks-"
+    },
+    {
       "matchFileNames": ["projects/mmb-datacloud/**"],
       "groupName": "mmb-datacloud",
       "commitMessagePrefix": "chore(deps): [mmb-datacloud]",
