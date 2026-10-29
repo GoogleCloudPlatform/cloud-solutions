@@ -366,12 +366,6 @@
       "additionalBranchPrefix": "migrate-nutanix-to-google-cloud-"
     },
     {
-      "matchFileNames": ["projects/migrate-vmware-to-gce/**"],
-      "groupName": "migrate-vmware-to-gce",
-      "commitMessagePrefix": "chore(deps): [migrate-vmware-to-gce]",
-      "additionalBranchPrefix": "migrate-vmware-to-gce-"
-    },
-    {
       "matchFileNames": ["projects/mmb-datacloud/**"],
       "groupName": "mmb-datacloud",
       "commitMessagePrefix": "chore(deps): [mmb-datacloud]",
