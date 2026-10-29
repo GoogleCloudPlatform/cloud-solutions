@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Engineer Investigation Console | Dual-Graph System of Action</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    };
+    document.documentElement.classList.remove('dark');
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.29.2/cytoscape.min.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-150">
+  <header class="border-b border-slate-200 bg-white/95 dark:border-slate-800 dark:bg-slate-900/90 sticky top-0 z-20 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="px-2.5 py-1 rounded bg-emerald-600 text-white text-xs font-bold tracking-wider uppercase">UI 2</span>
+        <div>
+          <h1 id="console-header-title" class="text-lg font-semibold text-slate-900 dark:text-white">Data Engineer Investigation Console</h1>
+          <p id="console-header-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Dual-Graph Visualizer (Cytoscape.js), ISO GQL Workbench &amp; Spanner Data Boost</p>
+        </div>
+      </div>
+      <nav class="flex flex-wrap items-center gap-2.5">
+        <a id="nav-shop-link" href="/shop" class="px-3 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 text-sm font-medium">
+          UI 1: Shopping Mall (/shop)
+        </a>
+        <a id="nav-console-link" href="/console" class="px-3 py-1.5 rounded-md bg-emerald-600 text-white text-sm font-medium">
+          UI 2: Data Engineer Console (/console)
+        </a>
+        <button id="lang-toggle-btn" type="button" title="Switch language and reset demo dataset" class="px-3 py-1.5 rounded-md bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 dark:bg-indigo-950/70 dark:hover:bg-indigo-900/70 dark:text-indigo-200 dark:border-indigo-700 text-sm font-semibold">
+          &#127760; &#54620;&#44397;&#50612; (KO)
+        </button>
+        <button id="reset-demo-btn" type="button" class="px-3 py-1.5 rounded-md bg-amber-600 hover:bg-amber-500 text-white text-sm font-medium">
+          Reset Demo Data
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="reset-progress-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 dark:bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="reset-progress-title">
+    <div class="w-full max-w-xl rounded-xl bg-white border border-slate-200 shadow-2xl dark:bg-slate-900 dark:border-slate-700 p-6 space-y-4">
+      <div id="reset-confirm-panel" class="space-y-4">
+        <div>
+          <span id="reset-confirm-badge" class="inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-700 text-[11px] font-bold uppercase tracking-wider mb-1">
+            Confirm Demo Reset
+          </span>
+          <h2 id="reset-confirm-heading" class="text-base font-semibold text-slate-900 dark:text-white">
+            Are you sure you want to reset all demo data?
+          </h2>
+          <p id="reset-confirm-desc" class="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+            This will restore Cloud Spanner demo orders (<code class="font-mono font-semibold">ORD-90124</code>, <code class="font-mono font-semibold">ORD-90125</code>, <code class="font-mono font-semibold">ORD-90126</code>, <code class="font-mono font-semibold">ORD-90588</code>, <code class="font-mono font-semibold">ORD-90910</code>), refresh all relative 30-day delivery and 100-day return timestamps to current UTC time, and clear all BigQuery <code class="font-mono font-semibold">soa_action_lineage</code> audit traces.
+          </p>
+        </div>
+        <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-200 dark:border-slate-800">
+          <button id="reset-cancel-btn" type="button" class="px-3.5 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 text-xs font-medium">
+            Cancel
+          </button>
+          <button id="reset-confirm-btn" type="button" class="px-3.5 py-1.5 rounded-md bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold">
+            Yes, Reset Demo Data
+          </button>
+        </div>
+      </div>
+
+      <div id="reset-running-panel" class="hidden space-y-4">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <span id="reset-running-badge" class="inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-700 text-[11px] font-bold uppercase tracking-wider mb-1">
+              Dual-Graph Demo Reset
+            </span>
+            <h2 id="reset-progress-title" class="text-base font-semibold text-slate-900 dark:text-white">
+              Resetting Cloud Spanner &amp; BigQuery Demo State...
+            </h2>
+          </div>
+          <span id="reset-progress-pct" class="font-mono text-sm font-bold text-amber-600 dark:text-amber-400">0%</span>
+        </div>
+
+        <div class="w-full h-3 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+          <div id="reset-progress-bar" class="h-full bg-amber-500 dark:bg-amber-400 transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+
+        <p id="reset-progress-status" class="text-xs font-medium text-slate-700 dark:text-slate-300">
+          Preparing Dual-Graph System of Action reset sequence...
+        </p>
+
+        <div id="reset-progress-steps" class="space-y-2 pt-1 border-t border-slate-200 dark:border-slate-800 text-xs"></div>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto w-full px-4 py-6 space-y-6 flex-1">
+    <div id="empty-traces-banner" class="hidden bg-blue-50 border border-blue-200 dark:bg-blue-950/50 dark:border-blue-700 rounded-xl p-4 flex items-center justify-between gap-4">
+      <div>
+        <h2 id="empty-traces-title" class="text-sm font-semibold text-blue-900 dark:text-blue-200">No Refund Workflow Traces Recorded Yet</h2>
+        <p id="empty-traces-desc" class="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+          Submit a refund request in UI 1 (/shop) as Customer A (1001), Customer B (2048), or Customer C (3072) to populate
+          <code class="text-blue-700 dark:text-blue-300 font-semibold">soa_action_lineage.ActionLineageGraph</code>. You can already explore the Cloud Spanner Context Graph and Knowledge Catalog Inspector below.
+        </p>
+      </div>
+      <a id="empty-traces-cta" href="/shop" class="px-3 py-1.5 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium shrink-0">
+        Open UI 1 (/shop) &rarr;
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <section class="lg:col-span-4 bg-white border border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800 rounded-xl p-4 flex flex-col max-h-[640px]">
+        <div class="flex items-center justify-between mb-3">
+          <h2 id="feed-section-title" class="text-sm font-semibold text-slate-900 dark:text-white">Live Refund Request Feed</h2>
+          <span id="bq-mode-badge" class="text-[11px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-slate-800 dark:text-emerald-300 dark:border-slate-700 font-mono"></span>
+        </div>
+        <div id="traces-list" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
+      </section>
+
+      <section class="lg:col-span-8 bg-white border border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800 rounded-xl p-4 flex flex-col">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div>
+            <h2 id="graph-section-title" class="text-sm font-semibold text-slate-900 dark:text-white">Interactive Dual-Graph Visualizer (Cytoscape.js)</h2>
+            <p id="graph-section-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Click any node or edge to inspect its Cloud Spanner or BigQuery properties</p>
+          </div>
+          <div class="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300">
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> <span id="legend-r2g">Spanner R2G</span></span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> <span id="legend-u2g">Spanner U2G Policy</span></span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> <span id="legend-bq">BigQuery Lineage</span></span>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4 flex-1">
+          <div id="cy-canvas" class="w-full h-[360px] bg-slate-50 border border-slate-200 dark:bg-slate-950 dark:border-slate-800 rounded-lg"></div>
+          <div class="w-full bg-slate-50 border border-slate-200 dark:bg-slate-950 dark:border-slate-800 rounded-lg p-3 flex flex-col">
+            <h3 id="node-inspector-title" class="text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-2">Node Property Inspector</h3>
+            <pre id="node-inspector" class="flex-1 overflow-x-auto max-h-56 text-xs font-mono leading-relaxed text-slate-700 dark:text-slate-300 whitespace-pre">Click a graph node or edge to view its attributes.</pre>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="bg-white border border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800 rounded-xl p-5 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 id="workbench-title" class="text-base font-semibold text-slate-900 dark:text-white">Built-In 3-Tab ISO GQL &amp; Federated Query Workbench</h2>
+          <p id="workbench-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Read-only guarded execution against Cloud Spanner and BigQuery</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="tab-btn-spanner" type="button" data-tab="spanner" class="workbench-tab px-3 py-1.5 rounded-md bg-blue-600 text-white text-xs font-medium">
+            1. Cloud Spanner Context Graph (GQL)
+          </button>
+          <button id="tab-btn-bigquery" type="button" data-tab="bigquery" class="workbench-tab px-3 py-1.5 rounded-md bg-slate-100 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 text-xs font-medium">
+            2. BigQuery Action Lineage Graph
+          </button>
+          <button id="tab-btn-federated" type="button" data-tab="federated" class="workbench-tab px-3 py-1.5 rounded-md bg-slate-100 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 text-xs font-medium">
+            3. Federated Spanner Data Boost
+          </button>
+        </div>
+      </div>
+
+      <div id="preset-buttons-bar" class="flex flex-wrap items-center gap-2"></div>
+
+      <div class="relative rounded-lg bg-slate-50 border border-slate-300 dark:bg-slate-950 dark:border-slate-800 focus-within:border-blue-500 overflow-hidden">
+        <pre
+          id="query-highlight-view"
+          aria-hidden="true"
+          class="m-0 p-3 font-mono text-xs leading-5 whitespace-pre overflow-auto pointer-events-none text-slate-900 dark:text-slate-100 h-60"
+        ></pre>
+        <textarea
+          id="query-editor"
+          rows="11"
+          wrap="off"
+          spellcheck="false"
+          class="absolute inset-0 w-full h-full m-0 p-3 bg-transparent text-transparent caret-slate-900 dark:caret-white font-mono text-xs leading-5 whitespace-pre overflow-auto resize-none focus:outline-none selection:bg-blue-500/20"
+        ></textarea>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <button id="run-query-btn" type="button" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold">
+          Run Query
+        </button>
+        <span id="query-status" class="text-xs font-mono text-slate-600 dark:text-slate-400"></span>
+      </div>
+
+      <div id="query-results-wrapper" class="overflow-x-auto bg-slate-50 border border-slate-200 dark:bg-slate-950 dark:border-slate-800 rounded-lg p-3 max-h-72">
+        <p id="query-results-placeholder" class="text-xs text-slate-500 dark:text-slate-400">Run a query above to inspect tabular results.</p>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800 rounded-xl p-5">
+        <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+          <div>
+            <h2 id="catalog-card-title" class="text-sm font-semibold text-slate-900 dark:text-white">Knowledge Catalog Semantic Contract</h2>
+            <p id="catalog-card-desc" class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+              Governed glossary terms (<code class="font-mono text-indigo-700 dark:text-indigo-300">soa-business-glossary</code>) &amp; Metadata Type (<code class="font-mono text-indigo-700 dark:text-indigo-300">refund-metric-contract</code>) resolved in Step 2, bound into Step 3 Cloud Spanner GQL, and attributed in Step 4 BigQuery Lineage
+            </p>
+          </div>
+          <button
+            id="preview-catalog-contract-btn"
+            type="button"
+            class="px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 dark:text-indigo-200 dark:border-indigo-800 text-xs font-medium inline-flex items-center gap-1.5 transition shrink-0"
+          >
+            <span>&#128218;</span>
+            <span id="preview-catalog-contract-label">Preview Glossary &amp; Contract</span>
+          </button>
+        </div>
+        <pre id="catalog-contract-view" class="bg-slate-50 border border-slate-200 text-slate-800 dark:bg-slate-950 dark:border-slate-800 dark:text-slate-200 rounded-lg p-3 text-xs font-mono leading-relaxed overflow-x-auto max-h-60"></pre>
+      </div>
+      <div class="bg-white border border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800 rounded-xl p-5">
+        <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+          <div>
+            <h2 id="policy-card-title" class="text-sm font-semibold text-slate-900 dark:text-white">Policy Document (U2G) &amp; Extracted Triples</h2>
+            <p id="policy-card-desc" class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+              Unstructured-to-Graph (U2G) policy triples extracted from <code class="font-mono text-purple-700 dark:text-purple-300">data/policies/return_policy_v1.md</code> into Cloud Spanner <code class="font-mono">OperationalContextGraph</code>
+            </p>
+          </div>
+          <button
+            id="preview-policy-doc-btn"
+            type="button"
+            class="px-2.5 py-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 dark:bg-purple-950/60 dark:hover:bg-purple-900/60 dark:text-purple-200 dark:border-purple-800 text-xs font-medium inline-flex items-center gap-1.5 transition shrink-0"
+          >
+            <span>&#128196;</span>
+            <span id="preview-policy-doc-label">Preview return_policy_v1.md</span>
+          </button>
+        </div>
+        <pre id="u2g-triples-view" class="bg-slate-50 border border-slate-200 text-slate-800 dark:bg-slate-950 dark:border-slate-800 dark:text-slate-200 rounded-lg p-3 text-xs font-mono leading-relaxed overflow-x-auto max-h-60"></pre>
+      </div>
+    </section>
+  </main>
+
+  <div
+    id="catalog-contract-modal"
+    class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+  >
+    <div class="w-full max-w-4xl max-h-[85vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 bg-slate-50/70 dark:bg-slate-950/60">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 border border-indigo-200 dark:bg-indigo-900/60 dark:text-indigo-200 dark:border-indigo-800 flex items-center justify-center font-mono text-xs font-bold shrink-0">
+            KC
+          </span>
+          <div>
+            <h3 id="catalog-modal-title" class="text-sm font-bold text-slate-900 dark:text-white">
+              Knowledge Catalog Semantic Contract (<code class="font-mono text-xs text-indigo-700 dark:text-indigo-300">soa-business-glossary</code> &amp; <code class="font-mono text-xs text-indigo-700 dark:text-indigo-300">refund-metric-contract</code>)
+            </h3>
+            <p id="catalog-modal-subtitle" class="text-[11px] text-slate-500 dark:text-slate-400">
+              How governed business terms and metadata contracts ground the ADK 2.0 workflow across Cloud Spanner and BigQuery
+            </p>
+          </div>
+        </div>
+        <button
+          id="close-catalog-contract-modal-btn"
+          type="button"
+          class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 text-xs font-medium transition"
+        >
+          &#10005; Close
+        </button>
+      </div>
+
+      <div class="px-5 py-3 bg-indigo-50/70 dark:bg-indigo-950/30 border-b border-indigo-200/80 dark:border-indigo-800/60 flex flex-wrap items-center justify-between gap-3">
+        <div id="catalog-modal-flow-banner" class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+          <span class="font-semibold text-indigo-900 dark:text-indigo-200">Semantic Governance Flow:</span>
+          <code class="font-mono text-[11px] text-indigo-800 dark:text-indigo-300">Knowledge Catalog</code>
+          &rarr; resolved in
+          <code class="font-mono text-[11px] text-indigo-800 dark:text-indigo-300">Step 2 (resolve_catalog_contract)</code>
+          &rarr; bound as parameters in
+          <code class="font-mono text-[11px] text-teal-700 dark:text-teal-300">Step 3 (OperationalContextGraph GQL)</code>
+          &rarr; attributed in
+          <code class="font-mono text-[11px] text-emerald-700 dark:text-emerald-300">Step 4 (BigQuery ActionLineageGraph)</code>.
+        </div>
+        <div class="inline-flex rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-0.5 shrink-0">
+          <button
+            id="catalog-tab-overview"
+            type="button"
+            class="px-2.5 py-1 rounded-md bg-indigo-600 text-white text-xs font-medium transition"
+          >
+            Overview &amp; Governed Terms
+          </button>
+          <button
+            id="catalog-tab-raw"
+            type="button"
+            class="px-2.5 py-1 rounded-md text-slate-700 dark:text-slate-300 text-xs font-medium transition"
+          >
+            Raw Glossary JSON
+          </button>
+        </div>
+      </div>
+
+      <div class="p-5 overflow-y-auto flex-1">
+        <div id="catalog-contract-overview-view" class="space-y-4 text-xs text-slate-800 dark:text-slate-200 leading-relaxed"></div>
+        <pre
+          id="catalog-contract-raw-view"
+          class="hidden bg-slate-50 border border-slate-200 text-slate-800 dark:bg-slate-950 dark:border-slate-800 dark:text-slate-200 rounded-lg p-4 text-xs font-mono leading-relaxed whitespace-pre overflow-x-auto"
+        ></pre>
+      </div>
+
+      <div class="px-5 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 flex items-center justify-between gap-2 text-[11px] text-slate-500 dark:text-slate-400">
+        <span>Glossary ID: <code class="font-mono">soa-business-glossary</code> &bull; Metadata Type: <code class="font-mono">refund-metric-contract</code> &bull; Bundle: <code class="font-mono">data/policies/business_glossary.json</code></span>
+        <button
+          id="close-catalog-contract-footer-btn"
+          type="button"
+          class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="policy-doc-modal"
+    class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+  >
+    <div class="w-full max-w-3xl max-h-[85vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 bg-slate-50/70 dark:bg-slate-950/60">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-900/60 dark:text-purple-200 dark:border-purple-800 flex items-center justify-center font-mono text-xs font-bold shrink-0">
+            U2G
+          </span>
+          <div>
+            <h3 id="policy-modal-title" class="text-sm font-bold text-slate-900 dark:text-white">
+              Source Policy Document Preview (<code class="font-mono text-xs text-purple-700 dark:text-purple-300">data/policies/return_policy_v1.md</code>)
+            </h3>
+            <p id="policy-modal-subtitle" class="text-[11px] text-slate-500 dark:text-slate-400">
+              How unstructured corporate policy prose is converted into structured Cloud Spanner Graph policy nodes
+            </p>
+          </div>
+        </div>
+        <button
+          id="close-policy-doc-modal-btn"
+          type="button"
+          class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 text-xs font-medium transition"
+        >
+          &#10005; Close
+        </button>
+      </div>
+
+      <div class="px-5 py-3 bg-purple-50/70 dark:bg-purple-950/30 border-b border-purple-200/80 dark:border-purple-800/60 flex flex-wrap items-center justify-between gap-3">
+        <div id="policy-modal-flow-banner" class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+          <span class="font-semibold text-purple-900 dark:text-purple-200">Unstructured-to-Graph (U2G) Conversion Pipeline:</span>
+          <code class="font-mono text-[11px] text-purple-800 dark:text-purple-300">return_policy_v1.md</code>
+          &rarr; extracted into
+          <code class="font-mono text-[11px] text-purple-800 dark:text-purple-300">u2g_policy_triples.json</code>
+          &rarr; seeded as
+          <code class="font-mono text-[11px] text-purple-800 dark:text-purple-300">policies</code>,
+          <code class="font-mono text-[11px] text-purple-800 dark:text-purple-300">policy_conditions</code>, and
+          <code class="font-mono text-[11px] text-purple-800 dark:text-purple-300">policy_restrictions</code>
+          in Cloud Spanner <code class="font-mono text-[11px] text-teal-700 dark:text-teal-300">OperationalContextGraph</code>.
+        </div>
+        <div class="inline-flex rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-0.5 shrink-0">
+          <button
+            id="policy-tab-rendered"
+            type="button"
+            class="px-2.5 py-1 rounded-md bg-purple-600 text-white text-xs font-medium transition"
+          >
+            Rendered Policy
+          </button>
+          <button
+            id="policy-tab-raw"
+            type="button"
+            class="px-2.5 py-1 rounded-md text-slate-700 dark:text-slate-300 text-xs font-medium transition"
+          >
+            Raw Markdown (.md)
+          </button>
+        </div>
+      </div>
+
+      <div class="p-5 overflow-y-auto flex-1">
+        <div id="policy-doc-rendered-view" class="space-y-3 text-xs text-slate-800 dark:text-slate-200 leading-relaxed"></div>
+        <pre
+          id="policy-doc-raw-view"
+          class="hidden bg-slate-50 border border-slate-200 text-slate-800 dark:bg-slate-950 dark:border-slate-800 dark:text-slate-200 rounded-lg p-4 text-xs font-mono leading-relaxed whitespace-pre-wrap overflow-x-auto"
+        ></pre>
+      </div>
+
+      <div class="px-5 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 flex items-center justify-between gap-2 text-[11px] text-slate-500 dark:text-slate-400">
+        <span>Policy URI: <code class="font-mono">data/policies/return_policy_v1.md</code> &bull; Policy ID: <code class="font-mono">POL-REFUND-STD-V1</code></span>
+        <button
+          id="close-policy-doc-footer-btn"
+          type="button"
+          class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/static/console.js?v=20261027a"></script>
+</body>
+</html>

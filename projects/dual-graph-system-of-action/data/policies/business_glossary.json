@@ -1,0 +1,55 @@
+{
+  "catalog_term_id": "rolling-100d-refund-count",
+  "secondary_term_id": "order-age-days",
+  "tier_term_id": "customer-loyalty-tier",
+  "returned_status": "Returned",
+  "eligible_order_status": "Complete",
+  "rolling_window_days": 100,
+  "standard_tier": "STANDARD",
+  "vip_tier": "VIP",
+  "terms": [
+    {
+      "term_id": "rolling-100d-refund-count",
+      "display_name": "Rolling 100-Day Refund Count",
+      "category": "Order Fulfillment Governance",
+      "description": "Count of distinct returned order items (order_items.status = 'Returned') for a customer over the trailing 100 days, excluding the target order.",
+      "sql_mapping": {
+        "table": "thelook_ecommerce.order_items",
+        "expression": "COUNT(DISTINCT hist_oi.id) WHERE hist_oi.status = 'Returned' AND COALESCE(hist_oi.returned_at, hist_o.returned_at, hist_o.created_at) >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 100 DAY)"
+      }
+    },
+    {
+      "term_id": "order-age-days",
+      "display_name": "Order Age in Days",
+      "category": "Order Fulfillment Governance",
+      "description": "Elapsed days since order delivery for orders with status 'Complete'.",
+      "sql_mapping": {
+        "table": "thelook_ecommerce.orders",
+        "expression": "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), target_o.delivered_at, DAY) WHERE target_o.status = 'Complete'"
+      }
+    },
+    {
+      "term_id": "customer-loyalty-tier",
+      "display_name": "Customer Loyalty Tier",
+      "category": "Customer Loyalty Governance",
+      "description": "Governed customer loyalty classification ('STANDARD' with 10-item 100-day refund cap vs. 'VIP' with 20-item 100-day refund cap).",
+      "sql_mapping": {
+        "table": "thelook_ecommerce.users",
+        "expression": "u.customer_tier IN ('STANDARD', 'VIP') AND cond.applicable_tier = u.customer_tier"
+      }
+    }
+  ],
+  "query_templates": {
+    "spanner_eligibility_gql": "GRAPH OperationalContextGraph\nMATCH (u:users {id: @user_id})\n        -[:places]->(target_o:orders {order_id: @target_order_id})\n        -[target_oi:contains_item]->(ii:inventory_items)-[:is_product]->(p:products)\n        -[:supplied_by]->(dc:distribution_centers),\n      (p)-[:governed_by]->(pol:policies {status: 'ACTIVE'})\n        -[:requires_condition]->(cond:policy_conditions),\n      (pol)-[:enforces_restriction]->(res:policy_restrictions)\nWHERE u.customer_tier IN (@standard_tier, @vip_tier)\n  AND cond.applicable_tier = u.customer_tier\nRETURN\n  u.id AS user_id,\n  u.email AS email,\n  u.customer_tier AS customer_tier,\n  target_o.order_id AS target_order_id,\n  target_o.status AS target_order_status,\n  TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), target_o.delivered_at, DAY) AS target_order_age_days,\n  ROUND(SUM(target_oi.sale_price), 2) AS target_order_price,\n  STRING_AGG(DISTINCT p.name, ', ') AS product_names,\n  STRING_AGG(DISTINCT dc.name, ', ') AS distribution_center_names,\n  pol.policy_id AS policy_id,\n  pol.name AS policy_name,\n  cond.condition_id AS condition_id,\n  cond.max_refunds_100d AS max_refunds_100d,\n  cond.return_window_days AS return_window_days,\n  res.action_code AS restriction_action\nGROUP BY\n  user_id, email, customer_tier, target_order_id, target_order_status,\n  target_order_age_days, policy_id, policy_name, condition_id,\n  max_refunds_100d, return_window_days, restriction_action\nNEXT\nOPTIONAL MATCH (u2:users)-[:places]->(hist_o:orders)-[hist_oi:contains_item]->(:inventory_items)\nWHERE u2.id = user_id\n  AND hist_o.order_id != target_order_id\n  AND hist_oi.status = @returned_status\n  AND COALESCE(hist_oi.returned_at, hist_o.returned_at, hist_o.created_at)\n      >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL @rolling_window_days DAY)\nRETURN\n  user_id,\n  email,\n  customer_tier,\n  target_order_id,\n  target_order_status,\n  product_names,\n  distribution_center_names,\n  target_order_price,\n  target_order_age_days,\n  COUNT(DISTINCT hist_oi.id) AS prior_refund_count_100d,\n  policy_id,\n  policy_name,\n  condition_id,\n  max_refunds_100d,\n  return_window_days,\n  restriction_action\nGROUP BY\n  user_id, email, customer_tier, target_order_id, target_order_status,\n  product_names, distribution_center_names, target_order_price,\n  target_order_age_days, policy_id, policy_name, condition_id,\n  max_refunds_100d, return_window_days, restriction_action",
+    "spanner_products_sql": "SELECT p.id, p.name, p.brand, p.category, p.department, p.retail_price, dc.name AS distribution_center_name, p.policy_id FROM products AS p JOIN distribution_centers AS dc ON p.distribution_center_id = dc.id ORDER BY p.id",
+    "spanner_customers_sql": "SELECT u.id AS user_id, u.first_name, u.last_name, u.email, u.customer_tier, COUNT(DISTINCT oi.id) AS prior_refund_count_100d, cond.max_refunds_100d FROM users AS u JOIN policy_conditions AS cond ON cond.applicable_tier = u.customer_tier AND cond.policy_id = 'POL-REFUND-STD-V1' LEFT JOIN orders AS o ON o.user_id = u.id LEFT JOIN order_items AS oi ON oi.order_id = o.order_id AND oi.status = 'Returned' AND COALESCE(oi.returned_at, o.returned_at, o.created_at) >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 100 DAY) WHERE u.id IN (1001, 2048, 3072) GROUP BY u.id, u.first_name, u.last_name, u.email, u.customer_tier, cond.max_refunds_100d ORDER BY u.id",
+    "spanner_customer_orders_sql": "SELECT o.order_id, o.status, o.created_at, o.delivered_at, o.returned_at, oi.id AS item_id, p.name AS product_name, oi.sale_price, oi.status AS item_status, oi.refund_trace_id FROM orders AS o JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.id WHERE o.user_id = @user_id ORDER BY o.order_id DESC",
+    "spanner_update_order_sql": "UPDATE orders SET status = @returned_status, returned_at = CURRENT_TIMESTAMP() WHERE order_id = @order_id AND user_id = @user_id",
+    "spanner_update_order_items_sql": "UPDATE order_items SET status = @returned_status, returned_at = CURRENT_TIMESTAMP(), refund_trace_id = @trace_id WHERE order_id = @order_id",
+    "bq_recent_traces_sql": "SELECT s.trace_id, s.customer_id, s.target_order_id, act.decision_status, pe.evaluation_result, pe.observed_refunds_100d, pe.max_refunds_100d, n.latency_ms, s.started_at FROM `{dataset}.agent_sessions` AS s JOIN `{dataset}.workflow_nodes` AS n ON s.trace_id = n.trace_id AND n.node_name = 'evaluate_spanner_policy' JOIN `{dataset}.policy_evaluations` AS pe ON n.node_exec_id = pe.node_exec_id JOIN `{dataset}.agent_actions` AS act ON pe.eval_id = act.eval_id ORDER BY s.started_at DESC LIMIT 50",
+    "bq_trace_detail_sql": "SELECT s.trace_id, s.customer_id, s.target_order_id, s.user_prompt, s.started_at, pe.eval_id, pe.node_exec_id, pe.catalog_term_id, pe.policy_id, pe.policy_name, pe.observed_refunds_100d, pe.max_refunds_100d, pe.observed_order_age_days, pe.return_window_days, pe.evaluation_result, act.action_id, act.action_type, act.decision_status, act.rejection_reason, act.created_at FROM `{dataset}.agent_sessions` AS s JOIN `{dataset}.workflow_nodes` AS n ON s.trace_id = n.trace_id AND n.node_name = 'evaluate_spanner_policy' JOIN `{dataset}.policy_evaluations` AS pe ON n.node_exec_id = pe.node_exec_id JOIN `{dataset}.agent_actions` AS act ON pe.eval_id = act.eval_id WHERE s.trace_id = @trace_id LIMIT 1",
+    "bq_trace_nodes_sql": "SELECT node_exec_id, node_name, step_order, latency_ms, executed_at FROM `{dataset}.workflow_nodes` WHERE trace_id = @trace_id ORDER BY step_order ASC",
+    "bq_fallback_approval_sql": "SELECT s.trace_id, s.customer_id, s.target_order_id, n.node_name, pe.catalog_term_id, pe.policy_name, pe.observed_refunds_100d AS prior_refund_count_100d, pe.max_refunds_100d, pe.evaluation_result, act.action_type, act.decision_status, act.created_at AS committed_at FROM `{dataset}.agent_sessions` AS s JOIN `{dataset}.workflow_nodes` AS n ON s.trace_id = n.trace_id AND n.node_name = 'evaluate_spanner_policy' JOIN `{dataset}.policy_evaluations` AS pe ON n.node_exec_id = pe.node_exec_id JOIN `{dataset}.agent_actions` AS act ON pe.eval_id = act.eval_id WHERE s.trace_id = @trace_id",
+    "bq_fallback_denial_sql": "SELECT s.trace_id, s.customer_id, s.target_order_id, pe.catalog_term_id, pe.policy_name, pe.observed_refunds_100d AS prior_refund_count_100d, pe.max_refunds_100d, pe.evaluation_result, act.action_type, act.decision_status, act.rejection_reason FROM `{dataset}.agent_sessions` AS s JOIN `{dataset}.workflow_nodes` AS n ON s.trace_id = n.trace_id AND n.node_name = 'evaluate_spanner_policy' JOIN `{dataset}.policy_evaluations` AS pe ON n.node_exec_id = pe.node_exec_id AND pe.evaluation_result = 'FAIL' JOIN `{dataset}.agent_actions` AS act ON pe.eval_id = act.eval_id WHERE s.trace_id = @trace_id"
+  }
+}

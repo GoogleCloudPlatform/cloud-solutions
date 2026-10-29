@@ -1,0 +1,9 @@
+fastapi~=0.162
+google-adk~=2.13
+google-cloud-bigquery~=3.29
+google-cloud-dataplex~=2.6
+google-cloud-spanner~=3.51
+google-genai~=2.33
+httpx~=0.28
+pydantic~=2.12
+uvicorn~=0.54

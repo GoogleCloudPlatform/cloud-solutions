@@ -1,0 +1,39 @@
+{
+  "policies": [
+    {
+      "policy_id": "POL-REFUND-STD-V1",
+      "name": "Tiered Standard and VIP Refund Policy",
+      "source_document_uri": "data/policies/return_policy_v1.md",
+      "policy_version": "1.0",
+      "status": "ACTIVE",
+      "valid_from": "2025-01-01T00:00:00Z",
+      "valid_to": null
+    }
+  ],
+  "policy_conditions": [
+    {
+      "condition_id": "COND-REFUND-STD-100D-30D",
+      "policy_id": "POL-REFUND-STD-V1",
+      "applicable_tier": "STANDARD",
+      "max_refunds_100d": 10,
+      "return_window_days": 30,
+      "threshold_expression": "prior_refund_count_100d < 10 AND target_order_age_days <= 30"
+    },
+    {
+      "condition_id": "COND-REFUND-VIP-100D-30D",
+      "policy_id": "POL-REFUND-STD-V1",
+      "applicable_tier": "VIP",
+      "max_refunds_100d": 20,
+      "return_window_days": 30,
+      "threshold_expression": "prior_refund_count_100d < 20 AND target_order_age_days <= 30"
+    }
+  ],
+  "policy_restrictions": [
+    {
+      "restriction_id": "RES-DENY-AUTO-REFUND",
+      "policy_id": "POL-REFUND-STD-V1",
+      "action_code": "DENY_AUTONOMOUS_REFUND",
+      "description": "Block autonomous Spanner refund mutation and log rejection trace to BigQuery"
+    }
+  ]
+}

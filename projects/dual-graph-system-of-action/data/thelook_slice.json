@@ -1,0 +1,227 @@
+{
+  "distribution_centers": [
+    {
+      "id": 1,
+      "name": "Memphis TN",
+      "latitude": 35.1174,
+      "longitude": -89.9711
+    },
+    {
+      "id": 2,
+      "name": "Chicago IL",
+      "latitude": 41.8369,
+      "longitude": -87.6847
+    },
+    {
+      "id": 3,
+      "name": "Houston TX",
+      "latitude": 29.7604,
+      "longitude": -95.3698
+    },
+    {
+      "id": 4,
+      "name": "Los Angeles CA",
+      "latitude": 34.05,
+      "longitude": -118.25
+    },
+    {
+      "id": 5,
+      "name": "New Orleans LA",
+      "latitude": 29.95,
+      "longitude": -90.0667
+    },
+    {
+      "id": 6,
+      "name": "Port Authority of New York/New Jersey NY/NJ",
+      "latitude": 40.634,
+      "longitude": -74.0254
+    },
+    {
+      "id": 7,
+      "name": "Philadelphia PA",
+      "latitude": 39.95,
+      "longitude": -75.1667
+    },
+    {
+      "id": 8,
+      "name": "Mobile AL",
+      "latitude": 30.6944,
+      "longitude": -88.0431
+    },
+    {
+      "id": 9,
+      "name": "Charleston SC",
+      "latitude": 32.7833,
+      "longitude": -79.9333
+    },
+    {
+      "id": 10,
+      "name": "Savannah GA",
+      "latitude": 32.0167,
+      "longitude": -81.1167
+    }
+  ],
+  "products": [
+    {
+      "id": 501,
+      "cost": 48.2,
+      "category": "Outerwear & Coats",
+      "name": "Alpine Gore-Tex Waterproof Shell Jacket",
+      "brand": "Columbia",
+      "retail_price": 129.0,
+      "department": "Women",
+      "sku": "THELOOK-501-GTX",
+      "distribution_center_id": 1,
+      "policy_id": "POL-REFUND-STD-V1"
+    },
+    {
+      "id": 502,
+      "cost": 34.5,
+      "category": "Sweaters",
+      "name": "Merino Wool Quarter-Zip Pullover",
+      "brand": "Calvin Klein",
+      "retail_price": 89.5,
+      "department": "Men",
+      "sku": "THELOOK-502-MWP",
+      "distribution_center_id": 2,
+      "policy_id": "POL-REFUND-STD-V1"
+    },
+    {
+      "id": 503,
+      "cost": 62.0,
+      "category": "Active",
+      "name": "CloudStride Trail Running Shoes",
+      "brand": "ASICS",
+      "retail_price": 148.0,
+      "department": "Women",
+      "sku": "THELOOK-503-CTR",
+      "distribution_center_id": 3,
+      "policy_id": "POL-REFUND-STD-V1"
+    },
+    {
+      "id": 504,
+      "cost": 29.8,
+      "category": "Jeans",
+      "name": "501 Original Fit Selvedge Denim Jeans",
+      "brand": "Levi's",
+      "retail_price": 79.5,
+      "department": "Men",
+      "sku": "THELOOK-504-LVS",
+      "distribution_center_id": 4,
+      "policy_id": "POL-REFUND-STD-V1"
+    },
+    {
+      "id": 505,
+      "cost": 55.0,
+      "category": "Accessories",
+      "name": "Polarized Aviator Titanium Sunglasses",
+      "brand": "Ray-Ban",
+      "retail_price": 165.0,
+      "department": "Women",
+      "sku": "THELOOK-505-RBA",
+      "distribution_center_id": 10,
+      "policy_id": "POL-REFUND-STD-V1"
+    },
+    {
+      "id": 506,
+      "cost": 41.0,
+      "category": "Tops & Tees",
+      "name": "Organic Supima Cotton Oxford Shirt",
+      "brand": "Tommy Hilfiger",
+      "retail_price": 95.0,
+      "department": "Men",
+      "sku": "THELOOK-506-THO",
+      "distribution_center_id": 6,
+      "policy_id": "POL-REFUND-STD-V1"
+    },
+    {
+      "id": 507,
+      "cost": 74.0,
+      "category": "Suits & Sport Coats",
+      "name": "Tailored Italian Wool Travel Blazer",
+      "brand": "Hugo Boss",
+      "retail_price": 210.0,
+      "department": "Men",
+      "sku": "THELOOK-507-HBB",
+      "distribution_center_id": 7,
+      "policy_id": "POL-REFUND-STD-V1"
+    },
+    {
+      "id": 508,
+      "cost": 22.0,
+      "category": "Accessories",
+      "name": "Cashmere Ribbed Winter Beanie",
+      "brand": "Nordstrom",
+      "retail_price": 58.0,
+      "department": "Women",
+      "sku": "THELOOK-508-NWB",
+      "distribution_center_id": 9,
+      "policy_id": "POL-REFUND-STD-V1"
+    }
+  ],
+  "users": [
+    {
+      "id": 500,
+      "first_name": "Marcus",
+      "last_name": "Rivera",
+      "email": "marcus.rivera@example.com",
+      "customer_tier": "STANDARD",
+      "age": 38,
+      "gender": "M",
+      "state": "Illinois",
+      "street_address": "420 Michigan Ave",
+      "postal_code": "60611",
+      "city": "Chicago",
+      "country": "United States",
+      "latitude": 41.8902,
+      "longitude": -87.6244,
+      "traffic_source": "Search",
+      "created_at": "2025-02-15T10:00:00Z"
+    }
+  ],
+  "inventory_items": [
+    {
+      "id": 5001,
+      "product_id": 502,
+      "created_at": "2025-03-01T08:00:00Z",
+      "sold_at": "2025-03-05T12:00:00Z",
+      "cost": 34.5,
+      "product_category": "Sweaters",
+      "product_name": "Merino Wool Quarter-Zip Pullover",
+      "product_brand": "Calvin Klein",
+      "product_retail_price": 89.5,
+      "product_department": "Men",
+      "product_sku": "THELOOK-502-MWP",
+      "product_distribution_center_id": 2
+    }
+  ],
+  "orders": [
+    {
+      "order_id": 5001,
+      "user_id": 500,
+      "status": "Complete",
+      "gender": "M",
+      "created_at": "2025-03-05T12:00:00Z",
+      "returned_at": null,
+      "shipped_at": "2025-03-06T09:00:00Z",
+      "delivered_at": "2025-03-08T15:30:00Z",
+      "num_of_item": 1
+    }
+  ],
+  "order_items": [
+    {
+      "id": 5001,
+      "order_id": 5001,
+      "user_id": 500,
+      "product_id": 502,
+      "inventory_item_id": 5001,
+      "status": "Complete",
+      "created_at": "2025-03-05T12:00:00Z",
+      "shipped_at": "2025-03-06T09:00:00Z",
+      "delivered_at": "2025-03-08T15:30:00Z",
+      "returned_at": null,
+      "sale_price": 89.5,
+      "refund_trace_id": null
+    }
+  ]
+}
