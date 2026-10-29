@@ -127,45 +127,6 @@ alternatives:
 | **Database seeding in Qwiklabs** | **Idempotent Cloud Run lifespan bootstrap** (`ensure_bootstrapped()` calling `seed_spanner_if_empty()`) | **Terraform `local-exec` provisioner** running Python seed scripts on the Qwiklabs runner | The Qwiklabs Terraform runner container uses an immutable image that does not pre-install `google-cloud-spanner` or `google-cloud-bigquery` Python packages. Running seeding inside the Cloud Run container guarantees locked dependencies. |
 | **Spanner-to-BigQuery federation** | **`EXTERNAL_QUERY` over `spanner-data-boost`** (`use_data_boost = true` for ISO GQL pushdown) | **Scheduled ETL replication** or **`CREATE EXTERNAL SCHEMA` alone** | Scheduled ETL introduces replication lag, while `CREATE EXTERNAL SCHEMA` exposes only relational tables in BigQuery SQL and cannot push `GRAPH OperationalContextGraph MATCH` GQL queries down to Spanner Data Boost. |
 
-## End-to-end runtime interaction
-
-For the component topology diagram, see
-[README.md](../README.md#system-architecture). The sequence diagram below shows
-the runtime execution flow across a two-turn confirmed refund request (as well
-as read-only informational queries) and data engineer audit:
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Customer as Customer (/shop)
-    participant API as FastAPI + ADK 2.0 Workflow
-    participant KC as Knowledge Catalog
-    participant Spanner as Cloud Spanner Graph
-    participant BQ as BigQuery Graph
-    actor Engineer as Data Engineer (/console)
-
-    Customer->>API: Turn 1: POST /api/chat/refund/stream (user_id, message)
-    API->>API: Step 1: IntentAgent (direct ORD-<id> resolution or gemini-3-flash-preview ThinkingLevel.MINIMAL + fallback) resolves intent, order_id, status filter, or unmatched_product (stream step 1 & buffer node 1)
-    API->>KC: Step 2: resolve_catalog_contract (5-min TTL cache or JSON fallback, stream step 2 & buffer node 2)
-    API->>Spanner: Step 3: evaluate_spanner_policy (Parameterized ISO GQL snapshot via cached _SPANNER_DB_CACHE, stream step 3 & buffer node 3)
-    Spanner-->>API: Return order age, 100d return count, and tier-matched policy thresholds
-    API->>API: Step 4: route_and_commit_action (Pause at PENDING_CONFIRMATION or return ORDER_LIST / ORDER_INFO / POLICY_INFO, stream step 4 & buffer node 4)
-    API->>API: Step 5: ResponseAgent (gemini-3-flash-preview ThinkingLevel.MINIMAL, 4s timeout + fallback) synthesizes grounded reply across all outcomes & syncs candidate_orders (stream step 5 & buffer node 5)
-    API--)BQ: Callback flushes Turn 1 trace (AWAIT_CUSTOMER_CONFIRMATION / PENDING_CONFIRMATION)
-    API-->>Customer: Stream live [1/5]..[5/5] NDJSON step telemetry and prompt customer to confirm order number, item photo, and price (trace_1)
-
-    Customer->>API: Turn 2: POST /api/chat/refund/stream (confirmed = true, pending_order_id)
-    API->>KC: Step 2: Re-verify catalog contract
-    API->>Spanner: Step 3: Re-verify OperationalContextGraph policy state
-    API->>Spanner: Step 4: Re-verify locks and commit DML if PASS (or block if FAIL)
-    API->>API: Step 5: ResponseAgent (gemini-3-flash-preview ThinkingLevel.MINIMAL, 4s timeout + fallback) synthesizes final APPROVED or DENIED reply
-    API--)BQ: Callback flushes Turn 2 trace (COMMIT_SPANNER_REFUND or BLOCK_SPANNER_MUTATION)
-    API-->>Customer: Stream live [1/5]..[5/5] NDJSON step telemetry and return final decision, explanation, and trace_2
-    Engineer->>API: POST /api/query/bigquery (ActionLineageGraph + EXTERNAL_QUERY)
-    API->>BQ: Execute lineage GQL and federated Spanner Data Boost query
-    BQ-->>Engineer: Return unified operational and lineage audit rows
-```
-
 ## Multi-region Terraform and Qwiklabs V2 configuration
 
 Terraform (`runtime.yaml` pinned to `terraform` version `1.15.6`, with

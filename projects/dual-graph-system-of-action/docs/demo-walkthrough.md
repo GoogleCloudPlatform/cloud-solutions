@@ -54,11 +54,17 @@ Before running the web UI scenarios, students can verify the live database and
 catalog resources directly in the **Google Cloud Console**:
 
 1.  **Knowledge Catalog (`Knowledge Catalog` > `Glossaries` >
-    `soa-business-glossary`):** Inspect the `Refund Policy Metrics` category and
-    the three governed terms (`rolling-100d-refund-count`, `order-age-days`, and
-    `customer-loyalty-tier`), each carrying the **`refund-metric-contract`**
-    aspect (`standard_max_refunds_100d = 10`, `vip_max_refunds_100d = 20`,
-    `return_window_days = 30`).
+    `soa-business-glossary` & `Metadata Types`):** Inspect the three governed
+    glossary terms (`Customer Loyalty Tier` / `customer-loyalty-tier`, `Order
+    Age in Days` / `order-age-days`, and `Rolling 100-Day Refund Count` /
+    `rolling-100d-refund-count`), and open **Metadata Types** in the left
+    navigation menu to inspect the custom **`Refund Metric Contract`
+    (`refund-metric-contract`)** aspect type defining the 5 canonical parameter
+    fields (`returned_status`, `eligible_order_status`, `rolling_window_days`,
+    `standard_tier`, and `vip_tier`). Tier-specific operational thresholds
+    (`max_refunds_100d = 10` for `STANDARD` vs. `20` for `VIP`, and
+    `return_window_days = 30`) live in Cloud Spanner's `policy_conditions`
+    nodes.
 1.  **Cloud Spanner Studio (`Spanner` > `soa-graph-instance` > `thelook-soa-db`
     > `Spanner Studio`):** Inspect the 6 R2G tables (`users`, `orders`,
     `order_items`, `inventory_items`, `products`, `distribution_centers`), the 3
@@ -68,8 +74,8 @@ catalog resources directly in the **Google Cloud Console**:
 1.  **BigQuery Studio (`BigQuery` > `Studio` > `soa_action_lineage`):** Inspect
     the four lineage tables (`agent_sessions`, `workflow_nodes`,
     `policy_evaluations`, `agent_actions`), the **`ActionLineageGraph`**
-    property graph, and the **`us-central1.spanner-data-boost`** external
-    connection.
+    property graph, and the **`<region>.spanner-data-boost`** (such as
+    `us-central1.spanner-data-boost`) external connection.
 
 ## Demo activity 1: Customer A requests an eligible refund (Standard tier)
 
@@ -110,7 +116,8 @@ switch to **UI 2 (`Data Engineer Investigation Console`, `/console`)** and
       status, returned_at FROM orders WHERE order_id = 90124;` in **Spanner
       Studio** to confirm that `status` is still `'Complete'` before you click
       confirm.
-1.  Click **Yes, confirm refund for ORD-90124** (or type `Yes, please proceed`)
+1.  Click **`Confirm Refund: ORD-90124 — Alpine Gore-Tex Waterproof Shell
+    Jacket ($129.00)`** (or type `Yes, please proceed`)
     to execute **Turn 2 (`APPROVED`)**. The workflow updates `orders.status` and
     `order_items.status` for `order_id = 90124` from `Complete` to `Returned`,
     sets `returned_at = CURRENT_TIMESTAMP()`, writes a UUID `trace_id` (such as
@@ -339,8 +346,9 @@ exceeds the 100-day return limit (`prior_refund_count_100d = 12 >= 10`).
     `$148.00`, delivered 10 days ago with `thelook` status `Complete`) and
     submit the refund request in the chat widget:
     `Please refund my order ORD-90588.`
-1.  Observe **Turn 1 (`PENDING_CONFIRMATION`)** and click **Yes, confirm refund
-    for ORD-90588** to execute **Turn 2 (`DENIED`)**. Because Customer B already
+1.  Observe **Turn 1 (`PENDING_CONFIRMATION`)** and click **`Confirm Refund:
+    ORD-90588 — CloudStride Trail Running Shoes ($148.00)`** to execute **Turn 2
+    (`DENIED`)**. Because Customer B already
     has 12 returned items (`status = 'Returned'`) within the past 100 days
     (reaching or exceeding the `STANDARD` tier limit of 10), the workflow blocks
     the Cloud Spanner mutation (`BLOCK_SPANNER_MUTATION`), leaves `ORD-90588` in
@@ -543,7 +551,8 @@ approving a refund even though Customer C has the same 100-day return count
     (`max_refunds_100d = 20`). Because `12 < 20`, the agent pauses at
     `PENDING_CONFIRMATION` and asks Customer C to confirm `ORD-90910`
     (**Tailored Italian Wool Travel Blazer**, `$210.00`).
-1.  Click **Yes, confirm refund for ORD-90910** to execute **Turn 2
+1.  Click **`Confirm Refund: ORD-90910 — Tailored Italian Wool Travel Blazer
+    ($210.00)`** to execute **Turn 2
     (`APPROVED`)**. Even though Customer C has 12 returned items in the last 100
     days, the workflow updates `ORD-90910` to `Returned`, writes the new
     `trace_id` (such as `trace-c9d0e1f2`) to `order_items.refund_trace_id`, and
