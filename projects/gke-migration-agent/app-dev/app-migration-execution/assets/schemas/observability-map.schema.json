@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "observability-map",
+  "title": "Observability Map Schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "source",
+      "target"
+    ],
+    "properties": {
+      "source": {
+        "type": "object",
+        "required": [
+          "signal_type",
+          "name",
+          "provider"
+        ],
+        "properties": {
+          "signal_type": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "log",
+              "alert",
+              "trace",
+              "dashboard"
+            ],
+            "description": "Observability signal type"
+          },
+          "name": {
+            "type": "string",
+            "description": "AWS/EKS resource name, or the metadata.name of the Kubernetes resource"
+          },
+          "namespace": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Source Kubernetes namespace"
+          },
+          "provider": {
+            "type": "string",
+            "description": "Source provider (e.g. cloudwatch, amp, xray, grafana)"
+          },
+          "identifier": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Source ARN, Log Group, or Metric Name"
+          }
+        },
+        "additionalProperties": false
+      },
+      "target": {
+        "type": "object",
+        "required": [
+          "signal_type",
+          "name",
+          "provider"
+        ],
+        "properties": {
+          "signal_type": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "log",
+              "alert",
+              "trace",
+              "dashboard"
+            ],
+            "description": "Observability signal type"
+          },
+          "name": {
+            "type": "string",
+            "description": "GKE/Google Cloud resource name, or the metadata.name of the Kubernetes resource"
+          },
+          "namespace": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Target Kubernetes namespace"
+          },
+          "provider": {
+            "type": "string",
+            "description": "Target provider (e.g. cloud_monitoring, gmp, cloud_logging, cloud_trace, gke_grafana)"
+          },
+          "identifier": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Target metric type, log filter, alerting policy ID, or ClusterPodMonitoring CRD name"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": false
+  }
+}

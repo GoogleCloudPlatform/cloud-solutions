@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "workload-handoff-namespace",
+  "title": "Workload Handoff (Per Namespace)",
+  "description": "Per-namespace narrower version of workload-handoff.json. One file per cluster per namespace under workload-handoff/<cluster>/<namespace>/.",
+  "type": "object",
+  "required": [
+    "run_id",
+    "source_cluster_name",
+    "namespace",
+    "workloads"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "source_cluster_name": {
+      "type": "string"
+    },
+    "source_region": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "target_cluster_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Placeholder. Populated by gke-landing-zone when target is decided."
+    },
+    "target_project": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Placeholder. Populated by gke-landing-zone."
+    },
+    "workloads": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/workload"
+      }
+    }
+  },
+  "definitions": {
+    "workload": {
+      "type": "object",
+      "required": [
+        "name",
+        "kind",
+        "dependencies"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Exact Kubernetes resource metadata.name of the workload (e.g., Deployment or StatefulSet). Do not use container names or label values."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Deployment",
+            "StatefulSet",
+            "DaemonSet",
+            "CronJob",
+            "Job"
+          ]
+        },
+        "dependencies": {
+          "$ref": "#/definitions/dependencies"
+        },
+        "autopilot_compatible": {
+          "type": "boolean",
+          "description": "Heuristic: false if hostNetwork/hostPID/hostIPC, privileged containers, added capabilities, or hostPath volumes."
+        },
+        "pod_security_baseline_passes": {
+          "type": "boolean",
+          "description": "Heuristic: false if hostNetwork/hostPID/hostIPC, privileged containers, or hostPath volumes."
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "required": [
+        "images",
+        "service_account",
+        "storage",
+        "ingresses",
+        "http_routes",
+        "secrets",
+        "configmaps",
+        "services",
+        "data_dependencies"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Full container image references including registry, repo, and tag/digest."
+        },
+        "irsa_role_arn": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Resolved from IRSA SA annotation OR Pod Identity association. Null if neither applies."
+        },
+        "service_account": {
+          "type": "string",
+          "description": "Kubernetes ServiceAccount name. 'default' if not explicitly set."
+        },
+        "storage": {
+          "$ref": "#/definitions/storage"
+        },
+        "ingresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Ingress references in 'namespace/name' format."
+        },
+        "http_routes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Gateway API HTTPRoute references in 'namespace/name' format."
+        },
+        "secrets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Kubernetes Secret names consumed by this workload (env, envFrom, volumes, imagePullSecrets)."
+        },
+        "configmaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Kubernetes ConfigMap names consumed by this workload."
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Kubernetes Service metadata.names targeting this workload via label selector matching."
+        },
+        "data_dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "RDS/ElastiCache/etc. identifiers. Populated by Step 9 cross-reference."
+        }
+      }
+    },
+    "storage": {
+      "type": "object",
+      "required": [
+        "pvc_names",
+        "volume_claim_templates",
+        "rwx_file_shares"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pvc_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "PersistentVolumeClaim metadata.names referenced by this workload."
+        },
+        "volume_claim_templates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "PersistentVolumeClaim template names dynamically provisioned by StatefulSets."
+        },
+        "rwx_file_shares": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "EFS access points or other RWX shares. Populated by Step 8 cross-reference."
+        }
+      }
+    }
+  }
+}

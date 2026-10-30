@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "network-map",
+  "title": "Comprehensive Network Map Schema",
+  "description": "Centralized mapping schema for all network, certificate, routing, and NetworkPolicy translations from EKS to GKE.",
+  "type": "object",
+  "required": [
+    "class_mappings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "class_mappings": {
+      "type": "object",
+      "description": "Maps EKS GatewayClasses, IngressClasses, or custom controllers to GKE GatewayClasses/Ingress Classes.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "certificates": {
+      "type": "object",
+      "description": "Maps AWS ACM certificate ARNs or EKS Secret names to Google Cloud Certificate Manager names or GKE TLS Secret names.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "domain_mappings": {
+      "type": "object",
+      "description": "Optional mapping to rename hostnames/domains during migration (e.g., to redirect DNS to GKE endpoints).",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "cidr_mappings": {
+      "type": "object",
+      "description": "Maps AWS VPC IP blocks (used in NetworkPolicies) to Google Cloud VPC / GKE Subnet IP blocks.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

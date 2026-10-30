@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scorecard",
+  "type": "object",
+  "properties": {
+    "cluster_name": {
+      "type": "string"
+    },
+    "recommended_gke_mode": {
+      "type": "string",
+      "enum": [
+        "Autopilot",
+        "Standard"
+      ]
+    },
+    "version_drift": {
+      "type": "string",
+      "description": "Details about EKS to GKE control plane version drift and upgrade requirements."
+    },
+    "workloads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "scores": {
+            "type": "object",
+            "properties": {
+              "statelessness": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 3
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "score",
+                  "reasoning"
+                ]
+              },
+              "identity_portability": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 3
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "score",
+                  "reasoning"
+                ]
+              },
+              "network_portability": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 3
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "score",
+                  "reasoning"
+                ]
+              },
+              "data_dependencies": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 3
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "score",
+                  "reasoning"
+                ]
+              }
+            },
+            "required": [
+              "statelessness",
+              "identity_portability",
+              "network_portability",
+              "data_dependencies"
+            ]
+          },
+          "readiness_bucket": {
+            "type": "string",
+            "enum": [
+              "Ready",
+              "Tractable",
+              "High-Risk",
+              "Blocked"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "namespace",
+          "scores",
+          "readiness_bucket"
+        ]
+      }
+    },
+    "cluster_sizing": {
+      "type": "object",
+      "properties": {
+        "gke_node_pool_requirements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "autoscaling_bounds": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "cluster_name",
+    "recommended_gke_mode",
+    "workloads",
+    "cluster_sizing"
+  ]
+}

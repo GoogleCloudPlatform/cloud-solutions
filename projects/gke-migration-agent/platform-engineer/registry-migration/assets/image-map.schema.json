@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "image-map",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "source": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "source",
+      "target"
+    ],
+    "additionalProperties": false
+  }
+}

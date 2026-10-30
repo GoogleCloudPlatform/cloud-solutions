@@ -1,0 +1,38 @@
+{
+  "migration_id": "migration-test-workloads-1786252217",
+  "target_namespace": "test-workloads",
+  "current_phase": "Phase 5: Network Exposure",
+  "overall_status": "COMPLETED",
+  "phases": {
+    "Phase 1: Namespace & Identity": {
+      "status": "COMPLETED",
+      "started_at": "2026-08-09T05:10:58.114057",
+      "completed_at": "2026-08-09T05:11:03.172640",
+      "resources_created": []
+    },
+    "Phase 2: Storage & Data Sync": {
+      "status": "COMPLETED",
+      "started_at": "2026-08-09T05:11:03.175019",
+      "completed_at": "2026-08-09T05:11:06.054810",
+      "resources_created": []
+    },
+    "Phase 3: Workloads Deployment": {
+      "status": "COMPLETED",
+      "started_at": "2026-08-09T05:11:06.057039",
+      "completed_at": "2026-08-09T05:11:10.775936",
+      "resources_created": []
+    },
+    "Phase 4: Observability Integration": {
+      "status": "COMPLETED",
+      "started_at": "2026-08-09T05:11:10.777935",
+      "completed_at": "2026-08-09T05:11:13.408002",
+      "resources_created": []
+    },
+    "Phase 5: Network Exposure": {
+      "status": "COMPLETED",
+      "started_at": "2026-08-09T05:11:13.410844",
+      "completed_at": "2026-08-09T05:11:16.171126",
+      "resources_created": []
+    }
+  }
+}

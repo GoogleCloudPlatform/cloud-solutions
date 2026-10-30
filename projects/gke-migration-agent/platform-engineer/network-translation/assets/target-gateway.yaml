@@ -1,0 +1,114 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: storefront-external
+  namespace: storefront
+  annotations:
+    networking.gke.io/certmap: storefront-cert-map # if using Certificate Manager
+spec:
+  gatewayClassName: gke-l7-global-external-managed
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              shared-gateway-access: "true"
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: shop-example-com-tls # OR use Google-managed cert via certmap
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              shared-gateway-access: "true"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-redirect
+  namespace: storefront
+spec:
+  parentRefs:
+    - name: storefront-external
+      sectionName: http
+  hostnames: ["shop.example.com"]
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web
+  namespace: storefront
+spec:
+  parentRefs:
+    - name: storefront-external
+      sectionName: https
+  hostnames: ["shop.example.com"]
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: / }
+      backendRefs:
+        - name: web
+          port: 80
+---
+apiVersion: networking.gke.io/v1
+kind: HealthCheckPolicy
+metadata:
+  name: web
+  namespace: storefront
+spec:
+  default:
+    config:
+      type: HTTP
+      httpHealthCheck:
+        port: 80
+        requestPath: /healthz
+  targetRef:
+    group: ""
+    kind: Service
+    name: web
+---
+apiVersion: networking.gke.io/v1
+kind: GCPBackendPolicy
+metadata:
+  name: web
+  namespace: storefront
+spec:
+  default:
+    securityPolicy: shop-armor # Cloud Armor policy
+  targetRef:
+    group: ""
+    kind: Service
+    name: web

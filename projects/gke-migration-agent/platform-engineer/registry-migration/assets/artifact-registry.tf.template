@@ -1,0 +1,32 @@
+module "artifact_registry_repo_name" {
+  source  = "GoogleCloudPlatform/artifact-registry/google"
+  version = "~> 0.2"
+
+  project_id    = var.ar_project
+  location      = var.region
+  format        = "docker"
+  repository_id = "repo-name"
+
+  cleanup_policies = {
+    keep-recent-100 = {
+      action = "KEEP"
+      most_recent_versions = {
+        keep_count = 100
+      }
+    }
+    delete-untagged-after-30d = {
+      action = "DELETE"
+      condition = {
+        tag_state  = "UNTAGGED"
+        older_than = "2592000s"
+      }
+    }
+  }
+
+  cleanup_policy_dry_run = true
+
+  members = {
+    readers = ["serviceAccount:${var.gke_workload_identity_gsa}"]
+    writers = ["serviceAccount:${var.ci_cd_push_sa}"]
+  }
+}

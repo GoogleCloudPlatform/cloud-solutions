@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "platform-handoff",
+  "title": "Platform Handoff",
+  "description": "Structured target infrastructure mappings provided by the platform operator persona, consumed by application migration tools.",
+  "type": "object",
+  "required": [
+    "target_project",
+    "workload_identity_pool",
+    "registry_endpoint",
+    "storage_class_map",
+    "identity_map",
+    "clusters"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "target_project": {
+      "type": "string",
+      "description": "Target Google Cloud Project ID hosting GKE clusters."
+    },
+    "workload_identity_pool": {
+      "type": "string",
+      "description": "Google Cloud Workload Identity pool URL (e.g. PROJECT_ID.svc.id.goog)."
+    },
+    "registry_endpoint": {
+      "type": "string",
+      "description": "Target Artifact Registry Docker repository URL."
+    },
+    "storage_class_map": {
+      "type": "object",
+      "description": "Key-value mapping of EKS StorageClass names to GKE StorageClass names.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "identity_map": {
+      "type": "object",
+      "description": "Key-value mapping of AWS IRSA Role ARNs to target GSA emails.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "clusters": {
+      "type": "array",
+      "description": "List of target GKE clusters in scope.",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "location",
+          "mode"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Target GKE cluster name."
+          },
+          "location": {
+            "type": "string",
+            "description": "Google Cloud region or zone where cluster is located."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "autopilot",
+              "standard"
+            ],
+            "description": "Operational mode of the target GKE cluster."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::123456789012:oidc-provider/container.googleapis.com/v1/projects/PROJECT/locations/REGION/clusters/CLUSTER"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "container.googleapis.com/v1/projects/PROJECT/locations/REGION/clusters/CLUSTER:sub": "system:serviceaccount:checkout:checkout"
+        }
+      }
+    }
+  ]
+}
