@@ -8,7 +8,7 @@ Armor WAF security policies on GKE.
 | Security Control      | AWS WAF                               | Google Cloud Armor                                    |
 | :-------------------- | :------------------------------------ | :---------------------------------------------------- |
 | Policy attachment     | WebACL association to ALB             | BackendService attachment via `GCPBackendPolicy`      |
-| IP White/Blacklisting | IP Set Rule                           | IP match rule (action: `allow` / `deny`)              |
+| IP Allow/Denylisting  | IP Set Rule                           | IP match rule (action: `allow` / `deny`)              |
 | Geo-Blocking          | Geographic match rule                 | Origin match rule (`origin.region_code`)              |
 | Preconfigured WAF     | Managed rule groups (Core, SQLi, LFI) | Preconfigured WAF rules (`evaluatePreconfiguredExpr`) |
 

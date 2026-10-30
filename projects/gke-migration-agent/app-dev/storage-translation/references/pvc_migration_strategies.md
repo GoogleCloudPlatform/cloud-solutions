@@ -35,9 +35,9 @@ Best for relational and transactional databases (e.g. running MySQL/PostgreSQL
 on top of PVs).
 
 1.  Deploy a replica database on GKE.
-1.  Establish network routing and set up database master-slave replication.
+1.  Establish network routing and set up database primary-replica replication.
 1.  Verify the replica has caught up.
-1.  Promote the replica to master, disconnect source, and point GKE workloads to
+1.  Promote the replica to primary, disconnect source, and point GKE workloads to
     the local DB.
 
 ## Strategy D: Workstation-mediated synchronization via Google Cloud Storage (GCS)
