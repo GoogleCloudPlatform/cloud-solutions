@@ -288,6 +288,12 @@
       "additionalBranchPrefix": "generative-media-shot-production-"
     },
     {
+      "matchFileNames": ["projects/gke-crossgen-storage-aware-ccc/**"],
+      "groupName": "gke-crossgen-storage-aware-ccc",
+      "commitMessagePrefix": "chore(deps): [gke-crossgen-storage-aware-ccc]",
+      "additionalBranchPrefix": "gke-crossgen-storage-aware-ccc-"
+    },
+    {
       "matchFileNames": ["projects/gke-migration-agent/**"],
       "groupName": "gke-migration-agent",
       "commitMessagePrefix": "chore(deps): [gke-migration-agent]",
