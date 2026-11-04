@@ -130,6 +130,12 @@
       "additionalBranchPrefix": "agentic-knowledge-catalog-"
     },
     {
+      "matchFileNames": ["projects/agentic-security-log-analytics/**"],
+      "groupName": "agentic-security-log-analytics",
+      "commitMessagePrefix": "chore(deps): [agentic-security-log-analytics]",
+      "additionalBranchPrefix": "agentic-security-log-analytics-"
+    },
+    {
       "matchFileNames": ["projects/ai/**"],
       "groupName": "ai",
       "commitMessagePrefix": "chore(deps): [ai]",
