@@ -114,9 +114,9 @@ brotli==1.2.0 \
     --hash=sha256:fc1530af5c3c275b8524f2e24841cbe2599d74462455e9bae5109e9ff42e9361 \
     --hash=sha256:ff09cd8c5eec3b9d02d2408db41be150d8891c5566addce57513bf546e3d6c6d
     # via geventhttpclient
-certifi==2026.2.25 \
-    --hash=sha256:027692e4402ad994f1c42e52a4997a9763c646b73e4096e4d5d6db8af1d6f0fa \
-    --hash=sha256:e887ab5cee78ea814d3472169153c2d12cd43b14bd03329a39a9c6e2e80bfba7
+certifi==2026.10.18 \
+    --hash=sha256:73191c47aaa79da394e8fee2dbc2ec827432cab56311122c9e47abf79e390f62 \
+    --hash=sha256:b9995d97b64d0431a5af837d8ca8cd6238104d1f319f04bd93ea43124d6c861e
     # via
     #   geventhttpclient
     #   requests
