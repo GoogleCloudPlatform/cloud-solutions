@@ -474,6 +474,14 @@
       "additionalBranchPrefix": "secured-agents-solutions-"
     },
     {
+      "matchFileNames": [
+        "projects/secured-sdlc-for-vibe-coding-with-antigravity/**"
+      ],
+      "groupName": "secured-sdlc-for-vibe-coding-with-antigravity",
+      "commitMessagePrefix": "chore(deps): [secured-sdlc-for-vibe-coding-with-antigravity]",
+      "additionalBranchPrefix": "secured-sdlc-for-vibe-coding-with-antigravity-"
+    },
+    {
       "matchFileNames": ["projects/serverless-event-processing/**"],
       "groupName": "serverless-event-processing",
       "commitMessagePrefix": "chore(deps): [serverless-event-processing]",
