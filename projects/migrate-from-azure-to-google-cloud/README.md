@@ -31,6 +31,7 @@ This series provides guidance about the following migration journeys:
 
 - **From Azure compute services to Google Cloud**:
     - [Migrate from Azure Virtual Machines to Compute Engine](./migrate-from-azure-vms-to-compute-engine.md)
+    - [Demo: Migrate an Azure VM to Compute Engine](./vm-to-compute-engine/README.md)
     - [Migrate from Azure Kubernetes Service to Google Kubernetes Engine](./migrate-from-aks-to-gke.md)
 - **From Azure data storage services to Google Cloud**:
     - [Migrate from Azure Blob Storage to Cloud Storage](./migrate-from-azure-blob-storage-to-cloud-storage.md)

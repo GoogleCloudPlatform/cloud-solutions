@@ -50,7 +50,7 @@
 /projects/legacy-detox-demo/                                          @eyalbenivri
 /projects/manufacturing/                                              @ashwins2
 /projects/migrate-from-aws-to-google-cloud/                           @aburhan @ferrarimarco
-/projects/migrate-from-azure-to-google-cloud/                         @ferrarimarco
+/projects/migrate-from-azure-to-google-cloud/                         @aburhan @ferrarimarco
 /projects/migrate-nutanix-to-google-cloud/                            @ferrarimarco
 /projects/migrate-persistent-disks-to-hyperdisks/                     @ferrarimarco
 /projects/mmb-datacloud/                                              @zunhoyi
