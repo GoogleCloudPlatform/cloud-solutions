@@ -1,0 +1,29 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+project_id       = "your-project"
+region           = "your-region"
+vpc_network_name = "your-vpc-network"
+subnet_name      = "your-subnet-name"
+oracle_host      = "your-oracle-ebs-db-private-ip"
+
+# Responsibility keys of the confirmed writebacks: the Vision keys that
+# ebs-scripts/install_voltguard_agent_user.sql assigns. Keep both equal.
+ebs_inventory_responsibility  = "INVENTORY_VISION_OPERATIONS"
+ebs_purchasing_responsibility = "PURCHASING_OPERATIONS"
+
+# Passwords. Without them, deploy_stack.sh reads them from Secret Manager or
+# prompts for them:
+# oracle_db_password     = "your-apps-ai-password"
+# ebs_writeback_password = "your-voltguard-agent-password"

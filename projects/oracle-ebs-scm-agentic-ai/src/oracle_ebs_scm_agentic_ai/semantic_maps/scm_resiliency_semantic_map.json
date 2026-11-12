@@ -1,0 +1,373 @@
+{
+  "module": "Supply Chain Resiliency (Oracle EBS APPS views)",
+  "dialect": "oracle",
+  "description": "Governed Oracle E-Business Suite views for hub inventory exposure, SLA reservation locks, consumption velocity, inbound purchase order risk, approved suppliers, and open planner workflow alerts. Oracle EBS is the system of record for every quantity, reservation, purchase order, supplier, and notification. VoltGuard's hubs are the organization codes MIA, ATL, DAL, ORD, PHX, and EWR. Query these views with the ebs_execute_sql tool.",
+  "tables": [
+    {
+      "table_name": "APPS.VW_SCM_NET_AVAILABILITY",
+      "business_name": "Hub Net Availability",
+      "description": "One row per active item and inventory organization (hub) with raw on-hand, SLA-reserved, available-to-transact (ATT), and safety stock quantities.",
+      "columns": [
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "Inventory organization identifier."
+        },
+        {
+          "name": "ORGANIZATION_CODE",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "ORGANIZATION_NAME",
+          "description": "Hub display name."
+        },
+        {
+          "name": "INVENTORY_ITEM_ID",
+          "description": "Item identifier."
+        },
+        {
+          "name": "ITEM_CODE",
+          "description": "Item number (MTL_SYSTEM_ITEMS_B.SEGMENT1)."
+        },
+        {
+          "name": "ITEM_DESCRIPTION",
+          "description": "Item description."
+        },
+        {
+          "name": "UOM_CODE",
+          "description": "Primary unit of measure."
+        },
+        {
+          "name": "UNIT_LIST_PRICE_USD",
+          "description": "Item list price per unit in USD. Oracle Cost Management holds no item cost for these items, so a transfer protects revenue at this price."
+        },
+        {
+          "name": "RAW_ONHAND_QTY",
+          "description": "Total on-hand quantity across all subinventories, including non-reservable ones."
+        },
+        {
+          "name": "SLA_RESERVED_QTY",
+          "description": "Quantity locked by reservations for SLA customer demand."
+        },
+        {
+          "name": "SAFETY_STOCK_QTY",
+          "description": "Safety stock quantity from the latest effective MTL_SAFETY_STOCKS record."
+        },
+        {
+          "name": "BASELINE_SAFETY_STOCK_QTY",
+          "description": "Baseline safety stock: the latest effective safety stock that the agent didn't set, which surge targets start from. NULL when only the agent has set the hub's safety stock for the item."
+        },
+        {
+          "name": "AVAILABLE_TO_TRANSACT_QTY",
+          "description": "ATT: on-hand in reservable subinventories minus SLA-reserved quantity, floored at zero. The only quantity a hub can release for transfer."
+        },
+        {
+          "name": "SNAPSHOT_TIMESTAMP",
+          "description": "Time the row was read."
+        }
+      ]
+    },
+    {
+      "table_name": "APPS.VW_SCM_SLA_CONTRACT_LOCKS",
+      "business_name": "SLA Reservation Locks",
+      "description": "One row per inventory reservation with the SLA customer, contract tier, breach penalty, and reserved quantity that block a hub from releasing stock.",
+      "columns": [
+        {
+          "name": "RESERVATION_ID",
+          "description": "Reservation identifier."
+        },
+        {
+          "name": "ORGANIZATION_CODE",
+          "description": "Hub organization code holding the reservation."
+        },
+        {
+          "name": "ITEM_CODE",
+          "description": "Reserved item number."
+        },
+        {
+          "name": "ORDER_LINE_ID",
+          "description": "Demand source line identifier."
+        },
+        {
+          "name": "SALES_ORDER_NUMBER",
+          "description": "Sales order number when the reservation belongs to an order."
+        },
+        {
+          "name": "CUSTOMER_PARTY_NAME",
+          "description": "SLA customer that owns the reservation."
+        },
+        {
+          "name": "SLA_CONTRACT_TIER",
+          "description": "SLA contract tier."
+        },
+        {
+          "name": "BREACH_PENALTY_USD",
+          "description": "Contractual penalty in USD for breaching the reservation."
+        },
+        {
+          "name": "RESERVED_QTY",
+          "description": "Reserved quantity in the primary unit of measure."
+        },
+        {
+          "name": "REQUIREMENT_DATE",
+          "description": "Date the customer requires the reserved stock."
+        },
+        {
+          "name": "SUBINVENTORY_CODE",
+          "description": "Subinventory that holds the reserved stock."
+        }
+      ]
+    },
+    {
+      "table_name": "APPS.VW_SCM_BURN_RATE_AND_MRP",
+      "business_name": "Burn Rate and MRP Status",
+      "description": "Trailing 7-day sales order and internal order issue velocity from MTL_MATERIAL_TRANSACTIONS and MRP planning attributes per hub and item. Transfers, subinventory moves, and adjustments never count. BASELINE_DAILY_BURN_QTY is NULL when Oracle EBS recorded no such issues in the last 7 days.",
+      "columns": [
+        {
+          "name": "ORGANIZATION_CODE",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "ITEM_CODE",
+          "description": "Item number."
+        },
+        {
+          "name": "AVAILABLE_TO_TRANSACT_QTY",
+          "description": "ATT quantity, identical to VW_SCM_NET_AVAILABILITY."
+        },
+        {
+          "name": "BASELINE_DAILY_BURN_QTY",
+          "description": "Average daily issued quantity over the trailing 7 days."
+        },
+        {
+          "name": "STATIC_MRP_LEAD_TIME_DAYS",
+          "description": "Item full lead time in days used by MRP."
+        },
+        {
+          "name": "PLANNED_MRP_ORDER_QTY",
+          "description": "Quantity of uncancelled planned orders in the hub's latest completed MRP plan."
+        },
+        {
+          "name": "NEXT_MRP_DOCK_DATE",
+          "description": "Earliest dock date of those planned orders."
+        }
+      ]
+    },
+    {
+      "table_name": "APPS.VW_SCM_ACTIVE_POS",
+      "business_name": "Inbound Purchase Orders",
+      "description": "One row per open shipment of an approved standard purchase order, with supplier, dates, and supply risk attributes. Cancelled, closed, and fully received shipments are not inbound supply and don't appear. CORRIDOR_DELAY_DAYS, PLANT_BUFFER_DAYS, and LINE_STOP_EXPOSURE_USD come from the purchase order header descriptive flexfield.",
+      "columns": [
+        {
+          "name": "PO_NUMBER",
+          "description": "Purchase order number (PO_HEADERS_ALL.SEGMENT1)."
+        },
+        {
+          "name": "AUTHORIZATION_STATUS",
+          "description": "Purchase order approval status."
+        },
+        {
+          "name": "ITEM_CODE",
+          "description": "Ordered item number."
+        },
+        {
+          "name": "ITEM_DESCRIPTION",
+          "description": "Ordered item description."
+        },
+        {
+          "name": "ORGANIZATION_CODE",
+          "description": "Ship-to hub organization code."
+        },
+        {
+          "name": "ORDERED_QTY",
+          "description": "Ordered quantity on the shipment."
+        },
+        {
+          "name": "OPEN_QTY",
+          "description": "Quantity still to receive on the shipment: ordered minus received minus cancelled."
+        },
+        {
+          "name": "UNIT_PRICE",
+          "description": "Unit price in the purchase order currency (CURRENCY_CODE)."
+        },
+        {
+          "name": "CURRENCY_CODE",
+          "description": "Currency of the purchase order (for example, USD, EUR)."
+        },
+        {
+          "name": "NEED_BY_DATE",
+          "description": "Date the hub needs the shipment."
+        },
+        {
+          "name": "PROMISED_DATE",
+          "description": "Date the supplier promised the shipment."
+        },
+        {
+          "name": "SUPPLIER_NAME",
+          "description": "Supplier on the purchase order."
+        },
+        {
+          "name": "CORRIDOR_DELAY_DAYS",
+          "description": "Current inbound freight corridor delay in days."
+        },
+        {
+          "name": "PLANT_BUFFER_DAYS",
+          "description": "Days of delay the receiving plant can absorb."
+        },
+        {
+          "name": "LINE_STOP_EXPOSURE_USD",
+          "description": "Financial exposure in USD if the delay stops the line."
+        }
+      ]
+    },
+    {
+      "table_name": "APPS.VW_SCM_APPROVED_SUPPLIERS",
+      "business_name": "Approved Suppliers",
+      "description": "Approved supplier list entries per item and hub that Oracle Purchasing can order from (Approved status, enabled and active supplier, active purchasing site), with the item list price that prices a purchase requisition.",
+      "columns": [
+        {
+          "name": "ORGANIZATION_CODE",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "ITEM_CODE",
+          "description": "Item number."
+        },
+        {
+          "name": "ITEM_DESCRIPTION",
+          "description": "Item description."
+        },
+        {
+          "name": "SUPPLIER_NAME",
+          "description": "Approved supplier name."
+        },
+        {
+          "name": "SUPPLIER_SITE_CODE",
+          "description": "Supplier site that ships the item."
+        },
+        {
+          "name": "SUPPLIER_CITY",
+          "description": "City of the supplier site."
+        },
+        {
+          "name": "SUPPLIER_STATE",
+          "description": "State of the supplier site."
+        },
+        {
+          "name": "ASL_STATUS",
+          "description": "Approved supplier list status, such as Approved."
+        },
+        {
+          "name": "LIST_PRICE_USD",
+          "description": "Item list price in USD for a requisition."
+        }
+      ]
+    },
+    {
+      "table_name": "APPS.VW_SCM_OPEN_NOTIFICATIONS",
+      "business_name": "Open Planner Workflow Alerts",
+      "description": "Open VoltGuard resiliency alerts (Oracle Workflow message VOLTGUARD_RESILIENCY_ALERT) with the item, hub, purchase order, and severity stored as notification attributes. An alert that is missing from this view doesn't exist, isn't a VoltGuard alert, or is already closed.",
+      "columns": [
+        {
+          "name": "NOTIFICATION_ID",
+          "description": "Oracle Workflow notification identifier."
+        },
+        {
+          "name": "SUBJECT",
+          "description": "Alert subject line."
+        },
+        {
+          "name": "RECIPIENT_ROLE",
+          "description": "Planner role that owns the alert."
+        },
+        {
+          "name": "STATUS",
+          "description": "Notification status, always OPEN in this view."
+        },
+        {
+          "name": "BEGIN_DATE",
+          "description": "Date of the alert."
+        },
+        {
+          "name": "DUE_DATE",
+          "description": "Date the alert is due."
+        },
+        {
+          "name": "ITEM_CODE",
+          "description": "Item at risk."
+        },
+        {
+          "name": "ORGANIZATION_CODE",
+          "description": "Hub at risk."
+        },
+        {
+          "name": "RELATED_PO_NUMBER",
+          "description": "Purchase order linked to the alert."
+        },
+        {
+          "name": "ALERT_SEVERITY",
+          "description": "Alert severity."
+        }
+      ]
+    }
+  ],
+  "common_joins": [
+    {
+      "description": "Alert to the hub inventory it concerns",
+      "join_condition": "VW_SCM_OPEN_NOTIFICATIONS.ORGANIZATION_CODE = VW_SCM_NET_AVAILABILITY.ORGANIZATION_CODE AND VW_SCM_OPEN_NOTIFICATIONS.ITEM_CODE = VW_SCM_NET_AVAILABILITY.ITEM_CODE"
+    },
+    {
+      "description": "Alert to its delayed purchase order",
+      "join_condition": "VW_SCM_OPEN_NOTIFICATIONS.RELATED_PO_NUMBER = VW_SCM_ACTIVE_POS.PO_NUMBER"
+    },
+    {
+      "description": "Hub availability to the SLA reservations that lock it",
+      "join_condition": "VW_SCM_NET_AVAILABILITY.ORGANIZATION_CODE = VW_SCM_SLA_CONTRACT_LOCKS.ORGANIZATION_CODE AND VW_SCM_NET_AVAILABILITY.ITEM_CODE = VW_SCM_SLA_CONTRACT_LOCKS.ITEM_CODE"
+    },
+    {
+      "description": "Hub item to its approved suppliers",
+      "join_condition": "VW_SCM_NET_AVAILABILITY.ORGANIZATION_CODE = VW_SCM_APPROVED_SUPPLIERS.ORGANIZATION_CODE AND VW_SCM_NET_AVAILABILITY.ITEM_CODE = VW_SCM_APPROVED_SUPPLIERS.ITEM_CODE"
+    },
+    {
+      "description": "Hub item to its requisition lines",
+      "join_condition": "VW_SCM_NET_AVAILABILITY.ORGANIZATION_ID = PO_REQUISITION_LINES_ALL.DESTINATION_ORGANIZATION_ID AND VW_SCM_NET_AVAILABILITY.INVENTORY_ITEM_ID = PO_REQUISITION_LINES_ALL.ITEM_ID"
+    }
+  ],
+  "example_queries": [
+    {
+      "description": "Read the context of an open planner alert",
+      "sql": "SELECT notification_id, subject, recipient_role, item_code, organization_code, related_po_number, alert_severity, begin_date, due_date FROM APPS.VW_SCM_OPEN_NOTIFICATIONS WHERE notification_id = :notification_id"
+    },
+    {
+      "description": "Attention scan inputs: available stock, safety stock, baseline safety stock, and MRP lead time for every item at every hub",
+      "sql": "SELECT b.organization_code, b.item_code, b.available_to_transact_qty, n.safety_stock_qty, n.baseline_safety_stock_qty, b.static_mrp_lead_time_days FROM APPS.VW_SCM_BURN_RATE_AND_MRP b JOIN APPS.VW_SCM_NET_AVAILABILITY n ON n.organization_code = b.organization_code AND n.item_code = b.item_code WHERE b.organization_code IN ('MIA', 'ATL', 'DAL', 'ORD', 'PHX', 'EWR') ORDER BY b.organization_code, b.item_code"
+    },
+    {
+      "description": "Net availability of an item across every hub",
+      "sql": "SELECT organization_code, organization_name, raw_onhand_qty, sla_reserved_qty, available_to_transact_qty, safety_stock_qty, baseline_safety_stock_qty, unit_list_price_usd FROM APPS.VW_SCM_NET_AVAILABILITY WHERE item_code = :item_code ORDER BY organization_code"
+    },
+    {
+      "description": "SLA reservations that lock an item at each hub",
+      "sql": "SELECT organization_code, customer_party_name, sla_contract_tier, reserved_qty, breach_penalty_usd, requirement_date FROM APPS.VW_SCM_SLA_CONTRACT_LOCKS WHERE item_code = :item_code ORDER BY organization_code"
+    },
+    {
+      "description": "Classify source hubs that can release a transfer quantity without breaching SLA reservations",
+      "sql": "SELECT organization_code, organization_name, available_to_transact_qty, unit_list_price_usd, CASE WHEN available_to_transact_qty >= :transfer_qty THEN 'SLA_COMPLIANT' ELSE 'SLA_LOCKED' END AS sla_status FROM APPS.VW_SCM_NET_AVAILABILITY WHERE item_code = :item_code AND organization_code <> :dest_org_code ORDER BY available_to_transact_qty DESC"
+    },
+    {
+      "description": "Delay details of a purchase order",
+      "sql": "SELECT po_number, item_code, item_description, organization_code, ordered_qty, unit_price, currency_code, need_by_date, promised_date, supplier_name, corridor_delay_days, plant_buffer_days, line_stop_exposure_usd FROM APPS.VW_SCM_ACTIVE_POS WHERE po_number = :po_number"
+    },
+    {
+      "description": "Recommended requisition quantity: 0 when another hub has surplus stock (ATT above safety stock) to transfer. Otherwise scale the destination's baseline safety stock by the search surge multiplier (NULL, without a matching search, counts as 1), then subtract its available stock and the quantity on its open requisitions that aren't on a purchase order yet, never below zero",
+      "sql": "SELECT organization_code, item_code, safety_stock_qty, baseline_safety_stock_qty, available_to_transact_qty, network_surplus_qty, open_requisition_qty, CASE WHEN network_surplus_qty > 0 THEN 0 ELSE GREATEST(CEIL(baseline_safety_stock_qty * NVL(:search_surge_multiplier, 1)) - available_to_transact_qty - open_requisition_qty, 0) END AS recommended_requisition_qty FROM (SELECT n.organization_code, n.item_code, n.safety_stock_qty, n.baseline_safety_stock_qty, n.available_to_transact_qty, (SELECT NVL(SUM(GREATEST(x.available_to_transact_qty - x.safety_stock_qty, 0)), 0) FROM APPS.VW_SCM_NET_AVAILABILITY x WHERE x.item_code = n.item_code AND x.organization_code <> n.organization_code) AS network_surplus_qty, (SELECT NVL(SUM(l.quantity), 0) FROM PO_REQUISITION_LINES_ALL l JOIN PO_REQUISITION_HEADERS_ALL h ON h.requisition_header_id = l.requisition_header_id WHERE l.destination_organization_id = n.organization_id AND l.item_id = n.inventory_item_id AND h.authorization_status IN ('APPROVED', 'IN PROCESS', 'PRE-APPROVED') AND NVL(l.cancel_flag, 'N') = 'N' AND NVL(l.closed_code, 'OPEN') = 'OPEN' AND l.line_location_id IS NULL) AS open_requisition_qty FROM APPS.VW_SCM_NET_AVAILABILITY n WHERE n.organization_code = :org_code AND n.item_code = :item_code)"
+    },
+    {
+      "description": "Open requisitions for an item at a hub that aren't on a purchase order yet",
+      "sql": "SELECT h.segment1 AS requisition_number, h.authorization_status, l.quantity, l.unit_price AS unit_price_usd, l.suggested_vendor_name, l.need_by_date, h.creation_date FROM PO_REQUISITION_LINES_ALL l JOIN PO_REQUISITION_HEADERS_ALL h ON h.requisition_header_id = l.requisition_header_id JOIN APPS.VW_SCM_NET_AVAILABILITY n ON n.organization_id = l.destination_organization_id AND n.inventory_item_id = l.item_id WHERE n.organization_code = :org_code AND n.item_code = :item_code AND h.authorization_status IN ('APPROVED', 'IN PROCESS', 'PRE-APPROVED') AND NVL(l.cancel_flag, 'N') = 'N' AND NVL(l.closed_code, 'OPEN') = 'OPEN' AND l.line_location_id IS NULL ORDER BY h.creation_date"
+    },
+    {
+      "description": "Approved supplier and list price of an item at a hub",
+      "sql": "SELECT supplier_name, supplier_site_code, supplier_city, supplier_state, asl_status, list_price_usd FROM APPS.VW_SCM_APPROVED_SUPPLIERS WHERE organization_code = :org_code AND item_code = :item_code AND asl_status = 'Approved'"
+    }
+  ]
+}

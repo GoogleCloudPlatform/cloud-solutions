@@ -1,0 +1,91 @@
+# VoltGuard supply chain resiliency agent
+
+I help supply chain planners spot and fix stockout risks across **Oracle
+E-Business Suite (EBS)** hubs, such as the Miami distribution center (Miami
+DC), before the weekly material requirements planning (MRP) run sees them. I
+read live data from Oracle EBS and **Google Cloud BigQuery**, including
+TimesFM demand forecasts and rising Google searches, plus live drive times,
+weather, places, and maps from **Google Maps Platform**. Every number, table,
+chart, and map comes from your data at the moment you ask.
+
+**Start your day:** ask *"What needs my attention today?"* I scan every hub
+and item and lead with the most urgent risk. I remember its hub and item for
+the rest of the conversation.
+
+| Capability | What I check | Mode |
+| :--- | :--- | :---: |
+| **1. Attention scan** | Stockout cliff and MRP detection gap for every hub and item | Read-only |
+| **2. Demand sensing** | Available to transact (ATT), TimesFM forecast, rising searches, stockout cliff | Read-only |
+| **3. Service level agreement (SLA) reservation audit** | On-hand, SLA-reserved, and ATT for every hub | Read-only |
+| **4. Transfer simulation** | SLA compliance, lane freight, live routes and weather, net benefit | Read-only |
+| **5. Routes and weather** | Live truck routes, traffic delay, tolls, forecasts, heat, and alerts for any hub or lane | Read-only |
+| **6. Location intelligence** | Zone demand exposure, place density heatmaps, Gemini pull-forward tiers, nearby partners, and Google maps | Read-only |
+| **7. Executive charts** | Charts drawn from the live query results | Read-only |
+| **8. Governed writebacks** | Transfer, safety stock, requisition, alert close | **Needs "Confirmed"** |
+
+## Attention scan
+
+| Try asking |
+| :--- |
+| `What needs my attention today?` |
+
+## Demand sensing
+
+| Try asking |
+| :--- |
+| `Why is Miami DC running out of VG-GEN-7500?` |
+| `What are the rising searches in the Miami market this week?` |
+
+## SLA reservation audit
+
+| Try asking |
+| :--- |
+| `Why can't we pull 150 generators from Atlanta?` |
+| `Show net availability and SLA reservations for VG-GEN-7500 across all hubs.` |
+
+## Transfer simulation
+
+| Try asking |
+| :--- |
+| `Simulate reallocating 150 generators to Miami DC and rank the hubs by net financial benefit.` |
+| `Map the transfer lanes for 150 generators into Miami DC.` |
+
+## Routes and weather
+
+| Try asking |
+| :--- |
+| `What is the 5-day weather outlook at Miami DC, and are there any active weather alerts?` |
+| `What are the alternative truck routes from Dallas to Miami DC, and how much does traffic add to the drive?` |
+| `Will traffic or weather conditions delay a Dallas to Miami DC transfer this week?` |
+
+## Location intelligence
+
+| Try asking |
+| :--- |
+| `Where in South Florida will the generator surge hit hardest?` |
+| `Show the demand exposure map for Miami DC.` |
+| `Show the place density heatmap for Miami DC.` |
+| `Which Home Depot and Lowe's stores serve the most exposed zone around Miami DC?` |
+
+## Executive charts
+
+| Try asking |
+| :--- |
+| `Show the executive charts for the 150-generator transfer to Miami DC.` |
+
+## Governed writebacks
+
+| Try asking |
+| :--- |
+| `Plan the 150-unit Dallas transfer, the generator safety stock update, and the surge protector requisition for Miami DC.` |
+
+I always show the plan first and change Oracle EBS data only after you reply
+**Confirmed**.
+
+## Inbound supplier delays
+
+| Try asking |
+| :--- |
+| `Evaluate notification 90412.` |
+
+Copy any example, or ask in your own words.

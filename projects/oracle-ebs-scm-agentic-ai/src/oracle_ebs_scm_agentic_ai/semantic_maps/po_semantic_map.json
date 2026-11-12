@@ -1,0 +1,585 @@
+{
+  "module": "Purchasing (PO)",
+  "dialect": "oracle",
+  "description": "Semantic mapping for Oracle EBS Purchasing tables to business concepts.",
+  "tables": [
+    {
+      "table_name": "PO_HEADERS_ALL",
+      "business_name": "Purchase Orders",
+      "description": "Stores header-level information for purchase orders, blanket agreements, and contracts.",
+      "columns": [
+        {
+          "name": "PO_HEADER_ID",
+          "description": "Unique identifier for the PO header (Primary Key)."
+        },
+        {
+          "name": "SEGMENT1",
+          "description": "The purchase order number (user-visible PO number)."
+        },
+        {
+          "name": "TYPE_LOOKUP_CODE",
+          "description": "Type of document: STANDARD, BLANKET, CONTRACT, PLANNED."
+        },
+        {
+          "name": "STATUS_LOOKUP_CODE",
+          "description": "The status of the PO (for example, APPROVED, INCOMPLETE, IN PROCESS)."
+        },
+        {
+          "name": "AUTHORIZATION_STATUS",
+          "description": "Approval status: APPROVED, IN PROCESS, INCOMPLETE, REJECTED, REQUIRES REAPPROVAL."
+        },
+        {
+          "name": "VENDOR_ID",
+          "description": "Foreign Key to AP_SUPPLIERS (the supplier)."
+        },
+        {
+          "name": "VENDOR_SITE_ID",
+          "description": "Foreign Key to AP_SUPPLIER_SITES_ALL (the supplier site)."
+        },
+        {
+          "name": "CURRENCY_CODE",
+          "description": "The currency of the purchase order (for example, USD, EUR)."
+        },
+        {
+          "name": "CREATION_DATE",
+          "description": "Creation date of the PO."
+        },
+        {
+          "name": "APPROVED_DATE",
+          "description": "Approval date of the PO."
+        },
+        {
+          "name": "START_DATE",
+          "description": "Effective start date (used for blanket/contract agreements)."
+        },
+        {
+          "name": "END_DATE",
+          "description": "Effective end date (used for blanket/contract agreements)."
+        },
+        {
+          "name": "AMOUNT_LIMIT",
+          "description": "Maximum amount allowed for blanket agreements."
+        },
+        {
+          "name": "COMMENTS",
+          "description": "Free-text comments or description for the PO."
+        },
+        {
+          "name": "ORG_ID",
+          "description": "Operating unit identifier."
+        },
+        {
+          "name": "CREATED_BY",
+          "description": "User ID of the person who created the PO."
+        }
+      ]
+    },
+    {
+      "table_name": "PO_LINES_ALL",
+      "business_name": "Purchase Order Lines",
+      "description": "Stores line-level details for purchase orders, including item, quantity, and price. PO_LINE_LOCATIONS_ALL holds the received and billed quantities of each line's shipments.",
+      "columns": [
+        {
+          "name": "PO_LINE_ID",
+          "description": "Unique identifier for the PO line (Primary Key)."
+        },
+        {
+          "name": "PO_HEADER_ID",
+          "description": "Foreign Key to PO_HEADERS_ALL."
+        },
+        {
+          "name": "LINE_NUM",
+          "description": "The line number on the purchase order."
+        },
+        {
+          "name": "LINE_TYPE_ID",
+          "description": "Foreign Key to PO_LINE_TYPES (for example, Goods, Services)."
+        },
+        {
+          "name": "ITEM_ID",
+          "description": "Foreign Key to MTL_SYSTEM_ITEMS_B (the purchased item, if item-based)."
+        },
+        {
+          "name": "ITEM_DESCRIPTION",
+          "description": "Description of the item or service purchased."
+        },
+        {
+          "name": "CATEGORY_ID",
+          "description": "Foreign Key to MTL_CATEGORIES (purchasing category)."
+        },
+        {
+          "name": "UNIT_MEAS_LOOKUP_CODE",
+          "description": "Unit of measure for the line (for example, EACH, KG)."
+        },
+        {
+          "name": "QUANTITY",
+          "description": "Total quantity ordered on this line."
+        },
+        {
+          "name": "UNIT_PRICE",
+          "description": "Price per unit of the item."
+        },
+        {
+          "name": "AMOUNT",
+          "description": "Total line amount (used for service/amount-based lines)."
+        },
+        {
+          "name": "CLOSED_CODE",
+          "description": "Closure status: OPEN, CLOSED, FINALLY CLOSED, CLOSED FOR RECEIVING, CLOSED FOR INVOICING."
+        }
+      ]
+    },
+    {
+      "table_name": "PO_LINE_LOCATIONS_ALL",
+      "business_name": "PO Shipments / Delivery Schedules",
+      "description": "Stores shipment (delivery schedule) information for each PO line, including due dates and ship-to locations.",
+      "columns": [
+        {
+          "name": "LINE_LOCATION_ID",
+          "description": "Unique identifier for the shipment/schedule (Primary Key)."
+        },
+        {
+          "name": "PO_HEADER_ID",
+          "description": "Foreign Key to PO_HEADERS_ALL."
+        },
+        {
+          "name": "PO_LINE_ID",
+          "description": "Foreign Key to PO_LINES_ALL."
+        },
+        {
+          "name": "SHIPMENT_NUM",
+          "description": "The shipment line number."
+        },
+        {
+          "name": "SHIP_TO_ORGANIZATION_ID",
+          "description": "The inventory organization that receives the goods."
+        },
+        {
+          "name": "SHIP_TO_LOCATION_ID",
+          "description": "Foreign Key to HR_LOCATIONS (the specific delivery location)."
+        },
+        {
+          "name": "QUANTITY",
+          "description": "Quantity scheduled for this shipment."
+        },
+        {
+          "name": "QUANTITY_RECEIVED",
+          "description": "Quantity received against this shipment."
+        },
+        {
+          "name": "QUANTITY_BILLED",
+          "description": "Quantity invoiced against this shipment."
+        },
+        {
+          "name": "QUANTITY_ACCEPTED",
+          "description": "Quantity accepted after inspection."
+        },
+        {
+          "name": "QUANTITY_REJECTED",
+          "description": "Quantity rejected after inspection."
+        },
+        {
+          "name": "NEED_BY_DATE",
+          "description": "The need-by date of the goods or services."
+        },
+        {
+          "name": "PROMISED_DATE",
+          "description": "The date the supplier promised to deliver."
+        },
+        {
+          "name": "PRICE_OVERRIDE",
+          "description": "Price override for this specific shipment (if different from line price)."
+        },
+        {
+          "name": "CLOSED_CODE",
+          "description": "Closure status for the shipment."
+        },
+        {
+          "name": "MATCH_OPTION",
+          "description": "Whether invoices match the PO (P) or the receipt (R)."
+        }
+      ]
+    },
+    {
+      "table_name": "PO_DISTRIBUTIONS_ALL",
+      "business_name": "PO Distributions",
+      "description": "Stores accounting distribution information for PO shipments, including charge accounts and quantities.",
+      "columns": [
+        {
+          "name": "PO_DISTRIBUTION_ID",
+          "description": "Unique identifier for the distribution (Primary Key)."
+        },
+        {
+          "name": "PO_HEADER_ID",
+          "description": "Foreign Key to PO_HEADERS_ALL."
+        },
+        {
+          "name": "PO_LINE_ID",
+          "description": "Foreign Key to PO_LINES_ALL."
+        },
+        {
+          "name": "LINE_LOCATION_ID",
+          "description": "Foreign Key to PO_LINE_LOCATIONS_ALL."
+        },
+        {
+          "name": "DISTRIBUTION_NUM",
+          "description": "The distribution line number."
+        },
+        {
+          "name": "CODE_COMBINATION_ID",
+          "description": "Foreign Key to GL_CODE_COMBINATIONS (the charge account)."
+        },
+        {
+          "name": "QUANTITY_ORDERED",
+          "description": "Quantity allocated to this distribution."
+        },
+        {
+          "name": "QUANTITY_DELIVERED",
+          "description": "Quantity received/delivered to this distribution."
+        },
+        {
+          "name": "QUANTITY_BILLED",
+          "description": "Quantity billed/invoiced to this distribution."
+        },
+        {
+          "name": "SET_OF_BOOKS_ID",
+          "description": "Foreign Key to GL_SETS_OF_BOOKS."
+        },
+        {
+          "name": "DESTINATION_TYPE_CODE",
+          "description": "Destination type: EXPENSE, INVENTORY, SHOP FLOOR."
+        },
+        {
+          "name": "DELIVER_TO_LOCATION_ID",
+          "description": "The deliver-to location for this distribution."
+        }
+      ]
+    },
+    {
+      "table_name": "PO_REQUISITION_HEADERS_ALL",
+      "business_name": "Purchase Requisitions",
+      "description": "Stores header information for purchase requisitions (internal requests to procure goods or services).",
+      "columns": [
+        {
+          "name": "REQUISITION_HEADER_ID",
+          "description": "Unique identifier for the requisition header (Primary Key)."
+        },
+        {
+          "name": "SEGMENT1",
+          "description": "The requisition number (user-visible)."
+        },
+        {
+          "name": "AUTHORIZATION_STATUS",
+          "description": "Approval status: APPROVED, IN PROCESS, INCOMPLETE, REJECTED."
+        },
+        {
+          "name": "TYPE_LOOKUP_CODE",
+          "description": "Type of requisition: PURCHASE or INTERNAL."
+        },
+        {
+          "name": "CREATION_DATE",
+          "description": "Creation date of the requisition."
+        },
+        {
+          "name": "DESCRIPTION",
+          "description": "Description or purpose of the requisition."
+        },
+        {
+          "name": "ORG_ID",
+          "description": "Operating unit identifier."
+        }
+      ]
+    },
+    {
+      "table_name": "PO_REQUISITION_LINES_ALL",
+      "business_name": "Purchase Requisition Lines",
+      "description": "Stores line-level details for purchase requisitions.",
+      "columns": [
+        {
+          "name": "REQUISITION_LINE_ID",
+          "description": "Unique identifier for the requisition line (Primary Key)."
+        },
+        {
+          "name": "REQUISITION_HEADER_ID",
+          "description": "Foreign Key to PO_REQUISITION_HEADERS_ALL."
+        },
+        {
+          "name": "LINE_NUM",
+          "description": "The line number on the requisition."
+        },
+        {
+          "name": "ITEM_ID",
+          "description": "Foreign Key to MTL_SYSTEM_ITEMS_B."
+        },
+        {
+          "name": "ITEM_DESCRIPTION",
+          "description": "Description of the item or service requested."
+        },
+        {
+          "name": "UNIT_MEAS_LOOKUP_CODE",
+          "description": "Unit of measure."
+        },
+        {
+          "name": "QUANTITY",
+          "description": "Quantity requested."
+        },
+        {
+          "name": "UNIT_PRICE",
+          "description": "Estimated or quoted unit price."
+        },
+        {
+          "name": "NEED_BY_DATE",
+          "description": "The need-by date of the item."
+        },
+        {
+          "name": "DESTINATION_TYPE_CODE",
+          "description": "Destination: EXPENSE, INVENTORY, SHOP FLOOR."
+        },
+        {
+          "name": "DESTINATION_ORGANIZATION_ID",
+          "description": "The organization that receives the goods."
+        },
+        {
+          "name": "LINE_LOCATION_ID",
+          "description": "Foreign Key to PO_LINE_LOCATIONS_ALL (set when sourced to a PO)."
+        },
+        {
+          "name": "CLOSED_CODE",
+          "description": "Closure status: NULL or OPEN while open, otherwise CLOSED or FINALLY CLOSED."
+        },
+        {
+          "name": "CANCEL_FLAG",
+          "description": "Y for a cancelled line."
+        },
+        {
+          "name": "SUGGESTED_VENDOR_NAME",
+          "description": "Supplier suggested on the requisition line."
+        }
+      ]
+    },
+    {
+      "table_name": "RCV_SHIPMENT_HEADERS",
+      "business_name": "Receiving Shipment Headers",
+      "description": "Stores header information for shipments received from suppliers.",
+      "columns": [
+        {
+          "name": "SHIPMENT_HEADER_ID",
+          "description": "Unique identifier for the receipt/shipment header (Primary Key)."
+        },
+        {
+          "name": "RECEIPT_NUM",
+          "description": "The receipt number (user-visible)."
+        },
+        {
+          "name": "RECEIPT_SOURCE_CODE",
+          "description": "Source of the receipt: VENDOR, INTERNAL ORDER, CUSTOMER."
+        },
+        {
+          "name": "VENDOR_ID",
+          "description": "Foreign Key to AP_SUPPLIERS (the supplying vendor)."
+        },
+        {
+          "name": "VENDOR_SITE_ID",
+          "description": "Foreign Key to AP_SUPPLIER_SITES_ALL."
+        },
+        {
+          "name": "SHIPPED_DATE",
+          "description": "Date the supplier shipped the goods."
+        },
+        {
+          "name": "SHIP_TO_LOCATION_ID",
+          "description": "The delivery location."
+        },
+        {
+          "name": "SHIP_TO_ORG_ID",
+          "description": "The inventory organization that receives the shipment."
+        }
+      ]
+    },
+    {
+      "table_name": "RCV_TRANSACTIONS",
+      "business_name": "Receiving Transactions",
+      "description": "Stores individual receiving transactions such as Receive, Deliver, Return to Vendor, and Correct.",
+      "columns": [
+        {
+          "name": "TRANSACTION_ID",
+          "description": "Unique identifier for the receiving transaction (Primary Key)."
+        },
+        {
+          "name": "SHIPMENT_HEADER_ID",
+          "description": "Foreign Key to RCV_SHIPMENT_HEADERS."
+        },
+        {
+          "name": "SHIPMENT_LINE_ID",
+          "description": "Foreign Key to RCV_SHIPMENT_LINES."
+        },
+        {
+          "name": "TRANSACTION_TYPE",
+          "description": "Type: RECEIVE, DELIVER, RETURN TO VENDOR, TRANSFER, CORRECT."
+        },
+        {
+          "name": "TRANSACTION_DATE",
+          "description": "Date and time of the transaction."
+        },
+        {
+          "name": "QUANTITY",
+          "description": "Quantity received or processed."
+        },
+        {
+          "name": "UNIT_OF_MEASURE",
+          "description": "Unit of measure for the quantity."
+        },
+        {
+          "name": "PO_HEADER_ID",
+          "description": "Foreign Key to PO_HEADERS_ALL."
+        },
+        {
+          "name": "PO_LINE_ID",
+          "description": "Foreign Key to PO_LINES_ALL."
+        },
+        {
+          "name": "PO_LINE_LOCATION_ID",
+          "description": "Foreign Key to PO_LINE_LOCATIONS_ALL."
+        },
+        {
+          "name": "DESTINATION_TYPE_CODE",
+          "description": "Destination of the goods: RECEIVING, INVENTORY, EXPENSE, SHOP FLOOR."
+        },
+        {
+          "name": "SUBINVENTORY",
+          "description": "Target subinventory when delivering to inventory."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "Inventory organization receiving the goods."
+        }
+      ]
+    },
+    {
+      "table_name": "AP_SUPPLIERS",
+      "business_name": "Suppliers",
+      "description": "Stores supplier (vendor) master information. The PO_VENDORS view also exposes it.",
+      "columns": [
+        {
+          "name": "VENDOR_ID",
+          "description": "Unique identifier for the supplier (Primary Key)."
+        },
+        {
+          "name": "VENDOR_NAME",
+          "description": "The name of the supplier."
+        },
+        {
+          "name": "SEGMENT1",
+          "description": "The supplier number."
+        },
+        {
+          "name": "VENDOR_TYPE_LOOKUP_CODE",
+          "description": "Type of vendor (for example, EMPLOYEE, VENDOR)."
+        },
+        {
+          "name": "ENABLED_FLAG",
+          "description": "Indicates if the supplier is active (Y/N)."
+        }
+      ]
+    },
+    {
+      "table_name": "AP_SUPPLIER_SITES_ALL",
+      "business_name": "Supplier Sites",
+      "description": "Stores site/address information for suppliers.",
+      "columns": [
+        {
+          "name": "VENDOR_SITE_ID",
+          "description": "Unique identifier for the supplier site (Primary Key)."
+        },
+        {
+          "name": "VENDOR_ID",
+          "description": "Foreign Key to AP_SUPPLIERS."
+        },
+        {
+          "name": "VENDOR_SITE_CODE",
+          "description": "Short code name for the site (for example, MAIN, HQ)."
+        },
+        {
+          "name": "ADDRESS_LINE1",
+          "description": "Address line 1."
+        },
+        {
+          "name": "CITY",
+          "description": "City of the supplier site."
+        },
+        {
+          "name": "COUNTRY",
+          "description": "Country code."
+        },
+        {
+          "name": "PAY_SITE_FLAG",
+          "description": "Y when payments go to this site."
+        },
+        {
+          "name": "PURCHASING_SITE_FLAG",
+          "description": "Y when purchase orders go to this site."
+        }
+      ]
+    }
+  ],
+  "common_joins": [
+    {
+      "description": "Link PO Lines to PO Header",
+      "join_condition": "PO_LINES_ALL.PO_HEADER_ID = PO_HEADERS_ALL.PO_HEADER_ID"
+    },
+    {
+      "description": "Link PO Shipments to PO Line",
+      "join_condition": "PO_LINE_LOCATIONS_ALL.PO_LINE_ID = PO_LINES_ALL.PO_LINE_ID AND PO_LINE_LOCATIONS_ALL.PO_HEADER_ID = PO_LINES_ALL.PO_HEADER_ID"
+    },
+    {
+      "description": "Link PO Distributions to PO Shipment",
+      "join_condition": "PO_DISTRIBUTIONS_ALL.LINE_LOCATION_ID = PO_LINE_LOCATIONS_ALL.LINE_LOCATION_ID"
+    },
+    {
+      "description": "Link PO Header to Supplier",
+      "join_condition": "PO_HEADERS_ALL.VENDOR_ID = AP_SUPPLIERS.VENDOR_ID"
+    },
+    {
+      "description": "Link PO Header to Supplier Site",
+      "join_condition": "PO_HEADERS_ALL.VENDOR_SITE_ID = AP_SUPPLIER_SITES_ALL.VENDOR_SITE_ID"
+    },
+    {
+      "description": "Link PO Line to Item Master",
+      "join_condition": "PO_LINES_ALL.ITEM_ID = MTL_SYSTEM_ITEMS_B.INVENTORY_ITEM_ID AND PO_LINE_LOCATIONS_ALL.SHIP_TO_ORGANIZATION_ID = MTL_SYSTEM_ITEMS_B.ORGANIZATION_ID"
+    },
+    {
+      "description": "Link Receiving Transaction to PO Shipment",
+      "join_condition": "RCV_TRANSACTIONS.PO_LINE_LOCATION_ID = PO_LINE_LOCATIONS_ALL.LINE_LOCATION_ID"
+    },
+    {
+      "description": "Link Receiving Transaction to Receiving Shipment Header",
+      "join_condition": "RCV_TRANSACTIONS.SHIPMENT_HEADER_ID = RCV_SHIPMENT_HEADERS.SHIPMENT_HEADER_ID"
+    },
+    {
+      "description": "Link Requisition Lines to PO Shipment (sourced requisitions)",
+      "join_condition": "PO_REQUISITION_LINES_ALL.LINE_LOCATION_ID = PO_LINE_LOCATIONS_ALL.LINE_LOCATION_ID"
+    }
+  ],
+  "example_queries": [
+    {
+      "description": "Get all approved standard purchase orders with supplier name in the current operating unit.",
+      "sql": "SELECT ph.SEGMENT1 AS PO_NUMBER, s.VENDOR_NAME AS SUPPLIER, ph.CREATION_DATE, ph.CURRENCY_CODE FROM PO_HEADERS_ALL ph JOIN AP_SUPPLIERS s ON ph.VENDOR_ID = s.VENDOR_ID WHERE ph.TYPE_LOOKUP_CODE = 'STANDARD' AND ph.AUTHORIZATION_STATUS = 'APPROVED' AND ph.ORG_ID = :org_id ORDER BY ph.CREATION_DATE DESC"
+    },
+    {
+      "description": "Get all open PO lines with quantities ordered and received to calculate outstanding quantity.",
+      "sql": "SELECT ph.SEGMENT1 AS PO_NUMBER, pl.LINE_NUM, pl.ITEM_DESCRIPTION, SUM(pll.QUANTITY) AS QTY_ORDERED, SUM(NVL(pll.QUANTITY_RECEIVED, 0)) AS QTY_RECEIVED, SUM(pll.QUANTITY - NVL(pll.QUANTITY_RECEIVED, 0)) AS QTY_OUTSTANDING, pl.UNIT_PRICE, ph.CURRENCY_CODE FROM PO_LINES_ALL pl JOIN PO_HEADERS_ALL ph ON pl.PO_HEADER_ID = ph.PO_HEADER_ID JOIN PO_LINE_LOCATIONS_ALL pll ON pll.PO_LINE_ID = pl.PO_LINE_ID WHERE pl.CLOSED_CODE = 'OPEN' AND ph.AUTHORIZATION_STATUS = 'APPROVED' AND ph.ORG_ID = :org_id GROUP BY ph.SEGMENT1, pl.LINE_NUM, pl.ITEM_DESCRIPTION, pl.UNIT_PRICE, ph.CURRENCY_CODE ORDER BY ph.SEGMENT1, pl.LINE_NUM"
+    },
+    {
+      "description": "Find all PO shipments with a need-by date in the past that are still open (overdue deliveries).",
+      "sql": "SELECT ph.SEGMENT1 AS PO_NUMBER, s.VENDOR_NAME, pl.ITEM_DESCRIPTION, pll.NEED_BY_DATE, pll.QUANTITY - pll.QUANTITY_RECEIVED AS QTY_OUTSTANDING FROM PO_LINE_LOCATIONS_ALL pll JOIN PO_LINES_ALL pl ON pll.PO_LINE_ID = pl.PO_LINE_ID JOIN PO_HEADERS_ALL ph ON pll.PO_HEADER_ID = ph.PO_HEADER_ID JOIN AP_SUPPLIERS s ON ph.VENDOR_ID = s.VENDOR_ID WHERE pll.CLOSED_CODE = 'OPEN' AND pll.NEED_BY_DATE < SYSDATE AND pll.QUANTITY > pll.QUANTITY_RECEIVED AND ph.ORG_ID = :org_id ORDER BY pll.NEED_BY_DATE"
+    },
+    {
+      "description": "Get total PO spend by supplier for a given period.",
+      "sql": "SELECT s.VENDOR_NAME, COUNT(DISTINCT ph.PO_HEADER_ID) AS NUM_POS, SUM(pl.QUANTITY * pl.UNIT_PRICE) AS TOTAL_SPEND, ph.CURRENCY_CODE FROM PO_HEADERS_ALL ph JOIN PO_LINES_ALL pl ON ph.PO_HEADER_ID = pl.PO_HEADER_ID JOIN AP_SUPPLIERS s ON ph.VENDOR_ID = s.VENDOR_ID WHERE ph.AUTHORIZATION_STATUS = 'APPROVED' AND ph.CREATION_DATE BETWEEN :start_date AND :end_date AND ph.ORG_ID = :org_id GROUP BY s.VENDOR_NAME, ph.CURRENCY_CODE ORDER BY TOTAL_SPEND DESC"
+    },
+    {
+      "description": "Get receiving transactions for a specific purchase order.",
+      "sql": "SELECT rsh.RECEIPT_NUM, rt.TRANSACTION_DATE, rt.TRANSACTION_TYPE, pl.ITEM_DESCRIPTION, rt.QUANTITY, rt.UNIT_OF_MEASURE FROM RCV_TRANSACTIONS rt JOIN RCV_SHIPMENT_HEADERS rsh ON rt.SHIPMENT_HEADER_ID = rsh.SHIPMENT_HEADER_ID JOIN PO_LINES_ALL pl ON rt.PO_LINE_ID = pl.PO_LINE_ID JOIN PO_HEADERS_ALL ph ON rt.PO_HEADER_ID = ph.PO_HEADER_ID WHERE ph.SEGMENT1 = :po_number AND rt.TRANSACTION_TYPE = 'RECEIVE' ORDER BY rt.TRANSACTION_DATE"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# Holds the APPS_AI and VOLTGUARD_AGENT passwords.
+terraform.tfvars

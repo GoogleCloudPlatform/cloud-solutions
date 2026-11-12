@@ -1,0 +1,94 @@
+{
+  "capabilities": {
+    "pushNotifications": false,
+    "streaming": false
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain", "image/png"],
+  "description": "Supply chain resiliency agent for Oracle E-Business Suite (EBS) and Google Cloud: an attention scan of every hub, demand sensing with TimesFM forecasts and Google Trends searches, service level agreement (SLA) reservation audits, transfer simulation, live Google Maps Platform routes and weather, zone demand exposure and place density heatmaps from Places Insights with Gemini assessments and Google maps, executive charts, and confirmed Oracle EBS writebacks.",
+  "name": "VoltGuard Supply Chain Resiliency Agent",
+  "protocolVersion": "0.3.0",
+  "skills": [
+    {
+      "description": "Scan every hub and item for stockouts that arrive before an Oracle EBS material requirements planning (MRP) replenishment could, leading with the risks that Oracle EBS doesn't flag.",
+      "examples": [
+        "What needs my attention today?"
+      ],
+      "id": "attention_scan",
+      "name": "Attention scan",
+      "tags": ["inventory", "forecast", "mrp", "oracle_ebs"]
+    },
+    {
+      "description": "Explain stockout risk from Oracle EBS available-to-transact stock, TimesFM demand forecasts, and rising Google searches in each hub market.",
+      "examples": [
+        "Why is Miami DC running out of VG-GEN-7500?",
+        "What are the rising searches in the Miami market this week?"
+      ],
+      "id": "demand_sensing",
+      "name": "Demand sensing and stockout cliff",
+      "tags": ["inventory", "forecast", "timesfm", "google_trends"]
+    },
+    {
+      "description": "Audit raw on-hand, SLA-reserved, and available-to-transact quantities for every hub, with the reservations that lock stock.",
+      "examples": [
+        "Why can't we pull 150 generators from Atlanta?",
+        "Show net availability and SLA reservations for VG-GEN-7500 across all hubs"
+      ],
+      "id": "sla_reservation_audit",
+      "name": "SLA reservation audit",
+      "tags": ["inventory", "sla_reservations", "available_to_transact"]
+    },
+    {
+      "description": "Rank source hubs for a transfer by SLA compliance and net financial benefit, with live Google Maps Platform drive times, alternative routes, and weather.",
+      "examples": [
+        "Simulate reallocating 150 generators to Miami DC and rank the hubs by net financial benefit"
+      ],
+      "id": "transfer_simulation",
+      "name": "Transfer simulation",
+      "tags": ["transfer", "freight", "routes", "weather"]
+    },
+    {
+      "description": "Report live truck routes, traffic delay, tolls and route warnings, daily weather forecasts, and active weather alerts for any hub or lane from Google Maps Platform.",
+      "examples": [
+        "What is the 5-day weather outlook at Miami DC, and are there any active weather alerts?",
+        "Will traffic or weather conditions delay a Dallas to Miami DC transfer this week?"
+      ],
+      "id": "routes_and_weather",
+      "name": "Live routes and weather",
+      "tags": ["routes", "traffic", "weather", "google_maps_platform"]
+    },
+    {
+      "description": "Rank each hub's ZIP code zones by demand exposure from Google Maps Places Insights and US Census homes, add Gemini pull-forward tiers, find nearby partner stores, and draw Google maps of zones, place density heatmaps, and transfer lanes.",
+      "examples": [
+        "Where in South Florida will the generator surge hit hardest?",
+        "Show the demand exposure map for Miami DC",
+        "Show the place density heatmap for Miami DC",
+        "Map the transfer lanes for 150 generators into Miami DC"
+      ],
+      "id": "location_intelligence",
+      "name": "Location intelligence and maps",
+      "tags": ["zones", "places", "maps", "google_maps_platform", "gemini"]
+    },
+    {
+      "description": "Render executive charts from live Oracle EBS and BigQuery data.",
+      "examples": [
+        "Show the executive charts for the 150-generator transfer to Miami DC"
+      ],
+      "id": "executive_charts",
+      "name": "Executive charts",
+      "tags": ["charts", "visualization"]
+    },
+    {
+      "description": "Execute planner-confirmed Oracle EBS writebacks: inter-organization transfer, safety stock update, approved supplier requisition, and workflow notification close.",
+      "examples": [
+        "Plan the 150-unit Dallas transfer, the generator safety stock update, and the surge protector requisition for Miami DC",
+        "Evaluate notification 90412"
+      ],
+      "id": "governed_writebacks",
+      "name": "Governed Oracle EBS writebacks",
+      "tags": ["interorg_transfer", "requisition", "safety_stock", "workflow"]
+    }
+  ],
+  "url": "https://agent-url.example.com",
+  "version": "2.0.0"
+}

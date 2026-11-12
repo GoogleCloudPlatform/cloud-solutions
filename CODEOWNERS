@@ -15,6 +15,15 @@
 /projects/arm-reference-guides/                                       @ferrarimarco @prev-dev
 /projects/beyond-the-chatbot/                                         @zunhoyi
 /projects/build-with-gemini-demo/                                     @gitrey @ferrarimarco
+/projects/build-with-gemini-demo/agentic-development-with-gemini-cli/  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/build-with-gemini-demo/automating-ui-tests/                  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/build-with-gemini-demo/parallel-feature-development/         @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/build-with-gemini-demo/prototype-adk-agent-sample/           @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/build-with-gemini-demo/prototype-adk-agent-with-gemini-cli/  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/build-with-gemini-demo/prototype-with-gemini-cli/            @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/build-with-gemini-demo/prototype-with-gemini-cli-conductor/  @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/build-with-gemini-demo/security-scan-fix/                    @GoogleCloudPlatform/cloud-solutions-the-repo-admin
+/projects/build-with-gemini-demo/ui-changes-implementation/            @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/bulk-delete-gcs-files-fn/                                   @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/confidential-ai-model-serving/                              @jpassing
 /projects/contextual-ai/                                              @GoogleCloudPlatform/cloud-solutions-the-repo-admin

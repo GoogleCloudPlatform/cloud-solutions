@@ -1,0 +1,471 @@
+{
+  "module": "Demand and Logistics Signals (BigQuery)",
+  "dialect": "bigquery",
+  "description": "BigQuery views and tables with the TimesFM demand forecasts, the issue history they learn from, this week's rising Google searches in every hub market from the Google Trends public dataset, hub coordinates for the Google Maps Platform tools, contract freight per lane, the demand exposure of each hub's distribution zones, and place density by H3 cell in each hub market. Query them with the bq_execute_sql tool and always qualify them as dataset.table. They hold signals only, so take every on-hand, reservation, purchase order, supplier, and notification value from the Oracle EBS views.",
+  "tables": [
+    {
+      "table_name": "ebs_scm_agentic_ai.timesfm_hub_burn_forecast",
+      "business_name": "TimesFM Daily Demand Forecast",
+      "description": "Daily demand forecast per hub and item for up to the next 14 days from BigQuery ML AI.FORECAST (TimesFM) on the issue history, multiplied by the hub market's rising search signal when one matches the item. A daily scheduled query refreshes it, and days before today drop out.",
+      "columns": [
+        {
+          "name": "organization_code",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "item_code",
+          "description": "Item number."
+        },
+        {
+          "name": "forecast_date",
+          "description": "Forecast day, stored when TimesFM produced the forecast. Fewer than 14 days per hub and item mean that a daily refresh didn't run."
+        },
+        {
+          "name": "baseline_daily_burn_qty",
+          "description": "TimesFM forecast of units issued that day before any search surge."
+        },
+        {
+          "name": "lower_bound_qty",
+          "description": "Lower bound of the 95% prediction interval."
+        },
+        {
+          "name": "upper_bound_qty",
+          "description": "Upper bound of the 95% prediction interval."
+        },
+        {
+          "name": "search_surge_multiplier",
+          "description": "Demand multiplier from the matching rising search: 1 + percent gain / 100. NULL when no matching search is rising."
+        },
+        {
+          "name": "surged_daily_burn_qty",
+          "description": "Baseline forecast multiplied by the search surge multiplier, or the baseline when no search surge applies."
+        },
+        {
+          "name": "top_rising_term",
+          "description": "Rising search term that drives the surge."
+        },
+        {
+          "name": "signal_source",
+          "description": "Google Trends public dataset, or Scenario signal for the demo's seeded surge."
+        },
+        {
+          "name": "demand_driver_summary",
+          "description": "Plain-language explanation of the scenario's demand driver."
+        },
+        {
+          "name": "forecast_generated_at",
+          "description": "Time the scheduled refresh produced the forecast."
+        }
+      ]
+    },
+    {
+      "table_name": "ebs_scm_agentic_ai.hub_daily_issue_history",
+      "business_name": "Daily Issue History",
+      "description": "Daily issued quantity per hub and item for the trailing 90 days. The input history for TimesFM.",
+      "columns": [
+        {
+          "name": "organization_code",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "item_code",
+          "description": "Item number."
+        },
+        {
+          "name": "issue_date",
+          "description": "Issue day."
+        },
+        {
+          "name": "daily_issued_qty",
+          "description": "Units issued that day."
+        }
+      ]
+    },
+    {
+      "table_name": "ebs_scm_agentic_ai.regional_search_trends_surge",
+      "business_name": "Search Demand Surge",
+      "description": "The strongest rising search per hub and item that matches the item's demand phrases and has a numeric percent gain. Hub-items without such a search have no row.",
+      "columns": [
+        {
+          "name": "organization_code",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "hub_name",
+          "description": "Hub display name."
+        },
+        {
+          "name": "dma_name",
+          "description": "Designated market area of the search signal."
+        },
+        {
+          "name": "item_code",
+          "description": "Item number."
+        },
+        {
+          "name": "top_rising_term",
+          "description": "Rising search term."
+        },
+        {
+          "name": "search_surge_multiplier",
+          "description": "Demand multiplier: 1 + percent gain / 100."
+        },
+        {
+          "name": "search_percent_gain",
+          "description": "Percent gain in search interest."
+        },
+        {
+          "name": "signal_source",
+          "description": "Google Trends public dataset, or Scenario signal for the demo's seeded surge."
+        },
+        {
+          "name": "demand_driver_summary",
+          "description": "Plain-language explanation of the scenario's demand driver."
+        },
+        {
+          "name": "signal_week",
+          "description": "Week of the search signal."
+        }
+      ]
+    },
+    {
+      "table_name": "ebs_scm_agentic_ai.hub_search_signals",
+      "business_name": "Rising Searches by Hub Market",
+      "description": "This week's top rising Google searches in every hub's designated market area from the Google Trends public dataset, plus the demo's scenario signal.",
+      "columns": [
+        {
+          "name": "organization_code",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "hub_name",
+          "description": "Hub display name."
+        },
+        {
+          "name": "dma_name",
+          "description": "Designated market area."
+        },
+        {
+          "name": "term",
+          "description": "Rising search term."
+        },
+        {
+          "name": "week",
+          "description": "Week of the search data."
+        },
+        {
+          "name": "rank",
+          "description": "Rank among the market's rising searches, where 1 rises fastest."
+        },
+        {
+          "name": "percent_gain",
+          "description": "Percent gain in search interest."
+        },
+        {
+          "name": "signal_source",
+          "description": "Google Trends public dataset, or Scenario signal."
+        },
+        {
+          "name": "demand_driver",
+          "description": "Plain-language demand driver of a scenario signal."
+        }
+      ]
+    },
+    {
+      "table_name": "ebs_scm_agentic_ai.hub_market_areas",
+      "business_name": "Hub Market Areas",
+      "description": "Each hub's designated market area and coordinates. Pass the coordinates to the Routes API and Weather API tools.",
+      "columns": [
+        {
+          "name": "organization_code",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "hub_name",
+          "description": "Hub display name."
+        },
+        {
+          "name": "dma_id",
+          "description": "Designated market area code."
+        },
+        {
+          "name": "dma_name",
+          "description": "Designated market area name."
+        },
+        {
+          "name": "latitude",
+          "description": "Hub latitude."
+        },
+        {
+          "name": "longitude",
+          "description": "Hub longitude."
+        }
+      ]
+    },
+    {
+      "table_name": "ebs_scm_agentic_ai.freight_lane_rates",
+      "business_name": "Freight Lane Rates",
+      "description": "Contract truckload freight in USD for one transfer on each lane from a source hub to a destination hub.",
+      "columns": [
+        {
+          "name": "source_org_code",
+          "description": "Source hub organization code."
+        },
+        {
+          "name": "source_hub_name",
+          "description": "Source hub display name."
+        },
+        {
+          "name": "dest_org_code",
+          "description": "Destination hub organization code."
+        },
+        {
+          "name": "dest_hub_name",
+          "description": "Destination hub display name."
+        },
+        {
+          "name": "contract_freight_usd",
+          "description": "Contract freight in USD for one transfer."
+        }
+      ]
+    },
+    {
+      "table_name": "ebs_scm_agentic_ai.zone_demand_exposure",
+      "business_name": "Zone Demand Exposure",
+      "description": "Each hub's distribution zones, the residential ZIP codes inside its market area, ranked by the places and homes that pull backup power demand forward during a grid event: operational critical care, food retail, and hardware retail places from Google Maps Places Insights, owner-occupied homes from the US Census Bureau, and a Gemini (AI.GENERATE) pull-forward assessment. The deployment rebuilds it.",
+      "columns": [
+        {
+          "name": "organization_code",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "hub_name",
+          "description": "Hub display name."
+        },
+        {
+          "name": "zone_id",
+          "description": "ZIP code of the zone."
+        },
+        {
+          "name": "zone_name",
+          "description": "Zone display name: community and ZIP code."
+        },
+        {
+          "name": "latitude",
+          "description": "Zone interior point latitude for the map tools."
+        },
+        {
+          "name": "longitude",
+          "description": "Zone interior point longitude for the map tools."
+        },
+        {
+          "name": "distance_km",
+          "description": "Distance from the hub in kilometers."
+        },
+        {
+          "name": "market_radius_km",
+          "description": "Radius of the hub's market area in kilometers, for the zone map ring."
+        },
+        {
+          "name": "housing_units",
+          "description": "Housing units (US Census Bureau American Community Survey 2020 5-year estimate)."
+        },
+        {
+          "name": "owner_occupied_homes",
+          "description": "Owner-occupied homes (US Census Bureau American Community Survey 2020 5-year estimate)."
+        },
+        {
+          "name": "critical_care_sites",
+          "description": "Operational hospitals, medical labs, pharmacies, and drugstores in the zone (Google Maps Places Insights)."
+        },
+        {
+          "name": "food_retail_sites",
+          "description": "Operational grocery stores and supermarkets in the zone (Google Maps Places Insights)."
+        },
+        {
+          "name": "hardware_retail_sites",
+          "description": "Operational hardware and home improvement stores in the zone (Google Maps Places Insights)."
+        },
+        {
+          "name": "critical_care_level",
+          "description": "Density of hospitals, medical labs, and pharmacies compared with the hub's other zones: HIGH, MEDIUM, or LOW (Google Maps Places Insights)."
+        },
+        {
+          "name": "food_retail_level",
+          "description": "Density of grocery stores and supermarkets compared with the hub's other zones: HIGH, MEDIUM, or LOW (Google Maps Places Insights)."
+        },
+        {
+          "name": "hardware_retail_level",
+          "description": "Density of hardware and home improvement stores compared with the hub's other zones: HIGH, MEDIUM, or LOW (Google Maps Places Insights)."
+        },
+        {
+          "name": "exposure_score",
+          "description": "Demand exposure score from 0 to 10 within the hub: 35% critical care, 20% food retail, 15% hardware retail, and 30% owner-occupied homes, each scaled across the hub's zones."
+        },
+        {
+          "name": "exposure_rank",
+          "description": "Rank of the zone within its hub by exposure score. Rank 1 is the most exposed."
+        },
+        {
+          "name": "exposure_share",
+          "description": "Zone share of the hub's total exposure score, which splits the hub's surged daily demand across its zones."
+        },
+        {
+          "name": "gemini_pull_forward_tier",
+          "description": "HIGH, MEDIUM, or LOW backup generator pull-forward tier that Gemini assigned from the zone facts and the hub's demand driver."
+        },
+        {
+          "name": "gemini_reasoning",
+          "description": "Gemini's one-sentence reason for the pull-forward tier."
+        },
+        {
+          "name": "refreshed_at",
+          "description": "When the deployment rebuilt the zone exposure."
+        }
+      ]
+    },
+    {
+      "table_name": "ebs_scm_agentic_ai.market_place_density",
+      "business_name": "Market Place Density",
+      "description": "Operational critical care, food retail, and hardware retail places in every H3 cell (resolution 7, about 5 square kilometers) of each hub's 15 km market area, from Google Maps Places Insights, with a 0 to 10 density score for the heatmap. The deployment rebuilds it.",
+      "columns": [
+        {
+          "name": "organization_code",
+          "description": "Hub organization code."
+        },
+        {
+          "name": "hub_name",
+          "description": "Hub display name."
+        },
+        {
+          "name": "market_radius_km",
+          "description": "Radius of the hub's market area in kilometers, for the heatmap ring."
+        },
+        {
+          "name": "h3_cell_index",
+          "description": "H3 cell index for the heatmap tool."
+        },
+        {
+          "name": "latitude",
+          "description": "Cell center latitude, for a place search inside the cell."
+        },
+        {
+          "name": "longitude",
+          "description": "Cell center longitude, for a place search inside the cell."
+        },
+        {
+          "name": "distance_km",
+          "description": "Distance from the hub to the cell center in kilometers."
+        },
+        {
+          "name": "critical_care_sites",
+          "description": "Operational hospitals, medical labs, pharmacies, and drugstores in the cell."
+        },
+        {
+          "name": "food_retail_sites",
+          "description": "Operational grocery stores and supermarkets in the cell."
+        },
+        {
+          "name": "hardware_retail_sites",
+          "description": "Operational hardware and home improvement stores in the cell."
+        },
+        {
+          "name": "place_count",
+          "description": "All three place groups in the cell."
+        },
+        {
+          "name": "density_score",
+          "description": "Place count scaled from 0 to 10 across the hub's cells. The hub's densest cell scores 10."
+        },
+        {
+          "name": "density_rank",
+          "description": "Rank of the cell within its hub by place count. Rank 1 is the densest."
+        },
+        {
+          "name": "refreshed_at",
+          "description": "When the deployment rebuilt the place density."
+        }
+      ]
+    }
+  ],
+  "common_joins": [
+    {
+      "description": "Forecast to the search surge that drives it",
+      "join_condition": "timesfm_hub_burn_forecast.organization_code = regional_search_trends_surge.organization_code AND timesfm_hub_burn_forecast.item_code = regional_search_trends_surge.item_code"
+    },
+    {
+      "description": "Freight lane to the coordinates of its hubs",
+      "join_condition": "freight_lane_rates.source_org_code = hub_market_areas.organization_code (source) and freight_lane_rates.dest_org_code = hub_market_areas.organization_code (destination)"
+    },
+    {
+      "description": "Oracle EBS hub values passed as literals to a forecast or lane query",
+      "join_condition": "organization_code = h.organization_code, where h is UNNEST([STRUCT(<organization_code> AS organization_code, <item_code> AS item_code, <att_qty> AS att_qty, ...), ...])"
+    },
+    {
+      "description": "Zone exposure to its hub's coordinates and forecast",
+      "join_condition": "zone_demand_exposure.organization_code = hub_market_areas.organization_code and zone_demand_exposure.organization_code = timesfm_hub_burn_forecast.organization_code"
+    },
+    {
+      "description": "Place density cells to their hub's coordinates",
+      "join_condition": "market_place_density.organization_code = hub_market_areas.organization_code"
+    }
+  ],
+  "example_queries": [
+    {
+      "description": "TimesFM daily demand forecast for a hub and item",
+      "sql": "SELECT forecast_date, baseline_daily_burn_qty, lower_bound_qty, upper_bound_qty, search_surge_multiplier, surged_daily_burn_qty, top_rising_term, signal_source, demand_driver_summary FROM ebs_scm_agentic_ai.timesfm_hub_burn_forecast WHERE organization_code = :org_code AND item_code = :item_code ORDER BY forecast_date"
+    },
+    {
+      "description": "Forecast summary: average baseline and surged daily demand over the horizon, with the search signal",
+      "sql": "SELECT organization_code, item_code, COUNT(*) AS forecast_days, ROUND(AVG(baseline_daily_burn_qty), 2) AS avg_baseline_daily_burn_qty, ANY_VALUE(search_surge_multiplier) AS search_surge_multiplier, ROUND(AVG(surged_daily_burn_qty), 2) AS avg_surged_daily_burn_qty, ANY_VALUE(top_rising_term) AS top_rising_term, ANY_VALUE(signal_source) AS signal_source, ANY_VALUE(demand_driver_summary) AS demand_driver_summary FROM ebs_scm_agentic_ai.timesfm_hub_burn_forecast WHERE organization_code = :org_code AND item_code = :item_code GROUP BY organization_code, item_code"
+    },
+    {
+      "description": "Stockout cliff and detection gap per hub and item: pass Oracle EBS ATT and MRP lead time as literals for one or more hub-items. Returns only hub-items that stock out within the 14-day forecast",
+      "sql": "WITH stock AS (SELECT * FROM UNNEST([STRUCT('<ORG_CODE>' AS organization_code, '<ITEM_CODE>' AS item_code, 0 AS att_qty, 0 AS lead_time_days)])), f AS (SELECT organization_code, item_code, forecast_date, surged_daily_burn_qty AS burn, search_surge_multiplier, top_rising_term, signal_source, demand_driver_summary, ROW_NUMBER() OVER w AS day_n, SUM(surged_daily_burn_qty) OVER w AS cum_burn FROM ebs_scm_agentic_ai.timesfm_hub_burn_forecast WINDOW w AS (PARTITION BY organization_code, item_code ORDER BY forecast_date)), crossing AS (SELECT stock.organization_code, stock.item_code, stock.att_qty, stock.lead_time_days, MIN(f.day_n) AS stockout_day FROM stock JOIN f USING (organization_code, item_code) WHERE f.cum_burn >= stock.att_qty AND f.burn > 0 GROUP BY stock.organization_code, stock.item_code, stock.att_qty, stock.lead_time_days) SELECT crossing.organization_code, crossing.item_code, crossing.att_qty, crossing.lead_time_days, ROUND(f.day_n - 1 + (crossing.att_qty - (f.cum_burn - f.burn)) / f.burn, 2) AS days_to_stockout, f.forecast_date AS stockout_date, ROUND(crossing.lead_time_days - (f.day_n - 1 + (crossing.att_qty - (f.cum_burn - f.burn)) / f.burn), 2) AS detection_gap_days, f.search_surge_multiplier, f.top_rising_term, f.signal_source, f.demand_driver_summary FROM crossing JOIN f ON f.organization_code = crossing.organization_code AND f.item_code = crossing.item_code AND f.day_n = crossing.stockout_day ORDER BY days_to_stockout"
+    },
+    {
+      "description": "Safety stock check per hub and item: pass Oracle EBS safety stock and baseline safety stock as literals for one or more hub-items. Returns the surge target, the baseline scaled by the search surge multiplier or the baseline without a search surge, and whether to raise the safety stock, return it to the target, or keep it",
+      "sql": "WITH stock AS (SELECT * FROM UNNEST([STRUCT('<ORG_CODE>' AS organization_code, '<ITEM_CODE>' AS item_code, 0 AS safety_stock_qty, 0 AS baseline_safety_stock_qty)])), surge AS (SELECT organization_code, item_code, ANY_VALUE(search_surge_multiplier) AS search_surge_multiplier FROM ebs_scm_agentic_ai.timesfm_hub_burn_forecast GROUP BY organization_code, item_code), targets AS (SELECT stock.organization_code, stock.item_code, stock.safety_stock_qty, stock.baseline_safety_stock_qty, surge.search_surge_multiplier, IF(surge.search_surge_multiplier IS NULL, stock.baseline_safety_stock_qty, CAST(CEIL(stock.baseline_safety_stock_qty * surge.search_surge_multiplier) AS INT64)) AS surge_target_qty FROM stock JOIN surge USING (organization_code, item_code)) SELECT organization_code, item_code, safety_stock_qty, baseline_safety_stock_qty, search_surge_multiplier, surge_target_qty, CASE WHEN safety_stock_qty < surge_target_qty THEN 'Raise to target' WHEN safety_stock_qty > surge_target_qty THEN 'Return to target' WHEN safety_stock_qty = surge_target_qty THEN 'At target' END AS safety_stock_action FROM targets ORDER BY organization_code, item_code"
+    },
+    {
+      "description": "Projected ATT per forecast day for a stockout chart (pass ATT as a literal)",
+      "sql": "SELECT forecast_date, surged_daily_burn_qty, ROUND(:att_qty - SUM(surged_daily_burn_qty) OVER (ORDER BY forecast_date), 2) AS projected_att_qty FROM ebs_scm_agentic_ai.timesfm_hub_burn_forecast WHERE organization_code = :org_code AND item_code = :item_code ORDER BY forecast_date"
+    },
+    {
+      "description": "Trailing 7-day average daily issues for the static days-of-cover baseline",
+      "sql": "SELECT organization_code, item_code, ROUND(AVG(daily_issued_qty), 2) AS trailing_7d_daily_burn_qty FROM ebs_scm_agentic_ai.hub_daily_issue_history WHERE organization_code = :org_code AND item_code = :item_code AND issue_date >= DATE_SUB((SELECT MAX(issue_date) FROM ebs_scm_agentic_ai.hub_daily_issue_history WHERE organization_code = :org_code AND item_code = :item_code), INTERVAL 6 DAY) GROUP BY organization_code, item_code"
+    },
+    {
+      "description": "This week's rising searches in a hub market",
+      "sql": "SELECT term, rank, percent_gain, signal_source, demand_driver FROM ebs_scm_agentic_ai.hub_search_signals WHERE organization_code = :org_code ORDER BY rank LIMIT 10"
+    },
+    {
+      "description": "Rank source hubs by net financial benefit for a transfer, using Oracle EBS ATT and item list price passed as literals. Returns the hub coordinates for the Routes and Weather tools",
+      "sql": "SELECT l.source_org_code, l.source_hub_name, h.att_qty, h.att_qty >= :transfer_qty AS sla_compliant, l.contract_freight_usd, ROUND(:transfer_qty * h.unit_list_price_usd, 2) AS protected_revenue_usd, ROUND(:transfer_qty * h.unit_list_price_usd - l.contract_freight_usd, 2) AS net_financial_benefit_usd, src.latitude AS source_latitude, src.longitude AS source_longitude, dst.latitude AS dest_latitude, dst.longitude AS dest_longitude FROM ebs_scm_agentic_ai.freight_lane_rates AS l JOIN UNNEST([STRUCT('<ORG_CODE>' AS organization_code, 0 AS att_qty, 0.0 AS unit_list_price_usd)]) AS h ON h.organization_code = l.source_org_code JOIN ebs_scm_agentic_ai.hub_market_areas AS src ON src.organization_code = l.source_org_code JOIN ebs_scm_agentic_ai.hub_market_areas AS dst ON dst.organization_code = l.dest_org_code WHERE l.dest_org_code = :dest_org_code ORDER BY sla_compliant DESC, net_financial_benefit_usd DESC"
+    },
+    {
+      "description": "Coordinates of hubs for the Routes and Weather tools",
+      "sql": "SELECT organization_code, hub_name, latitude, longitude FROM ebs_scm_agentic_ai.hub_market_areas WHERE organization_code IN (:org_codes)"
+    },
+    {
+      "description": "Most exposed distribution zones around a hub, with the Gemini pull-forward assessment",
+      "sql": "SELECT exposure_rank, zone_name, exposure_score, critical_care_sites, food_retail_sites, hardware_retail_sites, critical_care_level, food_retail_level, hardware_retail_level, owner_occupied_homes, distance_km, gemini_pull_forward_tier, gemini_reasoning FROM ebs_scm_agentic_ai.zone_demand_exposure WHERE organization_code = :org_code ORDER BY exposure_rank LIMIT 10"
+    },
+    {
+      "description": "Zone map rows (label, latitude, longitude, score) with the hub center and market radius for the zone map",
+      "sql": "SELECT e.zone_name AS label, ROUND(e.latitude, 4) AS latitude, ROUND(e.longitude, 4) AS longitude, e.exposure_score AS score, h.hub_name, h.latitude AS hub_latitude, h.longitude AS hub_longitude, e.market_radius_km FROM ebs_scm_agentic_ai.zone_demand_exposure e JOIN ebs_scm_agentic_ai.hub_market_areas h ON h.organization_code = e.organization_code WHERE e.organization_code = :org_code ORDER BY e.exposure_rank"
+    },
+    {
+      "description": "Split a hub's surged daily demand for an item across its most exposed zones (first forecast day)",
+      "sql": "WITH first_day AS (SELECT organization_code, surged_daily_burn_qty FROM ebs_scm_agentic_ai.timesfm_hub_burn_forecast WHERE organization_code = :org_code AND item_code = :item_code ORDER BY forecast_date LIMIT 1) SELECT e.exposure_rank, e.zone_name, first_day.surged_daily_burn_qty AS hub_surged_daily_qty, ROUND(first_day.surged_daily_burn_qty * e.exposure_share, 1) AS zone_surged_daily_qty FROM ebs_scm_agentic_ai.zone_demand_exposure e JOIN first_day ON first_day.organization_code = e.organization_code ORDER BY e.exposure_rank LIMIT 10"
+    },
+    {
+      "description": "Heatmap rows (h3_cell_index, score) for the densest cells around a hub, with the hub center and market radius",
+      "sql": "SELECT d.h3_cell_index, d.density_score AS score, h.hub_name, h.latitude AS hub_latitude, h.longitude AS hub_longitude, d.market_radius_km FROM ebs_scm_agentic_ai.market_place_density d JOIN ebs_scm_agentic_ai.hub_market_areas h ON h.organization_code = d.organization_code WHERE d.organization_code = :org_code ORDER BY d.density_rank LIMIT 80"
+    },
+    {
+      "description": "Densest cells around a hub with their place counts and centers",
+      "sql": "SELECT density_rank, h3_cell_index, latitude, longitude, distance_km, critical_care_sites, food_retail_sites, hardware_retail_sites, place_count, density_score FROM ebs_scm_agentic_ai.market_place_density WHERE organization_code = :org_code ORDER BY density_rank LIMIT 5"
+    }
+  ]
+}

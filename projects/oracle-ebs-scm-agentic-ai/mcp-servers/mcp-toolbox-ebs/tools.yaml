@@ -1,0 +1,393 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# MCP Toolbox configuration for the VoltGuard supply chain agent, built on the
+# Oracle EBS Gemini Enterprise MCP framework. The file contains placeholders
+# only: Cloud Run injects connection values and Secret Manager credentials as
+# environment variables at startup.
+#
+# Reads run as the SELECT-only APPS_AI database user. Writebacks call the
+# ge_ebs_scm_tools Oracle Integrated SOA Gateway (ISG) REST service, which
+# authenticates the Oracle EBS writeback user and starts its session on the
+# responsibility in the RESTHeader. The model supplies only the business
+# parameters, never the user or the responsibility. Live drive times, hub
+# weather, and nearby places come from the Google Maps Platform Routes,
+# Weather, and Places APIs, with a key restricted to those three APIs.
+
+---
+kind: source
+name: ebs-oracle
+type: oracle
+connectionString: ${EBS_DB_CONNECTION_STRING}
+user: ${EBS_DB_USER}
+password: ${EBS_DB_PASSWORD}
+
+---
+kind: source
+name: scm-bigquery
+type: bigquery
+project: ${BIGQUERY_PROJECT}
+location: ${BIGQUERY_LOCATION}
+readOnly: true
+allowedDatasets:
+  - ebs_scm_agentic_ai
+maxQueryResultRows: 200
+
+---
+kind: source
+name: ebs-isg
+type: http
+baseUrl: ${EBS_ISG_URL}
+timeout: 60s
+# The server-side request forgery (SSRF) guard blocks private addresses, so
+# allow only the Oracle EBS host.
+allowedIpRanges:
+  - ${EBS_ISG_ALLOWED_RANGE}
+headers:
+  Authorization: Basic ${EBS_ISG_BASIC_AUTH}
+  Content-Type: application/json
+  Accept: application/json
+
+---
+kind: source
+name: google-routes
+type: http
+baseUrl: https://routes.googleapis.com
+timeout: 30s
+headers:
+  X-Goog-Api-Key: ${MAPS_API_KEY}
+  X-Goog-FieldMask: >-
+    routes.description,routes.distanceMeters,routes.duration,routes.staticDuration,routes.warnings,routes.routeLabels
+  Content-Type: application/json
+
+---
+kind: source
+name: google-weather
+type: http
+baseUrl: https://weather.googleapis.com
+timeout: 30s
+headers:
+  X-Goog-Api-Key: ${MAPS_API_KEY}
+
+---
+kind: source
+name: google-places
+type: http
+baseUrl: https://places.googleapis.com
+timeout: 30s
+headers:
+  X-Goog-Api-Key: ${MAPS_API_KEY}
+  X-Goog-FieldMask: >-
+    places.displayName,places.formattedAddress,places.primaryType,places.location,places.googleMapsUri
+  Content-Type: application/json
+
+---
+kind: tool
+name: ebs_execute_sql
+type: oracle-execute-sql
+source: ebs-oracle
+description: >-
+  Runs one read-only Oracle SQL SELECT statement against the Oracle
+  E-Business Suite views and tables described in the semantic maps. Use
+  Oracle syntax (FETCH FIRST n ROWS ONLY, no LIMIT) and do not end the
+  statement with a semicolon.
+
+---
+kind: tool
+name: bq_execute_sql
+type: bigquery-execute-sql
+source: scm-bigquery
+description: >-
+  Runs one read-only GoogleSQL SELECT statement against the BigQuery
+  dataset ebs_scm_agentic_ai. Qualify every table as dataset.table.
+
+---
+kind: tool
+name: bq_forecast
+type: bigquery-forecast
+source: scm-bigquery
+description: >-
+  Forecasts a time series with BigQuery AI.FORECAST (TimesFM). Pass a
+  dataset-qualified table or a read-only SELECT as history_data, plus the
+  timestamp column, the value column, optional series ID columns, and the
+  horizon in time steps.
+
+---
+kind: tool
+name: maps_compute_routes
+type: http
+source: google-routes
+description: >-
+  Computes live truck routes from a source hub to a destination hub with the
+  Google Maps Platform Routes API: traffic-aware drive time, distance, and
+  alternative routes. Take the hub coordinates from
+  ebs_scm_agentic_ai.hub_market_areas.
+method: POST
+path: /directions/v2:computeRoutes
+requestBody: |
+  {"origin": {"location": {"latLng": {
+     "latitude": {{json .origin_latitude}},
+     "longitude": {{json .origin_longitude}}}}},
+   "destination": {"location": {"latLng": {
+     "latitude": {{json .destination_latitude}},
+     "longitude": {{json .destination_longitude}}}}},
+   "travelMode": "DRIVE", "routingPreference": "TRAFFIC_AWARE",
+   "computeAlternativeRoutes": true, "units": "IMPERIAL"}
+bodyParams:
+  - name: origin_latitude
+    type: float
+    description: Latitude of the source hub.
+  - name: origin_longitude
+    type: float
+    description: Longitude of the source hub.
+  - name: destination_latitude
+    type: float
+    description: Latitude of the destination hub.
+  - name: destination_longitude
+    type: float
+    description: Longitude of the destination hub.
+
+---
+kind: tool
+name: weather_daily_forecast
+type: http
+source: google-weather
+description: >-
+  Returns the Google Maps Platform Weather API daily forecast at a hub:
+  conditions, rain and thunderstorm probability, wind gusts, the high and low
+  temperatures, the feels-like high, and the maximum heat index. Take the hub
+  coordinates from ebs_scm_agentic_ai.hub_market_areas.
+method: GET
+path: /v1/forecast/days:lookup
+headers:
+  X-Goog-FieldMask: >-
+    forecastDays.displayDate,forecastDays.daytimeForecast.weatherCondition.description.text,forecastDays.daytimeForecast.precipitation.probability.percent,forecastDays.daytimeForecast.thunderstormProbability,forecastDays.daytimeForecast.wind.gust,forecastDays.maxTemperature,forecastDays.minTemperature,forecastDays.maxHeatIndex,forecastDays.feelsLikeMaxTemperature
+queryParams:
+  - name: location.latitude
+    type: float
+    description: Latitude of the hub.
+  - name: location.longitude
+    type: float
+    description: Longitude of the hub.
+  - name: days
+    type: integer
+    description: Number of forecast days, from 1 to 10.
+  - name: unitsSystem
+    type: string
+    description: Always IMPERIAL.
+
+---
+kind: tool
+name: weather_alerts
+type: http
+source: google-weather
+description: >-
+  Returns the active public weather alerts, such as storm, flood, or heat
+  warnings, at a hub from the Google Maps Platform Weather API. Take the hub
+  coordinates from ebs_scm_agentic_ai.hub_market_areas.
+method: GET
+path: /v1/publicAlerts:lookup
+queryParams:
+  - name: location.latitude
+    type: float
+    description: Latitude of the hub.
+  - name: location.longitude
+    type: float
+    description: Longitude of the hub.
+
+---
+kind: tool
+name: places_search_text
+type: http
+source: google-places
+description: >-
+  Finds the places that match a brand or kind of place, nearest first, around
+  a hub or zone with the Google Maps Platform Places API: name, address,
+  type, location, and Google Maps link. Take hub coordinates from
+  ebs_scm_agentic_ai.hub_market_areas and zone coordinates from
+  ebs_scm_agentic_ai.zone_demand_exposure.
+method: POST
+path: /v1/places:searchText
+requestBody: |
+  {"textQuery": {{json .text_query}},
+   "includedType": {{json .place_type}},
+   "strictTypeFiltering": true,
+   "pageSize": {{json .max_result_count}},
+   "rankPreference": "DISTANCE",
+   "locationBias": {"circle": {
+     "center": {"latitude": {{json .latitude}},
+       "longitude": {{json .longitude}}},
+     "radius": {{json .radius_meters}}}}}
+bodyParams:
+  - name: text_query
+    type: string
+    description: >-
+      Brands or kind of place, for example The Home Depot and Lowe's, Ace
+      Hardware, or hospital.
+  - name: place_type
+    type: string
+    description: >-
+      One Google Maps place type that every result has, for example
+      home_improvement_store, hardware_store, hospital, or supermarket.
+  - name: latitude
+    type: float
+    description: Latitude of the hub or zone.
+  - name: longitude
+    type: float
+    description: Longitude of the hub or zone.
+  - name: radius_meters
+    type: float
+    description: Search radius around the hub or zone in meters, up to 50000.
+  - name: max_result_count
+    type: integer
+    description: Number of places to return, from 1 to 20.
+
+---
+kind: tool
+name: ebs_stage_interorg_transfer
+type: http
+source: ebs-isg
+description: >-
+  Transfers units of an item from a source hub to a destination hub through
+  Oracle Inventory after checking the source hub's available-to-transact
+  quantity. Changes Oracle EBS data, so it runs only for a plan that the
+  planner confirms by replying "Confirmed".
+method: POST
+path: /webservices/rest/ge_ebs_scm_tools/stage_interorg_transfer/
+requestBody: |
+  {"STAGE_INTERORG_TRANSFER_Input": {
+    "RESTHeader": {"Responsibility": "${EBS_INVENTORY_RESPONSIBILITY}",
+      "RespApplication": "INV", "SecurityGroup": "STANDARD",
+      "NLSLanguage": "AMERICAN"},
+    "InputParameters": {
+      "P_SOURCE_ORG_CODE": {{json .source_org_code}},
+      "P_DEST_ORG_CODE": {{json .dest_org_code}},
+      "P_ITEM_CODE": {{json .item_code}},
+      "P_TRANSFER_QTY": {{json .transfer_qty}}}}}
+bodyParams:
+  - name: source_org_code
+    type: string
+    description: Oracle Inventory organization code of the source hub.
+  - name: dest_org_code
+    type: string
+    description: Oracle Inventory organization code of the destination hub.
+  - name: item_code
+    type: string
+    description: Item number (MTL_SYSTEM_ITEMS_B.SEGMENT1).
+  - name: transfer_qty
+    type: integer
+    description: Whole number of units to transfer.
+
+---
+kind: tool
+name: ebs_stage_purchase_requisition
+type: http
+source: ebs-isg
+description: >-
+  Stages a purchase requisition for the item's approved supplier and submits
+  Oracle Purchasing Requisition Import. Changes Oracle EBS data, so it runs
+  only for a plan that the planner confirms by replying "Confirmed".
+method: POST
+path: /webservices/rest/ge_ebs_scm_tools/stage_purchase_requisition/
+requestBody: |
+  {"STAGE_PURCHASE_REQUISITION_Input": {
+    "RESTHeader": {"Responsibility": "${EBS_PURCHASING_RESPONSIBILITY}",
+      "RespApplication": "PO", "SecurityGroup": "STANDARD",
+      "NLSLanguage": "AMERICAN"},
+    "InputParameters": {
+      "P_DESTINATION_ORG_CODE": {{json .destination_org_code}},
+      "P_ITEM_CODE": {{json .item_code}},
+      "P_QUANTITY": {{json .quantity}},
+      "P_UNIT_PRICE": {{json .unit_price}},
+      "P_SUGGESTED_VENDOR_NAME": {{json .suggested_vendor_name}}}}}
+bodyParams:
+  - name: destination_org_code
+    type: string
+    description: Oracle Inventory organization code that receives the goods.
+  - name: item_code
+    type: string
+    description: Item number (MTL_SYSTEM_ITEMS_B.SEGMENT1).
+  - name: quantity
+    type: integer
+    description: Whole number of units to requisition.
+  - name: unit_price
+    type: float
+    description: Item list price in USD from the approved supplier data.
+  - name: suggested_vendor_name
+    type: string
+    description: Approved supplier name from the approved supplier data.
+
+---
+kind: tool
+name: ebs_update_safety_stock
+type: http
+source: ebs-isg
+description: >-
+  Records a new safety stock quantity for an item at a hub, effective today.
+  Changes Oracle EBS data, so it runs only for a plan that the planner
+  confirms by replying "Confirmed".
+method: POST
+path: /webservices/rest/ge_ebs_scm_tools/update_safety_stock/
+requestBody: |
+  {"UPDATE_SAFETY_STOCK_Input": {
+    "RESTHeader": {"Responsibility": "${EBS_INVENTORY_RESPONSIBILITY}",
+      "RespApplication": "INV", "SecurityGroup": "STANDARD",
+      "NLSLanguage": "AMERICAN"},
+    "InputParameters": {
+      "P_ORGANIZATION_CODE": {{json .organization_code}},
+      "P_ITEM_CODE": {{json .item_code}},
+      "P_SAFETY_STOCK_QTY": {{json .safety_stock_qty}}}}}
+bodyParams:
+  - name: organization_code
+    type: string
+    description: Oracle Inventory organization code of the hub.
+  - name: item_code
+    type: string
+    description: Item number (MTL_SYSTEM_ITEMS_B.SEGMENT1).
+  - name: safety_stock_qty
+    type: integer
+    description: New safety stock quantity in whole units.
+
+---
+kind: tool
+name: ebs_close_workflow_notification
+type: http
+source: ebs-isg
+description: >-
+  Closes an open VoltGuard resiliency alert in Oracle Workflow and records the
+  closure code and the resolution note on it. Changes Oracle EBS data, so it
+  runs only for a plan that the planner confirms by replying "Confirmed".
+method: POST
+path: /webservices/rest/ge_ebs_scm_tools/close_workflow_notification/
+requestBody: |
+  {"CLOSE_WORKFLOW_NOTIFICATION_Input": {
+    "RESTHeader": {"Responsibility": "${EBS_INVENTORY_RESPONSIBILITY}",
+      "RespApplication": "INV", "SecurityGroup": "STANDARD",
+      "NLSLanguage": "AMERICAN"},
+    "InputParameters": {
+      "P_NOTIFICATION_ID": {{json .notification_id}},
+      "P_ACTION": {{json .action}},
+      "P_RESOLUTION_NOTE": {{json .resolution_note}}}}}
+bodyParams:
+  - name: notification_id
+    type: integer
+    description: Oracle Workflow notification ID of the VoltGuard alert.
+  - name: action
+    type: string
+    description: >-
+      Closure code: MITIGATED when executed actions resolve the alert, or
+      ACKNOWLEDGED when the planner closes it without action.
+  - name: resolution_note
+    type: string
+    description: Note of 2,000 characters or fewer that summarizes the outcome.

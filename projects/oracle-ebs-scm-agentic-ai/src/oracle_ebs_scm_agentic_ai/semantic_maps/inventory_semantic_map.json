@@ -1,0 +1,283 @@
+{
+  "module": "Inventory (INV)",
+  "dialect": "oracle",
+  "description": "Semantic mapping for Oracle EBS Inventory tables to business concepts.",
+  "tables": [
+    {
+      "table_name": "MTL_SYSTEM_ITEMS_B",
+      "business_name": "Items",
+      "description": "Master table for all inventory items defined in the system.",
+      "columns": [
+        {
+          "name": "INVENTORY_ITEM_ID",
+          "description": "Unique identifier for the item (Primary Key)."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "Identifier for the organization that defines the item."
+        },
+        {
+          "name": "SEGMENT1",
+          "description": "The item's number or code."
+        },
+        {
+          "name": "DESCRIPTION",
+          "description": "The description of the item."
+        },
+        {
+          "name": "PRIMARY_UOM_CODE",
+          "description": "The primary unit of measure for the item (for example, EACH, KG)."
+        },
+        {
+          "name": "INVENTORY_ASSET_FLAG",
+          "description": "Indicates if the item is an asset (Y/N)."
+        },
+        {
+          "name": "STOCK_ENABLED_FLAG",
+          "description": "Whether the organization can stock the item (Y/N)."
+        }
+      ]
+    },
+    {
+      "table_name": "MTL_ONHAND_QUANTITIES_DETAIL",
+      "business_name": "On-Hand Quantity",
+      "description": "Stores detailed information about on-hand quantities for items in specific locations.",
+      "columns": [
+        {
+          "name": "INVENTORY_ITEM_ID",
+          "description": "Foreign Key to MTL_SYSTEM_ITEMS_B."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "The inventory organization."
+        },
+        {
+          "name": "SUBINVENTORY_CODE",
+          "description": "The subinventory that stores the item."
+        },
+        {
+          "name": "LOCATOR_ID",
+          "description": "Foreign Key to MTL_ITEM_LOCATIONS (The specific stock locator)."
+        },
+        {
+          "name": "TRANSACTION_QUANTITY",
+          "description": "The quantity of items in this specific location."
+        },
+        {
+          "name": "LOT_NUMBER",
+          "description": "Lot number for lot-controlled items."
+        }
+      ]
+    },
+    {
+      "table_name": "MTL_SECONDARY_INVENTORIES",
+      "business_name": "Subinventories",
+      "description": "Stores information about subinventories within an inventory organization.",
+      "columns": [
+        {
+          "name": "SECONDARY_INVENTORY_NAME",
+          "description": "The name of the subinventory (Primary Key)."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "The inventory organization this subinventory belongs to (Primary Key)."
+        },
+        {
+          "name": "DESCRIPTION",
+          "description": "Description of the subinventory."
+        }
+      ]
+    },
+    {
+      "table_name": "MTL_ITEM_LOCATIONS",
+      "business_name": "Stock Locators",
+      "description": "Stores information about specific stock locators (for example, aisle, rack, bin) within a subinventory.",
+      "columns": [
+        {
+          "name": "INVENTORY_LOCATION_ID",
+          "description": "Unique identifier for the locator (Primary Key)."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "The inventory organization."
+        },
+        {
+          "name": "SUBINVENTORY_CODE",
+          "description": "The subinventory where the locator exists."
+        },
+        {
+          "name": "SEGMENT1",
+          "description": "Segment 1 of the locator flexfield (for example, Aisle)."
+        },
+        {
+          "name": "SEGMENT2",
+          "description": "Segment 2 of the locator flexfield (for example, Rack)."
+        },
+        {
+          "name": "SEGMENT3",
+          "description": "Segment 3 of the locator flexfield (for example, Bin)."
+        }
+      ]
+    },
+    {
+      "table_name": "MTL_MATERIAL_TRANSACTIONS",
+      "business_name": "Material Transactions",
+      "description": "Stores a history of all material transactions, such as receipts, issues, and transfers.",
+      "columns": [
+        {
+          "name": "TRANSACTION_ID",
+          "description": "Unique identifier for the transaction (Primary Key)."
+        },
+        {
+          "name": "INVENTORY_ITEM_ID",
+          "description": "Foreign Key to MTL_SYSTEM_ITEMS_B."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "The inventory organization."
+        },
+        {
+          "name": "TRANSACTION_DATE",
+          "description": "The date the transaction occurred."
+        },
+        {
+          "name": "TRANSACTION_TYPE_ID",
+          "description": "Identifier for the type of transaction (for example, PO Receipt, Sales Order Issue)."
+        },
+        {
+          "name": "TRANSACTION_ACTION_ID",
+          "description": "Identifier for the transaction action (for example, 1 = Issue from stores)."
+        },
+        {
+          "name": "TRANSACTION_QUANTITY",
+          "description": "The quantity transacted (can be positive or negative)."
+        },
+        {
+          "name": "PRIMARY_QUANTITY",
+          "description": "The quantity in the item's primary UOM."
+        },
+        {
+          "name": "TRANSACTION_SOURCE_ID",
+          "description": "Link to the source of the transaction (for example, PO_HEADER_ID)."
+        },
+        {
+          "name": "SUBINVENTORY_CODE",
+          "description": "The subinventory involved in the transaction."
+        }
+      ]
+    },
+    {
+      "table_name": "MTL_TRANSACTION_TYPES",
+      "business_name": "Transaction Types",
+      "description": "Defines the different types of material transactions.",
+      "columns": [
+        {
+          "name": "TRANSACTION_TYPE_ID",
+          "description": "Unique identifier for the transaction type (Primary Key)."
+        },
+        {
+          "name": "TRANSACTION_TYPE_NAME",
+          "description": "The name of the transaction type (for example, 'PO Receipt', 'Sales Order Issue')."
+        }
+      ]
+    },
+    {
+      "table_name": "MTL_PARAMETERS",
+      "business_name": "Inventory Parameters",
+      "description": "Stores default parameters and options for an inventory organization.",
+      "columns": [
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "Unique identifier for the inventory organization (Primary Key)."
+        },
+        {
+          "name": "ORGANIZATION_CODE",
+          "description": "The short code representing the inventory organization."
+        }
+      ]
+    },
+    {
+      "table_name": "MTL_RESERVATIONS",
+      "business_name": "Reservations",
+      "description": "Stores information about material reservations, which are holds placed on physical stock.",
+      "columns": [
+        {
+          "name": "INVENTORY_ITEM_ID",
+          "description": "Foreign Key to MTL_SYSTEM_ITEMS_B."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "The inventory organization."
+        },
+        {
+          "name": "SUBINVENTORY_CODE",
+          "description": "The subinventory that holds the reservation."
+        },
+        {
+          "name": "PRIMARY_RESERVATION_QUANTITY",
+          "description": "The reserved quantity."
+        },
+        {
+          "name": "REQUIREMENT_DATE",
+          "description": "The date when the demand needs the reserved stock."
+        },
+        {
+          "name": "CREATION_DATE",
+          "description": "Creation date of the reservation."
+        }
+      ]
+    }
+  ],
+  "common_joins": [
+    {
+      "description": "Link On-Hand Quantity to Item Details",
+      "join_condition": "MTL_ONHAND_QUANTITIES_DETAIL.INVENTORY_ITEM_ID = MTL_SYSTEM_ITEMS_B.INVENTORY_ITEM_ID AND MTL_ONHAND_QUANTITIES_DETAIL.ORGANIZATION_ID = MTL_SYSTEM_ITEMS_B.ORGANIZATION_ID"
+    },
+    {
+      "description": "Link On-Hand Quantity to Subinventory",
+      "join_condition": "MTL_ONHAND_QUANTITIES_DETAIL.SUBINVENTORY_CODE = MTL_SECONDARY_INVENTORIES.SECONDARY_INVENTORY_NAME AND MTL_ONHAND_QUANTITIES_DETAIL.ORGANIZATION_ID = MTL_SECONDARY_INVENTORIES.ORGANIZATION_ID"
+    },
+    {
+      "description": "Link On-Hand Quantity to Stock Locator",
+      "join_condition": "MTL_ONHAND_QUANTITIES_DETAIL.LOCATOR_ID = MTL_ITEM_LOCATIONS.INVENTORY_LOCATION_ID"
+    },
+    {
+      "description": "Link Material Transaction to Item",
+      "join_condition": "MTL_MATERIAL_TRANSACTIONS.INVENTORY_ITEM_ID = MTL_SYSTEM_ITEMS_B.INVENTORY_ITEM_ID AND MTL_MATERIAL_TRANSACTIONS.ORGANIZATION_ID = MTL_SYSTEM_ITEMS_B.ORGANIZATION_ID"
+    },
+    {
+      "description": "Link Material Transaction to Transaction Type",
+      "join_condition": "MTL_MATERIAL_TRANSACTIONS.TRANSACTION_TYPE_ID = MTL_TRANSACTION_TYPES.TRANSACTION_TYPE_ID"
+    },
+    {
+      "description": "Link Parameters to Item Details",
+      "join_condition": "MTL_SYSTEM_ITEMS_B.ORGANIZATION_ID = MTL_PARAMETERS.ORGANIZATION_ID"
+    },
+    {
+      "description": "Link Parameters to On-Hand Quantity",
+      "join_condition": "MTL_ONHAND_QUANTITIES_DETAIL.ORGANIZATION_ID = MTL_PARAMETERS.ORGANIZATION_ID"
+    },
+    {
+      "description": "Link Reservations to Item Details",
+      "join_condition": "MTL_RESERVATIONS.INVENTORY_ITEM_ID = MTL_SYSTEM_ITEMS_B.INVENTORY_ITEM_ID AND MTL_RESERVATIONS.ORGANIZATION_ID = MTL_SYSTEM_ITEMS_B.ORGANIZATION_ID"
+    },
+    {
+      "description": "Link Reservations to On-Hand Quantity",
+      "join_condition": "MTL_RESERVATIONS.INVENTORY_ITEM_ID = MTL_ONHAND_QUANTITIES_DETAIL.INVENTORY_ITEM_ID AND MTL_RESERVATIONS.ORGANIZATION_ID = MTL_ONHAND_QUANTITIES_DETAIL.ORGANIZATION_ID AND MTL_RESERVATIONS.SUBINVENTORY_CODE = MTL_ONHAND_QUANTITIES_DETAIL.SUBINVENTORY_CODE"
+    }
+  ],
+  "example_queries": [
+    {
+      "description": "Get the total on-hand quantity for a specific item across all subinventories.",
+      "sql": "SELECT i.SEGMENT1, i.DESCRIPTION, SUM(d.TRANSACTION_QUANTITY) AS TOTAL_ONHAND FROM MTL_ONHAND_QUANTITIES_DETAIL d JOIN MTL_SYSTEM_ITEMS_B i ON d.INVENTORY_ITEM_ID = i.INVENTORY_ITEM_ID AND d.ORGANIZATION_ID = i.ORGANIZATION_ID WHERE i.SEGMENT1 = :item_number GROUP BY i.SEGMENT1, i.DESCRIPTION"
+    },
+    {
+      "description": "Find the warehouse locations that hold a specific item.",
+      "sql": "SELECT d.SUBINVENTORY_CODE, l.SEGMENT1 || '.' || l.SEGMENT2 || '.' || l.SEGMENT3 AS LOCATOR, d.TRANSACTION_QUANTITY FROM MTL_ONHAND_QUANTITIES_DETAIL d JOIN MTL_ITEM_LOCATIONS l ON d.LOCATOR_ID = l.INVENTORY_LOCATION_ID JOIN MTL_SYSTEM_ITEMS_B i ON d.INVENTORY_ITEM_ID = i.INVENTORY_ITEM_ID WHERE i.SEGMENT1 = :item_number"
+    },
+    {
+      "description": "Get all material issues for a specific item in the last week.",
+      "sql": "SELECT t.TRANSACTION_DATE, t.TRANSACTION_QUANTITY, t.SUBINVENTORY_CODE FROM MTL_MATERIAL_TRANSACTIONS t JOIN MTL_SYSTEM_ITEMS_B i ON t.INVENTORY_ITEM_ID = i.INVENTORY_ITEM_ID WHERE i.SEGMENT1 = :item_number AND t.TRANSACTION_ACTION_ID = 1 AND t.TRANSACTION_DATE >= SYSDATE - 7"
+    }
+  ]
+}

@@ -7,61 +7,8 @@ source files within the codebase and applies the required changes, showcasing
 its ability to streamline the process of implementing UI updates and reduce
 manual effort.
 
-## Requirements
+Update **2026-11-12**:
 
-To follow this guide, you need
-
-- A Google Cloud project with the `Owner` role.
-- Gemini CLI: Installed and configured. Installation instructions are available
-  at [geminicli.com](https://geminicli.com/docs/get-started/deployment/).
-
-## Clone the codebase
-
-1.  Open
-    [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell).
-
-1.  Clone the sample repository:
-
-    ```bash
-    git clone https://github.com/gitrey/cymbal-eats.git && \
-    cd cymbal-eats/employee-ui
-    ```
-
-## Identify the new UI changes
-
-Start Gemini CLI:
-
-```bash
-gemini
-```
-
-Send the following prompt to compare two images:
-
-```text
-Compare two images @current-ui.png and @updated-ui.png, find what has changed and provide the details.
-```
-
-Sample output:
-
-```text
-Based on the images you provided, here are the differences between the current and updated UI:
-
-   * The checkbox label "Display only Ready items" has been shortened to "Ready only items".
-   * The "CREATE A NEW MENU ITEM" button has been renamed to "NEW MENU ITEM".
-   * The "ADJUST INVENTORY" button on each menu item card has been changed to "UPDATE INVENTORY".
-   * Two new fields, "Rating" and "Description", have been added to each menu item card.
-```
-
-## Implement the changes
-
-Send the following prompt to implement the changes:
-
-```text
-Locate the source files and make required changes based on the updated UI. Don't try to run the application.
-```
-
-Sample output:
-
-```text
-Code changes are complete; I've updated both ViewMenuPage.vue and Server.js.
-```
+This project has been archived. You can still access the code by browsing the
+repository at
+[commit 54ed0ec](https://github.com/GoogleCloudPlatform/cloud-solutions/tree/54ed0eccf6b1f015bee33cf56b2bf6758be02d9c/projects/build-with-gemini-demo/ui-changes-implementation)

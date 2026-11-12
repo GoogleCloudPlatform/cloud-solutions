@@ -1,0 +1,95 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+[project]
+name = "oracle-ebs-scm-agentic-ai"
+version = "2.0.0"
+description = "VoltGuard supply chain resiliency agent for Oracle EBS, built on the Oracle EBS Gemini Enterprise MCP framework"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Google Cloud Solutions" },
+]
+dependencies = [
+    "google-adk[a2a,mcp]>=2.13.0,<3.0.0",
+    "google-auth>=2.40.0,<3.0.0",
+    "google-cloud-storage>=3.17.0,<4.0.0",
+    "h3>=4.5.0,<5.0.0",
+    "matplotlib>=3.11.0,<4.0.0",
+    "pydantic>=2.13.0,<3.0.0",
+    "sqlglot>=30.0.0,<31.0.0",
+    "uvicorn>=0.52.0,<1.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.0.0,<27.0.0",
+    "httpx>=0.28.1,<1.0.0",
+    "isort>=9.0.0,<10.0.0",
+    "mypy>=2.3.0,<3.0.0",
+    "pytest>=9.1.0,<10.0.0",
+    "pytest-asyncio>=1.4.0,<2.0.0",
+    "pytest-cov>=7.0.0,<8.0.0",
+    "pyyaml>=6.0.0,<7.0.0",
+    "ruff>=0.16.0,<1.0.0",
+]
+
+[tool.uv]
+# google-adk 2.13.0 caps OpenTelemetry at 1.44, which GHSA-xcq7-p3pf-p88h
+# affects. Remove these overrides when google-adk allows 1.45.1 or later.
+override-dependencies = [
+    "opentelemetry-api==1.45.1",
+    "opentelemetry-sdk==1.45.1",
+]
+
+[build-system]
+requires = ["hatchling>=1.33.0,<2.0.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/oracle_ebs_scm_agentic_ai"]
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+profile = "black"
+line_length = 80
+multi_line_output = 3
+
+[tool.ruff]
+line-length = 80
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+packages = ["oracle_ebs_scm_agentic_ai", "tests"]
+disallow_untyped_defs = true
+disallow_any_unimported = false
+ignore_missing_imports = true
+warn_return_any = true
+warn_unused_configs = true
+explicit_package_bases = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

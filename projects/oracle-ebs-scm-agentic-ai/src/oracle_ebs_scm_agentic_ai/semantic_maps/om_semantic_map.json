@@ -1,0 +1,642 @@
+{
+  "module": "Order Management (OM)",
+  "dialect": "oracle",
+  "description": "Semantic mapping for Oracle EBS Order Management tables to business concepts.",
+  "tables": [
+    {
+      "table_name": "OE_ORDER_HEADERS_ALL",
+      "business_name": "Sales Orders",
+      "description": "Stores header-level information for sales orders, return orders, and quotes.",
+      "columns": [
+        {
+          "name": "HEADER_ID",
+          "description": "Unique identifier for the order header (Primary Key)."
+        },
+        {
+          "name": "ORDER_NUMBER",
+          "description": "The user-visible sales order number."
+        },
+        {
+          "name": "ORDER_TYPE_ID",
+          "description": "Foreign Key to OE_TRANSACTION_TYPES_ALL (order type/category)."
+        },
+        {
+          "name": "ORDER_SOURCE_ID",
+          "description": "Foreign Key to OE_ORDER_SOURCES (origin of the order, for example, web, EDI)."
+        },
+        {
+          "name": "ORDERED_DATE",
+          "description": "The order date."
+        },
+        {
+          "name": "FLOW_STATUS_CODE",
+          "description": "Lifecycle status: BOOKED, ENTERED, CANCELLED, CLOSED."
+        },
+        {
+          "name": "BOOKED_FLAG",
+          "description": "Order booked flag (Y/N)."
+        },
+        {
+          "name": "CANCELLED_FLAG",
+          "description": "Order cancelled flag (Y/N)."
+        },
+        {
+          "name": "SOLD_TO_ORG_ID",
+          "description": "Foreign Key to HZ_CUST_ACCOUNTS (the bill-to customer account)."
+        },
+        {
+          "name": "INVOICE_TO_ORG_ID",
+          "description": "Foreign Key to HZ_CUST_SITE_USES_ALL (the invoice/bill-to site use)."
+        },
+        {
+          "name": "SHIP_TO_ORG_ID",
+          "description": "Foreign Key to HZ_CUST_SITE_USES_ALL (the ship-to site use)."
+        },
+        {
+          "name": "PRICE_LIST_ID",
+          "description": "Foreign Key to QP_LIST_HEADERS_B (the price list applied to the order)."
+        },
+        {
+          "name": "PAYMENT_TERM_ID",
+          "description": "Foreign Key to RA_TERMS (payment terms, for example, Net 30)."
+        },
+        {
+          "name": "SHIPPING_METHOD_CODE",
+          "description": "The freight/shipping method (for example, FedEx, UPS, Standard)."
+        },
+        {
+          "name": "FREIGHT_TERMS_CODE",
+          "description": "Freight responsibility terms (for example, PREPAID, COLLECT)."
+        },
+        {
+          "name": "FOB_POINT_CODE",
+          "description": "Free On Board point (for example, ORIGIN, DESTINATION)."
+        },
+        {
+          "name": "SALESREP_ID",
+          "description": "Foreign Key to RA_SALESREPS_ALL (the responsible salesperson)."
+        },
+        {
+          "name": "TRANSACTIONAL_CURR_CODE",
+          "description": "Currency of the order (for example, USD, EUR)."
+        },
+        {
+          "name": "ORG_ID",
+          "description": "Operating unit identifier."
+        },
+        {
+          "name": "REQUEST_DATE",
+          "description": "The customer's requested delivery date."
+        },
+        {
+          "name": "CUST_PO_NUMBER",
+          "description": "The customer's own purchase order reference number."
+        }
+      ]
+    },
+    {
+      "table_name": "OE_ORDER_LINES_ALL",
+      "business_name": "Sales Order Lines",
+      "description": "Stores line-level details for sales orders, including item, quantity, pricing, and fulfillment status.",
+      "columns": [
+        {
+          "name": "LINE_ID",
+          "description": "Unique identifier for the order line (Primary Key)."
+        },
+        {
+          "name": "HEADER_ID",
+          "description": "Foreign Key to OE_ORDER_HEADERS_ALL."
+        },
+        {
+          "name": "LINE_NUMBER",
+          "description": "The sequential line number on the order."
+        },
+        {
+          "name": "SHIPMENT_NUMBER",
+          "description": "Shipment split number (usually 1 unless a line is split)."
+        },
+        {
+          "name": "ITEM_TYPE_CODE",
+          "description": "Type of item on the line: STANDARD, MODEL, CLASS, OPTION, KIT, SERVICE."
+        },
+        {
+          "name": "INVENTORY_ITEM_ID",
+          "description": "Foreign Key to MTL_SYSTEM_ITEMS_B (the item ordered)."
+        },
+        {
+          "name": "SHIP_FROM_ORG_ID",
+          "description": "Foreign Key to MTL_PARAMETERS / HR_ORGANIZATION_UNITS (the warehouse fulfilling the order)."
+        },
+        {
+          "name": "SHIP_TO_ORG_ID",
+          "description": "Foreign Key to HZ_CUST_SITE_USES_ALL (ship-to address for this line)."
+        },
+        {
+          "name": "INVOICE_TO_ORG_ID",
+          "description": "Foreign Key to HZ_CUST_SITE_USES_ALL (bill-to address for this line)."
+        },
+        {
+          "name": "ORDERED_QUANTITY",
+          "description": "Quantity ordered by the customer."
+        },
+        {
+          "name": "SHIPPED_QUANTITY",
+          "description": "Shipped quantity."
+        },
+        {
+          "name": "INVOICED_QUANTITY",
+          "description": "Invoiced quantity."
+        },
+        {
+          "name": "CANCELLED_QUANTITY",
+          "description": "Cancelled quantity."
+        },
+        {
+          "name": "UNIT_SELLING_PRICE",
+          "description": "The actual selling price per unit after any discounts."
+        },
+        {
+          "name": "UNIT_LIST_PRICE",
+          "description": "The list price per unit before discounts."
+        },
+        {
+          "name": "TAX_CODE",
+          "description": "Tax code applied to the line."
+        },
+        {
+          "name": "LINE_TYPE_ID",
+          "description": "Foreign Key to OE_TRANSACTION_TYPES_ALL (line type, for example, Bill Only, Ship Only)."
+        },
+        {
+          "name": "SCHEDULE_SHIP_DATE",
+          "description": "The scheduled ship date for the line."
+        },
+        {
+          "name": "REQUEST_DATE",
+          "description": "The customer's requested delivery date for this line."
+        },
+        {
+          "name": "PROMISE_DATE",
+          "description": "The date promised to the customer for delivery."
+        },
+        {
+          "name": "ACTUAL_SHIPMENT_DATE",
+          "description": "The actual ship date of the line."
+        },
+        {
+          "name": "FLOW_STATUS_CODE",
+          "description": "Current fulfillment status: ENTERED, BOOKED, AWAITING_SHIPPING, SHIPPED, INVOICED, CANCELLED, CLOSED."
+        },
+        {
+          "name": "OPEN_FLAG",
+          "description": "Indicates if the line is open (Y) or closed/cancelled (N)."
+        },
+        {
+          "name": "BOOKED_FLAG",
+          "description": "Line booked flag (Y/N)."
+        },
+        {
+          "name": "CANCELLED_FLAG",
+          "description": "Line cancelled flag (Y/N)."
+        },
+        {
+          "name": "RETURN_REASON_CODE",
+          "description": "Reason code for return lines (RMA)."
+        },
+        {
+          "name": "ORDER_QUANTITY_UOM",
+          "description": "The ordering unit of measure."
+        },
+        {
+          "name": "PRICE_LIST_ID",
+          "description": "Price list used for pricing this line."
+        },
+        {
+          "name": "ORG_ID",
+          "description": "Operating unit identifier."
+        }
+      ]
+    },
+    {
+      "table_name": "OE_TRANSACTION_TYPES_ALL",
+      "business_name": "Order Types / Line Types",
+      "description": "Defines order and line transaction types (for example, Standard Order, Return RMA, Mixed Order).",
+      "columns": [
+        {
+          "name": "TRANSACTION_TYPE_ID",
+          "description": "Unique identifier for the transaction type (Primary Key)."
+        },
+        {
+          "name": "TRANSACTION_TYPE_CODE",
+          "description": "Indicates whether this is a header (ORDER) or line (LINE) type."
+        },
+        {
+          "name": "ORDER_CATEGORY_CODE",
+          "description": "Category of the order: ORDER or RETURN."
+        },
+        {
+          "name": "ORG_ID",
+          "description": "Operating unit identifier."
+        }
+      ]
+    },
+    {
+      "table_name": "HZ_CUST_ACCOUNTS",
+      "business_name": "Customer Accounts",
+      "description": "Stores customer account information in the Trading Community Architecture (TCA).",
+      "columns": [
+        {
+          "name": "CUST_ACCOUNT_ID",
+          "description": "Unique identifier for the customer account (Primary Key)."
+        },
+        {
+          "name": "PARTY_ID",
+          "description": "Foreign Key to HZ_PARTIES (the underlying party/entity)."
+        },
+        {
+          "name": "ACCOUNT_NUMBER",
+          "description": "The customer account number (user-visible)."
+        },
+        {
+          "name": "ACCOUNT_NAME",
+          "description": "The name of the customer account."
+        },
+        {
+          "name": "STATUS",
+          "description": "Status of the account: A (Active), I (Inactive)."
+        },
+        {
+          "name": "CUSTOMER_TYPE",
+          "description": "Type: R (External), I (Internal)."
+        }
+      ]
+    },
+    {
+      "table_name": "HZ_PARTIES",
+      "business_name": "Parties (Customers / Organizations / Persons)",
+      "description": "The central TCA entity storing all party records including customers, contacts, and organizations.",
+      "columns": [
+        {
+          "name": "PARTY_ID",
+          "description": "Unique identifier for the party (Primary Key)."
+        },
+        {
+          "name": "PARTY_NUMBER",
+          "description": "The party number (user-visible unique identifier)."
+        },
+        {
+          "name": "PARTY_NAME",
+          "description": "The name of the party (for example, company or person name)."
+        },
+        {
+          "name": "PARTY_TYPE",
+          "description": "Type of party: ORGANIZATION, PERSON, GROUP, RELATIONSHIP."
+        },
+        {
+          "name": "STATUS",
+          "description": "Status of the party: A (Active), I (Inactive), M (Merged)."
+        }
+      ]
+    },
+    {
+      "table_name": "HZ_CUST_SITE_USES_ALL",
+      "business_name": "Customer Site Uses (Bill-To / Ship-To)",
+      "description": "Stores the business purposes (site uses) assigned to customer account sites, such as BILL_TO and SHIP_TO.",
+      "columns": [
+        {
+          "name": "SITE_USE_ID",
+          "description": "Unique identifier for the site use (Primary Key). This is the value stored as SHIP_TO_ORG_ID on orders."
+        },
+        {
+          "name": "CUST_ACCT_SITE_ID",
+          "description": "Foreign Key to HZ_CUST_ACCT_SITES_ALL."
+        },
+        {
+          "name": "SITE_USE_CODE",
+          "description": "The purpose of the site: BILL_TO, SHIP_TO, DELIVER_TO, STATEMENTS."
+        },
+        {
+          "name": "LOCATION",
+          "description": "Location code/name for the site use."
+        },
+        {
+          "name": "ORG_ID",
+          "description": "Operating unit identifier."
+        },
+        {
+          "name": "STATUS",
+          "description": "Status: A (Active), I (Inactive)."
+        }
+      ]
+    },
+    {
+      "table_name": "HZ_CUST_ACCT_SITES_ALL",
+      "business_name": "Customer Account Sites",
+      "description": "Links a customer account to a physical party site (address).",
+      "columns": [
+        {
+          "name": "CUST_ACCT_SITE_ID",
+          "description": "Unique identifier for the customer account site (Primary Key)."
+        },
+        {
+          "name": "CUST_ACCOUNT_ID",
+          "description": "Foreign Key to HZ_CUST_ACCOUNTS."
+        },
+        {
+          "name": "PARTY_SITE_ID",
+          "description": "Foreign Key to HZ_PARTY_SITES (the physical address)."
+        },
+        {
+          "name": "ORG_ID",
+          "description": "Operating unit identifier."
+        }
+      ]
+    },
+    {
+      "table_name": "HZ_PARTY_SITES",
+      "business_name": "Party Sites (Physical Addresses)",
+      "description": "Links a party to a physical location/address.",
+      "columns": [
+        {
+          "name": "PARTY_SITE_ID",
+          "description": "Unique identifier for the party site (Primary Key)."
+        },
+        {
+          "name": "PARTY_ID",
+          "description": "Foreign Key to HZ_PARTIES."
+        },
+        {
+          "name": "LOCATION_ID",
+          "description": "Foreign Key to HZ_LOCATIONS (the physical address detail)."
+        },
+        {
+          "name": "PARTY_SITE_NUMBER",
+          "description": "The party site number."
+        }
+      ]
+    },
+    {
+      "table_name": "HZ_LOCATIONS",
+      "business_name": "Locations / Addresses",
+      "description": "Stores physical address details for parties and sites.",
+      "columns": [
+        {
+          "name": "LOCATION_ID",
+          "description": "Unique identifier for the location (Primary Key)."
+        },
+        {
+          "name": "ADDRESS1",
+          "description": "Address line 1."
+        },
+        {
+          "name": "ADDRESS2",
+          "description": "Address line 2."
+        },
+        {
+          "name": "CITY",
+          "description": "City."
+        },
+        {
+          "name": "STATE",
+          "description": "State or province."
+        },
+        {
+          "name": "POSTAL_CODE",
+          "description": "ZIP or postal code."
+        },
+        {
+          "name": "COUNTRY",
+          "description": "ISO country code (for example, US, GB, CA)."
+        }
+      ]
+    },
+    {
+      "table_name": "WSH_DELIVERY_DETAILS",
+      "business_name": "Shipping Delivery Details",
+      "description": "Stores shipped line details including quantities and shipping status for fulfillment of order lines.",
+      "columns": [
+        {
+          "name": "DELIVERY_DETAIL_ID",
+          "description": "Unique identifier for the delivery detail (Primary Key)."
+        },
+        {
+          "name": "SOURCE_HEADER_ID",
+          "description": "Foreign Key to OE_ORDER_HEADERS_ALL (the source sales order)."
+        },
+        {
+          "name": "SOURCE_LINE_ID",
+          "description": "Foreign Key to OE_ORDER_LINES_ALL (the source order line)."
+        },
+        {
+          "name": "SOURCE_CODE",
+          "description": "Module generating the detail, typically OE for Order Management."
+        },
+        {
+          "name": "INVENTORY_ITEM_ID",
+          "description": "Foreign Key to MTL_SYSTEM_ITEMS_B."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "The shipping warehouse organization."
+        },
+        {
+          "name": "REQUESTED_QUANTITY",
+          "description": "Quantity requested to ship."
+        },
+        {
+          "name": "SHIPPED_QUANTITY",
+          "description": "Actual quantity shipped."
+        },
+        {
+          "name": "RELEASED_STATUS",
+          "description": "Pick release status: N=Not Released, R=Ready to Release, S=Released to Warehouse, Y=Staged, C=Shipped, D=Cancelled, B=Backordered."
+        },
+        {
+          "name": "SUBINVENTORY",
+          "description": "The subinventory that ships the item."
+        },
+        {
+          "name": "LOT_NUMBER",
+          "description": "Lot number for lot-controlled items."
+        },
+        {
+          "name": "SERIAL_NUMBER",
+          "description": "Serial number for serial-controlled items."
+        },
+        {
+          "name": "REQUESTED_QUANTITY_UOM",
+          "description": "Unit of measure for the requested and shipped quantities."
+        }
+      ]
+    },
+    {
+      "table_name": "WSH_NEW_DELIVERIES",
+      "business_name": "Shipment Deliveries",
+      "description": "Represents a shipment delivery grouping one or more delivery details shipped together.",
+      "columns": [
+        {
+          "name": "DELIVERY_ID",
+          "description": "Unique identifier for the delivery (Primary Key)."
+        },
+        {
+          "name": "NAME",
+          "description": "The delivery name or number."
+        },
+        {
+          "name": "STATUS_CODE",
+          "description": "Delivery status: OP=Open, PA=Picked/Packed, CL=Closed/Shipped, CO=Contents Unknown, IT=In Transit, SA=Arrived."
+        },
+        {
+          "name": "SHIP_METHOD_CODE",
+          "description": "The freight/carrier method used for this delivery."
+        },
+        {
+          "name": "ORGANIZATION_ID",
+          "description": "The shipping organization."
+        },
+        {
+          "name": "CONFIRM_DATE",
+          "description": "The actual ship date and time, when the warehouse ship-confirmed the delivery. It stays empty until the delivery ships."
+        },
+        {
+          "name": "WAYBILL",
+          "description": "Tracking number or waybill for the shipment."
+        },
+        {
+          "name": "GROSS_WEIGHT",
+          "description": "Total gross weight of the delivery."
+        },
+        {
+          "name": "WEIGHT_UOM_CODE",
+          "description": "Unit of measure for the weight."
+        }
+      ]
+    },
+    {
+      "table_name": "WSH_DELIVERY_ASSIGNMENTS",
+      "business_name": "Delivery Assignments",
+      "description": "Links delivery details (order lines) to their parent delivery.",
+      "columns": [
+        {
+          "name": "DELIVERY_ASSIGNMENT_ID",
+          "description": "Unique identifier (Primary Key)."
+        },
+        {
+          "name": "DELIVERY_DETAIL_ID",
+          "description": "Foreign Key to WSH_DELIVERY_DETAILS."
+        },
+        {
+          "name": "DELIVERY_ID",
+          "description": "Foreign Key to WSH_NEW_DELIVERIES."
+        }
+      ]
+    },
+    {
+      "table_name": "OE_PRICE_ADJUSTMENTS",
+      "business_name": "Price Adjustments / Discounts",
+      "description": "Stores pricing adjustments (discounts, surcharges, promotions) applied to order headers or lines.",
+      "columns": [
+        {
+          "name": "PRICE_ADJUSTMENT_ID",
+          "description": "Unique identifier for the price adjustment (Primary Key)."
+        },
+        {
+          "name": "HEADER_ID",
+          "description": "Foreign Key to OE_ORDER_HEADERS_ALL."
+        },
+        {
+          "name": "LINE_ID",
+          "description": "Foreign Key to OE_ORDER_LINES_ALL (NULL if header-level adjustment)."
+        },
+        {
+          "name": "LIST_HEADER_ID",
+          "description": "Foreign Key to QP_LIST_HEADERS_B (the pricing rule applied)."
+        },
+        {
+          "name": "LIST_LINE_ID",
+          "description": "Foreign Key to QP_LIST_LINES (the specific discount line)."
+        },
+        {
+          "name": "ADJUSTED_AMOUNT",
+          "description": "The monetary value of the adjustment."
+        },
+        {
+          "name": "PERCENT",
+          "description": "The discount or surcharge percentage."
+        },
+        {
+          "name": "ARITHMETIC_OPERATOR",
+          "description": "How the adjustment applies: % (percent), AMT (amount), LUMPSUM."
+        },
+        {
+          "name": "APPLIED_FLAG",
+          "description": "Indicates if the adjustment was actually applied (Y/N)."
+        }
+      ]
+    }
+  ],
+  "common_joins": [
+    {
+      "description": "Link Order Lines to Order Header",
+      "join_condition": "OE_ORDER_LINES_ALL.HEADER_ID = OE_ORDER_HEADERS_ALL.HEADER_ID"
+    },
+    {
+      "description": "Link Order Header to Customer Account",
+      "join_condition": "OE_ORDER_HEADERS_ALL.SOLD_TO_ORG_ID = HZ_CUST_ACCOUNTS.CUST_ACCOUNT_ID"
+    },
+    {
+      "description": "Link Customer Account to Party (for customer name)",
+      "join_condition": "HZ_CUST_ACCOUNTS.PARTY_ID = HZ_PARTIES.PARTY_ID"
+    },
+    {
+      "description": "Link Ship-To Site Use to Customer Account Site",
+      "join_condition": "HZ_CUST_SITE_USES_ALL.CUST_ACCT_SITE_ID = HZ_CUST_ACCT_SITES_ALL.CUST_ACCT_SITE_ID"
+    },
+    {
+      "description": "Link Customer Account Site to Physical Address",
+      "join_condition": "HZ_CUST_ACCT_SITES_ALL.PARTY_SITE_ID = HZ_PARTY_SITES.PARTY_SITE_ID AND HZ_PARTY_SITES.LOCATION_ID = HZ_LOCATIONS.LOCATION_ID"
+    },
+    {
+      "description": "Link Order Line to Item Master",
+      "join_condition": "OE_ORDER_LINES_ALL.INVENTORY_ITEM_ID = MTL_SYSTEM_ITEMS_B.INVENTORY_ITEM_ID AND OE_ORDER_LINES_ALL.SHIP_FROM_ORG_ID = MTL_SYSTEM_ITEMS_B.ORGANIZATION_ID"
+    },
+    {
+      "description": "Link Delivery Detail to Order Line",
+      "join_condition": "WSH_DELIVERY_DETAILS.SOURCE_LINE_ID = OE_ORDER_LINES_ALL.LINE_ID AND WSH_DELIVERY_DETAILS.SOURCE_CODE = 'OE'"
+    },
+    {
+      "description": "Link Delivery Detail to Delivery (for shipment tracking)",
+      "join_condition": "WSH_DELIVERY_DETAILS.DELIVERY_DETAIL_ID = WSH_DELIVERY_ASSIGNMENTS.DELIVERY_DETAIL_ID AND WSH_DELIVERY_ASSIGNMENTS.DELIVERY_ID = WSH_NEW_DELIVERIES.DELIVERY_ID"
+    },
+    {
+      "description": "Link Order Header to Order Type",
+      "join_condition": "OE_ORDER_HEADERS_ALL.ORDER_TYPE_ID = OE_TRANSACTION_TYPES_ALL.TRANSACTION_TYPE_ID"
+    },
+    {
+      "description": "Link Price Adjustments to Order Line",
+      "join_condition": "OE_PRICE_ADJUSTMENTS.LINE_ID = OE_ORDER_LINES_ALL.LINE_ID AND OE_PRICE_ADJUSTMENTS.HEADER_ID = OE_ORDER_LINES_ALL.HEADER_ID"
+    }
+  ],
+  "example_queries": [
+    {
+      "description": "Get all booked sales orders with customer name for a given date range.",
+      "sql": "SELECT h.ORDER_NUMBER, p.PARTY_NAME AS CUSTOMER_NAME, ca.ACCOUNT_NUMBER, h.ORDERED_DATE, h.TRANSACTIONAL_CURR_CODE AS CURRENCY_CODE, h.FLOW_STATUS_CODE FROM OE_ORDER_HEADERS_ALL h JOIN HZ_CUST_ACCOUNTS ca ON h.SOLD_TO_ORG_ID = ca.CUST_ACCOUNT_ID JOIN HZ_PARTIES p ON ca.PARTY_ID = p.PARTY_ID WHERE h.BOOKED_FLAG = 'Y' AND h.CANCELLED_FLAG = 'N' AND h.ORDERED_DATE BETWEEN :start_date AND :end_date AND h.ORG_ID = :org_id ORDER BY h.ORDERED_DATE DESC"
+    },
+    {
+      "description": "Get all open order lines with item details, quantities, and fulfillment status.",
+      "sql": "SELECT h.ORDER_NUMBER, l.LINE_NUMBER, i.SEGMENT1 AS ITEM_NUMBER, i.DESCRIPTION AS ITEM_DESCRIPTION, l.ORDERED_QUANTITY, l.SHIPPED_QUANTITY, (l.ORDERED_QUANTITY - NVL(l.SHIPPED_QUANTITY, 0) - NVL(l.CANCELLED_QUANTITY, 0)) AS QTY_OUTSTANDING, l.UNIT_SELLING_PRICE, h.TRANSACTIONAL_CURR_CODE AS CURRENCY_CODE, l.FLOW_STATUS_CODE, l.SCHEDULE_SHIP_DATE FROM OE_ORDER_LINES_ALL l JOIN OE_ORDER_HEADERS_ALL h ON l.HEADER_ID = h.HEADER_ID JOIN MTL_SYSTEM_ITEMS_B i ON l.INVENTORY_ITEM_ID = i.INVENTORY_ITEM_ID AND l.SHIP_FROM_ORG_ID = i.ORGANIZATION_ID WHERE l.OPEN_FLAG = 'Y' AND l.CANCELLED_FLAG = 'N' AND h.ORG_ID = :org_id ORDER BY l.SCHEDULE_SHIP_DATE"
+    },
+    {
+      "description": "Get total order value by customer for a given period (top customers).",
+      "sql": "SELECT p.PARTY_NAME AS CUSTOMER_NAME, COUNT(DISTINCT h.HEADER_ID) AS NUM_ORDERS, SUM(l.ORDERED_QUANTITY * l.UNIT_SELLING_PRICE) AS TOTAL_ORDER_VALUE, h.TRANSACTIONAL_CURR_CODE AS CURRENCY_CODE FROM OE_ORDER_HEADERS_ALL h JOIN OE_ORDER_LINES_ALL l ON h.HEADER_ID = l.HEADER_ID JOIN HZ_CUST_ACCOUNTS ca ON h.SOLD_TO_ORG_ID = ca.CUST_ACCOUNT_ID JOIN HZ_PARTIES p ON ca.PARTY_ID = p.PARTY_ID WHERE h.BOOKED_FLAG = 'Y' AND h.ORDERED_DATE BETWEEN :start_date AND :end_date AND h.ORG_ID = :org_id AND l.CANCELLED_FLAG = 'N' GROUP BY p.PARTY_NAME, h.TRANSACTIONAL_CURR_CODE ORDER BY TOTAL_ORDER_VALUE DESC"
+    },
+    {
+      "description": "Get shipment tracking information for a specific sales order.",
+      "sql": "SELECT h.ORDER_NUMBER, l.LINE_NUMBER, d.NAME AS DELIVERY_NAME, d.WAYBILL, d.CONFIRM_DATE AS ACTUAL_SHIP_DATE, d.STATUS_CODE AS DELIVERY_STATUS, wdd.SHIPPED_QUANTITY, d.SHIP_METHOD_CODE FROM OE_ORDER_HEADERS_ALL h JOIN OE_ORDER_LINES_ALL l ON h.HEADER_ID = l.HEADER_ID JOIN WSH_DELIVERY_DETAILS wdd ON wdd.SOURCE_LINE_ID = l.LINE_ID AND wdd.SOURCE_CODE = 'OE' JOIN WSH_DELIVERY_ASSIGNMENTS wda ON wdd.DELIVERY_DETAIL_ID = wda.DELIVERY_DETAIL_ID JOIN WSH_NEW_DELIVERIES d ON wda.DELIVERY_ID = d.DELIVERY_ID WHERE h.ORDER_NUMBER = :order_number"
+    },
+    {
+      "description": "Find orders that have not yet shipped past their scheduled ship date (late orders).",
+      "sql": "SELECT h.ORDER_NUMBER, p.PARTY_NAME AS CUSTOMER_NAME, l.LINE_NUMBER, i.SEGMENT1 AS ITEM, l.ORDERED_QUANTITY, l.SCHEDULE_SHIP_DATE, l.FLOW_STATUS_CODE FROM OE_ORDER_LINES_ALL l JOIN OE_ORDER_HEADERS_ALL h ON l.HEADER_ID = h.HEADER_ID JOIN HZ_CUST_ACCOUNTS ca ON h.SOLD_TO_ORG_ID = ca.CUST_ACCOUNT_ID JOIN HZ_PARTIES p ON ca.PARTY_ID = p.PARTY_ID JOIN MTL_SYSTEM_ITEMS_B i ON l.INVENTORY_ITEM_ID = i.INVENTORY_ITEM_ID AND l.SHIP_FROM_ORG_ID = i.ORGANIZATION_ID WHERE l.OPEN_FLAG = 'Y' AND l.FLOW_STATUS_CODE NOT IN ('SHIPPED', 'CANCELLED', 'CLOSED', 'INVOICED') AND l.SCHEDULE_SHIP_DATE < SYSDATE AND h.ORG_ID = :org_id ORDER BY l.SCHEDULE_SHIP_DATE"
+    }
+  ]
+}
