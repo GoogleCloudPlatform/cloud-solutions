@@ -1,372 +1,22 @@
-# Accelerating Development with Gemini: Prototyping, Implementation, and Code Review
+# Automate GitHub Pull Requests reviews with Code Review Agent
 
-In this demo, you prototype and implement application features with Gemini.
-
-This demo guide walks you through the following steps:
-
-1.  Prepare the environment
-1.  Prototype ADK agents with Gemini CLI
-1.  Implement new features with Gemini CLI
-1.  Automate GitHub Pull Requests reviews with Code Review Agent
+This demo goes over the process of integrating and utilizing Gemini Code Assist
+to improve GitHub code reviews. The demo will cover essential setup procedures
+in both Google Cloud and GitHub, followed by a showcase of Gemini Code Assist's
+capabilities in delivering smart suggestions, clear explanations, and concise
+summaries to optimize the code review workflow.
 
 ## Requirements
 
 To follow this demo, you need:
 
 - A Google Cloud project with the `Owner` role.
-- JIRA/Confluence project
 - GitHub account and repository
-- Gemini CLI: Installed and configured. For installation instructions, visit
-  [geminicli.com](https://geminicli.com/docs/get-started/deployment/).
+- Antigravity CLI: Installed and configured. For installation instructions,
+  visit
+  [antigravity.google](https://antigravity.google/docs/getting-started/?tab=cli#download-and-install).
 - GitHub CLI: Installed and configured. For installation instructions, visit
   [Installation](https://github.com/cli/cli?tab=readme-ov-file#installation).
-
-Detailed setup instructions for each demonstration are located within their
-respective sections below.
-
-## Prototype ADK Agents with Gemini CLI
-
-This demonstration guide walks through the process of rapidly prototyping an ADK
-(Agent Development Kit) agent using the Gemini CLI. You will leverage the Gemini
-CLI's planning and implementation capabilities to quickly scaffold and refine a
-functional customer support agent. This "vibe prototyping" approach allows for
-fast iteration and development, showcasing how AI-assisted tools can accelerate
-the creation of complex agents and services. By the end of this demo section,
-you will have a working ADK agent capable of looking up and summarizing
-in-memory ticket data, all built and debugged primarily through natural language
-commands in the Gemini CLI.
-
-### Key Files
-
-1.  **GEMINI.md**: Provides instructions on how to use the reference
-    documentation to build ADK agents.
-1.  **AGENTS.txt**: Contains detailed information and best practices for agent
-    development.
-
-AGENTS.txt file is imported into the GEMINI.md and will be included in the
-Gemini CLI session’s context when you interact with the Gemini CLI.
-
-This feature facilitates the decomposition of large GEMINI.md files into
-smaller, more manageable modules that can be seamlessly reused across varied
-contexts. The import processor supports both relative and absolute paths,
-incorporating robust safety mechanisms to avoid circular imports and ensure
-secure file access.
-
-### Custom Commands
-
-These custom commands help you with planning and implementing ADK agents.
-
-1.  `/adk-plan:new` - this command leverages provided documentation (GEMINI.md,
-    AGENTS.txt) to generate an implementation plan, ensuring adherence to best
-    practices.
-
-1.  `/adk-plan:impl` - this command uses the implementation plan to generate the
-    necessary Python files, reducing boilerplate and focusing on ADK
-    requirements.
-
-### Prepare the environment for ADK agent development
-
-1.  Open
-    [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell).
-
-1.  Clone the repository and set the working directory:
-
-    ```bash
-    git clone --filter=blob:none --no-checkout https://github.com/GoogleCloudPlatform/cloud-solutions
-    cd cloud-solutions
-    git sparse-checkout set --cone projects/build-with-gemini-demo
-    git checkout
-    ```
-
-### Start building the agent
-
-1.  Change the working directory:
-
-    ```bash
-    cd "$(git rev-parse --show-toplevel)/projects/build-with-gemini-demo/prototype-adk-agent-with-gemini-cli"
-    ```
-
-1.  Rename `.env.sample` to `.env` file and update with your Google Cloud
-    project information:
-
-    ```text
-    GOOGLE_GENAI_USE_VERTEXAI=TRUE
-    GOOGLE_CLOUD_PROJECT="<ENTER_YOUR_PROJECT_ID>"
-    GOOGLE_CLOUD_LOCATION="<ENTER_YOUR_PROJECT_LOCATION>" # e.g. us-central1
-    ```
-
-1.  Acquire new user credentials:
-
-    ```bash
-    gcloud auth application-default login
-    ```
-
-1.  Run Gemini CLI:
-
-    ```bash
-    gemini
-    ```
-
-1.  Send prompt to create implementation plan:
-
-    ```text
-    /adk-plan:new Build a customer support ADK agent that allows users to look
-    up the full details of any ticket using its ID and also provide the ability
-    to return a summary for any selected ticket. For summary requests return
-    ticket description. Generate 20 sample tickets (each with an integer based
-    ID, title, and description) and use them as an in-memory db.
-    ```
-
-    Review generated plan and request implementation. You can find an example
-    plan in the
-    `projects/build-with-gemini-demo/prototype-adk-agent-sample/plans/customer_support_agent.md`
-    file.
-
-1.  Send prompt to implement the plan:
-
-    ```text
-    /adk-plan:impl implement the plan and generate a requirements.txt
-    file for more reproducible builds.
-    ```
-
-    Review and approve tools and suggested code changes.
-
-    The `prototype-adk-agent-sample` folder contains sample implementation plan
-    and customer support agent built with the prompts above.
-
-1.  Exit from Gemini CLI and run commands to setup virtual environment and
-    install required dependencies for ADK agent:
-
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate
-    pip install -r requirements.txt --require-hashes
-    ```
-
-1.  Start ADK Web Server to test the agent:
-
-    ```bash
-    adk web .
-    ```
-
-    Click on the link to open application in the browser.
-
-    In the Cloud Shell environment, select Web Preview from the menu and change
-    port(eg. 8000) and preview the application.
-
-1.  Testing the Agent
-
-    After you start the application and select the agent from the dropdown in
-    the top left corner. Send a greeting to the agent and ask how they can help.
-    This will prompt the agent to describe available operations.
-
-    Sample queries to try:
-
-    ```text
-    lookup ticket # 10
-    ```
-
-    ```text
-    summarize ticket # 5
-    ```
-
-You can find an example implementation of this agent in the
-`projects/build-with-gemini-demo/prototype-adk-agent-sample` directory.
-
-Stop ADK Web server before moving to the next section.
-
-## Implement features with Gemini CLI
-
-This guide demonstrates how Gemini CLI accelerate feature development within the
-SDLC. Using Model Context Protocol (MCP) servers, it brings requirements from
-external systems(eg. JIRA, Confluence) into Gemini chat for efficient planning,
-review, and implementation. The workflow covers setup, code generation (adding
-rating to a menu service), and automatic JIRA updates.
-
-### Prerequisites
-
-1.  For this demo you need to have JIRA and Confluence projects configured.
-    [Sign up](https://www.atlassian.com/try/cloud/signup?bundle=jira-software&edition=free&editionIntent=free).
-
-1.  Create Atlassian API token:
-
-    You will use `API Token Authentication` to configure Atlassian MCP server.
-    [Additional details](https://github.com/sooperset/mcp-atlassian?tab=readme-ov-file#quick-start-guide).
-
-    Go to
-    [API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
-
-    Click `Create API token`, give it a name and save the generated token to set
-    environment variables.
-
-1.  Create new Confluence page:
-
-    ```text
-    Title: Menu-Service: Rating capabilities
-
-    Update Menu-Service to allow users to add ratings for menu items that they order.
-
-    Required Test cases:
-
-    Rating must be an integer value from 1 to 5.
-    Can’t be null.
-    Can’t be empty.
-    Can’t be zero.
-    ```
-
-1.  Create new JIRA user story and assign it to yourself:
-
-    ```text
-    Title: Update Menu service
-
-    Update Menu service:
-    1. Add new fields: description and rating to Menu entity.
-    2. Update other dependencies where Menu entity is used in the code, eg MenuResource.
-    3. Add unit tests for all methods, including new fields.
-
-    Link to Confluence page:
-    https://YOUR-ORG.atlassian.net/wiki/spaces/SD/pages/87785484/Menu-Service+Rating+capabilities
-    ```
-
-### Prepare the environment for Atlassian integration
-
-1.  Open
-    [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell).
-
-1.  Set environment variables:
-
-    ```bash
-    export USERNAME="your.email@company.com"
-    export JIRA_URL="https://your-company.atlassian.net"
-    export CONFLUENCE_URL="https://your-company.atlassian.net/wiki"
-    ```
-
-    Set value in secure manner, after running this command, paste the token
-    value and hit Enter:
-
-    ```bash
-    read -s ATLASSIAN_API_TOKEN
-    ```
-
-    Export environment variable:
-
-    ```bash
-    export ATLASSIAN_API_TOKEN
-    ```
-
-1.  Change the working directory:
-
-    ```bash
-    cd "$(git rev-parse --show-toplevel)/projects/build-with-gemini-demo/gemini-powered-development/menu-service"
-    ```
-
-1.  Review MCP servers configuration in `.gemini/settings.json` - no changes are
-    required for this step.
-
-1.  Update JIRA/Confluence instance in `.gemini/GEMINI.md`:
-
-    ```text
-    JIRA/Confluence instance is your-instance-name.atlassian.net
-    ```
-
-### Check MCP server configuration
-
-1.  Run Gemini CLI:
-
-    ```bash
-    gemini
-    ```
-
-1.  List configured MCP servers and tools:
-
-    ```text
-    /mcp
-    ```
-
-    The output confirms that the `mcp-atlassian` server is configured and ready.
-
-### Codebase explanation
-
-1.  Send the prompt to help you learn the codebase:
-
-    ```text
-    Act as a Technical Lead. I am a new developer joining this project.
-    Please analyze this codebase and provide an Onboarding Guide.
-    Include the following:
-    - High-Level Architecture: What is the tech stack, and how do the components interact?
-    - Key Functionality: What are the top 3 primary features this code executes?
-    - Folder Structure: Briefly explain the purpose of the main directories.
-    - Data Flow: Trace the path of a request from the entry point to the database and back.
-    ```
-
-### (Optional) If you did not configure JIRA and Confluence projects
-
-1.  Send prompt with the task requirements:
-
-    ```text
-    Review the code and prepare the implementation plan for requirements below.
-    I will approve the plan before you can start implementation.
-
-    Update Menu service:
-    1. Add new fields: description and rating to Menu entity.
-    2. Update other dependencies where Menu entity is used in the code, eg MenuResource.
-    3. Add unit tests for all methods, including new fields.
-
-    Rating must be an integer value from 1 to 5.
-    Can’t be null.
-    Can’t be empty.
-    Can’t be zero.
-    ```
-
-### Bring requirements into the context of Gemini CLI session
-
-1.  Send prompt to list assigned JIRA tasks:
-
-    ```text
-    List my JIRA tasks, include name, status and description
-    ```
-
-1.  Send prompt to query context of linked Confluence page:
-
-    ```text
-    What's the context of the confluence page in my JIRA user story?
-    ```
-
-### Start implementation
-
-1.  Send prompt to create an implementation plan:
-
-    ```text
-    Review the code and prepare the implementation plan. I will approve it before you can start implementation.
-    ```
-
-    Review the plan and request to implement the changes.
-
-1.  Send prompt to start the implementation:
-
-    ```text
-    Implement the changes in menu-service app
-    ```
-
-    Review and approve tools and suggested code changes. If Gemini CLI runs into
-    issues, for example test validation, multiple iterations might be required
-    to fix and re-run until generated code is valid.
-
-1.  Send prompt to update JIRA user story:
-
-    ```text
-    Update the JIRA user story status to Done, add a summary of the changes as a comment.
-    ```
-
-Exit from Gemini CLI before moving to the next section.
-
-## Automate GitHub Pull Requests reviews with Code Review Agent
-
-This section goes over the process of integrating and utilizing Gemini Code
-Assist to improve GitHub code reviews. The demo will cover essential setup
-procedures in both Google Cloud and GitHub, followed by a showcase of Gemini
-Code Assist's capabilities in delivering smart suggestions, clear explanations,
-and concise summaries to optimize the code review workflow.
 
 ### GitHub Prerequisites
 
@@ -414,20 +64,23 @@ At this point, Code Review agent is enabled for the selected repositories.
 
 ### Prepare to create GitHub Pull Request
 
-Return to the Cloud Shell terminal and configure GitHub MCP Server. Update the
-path to `~/gemini-code-review-agent` folder in the commands below, if you didn't
-clone it in the home folder.
+Return to the Cloud Shell terminal and clone the repository. Update the path to
+`~/gemini-code-review-agent` folder in the commands below, if you didn't clone
+it in the home folder.
+
+1.  Clone the repository:
+
+    ```bash
+    git clone --filter=blob:none --no-checkout https://github.com/GoogleCloudPlatform/cloud-solutions
+    cd cloud-solutions
+    git sparse-checkout set --cone projects/build-with-gemini-demo
+    git checkout
+    ```
 
 1.  Copy `menu-service` folder:
 
     ```bash
     cp -r "$(git rev-parse --show-toplevel)/projects/build-with-gemini-demo/gemini-powered-development/menu-service" ~/gemini-code-review-agent
-    ```
-
-1.  Copy `.gemini` folder:
-
-    ```bash
-    cp -r "$(git rev-parse --show-toplevel)/projects/build-with-gemini-demo/gemini-powered-development/menu-service/.gemini" ~/gemini-code-review-agent
     ```
 
 1.  Change into `~/gemini-code-review-agent` folder:
@@ -436,36 +89,22 @@ clone it in the home folder.
     cd ~/gemini-code-review-agent
     ```
 
-1.  Set environment variable that is used by GitHub MCP Server configured in
-    `.gemini/settings.json`:
+1.  Start Antigravity CLI:
 
     ```bash
-    export GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token)
-    ```
-
-1.  Configure GitHub user account details. Make sure to customize these with
-    your own email and name:
-
-    ```bash
-    git config --global user.email "you@example.com"
-    git config --global user.name "Your Name"
-    ```
-
-1.  Start Gemini CLI:
-
-    ```bash
-    gemini
+    agy
     ```
 
 1.  Commit new changes and open a pull request:
 
     ```text
-    Create a new feature branch, add/commit all the changes and open a new pull request.
+    Create a new feature branch, add/commit all the changes and open a new pull request using gh cli.
     ```
 
-    Review and approve tools that Gemini CLI requires to complete this task.
+    Review and approve tools that Antigravity CLI requires to complete this
+    task.
 
-Exit from Gemini CLI before moving to the next section.
+Exit from Antigravity CLI before moving to the next section.
 
 ### Pull Request Review
 

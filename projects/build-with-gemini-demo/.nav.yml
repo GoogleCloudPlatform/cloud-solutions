@@ -22,7 +22,7 @@
 title: Accelerate software development with Gemini
 
 nav:
-  - "Accelerate software development with Gemini": "README.md"
+  - "Automate GitHub Pull Requests reviews with Code Review Agent": "README.md"
   - "Agentic development with Antigravity": "build-with-gemini-demo/agentic-development-with-antigravity/README.md"
   - "Automating UI tests with Playwright & Antigravity CLI": "build-with-gemini-demo/automating-ui-tests-with-antigravity/README.md"
   - "Automated code reviews with Antigravity CLI": "build-with-gemini-demo/automated-code-reviews/README.md"
