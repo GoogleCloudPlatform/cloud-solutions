@@ -1,11 +1,39 @@
 # VoltGuard context-aware inventory and supply chain resiliency agent
 
-An AI agent that senses demand surges and helps planners prevent stockouts
-across Oracle E-Business Suite (EBS) R12.2 inventory hubs. Gemini Enterprise
-calls the agent through the Agent2Agent (A2A) protocol. The agent builds on
-the [Oracle EBS Gemini Enterprise Model Context Protocol (MCP) framework][framework-repo]:
-it reads Oracle EBS as a read-only database user and writes through an Oracle
-Integrated SOA Gateway (ISG) REST service.
+A reference architecture for agentic AI on Oracle E-Business Suite (EBS) with
+Google Cloud: an agent that senses demand surges and helps planners prevent
+stockouts across inventory hubs. An Agent Development Kit (ADK) agent on Cloud
+Run connects to Gemini Enterprise through the Agent2Agent (A2A) protocol and
+uses Gemini Flash models with automatic failover. It builds on
+the [Oracle EBS Gemini Enterprise Model Context Protocol (MCP) framework][framework-repo],
+whose MCP Toolbox for Databases is the only path to data: read-only SQL on
+Oracle EBS as a SELECT-only user and on BigQuery, plus the Google Maps Platform
+Routes, Weather, and Places APIs. Writebacks run through Oracle Integrated SOA
+Gateway (ISG) REST services that call Oracle public APIs, only after the
+planner replies `Confirmed`. BigQuery ML `AI.FORECAST` (TimesFM) forecasts
+daily demand, adjusted by regional search-surge signals.
+[Places Insights][places-insights] and US Census data score distribution zones
+in SQL, `AI.GENERATE` adds a Gemini pull-forward tier, and the Maps Static API
+draws zone maps, heatmaps, and transfer lanes. Semantic maps let the agent
+write governed SQL, guardrails validate every query and screen for prompt
+injection, and one script deploys the stack with Terraform.
+
+In the demo scenario, a brownout drives generator demand in South Florida, and
+the Miami distribution center runs out of generators in under four days, well
+inside the 14-day material requirements planning (MRP) lead time. Ask _"What
+needs my attention today?"_, and the agent scans every hub and item, finds that
+gap, and explains what drives it. From there, it maps the ZIP codes where
+homes, hospitals, pharmacies, grocery stores, and hardware stores concentrate
+demand, and finds the partner stores nearby. It sets aside the stock that
+service level agreement (SLA) reservations lock, and ranks the source hubs by
+net financial benefit, with live truck routes, traffic delays, and weather
+alerts. Executive charts show projected stock, stock by hub, net benefit by
+source hub, and freight by lane. The agent then plans the transfer, the safety
+stock update, and the requisition, and it evaluates and closes planner alerts,
+such as a delayed purchase order.
+
+To try it, [deploy the agent](#deployment) on an Oracle EBS Vision instance and
+follow the [recommended prompts](#recommended-prompts-for-testing).
 
 > [!IMPORTANT]
 >
@@ -28,25 +56,28 @@ Integrated SOA Gateway (ISG) REST service.
 >   deployment skips the zone exposure and place density tables.
 > - **IAM roles**: Owner on the project, or the admin roles for Cloud Run, IAM,
 >   Secret Manager, Artifact Registry, Cloud Build, Cloud Storage, BigQuery,
->   API Keys, Service Usage, Vertex AI, and Discovery Engine
+>   API Keys, Service Usage, Gemini Enterprise Agent Platform
+>   (`roles/aiplatform.admin`), and Discovery Engine
 >   (`roles/discoveryengine.admin`).
-> - **Google Cloud APIs**: Terraform enables Vertex AI, Discovery Engine,
->   Gemini for Google Cloud, Cloud Run, Secret Manager, Artifact Registry,
->   Cloud Build, Cloud Storage, BigQuery, BigQuery Connection, BigQuery Data
->   Transfer, Compute Engine, IAM, Cloud Resource Manager, Cloud Logging, API
->   Keys, Routes, Weather, Places, and Maps Static.
-
-## Key capabilities
-
-- **Attention scan**: finds the hub and item pairs that stock out before
-  material requirements planning (MRP) can react.
-- **Demand sensing**: combines stock, TimesFM forecasts, and rising searches.
-- **Service level agreement (SLA) reservation audit**: separates SLA-locked
-  stock from available stock.
-- **Transfer simulation**: ranks hubs by net benefit, with routes and weather.
-- **Location intelligence**: ranks hub zones by demand exposure and draws maps.
-- **Confirmed writebacks**: transfers, safety stock, requisitions, and alert
-  closures, only after the planner confirms.
+> - **Google Cloud APIs**: Terraform enables Gemini Enterprise Agent Platform
+>   (`aiplatform.googleapis.com`), Discovery Engine
+>   (`discoveryengine.googleapis.com`), Gemini for Google Cloud
+>   (`cloudaicompanion.googleapis.com`), Cloud Run (`run.googleapis.com`),
+>   Secret Manager (`secretmanager.googleapis.com`), Artifact Registry
+>   (`artifactregistry.googleapis.com`), Cloud Build
+>   (`cloudbuild.googleapis.com`), Cloud Storage (`storage.googleapis.com`),
+>   BigQuery (`bigquery.googleapis.com`), BigQuery Connection
+>   (`bigqueryconnection.googleapis.com`), BigQuery Data Transfer
+>   (`bigquerydatatransfer.googleapis.com`), Compute Engine
+>   (`compute.googleapis.com`), IAM (`iam.googleapis.com`), Cloud Resource
+>   Manager (`cloudresourcemanager.googleapis.com`), Cloud Logging
+>   (`logging.googleapis.com`), API Keys (`apikeys.googleapis.com`), Routes
+>   (`routes.googleapis.com`), Weather (`weather.googleapis.com`), Places
+>   (`places.googleapis.com`), and Maps Static
+>   (`static-maps-backend.googleapis.com`). Terraform enables them through the
+>   Service Usage API (`serviceusage.googleapis.com`), which is on by default
+>   in projects that you create in the Google Cloud console or with the Google
+>   Cloud CLI.
 
 ## Architecture
 
@@ -57,7 +88,7 @@ flowchart LR
         agent["voltguard-scm-agent (Agent Development Kit)"]
         toolbox["ebs-mcp-toolbox (MCP Toolbox)"]
     end
-    agent -- "Gemini (Vertex AI)" --> gemini["Gemini"]
+    agent -- "model calls" --> gemini["Gemini"]
     agent -- "MCP Streamable HTTP (OpenID Connect)" --> toolbox
     agent -- "signed Maps Static API maps" --> maps["Google Maps Platform"]
     toolbox -- "read-only SQL (APPS_AI)" --> ebs["Oracle EBS database"]
@@ -70,25 +101,21 @@ flowchart LR
     toolbox -- "Routes, Weather, and Places APIs" --> maps
 ```
 
-1.  **Agent (`voltguard-scm-agent`)**: an Agent Development Kit (ADK)
-    `LlmAgent` on `gemini-3.8-flash` that fails over to `gemini-3.7-flash` and
-    then `gemini-3.5-flash-lite`. It writes SQL from the semantic maps and
-    attaches charts and maps, whose images a Cloud Storage bucket deletes
-    after a day. One instance holds each conversation in memory until it's
-    idle for 2 hours or the instance stops. The service scales to zero when
-    idle.
+1.  **Agent (`voltguard-scm-agent`)**: an ADK `LlmAgent` on `gemini-3.8-flash`
+    that fails over to `gemini-3.7-flash` and then `gemini-3.5-flash-lite`. A
+    Cloud Storage bucket deletes its chart and map images after a day. One
+    instance holds each conversation in memory until it's idle for 2 hours or
+    the instance stops.
 1.  **MCP Toolbox (`ebs-mcp-toolbox`)**: the framework's MCP Toolbox for
     Databases server, with the SQL, Google Maps Platform, and writeback tools
-    in `mcp-servers/mcp-toolbox-ebs/tools.yaml`. It also scales to zero.
+    in `mcp-servers/mcp-toolbox-ebs/tools.yaml`. Both services scale to zero.
 1.  **Oracle EBS objects (`ebs-scripts/`)**: the supply chain views, the ISG
-    writeback package, the two agent users, and the demo seed.
-1.  **BigQuery (`bigquery/sql/`)**: a TimesFM forecast that a scheduled query
-    refreshes daily, Google Trends rising searches, hub coordinates, and lane
-    freight rates. Places Insights adds zone exposure and place counts per H3
-    hexagonal grid cell, with a Gemini `AI.GENERATE` tier per zone through a
-    BigQuery connection. The demo seeds a labeled surge signal, because Google
-    Trends rarely lists a product search, and 90 days of issue history. Deploy
-    again each month to load the new Places Insights snapshot.
+    writeback package, the read-only and writeback users, and the demo seed.
+1.  **BigQuery (`bigquery/sql/`)**: the forecast, which a scheduled query
+    refreshes daily, the search signals, hub coordinates, lane freight rates,
+    and the Places Insights tables. The demo seeds a labeled surge signal,
+    because Google Trends rarely lists a product search, and 90 days of issue
+    history. Deploy again each month to load the new Places Insights snapshot.
 
 ## Deployment
 
@@ -156,12 +183,6 @@ Before you deploy:
     you trust, because `http` sends the ISG credentials unencrypted. A host
     name in `ebs_isg_url` must resolve to `oracle_host`.
 
-1.  Both Cloud Run services scale to zero when idle, so an idle deployment
-    adds no Cloud Run charges. For a live demo, set `min_instance_count = 1` to
-    keep one instance of each service running, which avoids cold starts and
-    keeps conversations through idle periods. Set it back to `0` afterwards,
-    because running instances bill around the clock.
-
 1.  Copy the URL signing secret from the **Secret Generator** card on the
     Google Maps Platform [Credentials page][maps-credentials]. The deployment
     stores it in Secret Manager, never in Terraform. If the card doesn't
@@ -171,15 +192,6 @@ Before you deploy:
     gcloud services enable static-maps-backend.googleapis.com --project=PROJECT_ID
     ```
 
-### Publishing the ISG writeback service
-
-The MCP Toolbox sends the writebacks to the `ge_ebs_scm_tools` ISG REST
-service. Publish it once per instance, after you install the database objects:
-load the package specification into the Integration Repository, deploy its
-four methods as a REST service, grant them to `VOLTGUARD_AGENT`, activate the
-grants, and test the service. For the commands and console steps, see
-[Publishing the ISG writeback service][isg-publishing].
-
 ### Running the deployment script
 
 Run the deployment script from this directory:
@@ -188,11 +200,9 @@ Run the deployment script from this directory:
 ./scripts/deploy_stack.sh
 ```
 
-The script creates Artifact Registry, the build bucket, and the BigQuery
-dataset, prompts once for the URL signing secret, builds the agent image with
-Cloud Build, creates the BigQuery views and the zone exposure and place
-density tables, deploys both Cloud Run services, and prints the agent URL. To
-run each step yourself, follow the numbered steps in `scripts/deploy_stack.sh`.
+The script prompts once for the URL signing secret, and prints the agent URL
+when it finishes. To run each step yourself, follow the numbered steps in
+`scripts/deploy_stack.sh`.
 
 To remove the infrastructure, run `./scripts/destroy_stack.sh`. It doesn't
 remove the agent from Gemini Enterprise, or the Oracle EBS database objects,
@@ -236,8 +246,8 @@ users, and ISG grants.
     GEMINI_ENTERPRISE_AGENT="AGENT_NAME" ./scripts/deploy_stack.sh
     ```
 
-1.  Once deployed, to access the agent - click **Go to Gemini Enterprise** in
-    **Overview**, or open [Gemini Enterprise][gemini-web-app], and select
+1.  To open the agent, click **Go to Gemini Enterprise** in the **Overview** of
+    your app in [Gemini Enterprise Apps][gemini-enterprise-apps], and select
     **VoltGuard Supply Chain Resiliency Agent** under **Agents from your
     organization**.
 
@@ -291,15 +301,8 @@ uv sync --frozen --dev
 uv run --frozen ./scripts/run_tests.sh
 ```
 
-To run Pylint and the other repository linters on your committed changes, run
-`tools/run_linters.sh` from the repository root.
+## Security
 
-## Guardrails and security
-
-- **Data access**: the agent reads Oracle EBS through a read-only account, and
-  writes only through a separate account with narrow permissions.
-- **Confirmed changes**: every change to Oracle EBS starts as a plan, and runs
-  only after the planner replies `Confirmed`.
 - **Access**: only Gemini Enterprise can call the agent, and only the agent
   can call the MCP Toolbox. The optional `developer_user_email` setting is
   for testing; leave it empty otherwise.
@@ -323,7 +326,6 @@ missing Places Insights tables, and slow answers, see
     https://github.com/GoogleCloudPlatform/architecture-center-samples/tree/main/oracle-ebs-gemini-enterprise-mcp
 [gemini-enterprise-apps]:
     https://console.cloud.google.com/gemini-enterprise/apps
-[gemini-web-app]: https://gemini.google.com/
 [isg-publishing]:
     docs/deployment-and-troubleshooting.md#publishing-the-isg-writeback-service
 [maps-credentials]:

@@ -5,11 +5,15 @@ to.
 
 ## Publishing the ISG writeback service
 
-The MCP Toolbox sends the writebacks to the `ge_ebs_scm_tools` ISG REST
-service. Publish it once per instance, after you install the database objects:
+The Model Context Protocol (MCP) Toolbox sends the writebacks to the
+`ge_ebs_scm_tools` Oracle Integrated SOA Gateway (ISG) REST service. Publish it
+once per Oracle E-Business Suite (EBS) instance, after you install the database
+objects as the [README](../README.md#deployment) describes. Those scripts
+create the package and the `VOLTGUARD_AGENT` user that calls the service.
 
-1.  If you haven't enabled ISG REST services yet, follow the
-    [Oracle EBS ISG setup and troubleshooting guide][isg-setup-guide].
+1.  If you haven't enabled ISG REST services yet, follow steps 1 and 2 of the
+    [Oracle EBS ISG setup and troubleshooting guide][isg-setup-guide] to
+    configure `ISGADMIN` and check `oafm_server1`.
 1.  On the application tier, as the `oracle` user, source `EBSapps.env run`,
     copy `ebs-scripts/ge_ebs_scm_tools_pkg.pls` to the current directory, and
     load the annotated specification into the Integration Repository:
@@ -22,12 +26,48 @@ service. Publish it once per instance, after you install the database objects:
         "${FND_TOP}/patch/115/import/wfirep.lct" ge_ebs_scm_tools_pkg_pls.ildt
     ```
 
-1.  As `SYSADMIN`, open **Integrated SOA Gateway** > **Integration
-    Repository** > `GE_EBS_SCM_TOOLS`. On the **REST Web Service** tab, deploy
-    the four methods with the alias `ge_ebs_scm_tools`, and on the **Grants**
-    tab, grant them to the user `VOLTGUARD_AGENT`.
+1.  As `SYSADMIN`, with the **Integrated SOA Gateway** responsibility and the
+    **Integration Administrator** role, deploy the REST service:
+
+    1.  Open **Integrated SOA Gateway** > **Integration Repository**, click
+        **Search**, and search for the internal name `GE_EBS_SCM_TOOLS` with
+        the interface type `PL/SQL`.
+    1.  Open **VoltGuard Supply Chain Writebacks**, and select the **REST Web
+        Service** tab.
+    1.  In **Service Alias**, enter `ge_ebs_scm_tools`.
+    1.  Under **Service Operations**, select **Post** for the four operations:
+        `STAGE_INTERORG_TRANSFER`, `STAGE_PURCHASE_REQUISITION`,
+        `UPDATE_SAFETY_STOCK`, and `CLOSE_WORKFLOW_NOTIFICATION`.
+    1.  Click **Deploy**. Oracle EBS confirms with
+        `Successfully deployed Web Service`, and **REST Service Status** shows
+        `Deployed`. Ignore the second message, which says that ISG isn't
+        configured for SOAP services.
+
+1.  Grant the operations to the writeback user: on the **Grants** tab, select
+    the four operations, click **Create Grant**, grant access to the user
+    `VOLTGUARD_AGENT`, and create the grant. Oracle EBS confirms with
+    `Grant has been created successfully` for the four operations.
 1.  Activate the grants: run the **Compile Security** concurrent program with
-    **Everything** set to `No`, and then restart the ISG managed server with
+    **Everything** set to `No`, or run this block as `APPS` in SQL\*Plus:
+
+    ```sql
+    DECLARE
+        l_errbuf  VARCHAR2(2000);
+        l_retcode VARCHAR2(2000);
+    BEGIN
+        fnd_function.compile(l_errbuf, l_retcode, 'N');
+        IF l_retcode <> '0' THEN
+            raise_application_error(
+                -20001,
+                'Compile Security failed: ' || l_errbuf
+            );
+        END IF;
+        COMMIT;
+    END;
+    /
+    ```
+
+    Then restart the ISG managed server with
     `admanagedsrvctl.sh stop oafm_server1` and
     `admanagedsrvctl.sh start oafm_server1`.
 1.  Check the service from the application tier. The response contains a
