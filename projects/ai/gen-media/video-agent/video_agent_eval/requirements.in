@@ -1,4 +1,4 @@
-setuptools==83.0.0
+setuptools==84.2.1
 wheel==0.47.0
 google-adk==2.5.0
 google-genai==2.14.0
