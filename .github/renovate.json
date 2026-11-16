@@ -294,6 +294,12 @@
       "additionalBranchPrefix": "gke-crossgen-storage-aware-ccc-"
     },
     {
+      "matchFileNames": ["projects/gke-hyperdisk-quota-preflight/**"],
+      "groupName": "gke-hyperdisk-quota-preflight",
+      "commitMessagePrefix": "chore(deps): [gke-hyperdisk-quota-preflight]",
+      "additionalBranchPrefix": "gke-hyperdisk-quota-preflight-"
+    },
+    {
       "matchFileNames": ["projects/gke-migration-agent/**"],
       "groupName": "gke-migration-agent",
       "commitMessagePrefix": "chore(deps): [gke-migration-agent]",
