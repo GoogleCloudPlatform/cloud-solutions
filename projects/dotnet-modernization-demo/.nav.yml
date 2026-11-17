@@ -22,7 +22,7 @@
 title: Antigravity-powered .NET modernization demo
 
 nav:
-  - "Get started": "README.md"
+  - "Antigravity-powered .NET modernization": "README.md"
 
 flatten_single_child_sections: true
 sort:
