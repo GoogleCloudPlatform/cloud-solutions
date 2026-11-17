@@ -48,10 +48,11 @@ dev = [
 
 [tool.uv]
 # google-adk 2.13.0 caps OpenTelemetry at 1.44, which GHSA-xcq7-p3pf-p88h
-# affects. Remove these overrides when google-adk allows 1.45.1 or later.
+# affects, and GHSA-mf5v-w3w3-f6cg affects 1.45.1. Remove these overrides after
+# upgrading to google-adk 2.14.0 or later, which allows 1.45.2.
 override-dependencies = [
-    "opentelemetry-api==1.45.1",
-    "opentelemetry-sdk==1.45.1",
+    "opentelemetry-api==1.45.2",
+    "opentelemetry-sdk==1.45.2",
 ]
 
 [build-system]
