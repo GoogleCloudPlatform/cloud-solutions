@@ -412,3 +412,63 @@ def mint_sandbox_token(*, tenant_id: str, sub: str, role: str) -> str:
             "E_DEV_ISSUER_DISABLED: not available in this environment."
         )
     return wiring.dev_issuer.mint(tenant_id=tenant_id, sub=sub, role=role)
+
+
+def register_sandbox_idp_tenant(
+    *,
+    tenant_id: str,
+    provider: str,
+    issuer: str,
+    public_key: Any | None = None,
+    kid: str | None = None,
+    directory_id: str | None = None,
+) -> None:
+    """Registers a dynamically onboarded enterprise OIDC issuer in the sandbox Hop 0 gate.
+
+    Args:
+        tenant_id: Onboarded tenant identifier.
+        provider: Identity provider key (`"google"`, `"entra"`, `"okta"`, or `"ping"`).
+        issuer: Canonical OIDC `iss` URL (`1:1` bound to `tenant_id`).
+        public_key: Optional RSA/EC public key verifying this issuer's JWTs; defaults to the
+            sandbox `DevIssuer` public key.
+        kid: Optional JWKS `kid` matching `public_key`.
+        directory_id: Optional Entra `tid` directory UUID when `provider == "entra"`.
+
+    Raises:
+        SandboxIssuerDisabled: If called outside the synthetic sandbox environment.
+        ValueError: If `provider` is unknown.
+    """
+    active_config = get_platform_config()
+    wiring = get_hop0()
+    if wiring.dev_issuer is None or not sandbox_mode_active(active_config):
+        raise SandboxIssuerDisabled(
+            "E_DEV_ISSUER_DISABLED: not available in this environment."
+        )
+    if provider not in _PROVIDERS:
+        raise ValueError(f"Unsupported sandbox IdP provider: {provider!r}")
+    token_policy = platform_config.resolve_effective_token_policy(active_config)
+    group_map = (
+        dict(DEFAULT_ENTRA_APP_ROLE_MAP)
+        if provider == "entra"
+        else ({} if provider == "google" else dict(IDENTITY_ROLE_MAP))
+    )
+    wiring.gate.registry.register(
+        FederatedIdPConfig(
+            tenant_id=tenant_id,
+            provider=_PROVIDERS[provider],
+            issuer=issuer,
+            audience=active_config.identity.gateway_audience,
+            directory_id=directory_id,
+            role_claim=_DEFAULT_ROLE_CLAIM[provider],
+            group_to_role=group_map,
+            jwks_uri=None,
+            max_token_lifetime_seconds=token_policy.idp_direct_max_token_lifetime_seconds,
+        )
+    )
+    resolved_key = public_key or wiring.dev_issuer.private_key.public_key()
+    resolved_kid = kid or wiring.dev_issuer.kid
+    wiring.dev_issuer.resolver.add_key(
+        issuer=issuer,
+        kid=resolved_kid,
+        public_key=resolved_key,
+    )

@@ -42,7 +42,7 @@ built** = design or roadmap only.
 | Per-tenant Workload Identity Pool + OIDC Provider & Google Identity Platform broker for Hop 0                         | **Live** (Terraform WIF pool/OIDC provider + direct OIDC) · **Built, not live** (Identity Platform broker)                                     | Issuer-bound `google_iam_workload_identity_pool_provider` resources are live in `sandbox.tfvars`; Identity Platform multi-tenant OIDC broker is tested hermetically.                                                                                                                                                                                                                                                                                                                                                               |
 | Okta and Ping                                                                                                         | **Format tests only**                                                                                                                          | No real Okta or Ping tenant is connected.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | Perimeter gateways (Cloud Run and IAP vs. optional Apigee or Managed Agent Gateway)                                   | **Live** (Cloud Run + IAP + KMS signing + ADK interceptors) · **Optional enterprise upgrade** (Apigee, Managed Agent Gateway / CLB `ext_proc`) | The reference repo runs `cymbal-pooled-gateway` behind IAP, [`agents/registry.py`](agents/registry.py), and [`agents/interceptors.py`](agents/interceptors.py) so sandbox deployments iterate without ~45-min Apigee X org provisioning; Apigee (for heterogeneous or non-ADK sinks) and Managed Agent Gateway / CLB Service Extensions layer on without changing token contracts ([details](docs/solution_architecture_end_to_end.md#gateway-perimeter-options-cloud-run-and-iap-reference-vs-apigee-and-managed-agent-gateway)). |
-| Embedded-app (workload identity) callers, session renewal, per-user budgets                                           | **Not built**                                                                                                                                  | See [Known gaps](#missing-components--known-gaps).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Embedded-app (workload identity) callers, session renewal, per-user budgets                                           | **Not built**                                                                                                                                  | See [Known gaps](#missing-components-and-known-gaps).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | Cost and pooling economics                                                                                            | **Modeled**                                                                                                                                    | [`scripts/benchmark_pooling_at_scale.py`](scripts/benchmark_pooling_at_scale.py), [`docs/pooling_volume_benchmarks.md`](docs/pooling_volume_benchmarks.md).                                                                                                                                                                                                                                                                                                                                                                        |
 
 ## Contents
@@ -56,7 +56,7 @@ built** = design or roadmap only.
 1.  [Run against your own GCP project](#run-against-your-own-gcp-project)
 1.  [Configuration reference (summary)](#configuration-reference-summary)
 1.  [Repository map](#repository-map)
-1.  [Missing components & known gaps](#missing-components--known-gaps)
+1.  [Missing components and known gaps](#missing-components-and-known-gaps)
 1.  [Roadmap](#roadmap)
 1.  [Contributing](#contributing)
 
@@ -142,7 +142,7 @@ counter resets when a new gateway token is issued). Programmatic callers
 (`scripts/sandbox_auth.py` `SandboxCaller`) can re-exchange a still-valid IdP
 token with the same DPoP key, while automatic background renewal in the web UI
 and per-user rolling budgets are not built yet (see
-[Known gaps](#missing-components--known-gaps)).
+[Known gaps](#missing-components-and-known-gaps)).
 
 | Hop | What happens for Priya                                                                                                                                                                                                                                         |
 | :-- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -766,7 +766,7 @@ Full reference:
 
 ---
 
-## Missing components & known gaps
+## Missing components and known gaps
 
 Items below track remaining gaps (plus completed milestones 1 and 21 for audit
 continuity). Each open item has a planned fix; none blocks running the offline

@@ -66,6 +66,7 @@ def offboard_tenant(
     """
     from agents.gcp_live_bridge import evict_kms_verify_cache_for_tenant
     from agents.memory_crypto import MemoryCrypto, get_memory_crypto
+    from agents.registry import evict_dynamic_agents_for_tenant
     from agents.tenant_credentials import (
         TenantCredentialBroker,
         evict_tenant_credentials,
@@ -82,6 +83,7 @@ def offboard_tenant(
         )
 
     mark_tenant_revoked(tenant_id)
+    evict_dynamic_agents_for_tenant(tenant_id)
     removed_from_directory = TENANT_DIRECTORY.pop(tenant_id, None) is not None
 
     with _TENANT_EVICTION_LOCK:

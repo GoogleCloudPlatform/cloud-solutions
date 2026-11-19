@@ -48,6 +48,7 @@ import contextlib
 import json
 import os
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 from agents import sandbox_execution
@@ -662,4 +663,131 @@ def test_live_vertex_ai_memory_bank_scope_and_iam_cel_isolation(
                     "memory_scope": "tenant",
                 },
             )
+        )
+
+
+def test_live_multiturn_session_hydration_and_concurrent_tenant_isolation_on_gcp(
+    finvault_envelope: ContextEnvelope,
+    retailstream_envelope: ContextEnvelope,
+) -> None:
+    """Verifies live multi-turn Firestore session hydration and KMS/DLP isolation."""
+    firestore_bank = LiveFirestoreMemoryBank()
+    kms_verifier = LiveCloudKMSCMEKVerifier()
+    dlp_guardrail = LiveCloudDLPGuardrail()
+
+    # 1. Sequential multi-turn session write -> read -> update -> read on live Firestore + KMS CMEK.
+    turn_one_key = firestore_bank.write_memory(
+        envelope=finvault_envelope,
+        scope=MemoryScope.SESSION,
+        actor="cymbal_shared_diagnostic_agent",
+        content={
+            "last_prompt": "Live Turn 1: Triage FinVault wire settlement latency",
+            "turn_index": 1,
+            "turns": [
+                {
+                    "turn_index": 1,
+                    "prompt": "Live Turn 1: Triage FinVault wire settlement latency",
+                    "tool_name": "query_telemetry_rls",
+                }
+            ],
+        },
+    )
+    hydrated_turn_one = firestore_bank.read_memory(
+        envelope=finvault_envelope,
+        target_composite_key=turn_one_key,
+    )
+    assert hydrated_turn_one["turn_index"] == 1
+
+    prior_turns = list(hydrated_turn_one["turns"])
+    prior_turns.append(
+        {
+            "turn_index": 2,
+            "prompt": "Live Turn 2: Escalate OCC notice after runbook check",
+            "tool_name": "read_runbook",
+        }
+    )
+    turn_two_key = firestore_bank.write_memory(
+        envelope=finvault_envelope,
+        scope=MemoryScope.SESSION,
+        actor="cymbal_shared_diagnostic_agent",
+        content={
+            "last_prompt": "Live Turn 2: Escalate OCC notice after runbook check",
+            "turn_index": 2,
+            "turns": prior_turns,
+        },
+    )
+    assert turn_two_key == turn_one_key
+    hydrated_turn_two = firestore_bank.read_memory(
+        envelope=finvault_envelope,
+        target_composite_key=turn_two_key,
+    )
+    assert hydrated_turn_two["turn_index"] == 2
+    assert len(hydrated_turn_two["turns"]) == 2
+
+    # 2. Concurrent execution across both tenants on live KMS CMEK + Firestore + Cloud DLP.
+    def execute_live_tenant_probe(
+        caller_envelope: ContextEnvelope,
+        kms_key_name: str,
+        canary_marker: str,
+        raw_pii: str,
+    ) -> dict[str, object]:
+        kms_receipt = kms_verifier.verify_key_access(
+            kms_key_name=kms_key_name,
+            tenant_id=caller_envelope.tenant.tenant_id,
+            envelope=caller_envelope,
+        )
+        memory_key = firestore_bank.write_memory(
+            envelope=caller_envelope,
+            scope=MemoryScope.SESSION,
+            actor="cymbal_shared_diagnostic_agent",
+            content={"canary_marker": canary_marker},
+        )
+        opened_memory = firestore_bank.read_memory(
+            envelope=caller_envelope,
+            target_composite_key=memory_key,
+        )
+        dlp_result = dlp_guardrail.deidentify_tool_output(
+            raw_output=f"Customer marker {canary_marker} with {raw_pii}",
+            tool_name="query_telemetry_rls",
+            tenant_id=caller_envelope.tenant.tenant_id,
+        )
+        return {
+            "tenant_id": caller_envelope.tenant.tenant_id,
+            "kms_verified": kms_receipt.get("ciphertext_bytes", 0),
+            "memory_key": memory_key,
+            "opened_canary": opened_memory["canary_marker"],
+            "deidentified_text": dlp_result["deidentified_text"],
+        }
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        finvault_future = pool.submit(
+            execute_live_tenant_probe,
+            finvault_envelope,
+            FINVAULT_KMS_KEY,
+            "FV_LIVE_CONCURRENT_CANARY",
+            "SSN 123-45-6789",
+        )
+        retailstream_future = pool.submit(
+            execute_live_tenant_probe,
+            retailstream_envelope,
+            RETAILSTREAM_KMS_KEY,
+            "RS_LIVE_CONCURRENT_CANARY",
+            "PAN 4532-0151-1283-0366",
+        )
+        finvault_live_outcome = finvault_future.result(timeout=60)
+        retailstream_live_outcome = retailstream_future.result(timeout=60)
+
+    assert finvault_live_outcome["opened_canary"] == "FV_LIVE_CONCURRENT_CANARY"
+    assert (
+        retailstream_live_outcome["opened_canary"]
+        == "RS_LIVE_CONCURRENT_CANARY"
+    )
+    assert "123-45-6789" not in str(finvault_live_outcome["deidentified_text"])
+    assert "4532-0151-1283-0366" not in str(
+        retailstream_live_outcome["deidentified_text"]
+    )
+    with pytest.raises(PermissionError):
+        firestore_bank.read_memory(
+            envelope=retailstream_envelope,
+            target_composite_key=str(finvault_live_outcome["memory_key"]),
         )

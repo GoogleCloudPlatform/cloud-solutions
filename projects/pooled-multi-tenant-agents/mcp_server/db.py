@@ -78,6 +78,15 @@ ALLOWED_DB_AGENT_IDS: frozenset[str] = frozenset(
 )
 
 
+def _is_allowed_db_agent_id(agent_id: str) -> bool:
+    """Checks whether `agent_id` is in the static DB allowlist or dynamic `AGENT_CATALOG`."""
+    if agent_id in ALLOWED_DB_AGENT_IDS:
+        return True
+    from agents.registry import AGENT_CATALOG
+
+    return agent_id in AGENT_CATALOG
+
+
 def _pg_row_to_dict(row: Mapping[str, Any] | Any) -> dict[str, Any]:
     """Converts an `asyncpg.Record` into a JSON-safe dictionary (`datetime` -> ISO-8601 string)."""
     return {
@@ -656,6 +665,25 @@ class RLSDatabasePool:
         self._incidents.append(record)
         self._by_tenant.setdefault(record.tenant_id, []).append(record)
 
+    def seed_tenant_runbook(
+        self, tenant_id: str, runbook: Mapping[str, str]
+    ) -> None:
+        """Seeds a tenant-scoped remediation runbook for dynamic enterprise tenants.
+
+        Args:
+            tenant_id: Owning tenant identifier enforced by RLS.
+            runbook: Runbook dictionary containing `runbook_id`, `title`, and `remediation_steps`.
+
+        Raises:
+            ValueError: If `tenant_id` is empty.
+        """
+        clean_tenant = tenant_id.strip()
+        if not clean_tenant:
+            raise ValueError("tenant_id must be a non-empty string.")
+        seeded_entry = {str(key): str(val) for key, val in runbook.items()}
+        seeded_entry["tenant_id"] = clean_tenant
+        self._runbooks.setdefault(clean_tenant, []).append(seeded_entry)
+
     @staticmethod
     def validate_sql_safety(sql: str) -> None:
         """Strips SQL comments and blocks any attempt to override `app.current_tenant_id` or
@@ -851,9 +879,8 @@ class RLSDatabasePool:
                 and conn.active_guc_user_role not in ALLOWED_DB_USER_ROLES
             ):
                 return []
-            if (
+            if conn.active_guc_agent_id and not _is_allowed_db_agent_id(
                 conn.active_guc_agent_id
-                and conn.active_guc_agent_id not in ALLOWED_DB_AGENT_IDS
             ):
                 return []
 
@@ -931,9 +958,8 @@ class RLSDatabasePool:
                 and conn.active_guc_user_role not in ALLOWED_DB_USER_ROLES
             ):
                 return []
-            if (
+            if conn.active_guc_agent_id and not _is_allowed_db_agent_id(
                 conn.active_guc_agent_id
-                and conn.active_guc_agent_id not in ALLOWED_DB_AGENT_IDS
             ):
                 return []
             return list(self._runbooks.get(conn.active_guc_tenant_id, []))

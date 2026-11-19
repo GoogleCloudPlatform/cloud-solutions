@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import base64
 import contextlib
+import hashlib
 import inspect
 import json
 import os
@@ -64,6 +65,28 @@ class AuthManager3LOVault:
         self._tokens: dict[str, Delegated3LOToken] = {}
         self._lock = threading.Lock()
         register_tenant_eviction_target(self)
+
+    @staticmethod
+    def handle_for_caller(
+        *,
+        tenant_id: str,
+        user_sub: str,
+        required_scope: str,
+    ) -> str:
+        """Derives a deterministic vault handle scoped to `(tenant_id, user_sub, required_scope)`.
+
+        Args:
+            tenant_id: Verified tenant identifier.
+            user_sub: Verified user subject identifier.
+            required_scope: Required 3LO OAuth scope string.
+
+        Returns:
+            Opaque `3lo-<24-hex>` handle bound to the exact caller and scope.
+        """
+        digest = hashlib.sha256(
+            f"{tenant_id}:{user_sub}:{required_scope}".encode()
+        ).hexdigest()[:24]
+        return f"3lo-{digest}"
 
     def store_3lo_token(self, token: Delegated3LOToken) -> str:
         with self._lock:

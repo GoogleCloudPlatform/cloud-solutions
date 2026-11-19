@@ -44,6 +44,7 @@ class HermeticZeroCredentialSandboxBackend:
         """Initializes the hermetic in-memory agent sandbox in Gemini simulator."""
         self._lock = threading.Lock()
         self._states: dict[str, SandboxLifecycleState] = {}
+        self._workspaces: dict[str, dict[str, object]] = {}
 
     def create_sandbox(
         self,
@@ -80,6 +81,7 @@ class HermeticZeroCredentialSandboxBackend:
         )
         with self._lock:
             self._states[sandbox_resource_name] = SandboxLifecycleState.RUNNING
+            self._workspaces[sandbox_resource_name] = {}
         return SandboxBackendCreateResult(
             sandbox_id=sandbox_id,
             sandbox_resource_name=sandbox_resource_name,
@@ -112,6 +114,9 @@ class HermeticZeroCredentialSandboxBackend:
         """
         with self._lock:
             current_state = self._states.get(sandbox_resource_name)
+            workspace_snapshot = dict(
+                self._workspaces.get(sandbox_resource_name, {})
+            )
         if current_state != SandboxLifecycleState.RUNNING:
             raise SandboxUnavailableError(
                 f"Sandbox '{sandbox_resource_name}' is not in "
@@ -125,7 +130,21 @@ class HermeticZeroCredentialSandboxBackend:
             parsed_input = {"value": parsed_input}
 
         if language == SandboxLanguage.PYTHON:
-            return _evaluate_restricted_diagnostic_ast(code, parsed_input)
+            execution_result = _evaluate_restricted_diagnostic_ast(
+                code,
+                parsed_input,
+                session_workspace=workspace_snapshot,
+            )
+            if execution_result.exit_code == 0:
+                with self._lock:
+                    if (
+                        self._states.get(sandbox_resource_name)
+                        == SandboxLifecycleState.RUNNING
+                    ):
+                        self._workspaces[sandbox_resource_name] = dict(
+                            workspace_snapshot
+                        )
+            return execution_result
         if language == SandboxLanguage.JAVASCRIPT:
             _validate_javascript_syntax(code)
             stdout_payload = json.dumps(
@@ -210,4 +229,5 @@ class HermeticZeroCredentialSandboxBackend:
             self._states[sandbox_resource_name] = (
                 SandboxLifecycleState.DESTROYED
             )
+            self._workspaces.pop(sandbox_resource_name, None)
             return True

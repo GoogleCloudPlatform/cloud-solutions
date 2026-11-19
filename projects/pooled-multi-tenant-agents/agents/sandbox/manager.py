@@ -27,7 +27,11 @@ from collections.abc import Callable, Mapping
 from agents import context as agent_context
 from agents import interceptors
 from agents.platform_config import get_platform_config, resolve_project_id
-from agents.registry import TOOL_REGISTRY, AgentRegistryPDP
+from agents.registry import (
+    TOOL_REGISTRY,
+    AgentRegistryPDP,
+    is_tool_tenant_allowed,
+)
 from agents.sandbox.gemini_client import LiveGeminiAgentSandboxClient
 from agents.sandbox.models import (
     DEFAULT_SANDBOX_TTL_SECONDS,
@@ -185,10 +189,8 @@ class GeminiAgentSandboxManager:
             else "2lo:cymbal.sandbox.execute"
         )
         caller_scopes = set(envelope.tenant.authorized_scopes)
-        tenant_allowed = (
-            sandbox_tool is None
-            or "*" in sandbox_tool.allowed_tenants
-            or tenant_id in sandbox_tool.allowed_tenants
+        tenant_allowed = sandbox_tool is None or is_tool_tenant_allowed(
+            tenant_id, sandbox_tool
         )
         entitled_tools = self._registry_pdp.get_entitled_tools(
             tenant_id=tenant_id,

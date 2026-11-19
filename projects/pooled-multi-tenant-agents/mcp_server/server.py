@@ -37,7 +37,11 @@ from agents import interceptors, sandbox_execution
 from agents.context import averify_signed_adk_state
 from agents.context_token import AGENT_ID_CLAIM, AUDIENCE_MCP
 from agents.interceptors import egress_dlp_and_nlc_guardrail
-from agents.registry import TOOL_REGISTRY, AgentRegistryPDP
+from agents.registry import (
+    TOOL_REGISTRY,
+    AgentRegistryPDP,
+    is_tool_tenant_allowed,
+)
 from agents.workload_identity import CallerPrincipal, flag_enabled
 from mcp_server.db import RLSDatabasePool
 
@@ -72,10 +76,7 @@ def _verify_tool_authorization(
     if tool_meta is None:
         raise KeyError(f"Unknown MCP tool: {tool_name}")
 
-    if (
-        "*" not in tool_meta.allowed_tenants
-        and tenant_id not in tool_meta.allowed_tenants
-    ):
+    if not is_tool_tenant_allowed(tenant_id, tool_meta):
         raise PermissionError(
             f"403 Forbidden: Tenant '{tenant_id}' is not entitled to invoke '{tool_name}'."
         )

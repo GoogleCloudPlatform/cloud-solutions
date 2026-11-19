@@ -58,8 +58,10 @@ from agents.context import (
     ContextEnvelope,
     SubscriptionTier,
     register_tenant,
+    register_tenant_eviction_target,
 )
 from agents.interceptors import egress_dlp_and_nlc_guardrail
+from agents.registry import register_dynamic_private_agent
 
 _PINNED_SECRET_VERSION_RE = re.compile(
     r"^projects/[a-zA-Z0-9_-]+/secrets/[a-zA-Z0-9_-]+/versions/[1-9][0-9]*$"
@@ -177,6 +179,7 @@ class TenantWorkspaceManifest:
     private_agent_model: str | None = None
     thinking_token_budget: int = 4000
     require_inline_3lo_consent: bool = False
+    enforce_gateway_3lo_vault: bool = False
     custom_skills_uris: tuple[str, ...] = ()
     custom_nlc_rules: tuple[str, ...] = ()
     authorized_scopes: tuple[str, ...] = field(default_factory=tuple)
@@ -264,6 +267,33 @@ class WorkspacePluginRegistry:
             _DEFAULT_MANIFESTS
         )
         self.vault_3lo = vault_3lo or get_default_3lo_vault()
+        register_tenant_eviction_target(self)
+
+    def has_manifest(self, tenant_id: str) -> bool:
+        """Returns whether `tenant_id` has a registered workspace manifest."""
+        return tenant_id in self._manifests
+
+    def evict_tenant(self, tenant_id: str) -> int:
+        """Removes a dynamically onboarded tenant manifest and purges its 3LO vault tokens.
+
+        Args:
+            tenant_id: Offboarded tenant identifier.
+
+        Returns:
+            Count of evicted manifest and 3LO token entries.
+        """
+        removed_manifest = 0
+        if (
+            tenant_id not in _DEFAULT_MANIFESTS
+            and self._manifests.pop(tenant_id, None) is not None
+        ):
+            removed_manifest = 1
+        return removed_manifest + int(self.vault_3lo.evict_tenant(tenant_id))
+
+    def reset_dynamic_manifests(self) -> None:
+        """Restores `_manifests` to the canonical anchor tenant manifests."""
+        self._manifests.clear()
+        self._manifests.update(_DEFAULT_MANIFESTS)
 
     def get_manifest(self, tenant_id: str) -> TenantWorkspaceManifest:
         if tenant_id not in self._manifests:
@@ -284,6 +314,10 @@ class WorkspacePluginRegistry:
         for required in (itsm_scope, ws_scope):
             if required not in scopes:
                 scopes.append(required)
+        if manifest.private_agent_id:
+            private_agent_scope = f"agent:{manifest.private_agent_id}"
+            if private_agent_scope not in scopes:
+                scopes.append(private_agent_scope)
 
         updated = replace(manifest, authorized_scopes=tuple(scopes))
         self._manifests[updated.tenant_id] = updated
@@ -305,6 +339,17 @@ class WorkspacePluginRegistry:
                 )
             ),
         )
+        if updated.private_agent_id and updated.private_agent_id not in (
+            "cymbal_shared_diagnostic_agent",
+            "finvault_regulatory_escalation_agent",
+        ):
+            register_dynamic_private_agent(
+                agent_id=updated.private_agent_id,
+                display_name=f"{updated.display_name} Private Enterprise Agent",
+                model=updated.private_agent_model or updated.shared_agent_model,
+                owner_tenant_id=updated.tenant_id,
+                required_tier=updated.subscription_tier,
+            )
         return updated
 
     def hot_swap_tenant_config(
@@ -501,3 +546,14 @@ class WorkspacePluginRegistry:
                 f"authenticated tenant '{active_envelope.tenant.tenant_id}' session."
             )
         return True
+
+
+_DEFAULT_WORKSPACE_PLUGIN_REGISTRY: WorkspacePluginRegistry | None = None
+
+
+def get_default_workspace_plugin_registry() -> WorkspacePluginRegistry:
+    """Returns the shared in-process `WorkspacePluginRegistry` singleton."""
+    global _DEFAULT_WORKSPACE_PLUGIN_REGISTRY
+    if _DEFAULT_WORKSPACE_PLUGIN_REGISTRY is None:
+        _DEFAULT_WORKSPACE_PLUGIN_REGISTRY = WorkspacePluginRegistry()
+    return _DEFAULT_WORKSPACE_PLUGIN_REGISTRY

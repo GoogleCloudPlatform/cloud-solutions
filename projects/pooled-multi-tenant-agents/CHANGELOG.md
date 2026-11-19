@@ -278,7 +278,7 @@ First tagged release of the Workstream 2 pooled multi-tenant agent gateway
 
 ### Known gaps
 
-See [Missing components & known gaps](README.md#missing-components--known-gaps).
+See [Missing components and known gaps](README.md#missing-components-and-known-gaps).
 The largest: until B5 a fully compromised runtime can still obtain KMS
 signatures and therefore broker tokens; replay and rate limits are in-process
 (single instance, Redis not wired); Postgres RLS is tested on a simulated

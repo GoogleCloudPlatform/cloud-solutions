@@ -20,9 +20,16 @@ from __future__ import annotations
 
 import asyncio
 import os
+import secrets
+import time
 from typing import Any
 
 from agents import workload_identity as wi
+from agents.auth.vault_and_bulkhead import (
+    AuthManager3LOVault,
+    Delegated3LOToken,
+    RemoteBroker3LOVault,
+)
 from agents.context import _ACTIVE_TENANT_ENVELOPE
 from agents.context_token import (
     JWKS_MAX_AGE_SECONDS,
@@ -32,6 +39,7 @@ from agents.context_token import (
     public_key_to_jwk,
 )
 from agents.pooled_resilience_and_standards import A2AAgentCardRegistry
+from agents.workspace_plugins import WorkspacePluginRegistry
 from app.auth import (
     DEV_ISSUER_TOKEN_TTL_SECONDS,
     SandboxIssuerDisabled,
@@ -55,7 +63,12 @@ from app.runtime_state import (
     public_error_code,
     stripped_header_names,
 )
-from app.schemas.gateway import SandboxTokenRequest, TokenExchangeRequest
+from app.schemas.gateway import (
+    OAuth3LOAuthorizeRequest,
+    OAuth3LOCallbackRequest,
+    SandboxTokenRequest,
+    TokenExchangeRequest,
+)
 from broker_service.core import google_id_token_signature_verifier
 from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
@@ -316,3 +329,99 @@ async def ard_catalog(request: Request, envelope: Caller) -> dict[str, Any]:
 async def a2a_agent_cards(envelope: Caller) -> dict[str, Any]:
     """Returns A2A Agent Cards with tier-scoped tool allowlists for the caller's tenant."""
     return A2AAgentCardRegistry.build_a2a_agent_cards(envelope=envelope)
+
+
+@router.post("/api/v1/oauth/3lo/authorize")
+async def authorize_3lo_oauth(
+    req: OAuth3LOAuthorizeRequest,
+    envelope: Caller,
+    response: Response,
+) -> dict[str, Any]:
+    """Mints a tenant- and session-bound 3LO OAuth consent `state` token for the caller."""
+    if req.required_scope not in envelope.tenant.authorized_scopes:
+        raise HTTPException(
+            status_code=403,
+            detail={"error": "E_3LO_SCOPE_NOT_ENTITLED"},
+            headers={"Cache-Control": "no-store"},
+        )
+    oauth_state = WorkspacePluginRegistry.mint_csrf_bound_oauth_state(
+        envelope=envelope,
+        required_scope=req.required_scope,
+    )
+    response.headers["Cache-Control"] = "no-store"
+    return {
+        "status": "OAUTH_CONSENT_CHALLENGE",
+        "tenant_id": envelope.tenant.tenant_id,
+        "provider": req.provider,
+        "required_scope": req.required_scope,
+        "oauth_state": oauth_state,
+    }
+
+
+@router.post("/api/v1/oauth/3lo/callback")
+async def callback_3lo_oauth(
+    req: OAuth3LOCallbackRequest,
+    envelope: Caller,
+    response: Response,
+) -> dict[str, Any]:
+    """Verifies CSRF `oauth_state` and binds the 3LO grant to `(tenant_id, sub, scope)`."""
+    if req.required_scope not in envelope.tenant.authorized_scopes:
+        raise HTTPException(
+            status_code=403,
+            detail={"error": "E_3LO_SCOPE_NOT_ENTITLED"},
+            headers={"Cache-Control": "no-store"},
+        )
+    try:
+        WorkspacePluginRegistry.verify_oauth_callback_state(
+            callback_state=req.oauth_state,
+            active_envelope=envelope,
+            required_scope=req.required_scope,
+        )
+    except PermissionError as csrf_exc:
+        raise HTTPException(
+            status_code=403,
+            detail={"error": "E_OAUTH_3LO_CSRF_STATE_MISMATCH"},
+            headers={"Cache-Control": "no-store"},
+        ) from csrf_exc
+
+    token_handle = AuthManager3LOVault.handle_for_caller(
+        tenant_id=envelope.tenant.tenant_id,
+        user_sub=envelope.security.sub,
+        required_scope=req.required_scope,
+    )
+    expires_at = int(time.time()) + 3600
+    delegated_token = Delegated3LOToken(
+        token_handle=token_handle,
+        tenant_id=envelope.tenant.tenant_id,
+        user_sub=envelope.security.sub,
+        provider=req.provider,
+        scopes=(req.required_scope,),
+        access_token=f"oauth3lo-{secrets.token_urlsafe(24)}",
+        expires_at=expires_at,
+    )
+    vault_3lo = gateway_module().TURN_SERVICES.workspace_plugins.vault_3lo
+    try:
+        if isinstance(vault_3lo, RemoteBroker3LOVault):
+            await asyncio.to_thread(
+                vault_3lo.store_3lo_token_for_caller,
+                envelope=envelope,
+                token=delegated_token,
+            )
+        else:
+            vault_3lo.store_3lo_token(delegated_token)
+    except PermissionError as vault_exc:
+        raise HTTPException(
+            status_code=403,
+            detail={"error": public_error_code(vault_exc)},
+            headers={"Cache-Control": "no-store"},
+        ) from vault_exc
+
+    response.headers["Cache-Control"] = "no-store"
+    return {
+        "status": "OAUTH_CONSENT_LINKED",
+        "token_handle": token_handle,
+        "tenant_id": envelope.tenant.tenant_id,
+        "provider": req.provider,
+        "scopes": [req.required_scope],
+        "expires_at": expires_at,
+    }

@@ -163,9 +163,14 @@ def register_tenant_eviction_target(target: Any) -> None:
 
 def reset_dynamic_tenants() -> None:
     """Resets TENANT_DIRECTORY to the configured tenants, re-reading config (honors CYMBAL_ENV)."""
+    from agents.registry import reset_dynamic_agents
     from agents.workload_identity import reset_control_plane_revocations
+    from agents.workspace_plugins import _DEFAULT_WORKSPACE_PLUGIN_REGISTRY
 
     reset_control_plane_revocations()
+    reset_dynamic_agents()
+    if _DEFAULT_WORKSPACE_PLUGIN_REGISTRY is not None:
+        _DEFAULT_WORKSPACE_PLUGIN_REGISTRY.reset_dynamic_manifests()
     reloaded = _load_base_tenant_directory()
     _BASE_TENANT_DIRECTORY.clear()
     _BASE_TENANT_DIRECTORY.update(reloaded)

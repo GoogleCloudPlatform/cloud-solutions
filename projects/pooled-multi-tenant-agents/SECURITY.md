@@ -23,7 +23,7 @@ Do not test against the hosted gateway beyond your own named, time-boxed access.
 
 Known gaps are listed openly; please check them before reporting:
 
-- [Missing components & known gaps](README.md#missing-components--known-gaps)
+- [Missing components and known gaps](README.md#missing-components-and-known-gaps)
 - [What if a component is compromised?](README.md#what-if-a-component-is-compromised)
   (the component compromise table covering before B5 and today's live B5 +
   ADR-0016 split)
@@ -35,4 +35,4 @@ hold zero KMS signing or `TokenCreator` permissions; `cymbal-pooled-gateway`
 remains the context-token signing trust root (holding zero `TokenCreator` and
 zero invoker access on `cymbal-credential-broker`), with automated KMS
 signing-volume alerting tracked in
-[Known gaps (#5)](README.md#missing-components--known-gaps).
+[Known gaps (#5)](README.md#missing-components-and-known-gaps).

@@ -36,7 +36,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from agents import interceptors, sandbox_execution
-from agents.agent_alpha import build_agent_alpha
+from agents.agent_alpha import AgentAlphaSpec, build_agent_alpha
+from agents.auth.vault_and_bulkhead import AuthManager3LOVault
 from agents.context import (
     _ACTIVE_TENANT_ENVELOPE,
     ContextEnvelope,
@@ -46,9 +47,13 @@ from agents.context import (
 from agents.interceptors import enforce_tenant_isolation_interceptor
 from agents.model_routing import SharedModelRoutingPDP
 from agents.platform_config import is_live_mode
-from agents.registry import AgentRegistryPDP
+from agents.registry import AGENT_CATALOG, TOOL_REGISTRY, AgentRegistryPDP
 from agents.shared_diagnostic_agent import build_shared_diagnostic_agent
 from agents.testing_fakes import MockADKCallbackContext
+from agents.workspace_plugins import (
+    WorkspacePluginRegistry,
+    get_default_workspace_plugin_registry,
+)
 from fastapi import HTTPException
 from mcp_server import server as mcp_tools
 from mcp_server.db import RLSDatabasePool
@@ -69,6 +74,9 @@ class TurnServices:
     sandbox_manager: sandbox_execution.GeminiAgentSandboxManager = field(
         default_factory=sandbox_execution.GeminiAgentSandboxManager
     )
+    workspace_plugins: WorkspacePluginRegistry = field(
+        default_factory=get_default_workspace_plugin_registry
+    )
 
 
 def build_agent(agent_id: str) -> Any:
@@ -76,6 +84,27 @@ def build_agent(agent_id: str) -> Any:
     gateway refuses that mismatch when it binds the agent id)."""
     if agent_id == "finvault_regulatory_escalation_agent":
         return build_agent_alpha()
+    if (
+        agent_id != "cymbal_shared_diagnostic_agent"
+        and agent_id in AGENT_CATALOG
+    ):
+        catalog_entry = AGENT_CATALOG[agent_id]
+        candidate_tools = [
+            getattr(mcp_tools, tool_name)
+            for tool_name in catalog_entry.entitled_tools
+            if hasattr(mcp_tools, tool_name)
+        ]
+        return AgentAlphaSpec(
+            name=catalog_entry.agent_id,
+            model=catalog_entry.model,
+            owner_tenant_id=catalog_entry.owner_tenant_id or "",
+            instruction=(
+                f"You are {catalog_entry.display_name}, strictly scoped to "
+                f"tenant '{catalog_entry.owner_tenant_id}'."
+            ),
+            tools=candidate_tools,
+            before_agent_callback=enforce_tenant_isolation_interceptor,
+        )
     return build_shared_diagnostic_agent()
 
 
@@ -183,40 +212,144 @@ async def _run_agent_turn_inner(
         }
     )
 
-    mem_key = services.memory_bank.write_memory(
-        envelope=envelope,
+    session_memory_key = services.memory_bank.build_composite_key(
+        tenant_id=envelope.tenant.tenant_id,
         scope=MemoryScope.SESSION,
+        session_id=envelope.request.session_id,
         actor=req.agent_id,
-        content={"last_prompt": req.prompt},
+        sub=envelope.security.sub,
     )
-    if is_live_mode() and "pytest" not in sys.modules:
-        from agents.gcp_live_bridge import (
-            LiveFirestoreMemoryBank,
-            LiveVertexMemoryBankAdapter,
-        )
-
-        mem_key = LiveFirestoreMemoryBank().write_memory(
+    prior_turns: list[dict[str, Any]] = []
+    if services.memory_bank.exists(session_memory_key):
+        existing_session_payload = services.memory_bank.read_memory(
             envelope=envelope,
-            scope=MemoryScope.SESSION,
-            actor=req.agent_id,
-            content={"last_prompt": req.prompt},
+            target_key=session_memory_key,
         )
-        mb_engine = (
-            os.getenv("MEMORY_BANK_REASONING_ENGINE", "").strip()
-            or os.getenv("AGENT_SANDBOX_REASONING_ENGINE_NAME", "").strip()
+        raw_turns = existing_session_payload.get("turns")
+        if isinstance(raw_turns, list):
+            for turn_entry in raw_turns:
+                if isinstance(turn_entry, Mapping):
+                    prior_turns.append(
+                        {
+                            "turn_index": int(
+                                turn_entry.get(
+                                    "turn_index", len(prior_turns) + 1
+                                )
+                            ),
+                            "prompt": str(turn_entry.get("prompt", "")),
+                            "tool_name": str(turn_entry.get("tool_name", "")),
+                        }
+                    )
+        elif isinstance(existing_session_payload.get("last_prompt"), str):
+            prior_turns.append(
+                {
+                    "turn_index": 1,
+                    "prompt": str(existing_session_payload["last_prompt"]),
+                    "tool_name": "",
+                }
+            )
+    turn_index = len(prior_turns) + 1
+    prior_prompts = [str(turn_entry["prompt"]) for turn_entry in prior_turns]
+    state["temp:session_turn_index"] = turn_index
+    state["temp:prior_session_prompts"] = list(prior_prompts)
+
+    user_memory_key = services.memory_bank.build_composite_key(
+        tenant_id=envelope.tenant.tenant_id,
+        scope=MemoryScope.USER,
+        session_id=envelope.request.session_id,
+        actor=req.agent_id,
+        sub=envelope.security.sub,
+    )
+    recalled_user_memory: dict[str, Any] | None = None
+    if services.memory_bank.exists(user_memory_key):
+        recalled_user_memory = services.memory_bank.read_memory(
+            envelope=envelope,
+            target_key=user_memory_key,
         )
-        if mb_engine:
-            mb_retrieved = LiveVertexMemoryBankAdapter(
-                reasoning_engine_name=mb_engine
-            ).retrieve_memories(
-                envelope=envelope,
-                memory_scope=MemoryScope.USER,
-                agent_id=req.agent_id,
-                top_k=5,
-            )
-            state["temp:long_term_memories"] = list(
-                mb_retrieved.get("memories", [])
-            )
+        state["temp:recalled_user_memory"] = recalled_user_memory
+
+    workspace_governance: dict[str, Any] = {
+        "loaded_skill_uris": [],
+        "active_nlc_rules": [],
+        "itsm_adapter": None,
+        "workspace_adapter": None,
+        "delegated_3lo_grant": None,
+    }
+    if services.workspace_plugins.has_manifest(envelope.tenant.tenant_id):
+        tenant_manifest = services.workspace_plugins.get_manifest(
+            envelope.tenant.tenant_id
+        )
+        workspace_governance["loaded_skill_uris"] = list(
+            tenant_manifest.custom_skills_uris
+        )
+        workspace_governance["active_nlc_rules"] = list(
+            tenant_manifest.custom_nlc_rules
+        )
+        workspace_governance["itsm_adapter"] = str(tenant_manifest.itsm_adapter)
+        workspace_governance["workspace_adapter"] = str(
+            tenant_manifest.workspace_adapter
+        )
+        state["temp:loaded_skill_uris"] = list(
+            tenant_manifest.custom_skills_uris
+        )
+        for nlc_rule in tenant_manifest.custom_nlc_rules:
+            if ("PHI" in nlc_rule and "MRN-" in req.prompt) or (
+                "UNHEDGED_WIRE_OVERRIDE" in nlc_rule
+                and "UNHEDGED_WIRE_OVERRIDE" in req.prompt
+            ):
+                raise HTTPException(
+                    status_code=422,
+                    detail={"error": "E_CUSTOM_NLC_VIOLATION"},
+                )
+        if tenant_manifest.enforce_gateway_3lo_vault:
+            tool_meta = TOOL_REGISTRY.get(req.tool_name)
+            if (
+                tool_meta is not None
+                and tool_meta.auth_mode == "3LO"
+                and req.tool_name in pruned_tools
+            ):
+                expected_handle = AuthManager3LOVault.handle_for_caller(
+                    tenant_id=envelope.tenant.tenant_id,
+                    user_sub=envelope.security.sub,
+                    required_scope=tool_meta.required_scope,
+                )
+                try:
+                    checked_grant = (
+                        services.workspace_plugins.vault_3lo.checkout_3lo_token(
+                            token_handle=expected_handle,
+                            envelope=envelope,
+                            required_scope=tool_meta.required_scope,
+                        )
+                    )
+                except PermissionError as consent_exc:
+                    consent_msg = str(consent_exc)
+                    if any(
+                        token_code in consent_msg
+                        for token_code in (
+                            "E_3LO_TOKEN_NOT_FOUND",
+                            "E_3LO_TOKEN_EXPIRED",
+                            "E_BROKER_REFUSED",
+                        )
+                    ):
+                        raise HTTPException(
+                            status_code=401,
+                            detail={
+                                "error": "E_3LO_INLINE_CONSENT_REQUIRED",
+                                "required_scope": tool_meta.required_scope,
+                            },
+                            headers={
+                                "WWW-Authenticate": 'Bearer realm="3lo-oauth"',
+                                "Cache-Control": "no-store",
+                            },
+                        ) from consent_exc
+                    raise
+                workspace_governance["delegated_3lo_grant"] = {
+                    "token_handle": checked_grant.token_handle,
+                    "provider": checked_grant.provider,
+                    "scope": tool_meta.required_scope,
+                }
+
+    mem_key = session_memory_key
     routing_decision = services.model_routing_pdp.decide_route(
         envelope=envelope,
         agent_id=req.agent_id,
@@ -399,6 +532,57 @@ async def _run_agent_turn_inner(
                 status_code=422,
                 detail={"error": "E_SANDBOX_INVALID_CODE"},
             ) from val_exc
+
+    updated_session_turns = [
+        *prior_turns[-31:],
+        {
+            "turn_index": turn_index,
+            "prompt": req.prompt,
+            "tool_name": req.tool_name,
+        },
+    ]
+    mem_key = services.memory_bank.write_memory(
+        envelope=envelope,
+        scope=MemoryScope.SESSION,
+        actor=req.agent_id,
+        content={
+            "last_prompt": req.prompt,
+            "turn_index": turn_index,
+            "turns": updated_session_turns,
+        },
+    )
+    if is_live_mode() and "pytest" not in sys.modules:
+        from agents.gcp_live_bridge import (
+            LiveFirestoreMemoryBank,
+            LiveVertexMemoryBankAdapter,
+        )
+
+        mem_key = LiveFirestoreMemoryBank().write_memory(
+            envelope=envelope,
+            scope=MemoryScope.SESSION,
+            actor=req.agent_id,
+            content={
+                "last_prompt": req.prompt,
+                "turn_index": turn_index,
+                "turns": updated_session_turns,
+            },
+        )
+        mb_engine = (
+            os.getenv("MEMORY_BANK_REASONING_ENGINE", "").strip()
+            or os.getenv("AGENT_SANDBOX_REASONING_ENGINE_NAME", "").strip()
+        )
+        if mb_engine:
+            mb_retrieved = LiveVertexMemoryBankAdapter(
+                reasoning_engine_name=mb_engine
+            ).retrieve_memories(
+                envelope=envelope,
+                memory_scope=MemoryScope.USER,
+                agent_id=req.agent_id,
+                top_k=5,
+            )
+            state["temp:long_term_memories"] = list(
+                mb_retrieved.get("memories", [])
+            )
 
     live_cloud_receipt: dict[str, Any] | None = None
     if req.live_cloud:
@@ -600,6 +784,14 @@ async def _run_agent_turn_inner(
             "estimated_turn_usd_saved": routing_decision.estimated_turn_usd_saved,
         },
         "finops": finops,
+        "session_state": {
+            "session_id": envelope.request.session_id,
+            "turn_index": turn_index,
+            "prior_prompts": prior_prompts,
+            "memory_key": mem_key,
+            "recalled_user_memory": recalled_user_memory,
+        },
+        "workspace_governance": workspace_governance,
         "topology_route": _resolve_topology_route(envelope),
         "hops": hops,
         "tool_output": tool_result,

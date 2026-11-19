@@ -55,7 +55,11 @@ def _json_safe_value(value: object) -> object:
 class _RestrictedAstInterpreter:
     """Bounded, zero-`eval`/`exec` AST interpreter for hermetic Python diagnostics."""
 
-    def __init__(self, input_payload: Mapping[str, object]) -> None:
+    def __init__(
+        self,
+        input_payload: Mapping[str, object],
+        session_workspace: Mapping[str, object] | None = None,
+    ) -> None:
         payload_copy = copy.deepcopy(dict(input_payload))
         incidents_copy = (
             copy.deepcopy(payload_copy["incidents"])
@@ -67,11 +71,17 @@ class _RestrictedAstInterpreter:
             if "runbooks" in payload_copy
             else []
         )
+        workspace_copy = (
+            copy.deepcopy(dict(session_workspace))
+            if session_workspace is not None
+            else {}
+        )
         self.env: dict[str, Any] = {
             "input_data": payload_copy,
             "readonly_input": copy.deepcopy(payload_copy),
             "incidents": incidents_copy,
             "runbooks": runbooks_copy,
+            "workspace_state": workspace_copy,
         }
         self.assigned_names: set[str] = set()
         self.print_chunks: list[str] = []
@@ -629,7 +639,10 @@ class _RestrictedAstInterpreter:
 
 
 def _evaluate_restricted_diagnostic_ast(
-    code: str, input_payload: Mapping[str, object]
+    code: str,
+    input_payload: Mapping[str, object],
+    *,
+    session_workspace: dict[str, object] | None = None,
 ) -> SandboxBackendExecutionResult:
     """Evaluates a safe, bounded diagnostic snippet over `input_payload` without `exec`/`eval`.
 
@@ -729,7 +742,10 @@ def _evaluate_restricted_diagnostic_ast(
                 "float, bool, dict, list, range) are permitted."
             )
 
-    interpreter = _RestrictedAstInterpreter(input_payload)
+    interpreter = _RestrictedAstInterpreter(
+        input_payload,
+        session_workspace=session_workspace,
+    )
     try:
         interpreter.run(parsed_tree.body)
     except PermissionError:
@@ -756,6 +772,14 @@ def _evaluate_restricted_diagnostic_ast(
             exit_code=1,
             backend_mode="HERMETIC_AGENT_SANDBOX_SANDBOX_SIMULATION",
         )
+
+    if session_workspace is not None:
+        updated_workspace = interpreter.env.get("workspace_state")
+        if isinstance(updated_workspace, Mapping):
+            sanitized_workspace = _json_safe_value(updated_workspace)
+            if isinstance(sanitized_workspace, dict):
+                session_workspace.clear()
+                session_workspace.update(sanitized_workspace)
 
     stdout_lines = "".join(interpreter.print_chunks).splitlines()
     variables = {

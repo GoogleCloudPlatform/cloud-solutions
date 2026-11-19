@@ -150,3 +150,45 @@ class AgentSuspensionActionRequest(BaseModel):
         pattern=r"^[a-z][a-z0-9_]{0,63}$",
     )
     reason: str = Field(default="operator_emergency_suspension", max_length=256)
+
+
+class OAuth3LOAuthorizeRequest(BaseModel):
+    """Starts a tenant- and session-bound 3LO OAuth step-up consent challenge."""
+
+    model_config = {"extra": "forbid"}
+
+    required_scope: str = Field(
+        min_length=4,
+        max_length=128,
+        pattern=r"^3lo:[a-z0-9._-]+$",
+    )
+    provider: str = Field(
+        default="jira-cloud-3lo",
+        min_length=2,
+        max_length=64,
+        pattern=r"^[a-z0-9_-]+$",
+    )
+
+
+class OAuth3LOCallbackRequest(BaseModel):
+    """Completes a CSRF-bound 3LO OAuth callback and stores the caller's delegated grant."""
+
+    model_config = {"extra": "forbid"}
+
+    oauth_state: str = Field(min_length=8, max_length=256)
+    required_scope: str = Field(
+        min_length=4,
+        max_length=128,
+        pattern=r"^3lo:[a-z0-9._-]+$",
+    )
+    provider: str = Field(
+        default="jira-cloud-3lo",
+        min_length=2,
+        max_length=64,
+        pattern=r"^[a-z0-9_-]+$",
+    )
+    authorization_code: str = Field(
+        min_length=4,
+        max_length=512,
+        pattern=r"^[A-Za-z0-9._~-]+$",
+    )

@@ -29,6 +29,7 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
 from typing import Any
 
+from agents.auth.tenant_directory import _BASE_TENANT_DIRECTORY
 from agents.context import TENANT_DIRECTORY, SubscriptionTier
 from agents.platform_config import get_platform_config
 from agents.workload_identity import (
@@ -166,6 +167,117 @@ TOOL_REGISTRY: dict[str, CatalogToolEntry] = {
 
 def _configured_agent_bindings() -> Mapping[str, AgentBinding]:
     return bindings_from_config(get_platform_config())
+
+
+_DYNAMIC_AGENT_IDS: set[str] = set()
+
+
+def is_tool_tenant_allowed(tenant_id: str, tool_meta: CatalogToolEntry) -> bool:
+    """Checks whether `tenant_id` is allowed to invoke `tool_meta` before scope intersection.
+
+    Static baseline tenants (`_BASE_TENANT_DIRECTORY`) remain pinned to `tool_meta.allowed_tenants`,
+    while dynamically onboarded tenants may invoke 3LO tools explicitly granted in their manifest
+    `authorized_scopes`.
+
+    Args:
+        tenant_id: Verified caller tenant identifier.
+        tool_meta: Tool entry from `TOOL_REGISTRY`.
+
+    Returns:
+        `True` if the tenant is eligible for `tool_meta`, `False` otherwise.
+    """
+    if (
+        "*" in tool_meta.allowed_tenants
+        or tenant_id in tool_meta.allowed_tenants
+    ):
+        return True
+    if (
+        tenant_id in TENANT_DIRECTORY
+        and tenant_id not in _BASE_TENANT_DIRECTORY
+    ):
+        tenant_scopes = TENANT_DIRECTORY[tenant_id].get("authorized_scopes", ())
+        return tool_meta.required_scope in tenant_scopes
+    return False
+
+
+def register_dynamic_private_agent(
+    *,
+    agent_id: str,
+    display_name: str,
+    model: str,
+    owner_tenant_id: str,
+    required_tier: SubscriptionTier,
+    entitled_tools: tuple[str, ...] | None = None,
+) -> CatalogAgentEntry:
+    """Registers a tenant-owned private catalog agent for a dynamically onboarded tenant.
+
+    Args:
+        agent_id: Unique private agent identifier.
+        display_name: Human-readable display name for ARD discovery.
+        model: Foundation model identifier configured for the private agent.
+        owner_tenant_id: Owning enterprise `tenant_id`.
+        required_tier: Minimum subscription tier required.
+        entitled_tools: Optional candidate tool tuple; defaults to all `TOOL_REGISTRY` keys.
+
+    Returns:
+        Registered `CatalogAgentEntry`.
+
+    Raises:
+        ValueError: If `agent_id` collides with a built-in catalog agent owned by another tenant.
+    """
+    existing = AGENT_CATALOG.get(agent_id)
+    if (
+        existing is not None
+        and agent_id not in _DYNAMIC_AGENT_IDS
+        and existing.owner_tenant_id != owner_tenant_id
+    ):
+        raise ValueError(
+            f"Cannot overwrite built-in catalog agent '{agent_id}'."
+        )
+    entry = CatalogAgentEntry(
+        agent_id=agent_id,
+        display_name=display_name,
+        model=model,
+        visibility="private",
+        owner_tenant_id=owner_tenant_id,
+        required_tier=required_tier,
+        entitled_tools=(
+            entitled_tools
+            if entitled_tools is not None
+            else tuple(TOOL_REGISTRY)
+        ),
+    )
+    AGENT_CATALOG[agent_id] = entry
+    _DYNAMIC_AGENT_IDS.add(agent_id)
+    return entry
+
+
+def evict_dynamic_agents_for_tenant(tenant_id: str) -> int:
+    """Removes dynamically registered private agents owned by `tenant_id`.
+
+    Args:
+        tenant_id: Offboarded tenant identifier.
+
+    Returns:
+        Count of removed dynamic private agent entries.
+    """
+    matching_ids = [
+        agent_id
+        for agent_id in list(_DYNAMIC_AGENT_IDS)
+        if (entry := AGENT_CATALOG.get(agent_id)) is not None
+        and entry.owner_tenant_id == tenant_id
+    ]
+    for agent_id in matching_ids:
+        AGENT_CATALOG.pop(agent_id, None)
+        _DYNAMIC_AGENT_IDS.discard(agent_id)
+    return len(matching_ids)
+
+
+def reset_dynamic_agents() -> None:
+    """Removes all dynamically registered private agents from `AGENT_CATALOG`."""
+    for agent_id in list(_DYNAMIC_AGENT_IDS):
+        AGENT_CATALOG.pop(agent_id, None)
+    _DYNAMIC_AGENT_IDS.clear()
 
 
 class AgentRegistryPDP:
@@ -339,10 +451,8 @@ class AgentRegistryPDP:
             tool_meta = TOOL_REGISTRY.get(tool_name)
             if not tool_meta:
                 continue
-            tenant_allowed = (
-                "*" in tool_meta.allowed_tenants
-                or tenant_id in tool_meta.allowed_tenants
-            )
-            if tenant_allowed and tool_meta.required_scope in tenant_scopes:
+            if is_tool_tenant_allowed(tenant_id, tool_meta) and (
+                tool_meta.required_scope in tenant_scopes
+            ):
                 entitled.append(tool_name)
         return entitled

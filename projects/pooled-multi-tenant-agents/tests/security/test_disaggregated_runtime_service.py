@@ -393,7 +393,7 @@ def _normalize(obj: Any) -> Any:
         import re
 
         obj = re.sub(r"Memory key='[^']*'", "Memory key=<k>", obj)
-        return re.sub(r"(sess|trace|mem)-[0-9a-f-]+", r"\1-<id>", obj)
+        return re.sub(r"(sess|trace|mem)-(?:gw-)?[0-9a-f-]+", r"\1-<id>", obj)
     return obj
 
 
