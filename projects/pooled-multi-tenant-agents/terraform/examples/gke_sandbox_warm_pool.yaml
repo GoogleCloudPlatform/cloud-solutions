@@ -1,0 +1,170 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# GKE Agent Sandbox Warm Pool & Claim Reference Manifest (ADR-0012 / PR-S2)
+#
+# Self-managed Kubernetes portability option for "The Hands" alongside managed
+# Gemini `sandboxEnvironments`
+# (https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/sandbox).
+#
+# Prerequisites on GKE Standard or Autopilot (1.33+):
+#   1. Enable GKE Sandbox (`runtimeClassName: gvisor`) on the target node pool.
+#   2. Install the Kubernetes SIGs `agent-sandbox` CRDs & controller
+#      (`agents.x-k8s.io/v1beta1`, `extensions.agents.x-k8s.io/v1beta1`).
+#   3. Apply this manifest into an isolated namespace (`cymbal-agent-sandboxes`).
+#
+# Security posture enforced:
+#   - Userspace kernel isolation (`runtimeClassName: gvisor`).
+#   - Zero mounted Kubernetes or Google Cloud credentials (`automountServiceAccountToken: false`).
+#   - Unprivileged UID/GID 1000 (`appuser`), read-only rootfs, all Linux capabilities dropped.
+#   - Ephemeral size-bounded `/workspace` (`emptyDir` backed by memory, `512Mi` limit).
+#   - Default-deny `NetworkPolicy` blocking GCE metadata (`169.254.169.254/32`), RFC1918
+#     east-west pod/VPC ranges, and raw internet (`0.0.0.0/0`).
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cymbal-agent-sandboxes
+  labels:
+    app.kubernetes.io/part-of: cymbal-multitenant-agent-platform
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+---
+apiVersion: agents.x-k8s.io/v1beta1
+kind: SandboxTemplate
+metadata:
+  name: cymbal-diagnostic-sandbox-tpl
+  namespace: cymbal-agent-sandboxes
+spec:
+  podTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/name: cymbal-diagnostic-sandbox
+        cymbal.io/plane: hands-sandbox
+    spec:
+      runtimeClassName: gvisor
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: sandbox-worker
+          image: us-central1-docker.pkg.dev/<PROJECT_ID>/cymbal-sandboxes/diagnostic-runner:v1
+          workingDir: /workspace
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+              ephemeral-storage: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+              ephemeral-storage: "1Gi"
+          volumeMounts:
+            - name: workspace-tmpfs
+              mountPath: /workspace
+            - name: tmp-scratch
+              mountPath: /tmp
+      volumes:
+        - name: workspace-tmpfs
+          emptyDir:
+            medium: Memory
+            sizeLimit: 512Mi
+        - name: tmp-scratch
+          emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi
+---
+apiVersion: extensions.agents.x-k8s.io/v1beta1
+kind: SandboxWarmPool
+metadata:
+  name: cymbal-diagnostic-warm-pool
+  namespace: cymbal-agent-sandboxes
+spec:
+  replicas: 10
+  sandboxTemplateRef:
+    name: cymbal-diagnostic-sandbox-tpl
+---
+# Example per-session Claim-and-Taint allocation created by the Agent Harness
+# for a single verified (tenant_id, user_sub, agent_id, session_id) tuple.
+# Once claimed, the pod is permanently tainted to this session and deleted
+# (never returned to the warm pool) when ttlSecondsAfterClaim expires or the session ends.
+apiVersion: extensions.agents.x-k8s.io/v1beta1
+kind: SandboxClaim
+metadata:
+  name: claim-sess-example-0001
+  namespace: cymbal-agent-sandboxes
+  labels:
+    cymbal.io/taint-lifecycle: one-way-destroy-on-release
+spec:
+  sandboxTemplateRef:
+    name: cymbal-diagnostic-sandbox-tpl
+  lifecycle:
+    shutdownPolicy: Delete
+    shutdownTime: "<RFC3339_EXPIRY_TIMESTAMP>"
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cymbal-sandbox-zero-egress-lockdown
+  namespace: cymbal-agent-sandboxes
+spec:
+  podSelector:
+    matchLabels:
+      cymbal.io/plane: hands-sandbox
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: cymbal-agent-runtime
+      ports:
+        - protocol: TCP
+          port: 8888
+  egress:
+    # Default-deny all raw internet (0.0.0.0/0), GCE metadata server (169.254.169.254/32),
+    # GKE metadata proxy (169.254.170.2/32), and east-west RFC1918 pod/service ranges.
+    # OPTIONAL DNS egress: remove this kube-dns 53/UDP+TCP rule for strict air-gapped sandboxes.
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Explicit CIDR guard documenting forbidden metadata & RFC1918 destinations if an egress
+    # proxy rule is ever added: never allow 169.254.169.254/32, 169.254.170.2/32, 10.0.0.0/8,
+    # 172.16.0.0/12, or 192.168.0.0/16.

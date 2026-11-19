@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 900" width="1120" height="900" font-family="'Google Sans', Roboto, Arial, sans-serif">
+  <defs>
+    <filter id="sh" x="-2%" y="-2%" width="104%" height="106%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#202124" flood-opacity="0.05"/>
+    </filter>
+  </defs>
+  <rect width="1120" height="900" fill="#FFFFFF"/>
+
+  <!-- Top Banner -->
+  <rect x="20" y="16" width="1080" height="66" rx="12" fill="#174EA6"/>
+  <text x="560" y="44" font-size="19" font-weight="700" fill="#FFFFFF" text-anchor="middle">Three-Layer Authorization &amp; Token Propagation (Hop 0 → Hop 5)</text>
+  <text x="560" y="65" font-size="12" fill="#D2E3FC" text-anchor="middle">How Tenant ID ∩ User ID ∩ Agent SPIFFE Identity Travel Together Alongside Per-Tenant GCP IAM Walls</text>
+
+  <!-- Step 1: Hop 0 -->
+  <rect x="20" y="96" width="1080" height="118" rx="12" fill="#F8F9FA" stroke="#5F6368" stroke-width="2" filter="url(#sh)"/>
+  <rect x="38" y="110" width="182" height="24" rx="6" fill="#5F6368"/>
+  <text x="129" y="126" font-size="10.8" font-weight="700" fill="#FFFFFF" text-anchor="middle">1. HOP 0: CORPORATE OIDC</text>
+  <text x="232" y="127" font-size="15" font-weight="700" fill="#202124">External Customer IdP Assertion (Okta / Entra ID / Google Identity Platform)</text>
+
+  <rect x="38" y="142" width="482" height="38" rx="8" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.2"/>
+  <text x="52" y="165" font-size="11.2" fill="#202124"><tspan font-weight="700" fill="#174EA6">Layer 1 (Tenant):</tspan> <tspan font-family="Roboto Mono, monospace" font-size="10.6" font-weight="600">iss="finvault.okta.com" → tid="tenant-a"</tspan></text>
+
+  <rect x="534" y="142" width="548" height="38" rx="8" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.2"/>
+  <text x="548" y="165" font-size="11.2" fill="#202124"><tspan font-weight="700" fill="#137333">Layer 2 (User &amp; Role):</tspan> <tspan font-family="Roboto Mono, monospace" font-size="10.4" font-weight="600">sub="alice@finvault.com", role="sre_admin"</tspan></text>
+
+  <text x="38" y="201" font-size="11.2" font-weight="700" fill="#C5221F">Security &amp; Quota Best Practice: Zero per-human GCP Service Accounts created  |  Spoofed issuer or unmapped role → HTTP 401 / 403</text>
+
+  <!-- Connector 1->2 -->
+  <text x="560" y="236" font-size="12.1" font-weight="700" fill="#1967D2" text-anchor="middle">▼  Hop 1-2 Gateway Exchange (RFC 9449 DPoP) + Non-Exportable Cloud KMS ES256 Context Signing  ▼</text>
+
+  <!-- Step 2: Hop 1-2 -->
+  <rect x="20" y="250" width="1080" height="118" rx="12" fill="#E8F0FE" stroke="#1967D2" stroke-width="2" filter="url(#sh)"/>
+  <rect x="38" y="264" width="194" height="24" rx="6" fill="#1967D2"/>
+  <text x="135" y="280" font-size="10.8" font-weight="700" fill="#FFFFFF" text-anchor="middle">2. HOP 1 TO 2: KMS ctx+jwt</text>
+  <text x="244" y="281" font-size="15" font-weight="700" fill="#202124">DPoP Token + KMS-Signed Context Token Binding Tenant + User + Routed Agent (≤600s)</text>
+
+  <text x="38" y="308" font-size="11.6" fill="#202124"><tspan font-weight="700">Signed 3-Tuple Claim:</tspan> <tspan font-family="Roboto Mono, monospace" font-size="10.9" font-weight="700" fill="#174EA6">tid="tenant-a" + sub="alice@finvault.com" + agent_id="cymbal_shared_diagnostic_agent"</tspan></text>
+  <text x="38" y="330" font-size="11.6" fill="#202124"><tspan font-weight="700">Sender &amp; Signing Root:</tspan> <tspan font-family="Roboto Mono, monospace" font-size="10.8" font-weight="600">cnf.jkt</tspan> DPoP key  |  Single-use <tspan font-family="Roboto Mono, monospace" font-size="10.8" font-weight="600">jti</tspan>  |  3-key <tspan font-family="Roboto Mono, monospace" font-size="10.8" font-weight="600">(active, prev, next)</tspan> ring  |  Only Gateway holds KMS signerVerifier</text>
+  <text x="38" y="354" font-size="11.2" font-weight="700" fill="#137333">Gate Check: Agent cannot choose or swap agent_id  |  Stolen token or replayed jti → HTTP 401</text>
+
+  <!-- Connector 2->3 -->
+  <text x="560" y="391" font-size="12.1" font-weight="700" fill="#1967D2" text-anchor="middle">▼  Hop 3-5 Combines ctx+jwt (App Claims) + SPIFFE X.509 mTLS (Agent ID) + ct-&lt;hash&gt; SA (GCP IAM)  ▼</text>
+
+  <!-- Step 3: Three Complementary Credentials -->
+  <rect x="20" y="405" width="1080" height="236" rx="14" fill="#F8FAFD" stroke="#1967D2" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="560" y="428" font-size="11.8" font-weight="700" fill="#174EA6" text-anchor="middle">3. HOP 3 TO 5: THREE COMPLEMENTARY CREDENTIALS (USER ID IS NEVER DROPPED; SHA-256 IS ONLY THE 27-CHAR GCP SA NAME)</text>
+
+  <!-- 3A -->
+  <rect x="36" y="440" width="336" height="186" rx="10" fill="#FFFFFF" stroke="#1967D2" stroke-width="2"/>
+  <rect x="50" y="453" width="128" height="22" rx="6" fill="#1967D2"/>
+  <text x="114" y="468" font-size="10.2" font-weight="700" fill="#FFFFFF" text-anchor="middle">3A. APP &amp; DATA</text>
+  <text x="186" y="469" font-size="13" font-weight="700" fill="#202124">KMS Context Token</text>
+  <rect x="50" y="483" width="308" height="28" rx="6" fill="#E8F0FE"/>
+  <text x="60" y="501" font-family="Roboto Mono, monospace" font-size="10.4" font-weight="700" fill="#174EA6">tid + sub + role + agent_id</text>
+  <text x="50" y="531" font-size="10.8" fill="#3C4043"><tspan font-weight="700" fill="#202124">Answers:</tspan> Which customer &amp; user is</text>
+  <text x="50" y="547" font-size="10.8" fill="#3C4043">this for, and which agent was routed?</text>
+  <text x="50" y="578" font-size="10.8" font-weight="700" fill="#137333">Enforces Alice vs. Dave privacy</text>
+  <text x="50" y="594" font-size="10.8" font-weight="700" fill="#137333">across SQL RLS, Memory AAD &amp; 3LO.</text>
+
+  <!-- 3B -->
+  <rect x="392" y="440" width="336" height="186" rx="10" fill="#FAF5FF" stroke="#681DA8" stroke-width="2"/>
+  <rect x="406" y="453" width="132" height="22" rx="6" fill="#681DA8"/>
+  <text x="472" y="468" font-size="10.2" font-weight="700" fill="#FFFFFF" text-anchor="middle">3B. WORKLOAD ID</text>
+  <text x="546" y="469" font-size="13" font-weight="700" fill="#202124">SPIFFE X.509 mTLS</text>
+  <rect x="406" y="483" width="308" height="34" rx="6" fill="#F3E8FD"/>
+  <text x="416" y="497" font-family="Roboto Mono, monospace" font-size="9.6" font-weight="700" fill="#681DA8">spiffe://agents.global.org-.../</text>
+  <text x="416" y="511" font-family="Roboto Mono, monospace" font-size="9.6" font-weight="700" fill="#681DA8">services/cymbal-agent-shared</text>
+  <text x="406" y="536" font-size="10.8" fill="#3C4043"><tspan font-weight="700" fill="#202124">Answers:</tspan> Which agent container is</text>
+  <text x="406" y="552" font-size="10.8" fill="#3C4043">calling Broker, Gateway, or MCP?</text>
+  <text x="406" y="578" font-size="10.8" font-weight="700" fill="#681DA8">Blocks cross-agent token replay</text>
+  <text x="406" y="594" font-size="10.8" font-weight="700" fill="#681DA8">(403 E_AGENT_PRINCIPAL_MISMATCH).</text>
+
+  <!-- 3C -->
+  <rect x="748" y="440" width="336" height="186" rx="10" fill="#F2FAFA" stroke="#007B83" stroke-width="2"/>
+  <rect x="762" y="453" width="122" height="22" rx="6" fill="#007B83"/>
+  <text x="823" y="468" font-size="10.2" font-weight="700" fill="#FFFFFF" text-anchor="middle">3C. GCP INFRA</text>
+  <text x="892" y="469" font-size="13" font-weight="700" fill="#202124">Tenant GCP SA (300s)</text>
+  <rect x="762" y="483" width="308" height="34" rx="6" fill="#E0F2F1"/>
+  <text x="772" y="497" font-family="Roboto Mono, monospace" font-size="9.8" font-weight="700" fill="#00695C">ct-&lt;sha256(tid)[:24]&gt;@proj.iam</text>
+  <text x="772" y="511" font-family="Roboto Mono, monospace" font-size="9.6" font-weight="700" fill="#00695C">(Deterministic 27-char SA ID)</text>
+  <text x="762" y="536" font-size="10.8" fill="#3C4043"><tspan font-weight="700" fill="#202124">Answers:</tspan> Which tenant&apos;s Cloud KMS</text>
+  <text x="762" y="552" font-size="10.8" fill="#3C4043">CMEK key, GCS &amp; Secrets unlock?</text>
+  <text x="762" y="578" font-size="10.8" font-weight="700" fill="#00695C">Broker-minted IAM wall: 1 key =</text>
+  <text x="762" y="594" font-size="10.8" font-weight="700" fill="#00695C">1 tenant max (403 elsewhere).</text>
+
+  <!-- Connector 3->4 -->
+  <text x="560" y="665" font-size="12.1" font-weight="700" fill="#137333" text-anchor="middle">▼  Hop 5 Enforces Tenant ∩ User ∩ Agent Across Data, Memory, Models &amp; 3LO APIs  ▼</text>
+
+  <!-- Step 4: Three-Layer Enforcement -->
+  <rect x="20" y="680" width="1080" height="204" rx="12" fill="#E6F4EA" stroke="#137333" stroke-width="2" filter="url(#sh)"/>
+  <rect x="38" y="694" width="234" height="24" rx="6" fill="#137333"/>
+  <text x="155" y="710" font-size="10.8" font-weight="700" fill="#FFFFFF" text-anchor="middle">4. HOP 5: THREE-LAYER ENFORCEMENT</text>
+  <text x="284" y="711" font-size="15" font-weight="700" fill="#202124">Stateful Data, Semantic Memory, Governed Models &amp; 3LO SaaS Isolation</text>
+
+  <rect x="38" y="728" width="338" height="120" rx="8" fill="#FFFFFF" stroke="#A8DAB5" stroke-width="1.2"/>
+  <text x="50" y="748" font-size="12" font-weight="700" fill="#137333">1. Cloud SQL FORCE RLS + MCP</text>
+  <text x="50" y="767" font-size="10.5" fill="#3C4043">Verifies <tspan font-family="Roboto Mono, monospace" font-weight="600">ctx+jwt</tspan> + agent tool ACL;</text>
+  <text x="50" y="784" font-family="Roboto Mono, monospace" font-size="9.6" font-weight="600" fill="#202124">SET LOCAL app.current_tenant_id = 'tenant-a'</text>
+  <text x="50" y="801" font-size="10.5" fill="#3C4043">+ pre-retrieval user/group RAG filter.</text>
+  <text x="50" y="824" font-size="10.8" font-weight="700" fill="#202124">Blocks Tenant B &amp; analyst Dave.</text>
+
+  <rect x="391" y="728" width="338" height="120" rx="8" fill="#FFFFFF" stroke="#A8DAB5" stroke-width="1.2"/>
+  <text x="403" y="748" font-size="12" font-weight="700" fill="#137333">2. Semantic &amp; User Memory (CMEK)</text>
+  <text x="403" y="767" font-size="10.5" fill="#3C4043"><tspan font-weight="700" fill="#00695C">3C</tspan> unlocks <tspan font-family="Roboto Mono, monospace" font-weight="600">key-tenant-a</tspan> in KMS;</text>
+  <text x="403" y="784" font-size="10.5" fill="#3C4043"><tspan font-weight="700" fill="#174EA6">3A</tspan> binds <tspan font-family="Roboto Mono, monospace" font-weight="600">AAD = tid | uid | scope | key</tspan></text>
+  <text x="403" y="801" font-size="10.5" fill="#3C4043">across tenant semantic &amp; user scopes.</text>
+  <text x="403" y="824" font-size="10.8" font-weight="700" fill="#202124">Cross-tenant/user fails KMS AEAD.</text>
+
+  <rect x="744" y="728" width="338" height="120" rx="8" fill="#FFFFFF" stroke="#A8DAB5" stroke-width="1.2"/>
+  <text x="756" y="748" font-size="12" font-weight="700" fill="#137333">3. Egress Gateway &amp; 3LO Vault</text>
+  <text x="756" y="767" font-size="10.5" fill="#3C4043"><tspan font-weight="700" fill="#681DA8">3B</tspan> + Step 5 Gateway enforce single-pass</text>
+  <text x="756" y="784" font-size="10.5" fill="#3C4043">Model Armor &amp; DLP; <tspan font-weight="700" fill="#174EA6">3A</tspan> keys <tspan font-family="Roboto Mono, monospace" font-weight="600">{tid}:{uid}:{app}</tspan></text>
+  <text x="756" y="801" font-size="10.5" fill="#3C4043">so users never share org-wide OAuth.</text>
+  <text x="756" y="824" font-size="10.8" font-weight="700" fill="#202124">Unlinked user gets 401 consent step-up.</text>
+
+  <text x="38" y="870" font-size="11.2" font-weight="700" fill="#137333">Combined Guarantee: 0 Cross-Tenant GCP/SQL Leaks  |  0 Intra-Tenant User Bleed  |  0 Cross-Agent Impersonation</text>
+</svg>

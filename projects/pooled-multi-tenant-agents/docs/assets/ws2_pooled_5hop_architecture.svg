@@ -1,0 +1,219 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 880" width="1800" height="880" font-family="'Google Sans', Roboto, Arial, sans-serif">
+  <defs>
+    <filter id="shadow-sm" x="-2%" y="-2%" width="104%" height="106%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#202124" flood-opacity="0.05"/>
+    </filter>
+    <marker id="fan-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1967D2"/>
+    </marker>
+  </defs>
+  <rect width="1800" height="880" fill="#F8F9FA"/>
+  <rect x="24" y="16" width="1752" height="64" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="44" y="43" font-size="19.2" font-weight="700" fill="#202124">Cymbal CloudOps ISV: End-to-End Request Sequence (Pattern A: Governed Pool)</text>
+  <text x="44" y="63" font-size="12.0" fill="#5F6368">AI SRE SaaS Trace (Steps 1 → 6)  |  Three-Layer Authz (Tenant ∩ User ∩ Agent)  |  Egress Model Armor (Runtime Decision Monitoring) &amp; Governed Model Routing</text>
+  <rect x="1516" y="31" width="240" height="32" rx="16" fill="#E8F0FE" stroke="#AECBFA" stroke-width="1"/>
+  <text x="1636" y="51" font-size="11.4" font-weight="700" fill="#174EA6" text-anchor="middle">ADK • LangGraph • BYO Docker</text>
+  <rect x="24" y="94" width="1752" height="122" rx="12" fill="#FFFFFF" stroke="#AECBFA" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="40" y="116" font-size="12.0" font-weight="700" fill="#174EA6">GEMINI GOVERNANCE &amp; CONTROL PLANE (SAME OR SEPARATE GCP PROJECT)</text>
+  <text x="1760" y="116" font-size="12" font-weight="700" fill="#174EA6" text-anchor="end">Policy Decision Point (PDP)</text>
+  <rect x="40" y="127" width="419" height="76" rx="8" fill="#F8FAFD" stroke="#D2E3FC" stroke-width="1.2"/>
+  <text x="52" y="148" font-size="12.0" font-weight="700" fill="#174EA6">1. Auth Manager &amp; IAM / PAB</text>
+  <text x="52" y="166" font-size="10.4" fill="#3C4043">Cloud KMS ctx+jwt (tid+uid+aid) signing, Cloud Run</text>
+  <text x="52" y="181" font-size="10.4" fill="#3C4043">SPIFFE Agent Identity mTLS &amp; out-of-process Broker.</text>
+  <rect x="473" y="127" width="419" height="76" rx="8" fill="#F8FAFD" stroke="#D2E3FC" stroke-width="1.2"/>
+  <text x="485" y="148" font-size="12.0" font-weight="700" fill="#174EA6">2. Global + Local Agent Registry</text>
+  <text x="485" y="166" font-size="10.4" fill="#3C4043">Global Registry (shared agents/policies across regions) +</text>
+  <text x="485" y="181" font-size="10.4" fill="#3C4043">Local Registry (project-specific agents &amp; MCP servers).</text>
+  <rect x="906" y="127" width="419" height="76" rx="8" fill="#F8FAFD" stroke="#D2E3FC" stroke-width="1.2"/>
+  <text x="918" y="148" font-size="12.0" font-weight="700" fill="#174EA6">3. AI Security (Step 5 Model Armor + DLP)</text>
+  <text x="918" y="166" font-size="10.4" fill="#3C4043">Model Armor at Agent-to-Anywhere egress</text>
+  <text x="918" y="181" font-size="10.4" fill="#3C4043">(monitors runtime model &amp; tool calls), Cloud DLP &amp; quotas.</text>
+  <rect x="1339" y="127" width="419" height="76" rx="8" fill="#F8FAFD" stroke="#D2E3FC" stroke-width="1.2"/>
+  <text x="1351" y="148" font-size="12.0" font-weight="700" fill="#174EA6">4. AI Observability &amp; FinOps</text>
+  <text x="1351" y="166" font-size="10.4" fill="#3C4043">Cloud Logging, Cloud Trace &amp; OpenTelemetry spans tagged</text>
+  <text x="1351" y="181" font-size="10.4" fill="#3C4043">with tenant_hash, agent_id &amp; model_id in BigQuery.</text>
+  <rect x="24" y="230" width="1752" height="542" rx="14" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <text x="40" y="255" font-size="12.2" font-weight="700" fill="#202124">SEQUENTIAL REQUEST EXECUTION PATH (STEPS 1 → 6):</text>
+  <text x="392" y="255" font-size="11.4" fill="#5F6368">Each hop fails closed independently while propagating Tenant + User + Agent identity</text>
+  <rect x="40" y="270" width="240" height="486" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <path d="M 40 282 Q 40 270 52 270 L 268 270 Q 280 270 280 282 L 280 318 L 40 318 Z" fill="#FFFFFF"/>
+  <line x1="40" y1="318" x2="280" y2="318" stroke="#E8EAED" stroke-width="1"/>
+  <circle cx="63" cy="294" r="13" fill="#1967D2"/>
+  <text x="63" y="298.5" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+  <text x="84" y="291" font-size="12.2" font-weight="700" fill="#202124">IdP &amp; ISV SaaS App</text>
+  <text x="84" y="306" font-size="9.7" font-weight="600" fill="#1967D2">OIDC + Cloud Run / GKE / GCE</text>
+  <rect x="50" y="327" width="220" height="66.6" rx="7" fill="#E8F0FE" stroke="#AECBFA" stroke-width="1"/>
+  <text x="59" y="344" font-size="10.5" font-weight="700" fill="#202124">Corporate OIDC Login (Hop 0)</text>
+  <text x="59" y="358.5" font-size="9.7" fill="#3C4043">Verifies FinVault Okta / RetailStream</text>
+  <text x="59" y="371.7" font-size="9.7" fill="#3C4043">Entra (1:1 iss ↔ tid); extracts</text>
+  <text x="59" y="384.9" font-size="9.7" fill="#3C4043">tenant_id, user_id &amp; mapped role.</text>
+  <rect x="50" y="400.1" width="220" height="66.6" rx="7" fill="#F8F9FA" stroke="#E8EAED" stroke-width="1"/>
+  <text x="59" y="417.1" font-size="10.5" font-weight="700" fill="#202124">Existing ISV App Stack (Hop 1)</text>
+  <text x="59" y="431.6" font-size="9.7" fill="#3C4043">UI/BFF on Cloud Run, GKE, or GCE</text>
+  <text x="59" y="444.8" font-size="9.7" fill="#3C4043">exposes catalog agents (SRE, Audit);</text>
+  <text x="59" y="458.0" font-size="9.7" fill="#3C4043">Cloud Armor WAF + RPM/TPM caps.</text>
+  <rect x="50" y="473.20000000000005" width="220" height="66.6" rx="7" fill="#F8F9FA" stroke="#E8EAED" stroke-width="1"/>
+  <text x="59" y="490.20000000000005" font-size="10.5" font-weight="700" fill="#202124">Sender-Constrained Token</text>
+  <text x="59" y="504.70000000000005" font-size="9.7" fill="#3C4043">Mints 600s DPoP at+jwt (cnf.jkt) +</text>
+  <text x="59" y="517.9000000000001" font-size="9.7" fill="#3C4043">KMS-signed ctx+jwt binding</text>
+  <text x="59" y="531.1000000000001" font-size="9.7" fill="#3C4043">tid + uid + routed agent_id.</text>
+  <line x1="50" y1="730" x2="270" y2="730" stroke="#DADCE0" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="50" y="746" font-size="9.5" font-weight="700" fill="#C5221F">✕ Spoofed header/issuer → HTTP 401/422</text>
+  <text x="298.0" y="505.0" font-size="9" font-weight="700" fill="#5F6368" text-anchor="middle">ctx+jwt</text>
+  <line x1="283" y1="513.0" x2="308" y2="513.0" stroke="#1967D2" stroke-width="2.2"/>
+  <polygon points="314,513.0 307,508.5 307,517.5" fill="#1967D2"/>
+  <rect x="316" y="270" width="250" height="486" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <path d="M 316 282 Q 316 270 328 270 L 554 270 Q 566 270 566 282 L 566 318 L 316 318 Z" fill="#3B78E7"/>
+  <line x1="316" y1="318" x2="566" y2="318" stroke="#3B78E7" stroke-width="1"/>
+  <circle cx="339" cy="294" r="13" fill="#FFFFFF"/>
+  <text x="339" y="298.5" font-size="12.5" font-weight="700" fill="#174EA6" text-anchor="middle">2</text>
+  <text x="360" y="291" font-size="12.2" font-weight="700" fill="#FFFFFF">agent gateway in Gemini</text>
+  <text x="360" y="306" font-size="9.7" font-weight="600" fill="#E8F0FE">Client-to-Agent (Ingress)</text>
+  <rect x="326" y="327" width="230" height="66.6" rx="7" fill="#E6F4EA" stroke="#CEEAD6" stroke-width="1"/>
+  <text x="335" y="344" font-size="10.5" font-weight="700" fill="#202124">Fast Sub-ms Admission Gate</text>
+  <text x="335" y="358.5" font-size="9.7" fill="#3C4043">Fronts backend Agent Runtimes with</text>
+  <text x="335" y="371.7" font-size="9.7" fill="#3C4043">zero duplicate content-scan latency</text>
+  <text x="335" y="384.9" font-size="9.7" fill="#3C4043">on upstream customer UX.</text>
+  <rect x="326" y="400.1" width="230" height="66.6" rx="7" fill="#F8F9FA" stroke="#E8EAED" stroke-width="1"/>
+  <text x="335" y="417.1" font-size="10.5" font-weight="700" fill="#202124">Anti-Replay &amp; Signature Gate</text>
+  <text x="335" y="431.6" font-size="9.7" fill="#3C4043">Verifies DPoP proof (htm, htu, ath),</text>
+  <text x="335" y="444.8" font-size="9.7" fill="#3C4043">single-use jti nonce &amp; 3-key</text>
+  <text x="335" y="458.0" font-size="9.7" fill="#3C4043">(active, prev, next) KMS ring.</text>
+  <rect x="326" y="473.20000000000005" width="230" height="66.6" rx="7" fill="#E8F0FE" stroke="#AECBFA" stroke-width="1"/>
+  <text x="335" y="490.20000000000005" font-size="10.5" font-weight="700" fill="#202124">Agent Routing &amp; Body Hygiene</text>
+  <text x="335" y="504.70000000000005" font-size="9.7" fill="#3C4043">Routes to selected agent service</text>
+  <text x="335" y="517.9000000000001" font-size="9.7" fill="#3C4043">(e.g., SRE Agent) &amp; rejects body</text>
+  <text x="335" y="531.1000000000001" font-size="9.7" fill="#3C4043">tenant_id / user_id overrides.</text>
+  <line x1="326" y1="730" x2="556" y2="730" stroke="#DADCE0" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="326" y="746" font-size="9.5" font-weight="700" fill="#C5221F">✕ Replay → 401 | Body override → 422</text>
+  <text x="584.0" y="505.0" font-size="9" font-weight="700" fill="#5F6368" text-anchor="middle">routed</text>
+  <line x1="569" y1="513.0" x2="594" y2="513.0" stroke="#1967D2" stroke-width="2.2"/>
+  <polygon points="600,513.0 593,508.5 593,517.5" fill="#1967D2"/>
+  <rect x="602" y="270" width="302" height="486" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <path d="M 602 282 Q 602 270 614 270 L 892 270 Q 904 270 904 282 L 904 318 L 602 318 Z" fill="#FFFFFF"/>
+  <line x1="602" y1="318" x2="904" y2="318" stroke="#E8EAED" stroke-width="1"/>
+  <circle cx="625" cy="294" r="13" fill="#1967D2"/>
+  <text x="625" y="298.5" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+  <text x="646" y="291" font-size="12.2" font-weight="700" fill="#202124">Agent Runtime &amp; Sandboxes</text>
+  <text x="646" y="306" font-size="9.7" font-weight="600" fill="#1967D2">Per-Agent SPIFFE + Scale-Out</text>
+  <rect x="612" y="327" width="282" height="66.6" rx="7" fill="#E8F0FE" stroke="#AECBFA" stroke-width="1"/>
+  <text x="621" y="344" font-size="10.5" font-weight="700" fill="#202124">Stateless Turn Orchestrators</text>
+  <text x="621" y="358.5" font-size="9.7" fill="#3C4043">Per-agent Cloud Run services (SRE +</text>
+  <text x="621" y="371.7" font-size="9.7" fill="#3C4043">Compliance) with SPIFFE mTLS; hosts</text>
+  <text x="621" y="384.9" font-size="9.7" fill="#3C4043">ADK, LangGraph, or BYO Docker.</text>
+  <rect x="612" y="400.1" width="282" height="66.6" rx="7" fill="#E6F4EA" stroke="#CEEAD6" stroke-width="1"/>
+  <text x="621" y="417.1" font-size="10.5" font-weight="700" fill="#202124">Stateless Scale + Agent Sandboxes</text>
+  <text x="621" y="431.6" font-size="9.7" fill="#3C4043">Concurrent stateless turns; dynamic</text>
+  <text x="621" y="444.8" font-size="9.7" fill="#3C4043">code runs in per-session Agent</text>
+  <text x="621" y="458.0" font-size="9.7" fill="#3C4043">Sandboxes (gVisor, zero credentials).</text>
+  <rect x="612" y="473.20000000000005" width="282" height="66.6" rx="7" fill="#F8F9FA" stroke="#E8EAED" stroke-width="1"/>
+  <text x="621" y="490.20000000000005" font-size="10.5" font-weight="700" fill="#202124">Sessions, Memory &amp; Skills</text>
+  <text x="621" y="504.70000000000005" font-size="9.7" fill="#3C4043">Firestore sessions (tid:uid), tenant</text>
+  <text x="621" y="517.9000000000001" font-size="9.7" fill="#3C4043">semantic + user memory (CMEK AAD),</text>
+  <text x="621" y="531.1000000000001" font-size="9.7" fill="#3C4043">32k cached skills + tenant GCS.</text>
+  <rect x="612" y="546.3000000000001" width="282" height="53.4" rx="7" fill="#F8F9FA" stroke="#E8EAED" stroke-width="1"/>
+  <text x="621" y="563.3000000000001" font-size="10.5" font-weight="700" fill="#202124">Registry Tool Pruning</text>
+  <text x="621" y="577.8000000000001" font-size="9.7" fill="#3C4043">Loads only MCP tools allowed for</text>
+  <text x="621" y="591.0000000000001" font-size="9.7" fill="#3C4043">Tenant ∩ User ∩ Agent.</text>
+  <line x1="612" y1="730" x2="894" y2="730" stroke="#DADCE0" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="612" y="746" font-size="9.5" font-weight="700" fill="#C5221F">✕ Unentitled agent/tool → HTTP 403</text>
+  <text x="922.0" y="505.0" font-size="9" font-weight="700" fill="#5F6368" text-anchor="middle">SPIFFE</text>
+  <line x1="907" y1="513.0" x2="932" y2="513.0" stroke="#1967D2" stroke-width="2.2"/>
+  <polygon points="938,513.0 931,508.5 931,517.5" fill="#1967D2"/>
+  <rect x="940" y="270" width="234" height="486" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <path d="M 940 282 Q 940 270 952 270 L 1162 270 Q 1174 270 1174 282 L 1174 318 L 940 318 Z" fill="#E6F4EA"/>
+  <line x1="940" y1="318" x2="1174" y2="318" stroke="#A8DAB5" stroke-width="1"/>
+  <circle cx="963" cy="294" r="13" fill="#137333"/>
+  <text x="963" y="298.5" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+  <text x="984" y="291" font-size="12.2" font-weight="700" fill="#202124">Credential Broker</text>
+  <text x="984" y="306" font-size="9.7" font-weight="600" fill="#137333">Out-of-Process Auth Mgr</text>
+  <rect x="950" y="327" width="214" height="66.6" rx="7" fill="#E6F4EA" stroke="#CEEAD6" stroke-width="1"/>
+  <text x="959" y="344" font-size="10.5" font-weight="700" fill="#202124">SPIFFE Agent Binding Gate</text>
+  <text x="959" y="358.5" font-size="9.7" fill="#3C4043">Separate Cloud Run service; verifies</text>
+  <text x="959" y="371.7" font-size="9.7" fill="#3C4043">caller SPIFFE ID matches signed</text>
+  <text x="959" y="384.9" font-size="9.7" fill="#3C4043">token.agent_id (403 on mismatch).</text>
+  <rect x="950" y="400.1" width="214" height="66.6" rx="7" fill="#F8F9FA" stroke="#E8EAED" stroke-width="1"/>
+  <text x="959" y="417.1" font-size="10.5" font-weight="700" fill="#202124">300s Per-Tenant GCP SA</text>
+  <text x="959" y="431.6" font-size="9.7" fill="#3C4043">Mints ct-&lt;sha256(tid)[:24]&gt; (27-char</text>
+  <text x="959" y="444.8" font-size="9.7" fill="#3C4043">SA name) strictly for tenant KMS,</text>
+  <text x="959" y="458.0" font-size="9.7" fill="#3C4043">Secret Manager &amp; GCS walls.</text>
+  <rect x="950" y="473.20000000000005" width="214" height="66.6" rx="7" fill="#E8F0FE" stroke="#AECBFA" stroke-width="1"/>
+  <text x="959" y="490.20000000000005" font-size="10.5" font-weight="700" fill="#202124">Three-Layer Tuple Forwarded</text>
+  <text x="959" y="504.70000000000005" font-size="9.7" fill="#3C4043">Runtime proceeds with ctx+jwt</text>
+  <text x="959" y="517.9000000000001" font-size="9.7" fill="#3C4043">(tid+uid+aid) + SPIFFE ID +</text>
+  <text x="959" y="531.1000000000001" font-size="9.7" fill="#3C4043">brokered ct-&lt;tid&gt; GCP SA.</text>
+  <line x1="950" y1="730" x2="1164" y2="730" stroke="#DADCE0" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="950" y="746" font-size="9.5" font-weight="700" fill="#C5221F">✕ 1 Key = 1 Tenant Max (Live 403)</text>
+  <text x="1192.0" y="505.0" font-size="9" font-weight="700" fill="#5F6368" text-anchor="middle">3-layer</text>
+  <line x1="1177" y1="513.0" x2="1202" y2="513.0" stroke="#1967D2" stroke-width="2.2"/>
+  <polygon points="1208,513.0 1201,508.5 1201,517.5" fill="#1967D2"/>
+  <rect x="1210" y="270" width="240" height="486" rx="12" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#shadow-sm)"/>
+  <path d="M 1210 282 Q 1210 270 1222 270 L 1438 270 Q 1450 270 1450 282 L 1450 318 L 1210 318 Z" fill="#3B78E7"/>
+  <line x1="1210" y1="318" x2="1450" y2="318" stroke="#3B78E7" stroke-width="1"/>
+  <circle cx="1233" cy="294" r="13" fill="#FFFFFF"/>
+  <text x="1233" y="298.5" font-size="12.5" font-weight="700" fill="#174EA6" text-anchor="middle">5</text>
+  <text x="1254" y="291" font-size="12.2" font-weight="700" fill="#FFFFFF">agent gateway in Gemini</text>
+  <text x="1254" y="306" font-size="9.7" font-weight="600" fill="#E8F0FE">Agent-to-Anywhere (Egress)</text>
+  <rect x="1220" y="327" width="220" height="66.6" rx="7" fill="#E8F0FE" stroke="#AECBFA" stroke-width="1"/>
+  <text x="1229" y="344" font-size="10.5" font-weight="700" fill="#202124">Mandatory Model &amp; Tool Egress</text>
+  <text x="1229" y="358.5" font-size="9.7" fill="#3C4043">All LLM model routing, MCP calls &amp;</text>
+  <text x="1229" y="371.7" font-size="9.7" fill="#3C4043">3P API calls traverse this gateway</text>
+  <text x="1229" y="384.9" font-size="9.7" fill="#3C4043">(no bespoke direct bypass).</text>
+  <rect x="1220" y="400.1" width="220" height="66.6" rx="7" fill="#FEF7E0" stroke="#FDE293" stroke-width="1"/>
+  <text x="1229" y="417.1" font-size="10.5" font-weight="700" fill="#202124">Egress Model Armor (Runtime Check)</text>
+  <text x="1229" y="431.6" font-size="9.7" fill="#3C4043">Monitors each runtime model, MCP</text>
+  <text x="1229" y="444.8" font-size="9.7" fill="#3C4043">tool &amp; API call once target model</text>
+  <text x="1229" y="458.0" font-size="9.7" fill="#3C4043">and data context are known.</text>
+  <rect x="1220" y="473.20000000000005" width="220" height="66.6" rx="7" fill="#F8F9FA" stroke="#E8EAED" stroke-width="1"/>
+  <text x="1229" y="490.20000000000005" font-size="10.5" font-weight="700" fill="#202124">Registry + Cloud DLP Masking</text>
+  <text x="1229" y="504.70000000000005" font-size="9.7" fill="#3C4043">Verifies SPIFFE ID + Local/Global</text>
+  <text x="1229" y="517.9000000000001" font-size="9.7" fill="#3C4043">Registry target &amp; masks IBAN/SSN/</text>
+  <text x="1229" y="531.1000000000001" font-size="9.7" fill="#3C4043">PAN before targets 6A / 6B / 6C.</text>
+  <line x1="1220" y1="730" x2="1440" y2="730" stroke="#DADCE0" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="1220" y="746" font-size="9.5" font-weight="700" fill="#C5221F">✕ Injection → 400/422 | ACL → 403</text>
+  <path d="M 1450 513.0 L 1466 513.0 L 1466 347.0 L 1483 347.0" fill="none" stroke="#1967D2" stroke-width="2.2" marker-end="url(#fan-arr)"/>
+  <path d="M 1450 513.0 L 1483 513.0" fill="none" stroke="#1967D2" stroke-width="2.2" marker-end="url(#fan-arr)"/>
+  <path d="M 1450 513.0 L 1466 513.0 L 1466 679.0 L 1483 679.0" fill="none" stroke="#1967D2" stroke-width="2.2" marker-end="url(#fan-arr)"/>
+  <rect x="1486" y="270" width="274" height="154" rx="10" fill="#E6F4EA" stroke="#34A853" stroke-width="1.5"/>
+  <rect x="1498" y="284" width="28" height="19" rx="9" fill="#137333"/>
+  <text x="1512" y="297" font-size="10.2" font-weight="700" fill="#FFFFFF" text-anchor="middle">6A</text>
+  <text x="1533" y="298" font-size="11.6" font-weight="700" fill="#202124">Shared &amp; Local MCP → SQL (RLS)</text>
+  <text x="1498" y="319" font-size="10" fill="#3C4043">Re-verifies KMS ctx+jwt (tid+uid+aid);</text>
+  <text x="1498" y="333.5" font-size="10" fill="#3C4043">sets SET LOCAL app.current_tenant_id</text>
+  <text x="1498" y="348.0" font-size="10" fill="#3C4043">under FORCE RLS + pre-retrieval</text>
+  <text x="1498" y="362.5" font-size="10" fill="#3C4043">user_id / group RAG ACL filter.</text>
+  <text x="1498" y="377.0" font-size="10" fill="#3C4043">Non-superuser role (cymbal_mcp_app).</text>
+  <rect x="1486" y="436" width="274" height="154" rx="10" fill="#E8F0FE" stroke="#1967D2" stroke-width="1.5"/>
+  <rect x="1498" y="450" width="28" height="19" rx="9" fill="#174EA6"/>
+  <text x="1512" y="463" font-size="10.2" font-weight="700" fill="#FFFFFF" text-anchor="middle">6B</text>
+  <text x="1533" y="464" font-size="11.6" font-weight="700" fill="#202124">Model Routing → Gemini &amp; Garden</text>
+  <text x="1498" y="485" font-size="10" fill="#3C4043">Governed routing to Pro (FinVault)</text>
+  <text x="1498" y="499.5" font-size="10" fill="#3C4043">or Flash + AskPro (RetailStream)</text>
+  <text x="1498" y="514.0" font-size="10" fill="#3C4043">over 32k shared immutable prefix</text>
+  <text x="1498" y="528.5" font-size="10" fill="#3C4043">cache (-89.9% input tokens, modeled)</text>
+  <text x="1498" y="543.0" font-size="10" fill="#3C4043">in us-central1 with OTel spans.</text>
+  <rect x="1486" y="602" width="274" height="154" rx="10" fill="#FEF7E0" stroke="#F9AB00" stroke-width="1.5"/>
+  <rect x="1498" y="616" width="28" height="19" rx="9" fill="#B06000"/>
+  <text x="1512" y="629" font-size="10.2" font-weight="700" fill="#FFFFFF" text-anchor="middle">6C</text>
+  <text x="1533" y="630" font-size="11.6" font-weight="700" fill="#202124">Enterprise 3P SaaS &amp; PSC Spokes</text>
+  <text x="1498" y="651" font-size="10" fill="#3C4043">Jira / ServiceNow / Drive via 3LO</text>
+  <text x="1498" y="665.5" font-size="10" fill="#3C4043">vault key {tid}:{uid}:{connector}</text>
+  <text x="1498" y="680.0" font-size="10" fill="#3C4043">plus per-tenant ct-&lt;tid&gt; IAM SA.</text>
+  <text x="1498" y="694.5" font-size="10" fill="#3C4043">Returns 401 OAuth step-up if user</text>
+  <text x="1498" y="709.0" font-size="10" fill="#3C4043">consent is unlinked; optional PSC.</text>
+  <rect x="24" y="786" width="574" height="78" rx="10" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+  <rect x="24" y="792" width="4.5" height="66" rx="2" fill="#1967D2"/>
+  <text x="40" y="808" font-size="11.4" font-weight="700" fill="#202124">Existing ISV Stack (Step 1) + Client-to-Agent (Step 2)</text>
+  <text x="40" y="825" font-size="10.0" fill="#3C4043">ISV apps on Cloud Run, GKE, or GCE expose multiple agents (SRE, Compliance)</text>
+  <text x="40" y="839.5" font-size="10.0" fill="#3C4043">and enter Step 2 for fast DPoP, replay &amp; agent-routing admission checks.</text>
+  <rect x="613" y="786" width="574" height="78" rx="10" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+  <rect x="613" y="792" width="4.5" height="66" rx="2" fill="#F9AB00"/>
+  <text x="629" y="808" font-size="11.4" font-weight="700" fill="#202124">Why Egress Model Armor &amp; Model Routing Live at Step 5</text>
+  <text x="629" y="825" font-size="10.0" fill="#3C4043">Placing Model Armor at Agent-to-Anywhere monitors each runtime model and</text>
+  <text x="629" y="839.5" font-size="10.0" fill="#3C4043">tool decision in context while governing outbound LLM routing and MCP calls.</text>
+  <rect x="1202" y="786" width="574" height="78" rx="10" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5"/>
+  <rect x="1202" y="792" width="4.5" height="66" rx="2" fill="#137333"/>
+  <text x="1218" y="808" font-size="11.4" font-weight="700" fill="#202124">Scaling ADK, LangGraph &amp; BYO Docker + Agent Sandboxes</text>
+  <text x="1218" y="825" font-size="10.0" fill="#3C4043">Stateless agent services autoscale concurrently over Firestore sessions &amp; CMEK</text>
+  <text x="1218" y="839.5" font-size="10.0" fill="#3C4043">semantic memory; untrusted code runs in per-session agent sandboxes in Gemini.</text>
+</svg>

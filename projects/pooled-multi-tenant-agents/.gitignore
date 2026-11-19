@@ -1,0 +1,65 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+
+# Testing & Linting
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ADK & Local Storage
+.adk/
+*.db
+*.bundle
+deployment_metadata.json
+
+# Environment variables, local agent notes, internal tracking & secrets
+.env
+*.local
+credentials.json
+key.json
+GEMINI.md
+background_context/
+project_management/
+
+# Terraform
+.terraform/
+*.terraform.lock.hcl
+.terraform.lock.hcl
+*.tfstate
+# Local-only Terraform inputs (reviewer / operator emails)
+*.auto.tfvars
+*.local.tfvars
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+terraform/*.tfvars
+# Non-secret sandbox inputs are tracked; reviewer/operator lists stay in untracked *.auto.tfvars
+!terraform/sandbox.tfvars
+# Provider lock file is committed (reproducible CI validate and applies)
+!terraform/.terraform.lock.hcl
+
+# IDEs & OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+*.log

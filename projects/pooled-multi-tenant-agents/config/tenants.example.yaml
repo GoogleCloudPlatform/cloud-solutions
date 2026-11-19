@@ -1,0 +1,121 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# ==============================================================================
+# Declarative Multi-Tenant & 3rd-Party Connector Manifest (Pattern A: Pooled)
+# ==============================================================================
+# Copy this file to `config/tenants.yaml` to customize or onboard additional
+# tenants and mix-and-match Identity Providers (Google Workspace, Azure Entra ID,
+# Okta), Document Workspaces (Google Drive / GCS CMEK, SharePoint, Slack/Notion),
+# and ITSM Ticketing Connectors (Atlassian Jira, ServiceNow, PagerDuty).
+# ==============================================================================
+
+platform:
+  name: "Cymbal B2B SaaS — Pooled Agentic Platform"
+  pattern: "Pattern A (High-Density Pooled)"
+  shared_prefix_cache_ttl_seconds: 3600
+  database_pool_size: 20
+
+tenants:
+  - tenant_id: "tenant-finvault-alpha"
+    display_name: "FinVault Bank"
+    subscription_tier: "enterprise"
+    priority_weight: 0
+    identity_provider:
+      provider_type: "google_workspace"
+      issuer_url: "https://accounts.google.com"
+    compute_and_finops:
+      thinking_tokens_budget: 8000
+      rpm_limit: 120
+      tpm_limit: 250000
+      entitled_agents:
+        - "cymbal_shared_diagnostic_agent"
+        - "finvault_regulatory_escalation_agent"
+    cryptographic_isolation:
+      cmek_key_env_var: "FINVAULT_KMS_KEY"
+      runbook_prefix: "tenant-finvault-alpha/"
+    connectors:
+      workspace:
+        provider_type: "google_drive"
+        connector_id: "gdrive_3lo_finvault"
+        required_scopes:
+          - "https://www.googleapis.com/auth/drive.readonly"
+      itsm:
+        provider_type: "atlassian_jira"
+        connector_id: "jira_3lo_finvault"
+        secret_manager_id: "cymbal-finvault-jira-credentials"
+        project_key: "FINVAULT"
+        required_scopes:
+          - "read:jira-work"
+          - "write:jira-work"
+
+  - tenant_id: "tenant-retailstream-beta"
+    display_name: "RetailStream Corp"
+    subscription_tier: "standard"
+    priority_weight: 10
+    identity_provider:
+      provider_type: "microsoft_entra"
+      issuer_url: "https://login.microsoftonline.com/${AZURE_ENTRA_TENANT_ID}/v2.0"
+    compute_and_finops:
+      thinking_tokens_budget: 4000
+      rpm_limit: 30
+      tpm_limit: 40000
+      entitled_agents:
+        - "cymbal_shared_diagnostic_agent"
+    cryptographic_isolation:
+      cmek_key_env_var: "RETAILSTREAM_KMS_KEY"
+      runbook_prefix: "tenant-retailstream-beta/"
+    connectors:
+      workspace:
+        provider_type: "microsoft_sharepoint"
+        connector_id: "sharepoint_3lo_retailstream"
+        required_scopes:
+          - "https://graph.microsoft.com/Sites.Selected"
+          - "https://graph.microsoft.com/Files.Read.All"
+      itsm:
+        provider_type: "servicenow_itom"
+        connector_id: "servicenow_3lo_retailstream"
+        secret_manager_id: "cymbal-retailstream-servicenow-credentials"
+        correlation_id: "ROA-2026-8812"
+        required_scopes:
+          - "useraccount"
+
+  # Example 3rd Tenant showing how to onboard an Okta + Slack + PagerDuty tenant in O(1):
+  - tenant_id: "tenant-cloudhealth-gamma"
+    display_name: "CloudHealth MedTech"
+    subscription_tier: "enterprise"
+    priority_weight: 0
+    identity_provider:
+      provider_type: "okta"
+      issuer_url: "https://cloudhealth.okta.com/oauth2/default"
+    compute_and_finops:
+      thinking_tokens_budget: 8000
+      rpm_limit: 120
+      tpm_limit: 250000
+      entitled_agents:
+        - "cymbal_shared_diagnostic_agent"
+    cryptographic_isolation:
+      cmek_key_env_var: "FINVAULT_KMS_KEY"
+      runbook_prefix: "tenant-cloudhealth-gamma/"
+    connectors:
+      workspace:
+        provider_type: "slack_notion"
+        connector_id: "notion_3lo_cloudhealth"
+        required_scopes:
+          - "notion:content.read"
+      itsm:
+        provider_type: "pagerduty"
+        connector_id: "pagerduty_3lo_cloudhealth"
+        required_scopes:
+          - "incidents.write"
