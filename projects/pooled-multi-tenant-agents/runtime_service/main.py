@@ -73,6 +73,7 @@ from agents.runtime_protocol import (
     envelope_from_claims,
     verified_claims_from_cloud_run_header,
 )
+from agents.skill_loader import CustomSkillUnavailableError
 from agents.tenant_credentials import disable_local_exchange, turn_broker_token
 from agents.turn_engine import TurnServices, run_agent_turn
 from fastapi import FastAPI, Header, HTTPException
@@ -317,7 +318,10 @@ class RuntimeService:
                     "hops": hops,
                 }
             )
-        except sandbox_execution.SandboxUnavailableError as exc:
+        except (
+            sandbox_execution.SandboxUnavailableError,
+            CustomSkillUnavailableError,
+        ) as exc:
             return JSONResponse(
                 content={
                     "outcome": "http_error",
@@ -373,7 +377,10 @@ class RuntimeService:
             return JSONResponse(
                 content={"outcome": "blocked", "message": str(exc), "hops": []}
             )
-        except sandbox_execution.SandboxUnavailableError as exc:
+        except (
+            sandbox_execution.SandboxUnavailableError,
+            CustomSkillUnavailableError,
+        ) as exc:
             return JSONResponse(
                 content={
                     "outcome": "http_error",

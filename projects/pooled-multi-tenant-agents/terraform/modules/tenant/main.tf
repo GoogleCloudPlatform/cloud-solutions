@@ -195,7 +195,28 @@ resource "google_project_iam_member" "tenant_bigquery_job_user" {
   member  = "serviceAccount:${google_service_account.tenant.email}"
 }
 
-# --- Issuer-Bound Workload Identity Federation (WIF) Pool & Corporate OIDC IdP Provider -----------
+# --- Google Cloud Identity Platform Multi-Tenancy + Issuer-Bound WIF (Hop 0) ----------------------
+
+resource "google_identity_platform_tenant" "tenant" {
+  count                     = var.enable_identity_platform_tenant ? 1 : 0
+  project                   = var.project_id
+  display_name              = substr(var.tenant_id, 0, 20)
+  allow_password_signup     = false
+  enable_email_link_signin  = false
+  disable_auth              = false
+}
+
+resource "google_identity_platform_tenant_oauth_idp_config" "corporate_oidc" {
+  count         = var.enable_identity_platform_tenant ? 1 : 0
+  project       = var.project_id
+  tenant        = google_identity_platform_tenant.tenant[0].name
+  name          = "oidc.${substr(replace(var.tenant_id, "_", "-"), 0, 24)}"
+  display_name  = substr("OIDC ${var.tenant_id}", 0, 32)
+  client_id     = var.tenant_oidc_client_id
+  client_secret = var.tenant_oidc_secret_ref
+  issuer        = var.tenant_oidc_issuer_uri
+  enabled       = true
+}
 
 resource "google_iam_workload_identity_pool" "tenant_idp_pool" {
   count                     = var.enable_tenant_wif_provider ? 1 : 0
@@ -235,8 +256,8 @@ resource "google_project_iam_member" "tenant_memory_bank_user" {
 
   condition {
     title       = "memory-bank-tenant-scope-${var.tenant_id}"
-    description = "Restricts Memory Bank in Gemini reads and writes to ${var.tenant_id} memoryScope."
-    expression  = "api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['tenant_id'] == '${var.tenant_id}'"
+    description = "Restricts Memory Bank in Gemini reads and writes to ${var.tenant_id} and entitled agent_id memoryScope."
+    expression  = "api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['tenant_id'] == '${var.tenant_id}' && api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['agent_id'] in [${join(", ", formatlist("'%s'", var.allowed_memory_agent_ids))}]"
   }
 }
 

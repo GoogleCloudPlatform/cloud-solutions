@@ -27,6 +27,7 @@ from agents.context_exchange import get_context_token_exchange
 from agents.context_signing import ContextSigningUnavailableError
 from agents.context_token import ContextKeyUnavailableError
 from agents.platform_config import get_platform_config
+from agents.skill_loader import CustomSkillUnavailableError
 from app.api.v1 import (
     agents_and_sandboxes,
     auth_and_discovery,
@@ -188,6 +189,18 @@ async def _sandbox_unavailable(
         status_code=503,
         content={"detail": {"error": exc.code}},
         headers={"Retry-After": "15", "Cache-Control": "no-store"},
+    )
+
+
+@app.exception_handler(CustomSkillUnavailableError)
+async def _custom_skill_unavailable(
+    _request: Request, exc: CustomSkillUnavailableError
+) -> JSONResponse:
+    """Maps custom-skill storage outages to HTTP 503 + Retry-After (never 401/403)."""
+    return JSONResponse(
+        status_code=503,
+        content={"detail": {"error": exc.code}},
+        headers={"Retry-After": "10", "Cache-Control": "no-store"},
     )
 
 

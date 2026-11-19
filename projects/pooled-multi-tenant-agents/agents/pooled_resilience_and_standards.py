@@ -228,8 +228,10 @@ class SubstrateAgnostic3HopAdapter:
                     f"request.tag='tenant_id={tenant_id}', role='{user_role}', agent='{agent_id}'"
                 ),
                 "policy_ddl": (
-                    f"GRANT SELECT ON TABLE tenant_incidents TO ROLE pooled_agent_{user_role} "
-                    f"WHERE request.tag = 'tenant_id={tenant_id}';"
+                    "CREATE OR REPLACE VIEW v_tenant_incidents SQL SECURITY DEFINER AS "
+                    "SELECT incident_id, tenant_id, service_name, severity, summary "
+                    f"FROM tenant_incidents WHERE tenant_id = '{tenant_id}'; "
+                    f"GRANT SELECT ON VIEW v_tenant_incidents TO ROLE pooled_agent_{user_role};"
                 ),
             }
         if substrate == "cloud_firestore":

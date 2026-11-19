@@ -167,9 +167,49 @@ variable "tenant_oidc_issuer_uri" {
 }
 
 variable "enable_memory_bank_iam_cel" {
-  description = "Bind roles/aiplatform.memoryUser to the tenant SA with a CEL condition locking aiplatform.googleapis.com/memoryScope['tenant_id'] to var.tenant_id."
+  description = "Bind roles/aiplatform.memoryUser to the tenant SA with a CEL condition locking aiplatform.googleapis.com/memoryScope['tenant_id'] and ['agent_id']."
   type        = bool
   default     = true
+}
+
+variable "allowed_memory_agent_ids" {
+  description = "Catalog agent IDs permitted in aiplatform.googleapis.com/memoryScope['agent_id'] for this tenant's Memory Bank IAM CEL condition."
+  type        = list(string)
+  default = [
+    "cymbal_shared_diagnostic_agent",
+    "finvault_regulatory_escalation_agent",
+    "sre_diagnostic_agent",
+  ]
+  validation {
+    condition = (
+      length(var.allowed_memory_agent_ids) > 0 &&
+      alltrue([for a in var.allowed_memory_agent_ids : can(regex("^[a-z][a-z0-9_-]{1,62}$", a))])
+    )
+    error_message = "allowed_memory_agent_ids must be non-empty and each agent ID must match ^[a-z][a-z0-9_-]{1,62}$."
+  }
+}
+
+variable "enable_identity_platform_tenant" {
+  description = "Provision a Google Cloud Identity Platform multi-tenant configuration and corporate OIDC provider for Hop 0 brokered SSO."
+  type        = bool
+  default     = false
+}
+
+variable "tenant_oidc_client_id" {
+  description = "OIDC Relying Party client ID registered with the tenant's corporate IdP for Identity Platform federation."
+  type        = string
+  default     = "cymbal-pooled-oidc-client"
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9._:-]{3,128}$", var.tenant_oidc_client_id))
+    error_message = "tenant_oidc_client_id must match ^[a-zA-Z0-9._:-]{3,128}$."
+  }
+}
+
+variable "tenant_oidc_secret_ref" {
+  description = "Out-of-band OIDC relying-party reference for Identity Platform (never commit credentials; supply out-of-band)."
+  type        = string
+  sensitive   = true
+  default     = "managed-out-of-band"
 }
 
 variable "alloydb_cluster_name" {

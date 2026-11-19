@@ -16,7 +16,7 @@
 
 r"""Serves the Interactive Demos, Architecture & 3Blue1Brown Video Walkthrough Page (`/demos`, `/tuesday`).
 
-Provides a single unified presentation surface for the Tuesday team walkthrough:
+Provides a unified presentation surface for architectural walkthroughs:
 1. **3Blue1Brown-Style Video & Interactive Math Studio**:
    - Streams the rendered 1080p H.264 MP4 (`/assets/cymbal_3b1b_walkthrough.mp4`) with 6 chapter
      markers, playback speed controls, and synchronized presenter teleprompter notes.
@@ -50,7 +50,7 @@ def render_tuesday_walkthrough_html() -> str:
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Cymbal SaaS — Tuesday Demos, Architecture & 3B1B Walkthrough</title>
+  <title>Cymbal SaaS — Interactive Demos, Architecture &amp; 3B1B Walkthrough</title>
   <style>
     :root {
       --bg: #0B0F19;

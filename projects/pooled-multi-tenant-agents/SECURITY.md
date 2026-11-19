@@ -1,38 +1,50 @@
-# Security
+# Security Policy
 
 ## Scope
 
-This repository is an **internal** reference implementation. It runs in a
-sandbox project with **synthetic tenants and synthetic data only**. Do not load
-customer data or real personal data into it; the gate for that is in the README
-([Gate: no customer data until these are true](README.md#gate-no-customer-data-until-these-are-true)).
+This project is an open-source **reference implementation** demonstrating pooled
+multi-tenant AI agent isolation on Google Cloud. It runs with **synthetic
+tenants and synthetic data fixtures** (`FinVault Bank`, `RetailStream Corp`).
+Before deploying this architecture with production customer data, complete every
+item in the readiness checklist in
+[Gate: no customer data until these are true](README.md#gate-no-customer-data-until-these-are-true).
 
-## Reporting an issue
+## Supported Versions
 
-Report suspected vulnerabilities or isolation failures to the **WS2 owner
-through the team channel**. Please include:
+Active security updates apply to the `main` branch of this reference
+implementation.
 
-- what you did (request, endpoint or test), what you expected and what happened;
-- whether it crosses a tenant, user or role boundary;
-- whether it affects the hosted sandbox or only the code.
+## Reporting a Vulnerability
 
-Do not post exploit details, tokens or keys in public issues or pull requests.
-Do not test against the hosted gateway beyond your own named, time-boxed access.
+Please **do not** post exploit details, tokens, or private keys in public GitHub
+issues or pull requests.
 
-## Known limits
+To report a security vulnerability in Google Cloud open-source samples or
+Google-maintained repositories, submit a report through Google's official
+vulnerability reporting portal:
 
-Known gaps are listed openly; please check them before reporting:
+- **Report a vulnerability:** <https://g.co/vulnz>
+
+When submitting a report, please include:
+
+- The affected file path, endpoint, or Terraform module, along with reproduction
+  steps, expected behavior, and observed behavior.
+- Whether the issue crosses a tenant, user, role, or agent workload boundary.
+- Any relevant configuration flags or environment prerequisites.
+
+## Documented Architectural Scope & Known Limits
+
+Architectural boundaries and open roadmap items are documented transparently in
+the repository. Please review them when evaluating deployment posture:
 
 - [Missing components and known gaps](README.md#missing-components-and-known-gaps)
 - [What if a component is compromised?](README.md#what-if-a-component-is-compromised)
-  (the component compromise table covering before B5 and today's live B5 +
-  ADR-0016 split)
 - [Isolation invariants](README.md#isolation-invariants) and
-  [`docs/tenant_isolation_assurance.md`](docs/tenant_isolation_assurance.md)
+  [Tenant isolation assurance](docs/tenant_isolation_assurance.md)
 
-Residual trust-root note: with ADR-0014 B5 and ADR-0016 live, per-agent runtimes
-hold zero KMS signing or `TokenCreator` permissions; `cymbal-pooled-gateway`
-remains the context-token signing trust root (holding zero `TokenCreator` and
-zero invoker access on `cymbal-credential-broker`), with automated KMS
-signing-volume alerting tracked in
+Residual trust-root note: with `ADR-0014` B5 and `ADR-0016` enabled, per-agent
+Cloud Run runtimes hold zero Cloud KMS signing or `TokenCreator` permissions;
+`cymbal-pooled-gateway` serves as the context-token signing trust root (holding
+zero `TokenCreator` and zero invoker access on `cymbal-credential-broker`), with
+automated Cloud KMS signing-volume alerting tracked in
 [Known gaps (#5)](README.md#missing-components-and-known-gaps).

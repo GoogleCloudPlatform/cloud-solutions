@@ -271,9 +271,15 @@ variable "tenant_wif_issuer_overrides" {
 }
 
 variable "enable_memory_bank_iam_cel" {
-  description = "Grant each per-tenant service account `roles/aiplatform.memoryUser` constrained by an IAM CEL condition on `aiplatform.googleapis.com/memoryScope['tenant_id']`."
+  description = "Grant each per-tenant service account `roles/aiplatform.memoryUser` constrained by an IAM CEL condition on `aiplatform.googleapis.com/memoryScope['tenant_id']` and `['agent_id']`."
   type        = bool
   default     = true
+}
+
+variable "enable_identity_platform_tenant" {
+  description = "Provision per-tenant Google Cloud Identity Platform multi-tenant configuration and corporate OIDC provider for Hop 0 brokered SSO."
+  type        = bool
+  default     = false
 }
 
 # --- Configurable token expiry & autonomous session call ceilings ----------------------------------

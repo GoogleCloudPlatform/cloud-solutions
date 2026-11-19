@@ -58,6 +58,14 @@ from agents.shared_diagnostic_agent import (
     build_thinking_config,
     get_model_location,
 )
+from agents.skill_loader import (
+    TenantCustomSkillLoader,
+    get_default_custom_skill_loader,
+)
+from agents.workspace_plugins import (
+    WorkspacePluginRegistry,
+    get_default_workspace_plugin_registry,
+)
 
 
 def _bridge_attr(name: str, fallback: Any) -> Any:
@@ -99,6 +107,8 @@ class LiveADKVertexRunner:
         sandbox_manager: (
             sandbox_execution.GeminiAgentSandboxManager | None
         ) = None,
+        workspace_plugins: WorkspacePluginRegistry | None = None,
+        skill_loader: TenantCustomSkillLoader | None = None,
     ) -> dict[str, Any]:
         """Runs a live ADK 2.0 `InMemoryRunner` session scoped to `envelope.tenant.tenant_id`."""
         from mcp_server.db import build_rls_db_pool_from_env
@@ -113,6 +123,8 @@ class LiveADKVertexRunner:
                 sandbox_code=sandbox_code,
                 sandbox_language=sandbox_language,
                 sandbox_manager=sandbox_manager,
+                workspace_plugins=workspace_plugins,
+                skill_loader=skill_loader,
                 db_pool=db_pool,
             )
         finally:
@@ -128,6 +140,8 @@ class LiveADKVertexRunner:
         sandbox_code: str | None,
         sandbox_language: str,
         sandbox_manager: sandbox_execution.GeminiAgentSandboxManager | None,
+        workspace_plugins: WorkspacePluginRegistry | None,
+        skill_loader: TenantCustomSkillLoader | None,
         db_pool: Any,
     ) -> dict[str, Any]:
         # Never overwrite the deployment's settings at runtime (they feed identity decisions).
@@ -438,10 +452,45 @@ class LiveADKVertexRunner:
             model_name=effective_model
         )
 
+        active_workspace_plugins = (
+            workspace_plugins or get_default_workspace_plugin_registry()
+        )
+        active_skill_loader = skill_loader or get_default_custom_skill_loader()
+        loaded_custom_skills: list[dict[str, object]] = []
+        custom_skill_suffix = ""
+        if active_workspace_plugins.has_manifest(bound_tenant_id):
+            tenant_manifest = active_workspace_plugins.get_manifest(
+                bound_tenant_id
+            )
+            skill_docs = active_skill_loader.load_skills_for_turn(
+                envelope=envelope,
+                skill_uris=tenant_manifest.custom_skills_uris,
+            )
+            loaded_custom_skills = [
+                {
+                    "skill_uri": skill_doc.skill_uri,
+                    "kms_key_name": skill_doc.kms_key_name,
+                    "cache_hit": skill_doc.cache_hit,
+                }
+                for skill_doc in skill_docs
+            ]
+            session_state["temp:loaded_custom_skills"] = [
+                skill_doc.sanitized_content for skill_doc in skill_docs
+            ]
+            if skill_docs:
+                rendered_skills = "\n\n".join(
+                    skill_doc.sanitized_content for skill_doc in skill_docs
+                )
+                custom_skill_suffix = (
+                    f"\n\nTENANT CUSTOM SKILLS ({bound_tenant_id}):\n"
+                    f"{rendered_skills}"
+                )
+
         turn_instruction = (
             f"You are the Cymbal SaaS Pooled Diagnostic Agent serving tenant '{bound_tenant_id}'. "
             "Call `get_scoped_p1_incidents` AND your entitled 3P ticket/runbook tools first, then "
             "summarize the incident ID, 3P ticket key/number, and redacted notes in 2 sentences."
+            f"{custom_skill_suffix}"
         )
         agent_sig_params = set(inspect.signature(Agent).parameters)
         accepts_var_kw = any(
@@ -564,6 +613,7 @@ class LiveADKVertexRunner:
             },
             "tool_calls": tool_calls_seen,
             "pruned_unentitled_tools": pruned_out,
+            "loaded_custom_skills": loaded_custom_skills,
             "agent_response": final_text.strip(),
             "rls_guc": db_pool.last_executed_guc,
         }

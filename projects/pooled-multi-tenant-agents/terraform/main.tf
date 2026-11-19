@@ -175,5 +175,7 @@ module "tenant" {
   enable_memory_bank_iam_cel  = var.enable_memory_bank_iam_cel
   alloydb_cluster_name        = module.platform_core.alloydb_cluster_name
   enable_alloydb_iam          = var.enable_alloydb_cluster && var.enable_alloydb_primary_instance
-  depends_on                  = [module.platform_core]
+  # Optional Google Cloud Identity Platform multi-tenant Hop 0 broker
+  enable_identity_platform_tenant = var.enable_identity_platform_tenant
+  depends_on                      = [module.platform_core]
 }

@@ -65,6 +65,18 @@ async def get_3b1b_walkthrough_video() -> Response:
     )
 
 
+@router.get("/visualizer", response_class=HTMLResponse)
+async def standalone_visualizer_ui() -> Response:
+    """Serves the zero-backend standalone `docs/visualizer.html` explorer."""
+    vis_path = _REPO_ROOT / "docs" / "visualizer.html"
+    if not vis_path.is_file():
+        raise HTTPException(status_code=404, detail="Visualizer missing")
+    return HTMLResponse(
+        content=vis_path.read_text(encoding="utf-8"),
+        headers={"X-Frame-Options": "SAMEORIGIN"},
+    )
+
+
 @router.get("/demos", response_class=HTMLResponse)
 @router.get("/tuesday", response_class=HTMLResponse)
 async def tuesday_demos_and_architecture_ui() -> str:

@@ -37,6 +37,7 @@ from agents.interceptors import enforce_tenant_isolation_interceptor
 from agents.kms_rest import configure_client_certificate_env
 from agents.platform_config import get_platform_config
 from agents.registry import TOOL_REGISTRY
+from agents.skill_loader import load_shared_baseline_skills_text
 from mcp_server import server as mcp_tools
 
 # Prevent corporate workstation certificate collision with sandbox sandbox locally, while preserving
@@ -138,7 +139,7 @@ def build_thinking_config(
     return {"thinking_budget": budget}
 
 
-SHARED_SYSTEM_PROMPT_PREFIX = (
+_CORE_SYSTEM_PROMPT_HEADER = (
     "You are the Cymbal SaaS Shared Diagnostic Agent.\n"
     "You correlate production telemetry, inspect incident runbooks, and propose "
     "remediation steps.\n"
@@ -148,6 +149,12 @@ SHARED_SYSTEM_PROMPT_PREFIX = (
     "2. Never access, infer, or reference telemetry, incidents, or runbooks belonging to any "
     "other tenant.\n"
     "3. Use only the dynamically entitled MCP tools present in your active toolset.\n"
+)
+_BASELINE_PLUGIN_SKILLS_TEXT = load_shared_baseline_skills_text()
+SHARED_SYSTEM_PROMPT_PREFIX = (
+    f"{_CORE_SYSTEM_PROMPT_HEADER}\n{_BASELINE_PLUGIN_SKILLS_TEXT}\n"
+    if _BASELINE_PLUGIN_SKILLS_TEXT
+    else _CORE_SYSTEM_PROMPT_HEADER
 )
 
 SHARED_2LO_BASE_TOOLS: tuple[str, ...] = (

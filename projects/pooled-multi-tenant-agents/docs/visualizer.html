@@ -1,0 +1,1351 @@
+<!doctype html>
+<!--
+ Copyright 2026 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self';"
+  />
+  <title>Interactive Architecture Visualizer — Pooled Multi-Tenant AI Agents on Google Cloud</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root,
+    :root[data-theme="dark"] {
+      --bg-canvas: #060b16;
+      --bg-surface: #0f172a;
+      --bg-elevated: #16223b;
+      --bg-chip: rgba(56, 189, 248, 0.12);
+      --border-subtle: rgba(148, 163, 184, 0.18);
+      --border-strong: rgba(56, 189, 248, 0.45);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-green: #34d399;
+      --accent-green-bg: rgba(52, 211, 153, 0.14);
+      --accent-amber: #fbbf24;
+      --accent-amber-bg: rgba(251, 191, 36, 0.14);
+      --accent-red: #f87171;
+      --accent-red-bg: rgba(248, 113, 113, 0.14);
+      --code-bg: #091020;
+      --shadow-card: 0 14px 36px rgba(2, 6, 23, 0.45);
+    }
+
+    :root[data-theme="light"] {
+      --bg-canvas: #f4f7fb;
+      --bg-surface: #ffffff;
+      --bg-elevated: #eef3fa;
+      --bg-chip: rgba(2, 132, 199, 0.1);
+      --border-subtle: rgba(15, 23, 42, 0.12);
+      --border-strong: rgba(2, 132, 199, 0.45);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --accent-blue: #0284c7;
+      --accent-indigo: #4f46e5;
+      --accent-green: #059669;
+      --accent-green-bg: rgba(5, 150, 105, 0.1);
+      --accent-amber: #b45309;
+      --accent-amber-bg: rgba(180, 83, 9, 0.1);
+      --accent-red: #dc2626;
+      --accent-red-bg: rgba(220, 38, 38, 0.1);
+      --code-bg: #0f172a;
+      --shadow-card: 0 10px 28px rgba(15, 23, 42, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, .heading-font {
+      font-family: "Google Sans", "Inter", sans-serif;
+      margin: 0;
+    }
+
+    code, pre, .mono {
+      font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 24px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .nav-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 10px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 7px 13px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.16s ease, color 0.16s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--accent-blue);
+      color: #061224;
+    }
+
+    .action-link, .theme-btn {
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .invariant-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      border-radius: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      box-shadow: var(--shadow-card);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .badge-info {
+      background: var(--bg-chip);
+      color: var(--accent-blue);
+    }
+
+    .badge-pass {
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+    }
+
+    .badge-warn {
+      background: var(--accent-amber-bg);
+      color: var(--accent-amber);
+    }
+
+    .badge-block {
+      background: var(--accent-red-bg);
+      color: var(--accent-red);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    select, button.primary-btn, button.secondary-btn {
+      font-family: inherit;
+      font-size: 13px;
+      border-radius: 8px;
+      padding: 8px 13px;
+    }
+
+    select {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      font-weight: 500;
+    }
+
+    button.primary-btn {
+      background: var(--accent-blue);
+      color: #061224;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.secondary-btn {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .hop-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hop-item {
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      border-radius: 11px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.12s ease;
+    }
+
+    .hop-item.selected {
+      border-color: var(--accent-blue);
+      transform: translateX(3px);
+    }
+
+    .hop-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .hop-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    pre.code-pane {
+      background: var(--code-bg);
+      color: #e2e8f0;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 12px;
+      overflow-x: auto;
+      margin: 10px 0 0 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .kv-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 10px 12px;
+    }
+
+    .kv-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .kv-val {
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    .breach-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 760px) {
+      .breach-grid, .kv-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .breach-card {
+      text-align: left;
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    .breach-card.active {
+      border-color: var(--accent-red);
+    }
+
+    .slider-group {
+      margin-bottom: 14px;
+    }
+
+    .slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-blue);
+    }
+
+    .turn-log {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .turn-entry {
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-group">
+      <div class="brand-mark">P2</div>
+      <div>
+        <div class="brand-title">Pooled Multi-Tenant AI Agents — Interactive Visualizer</div>
+        <div class="brand-subtitle">Disaggregated Brain, gVisor Sandboxes, Auth Manager Vault &amp; Scoped Memory Bank on Google Cloud</div>
+      </div>
+    </div>
+    <div class="nav-controls">
+      <nav class="tab-strip" aria-label="Visualizer views">
+        <button type="button" class="tab-btn active" data-tab="flow">1. 6-Checkpoint Request Flow</button>
+        <button type="button" class="tab-btn" data-tab="concurrency">2. Two-Enterprise Concurrency</button>
+        <button type="button" class="tab-btn" data-tab="breach">3. 10-Vector Breach Matrix</button>
+        <button type="button" class="tab-btn" data-tab="finops">4. Pooling &amp; Cache Simulator</button>
+      </nav>
+      <a class="action-link" href="index.html">Docs Overview</a>
+      <a class="action-link" href="https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/pooled-multi-tenant-agents" target="_blank" rel="noopener noreferrer">GitHub Source</a>
+      <button type="button" class="theme-btn" id="themeToggle">Light Mode</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="invariant-banner">
+      <div>
+        <span class="badge badge-info">Non-Negotiable Invariant</span>
+        <strong style="margin-left: 8px;">Tenant A never reads Tenant B data · User B never accesses Coworker A sessions or 3LO OAuth · Agent A never invokes Agent B tools</strong>
+      </div>
+      <span class="badge badge-pass">Client-Side Deterministic Reference Simulator</span>
+    </section>
+
+    <!-- TAB 1: 6-CHECKPOINT REQUEST FLOW -->
+    <section id="view-flow">
+      <div class="control-row">
+        <label for="personaSelect" style="font-size: 13px; font-weight: 600;">Caller Persona:</label>
+        <select id="personaSelect">
+          <option value="priya">Priya — SRE Admin @ FinVault Bank (Enterprise Tier)</option>
+          <option value="alex">Alex — Read-Only Analyst @ FinVault Bank (Enterprise Tier)</option>
+          <option value="sam">Sam — SRE Admin @ RetailStream Corp (Standard Tier)</option>
+        </select>
+
+        <label for="agentSelect" style="font-size: 13px; font-weight: 600;">Target Catalog Agent:</label>
+        <select id="agentSelect">
+          <option value="cymbal_shared_diagnostic_agent">SRE Diagnostic Agent (Shared Pool)</option>
+          <option value="finvault_regulatory_escalation_agent">Regulatory Compliance Agent (FinVault Enterprise Only)</option>
+        </select>
+
+        <label for="datastoreSelect" style="font-size: 13px; font-weight: 600;">Datastore Engine:</label>
+        <select id="datastoreSelect">
+          <option value="alloydb">AlloyDB for PostgreSQL (Reference Store)</option>
+          <option value="spanner">Spanner (Definer Views + FGAC)</option>
+          <option value="firestore">Cloud Firestore (Composite Partition + RBAC)</option>
+          <option value="bigquery">BigQuery (Row Access Policy + Policy Tags)</option>
+        </select>
+
+        <button type="button" class="primary-btn" id="stepFlowBtn">Step Next Checkpoint</button>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h3>Chronological 6-Checkpoint Security Chain</h3>
+            <span class="badge badge-info" id="flowOutcomeBadge">Evaluating</span>
+          </div>
+          <div class="hop-list" id="hopList"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 id="inspectorTitle">Checkpoint Inspector</h3>
+            <span class="badge badge-pass" id="inspectorSubsystem">Subsystem</span>
+          </div>
+          <p id="inspectorDesc" style="font-size: 13px; color: var(--text-secondary); margin-top: 0;"></p>
+          <div class="kv-grid" id="inspectorKv"></div>
+          <pre class="code-pane" id="inspectorCode"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: TWO-ENTERPRISE CONCURRENCY -->
+    <section id="view-concurrency" class="hidden">
+      <div class="card" style="margin-bottom: 18px;">
+        <div class="card-header">
+          <div>
+            <h3>Multi-Turn &amp; Two-Enterprise Concurrent Isolation Simulator</h3>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+              Simulates barrier-synchronized turns between two Enterprise-tier customers (<strong>FinVault Bank</strong> &amp; <strong>Meridian Global Capital</strong>) across two stateless Cloud Run orchestrator replicas sharing a 4-connection AlloyDB RLS pool.
+            </div>
+          </div>
+          <div class="control-row" style="margin-bottom: 0;">
+            <label style="font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="injectAttackToggle" checked />
+              Inject unauthorized cross-tenant probe on Turn 3
+            </label>
+            <button type="button" class="primary-btn" id="runConcurrencyBtn">Run 4-Turn Concurrent Trace</button>
+          </div>
+        </div>
+        <div class="grid-2" id="concurrencyColumns"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3: 10-VECTOR BREACH MATRIX -->
+    <section id="view-breach" class="hidden">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h3>10-Vector Multi-Tenant Adversarial Red-Team Suite</h3>
+            <button type="button" class="primary-btn" id="runAllBreachesBtn">Verify All 10 Probes</button>
+          </div>
+          <div class="breach-grid" id="breachGrid"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 id="breachDetailTitle">Breach Probe Receipt</h3>
+            <span class="badge badge-block" id="breachStatusBadge">HTTP 403 BLOCKED</span>
+          </div>
+          <p id="breachDetailNarrative" style="font-size: 13px; color: var(--text-secondary); margin-top: 0;"></p>
+          <div class="kv-grid" id="breachKv"></div>
+          <pre class="code-pane" id="breachReceiptCode"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: POOLING & PREFIX CACHE SIMULATOR -->
+    <section id="view-finops" class="hidden">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h3>Governed Pool vs. Dedicated Silo Capacity Explorer</h3>
+            <span class="badge badge-warn">Modeled</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-secondary); margin-top: 0;">
+            Adjust tenant fleet size, concurrent active burst ratio, and shared 4,096-token Gemini prefix-cache hit rate to inspect modeled compute consolidation and cached input token efficiency (no pricing commitments).
+          </p>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Onboarded Enterprise &amp; Standard Tenants</span>
+              <span class="mono" id="tenantCountVal">150</span>
+            </div>
+            <input type="range" id="tenantCountSlider" min="10" max="500" step="10" value="150" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Concurrent Active Tenant Burst Ratio</span>
+              <span class="mono" id="burstRatioVal">15%</span>
+            </div>
+            <input type="range" id="burstRatioSlider" min="5" max="60" step="5" value="15" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Shared 4,096-Token Prefix Cache Hit Rate</span>
+              <span class="mono" id="cacheHitVal">85%</span>
+            </div>
+            <input type="range" id="cacheHitSlider" min="0" max="95" step="5" value="85" />
+          </div>
+
+          <div class="kv-grid" id="finopsMetrics"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Modeled Footprint &amp; Input Token Comparison</h3>
+            <span class="badge badge-info">Up to 90% Cached Prefix Discount</span>
+          </div>
+          <div id="finopsChartMount"></div>
+          <pre class="code-pane" id="finopsSummaryCode"></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      function el(tag, attrs, children) {
+        const node = document.createElement(tag);
+        if (attrs) {
+          Object.keys(attrs).forEach(function (k) {
+            if (k === "className") {
+              node.className = attrs[k];
+            } else if (k === "textContent") {
+              node.textContent = attrs[k];
+            } else if (k.startsWith("on") && typeof attrs[k] === "function") {
+              node.addEventListener(k.slice(2).toLowerCase(), attrs[k]);
+            } else {
+              node.setAttribute(k, String(attrs[k]));
+            }
+          });
+        }
+        if (Array.isArray(children)) {
+          children.forEach(function (child) {
+            if (child === null || child === undefined) return;
+            if (typeof child === "string") {
+              node.appendChild(document.createTextNode(child));
+            } else {
+              node.appendChild(child);
+            }
+          });
+        }
+        return node;
+      }
+
+      function svgEl(tag, attrs, children) {
+        const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+        if (attrs) {
+          Object.keys(attrs).forEach(function (k) {
+            node.setAttribute(k, String(attrs[k]));
+          });
+        }
+        if (Array.isArray(children)) {
+          children.forEach(function (child) {
+            if (child) node.appendChild(child);
+          });
+        }
+        return node;
+      }
+
+      const PERSONAS = {
+        priya: {
+          sub: "priya@finvault.example.com",
+          tenantId: "tenant-finvault-alpha",
+          tenantName: "FinVault Bank",
+          tier: "enterprise",
+          role: "sre_admin",
+          idpIssuer: "https://finvault.okta.com/oauth2/default",
+          sa: "ct-9f84b2c0a17d4e8c9102ab34",
+          cmek: "cmek-tenant-finvault-alpha",
+          skillUri: "gs://cymbal-skills-prod/finvault/occ_regulatory_escalation_skill.md",
+          allowedAgents: ["cymbal_shared_diagnostic_agent", "finvault_regulatory_escalation_agent"],
+          tools: ["query_telemetry_rls", "read_runbook", "execute_diagnostic_sandbox", "create_jira_incident"],
+          thinkingCap: 8000,
+          rpm: 120
+        },
+        alex: {
+          sub: "alex@finvault.example.com",
+          tenantId: "tenant-finvault-alpha",
+          tenantName: "FinVault Bank",
+          tier: "enterprise",
+          role: "read_only_analyst",
+          idpIssuer: "https://finvault.okta.com/oauth2/default",
+          sa: "ct-9f84b2c0a17d4e8c9102ab34",
+          cmek: "cmek-tenant-finvault-alpha",
+          skillUri: "gs://cymbal-skills-prod/finvault/occ_regulatory_escalation_skill.md",
+          allowedAgents: ["cymbal_shared_diagnostic_agent"],
+          tools: ["query_telemetry_rls", "read_runbook"],
+          thinkingCap: 8000,
+          rpm: 120
+        },
+        sam: {
+          sub: "sam@retailstream.example.com",
+          tenantId: "tenant-retailstream-beta",
+          tenantName: "RetailStream Corp",
+          tier: "standard",
+          role: "sre_admin",
+          idpIssuer: "https://login.microsoftonline.com/retailstream-tenant-id/v2.0",
+          sa: "ct-3c71e904d82a11f56b08ca19",
+          cmek: "cmek-tenant-retailstream-beta",
+          skillUri: "gs://cymbal-skills-prod/retailstream/flash_sale_checkout_skill.md",
+          allowedAgents: ["cymbal_shared_diagnostic_agent"],
+          tools: ["query_telemetry_rls", "read_runbook", "execute_diagnostic_sandbox", "create_servicenow_incident"],
+          thinkingCap: 4000,
+          rpm: 30
+        }
+      };
+
+      const DATASTORE_SNIPPETS = {
+        alloydb: function (p, agentId) {
+          return (
+            "-- AlloyDB for PostgreSQL (NOSUPERUSER NOBYPASSRLS role: cymbal_mcp_app)\n" +
+            "SET LOCAL app.current_tenant_id = '" + p.tenantId + "';\n" +
+            "SET LOCAL app.current_user_role = '" + p.role + "';\n" +
+            "SET LOCAL app.current_agent_id  = '" + agentId + "';\n" +
+            "SELECT incident_id, service_name, severity, summary\n" +
+            "FROM tenant_incidents\n" +
+            "WHERE severity = 'P1'\n" +
+            "ORDER BY created_at DESC LIMIT 10;"
+          );
+        },
+        spanner: function (p) {
+          return (
+            "-- Spanner Parameterized Definer-Rights View + FGAC Role\n" +
+            "CREATE OR REPLACE VIEW v_tenant_incidents SQL SECURITY DEFINER AS\n" +
+            "SELECT incident_id, tenant_id, service_name, severity, summary\n" +
+            "FROM tenant_incidents\n" +
+            "WHERE tenant_id = '" + p.tenantId + "';\n" +
+            "GRANT SELECT ON VIEW v_tenant_incidents TO ROLE pooled_agent_" + p.role + ";"
+          );
+        },
+        firestore: function (p, agentId) {
+          return (
+            "// Cloud Firestore Composite Partition + Verified Claim RBAC\n" +
+            "path: /tenants/" + p.tenantId + "/sessions/" + p.sub + ":sess-01\n" +
+            "allow read, write: if request.auth.token.tenant_id == '" + p.tenantId + "'\n" +
+            "  && request.auth.token.user_role == '" + p.role + "'\n" +
+            "  && request.auth.token.agent_id == '" + agentId + "';"
+          );
+        },
+        bigquery: function (p) {
+          return (
+            "-- BigQuery Row-Level Access Policy + Column Policy Tags\n" +
+            "CREATE OR REPLACE ROW ACCESS POLICY rap_" + p.tenantId.replace(/-/g, "_") + "\n" +
+            "ON `cymbal_agent_analytics.tenant_otel_spans`\n" +
+            "GRANT TO ('serviceAccount:" + p.sa + "@cymbal-project.iam.gserviceaccount.com')\n" +
+            "FILTER USING (tenant_id = '" + p.tenantId + "');"
+          );
+        }
+      };
+
+      let selectedHopIdx = 0;
+
+      function buildCheckpoints(personaKey, agentId, datastoreKey) {
+        const p = PERSONAS[personaKey];
+        const agentAllowed = p.allowedAgents.indexOf(agentId) !== -1;
+
+        return [
+          {
+            title: "Checkpoint 1 · Corporate SSO & Pooled WIF / Identity Platform",
+            subsystem: "Ingress Identity",
+            status: "PASSED",
+            desc: "Verifies corporate OIDC/SAML signature against the issuer bound 1:1 to the tenant without syncing employees into Google Cloud IAM.",
+            kv: [
+              ["Verified Tenant", p.tenantId],
+              ["Corporate Subject", p.sub],
+              ["Mapped RBAC Role", p.role],
+              ["Federation Mode", "Identity Platform + WIF"]
+            ],
+            code:
+              "attribute_mapping:\n" +
+              "  google.subject: \"assertion.sub\"\n" +
+              "  attribute.tenant_id: \"'" + p.tenantId + "'\"\n" +
+              "  attribute.user_role: \"assertion.groups\"\n" +
+              "attribute_condition: \"assertion.iss == '" + p.idpIssuer + "'\""
+          },
+          {
+            title: "Checkpoint 2 · Client-to-Agent Gateway & Cloud KMS ctx+jwt",
+            subsystem: "Ingress Agent Gateway",
+            status: "PASSED",
+            desc: "Strips caller-supplied tenant headers, validates single-use RFC 9449 DPoP proof, and signs an asymmetric ES256 ctx+jwt via Cloud KMS.",
+            kv: [
+              ["Header Hygiene", "Stripped untrusted tenant headers"],
+              ["Sender Binding", "DPoP cnf.jkt verified"],
+              ["Signing Key", "Cloud KMS ES256 (signerVerifier)"],
+              ["Token Type", "ctx+jwt (short-lived)"]
+            ],
+            code: JSON.stringify(
+              {
+                typ: "ctx+jwt",
+                alg: "ES256",
+                iss: "https://gateway.cymbal.example",
+                aud: "cymbal-agent-runtime",
+                sub: p.sub,
+                tenant_id: p.tenantId,
+                user_role: p.role,
+                agent_id: agentId,
+                cnf: { jkt: "sha256-dpop-thumbprint" }
+              },
+              null,
+              2
+            )
+          },
+          {
+            title: "Checkpoint 3 · Three-Layer Lock (Tenant ∩ User ∩ Agent) & The Vault",
+            subsystem: "Auth Manager & Broker",
+            status: agentAllowed ? "PASSED" : "BLOCKED (403)",
+            desc: agentAllowed
+              ? "Verifies Cloud Run Agent Identity SPIFFE mTLS certificate + signed ctx+jwt before minting per-tenant 2LO STS credentials or checking out user-scoped 3LO OAuth grants."
+              : "FAIL-CLOSED REFUSAL: Caller tenant/role is not entitled to invoke target agent '" + agentId + "'. Execution halts before compute or credential minting.",
+            kv: [
+              ["Layer 1 (Tenant)", p.tenantName + " (" + p.tier + ")"],
+              ["Layer 2 (User Role)", p.role],
+              ["Layer 3 (Workload)", "SPIFFE mTLS -> " + agentId],
+              ["Brokered 2LO SA", agentAllowed ? p.sa : "DENIED (HTTP 403)"]
+            ],
+            code: agentAllowed
+              ? (
+                "POST /internal/v1/2lo-credential\n" +
+                "Caller-SPIFFE: principal://agents.global.org-id.system.id.goog/.../" + agentId + "\n" +
+                "-> Issued 300s STS token for " + p.sa + "@cymbal-project.iam.gserviceaccount.com\n" +
+                "-> Entitled MCP Tools: [" + p.tools.join(", ") + "]"
+              )
+              : (
+                "HTTP/1.1 403 Forbidden\n" +
+                "{\n" +
+                "  \"error\": \"E_AGENT_ENTITLEMENT_DENIED\",\n" +
+                "  \"tenant_id\": \"" + p.tenantId + "\",\n" +
+                "  \"user_role\": \"" + p.role + "\",\n" +
+                "  \"requested_agent_id\": \"" + agentId + "\"\n" +
+                "}"
+              )
+          },
+          {
+            title: "Checkpoint 4 · Stateless Turn Orchestrator, Two-Tier Skills & gVisor Hands",
+            subsystem: "Brain & Hands",
+            status: agentAllowed ? "PASSED" : "SKIPPED",
+            desc: "Verifies ctx+jwt with KMS public keys only, keeps baseline skills warm in the shared prompt cache, injects KMS-decrypted tenant custom skills post-prefix, and dispatches untrusted code to zero-credential gVisor sandboxes.",
+            kv: [
+              ["Orchestrator State", "Stateless (ContextVar scoped)"],
+              ["Shared Prefix Skill", "incident-triage/SKILL.md (Cached)"],
+              ["Tenant Custom Skill", p.skillUri.split("/").pop()],
+              ["Sandbox Boundary", p.role === "sre_admin" ? "gVisor 4.19 (uid=999, zero egress)" : "Read-only role (Bash denied)"]
+            ],
+            code:
+              "# Tier 1 (Cached Shared Static Prefix — 0 Tenant Data):\n" +
+              "static_instruction = SHARED_SYSTEM_PROMPT_PREFIX + baseline_skills\n\n" +
+              "# Tier 2 (Uncached Turn Suffix — Brokered 2LO + CMEK '" + p.cmek + "'):\n" +
+              "loaded_skill_uri = '" + p.skillUri + "'\n" +
+              "sandbox_taint = ('" + p.tenantId + "', '" + p.sub + "', '" + agentId + "', 'sess-01')"
+          },
+          {
+            title: "Checkpoint 5 · Firestore KMS Checkpoints & Scoped Memory Bank",
+            subsystem: "Session & Memory",
+            status: agentAllowed ? "PASSED" : "SKIPPED",
+            desc: "Hydrates multi-turn session history AEAD-sealed under the tenant's Cloud KMS key and retrieves exact-scope semantic/episodic memories guarded by Cloud IAM memoryScope CEL.",
+            kv: [
+              ["Firestore AEAD Key", p.cmek],
+              ["Memory Matching", "Exact 4-key match (zero wildcards)"],
+              ["Consolidation Scope", "Isolated to identical scope dict"],
+              ["Cloud IAM Perimeter", "roles/aiplatform.memoryUser + CEL"]
+            ],
+            code:
+              "// Cloud IAM CEL Condition on roles/aiplatform.memoryUser\n" +
+              "api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['tenant_id'] == '" + p.tenantId + "' &&\n" +
+              "api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['agent_id'] == '" + agentId + "'\n\n" +
+              "// Server-Derived Exact Scope Dictionary:\n" +
+              JSON.stringify(
+                {
+                  tenant_id: p.tenantId,
+                  user_id: p.sub,
+                  agent_id: agentId,
+                  memory_scope: "user"
+                },
+                null,
+                2
+              )
+          },
+          {
+            title: "Checkpoint 6 · Outbound Agent Gateway, Model Routing & Datastore RLS",
+            subsystem: "Egress & Data Layer",
+            status: agentAllowed ? "PASSED" : "SKIPPED",
+            desc: "Enforces Memorystore Redis token-bucket bulkheads, Model Armor prompt/output screening, Cloud DLP PII masking, and transaction-scoped database RLS + RBAC.",
+            kv: [
+              ["Tenant Bulkhead", p.rpm + " RPM · " + p.thinkingCap + " thinking cap"],
+              ["AI Guardrails", "Model Armor + Cloud DLP masking"],
+              ["Gemini Prefix Cache", "4,096-token floor (up to 90% discount)"],
+              ["Datastore Lock", datastoreKey.toUpperCase() + " RLS + RBAC"]
+            ],
+            code: DATASTORE_SNIPPETS[datastoreKey](p, agentId)
+          }
+        ];
+      }
+
+      function renderFlow() {
+        const personaKey = document.getElementById("personaSelect").value;
+        const agentId = document.getElementById("agentSelect").value;
+        const datastoreKey = document.getElementById("datastoreSelect").value;
+        const hops = buildCheckpoints(personaKey, agentId, datastoreKey);
+        if (selectedHopIdx >= hops.length) selectedHopIdx = 0;
+
+        const allPassed = hops.every(function (h) { return h.status === "PASSED"; });
+        const badge = document.getElementById("flowOutcomeBadge");
+        badge.textContent = allPassed ? "200 OK · All 6 Checkpoints Verified" : "403 Blocked at Checkpoint 3";
+        badge.className = "badge " + (allPassed ? "badge-pass" : "badge-block");
+
+        const listNode = document.getElementById("hopList");
+        listNode.replaceChildren();
+        hops.forEach(function (hop, idx) {
+          const statusClass = hop.status === "PASSED"
+            ? "badge-pass"
+            : (hop.status.indexOf("BLOCKED") === 0 ? "badge-block" : "badge-warn");
+          const item = el(
+            "div",
+            {
+              className: "hop-item" + (idx === selectedHopIdx ? " selected" : ""),
+              onClick: function () {
+                selectedHopIdx = idx;
+                renderFlow();
+              }
+            },
+            [
+              el("div", { className: "hop-title-row" }, [
+                el("span", { textContent: hop.title }),
+                el("span", { className: "badge " + statusClass, textContent: hop.status })
+              ]),
+              el("div", { className: "hop-sub", textContent: hop.desc })
+            ]
+          );
+          listNode.appendChild(item);
+        });
+
+        const active = hops[selectedHopIdx];
+        document.getElementById("inspectorTitle").textContent = active.title;
+        document.getElementById("inspectorSubsystem").textContent = active.subsystem;
+        document.getElementById("inspectorDesc").textContent = active.desc;
+
+        const kvNode = document.getElementById("inspectorKv");
+        kvNode.replaceChildren();
+        active.kv.forEach(function (pair) {
+          kvNode.appendChild(
+            el("div", { className: "kv-box" }, [
+              el("div", { className: "kv-label", textContent: pair[0] }),
+              el("div", { className: "kv-val mono", textContent: pair[1] })
+            ])
+          );
+        });
+        document.getElementById("inspectorCode").textContent = active.code;
+      }
+
+      function renderConcurrency() {
+        const injectAttack = document.getElementById("injectAttackToggle").checked;
+        const columnsNode = document.getElementById("concurrencyColumns");
+        columnsNode.replaceChildren();
+
+        const tenants = [
+          {
+            name: "Enterprise A · FinVault Bank",
+            id: "tenant-finvault-alpha",
+            user: "priya@finvault.example.com",
+            itsm: "Jira Cloud (FINVAULT-901)",
+            cmek: "cmek-tenant-finvault-alpha",
+            turns: [
+              {
+                replica: "Replica A",
+                status: "200 OK",
+                turnIdx: 1,
+                summary: "Turn 1 (query_telemetry_rls): AlloyDB GUC app.current_tenant_id='tenant-finvault-alpha' -> returned INC-FV-1001 only."
+              },
+              {
+                replica: "Replica B",
+                status: "200 OK",
+                turnIdx: 2,
+                summary: "Turn 2 (execute_diagnostic_sandbox): Rehydrated Turn 1 from Firestore KMS AEAD on Replica B; claimed gVisor sandbox sb-fv-01."
+              },
+              injectAttack
+                ? {
+                    replica: "Replica A",
+                    status: "403 BLOCKED",
+                    turnIdx: "2 (Unchanged)",
+                    summary: "Turn 3 Probe: Attempted checkout of Meridian's ServiceNow 3LO handle -> 403 E_3LO_CROSS_TENANT_DENIED. Session turn_index stays at 2 (unpolluted)."
+                  }
+                : {
+                    replica: "Replica A",
+                    status: "200 OK",
+                    turnIdx: 3,
+                    summary: "Turn 3 (read_runbook): Loaded FinVault custom skill + KMS runbook DOC-FV-SEC-17A4."
+                  },
+              {
+                replica: "Replica B",
+                status: "200 OK",
+                turnIdx: injectAttack ? 3 : 4,
+                summary: "Turn 4 (create_jira_incident): Recalled MemoryScope.USER prior outage fact + opened DLP-redacted Jira ticket FINVAULT-901."
+              }
+            ]
+          },
+          {
+            name: "Enterprise B · Meridian Global Capital",
+            id: "tenant-meridian-prime",
+            user: "devon@meridian.example.com",
+            itsm: "ServiceNow ITOM (INC0084120)",
+            cmek: "cmek-tenant-meridian-prime",
+            turns: [
+              {
+                replica: "Replica B",
+                status: "200 OK",
+                turnIdx: 1,
+                summary: "Turn 1 (query_telemetry_rls): Barrier-synchronized on shared 4-conn RLS pool -> returned INC-MG-4401 (zero FinVault rows)."
+              },
+              {
+                replica: "Replica A",
+                status: "200 OK",
+                turnIdx: 2,
+                summary: "Turn 2 (execute_diagnostic_sandbox): Distinct session taint sb-mg-01; zero shared filesystem or env vars with FinVault."
+              },
+              injectAttack
+                ? {
+                    replica: "Replica B",
+                    status: "422 BLOCKED",
+                    turnIdx: "2 (Unchanged)",
+                    summary: "Turn 3 Probe: Caller injected body tenant_id='tenant-finvault-alpha' -> 422 E_BODY_TENANT_MISMATCH at ingress. Session state untouched."
+                  }
+                : {
+                    replica: "Replica B",
+                    status: "200 OK",
+                    turnIdx: 3,
+                    summary: "Turn 3 (read_sharepoint_runbook): Verified Meridian SharePoint 3LO grant + custom NLC policy."
+                  },
+              {
+                replica: "Replica A",
+                status: "200 OK",
+                turnIdx: injectAttack ? 3 : 4,
+                summary: "Turn 4 (create_servicenow_incident): Cross-session MemoryScope.USER recall + ServiceNow ticket INC0084120 with zero cross-tenant bleed."
+              }
+            ]
+          }
+        ];
+
+        tenants.forEach(function (t) {
+          const logNode = el("div", { className: "turn-log" }, []);
+          t.turns.forEach(function (tr) {
+            const ok = tr.status.indexOf("200") === 0;
+            logNode.appendChild(
+              el("div", { className: "turn-entry" }, [
+                el("div", { style: "display:flex; justify-content:space-between; margin-bottom:4px;" }, [
+                  el("strong", { textContent: tr.replica + " · session turn_index = " + tr.turnIdx }),
+                  el("span", { className: "badge " + (ok ? "badge-pass" : "badge-block"), textContent: tr.status })
+                ]),
+                el("div", { style: "color: var(--text-secondary);", textContent: tr.summary })
+              ])
+            );
+          });
+
+          columnsNode.appendChild(
+            el("div", { className: "card", style: "background: var(--bg-canvas);" }, [
+              el("div", { className: "card-header" }, [
+                el("div", {}, [
+                  el("h4", { textContent: t.name }),
+                  el("div", { className: "mono", style: "font-size:11px; color:var(--text-muted);", textContent: t.id + " · " + t.user })
+                ]),
+                el("span", { className: "badge badge-info", textContent: t.cmek })
+              ]),
+              logNode
+            ])
+          );
+        });
+      }
+
+      const BREACH_VECTORS = [
+        {
+          id: "B01",
+          name: "1. Spoofed X-Tenant-ID Header",
+          status: "HTTP 422 · BLOCKED",
+          hop: "Checkpoint 2 (Ingress Gateway)",
+          module: "app/api/v1/agents_and_sandboxes.py",
+          narrative: "RetailStream caller sends X-Tenant-ID: tenant-finvault-alpha or body tenant_id override. Gateway strips untrusted headers and rejects mismatched self-assertions before any runtime call.",
+          receipt: "{\n  \"status\": 422,\n  \"error\": \"E_TENANT_HEADER_SPOOF_REJECTED\",\n  \"verified_idp_tenant\": \"tenant-retailstream-beta\",\n  \"forged_claim\": \"tenant-finvault-alpha\"\n}"
+        },
+        {
+          id: "B02",
+          name: "2. Stolen Bearer Replay Without DPoP Key",
+          status: "HTTP 401 · BLOCKED",
+          hop: "Checkpoint 2 (DPoP Verifier & Replay Store)",
+          module: "app/gateway_tokens.py",
+          narrative: "Attacker replays an intercepted gateway token or reuses a single-use DPoP jti proof. SharedReplayStore (Memorystore Redis) rejects duplicate jti and thumbprint mismatches.",
+          receipt: "{\n  \"status\": 401,\n  \"error\": \"E_DPOP_PROOF_REPLAY_OR_JKT_MISMATCH\",\n  \"replay_store\": \"SharedReplayStore (Redis)\"\n}"
+        },
+        {
+          id: "B03",
+          name: "3. Cross-Tenant 3LO OAuth Token Checkout",
+          status: "HTTP 403 · BLOCKED",
+          hop: "Checkpoint 3 (Auth Manager & Broker)",
+          module: "agents/auth/vault_and_bulkhead.py",
+          narrative: "RetailStream turn attempts to check out Priya's Jira 3LO handle. Vault keys grants strictly by (tenant_id, user_sub, required_scope) and verifies caller SPIFFE identity.",
+          receipt: "{\n  \"status\": 403,\n  \"error\": \"E_3LO_TOKEN_CROSS_TENANT_MISMATCH\",\n  \"caller_partition\": \"tenant-retailstream-beta:sam\",\n  \"target_handle_owner\": \"tenant-finvault-alpha:priya\"\n}"
+        },
+        {
+          id: "B04",
+          name: "4. Coworker Private Session Key Read",
+          status: "HTTP 403 · BLOCKED",
+          hop: "Checkpoint 5 (Firestore KMS AEAD)",
+          module: "agents/memory_crypto.py",
+          narrative: "Coworker inside FinVault attempts to read Priya's active session document. AEAD Additional Authenticated Data binds (tenant_id, user_sub, scope, session_id) and refuses decryption.",
+          receipt: "{\n  \"status\": 403,\n  \"error\": \"E_MEMORY_COWORKER_SCOPE_DENIED\",\n  \"aad_expected_sub\": \"priya@finvault.example.com\",\n  \"caller_sub\": \"alex@finvault.example.com\"\n}"
+        },
+        {
+          id: "B05",
+          name: "5. Prompt-Injected SQL UNION Bypass",
+          status: "HTTP 403 / 0 ROWS · BLOCKED",
+          hop: "Checkpoint 6 (AlloyDB FORCE RLS)",
+          module: "mcp_server/schema.sql",
+          narrative: "Injected tool argument attempts cross-tenant SELECT. Connection runs as cymbal_mcp_app (NOSUPERUSER NOBYPASSRLS) with transaction-local GUCs locking rows to caller tenant.",
+          receipt: "{\n  \"status\": 403,\n  \"db_role\": \"cymbal_mcp_app (NOBYPASSRLS)\",\n  \"guc\": \"app.current_tenant_id = 'tenant-retailstream-beta'\",\n  \"cross_tenant_rows_returned\": 0\n}"
+        },
+        {
+          id: "B06",
+          name: "6. Memory Bank Wildcard / Subset Scope Probe",
+          status: "HTTP 403 · BLOCKED",
+          hop: "Checkpoint 5 (Memory Bank IAM CEL)",
+          module: "agents/memory_bank_iam_and_residency.py",
+          narrative: "Buggy or injected call queries Memory Bank with subset scope {'tenant_id': 'tenant-finvault-alpha'} or foreign tenant_id. Exact-match scope store + Cloud IAM CEL deny access.",
+          receipt: "{\n  \"status\": 403,\n  \"error\": \"PERMISSION_DENIED (IAM memoryScope CEL)\",\n  \"cel_guard\": \"memoryScope['tenant_id'] && memoryScope['agent_id']\"\n}"
+        },
+        {
+          id: "B07",
+          name: "7. Cross-Tenant Custom Skill URI Traversal",
+          status: "HTTP 403 · BLOCKED",
+          hop: "Checkpoint 4 (Two-Tier Skill Loader)",
+          module: "agents/skill_loader.py",
+          narrative: "Manifest or prompt attempts to load gs://cymbal-skills-prod/finvault/occ_regulatory_escalation_skill.md from RetailStream or pass ../ traversal.",
+          receipt: "{\n  \"status\": 403,\n  \"error\": \"E_CUSTOM_SKILL_CROSS_TENANT_URI\",\n  \"caller_tenant\": \"tenant-retailstream-beta\"\n}"
+        },
+        {
+          id: "B08",
+          name: "8. Sandbox Metadata & Env Credential Scrape",
+          status: "HTTP 422 · BLOCKED",
+          hop: "Checkpoint 4 (gVisor Agent Sandbox)",
+          module: "agents/sandbox/screener.py",
+          narrative: "Diagnostic script attempts to reach cloud metadata server or read service-account env vars. AST/bash screener rejects payload, and gVisor container mounts zero credentials with zero network egress.",
+          receipt: "{\n  \"status\": 422,\n  \"error\": \"E_SANDBOX_FORBIDDEN_METADATA_OR_ENV_ACCESS\",\n  \"kernel\": \"4.19.0-gvisor (uid=999, egress=[])\"\n}"
+        },
+        {
+          id: "B09",
+          name: "9. Standard-Tier Private Agent Escalation",
+          status: "HTTP 403 · BLOCKED",
+          hop: "Checkpoint 3 (Agent Registry PDP)",
+          module: "agents/registry.py",
+          narrative: "Standard-tier RetailStream caller invokes FinVault's private Regulatory Compliance Agent. AgentRegistryPDP + Cloud Run Agent Identity block cross-tenant catalog access.",
+          receipt: "{\n  \"status\": 403,\n  \"error\": \"E_PRIVATE_AGENT_TENANT_MISMATCH\",\n  \"owner_tenant\": \"tenant-finvault-alpha\"\n}"
+        },
+        {
+          id: "B10",
+          name: "10. RetailStream Flash-Sale Noisy-Neighbor Flood",
+          status: "HTTP 429 · ISOLATED",
+          hop: "Checkpoint 6 (Memorystore Redis Lua Bulkhead)",
+          module: "agents/auth/vault_and_bulkhead.py",
+          narrative: "RetailStream spikes above its 30 RPM Standard-tier token bucket. Redis atomic Lua bulkhead throttles RetailStream with HTTP 429 while FinVault's 120 RPM Enterprise bucket stays 100% unaffected.",
+          receipt: "{\n  \"status\": 429,\n  \"error\": \"E_TENANT_RATE_LIMIT_EXCEEDED\",\n  \"throttled_tenant\": \"tenant-retailstream-beta (30 RPM)\",\n  \"finvault_sla_impact\": \"0% (isolated bucket)\"\n}"
+        }
+      ];
+
+      let activeBreachIdx = 0;
+
+      function renderBreaches() {
+        const grid = document.getElementById("breachGrid");
+        grid.replaceChildren();
+        BREACH_VECTORS.forEach(function (b, idx) {
+          grid.appendChild(
+            el(
+              "button",
+              {
+                type: "button",
+                className: "breach-card" + (idx === activeBreachIdx ? " active" : ""),
+                onClick: function () {
+                  activeBreachIdx = idx;
+                  renderBreaches();
+                }
+              },
+              [
+                el("div", { style: "display:flex; justify-content:space-between; gap:6px; align-items:center;" }, [
+                  el("strong", { style: "font-size:12px;", textContent: b.name }),
+                  el("span", { className: "badge badge-pass", textContent: "PASS" })
+                ]),
+                el("div", { style: "font-size:11px; color:var(--text-muted); margin-top:4px;", textContent: b.hop })
+              ]
+            )
+          );
+        });
+
+        const cur = BREACH_VECTORS[activeBreachIdx];
+        document.getElementById("breachDetailTitle").textContent = cur.name;
+        document.getElementById("breachStatusBadge").textContent = cur.status;
+        document.getElementById("breachDetailNarrative").textContent = cur.narrative;
+
+        const kv = document.getElementById("breachKv");
+        kv.replaceChildren(
+          el("div", { className: "kv-box" }, [
+            el("div", { className: "kv-label", textContent: "Enforcing Boundary" }),
+            el("div", { className: "kv-val", textContent: cur.hop })
+          ]),
+          el("div", { className: "kv-box" }, [
+            el("div", { className: "kv-label", textContent: "Reference Module" }),
+            el("div", { className: "kv-val mono", textContent: cur.module })
+          ])
+        );
+        document.getElementById("breachReceiptCode").textContent = cur.receipt;
+      }
+
+      function renderFinops() {
+        const tenants = Number(document.getElementById("tenantCountSlider").value);
+        const burstPct = Number(document.getElementById("burstRatioSlider").value);
+        const cacheHitPct = Number(document.getElementById("cacheHitSlider").value);
+
+        document.getElementById("tenantCountVal").textContent = String(tenants);
+        document.getElementById("burstRatioVal").textContent = burstPct + "%";
+        document.getElementById("cacheHitVal").textContent = cacheHitPct + "%";
+
+        const siloWarmStacks = tenants;
+        const activeTenants = Math.max(1, Math.ceil((tenants * burstPct) / 100));
+        const pooledOrchestratorReplicas = Math.max(2, Math.ceil(activeTenants / 8));
+        const consolidationRatio = (siloWarmStacks / pooledOrchestratorReplicas).toFixed(1);
+
+        const uncachedPrefixTokens = 4400;
+        const dynamicSuffixTokens = 900;
+        const effectivePrefixTokens = Math.round(
+          uncachedPrefixTokens * ((100 - cacheHitPct * 0.9) / 100)
+        );
+        const effectiveTotalTokens = effectivePrefixTokens + dynamicSuffixTokens;
+        const baselineTotalTokens = uncachedPrefixTokens + dynamicSuffixTokens;
+        const tokenReductionPct = Math.round(
+          ((baselineTotalTokens - effectiveTotalTokens) / baselineTotalTokens) * 100
+        );
+
+        const metrics = document.getElementById("finopsMetrics");
+        metrics.replaceChildren(
+          el("div", { className: "kv-box" }, [
+            el("div", { className: "kv-label", textContent: "Siloed Warm Stacks (Pattern B)" }),
+            el("div", { className: "kv-val mono", textContent: siloWarmStacks + " dedicated stacks" })
+          ]),
+          el("div", { className: "kv-box" }, [
+            el("div", { className: "kv-label", textContent: "Pooled Brain Replicas (Pattern A)" }),
+            el("div", { className: "kv-val mono", textContent: pooledOrchestratorReplicas + " shared replicas (" + consolidationRatio + "x density)" })
+          ]),
+          el("div", { className: "kv-box" }, [
+            el("div", { className: "kv-label", textContent: "Effective Billable Input Tokens" }),
+            el("div", { className: "kv-val mono", textContent: effectiveTotalTokens + " vs " + baselineTotalTokens + " raw" })
+          ]),
+          el("div", { className: "kv-box" }, [
+            el("div", { className: "kv-label", textContent: "Modeled Input Token Reduction" }),
+            el("div", { className: "kv-val mono", textContent: tokenReductionPct + "% saved (Modeled)" })
+          ])
+        );
+
+        const mount = document.getElementById("finopsChartMount");
+        mount.replaceChildren();
+        const maxStacks = Math.max(siloWarmStacks, pooledOrchestratorReplicas, 1);
+        const siloWidth = Math.max(16, Math.round((siloWarmStacks / maxStacks) * 420));
+        const poolWidth = Math.max(16, Math.round((pooledOrchestratorReplicas / maxStacks) * 420));
+        const rawTokWidth = 420;
+        const cachedTokWidth = Math.max(24, Math.round((effectiveTotalTokens / baselineTotalTokens) * 420));
+
+        const svg = svgEl("svg", { viewBox: "0 0 560 195", width: "100%", height: "195" }, [
+          svgEl("text", { x: "10", y: "24", fill: "#94a3b8", "font-size": "12", "font-weight": "600" }, [
+            document.createTextNode("Always-On Orchestrator Stacks (Siloed vs. Governed Pool)")
+          ]),
+          svgEl("rect", { x: "110", y: "36", width: String(siloWidth), height: "22", rx: "5", fill: "#f87171" }, []),
+          svgEl("text", { x: "10", y: "51", fill: "#cbd5e1", "font-size": "12" }, [document.createTextNode("Siloed (" + siloWarmStacks + ")")]),
+          svgEl("rect", { x: "110", y: "66", width: String(poolWidth), height: "22", rx: "5", fill: "#34d399" }, []),
+          svgEl("text", { x: "10", y: "81", fill: "#cbd5e1", "font-size": "12" }, [document.createTextNode("Pooled (" + pooledOrchestratorReplicas + ")")]),
+
+          svgEl("text", { x: "10", y: "120", fill: "#94a3b8", "font-size": "12", "font-weight": "600" }, [
+            document.createTextNode("Per-Turn Billable Input Token Weight (Uncached vs. Shared Prefix Cache)")
+          ]),
+          svgEl("rect", { x: "110", y: "132", width: String(rawTokWidth), height: "22", rx: "5", fill: "#64748b" }, []),
+          svgEl("text", { x: "10", y: "147", fill: "#cbd5e1", "font-size": "12" }, [document.createTextNode("Uncached")]),
+          svgEl("rect", { x: "110", y: "162", width: String(cachedTokWidth), height: "22", rx: "5", fill: "#38bdf8" }, []),
+          svgEl("text", { x: "10", y: "177", fill: "#cbd5e1", "font-size": "12" }, [document.createTextNode("Cached (" + cacheHitPct + "%)")])
+        ]);
+        mount.appendChild(svg);
+
+        document.getElementById("finopsSummaryCode").textContent =
+          "# Modeled Capacity & Prefix-Cache Summary (Synthetic Calculation)\n" +
+          "tenants = " + tenants + " | concurrent_active = " + activeTenants + " (" + burstPct + "%)\n" +
+          "siloed_stacks = " + siloWarmStacks + " -> pooled_stateless_replicas = " + pooledOrchestratorReplicas + " (" + consolidationRatio + "x consolidation)\n" +
+          "shared_static_prefix = 4,400 tokens (>= 4,096-token Gemini minimum floor, zero tenant data)\n" +
+          "dynamic_tenant_suffix = 900 tokens (custom KMS skills + exact-scope Memory Bank facts)\n" +
+          "modeled_input_token_savings = " + tokenReductionPct + "%";
+      }
+
+      // Wire navigation tabs
+      document.querySelectorAll(".tab-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
+          btn.classList.add("active");
+          const target = btn.getAttribute("data-tab");
+          ["flow", "concurrency", "breach", "finops"].forEach(function (id) {
+            const sec = document.getElementById("view-" + id);
+            if (id === target) sec.classList.remove("hidden");
+            else sec.classList.add("hidden");
+          });
+        });
+      });
+
+      document.getElementById("themeToggle").addEventListener("click", function () {
+        const root = document.documentElement;
+        const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        document.getElementById("themeToggle").textContent = next === "dark" ? "Light Mode" : "Dark Mode";
+      });
+
+      ["personaSelect", "agentSelect", "datastoreSelect"].forEach(function (id) {
+        document.getElementById(id).addEventListener("change", renderFlow);
+      });
+
+      document.getElementById("stepFlowBtn").addEventListener("click", function () {
+        selectedHopIdx = (selectedHopIdx + 1) % 6;
+        renderFlow();
+      });
+
+      document.getElementById("injectAttackToggle").addEventListener("change", renderConcurrency);
+      document.getElementById("runConcurrencyBtn").addEventListener("click", renderConcurrency);
+
+      document.getElementById("runAllBreachesBtn").addEventListener("click", function () {
+        activeBreachIdx = (activeBreachIdx + 1) % BREACH_VECTORS.length;
+        renderBreaches();
+      });
+
+      ["tenantCountSlider", "burstRatioSlider", "cacheHitSlider"].forEach(function (id) {
+        document.getElementById(id).addEventListener("input", renderFinops);
+      });
+
+      renderFlow();
+      renderConcurrency();
+      renderBreaches();
+      renderFinops();
+    })();
+  </script>
+</body>
+</html>

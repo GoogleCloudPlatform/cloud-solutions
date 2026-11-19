@@ -336,6 +336,7 @@ PUBLIC_ROUTES = {
     "/",
     "/demos",
     "/tuesday",
+    "/visualizer",
     "/assets/cymbal_3b1b_walkthrough.mp4",
     "/diagrams/{diagram_name}.svg",
     "/api/v1/sandbox/token",  # 404 unless the dev issuer is allowed
