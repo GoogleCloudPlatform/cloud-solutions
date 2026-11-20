@@ -39,6 +39,15 @@ if not TDD_0013_PATH.is_file():
     )
 
 
+def _tdd_text() -> str:
+    """The companion technical design doc. It is an internal working document that public exports
+    of this repository omit; the tests that need it are skipped there.
+    """
+    if not TDD_0013_PATH.is_file():
+        pytest.skip("Companion TDD is not part of this distribution.")
+    return TDD_0013_PATH.read_text(encoding="utf-8")
+
+
 @pytest.mark.parametrize(
     "failure_mode", [f"FM-{idx:02d}" for idx in range(1, 13)]
 )
@@ -47,7 +56,7 @@ def test_adr_0013_and_tdd_cover_all_twelve_failure_modes(
 ) -> None:
     """Both ADR-0013 and the TDD must document FM-01 through FM-12."""
     adr_text = ADR_0013_PATH.read_text(encoding="utf-8")
-    tdd_text = TDD_0013_PATH.read_text(encoding="utf-8")
+    tdd_text = _tdd_text()
 
     assert failure_mode in adr_text
     assert failure_mode in tdd_text
@@ -64,7 +73,7 @@ def test_adr_0013_and_tdd_map_pr_da1_to_pr26_and_pr25_with_exact_symbols() -> (
 ):
     """PR-DA1 must point to #26 and #25 with exact symbol and test references."""
     adr_text = ADR_0013_PATH.read_text(encoding="utf-8")
-    tdd_text = TDD_0013_PATH.read_text(encoding="utf-8")
+    tdd_text = _tdd_text()
 
     assert "`PR-DA1` (`#26` + `#25`)" in adr_text
     assert "`PR-DA1` (`#26` + `#25`)" in tdd_text
@@ -84,9 +93,7 @@ def test_adr_0013_and_tdd_map_pr_da1_to_pr26_and_pr25_with_exact_symbols() -> (
 def test_adr_0013_and_tdd_omit_meta_prompt_jargon() -> None:
     """ADR-0013 and the TDD must not include internal meta-prompt terms."""
     combined_text = (
-        ADR_0013_PATH.read_text(encoding="utf-8")
-        + "\n"
-        + TDD_0013_PATH.read_text(encoding="utf-8")
+        ADR_0013_PATH.read_text(encoding="utf-8") + "\n" + _tdd_text()
     ).lower()
 
     for forbidden_term in (

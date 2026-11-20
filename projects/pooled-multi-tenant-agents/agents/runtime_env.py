@@ -188,7 +188,7 @@ RUNTIME_ENV_CONTRACT: dict[str, str] = {
         "Pinned Secret Manager version holding JSON {url, ca_pem} for AUTH+TLS Memorystore "
         "Redis (preferred over plaintext REDIS_URL)"
     ),
-    # Agent Sandbox in Gemini (ADR-0012 / PR-S2; live mode requires AGENT_SANDBOX_REASONING_ENGINE_NAME)
+    # Agent Sandbox in Gemini (ADR-0012; live mode requires AGENT_SANDBOX_REASONING_ENGINE_NAME)
     "AGENT_SANDBOX_REASONING_ENGINE_NAME": (
         "agent runtime in Gemini parent resource name for live sandboxEnvironments; unset fails "
         "closed in live mode"

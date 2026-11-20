@@ -57,14 +57,14 @@ deliberate: the tenant's CMEK key has `prevent_destroy`, because destroying a
 KMS key makes its data unrecoverable (and KMS never deletes key rings anyway).
 Offboard in this order:
 
-1.  Stop traffic first: offboard the tenant in the gateway and the broker
-    (config change and redeploy; see README gap 15), so no new tokens are minted
-    for its `ct-*` account.
+1.  Stop traffic first: offboard the tenant in the gateway and the broker (config
+   change and redeploy; see README gap 15), so no new tokens are minted for its
+   `ct-*` account.
 1.  Retire the key outside Terraform: disable or schedule destruction of its key
-    versions with `gcloud kms keys versions disable|destroy`, once the retention
-    policy allows it.
+   versions with `gcloud kms keys versions disable|destroy`, once the retention
+   policy allows it.
 1.  Release the key from state without destroying it: add a `removed` block
-    (Terraform >= 1.7) and keep it until every state has been applied:
+   (Terraform >= 1.7) and keep it until every state has been applied:
 
     ```hcl
     removed {
@@ -79,11 +79,11 @@ Offboard in this order:
     `terraform state rm 'module.tenant["tenant-x"].google_kms_crypto_key.tenant_cmek'`).
 
 1.  Remove `config/tenants/<env>/tenant-x.yaml` and plan. Expect destroys only
-    under `module.tenant["tenant-x"]`: the service account and its IAM, the
-    secrets and their accessors, the managed folder, the skills bucket and its
-    IAM, and the row access policy. With `deletion_protection = true` the skills
-    bucket is not force-destroyed, so empty it first (or export and delete its
-    objects under your retention policy). Review the plan, then apply.
+   under `module.tenant["tenant-x"]`: the service account and its IAM, the
+   secrets and their accessors, the managed folder, the skills bucket and its
+   IAM, and the row access policy. With `deletion_protection = true` the skills
+   bucket is not force-destroyed, so empty it first (or export and delete its
+   objects under your retention policy). Review the plan, then apply.
 
 ## Identity, memory and serving settings (Oct 2026)
 
@@ -120,10 +120,10 @@ Offboard in this order:
 
 ## Remote state
 
-State is stored in GCS (`backend.tf`). The defaults point at the sandbox: bucket
-`cymbal-multitenancy-example-tfstate`, prefix `sandbox`. Other environments pass
-their own values at init time (`scripts/deploy.sh` does this, with
-`<project>-tfstate` and the environment name):
+State is stored in GCS (`backend.tf`). No bucket is set by default, because
+bucket names are global: `terraform init` fails until you pass your own bucket
+and prefix at init time (`scripts/deploy.sh` does this, with `<project>-tfstate`
+and the environment name):
 
 ```bash
 terraform -chdir=terraform init -reconfigure \

@@ -432,8 +432,7 @@ async def test_live_adk_vertex_ai_gemini_multi_turn_reasoning(
 @pytest.mark.skipif(
     os.getenv("RUN_LIVE_GCP_TESTS") != "1"
     or not os.getenv("AGENT_SANDBOX_REASONING_ENGINE_NAME"),
-    reason="Set RUN_LIVE_GCP_TESTS=1 and AGENT_SANDBOX_REASONING_ENGINE_NAME to run live agent sandboxes "
-    "tests.",
+    reason="Set RUN_LIVE_GCP_TESTS=1 and AGENT_SANDBOX_REASONING_ENGINE_NAME to run these tests.",
 )
 async def test_live_gemini_agent_sandbox_python_bash_pause_resume_and_adk_tool(
     finvault_envelope: ContextEnvelope,
@@ -546,7 +545,7 @@ async def test_live_gemini_agent_sandbox_python_bash_pause_resume_and_adk_tool(
         adk_res = await runner.run_tenant_diagnostic_turn(
             envelope=finvault_envelope,
             user_prompt=(
-                "First fetch scoped P1 incidents, then call `execute_live_gemini_diagnostic_sandbox` "
+                "Fetch scoped P1 incidents, then call `execute_live_gemini_diagnostic_sandbox` "
                 "with python code `print(sum([10, 20, 30]))` to compute the sum."
             ),
         )

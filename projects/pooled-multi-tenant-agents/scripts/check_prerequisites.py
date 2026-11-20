@@ -44,7 +44,20 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
+from agents import platform_config
 from agents.gcp_live_bridge import _DotEnvHelper
+
+
+def _configured_project_id() -> str:
+    """`gcp.project_id` of the active platform config (`CYMBAL_ENV`, default `sandbox`).
+
+    Falls back to the unset placeholder (which fails the check) if the config cannot be loaded, so
+    the report never names a project that the selected environment does not use.
+    """
+    try:
+        return str(platform_config.get_platform_config().gcp.project_id or "")
+    except (OSError, RuntimeError, ValueError, KeyError, AttributeError):
+        return "your-gcp-project-id"
 
 
 def check_prerequisites(mode: str = "google-only") -> dict[str, object]:
@@ -73,9 +86,7 @@ def check_prerequisites(mode: str = "google-only") -> dict[str, object]:
     )
 
     # 2. Phase 1: Single Required Variable (`GOOGLE_CLOUD_PROJECT`)
-    project_id = env_map.get(
-        "GOOGLE_CLOUD_PROJECT", "cymbal-multitenancy-example"
-    )
+    project_id = env_map.get("GOOGLE_CLOUD_PROJECT") or _configured_project_id()
     checks.append(
         {
             "check": "Phase 1 Variable: GOOGLE_CLOUD_PROJECT (project_id)",

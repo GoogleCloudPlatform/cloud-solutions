@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# pylint: disable=line-too-long
-
-"""Backward-compatible facade re-exporting `render_tuesday_walkthrough_html` from `app.ui`."""
+"""Compatibility facade re-exporting `render_walkthrough_html`."""
 
 from __future__ import annotations
 
-from app.ui.walkthrough_page import render_tuesday_walkthrough_html
+from app.ui.walkthrough_page import render_walkthrough_html
 
-__all__ = ["render_tuesday_walkthrough_html"]
+__all__ = ["render_walkthrough_html"]

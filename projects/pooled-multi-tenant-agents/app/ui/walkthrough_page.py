@@ -14,13 +14,14 @@
 
 # pylint: disable=line-too-long
 
-r"""Serves the Interactive Demos, Architecture & 3Blue1Brown Video Walkthrough Page (`/demos`, `/tuesday`).
+r"""Serves the Interactive Demos, Architecture & Video Walkthrough Page (`/demos`).
 
-Provides a unified presentation surface for architectural walkthroughs:
-1. **3Blue1Brown-Style Video & Interactive Math Studio**:
-   - Streams the rendered 1080p H.264 MP4 (`/assets/cymbal_3b1b_walkthrough.mp4`) with 6 chapter
-     markers, playback speed controls, and synchronized presenter teleprompter notes.
-   - Includes a live 60fps HTML5 Canvas 3B1B interactive math explorer where presenters can scrub
+Provides a single unified presentation surface for the team walkthrough:
+1. **Animated Video & Interactive Math Studio**:
+   - Streams the rendered 1080p H.264 MP4 (`/assets/cymbal_architecture_walkthrough.mp4`) with 6
+     chapter markers, playback speed controls, and synchronized presenter teleprompter notes. The
+     MP4 is optional: when the file is absent the page opens in the interactive canvas instead.
+   - Includes a live 60fps HTML5 Canvas interactive math explorer where presenters can scrub
      tenant count $N$, rolling key-ring stage, RAG query vector angle $\theta$, and Horvitz-Thompson
      sampling rate $\pi_{\text{clean}}$ in real time.
 2. **Interactive 5-Hop Architecture & Hardening Deep-Dive (`PR #25-#35`)**:
@@ -37,20 +38,76 @@ Provides a unified presentation surface for architectural walkthroughs:
 
 from __future__ import annotations
 
+from pathlib import Path
 
-def render_tuesday_walkthrough_html() -> str:
-    """Returns the complete HTML document for `/demos` and `/tuesday`.
+from app.ui.workbench_page import modularity_diagram_available
+
+WALKTHROUGH_VIDEO_FILENAME = "cymbal_architecture_walkthrough.mp4"
+WALKTHROUGH_VIDEO_PATH = (
+    Path(__file__).resolve().parents[2]
+    / "docs"
+    / "assets"
+    / WALKTHROUGH_VIDEO_FILENAME
+)
+_VIDEO_URL = f"/assets/{WALKTHROUGH_VIDEO_FILENAME}"
+_VIDEO_SOURCE_TAG = f'<source src="{_VIDEO_URL}" type="video/mp4"/>'
+_VIDEO_DOWNLOAD_LINK = f'<a href="{_VIDEO_URL}" download="{WALKTHROUGH_VIDEO_FILENAME}" class="btn">⬇ Download MP4</a>'
+
+
+_MODULARITY_LINK = (
+    '          <a href="/diagrams/ws2_phase1_vs_phase2_modularity.svg" target="_blank" class="btn">'
+    "↗ Open Pool / Silo / Hybrid Modularity SVG</a>"
+)
+
+
+def walkthrough_video_available() -> bool:
+    """Whether the optional rendered MP4 ships with this checkout."""
+    return WALKTHROUGH_VIDEO_PATH.is_file()
+
+
+def render_walkthrough_html(
+    *,
+    video_available: bool | None = None,
+    modularity_diagram: bool | None = None,
+) -> str:
+    """Returns the complete HTML document for `/demos`.
+
+    Args:
+        video_available: Whether to embed the rendered MP4. Defaults to whether the file exists.
+            Without it the page references no video asset and opens in the interactive canvas.
+        modularity_diagram: Whether to link the optional phase-comparison diagram. Defaults to
+            whether the file exists.
 
     Returns:
-        Self-contained HTML5 page string with embedded 3B1B video player, interactive 3B1B math
+        Self-contained HTML5 page string with the video player (when available), interactive math
         canvas, 5-Hop architecture explorer, and live 5-Act API runner.
     """
-    return """<!DOCTYPE html>
+    if video_available is None:
+        video_available = walkthrough_video_available()
+    if modularity_diagram is None:
+        modularity_diagram = modularity_diagram_available()
+    return (
+        _PAGE_TEMPLATE.replace(
+            "__VIDEO_SOURCE__", _VIDEO_SOURCE_TAG if video_available else ""
+        )
+        .replace(
+            "__VIDEO_DOWNLOAD__",
+            _VIDEO_DOWNLOAD_LINK if video_available else "",
+        )
+        .replace("__VIDEO_AVAILABLE__", "true" if video_available else "false")
+        .replace(
+            "__MODULARITY_LINK__",
+            _MODULARITY_LINK if modularity_diagram else "",
+        )
+    )
+
+
+_PAGE_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Cymbal SaaS — Interactive Demos, Architecture &amp; 3B1B Walkthrough</title>
+  <title>Cymbal SaaS — Demos, Architecture & Video Walkthrough</title>
   <style>
     :root {
       --bg: #0B0F19;
@@ -290,7 +347,7 @@ def render_tuesday_walkthrough_html() -> str:
       margin: 4px 0 0;
     }
 
-    /* 3B1B Studio Grid */
+    /* Studio Grid */
     .studio-grid {
       display: grid;
       grid-template-columns: 1.65fr 1fr;
@@ -308,7 +365,7 @@ def render_tuesday_walkthrough_html() -> str:
       overflow: hidden;
       position: relative;
     }
-    video, #interactive-3b1b-canvas {
+    video, #interactive-math-canvas {
       width: 100%;
       aspect-ratio: 16 / 9;
       display: block;
@@ -601,17 +658,18 @@ def render_tuesday_walkthrough_html() -> str:
       <div class="brand-badge">3B</div>
       <div>
         <div>Cymbal Pooled Multi-Tenancy</div>
-        <div style="font-size:11.5px; color:var(--muted); font-weight:500;">Tuesday Team Walkthrough • Architecture, 3B1B Video &amp; Live 5-Act Demos</div>
+        <div style="font-size:11.5px; color:var(--muted); font-weight:500;">Team Walkthrough • Architecture, Video &amp; Live 5-Act Demos</div>
       </div>
     </div>
     <nav class="nav-pills">
-      <a href="#section-video" class="nav-pill active">1. 3B1B Video &amp; Math Studio</a>
+      <a href="#section-video" class="nav-pill active">1. Video &amp; Math Studio</a>
       <a href="#section-arch" class="nav-pill">2. 5-Hop Architecture &amp; PR #25-#35</a>
       <a href="#section-demos" class="nav-pill">3. Live 5-Act Demo Runner</a>
       <a href="#section-qa" class="nav-pill">4. Executive Q&amp;A Playbook</a>
     </nav>
     <div class="nav-right">
       <a href="/" class="btn">← Main Control Plane</a>
+      <a href="/visualizer" class="btn btn-gold">✦ Architecture Visualizer</a>
       <button class="btn btn-green" onclick="runAllFiveActs()">▶ Run All 5 Acts Live</button>
     </div>
   </header>
@@ -658,27 +716,27 @@ def render_tuesday_walkthrough_html() -> str:
       </div>
     </section>
 
-    <!-- SECTION 1: 3Blue1Brown Video & Interactive Math Studio -->
+    <!-- SECTION 1: Animated Video & Interactive Math Studio -->
     <section id="section-video" class="section-panel">
       <div class="section-header">
         <div>
-          <h2 class="section-title serif">🎬 1. 3Blue1Brown Architecture &amp; Mathematical Walkthrough (90s, 1080p)</h2>
+          <h2 class="section-title serif">🎬 1. Animated Architecture &amp; Mathematical Walkthrough</h2>
           <p class="section-sub">Click any chapter below to jump directly to that mathematical derivation and sync the Presenter Teleprompter on the right, or switch to the Interactive 60fps Canvas Explorer.</p>
         </div>
         <div style="display:flex; gap:8px;">
           <button id="mode-btn-video" class="btn active" onclick="setStudioMode('video')">🎬 Rendered 1080p MP4</button>
           <button id="mode-btn-canvas" class="btn btn-gold" onclick="setStudioMode('canvas')">📐 Interactive 60fps Math Canvas</button>
-          <a href="/assets/cymbal_3b1b_walkthrough.mp4" download="cymbal_3b1b_walkthrough.mp4" class="btn">⬇ Download MP4</a>
+          __VIDEO_DOWNLOAD__
         </div>
       </div>
 
       <div class="studio-grid">
         <div class="video-frame">
           <video id="walkthrough-video" controls preload="metadata" poster="/diagrams/ws2_pooled_5hop_architecture.svg">
-            <source src="/assets/cymbal_3b1b_walkthrough.mp4" type="video/mp4"/>
+            __VIDEO_SOURCE__
             Your browser does not support HTML5 MP4 video.
           </video>
-          <canvas id="interactive-3b1b-canvas" width="1280" height="720" style="display:none;"></canvas>
+          <canvas id="interactive-math-canvas" width="1280" height="720" style="display:none;"></canvas>
 
           <!-- Interactive Canvas Sliders (shown when Interactive Canvas mode is active) -->
           <div id="canvas-sliders" class="slider-controls">
@@ -727,7 +785,7 @@ def render_tuesday_walkthrough_html() -> str:
 
         <!-- Synchronized Presenter Teleprompter -->
         <aside class="teleprompter">
-          <div class="tp-badge">🎙️ Tuesday Presenter Teleprompter • <span id="tp-chapter-tag">Chapter 1 / 6 (00:00 - 00:15)</span></div>
+          <div class="tp-badge">🎙️ Presenter Teleprompter • <span id="tp-chapter-tag">Chapter 1 / 6 (00:00 - 00:15)</span></div>
           <h3 id="tp-title" class="tp-title serif">The Multi-Tenant Cost &amp; Isolation Paradox</h3>
           <div id="tp-math" class="tp-math mono">
             Footprint_silo(250) = 250 × Dedicated Stacks (O(N))<br/>
@@ -758,7 +816,7 @@ def render_tuesday_walkthrough_html() -> str:
         </div>
         <div style="display:flex; gap:8px;">
           <a href="/diagrams/ws2_pooled_5hop_architecture.svg" target="_blank" class="btn">↗ Open 5-Hop Vector SVG</a>
-          <a href="/diagrams/ws2_phase1_vs_phase2_modularity.svg" target="_blank" class="btn">↗ Open WS2/WS3/WS4 Modularity SVG</a>
+__MODULARITY_LINK__
         </div>
       </div>
 
@@ -825,7 +883,7 @@ def render_tuesday_walkthrough_html() -> str:
       <div class="section-header">
         <div>
           <h2 class="section-title serif">⚡ 3. Live 5-Act Interactive Demo Console (Zero Mocks • Real FastAPI Execution)</h2>
-          <p class="section-sub">Execute each Act individually or click "Run All 5 Acts Live" to run the complete Tuesday walkthrough against the live backend server.</p>
+          <p class="section-sub">Execute each Act individually or click "Run All 5 Acts Live" to run the complete walkthrough against the live backend server.</p>
         </div>
         <div style="display:flex; gap:8px;">
           <button class="btn btn-green" onclick="runAllFiveActs()">▶ Run All 5 Acts Live</button>
@@ -887,7 +945,7 @@ def render_tuesday_walkthrough_html() -> str:
     <section id="section-qa" class="section-panel">
       <div class="section-header">
         <div>
-          <h2 class="section-title serif">🛡️ 4. Tuesday Architecture &amp; Security Q&amp;A Defense Playbook</h2>
+          <h2 class="section-title serif">🛡️ 4. Architecture &amp; Security Q&amp;A Defense Playbook</h2>
           <p class="section-sub">Concise, source-grounded answers for the 6 toughest technical review questions.</p>
         </div>
       </div>
@@ -995,7 +1053,7 @@ def render_tuesday_walkthrough_html() -> str:
     let animFrameId = null;
 
     const videoEl = document.getElementById("walkthrough-video");
-    const canvasEl = document.getElementById("interactive-3b1b-canvas");
+    const canvasEl = document.getElementById("interactive-math-canvas");
     const slidersEl = document.getElementById("canvas-sliders");
 
     videoEl.addEventListener("timeupdate", () => {
@@ -1081,7 +1139,7 @@ def render_tuesday_walkthrough_html() -> str:
         const qAngleDeg = parseInt(document.getElementById("rng-angle").value, 10);
         const samplePct = parseFloat(document.getElementById("rng-sample").value);
 
-        // Background + 3B1B NumberPlane grid
+        // Background + number-plane grid
         ctx.fillStyle = "#0B0F19";
         ctx.fillRect(0, 0, w, h);
         ctx.strokeStyle = "rgba(88, 196, 221, 0.10)";
@@ -1100,7 +1158,7 @@ def render_tuesday_walkthrough_html() -> str:
         ctx.strokeRect(28, 20, w - 56, 62);
         ctx.fillStyle = "#58C4DD";
         ctx.font = "bold 20px Georgia, serif";
-        ctx.fillText("Interactive 3Blue1Brown Mathematical Sandbox — Live Parameter Explorer", 48, 57);
+        ctx.fillText("Interactive Mathematical Sandbox — Live Parameter Explorer", 48, 57);
 
         // Left Panel: Unit Economics & Horvitz-Thompson Savings
         const siloCost = nTenants * 780;
@@ -1326,6 +1384,13 @@ def render_tuesday_walkthrough_html() -> str:
       } catch (err) {
         logToConsole(`ERROR in Act ${actNum}: ${err}`);
       }
+    }
+
+    // The rendered MP4 is optional (it is not part of every distribution of this repository).
+    const VIDEO_AVAILABLE = __VIDEO_AVAILABLE__;
+    if (!VIDEO_AVAILABLE) {
+      document.getElementById("mode-btn-video").style.display = "none";
+      setStudioMode("canvas");
     }
 
     async function runAllFiveActs() {

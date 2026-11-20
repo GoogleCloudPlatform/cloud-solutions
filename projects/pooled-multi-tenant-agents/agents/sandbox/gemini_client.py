@@ -459,7 +459,7 @@ class LiveGeminiAgentSandboxClient:
             `SandboxBackendCreateResult` naming the created `sandboxEnvironments/{id}` resource.
 
         Raises:
-            SandboxUnavailableError: When `AGENT_SANDBOX_REASONING_ENGINE_NAME` is unset or API fails.
+            SandboxUnavailableError: `AGENT_SANDBOX_REASONING_ENGINE_NAME` unset, or the API failed.
         """
         if not self._use_live_api():
             return self._hermetic_fallback.create_sandbox(

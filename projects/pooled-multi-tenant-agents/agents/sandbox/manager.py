@@ -92,7 +92,7 @@ class GeminiAgentSandboxManager:
         """Initializes the session-tainted Agent Sandbox in Gemini manager.
 
         Args:
-            backend: Synchronous `SandboxBackendClient` (`LiveGeminiAgentSandboxClient` in live mode).
+            backend: `SandboxBackendClient` (`LiveGeminiAgentSandboxClient` in live mode).
             registry_pdp: `AgentRegistryPDP` enforcing `Tenant ∩ User ∩ Agent` access.
             clock_fn: Monotonic clock callable returning seconds (`time.monotonic`).
             default_ttl_seconds: Per-sandbox TTL (`<= 3600s`, default `900s`).

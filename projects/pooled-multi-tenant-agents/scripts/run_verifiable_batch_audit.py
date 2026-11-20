@@ -65,6 +65,7 @@ from agents.interceptors import (
 from app.main import SANDBOX_MANAGER as GATEWAY_SANDBOX_MANAGER
 from app.main import TOKEN_BULKHEAD as GATEWAY_BULKHEAD
 from app.main import app
+from evals.deterministic_verifier import strip_platform_identifiers
 from evals.judge_calibration import compute_security_confusion_matrix
 from fastapi.testclient import TestClient
 from scripts.sandbox_auth import SandboxCaller
@@ -99,6 +100,7 @@ def contains_unredacted_pii(text: str) -> bool:
         return True
 
     scrubbed = _REDACTION_PLACEHOLDER_RE.sub("", text)
+    scrubbed = strip_platform_identifiers(scrubbed)
     if (
         _SSN_PATTERN.search(scrubbed)
         or _ABA_ROUTING_PATTERN.search(scrubbed)

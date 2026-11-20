@@ -1,52 +1,67 @@
-# Contributing
+# How to contribute
 
-Contributions to this reference implementation are welcome and appreciated. Keep
-pull requests focused, well-tested, and accurately labeled.
+We would love to accept your patches and contributions to this project.
 
-## Contributor License Agreement
+## Before you begin
 
-Contributions to this repository must be accompanied by a
-[Google Individual or Corporate Contributor License Agreement (CLA)](https://cla.developers.google.com/).
-You (or your employer) retain the copyright to your contribution; the CLA gives
-Google permission to use and redistribute your contributions as part of the
+### Sign our Contributor License Agreement
+
+Contributions to this project must be accompanied by a
+[Contributor License Agreement](https://cla.developers.google.com/about) (CLA).
+You (or your employer) retain the copyright to your contribution; this simply
+gives us permission to use and redistribute your contributions as part of the
 project.
 
-## Branch and Pull Request Workflow
+If you or your current employer have already signed the Google CLA (even if it
+was for a different project), you probably don't need to do it again.
 
-- Create a feature branch from `main` with one logical change per pull request.
-- Keep security-sensitive changes small enough to review thoroughly in one pass.
-- Changes affecting identity, token signing, IAM, tenant isolation, guardrails,
-  or credential brokering must update the corresponding ADR in
-  [docs/adr/](docs/adr/),
-  [docs/tenant_isolation_assurance.md](docs/tenant_isolation_assurance.md), and
-  the status table in [README.md](README.md#at-a-glance), and include a
-  regression test that fails when the guard branch is mutated.
+Visit <https://cla.developers.google.com/> to see your current agreements or to
+sign a new one.
 
-## Pre-Submission Verification Gates
+### Review our community guidelines
 
-Run the local verification suite before opening or updating a pull request:
+This project follows
+[Google's Open Source Community Guidelines](https://opensource.google/conduct/).
+
+## Contribution process
+
+### Code reviews
+
+All submissions, including submissions by project members, require review. We
+use GitHub pull requests for this purpose. Consult
+[GitHub Help](https://docs.github.com/articles/about-pull-requests) for more
+information on using pull requests.
+
+- One topic per pull request. Keep security changes small enough to review in
+  one sitting.
+- Code that touches identity, tokens, keys, IAM, tenant isolation, guardrails or
+  the credential broker should add or update a test that fails without the
+  change.
+- Security-relevant changes also update the relevant ADR in
+  [`docs/adr/`](docs/adr/),
+  [`docs/tenant_isolation_assurance.md`](docs/tenant_isolation_assurance.md)
+  and, if behaviour changes, the status labels in
+  [`docs/implementation_status.md`](docs/implementation_status.md#at-a-glance).
+
+### Checks to run before opening a pull request
 
 ```bash
 uv run python scripts/verify_repo_sanitized.py
 uv run ruff check .
-uv run pytest -q
-uv run python run_breach_simulations.py
-uv run python scripts/run_extended_golden_e2e.py
+uv run pytest -q                                   # hermetic suite; live tests skip
+uv run python run_breach_simulations.py            # breach matrix
+uv run python scripts/run_extended_golden_e2e.py   # golden end-to-end
 uv run python scripts/run_verifiable_batch_audit.py
-CYMBAL_LOCAL_CONTEXT_SIGNER=1 uv run python scripts/run_5act_demo.py
+uv run python scripts/run_5act_demo.py
 ```
 
-Documentation governance tests verify that every relative Markdown link and
-`path:line` citation across `README.md` and `docs/` resolves cleanly.
+### Never commit
 
-## Security & Data Hygiene Rules
+- Secrets, tokens, keys or credential files.
+- Real customer or personal data. Test data is synthetic.
 
-- **Never commit secrets:** Do not commit API keys, OAuth tokens, private keys,
-  or credential files. Use `.env.example` and Secret Manager resource shells.
-- **Synthetic fixtures only:** Never commit real customer data, personal
-  identifiers, corporate hostnames, or non-public links. All test and demo data
-  must remain synthetic.
-- **Accurate status labels:** Label capabilities honestly as **Live**,
-  **Simulated**, **Modeled**, **Built, not live**, or **Not built** (see the
-  [README status legend](README.md#at-a-glance)). Mark cost and capacity
-  calculations as **Modeled** unless backed by measured telemetry.
+### Honest labels
+
+Mark claims as live, simulated, modeled, built-not-live or not built (see the
+[status legend](docs/implementation_status.md#at-a-glance)). Cost and latency
+numbers are "modeled" unless they come from billing data or a measured run.

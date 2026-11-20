@@ -275,26 +275,6 @@ async def _run_agent_turn_inner(
         )
         state["temp:recalled_user_memory"] = recalled_user_memory
 
-    if is_live_mode() and "pytest" not in sys.modules:
-        from agents.gcp_live_bridge import LiveVertexMemoryBankAdapter
-
-        mb_engine = (
-            os.getenv("MEMORY_BANK_REASONING_ENGINE", "").strip()
-            or os.getenv("AGENT_SANDBOX_REASONING_ENGINE_NAME", "").strip()
-        )
-        if mb_engine:
-            mb_retrieved = LiveVertexMemoryBankAdapter(
-                reasoning_engine_name=mb_engine
-            ).retrieve_memories(
-                envelope=envelope,
-                memory_scope=MemoryScope.USER,
-                agent_id=req.agent_id,
-                top_k=5,
-            )
-            state["temp:long_term_memories"] = list(
-                mb_retrieved.get("memories", [])
-            )
-
     workspace_governance: dict[str, Any] = {
         "loaded_skill_uris": [],
         "loaded_skills": [],
@@ -307,22 +287,9 @@ async def _run_agent_turn_inner(
         tenant_manifest = services.workspace_plugins.get_manifest(
             envelope.tenant.tenant_id
         )
-        loaded_skill_docs = services.skill_loader.load_skills_for_turn(
-            envelope=envelope,
-            skill_uris=tenant_manifest.custom_skills_uris,
+        workspace_governance["loaded_skill_uris"] = list(
+            tenant_manifest.custom_skills_uris
         )
-        workspace_governance["loaded_skill_uris"] = [
-            skill_doc.skill_uri for skill_doc in loaded_skill_docs
-        ]
-        workspace_governance["loaded_skills"] = [
-            {
-                "skill_uri": skill_doc.skill_uri,
-                "kms_key_name": skill_doc.kms_key_name,
-                "cache_hit": skill_doc.cache_hit,
-                "sanitized_content": skill_doc.sanitized_content,
-            }
-            for skill_doc in loaded_skill_docs
-        ]
         workspace_governance["active_nlc_rules"] = list(
             tenant_manifest.custom_nlc_rules
         )
@@ -331,11 +298,25 @@ async def _run_agent_turn_inner(
             tenant_manifest.workspace_adapter
         )
         state["temp:loaded_skill_uris"] = list(
-            workspace_governance["loaded_skill_uris"]
+            tenant_manifest.custom_skills_uris
         )
-        state["temp:loaded_custom_skills"] = [
-            skill_doc.sanitized_content for skill_doc in loaded_skill_docs
-        ]
+        if tenant_manifest.custom_skills_uris:
+            loaded_custom = services.skill_loader.load_skills_for_turn(
+                envelope=envelope,
+                skill_uris=tenant_manifest.custom_skills_uris,
+            )
+            workspace_governance["loaded_skills"] = [
+                {
+                    "skill_uri": s.skill_uri,
+                    "kms_key_name": s.kms_key_name,
+                    "cache_hit": s.cache_hit,
+                    "sanitized_content": s.sanitized_content,
+                }
+                for s in loaded_custom
+            ]
+            state["temp:loaded_custom_skills"] = [
+                s.sanitized_content for s in loaded_custom
+            ]
         for nlc_rule in tenant_manifest.custom_nlc_rules:
             if ("PHI" in nlc_rule and "MRN-" in req.prompt) or (
                 "UNHEDGED_WIRE_OVERRIDE" in nlc_rule
@@ -394,6 +375,49 @@ async def _run_agent_turn_inner(
                 }
 
     mem_key = session_memory_key
+    hop3_mb_live_receipt: dict[str, Any] | None = None
+    mb_live_engine = (
+        os.getenv("MEMORY_BANK_REASONING_ENGINE", "").strip()
+        or os.getenv("AGENT_SANDBOX_REASONING_ENGINE_NAME", "").strip()
+    )
+    if (
+        mb_live_engine
+        and is_live_mode()
+        and (getattr(req, "live_cloud", False) or "pytest" not in sys.modules)
+    ):
+        from agents.gcp_live_bridge import LiveVertexMemoryBankAdapter
+
+        try:
+            mb_read = LiveVertexMemoryBankAdapter(
+                reasoning_engine_name=mb_live_engine
+            ).retrieve_memories(
+                envelope=envelope,
+                memory_scope=MemoryScope.USER,
+                agent_id=req.agent_id,
+                top_k=5,
+            )
+            state["temp:long_term_memories"] = list(mb_read.get("memories", []))
+            hop3_mb_live_receipt = {
+                "reasoning_engine_name": mb_read.get(
+                    "reasoning_engine_name", mb_live_engine
+                ),
+                "principal": mb_read.get("principal", ""),
+                "scope": mb_read.get("scope", {}),
+                "memories_count": len(mb_read.get("memories", [])),
+                "quarantined_count": mb_read.get("quarantined_count", 0),
+            }
+        except PermissionError:
+            raise
+        except Exception as mb_exc:
+            logger.warning(
+                "Hop 3 Memory Bank retrieval skipped: %s", type(mb_exc).__name__
+            )
+            if not services.sandbox_mode_active():
+                raise HTTPException(
+                    status_code=503,
+                    detail={"error": "E_LIVE_GCP_STEP_FAILED"},
+                ) from mb_exc
+
     routing_decision = services.model_routing_pdp.decide_route(
         envelope=envelope,
         agent_id=req.agent_id,
@@ -680,14 +704,14 @@ async def _run_agent_turn_inner(
                     actor=req.agent_id,
                     content={"prompt": req.prompt, "live_verified": True},
                 )
-                mb_live_receipt: dict[str, Any] | None = None
+                mb_live_receipt: dict[str, Any] | None = hop3_mb_live_receipt
                 mb_live_engine = (
                     os.getenv("MEMORY_BANK_REASONING_ENGINE", "").strip()
                     or os.getenv(
                         "AGENT_SANDBOX_REASONING_ENGINE_NAME", ""
                     ).strip()
                 )
-                if mb_live_engine:
+                if mb_live_receipt is None and mb_live_engine:
                     mb_read = LiveVertexMemoryBankAdapter(
                         reasoning_engine_name=mb_live_engine
                     ).retrieve_memories(

@@ -50,6 +50,7 @@ FAKE_DENYLIST = (
     "resource_id: 5555555555555555555\n"
     "third_party_tenant: 11111111-2222-3333-4444-555555555555\n"
     "employee: jdoe\n"
+    "private_repository: acme-private-org\n"
 )
 
 
@@ -136,6 +137,7 @@ def test_public_export_mode_catches_each_documented_class(
         "Denylisted resource_id": "reasoningEngines/5555555555555555555",
         "Denylisted third_party_tenant": "tid=11111111-2222-3333-4444-555555555555",
         "Denylisted employee": "reviewed by jdoe on Tuesday",
+        "Denylisted private_repository": "https://github.com/acme-private-org/repo/pull/7",
         "Internal Buganizer ID": "tracked in b/" + "123456789",
         "Internal workstation hostname": f"open {WORKSTATION_HOST}",
         "Internal infrastructure term": f"use {INFRA_TERMS[0]} ADC, not {INFRA_TERMS[1]} certs",
@@ -321,5 +323,6 @@ def test_repository_denylist_covers_concatenated_usernames_and_record_ids() -> (
         for cls in sanitizer.DENYLIST_CLASSES
     }
     assert by_class["employee"] >= 25
+    assert by_class["private_repository"] >= 2
     assert by_class["third_party_tenant"] >= 10
     assert by_class["resource_id"] >= 5

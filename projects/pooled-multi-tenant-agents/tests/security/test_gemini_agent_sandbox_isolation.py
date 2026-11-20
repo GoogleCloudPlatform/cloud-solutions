@@ -742,7 +742,7 @@ class _StubHttpResponse:
 def test_live_gemini_agent_sandbox_client_rest_contract_and_fail_closed_missing_engine(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """Proves live mode fails closed without `AGENT_SANDBOX_REASONING_ENGINE_NAME` and sends zero tokens."""
+    """Live mode fails closed without `AGENT_SANDBOX_REASONING_ENGINE_NAME` and sends no tokens."""
     monkeypatch.delenv("AGENT_SANDBOX_REASONING_ENGINE_NAME", raising=False)
     missing_engine_client = gcp_live_bridge.LiveGeminiAgentSandboxClient(
         live_mode_fn=lambda: True,
@@ -3189,7 +3189,7 @@ def test_live_adk_runner_sandbox_tool_rbacs_errors_and_invoke_agent_live_routes(
             )
         )
 
-    # 2. Stub google.adk / google.genai cleanly to exercise `execute_live_gemini_diagnostic_sandbox`.
+    # 2. Stub google.adk / google.genai to exercise `execute_live_gemini_diagnostic_sandbox`.
     stub_adk = ModuleType("google.adk")
     stub_adk_agents = ModuleType("google.adk.agents")
     stub_adk_runners = ModuleType("google.adk.runners")

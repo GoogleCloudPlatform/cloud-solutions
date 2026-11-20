@@ -38,11 +38,20 @@ if not TDD_0012_PATH.is_file():
     )
 
 
+def _tdd_text() -> str:
+    """The companion technical design doc. It is an internal working document that public exports
+    of this repository omit; the tests that need it are skipped there.
+    """
+    if not TDD_0012_PATH.is_file():
+        pytest.skip("Companion TDD is not part of this distribution.")
+    return TDD_0012_PATH.read_text(encoding="utf-8")
+
+
 @pytest.mark.parametrize("slice_id", ["PR-S1", "PR-S2", "PR-S3", "PR-S4"])
 def test_adr_0012_and_tdd_cover_all_four_pr_slices(slice_id: str) -> None:
     """Both ADR-0012 and the TDD must document PR-S1 through PR-S4."""
     adr_text = ADR_0012_PATH.read_text(encoding="utf-8")
-    tdd_text = TDD_0012_PATH.read_text(encoding="utf-8")
+    tdd_text = _tdd_text()
 
     assert slice_id in adr_text
     assert slice_id in tdd_text
@@ -52,7 +61,7 @@ def test_adr_0012_and_tdd_document_modelrouter_preconditions_and_canonical_roles
     None
 ):
     """ADR-0012 and the TDD must specify the 3 modelrouter preconditions and canonical roles."""
-    tdd_text = TDD_0012_PATH.read_text(encoding="utf-8")
+    tdd_text = _tdd_text()
 
     for required_term in (
         "tenant_scoped_cache",
@@ -69,9 +78,7 @@ def test_adr_0012_and_tdd_document_modelrouter_preconditions_and_canonical_roles
 def test_adr_0012_and_tdd_omit_meta_prompt_jargon() -> None:
     """ADR-0012 and the TDD must not include internal meta-prompt terms."""
     combined_text = (
-        ADR_0012_PATH.read_text(encoding="utf-8")
-        + "\n"
-        + TDD_0012_PATH.read_text(encoding="utf-8")
+        ADR_0012_PATH.read_text(encoding="utf-8") + "\n" + _tdd_text()
     ).lower()
 
     for forbidden_term in (

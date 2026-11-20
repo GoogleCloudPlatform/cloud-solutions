@@ -48,7 +48,7 @@ runs the default checks plus:
 - Corporate email address (`@google.com`).
 - Internal infrastructure term (the internal sandbox-organization and cloud-workstation names).
 - Every literal listed in the export denylist, by class: `project_id`, `project_number`, `org_id`,
-  `resource_id`, `third_party_tenant`, `employee`.
+  `resource_id`, `third_party_tenant`, `employee`, `private_repository`.
 - The export denylist file itself, if it is tracked inside the scanned tree.
 
 The denylist holds the real identifiers and names, so it must never be published: pass it from
@@ -76,6 +76,7 @@ DENYLIST_CLASSES = (
     "resource_id",
     "third_party_tenant",
     "employee",
+    "private_repository",
 )
 
 Pattern = tuple[str, re.Pattern[str]]

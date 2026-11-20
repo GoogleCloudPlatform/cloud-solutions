@@ -46,16 +46,16 @@ PROVISION_SANDBOX=0
 APPROVE=""
 for arg in "$@"; do
   case "$arg" in
-  --skip-infra) SKIP_INFRA=1 ;;
-  --skip-image) SKIP_IMAGE=1 ;;
-  --skip-smoke) SKIP_SMOKE=1 ;;
-  --skip-db-bootstrap) SKIP_DB_BOOTSTRAP=1 ;;
-  --provision-sandbox) PROVISION_SANDBOX=1 ;;
-  --auto-approve) APPROVE="-auto-approve" ;;
-  *)
-    echo "Unknown option: $arg"
-    exit 1
-    ;;
+    --skip-infra) SKIP_INFRA=1 ;;
+    --skip-image) SKIP_IMAGE=1 ;;
+    --skip-smoke) SKIP_SMOKE=1 ;;
+    --skip-db-bootstrap) SKIP_DB_BOOTSTRAP=1 ;;
+    --provision-sandbox) PROVISION_SANDBOX=1 ;;
+    --auto-approve) APPROVE="-auto-approve" ;;
+    *)
+      echo "Unknown option: $arg"
+      exit 1
+      ;;
   esac
 done
 
@@ -68,9 +68,10 @@ SERVICE="cymbal-pooled-gateway"
 
 echo "==> [1/4] Validating platform config for '$ENV_NAME'"
 uv run --frozen python scripts/config_check.py --env "$ENV_NAME" --for-deploy >/dev/null
-read -r PROJECT_ID REGION < <(uv run --frozen python -c "
+GATEWAY_SIGNING_SECRET=""
+read -r PROJECT_ID REGION GATEWAY_SIGNING_SECRET < <(uv run --frozen python -c "
 from agents.platform_config import load_platform_config
-c = load_platform_config('$ENV_NAME'); print(c.gcp.project_id, c.gcp.region)")
+c = load_platform_config('$ENV_NAME'); print(c.gcp.project_id, c.gcp.region, c.identity.gateway_signing_secret or '')")
 echo "    project=$PROJECT_ID region=$REGION"
 
 # Propagate optional Agent Sandbox in Gemini settings to agent_runtime services, which use
@@ -92,7 +93,7 @@ _resolve_tfvars_value() {
     printf '%s' "$default_val"
     return
   fi
-  python3 - "$tf_key" "$kind" "$default_val" "${tf_files[@]}" <<'PYEOF'
+  python3 - "$tf_key" "$kind" "$default_val" ${tf_files[@]+"${tf_files[@]}"} <<'PYEOF'
 import re
 import sys
 from pathlib import Path
@@ -100,16 +101,16 @@ from pathlib import Path
 key, kind, default_val = sys.argv[1], sys.argv[2], sys.argv[3]
 resolved = default_val
 if kind == "bool":
-  pat = re.compile(rf"^\s*{re.escape(key)}\s*=\s*(true|false)\b", re.MULTILINE)
+    pat = re.compile(rf"^\s*{re.escape(key)}\s*=\s*(true|false)\b", re.MULTILINE)
 else:
-  pat = re.compile(rf'^\s*{re.escape(key)}\s*=\s*"([^"]*)"', re.MULTILINE)
+    pat = re.compile(rf'^\s*{re.escape(key)}\s*=\s*"([^"]*)"', re.MULTILINE)
 for path_str in sys.argv[4:]:
-  try:
-    text = Path(path_str).read_text(encoding="utf-8")
-  except OSError:
-    continue
-  for match in pat.finditer(text):
-    resolved = match.group(1)
+    try:
+        text = Path(path_str).read_text(encoding="utf-8")
+    except OSError:
+        continue
+    for match in pat.finditer(text):
+        resolved = match.group(1)
 print(resolved)
 PYEOF
 }
@@ -221,36 +222,36 @@ import shlex
 
 raw = os.environ.get("TF_OUT_JSON", "").strip()
 try:
-  outputs = json.loads(raw) if raw else {}
+    outputs = json.loads(raw) if raw else {}
 except ValueError:
-  outputs = {}
+    outputs = {}
 if not isinstance(outputs, dict):
-  outputs = {}
+    outputs = {}
 
 gw_raw = os.environ.get("GW_ENV_JSON", "").strip()
 try:
-  gw_doc = json.loads(gw_raw) if gw_raw else {}
+    gw_doc = json.loads(gw_raw) if gw_raw else {}
 except ValueError:
-  gw_doc = {}
+    gw_doc = {}
 gw_env: dict[str, str] = {}
 if isinstance(gw_doc, dict):
-  containers = (
-    gw_doc.get("spec", {})
-    .get("template", {})
-    .get("spec", {})
-    .get("containers", [])
-  )
-  if isinstance(containers, list) and containers and isinstance(containers[0], dict):
-    for item in containers[0].get("env", []) or []:
-      if isinstance(item, dict) and item.get("name"):
-        gw_env[str(item["name"])] = str(item.get("value") or "").strip()
+    containers = (
+        gw_doc.get("spec", {})
+        .get("template", {})
+        .get("spec", {})
+        .get("containers", [])
+    )
+    if isinstance(containers, list) and containers and isinstance(containers[0], dict):
+        for item in containers[0].get("env", []) or []:
+            if isinstance(item, dict) and item.get("name"):
+                gw_env[str(item["name"])] = str(item.get("value") or "").strip()
 
 
 def out_val(key: str) -> str:
-  entry = outputs.get(key)
-  if isinstance(entry, dict) and entry.get("value") is not None:
-    return str(entry["value"]).strip()
-  return ""
+    entry = outputs.get(key)
+    if isinstance(entry, dict) and entry.get("value") is not None:
+        return str(entry["value"]).strip()
+    return ""
 
 
 live = os.environ.get("LIVE_FLAG", "0") == "1"
@@ -262,55 +263,55 @@ upd: dict[str, str] = {"CYMBAL_LIVE_GCP": "1" if live else "0"}
 rem: list[str] = [k for k in sandbox_rem.split(",") if k]
 
 if sandbox_upd:
-  for item in sandbox_upd.split(","):
-    if "=" in item:
-      k, v = item.split("=", 1)
-      upd[k] = v
+    for item in sandbox_upd.split(","):
+        if "=" in item:
+            k, v = item.split("=", 1)
+            upd[k] = v
 
 if mb_engine:
-  upd["MEMORY_BANK_REASONING_ENGINE"] = mb_engine
+    upd["MEMORY_BANK_REASONING_ENGINE"] = mb_engine
 else:
-  rem.append("MEMORY_BANK_REASONING_ENGINE")
+    rem.append("MEMORY_BANK_REASONING_ENGINE")
 
 mapping = {
-  "MODEL_ARMOR_TEMPLATE_ID": out_val("model_armor_template_short_id"),
-  "DLP_INSPECT_TEMPLATE": out_val("dlp_inspect_template_id"),
-  "DLP_DEIDENTIFY_TEMPLATE": out_val("dlp_deidentify_template_id"),
-  "KMS_KEYRING_NAME": out_val("tenant_key_ring_name"),
-  "RUNBOOK_BUCKET_NAME": out_val("pooled_runbook_gcs_bucket"),
-  "BIGQUERY_DATASET": out_val("analytics_dataset_id"),
-  "FIRESTORE_DATABASE": out_val("firestore_database_name"),
+    "MODEL_ARMOR_TEMPLATE_ID": out_val("model_armor_template_short_id"),
+    "DLP_INSPECT_TEMPLATE": out_val("dlp_inspect_template_id"),
+    "DLP_DEIDENTIFY_TEMPLATE": out_val("dlp_deidentify_template_id"),
+    "KMS_KEYRING_NAME": out_val("tenant_key_ring_name"),
+    "RUNBOOK_BUCKET_NAME": out_val("pooled_runbook_gcs_bucket"),
+    "BIGQUERY_DATASET": out_val("analytics_dataset_id"),
+    "FIRESTORE_DATABASE": out_val("firestore_database_name"),
 }
 for env_k, env_v in mapping.items():
-  if env_v:
-    upd[env_k] = env_v
+    if env_v:
+        upd[env_k] = env_v
 
 vpc_name = ""
 if live:
-  upd["FIRESTORE_REVOCATION_STORE"] = "1"
-  redis_tls_secret = gw_env.get("REDIS_TLS_SECRET_VERSION", "")
-  redis_url = gw_env.get("REDIS_URL", "") or out_val("redis_bulkhead_url")
-  if redis_tls_secret:
-    upd["REDIS_TLS_SECRET_VERSION"] = redis_tls_secret
-    rem.append("REDIS_URL")
-  elif redis_url:
-    upd["REDIS_URL"] = redis_url
-    rem.append("REDIS_TLS_SECRET_VERSION")
-  alloy_ip = out_val("alloydb_primary_ip_address")
-  if alloy_ip:
-    upd["DATABASE_URL"] = f"postgresql://{alloy_ip}:5432/postgres"
-    upd["ALLOYDB_TENANT_IAM_AUTH"] = "1"
-  vpc_name = out_val("pooled_vpc_name")
+    upd["FIRESTORE_REVOCATION_STORE"] = "1"
+    redis_tls_secret = gw_env.get("REDIS_TLS_SECRET_VERSION", "")
+    redis_url = gw_env.get("REDIS_URL", "") or out_val("redis_bulkhead_url")
+    if redis_tls_secret:
+        upd["REDIS_TLS_SECRET_VERSION"] = redis_tls_secret
+        rem.append("REDIS_URL")
+    elif redis_url:
+        upd["REDIS_URL"] = redis_url
+        rem.append("REDIS_TLS_SECRET_VERSION")
+    alloy_ip = out_val("alloydb_primary_ip_address")
+    if alloy_ip:
+        upd["DATABASE_URL"] = f"postgresql://{alloy_ip}:5432/postgres"
+        upd["ALLOYDB_TENANT_IAM_AUTH"] = "1"
+    vpc_name = out_val("pooled_vpc_name")
 else:
-  rem.extend(
-    [
-      "FIRESTORE_REVOCATION_STORE",
-      "REDIS_URL",
-      "REDIS_TLS_SECRET_VERSION",
-      "DATABASE_URL",
-      "ALLOYDB_TENANT_IAM_AUTH",
-    ]
-  )
+    rem.extend(
+        [
+            "FIRESTORE_REVOCATION_STORE",
+            "REDIS_URL",
+            "REDIS_TLS_SECRET_VERSION",
+            "DATABASE_URL",
+            "ALLOYDB_TENANT_IAM_AUTH",
+        ]
+    )
 
 rem_clean = [k for k in dict.fromkeys(rem) if k not in upd]
 upd_csv = ",".join(f"{k}={v}" for k, v in upd.items())
@@ -329,7 +330,7 @@ PYEOF
       if [[ -n "$sync_vpc_name" ]]; then
         sync_args+=(--network="$sync_vpc_name" --subnet="$sync_vpc_name" --vpc-egress=private-ranges-only)
       fi
-      gcloud alpha run services update "$DISAGG_SVC" --region="$REGION" --project="$PROJECT_ID" --quiet "${sync_args[@]}"
+      gcloud alpha run services update "$DISAGG_SVC" --region="$REGION" --project="$PROJECT_ID" --quiet ${sync_args[@]+"${sync_args[@]}"}
     fi
   done
 }
@@ -347,20 +348,20 @@ import json, os, shlex
 raw = os.environ.get("TF_OUT_JSON", "").strip()
 scope = os.environ.get("SCOPE", "all")
 try:
-  outputs = json.loads(raw) if raw else {}
+    outputs = json.loads(raw) if raw else {}
 except ValueError:
-  outputs = {}
+    outputs = {}
 if not isinstance(outputs, dict):
-  outputs = {}
+    outputs = {}
 uri = str((outputs.get("alloydb_primary_instance_uri") or {}).get("value") or "").strip()
 users: list[str] = []
 if scope != "runtime-only":
-  sa_map = (outputs.get("tenant_service_accounts") or {}).get("value") or {}
-  users = [
-    str(email).removesuffix(".gserviceaccount.com")
-    for email in sa_map.values()
-    if str(email).strip()
-  ]
+    sa_map = (outputs.get("tenant_service_accounts") or {}).get("value") or {}
+    users = [
+        str(email).removesuffix(".gserviceaccount.com")
+        for email in sa_map.values()
+        if str(email).strip()
+    ]
 print(f"ALLOYDB_URI={shlex.quote(uri)}")
 print(f"TENANT_DB_USERS={shlex.quote(' '.join(users))}")
 PYEOF
@@ -374,12 +375,23 @@ PYEOF
   fi
   echo "==> Bootstrapping AlloyDB PostgreSQL RLS & IAM database roles..."
   if ! command -v alloydb-auth-proxy >/dev/null 2>&1 && [[ ! -x "$HOME/.local/bin/alloydb-auth-proxy" ]]; then
-    if [[ "$(uname -s)" == "Linux" && "$(uname -m)" == "x86_64" ]]; then
-      mkdir -p "$HOME/.local/bin"
-      curl -fsSL -o "$HOME/.local/bin/alloydb-auth-proxy" \
-        "https://storage.googleapis.com/alloydb-auth-proxy/v1.11.1/alloydb-auth-proxy.linux.amd64"
-      chmod +x "$HOME/.local/bin/alloydb-auth-proxy"
+    local proxy_build=""
+    case "$(uname -s)/$(uname -m)" in
+      Linux/x86_64) proxy_build="linux.amd64" ;;
+      Linux/aarch64 | Linux/arm64) proxy_build="linux.arm64" ;;
+      Darwin/arm64) proxy_build="darwin.arm64" ;;
+      Darwin/x86_64) proxy_build="darwin.amd64" ;;
+    esac
+    if [[ -z "$proxy_build" ]]; then
+      echo "ERROR: alloydb-auth-proxy is not installed and there is no prebuilt binary for" >&2
+      echo "       $(uname -s)/$(uname -m). Install it and put it on PATH, then re-run:" >&2
+      echo "       https://cloud.google.com/alloydb/docs/auth-proxy/connect#install" >&2
+      exit 1
     fi
+    mkdir -p "$HOME/.local/bin"
+    curl -fsSL -o "$HOME/.local/bin/alloydb-auth-proxy" \
+      "https://storage.googleapis.com/alloydb-auth-proxy/v1.11.1/alloydb-auth-proxy.${proxy_build}"
+    chmod +x "$HOME/.local/bin/alloydb-auth-proxy"
   fi
   local db_admin_user
   db_admin_user="$(gcloud config get-value account 2>/dev/null || true)"
@@ -406,7 +418,7 @@ PYEOF
     --db-user "$db_admin_user" \
     --iam-auth \
     ${ip_args[@]+"${ip_args[@]}"} \
-    "${grant_args[@]}"
+    ${grant_args[@]+"${grant_args[@]}"}
 }
 
 if [[ "$SKIP_INFRA" == 0 ]]; then
@@ -439,9 +451,26 @@ if [[ "$SKIP_INFRA" == 0 ]]; then
   # Environment inputs (e.g. terraform/sandbox.tfvars) are required for adopted environments:
   # without them the defaults would plan to remove resources that the environment enables.
   TF_VAR_FILE_ARGS=()
-  [[ -f "terraform/$ENV_NAME.tfvars" ]] && TF_VAR_FILE_ARGS=(-var-file="$ENV_NAME.tfvars")
-  # Ensure cymbal-build-sa (and KMS signing key) exist before building or bootstrapping services
-  terraform -chdir=terraform apply -auto-approve "${TF_VAR_FILE_ARGS[@]}" \
+  SIGNING_SECRET_TF_VAR_ARGS=()
+  if [[ -f "terraform/$ENV_NAME.tfvars" ]]; then
+    TF_VAR_FILE_ARGS=(-var-file="$ENV_NAME.tfvars")
+  else
+    # No per-environment tfvars. Every Terraform call below already passes project_id, region and
+    # platform_environment from the platform config, so Terraform targets the configured project;
+    # all other inputs keep their Terraform defaults. If the environment configures a pinned
+    # gateway_signing_secret, enable platform_signing_shells so fresh projects get the secret shell
+    # and IAM binding before the gateway boots.
+    if [[ -n "${GATEWAY_SIGNING_SECRET:-}" ]]; then
+      SIGNING_SECRET_TF_VAR_ARGS=(-var="enable_platform_signing_secrets=true")
+    fi
+    echo "    INFO: terraform/$ENV_NAME.tfvars not found; using project_id=$PROJECT_ID region=$REGION"
+    echo "          platform_environment=$ENV_NAME from config/environments/$ENV_NAME.yaml and Terraform"
+    echo "          defaults for everything else. Copy terraform/terraform.tfvars.example to"
+    echo "          terraform/$ENV_NAME.tfvars to enable live mode, AlloyDB, Redis or agent runtimes."
+  fi
+  # Ensure cymbal-build-sa, KMS signing key, and signing secret shells exist before building or bootstrapping services
+  terraform -chdir=terraform apply -auto-approve ${TF_VAR_FILE_ARGS[@]+"${TF_VAR_FILE_ARGS[@]}"} \
+    ${SIGNING_SECRET_TF_VAR_ARGS[@]+"${SIGNING_SECRET_TF_VAR_ARGS[@]}"} \
     -target="module.platform_core.google_project_service.bootstrap_apis" \
     -target="module.platform_core.google_project_service.enabled_apis" \
     -target="module.platform_core.google_service_account.cymbal_build" \
@@ -451,9 +480,23 @@ if [[ "$SKIP_INFRA" == 0 ]]; then
     -target="module.platform_core.google_storage_bucket_iam_member.build_source_creator" \
     -target="module.platform_core.google_kms_key_ring.platform" \
     -target="module.platform_core.google_kms_crypto_key.context_signing" \
+    -target="module.platform_core.google_secret_manager_secret.platform_signing_shells" \
     -var="project_id=$PROJECT_ID" \
     -var="region=$REGION" \
     -var="platform_environment=$ENV_NAME" >/dev/null 2>&1 || true
+  if [[ -n "${GATEWAY_SIGNING_SECRET:-}" ]]; then
+    SIGNING_SECRET_NAME="${GATEWAY_SIGNING_SECRET%%/versions/*}"
+    SIGNING_SECRET_VERSION="${GATEWAY_SIGNING_SECRET#*/versions/}"
+    [[ "$SIGNING_SECRET_VERSION" == "$GATEWAY_SIGNING_SECRET" ]] && SIGNING_SECRET_VERSION="1"
+    if [[ "$SIGNING_SECRET_VERSION" == "1" ]] &&
+      gcloud secrets describe "$SIGNING_SECRET_NAME" --project="$PROJECT_ID" >/dev/null 2>&1 &&
+      ! gcloud secrets versions describe 1 --secret="$SIGNING_SECRET_NAME" --project="$PROJECT_ID" >/dev/null 2>&1; then
+      echo "    Seeding initial EC P-256 signing key version 1 for secret '$SIGNING_SECRET_NAME' (in-memory)..."
+      openssl ecparam -name prime256v1 -genkey -noout 2>/dev/null |
+        openssl pkcs8 -topk8 -nocrypt 2>/dev/null |
+        gcloud secrets versions add "$SIGNING_SECRET_NAME" --project="$PROJECT_ID" --data-file=- --quiet >/dev/null
+    fi
+  fi
   GW_READY_STATUS="$(gcloud run services describe "$SERVICE" --region="$REGION" --project="$PROJECT_ID" --format='value(status.conditions[0].status)' 2>/dev/null || true)"
   GW_STATE_INFO="$(terraform -chdir=terraform state show -no-color "module.platform_core.google_cloud_run_v2_service.cymbal_pooled_gateway" 2>/dev/null || true)"
   if [[ "$GW_READY_STATUS" == "False" ]] && { [[ -z "$GW_STATE_INFO" ]] || [[ "$GW_STATE_INFO" == *"(tainted)"* ]]; }; then
@@ -469,7 +512,7 @@ if [[ "$SKIP_INFRA" == 0 ]]; then
       if gcloud iam service-accounts describe "cymbal-build-sa@${PROJECT_ID}.iam.gserviceaccount.com" --project="$PROJECT_ID" >/dev/null 2>&1; then
         BUILD_ARGS+=(--build-service-account="projects/${PROJECT_ID}/serviceAccounts/cymbal-build-sa@${PROJECT_ID}.iam.gserviceaccount.com")
       fi
-      gcloud run deploy "$SERVICE" --source=. --region="$REGION" --project="$PROJECT_ID" --quiet "${BUILD_ARGS[@]}"
+      gcloud run deploy "$SERVICE" --source=. --region="$REGION" --project="$PROJECT_ID" --quiet ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}
       EXISTING_IMAGE="$(gcloud run services describe "$SERVICE" --region="$REGION" --project="$PROJECT_ID" --format='value(spec.template.spec.containers[0].image)' 2>/dev/null || true)"
       SKIP_IMAGE=1
     else
@@ -479,7 +522,7 @@ if [[ "$SKIP_INFRA" == 0 ]]; then
       cat >"$CB_CFG" <<YAML
 steps:
   - name: gcr.io/cloud-builders/docker
-  args: ['build', '-t', '${BOOTSTRAP_TAG}', '.']
+    args: ['build', '-t', '${BOOTSTRAP_TAG}', '.']
 images:
   - '${BOOTSTRAP_TAG}'
 options:
@@ -497,7 +540,7 @@ YAML
       fi
       CB_OK=0
       for attempt in 1 2 3; do
-        if gcloud builds submit . "${CB_ARGS[@]}"; then
+        if gcloud builds submit . ${CB_ARGS[@]+"${CB_ARGS[@]}"}; then
           CB_OK=1
           break
         fi
@@ -532,7 +575,7 @@ YAML
           [[ -n "$AGENT_SANDBOX_REMOVE_ENV_CSV" ]] && ENV_UPDATE_ARGS+=(--remove-env-vars="$AGENT_SANDBOX_REMOVE_ENV_CSV")
           [[ -n "$AGENT_SANDBOX_UPDATE_ENV_CSV" ]] && ENV_UPDATE_ARGS+=(--update-env-vars="$AGENT_SANDBOX_UPDATE_ENV_CSV")
         fi
-        gcloud alpha run services update "$DISAGG_SVC" --image="$EXISTING_IMAGE" --region="$REGION" --project="$PROJECT_ID" --quiet "${ENV_UPDATE_ARGS[@]}"
+        gcloud alpha run services update "$DISAGG_SVC" --image="$EXISTING_IMAGE" --region="$REGION" --project="$PROJECT_ID" --quiet ${ENV_UPDATE_ARGS[@]+"${ENV_UPDATE_ARGS[@]}"}
       fi
     done
   fi
@@ -564,7 +607,7 @@ YAML
           --set-env-vars="$RUNTIME_ENV_CSV"
       fi
       if ! terraform -chdir=terraform state show "module.agent_runtime[\"${TF_KEY}\"].google_cloud_run_v2_service.agent_runtime" >/dev/null 2>&1; then
-        terraform -chdir=terraform import "${TF_VAR_FILE_ARGS[@]}" "${IMAGE_VAR_ARGS[@]}" "${AGENT_SANDBOX_TF_VAR_ARGS[@]}" \
+        terraform -chdir=terraform import ${TF_VAR_FILE_ARGS[@]+"${TF_VAR_FILE_ARGS[@]}"} ${SIGNING_SECRET_TF_VAR_ARGS[@]+"${SIGNING_SECRET_TF_VAR_ARGS[@]}"} ${IMAGE_VAR_ARGS[@]+"${IMAGE_VAR_ARGS[@]}"} ${AGENT_SANDBOX_TF_VAR_ARGS[@]+"${AGENT_SANDBOX_TF_VAR_ARGS[@]}"} \
           -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="platform_environment=$ENV_NAME" \
           "module.agent_runtime[\"${TF_KEY}\"].google_cloud_run_v2_service.agent_runtime" \
           "projects/${PROJECT_ID}/locations/${REGION}/services/${AGENT_SVC}"
@@ -575,7 +618,7 @@ YAML
   # because `_gateway_lifespan` fails closed at startup if `cymbal_mcp_app` does not exist yet.
   if [[ "$AGENT_LIVE_GCP_FLAG" == "1" && "$SKIP_DB_BOOTSTRAP" == 0 && "$ENABLE_ALLOYDB_PRIMARY_FLAG" == "1" ]]; then
     echo "==> Pre-provisioning AlloyDB primary instance & bootstrapping RLS schema before gateway apply..."
-    terraform -chdir=terraform apply $APPROVE "${TF_VAR_FILE_ARGS[@]}" \
+    terraform -chdir=terraform apply $APPROVE ${TF_VAR_FILE_ARGS[@]+"${TF_VAR_FILE_ARGS[@]}"} \
       -target="module.platform_core.google_compute_network.pooled_vpc" \
       -target="module.platform_core.google_compute_global_address.alloydb_psa_range" \
       -target="module.platform_core.google_service_networking_connection.alloydb_psa_connection" \
@@ -591,7 +634,7 @@ YAML
       -var="platform_environment=$ENV_NAME"
     _run_alloydb_rls_bootstrap runtime-only
   fi
-  terraform -chdir=terraform apply $APPROVE "${TF_VAR_FILE_ARGS[@]}" "${IMAGE_VAR_ARGS[@]}" "${AGENT_SANDBOX_TF_VAR_ARGS[@]}" \
+  terraform -chdir=terraform apply $APPROVE ${TF_VAR_FILE_ARGS[@]+"${TF_VAR_FILE_ARGS[@]}"} ${SIGNING_SECRET_TF_VAR_ARGS[@]+"${SIGNING_SECRET_TF_VAR_ARGS[@]}"} ${IMAGE_VAR_ARGS[@]+"${IMAGE_VAR_ARGS[@]}"} ${AGENT_SANDBOX_TF_VAR_ARGS[@]+"${AGENT_SANDBOX_TF_VAR_ARGS[@]}"} \
     -var="project_id=$PROJECT_ID" \
     -var="region=$REGION" \
     -var="platform_environment=$ENV_NAME"
@@ -615,7 +658,7 @@ import sys
 print(",".join(k for k in sys.argv[1].split(",") if k and k != "AGENT_SANDBOX_REASONING_ENGINE_NAME"))
 PYEOF
       )"
-      terraform -chdir=terraform apply $APPROVE "${TF_VAR_FILE_ARGS[@]}" "${IMAGE_VAR_ARGS[@]}" "${AGENT_SANDBOX_TF_VAR_ARGS[@]}" \
+      terraform -chdir=terraform apply $APPROVE ${TF_VAR_FILE_ARGS[@]+"${TF_VAR_FILE_ARGS[@]}"} ${SIGNING_SECRET_TF_VAR_ARGS[@]+"${SIGNING_SECRET_TF_VAR_ARGS[@]}"} ${IMAGE_VAR_ARGS[@]+"${IMAGE_VAR_ARGS[@]}"} ${AGENT_SANDBOX_TF_VAR_ARGS[@]+"${AGENT_SANDBOX_TF_VAR_ARGS[@]}"} \
         -var="project_id=$PROJECT_ID" \
         -var="region=$REGION" \
         -var="platform_environment=$ENV_NAME"
@@ -638,7 +681,7 @@ if [[ "$SKIP_IMAGE" == 0 ]]; then
   if gcloud iam service-accounts describe "cymbal-build-sa@${PROJECT_ID}.iam.gserviceaccount.com" --project="$PROJECT_ID" >/dev/null 2>&1; then
     BUILD_ARGS+=(--build-service-account="projects/${PROJECT_ID}/serviceAccounts/cymbal-build-sa@${PROJECT_ID}.iam.gserviceaccount.com")
   fi
-  gcloud run deploy "$SERVICE" --source=. --region="$REGION" --project="$PROJECT_ID" --quiet "${BUILD_ARGS[@]}"
+  gcloud run deploy "$SERVICE" --source=. --region="$REGION" --project="$PROJECT_ID" --quiet ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}
   BUILT_IMAGE="$(gcloud run services describe "$SERVICE" --region="$REGION" --project="$PROJECT_ID" --format='value(spec.template.spec.containers[0].image)')"
   for DISAGG_SVC in cymbal-credential-broker cymbal-agent-shared cymbal-agent-finvault-alpha; do
     if gcloud run services describe "$DISAGG_SVC" --region="$REGION" --project="$PROJECT_ID" >/dev/null 2>&1; then
@@ -648,7 +691,7 @@ if [[ "$SKIP_IMAGE" == 0 ]]; then
         [[ -n "$AGENT_SANDBOX_REMOVE_ENV_CSV" ]] && ENV_UPDATE_ARGS+=(--remove-env-vars="$AGENT_SANDBOX_REMOVE_ENV_CSV")
         [[ -n "$AGENT_SANDBOX_UPDATE_ENV_CSV" ]] && ENV_UPDATE_ARGS+=(--update-env-vars="$AGENT_SANDBOX_UPDATE_ENV_CSV")
       fi
-      gcloud alpha run services update "$DISAGG_SVC" --image="$BUILT_IMAGE" --region="$REGION" --project="$PROJECT_ID" --quiet "${ENV_UPDATE_ARGS[@]}"
+      gcloud alpha run services update "$DISAGG_SVC" --image="$BUILT_IMAGE" --region="$REGION" --project="$PROJECT_ID" --quiet ${ENV_UPDATE_ARGS[@]+"${ENV_UPDATE_ARGS[@]}"}
     fi
   done
 else

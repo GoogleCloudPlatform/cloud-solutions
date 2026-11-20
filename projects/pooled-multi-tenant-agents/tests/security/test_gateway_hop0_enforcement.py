@@ -160,6 +160,9 @@ SANDBOX_ONLY = [
     ("POST", "/api/v1/live-3p-connectors/create-ticket/jira"),
     ("POST", "/api/v1/prerequisites-check/sandbox"),
     ("POST", "/api/v1/golden-e2e-suite"),
+    # The 3LO callback records a synthetic grant without a provider code exchange.
+    ("POST", "/api/v1/oauth/3lo/authorize"),
+    ("POST", "/api/v1/oauth/3lo/callback"),
 ]
 
 
@@ -337,7 +340,7 @@ PUBLIC_ROUTES = {
     "/demos",
     "/tuesday",
     "/visualizer",
-    "/assets/cymbal_3b1b_walkthrough.mp4",
+    "/assets/cymbal_architecture_walkthrough.mp4",
     "/diagrams/{diagram_name}.svg",
     "/api/v1/sandbox/token",  # 404 unless the dev issuer is allowed
     "/api/v1/auth/token",  # verifies the IdP token itself
@@ -364,7 +367,7 @@ def test_every_route_is_authenticated_sandbox_only_or_explicitly_public() -> (
     for route in app.routes:
         if not isinstance(route, APIRoute) or route.path in PUBLIC_ROUTES:
             continue
-        guards = calls(getattr(route, "dep" + "endant"))
+        guards = calls(getattr(route, "depend" + "ant"))
         if not guards & {"require_caller", "optional_caller", "sandbox_only"}:
             unguarded.append(route.path)
     assert unguarded == []

@@ -18,4 +18,3 @@ tests/
 # docs/ stays out of the upload except the diagrams the UI serves at /diagrams/*.svg
 docs/*
 !docs/assets/
-scripts/public_export_denylist.txt

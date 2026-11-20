@@ -452,45 +452,40 @@ class LiveADKVertexRunner:
             model_name=effective_model
         )
 
-        active_workspace_plugins = (
+        active_plugins = (
             workspace_plugins or get_default_workspace_plugin_registry()
         )
         active_skill_loader = skill_loader or get_default_custom_skill_loader()
-        loaded_custom_skills: list[dict[str, object]] = []
-        custom_skill_suffix = ""
-        if active_workspace_plugins.has_manifest(bound_tenant_id):
-            tenant_manifest = active_workspace_plugins.get_manifest(
-                bound_tenant_id
-            )
-            skill_docs = active_skill_loader.load_skills_for_turn(
-                envelope=envelope,
-                skill_uris=tenant_manifest.custom_skills_uris,
-            )
-            loaded_custom_skills = [
-                {
-                    "skill_uri": skill_doc.skill_uri,
-                    "kms_key_name": skill_doc.kms_key_name,
-                    "cache_hit": skill_doc.cache_hit,
-                }
-                for skill_doc in skill_docs
-            ]
-            session_state["temp:loaded_custom_skills"] = [
-                skill_doc.sanitized_content for skill_doc in skill_docs
-            ]
-            if skill_docs:
-                rendered_skills = "\n\n".join(
-                    skill_doc.sanitized_content for skill_doc in skill_docs
+        loaded_custom_skills_summary: list[dict[str, Any]] = []
+        custom_skills_suffix = ""
+        if active_plugins.has_manifest(bound_tenant_id):
+            manifest = active_plugins.get_manifest(bound_tenant_id)
+            if manifest.custom_skills_uris:
+                loaded_skills = active_skill_loader.load_skills_for_turn(
+                    envelope=envelope,
+                    skill_uris=manifest.custom_skills_uris,
                 )
-                custom_skill_suffix = (
-                    f"\n\nTENANT CUSTOM SKILLS ({bound_tenant_id}):\n"
-                    f"{rendered_skills}"
+                loaded_custom_skills_summary = [
+                    {
+                        "skill_uri": s.skill_uri,
+                        "kms_key_name": s.kms_key_name,
+                        "cache_hit": s.cache_hit,
+                    }
+                    for s in loaded_skills
+                ]
+                session_state["temp:loaded_custom_skills"] = [
+                    s.sanitized_content for s in loaded_skills
+                ]
+                rendered_blocks = "\n\n".join(
+                    s.sanitized_content for s in loaded_skills
                 )
+                custom_skills_suffix = f"\n\n=== TENANT CUSTOM SKILLS ({bound_tenant_id}) ===\n{rendered_blocks}\n"
 
         turn_instruction = (
             f"You are the Cymbal SaaS Pooled Diagnostic Agent serving tenant '{bound_tenant_id}'. "
             "Call `get_scoped_p1_incidents` AND your entitled 3P ticket/runbook tools first, then "
             "summarize the incident ID, 3P ticket key/number, and redacted notes in 2 sentences."
-            f"{custom_skill_suffix}"
+            f"{custom_skills_suffix}"
         )
         agent_sig_params = set(inspect.signature(Agent).parameters)
         accepts_var_kw = any(
@@ -613,9 +608,9 @@ class LiveADKVertexRunner:
             },
             "tool_calls": tool_calls_seen,
             "pruned_unentitled_tools": pruned_out,
-            "loaded_custom_skills": loaded_custom_skills,
             "agent_response": final_text.strip(),
             "rls_guc": db_pool.last_executed_guc,
+            "loaded_custom_skills": loaded_custom_skills_summary,
         }
         if vertex_mb_summary is not None:
             result["vertex_memory_bank"] = vertex_mb_summary

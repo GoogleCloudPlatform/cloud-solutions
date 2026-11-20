@@ -20,7 +20,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from app.ui.walkthrough_page import render_tuesday_walkthrough_html
+from app.ui.walkthrough_page import (
+    WALKTHROUGH_VIDEO_FILENAME,
+    render_walkthrough_html,
+)
 from app.ui.workbench_page import render_workbench_html
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import HTMLResponse, Response
@@ -49,10 +52,10 @@ async def get_architecture_svg(diagram_name: str) -> Response:
     )
 
 
-@router.get("/assets/cymbal_3b1b_walkthrough.mp4")
-async def get_3b1b_walkthrough_video() -> Response:
-    """Serves the 3Blue1Brown-style 1080p architectural animation video."""
-    mp4_path = _REPO_ROOT / "docs" / "assets" / "cymbal_3b1b_walkthrough.mp4"
+@router.get(f"/assets/{WALKTHROUGH_VIDEO_FILENAME}")
+async def get_walkthrough_video() -> Response:
+    """Serves the optional 1080p architecture walkthrough video (404 when it is not shipped)."""
+    mp4_path = _REPO_ROOT / "docs" / "assets" / WALKTHROUGH_VIDEO_FILENAME
     if not mp4_path.exists():
         raise HTTPException(status_code=404, detail="Video asset missing")
     return Response(
@@ -65,23 +68,22 @@ async def get_3b1b_walkthrough_video() -> Response:
     )
 
 
-@router.get("/visualizer", response_class=HTMLResponse)
-async def standalone_visualizer_ui() -> Response:
-    """Serves the zero-backend standalone `docs/visualizer.html` explorer."""
-    vis_path = _REPO_ROOT / "docs" / "visualizer.html"
-    if not vis_path.is_file():
-        raise HTTPException(status_code=404, detail="Visualizer missing")
-    return HTMLResponse(
-        content=vis_path.read_text(encoding="utf-8"),
-        headers={"X-Frame-Options": "SAMEORIGIN"},
-    )
-
-
 @router.get("/demos", response_class=HTMLResponse)
-@router.get("/tuesday", response_class=HTMLResponse)
-async def tuesday_demos_and_architecture_ui() -> str:
-    """Serves the Interactive Demos, Architecture & 3B1B Video Walkthrough page."""
-    return render_tuesday_walkthrough_html()
+@router.get(
+    "/tuesday", response_class=HTMLResponse
+)  # legacy alias of /demos (old bookmarks)
+async def demos_and_architecture_ui() -> str:
+    """Serves the Interactive Demos, Architecture & Video Walkthrough page."""
+    return render_walkthrough_html()
+
+
+@router.get("/visualizer", response_class=HTMLResponse)
+async def interactive_architecture_visualizer() -> str:
+    """Serves the standalone interactive architecture visualizer (`docs/visualizer.html`)."""
+    visualizer_path = _REPO_ROOT / "docs" / "visualizer.html"
+    if not visualizer_path.is_file():
+        raise HTTPException(status_code=404, detail="Visualizer asset missing")
+    return visualizer_path.read_text(encoding="utf-8")
 
 
 @router.get("/", response_class=HTMLResponse)

@@ -3,8 +3,7 @@
 **Status:** v0.2.0 Sandbox Reference Design (2026-11-17, Live Mode + AlloyDB
 RLS + Agent Sandbox in Gemini + Memory Bank in Gemini IAM CEL) | **Region &
 Sandbox:** `us-central1` (`cymbal-multitenancy-example`) | **Reference Repo:**
-[multi-tenant-experiment-workstream2](https://github.com/cloud-ai-fde/multi-tenant-experiment-workstream2)
-([PR #62: Token & Session Policy](https://github.com/cloud-ai-fde/multi-tenant-experiment-workstream2/pull/62))
+this repository (PR #62: Token & Session Policy)
 
 ## 1. Context and Scope
 
@@ -536,8 +535,7 @@ prompting her to log in again:
 
 Different enterprises weigh blast-radius containment against autonomous
 investigation length differently. Rather than hardcoding expiry constants in
-Python, Cymbal exposes a single schema-validated policy surface
-([PR #62](https://github.com/cloud-ai-fde/multi-tenant-experiment-workstream2/pull/62),
+Python, Cymbal exposes a single schema-validated policy surface (PR #62,
 [`docs/configuration_reference.md`](configuration_reference.md)) across three
 layers, resolved in strict precedence: **Terraform / Cloud Run env vars
 (`var.token_and_session_policy` in

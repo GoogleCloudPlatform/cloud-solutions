@@ -18,7 +18,7 @@
 
 from __future__ import annotations
 
-from app.ui.walkthrough_page import render_tuesday_walkthrough_html
+from app.ui.walkthrough_page import render_walkthrough_html
 from app.ui.workbench_page import render_workbench_html
 
-__all__ = ["render_tuesday_walkthrough_html", "render_workbench_html"]
+__all__ = ["render_walkthrough_html", "render_workbench_html"]

@@ -35,7 +35,8 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_DIR"
 
 echo "==> Prerequisites"
-uv run --frozen python scripts/check_prerequisites.py || true
+# CYMBAL_ENV makes the prerequisite report name THIS environment's project, not the sandbox default.
+CYMBAL_ENV="$ENV_NAME" uv run --frozen python scripts/check_prerequisites.py || true
 uv run --frozen python scripts/config_check.py --env "$ENV_NAME" --for-deploy
 
 echo "==> Deploying through the single path (scripts/deploy.sh)"

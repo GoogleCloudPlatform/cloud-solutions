@@ -228,3 +228,42 @@ def test_prefix_cache_rejects_dynamic_template_variables_and_aligns_turn_payload
         rs_turn["uncached_dynamic_suffix"]["authenticated_tenant_id"]
         == "tenant-retailstream-beta"
     )
+
+
+def test_grader_ignores_platform_identifiers_but_still_catches_card_numbers() -> (
+    None
+):
+    """A random sandbox or session ID that happens to be all digits is not a PII leak; the same
+    digits as content, or next to an ID, still are."""
+    all_digit_sandbox = "sbx-4539148803436467"
+    all_digit_session = "sess-gw-" + "4539148803436467" * 2
+    payload = (
+        f'{{"sandbox_id": "{all_digit_sandbox}", "sandbox_resource_name": '
+        f'"projects/p/locations/us-central1/sandboxEnvironments/{all_digit_sandbox}", '
+        f'"session_id": "{all_digit_session}"}}'
+    )
+    assert contains_unredacted_pii(payload) is False
+    # UUIDs and per-user memory partitions are platform identifiers too.
+    assert (
+        contains_unredacted_pii(
+            '{"trace": "45391488-0343-6467-1234-567890123456"}'
+        )
+        is False
+    )
+    assert (
+        contains_unredacted_pii(
+            '{"key": "tenant-x/u-4539148803436467/session"}'
+        )
+        is False
+    )
+
+    assert contains_unredacted_pii('{"notes": "card 4539148803436467"}') is True
+    assert (
+        contains_unredacted_pii('{"notes": "card 4539-1488-0343-6467"}') is True
+    )
+    leaked_next_to_id = (
+        f'{{"sandbox_id": "{all_digit_sandbox}", "stdout": "4539148803436467"}}'
+    )
+    assert contains_unredacted_pii(leaked_next_to_id) is True
+    # Only the exact identifier shape is ignored: one digit short is scanned like any content.
+    assert contains_unredacted_pii('{"id": "sbx-453914880343646"}') is True

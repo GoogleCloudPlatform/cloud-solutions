@@ -18,4 +18,3 @@ tests/
 # docs/ stays out of the image context except the diagrams served at /diagrams/*.svg
 docs/*
 !docs/assets/
-scripts/public_export_denylist.txt

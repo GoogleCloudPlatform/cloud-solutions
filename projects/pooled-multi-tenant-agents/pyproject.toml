@@ -1,6 +1,6 @@
 [project]
 name = "cymbal-multitenant-pooled-agents"
-version = "0.2.2"
+version = "0.2.4"
 description = "Reference implementation for Pattern A (High-Density Pooled Architecture) multi-tenant agentic AI on Google Cloud with Gemini and Agent Development Kit (ADK)"
 license = { file = "LICENSE" }
 requires-python = ">=3.12"
@@ -64,21 +64,21 @@ fail_under = 90
 show_missing = true
 
 [tool.ruff]
-line-length = 80
+line-length = 100
 target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "PT", "RUF", "G", "PIE"]
 
 [tool.ruff.lint.isort]
-force-single-line = false
+force-single-line = true
 single-line-exclusions = ["typing", "collections.abc"]
 force-sort-within-sections = true
 
 [tool.ruff.lint.per-file-ignores]
 "app/ui/*.py" = ["E501", "RUF001"]
-"app/tuesday_walkthrough_page.py" = ["E501", "RUF001"]
-"scripts/render_3b1b_video.py" = ["E501", "RUF001"]
+"app/walkthrough_page.py" = ["E501", "RUF001"]
+"scripts/render_architecture_video.py" = ["E501", "RUF001"]
 "scripts/render_e2e_life_of_request_diagram.py" = ["E501", "RUF001"]
 "scripts/benchmark_pooling_at_scale.py" = ["E402", "E501"]
 # Standalone CLI scripts bootstrap sys.path / offline signer before local package imports.

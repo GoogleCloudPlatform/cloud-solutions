@@ -222,16 +222,18 @@ class SubstrateAgnostic3HopAdapter:
                 ),
             }
         if substrate == "cloud_spanner":
+            safe_role = f"tenant_{tenant_id.replace('-', '_')}_{user_role}"
             return {
                 "substrate": "cloud_spanner",
                 "hop3_statement": (
-                    f"request.tag='tenant_id={tenant_id}', role='{user_role}', agent='{agent_id}'"
+                    f"SET SESSION ROLE = '{safe_role}'; "
+                    f"-- request.tag='tenant_id={tenant_id}', agent='{agent_id}'"
                 ),
                 "policy_ddl": (
+                    f"CREATE ROLE {safe_role}; "
                     "CREATE OR REPLACE VIEW v_tenant_incidents SQL SECURITY DEFINER AS "
-                    "SELECT incident_id, tenant_id, service_name, severity, summary "
-                    f"FROM tenant_incidents WHERE tenant_id = '{tenant_id}'; "
-                    f"GRANT SELECT ON VIEW v_tenant_incidents TO ROLE pooled_agent_{user_role};"
+                    f"SELECT * FROM tenant_incidents WHERE tenant_id = '{tenant_id}'; "
+                    f"GRANT SELECT ON VIEW v_tenant_incidents TO ROLE {safe_role};"
                 ),
             }
         if substrate == "cloud_firestore":

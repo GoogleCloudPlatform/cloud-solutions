@@ -12,18 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Remote state (GCS). Defaults target the sandbox (cymbal-multitenancy-example). Other environments
-# override both values at init time without editing this file:
+# Remote state (GCS). No bucket is set here on purpose: bucket names are global, so a default
+# could point at a bucket you do not own. `terraform init` fails until you name your own bucket
+# and prefix (scripts/deploy.sh does this for you):
 #
 #   terraform -chdir=terraform init -reconfigure \
 #     -backend-config="bucket=<project>-tfstate" -backend-config="prefix=<env>"
 #
-# The state bucket is created once, out of band (uniform access, public access prevention
-# enforced, object versioning on); see terraform/README.md. State can hold sensitive values:
-# never commit it, and keep bucket access to the operators who run Terraform.
+# Create the state bucket once, out of band (uniform access, public access prevention enforced,
+# object versioning on); see terraform/README.md. State can hold sensitive values: never commit
+# it, and keep bucket access to the operators who run Terraform.
 terraform {
-  backend "gcs" {
-    bucket = "cymbal-multitenancy-example-tfstate"
-    prefix = "sandbox"
-  }
+  backend "gcs" {}
 }

@@ -110,7 +110,7 @@ _OPENAPI_DOC_PATHS = frozenset(
 
 app = FastAPI(
     title="Cymbal SaaS — Gemini Multi-Tenant Pooled Agent Gateway (Pattern A)",
-    version="0.2.2",
+    version="0.2.4",
     description=(
         "High-Density Pooled Architecture demonstrating the 5-Hop Cryptographic Context Chain, "
         "ADK 2.0 tool pruning, Model Armor + DLP guardrails, and AlloyDB Fail-Closed RLS."
@@ -196,7 +196,7 @@ async def _sandbox_unavailable(
 async def _custom_skill_unavailable(
     _request: Request, exc: CustomSkillUnavailableError
 ) -> JSONResponse:
-    """Maps custom-skill storage outages to HTTP 503 + Retry-After (never 401/403)."""
+    """Maps GCS / Cloud KMS / Model Armor custom-skill outages to HTTP 503 + Retry-After."""
     return JSONResponse(
         status_code=503,
         content={"detail": {"error": exc.code}},

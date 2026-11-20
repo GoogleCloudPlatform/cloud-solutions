@@ -17,7 +17,7 @@
 """Opt-In Live Gemini/ADK + `DecomposedJudgeVerdict` Behavioral Evaluation Runner.
 
 Drives real `LiveADKVertexRunner` (`InMemoryRunner` + Gemini tool calling, including
-`execute_live_gemini_diagnostic_sandbox`), verifies deterministic tenant/PII/NLC hygiene, scores each
+`execute_live_gemini_diagnostic_sandbox`), checks deterministic tenant/PII/NLC hygiene, scores each
 output with a Gemini-backed `DecomposedJudgeVerdict` across the four binary dimensions:
   - `faithfulness` (`check_2_factual_grounding`)
   - `tool_grounding` (`check_3_runbook_compliance`)

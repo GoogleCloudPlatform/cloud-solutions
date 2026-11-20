@@ -47,6 +47,7 @@ S1_DOCS = tuple(
     path
     for path in (
         REPO_ROOT / "README.md",
+        REPO_ROOT / "docs" / "implementation_status.md",
         REPO_ROOT
         / "docs"
         / "adr"

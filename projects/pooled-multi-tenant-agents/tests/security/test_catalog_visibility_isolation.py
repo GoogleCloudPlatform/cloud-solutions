@@ -14,22 +14,27 @@
 
 # pylint: disable=line-too-long
 
-"""Breach Simulation 1: Catalog & Visibility Isolation (Governance Pillar 1 — Hop 2).
+"""Breach Simulation 1: Catalog & Visibility Isolation (Governance Pillar 1 —
+Hop 2).
 
 Verifies:
-1. RetailStream Corp (Standard Tier) cannot see FinVault Bank's private `Agent Alpha` in
+1. RetailStream Corp (Standard Tier) cannot see FinVault Bank's private `Agent
+Alpha` in
    ARD catalog discovery (`/.well-known/ai-catalog.json`).
-2. Direct API invocation of `finvault_regulatory_escalation_agent` by RetailStream raises
+2. Direct API invocation of `finvault_regulatory_escalation_agent` by
+RetailStream raises
    `403 Forbidden`.
-3. ADK `before_agent_callback` dynamically prunes FinVault-only 3LO tools (`create_jira_incident`,
+3. ADK `before_agent_callback` dynamically prunes FinVault-only 3LO tools
+(`create_jira_incident`,
    `send_gmail_brief`) from RetailStream's active prompt and vice versa.
 """
 
 from __future__ import annotations
 
 import pytest
+from agents import registry
 from agents.agent_alpha import build_agent_alpha
-from agents.context import ContextEnvelope
+from agents.context import ContextEnvelope, SubscriptionTier
 from agents.interceptors import (
     OTelAuditSink,
     enforce_tenant_isolation_interceptor,
@@ -88,7 +93,8 @@ async def test_before_agent_callback_prunes_unentitled_3lo_tools(
 ) -> None:
     shared_agent = build_shared_diagnostic_agent()
 
-    # FinVault Bank turn: should receive Jira & Gmail 3LO tools, NOT ServiceNow/SharePoint
+    # FinVault Bank turn: should receive Jira & Gmail 3LO tools, NOT
+    # ServiceNow/SharePoint
     fv_ctx = MockADKCallbackContext(
         state=finvault_envelope.to_adk_state(),
         agent=shared_agent,
@@ -108,7 +114,8 @@ async def test_before_agent_callback_prunes_unentitled_3lo_tools(
         "send_gmail_brief",
     }
 
-    # RetailStream Corp turn: should receive ServiceNow & SharePoint 3LO tools, NOT Jira/Gmail
+    # RetailStream Corp turn: should receive ServiceNow & SharePoint 3LO tools,
+    # NOT Jira/Gmail
     rs_ctx = MockADKCallbackContext(
         state=retailstream_envelope.to_adk_state(),
         agent=shared_agent,
@@ -128,17 +135,20 @@ async def test_before_agent_callback_prunes_unentitled_3lo_tools(
         "read_sharepoint_runbook",
     }
 
-    # Direct MCP tool call by RetailStream to FinVault's Jira tool must fail closed with 403
+    # Direct MCP tool call by RetailStream to FinVault's Jira tool must fail
+    # closed with 403
     with pytest.raises(PermissionError, match="403 Forbidden"):
         await create_jira_incident("Spoofed Jira ticket", tool_context=rs_ctx)
 
-    # Direct MCP tool call by FinVault to RetailStream's ServiceNow tool must fail closed with 403
+    # Direct MCP tool call by FinVault to RetailStream's ServiceNow tool must
+    # fail closed with 403
     with pytest.raises(PermissionError, match="403 Forbidden"):
         await create_servicenow_incident(
             "Spoofed ServiceNow ticket", tool_context=fv_ctx
         )
 
-    # Positive invocations for entitled tools succeed with DLP redaction & RLS scoping
+    # Positive invocations for entitled tools succeed with DLP redaction & RLS
+    # scoping
     fv_rb = await read_runbook(tool_context=fv_ctx)
     assert fv_rb["runbooks"][0]["runbook_id"] == "RB-FV-01"
     fv_jira = await create_jira_incident(
@@ -158,3 +168,48 @@ async def test_before_agent_callback_prunes_unentitled_3lo_tools(
         "/sites/ops/runbook.md", tool_context=rs_ctx
     )
     assert rs_sp["provider"] == "microsoft-entra-sharepoint-3lo"
+
+
+def test_a_tenant_cannot_take_over_another_tenants_dynamic_private_agent() -> (
+    None
+):
+    """Registering an agent ID that another tenant owns is refused, whether
+    that agent is
+    built in or was registered at runtime; a tenant may still update its own
+    dynamic agent.
+    """
+    agent_id = "dynamic_private_agent_takeover_probe"
+    fv, rs = "tenant-finvault-alpha", "tenant-retailstream-beta"
+
+    def register(owner: str, name: str = "Probe") -> registry.CatalogAgentEntry:
+        return registry.register_dynamic_private_agent(
+            agent_id=agent_id,
+            display_name=name,
+            model="gemini-4-hydrogen",
+            owner_tenant_id=owner,
+            required_tier=SubscriptionTier.STANDARD,
+            entitled_tools=("query_telemetry_rls",),
+        )
+
+    try:
+        assert register(fv).owner_tenant_id == fv
+        with pytest.raises(ValueError, match="already registered"):
+            register(rs)
+        assert registry.AGENT_CATALOG[agent_id].owner_tenant_id == fv
+        # The owner can update its own entry.
+        assert register(fv, name="Probe v2").display_name == "Probe v2"
+
+        # Built-in agents cannot be replaced, even by their owner.
+        builtin = "finvault_regulatory_escalation_agent"
+        for owner in (rs, fv):
+            with pytest.raises(ValueError, match="already registered"):
+                registry.register_dynamic_private_agent(
+                    agent_id=builtin,
+                    display_name="x",
+                    model="gemini-4-hydrogen",
+                    owner_tenant_id=owner,
+                    required_tier=SubscriptionTier.STANDARD,
+                )
+        assert registry.AGENT_CATALOG[builtin].owner_tenant_id == fv
+    finally:
+        registry.reset_dynamic_agents()

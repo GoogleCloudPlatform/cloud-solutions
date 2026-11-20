@@ -14,6 +14,8 @@
 
 # pylint: disable=line-too-long
 
+# pylint: disable=line-too-long
+
 """Two-tier runtime skill loading for pooled multi-tenant agents.
 
 Implements the two-tier dynamic skill architecture:

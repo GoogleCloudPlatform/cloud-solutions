@@ -64,12 +64,21 @@ def test_image_layout_imports_the_gateway_and_finds_its_config(
         if not k.startswith(("CYMBAL_", "RUN_LIVE"))
     }
     env["PYTHONPATH"] = str(tmp_path)
+    # Diagrams the UI serves; a distribution may omit some, so probe the ones that ship.
+    diagrams = tuple(
+        name
+        for name in (
+            "ws2_pooled_5hop_architecture",
+            "ws2_phase1_vs_phase2_modularity",
+            "ws2_token_permission_flow",
+        )
+        if (REPO / "docs" / "assets" / f"{name}.svg").is_file()
+    )
+    assert "ws2_pooled_5hop_architecture" in diagrams
     probe = (
         "import app.main as m; from fastapi.testclient import TestClient; "
         "c = TestClient(m.app); r = c.get('/api/v1/health'); assert r.status_code == 200, r.text; "
-        "[c.get(f'/diagrams/{d}.svg').raise_for_status() for d in "
-        "('ws2_pooled_5hop_architecture', 'ws2_phase1_vs_phase2_modularity', "
-        "'ws2_token_permission_flow')]; "
+        f"[c.get(f'/diagrams/{{d}}.svg').raise_for_status() for d in {diagrams!r}]; "
         "print(r.json()['environment'])"
     )
     result = subprocess.run(

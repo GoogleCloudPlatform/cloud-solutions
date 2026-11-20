@@ -14,6 +14,8 @@
 
 # pylint: disable=import-outside-toplevel,line-too-long,protected-access
 
+# pylint: disable=import-outside-toplevel,line-too-long,protected-access
+
 """Security, guard-branch, and OSS parity tests for skills, Terraform, and UI.
 
 Verifies:
@@ -471,7 +473,15 @@ def test_terraform_oss_governance_and_spanner_ddl_parity() -> None:
 
     sec_md = (REPO_ROOT / "SECURITY.md").read_text(encoding="utf-8")
     contrib_md = (REPO_ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
-    assert "https://g.co/vulnz" in sec_md
-    assert "internal reference implementation" not in sec_md.lower()
-    assert "internal reference implementation" not in contrib_md.lower()
-    assert "cla.developers.google.com" in contrib_md
+    if (REPO_ROOT / "scripts" / "build_public_export.py").is_file():
+        from scripts import build_public_export as exporter
+
+        public_sec = exporter.public_security_md(sec_md)
+        public_contrib = exporter.PUBLIC_CONTRIBUTING_MD
+    else:
+        public_sec = sec_md
+        public_contrib = contrib_md
+    assert "https://g.co/vulnz" in public_sec
+    assert "internal reference implementation" not in public_sec.lower()
+    assert "internal reference implementation" not in public_contrib.lower()
+    assert "cla.developers.google.com" in public_contrib

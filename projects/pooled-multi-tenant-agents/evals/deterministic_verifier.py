@@ -55,6 +55,23 @@ _NUMERIC_UNIT_TOKEN_RE = re.compile(
     re.IGNORECASE,
 )
 _REDACTION_PLACEHOLDER_RE = re.compile(r"\[REDACTED[_-][A-Z0-9_-]+\]")
+# Identifiers the platform generates itself: sandbox IDs, gateway session IDs, per-user memory
+# partitions and UUIDs. They are random hex, not tenant content, and a random one is sometimes
+# all digits, which the card-number pattern reports as a leak (about 1 sandbox ID in 1,200).
+# Offline graders drop these exact shapes before looking for PII, so a run cannot fail at random.
+PLATFORM_IDENTIFIER_RE = re.compile(
+    r"\bsbx-[0-9a-f]{16}\b"
+    r"|\bsess-gw-[0-9a-f]{32}\b"
+    r"|\bu-[0-9a-f]{16}\b"
+    r"|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b"
+)
+
+
+def strip_platform_identifiers(text: str) -> str:
+    """Removes platform-generated identifiers so PII patterns only see content."""
+    return PLATFORM_IDENTIFIER_RE.sub("", text)
+
+
 _AFFIRMATIVE_SUPPRESS_OCC_RE = _OCC_SUPPRESSION_TARGET_RE
 _NEGATION_BEFORE_SUPPRESS_RE = _NEGATION_WINDOW_RE
 
@@ -265,7 +282,9 @@ def verify_agent_output_deterministically(
             negation_contradictions.append(match.group(0))
 
     # 5. Check for unredacted PII in output
-    scrubbed = _REDACTION_PLACEHOLDER_RE.sub("", full_output_text)
+    scrubbed = strip_platform_identifiers(
+        _REDACTION_PLACEHOLDER_RE.sub("", full_output_text)
+    )
     if _SSN_PATTERN.search(scrubbed):
         pii_leaks.append("UNREDACTED_SSN")
     if _ABA_ROUTING_PATTERN.search(scrubbed):

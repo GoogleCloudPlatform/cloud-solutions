@@ -63,6 +63,11 @@ class _VerifiedToolContext:
     state: dict[str, object]
 
 
+def _tfvars_snippet(engine_resource_name: str) -> str:
+    """The Terraform variable assignment that points a deployment at this reasoning engine."""
+    return f'agent_sandbox_reasoning_engine_name = "{engine_resource_name}"'
+
+
 def _always_live_mode() -> bool:
     """Returns `True` to force live Gemini REST calls during `--verify-manager` runs."""
     return True
@@ -189,7 +194,7 @@ def build_dry_run_plan(
             "ttl": f"{ttl_seconds}s",
             "zero_credentials_mounted": True,
         },
-        "terraform_tfvars_snippet": f'agent_sandbox_reasoning_engine_name = "{placeholder_engine}"',
+        "terraform_tfvars_snippet": _tfvars_snippet(placeholder_engine),
     }
 
 
@@ -201,7 +206,7 @@ def run_live_manager_verification(
     ttl_seconds: int,
     use_gcloud_auth: bool,
 ) -> dict[str, object]:
-    """Verifies `LiveGeminiAgentSandboxClient`, `GeminiAgentSandboxManager`, and MCP tool end-to-end.
+    """Verifies `LiveGeminiAgentSandboxClient`, `GeminiAgentSandboxManager`, and the MCP tool.
 
     Args:
         project_id: Target Google Cloud project ID.
@@ -665,7 +670,7 @@ def provision_and_smoke_test_live(
         verify_manager: When `True`, also exercises `GeminiAgentSandboxManager` + MCP live flow.
 
     Returns:
-        Receipt dictionary containing the live `AGENT_SANDBOX_REASONING_ENGINE_NAME` and test outputs.
+        Receipt with the live `AGENT_SANDBOX_REASONING_ENGINE_NAME` and test outputs.
 
     Raises:
         RuntimeError: If parent runtime creation or sandbox execution fails.
@@ -831,7 +836,7 @@ def provision_and_smoke_test_live(
             "after_pause_resume": bash_resumed,
         },
         "shell_pause_resume_verified": True,
-        "terraform_tfvars_snippet": f'agent_sandbox_reasoning_engine_name = "{engine_resource_name}"',
+        "terraform_tfvars_snippet": _tfvars_snippet(engine_resource_name),
     }
     if verify_manager:
         result_payload["manager_and_mcp_verification"] = (

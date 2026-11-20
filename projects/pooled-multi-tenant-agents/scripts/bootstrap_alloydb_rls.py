@@ -220,6 +220,12 @@ def main() -> int:
             proxy_bin = shutil.which("alloydb-auth-proxy") or str(
                 Path.home() / ".local" / "bin" / "alloydb-auth-proxy"
             )
+            if not Path(proxy_bin).is_file():
+                raise FileNotFoundError(
+                    "alloydb-auth-proxy was not found on PATH or in ~/.local/bin. Install it "
+                    "(https://cloud.google.com/alloydb/docs/auth-proxy/connect#install) and "
+                    "re-run; scripts/deploy.sh downloads it on Linux and macOS."
+                )
             proxy_cmd = [proxy_bin, args.instance_uri.strip()]
             if not args.private_ip:
                 proxy_cmd.append("--public-ip")

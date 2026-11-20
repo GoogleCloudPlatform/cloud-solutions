@@ -144,7 +144,7 @@ MERIDIAN_RUNTIME_URL = "https://cymbal-agent-meridian.example"
 
 FINVAULT_TENANT_ID = "tenant-finvault-alpha"
 MERIDIAN_TENANT_ID = "tenant-meridian-capital"
-MERIDIAN_OKTA_ISSUER = "https://meridian.okta.com/oauth2/default"
+MERIDIAN_OKTA_ISSUER = "https://meridian-idp.example.com/oauth2/default"
 
 
 @pytest.fixture(autouse=True)

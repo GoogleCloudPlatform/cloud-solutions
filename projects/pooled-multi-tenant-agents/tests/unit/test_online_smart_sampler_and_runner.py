@@ -14,13 +14,21 @@
 
 # pylint: disable=line-too-long
 
-"""Tests for Study Guide Ch. 6 & Ch. 8: 3-Tier Online Smart Sampler, HT+RG & AsyncEvalRunner."""
+"""Tests for Study Guide Ch. 6 & Ch. 8: 3-Tier Online Smart Sampler, HT+RG &
+AsyncEvalRunner.
+"""
 
 from __future__ import annotations
 
+import itertools
+import re
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
+import pytest
+from agents.sandbox import hermetic_backend
+from evals import deterministic_verifier
 from evals.async_eval_runner import AsyncEvalRunner, EvalCaseInput
 from evals.online_smart_sampler import (
     OnlineTraceTelemetry,
@@ -30,12 +38,15 @@ from evals.online_smart_sampler import (
     evaluate_online_sampling_funnel,
 )
 from scripts.run_ai_engineering_evals import run_eval_showcase
+from scripts.run_verifiable_batch_audit import run_batch_dataset_audit
 
 
 def test_three_tier_online_sampling_funnel_assigns_correct_strata_and_probabilities() -> (
     None
 ):
-    """Proves anomalies get pi=1.00, 3LO write tools get pi=0.25, and healthy reads get pi=0.01."""
+    """Proves anomalies get pi=1.00, 3LO write tools get pi=0.25, and healthy
+    reads get pi=0.01.
+    """
     anom = evaluate_online_sampling_funnel(
         OnlineTraceTelemetry(
             trace_id="t-anom-1",
@@ -107,7 +118,9 @@ def test_three_tier_online_sampling_funnel_assigns_correct_strata_and_probabilit
 def test_horvitz_thompson_and_rogan_gladen_correct_non_uniform_sampling_bias() -> (
     None
 ):
-    """Proves inverse-probability weighting + Rogan-Gladen recovers true fleet quality."""
+    """Proves inverse-probability weighting + Rogan-Gladen recovers true fleet
+    quality.
+    """
     obs = [
         # 10 anomalies sampled at 100% (pi=1.0): all 10 fail (judge_pass=0)
         *[
@@ -120,7 +133,8 @@ def test_horvitz_thompson_and_rogan_gladen_correct_non_uniform_sampling_bias() -
             )
             for i in range(10)
         ],
-        # 10 healthy baseline traces sampled at 1% (pi=0.01, representing 1,000 turns): 9 pass
+        # 10 healthy baseline traces sampled at 1% (pi=0.01, representing 1,000
+        # turns): 9 pass
         *[
             SampledJudgeObservation(
                 trace_id=f"h-{i}",
@@ -135,10 +149,12 @@ def test_horvitz_thompson_and_rogan_gladen_correct_non_uniform_sampling_bias() -
     res = estimate_daily_fleet_quality(
         obs, judge_sensitivity_p=0.90, judge_specificity_q=0.90
     )
-    # Naive unweighted sample pass rate is 9 / 20 = 0.45 (severely biased downward by 100% anomaly
+    # Naive unweighted sample pass rate is 9 / 20 = 0.45 (severely biased
+    # downward by 100% anomaly
     # sampling!)
     assert res["naive_biased_sample_pass_rate"] == 0.45
-    # Horvitz-Thompson weights the 10 healthy traces by 1/0.01 = 100 each (total weight 1010):
+    # Horvitz-Thompson weights the 10 healthy traces by 1/0.01 = 100 each
+    # (total weight 1010):
     # HT pass rate = 900 / 1010 = 0.8911
     assert res["horvitz_thompson_pass_rate"] == 0.8911
     # Rogan-Gladen with p=0.90, q=0.90: (0.8911 + 0.90 - 1) / 0.80 = 0.9889
@@ -152,7 +168,9 @@ def test_horvitz_thompson_and_rogan_gladen_correct_non_uniform_sampling_bias() -
 async def test_async_eval_runner_semaphore_sha256_cache_and_jsonl_checkpoint_resume(
     tmp_path: Path,
 ) -> None:
-    """Proves bounded concurrency, transient retry backoff, terminal halt, and JSONL resume."""
+    """Proves bounded concurrency, transient retry backoff, terminal halt, and
+    JSONL resume.
+    """
     ckpt_file = tmp_path / "eval_checkpoint.jsonl"
     cases = [
         EvalCaseInput(
@@ -194,7 +212,8 @@ async def test_async_eval_runner_semaphore_sha256_cache_and_jsonl_checkpoint_res
     assert rep1["cache_hits"] == 0
     assert ckpt_file.is_file()
 
-    # New runner instance pointed at the same checkpoint file must serve all 3 from cache (0 live
+    # New runner instance pointed at the same checkpoint file must serve all 3
+    # from cache (0 live
     # calls!)
     runner2 = AsyncEvalRunner(max_concurrency=2, checkpoint_path=ckpt_file)
     rep2 = await runner2.run_suite(cases, _evaluator)
@@ -244,3 +263,38 @@ async def test_async_eval_runner_semaphore_sha256_cache_and_jsonl_checkpoint_res
         showcase["async_runner_second_run_cached"]["cache_hits"]
         == showcase["async_runner_first_run"]["total_cases"]
     )
+
+
+class _AllDigitUuidModule:
+    """Stands in for `uuid` in the hermetic sandbox backend: every sandbox ID
+    is all digits.
+    """
+
+    def __init__(self) -> None:
+        self._next = itertools.count(4539148803436467)
+
+    def uuid4(self) -> Any:
+        zeros = "0" * 16
+        return SimpleNamespace(hex=f"{next(self._next)}{zeros}")
+
+
+async def test_all_digit_sandbox_ids_do_not_fail_the_showcase_or_the_batch_audit(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A sandbox ID is 16 random hex characters, and about 1 in 1,200 is all
+    digits. That must
+    not be graded as a leaked card number: it used to fail these two suites at
+    random.
+    """
+    monkeypatch.setattr(hermetic_backend, "uuid", _AllDigitUuidModule())
+    showcase = await run_eval_showcase()
+    assert showcase["status"] == "PASS"
+    assert run_batch_dataset_audit()["status"] == "PASS"
+
+    # The forced IDs really are the false-positive shape: without the shared
+    # scrub both fail.
+    monkeypatch.setattr(
+        deterministic_verifier, "PLATFORM_IDENTIFIER_RE", re.compile(r"(?!)")
+    )
+    assert (await run_eval_showcase())["status"] == "FAIL"
+    assert run_batch_dataset_audit()["status"] == "FAIL"

@@ -139,7 +139,7 @@ def build_thinking_config(
     return {"thinking_budget": budget}
 
 
-_CORE_SYSTEM_PROMPT_HEADER = (
+SHARED_SYSTEM_PROMPT_PREFIX = (
     "You are the Cymbal SaaS Shared Diagnostic Agent.\n"
     "You correlate production telemetry, inspect incident runbooks, and propose "
     "remediation steps.\n"
@@ -149,12 +149,7 @@ _CORE_SYSTEM_PROMPT_HEADER = (
     "2. Never access, infer, or reference telemetry, incidents, or runbooks belonging to any "
     "other tenant.\n"
     "3. Use only the dynamically entitled MCP tools present in your active toolset.\n"
-)
-_BASELINE_PLUGIN_SKILLS_TEXT = load_shared_baseline_skills_text()
-SHARED_SYSTEM_PROMPT_PREFIX = (
-    f"{_CORE_SYSTEM_PROMPT_HEADER}\n{_BASELINE_PLUGIN_SKILLS_TEXT}\n"
-    if _BASELINE_PLUGIN_SKILLS_TEXT
-    else _CORE_SYSTEM_PROMPT_HEADER
+    f"\n{load_shared_baseline_skills_text()}"
 )
 
 SHARED_2LO_BASE_TOOLS: tuple[str, ...] = (

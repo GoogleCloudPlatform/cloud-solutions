@@ -223,16 +223,16 @@ def register_dynamic_private_agent(
         Registered `CatalogAgentEntry`.
 
     Raises:
-        ValueError: If `agent_id` collides with a built-in catalog agent owned by another tenant.
+        ValueError: If `agent_id` already belongs to another tenant (built-in or dynamic), or is
+            a built-in agent. A tenant may only re-register its own dynamic agent.
     """
     existing = AGENT_CATALOG.get(agent_id)
-    if (
-        existing is not None
-        and agent_id not in _DYNAMIC_AGENT_IDS
-        and existing.owner_tenant_id != owner_tenant_id
+    if existing is not None and (
+        existing.owner_tenant_id != owner_tenant_id
+        or agent_id not in _DYNAMIC_AGENT_IDS
     ):
         raise ValueError(
-            f"Cannot overwrite built-in catalog agent '{agent_id}'."
+            f"Agent id '{agent_id}' is already registered and cannot be replaced."
         )
     entry = CatalogAgentEntry(
         agent_id=agent_id,

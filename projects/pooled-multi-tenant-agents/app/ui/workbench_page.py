@@ -18,9 +18,46 @@
 
 from __future__ import annotations
 
+import re
+from pathlib import Path
 
-def render_workbench_html() -> str:
-    """Returns the self-contained HTML5 workbench page served at `GET /`."""
+MODULARITY_DIAGRAM = "ws2_phase1_vs_phase2_modularity"
+_DIAGRAM_DIR = Path(__file__).resolve().parents[2] / "docs" / "assets"
+_FALLBACK_DIAGRAM = "ws2_pooled_5hop_architecture"
+_MODULARITY_BUTTON_RE = re.compile(
+    r'[ \t]*<button id="svg-btn-mod".*?</button>\n', re.DOTALL
+)
+_MODULARITY_TOGGLE_RE = re.compile(
+    r"document\.getElementById\('svg-btn-mod'\)\.classList\.(?:add|remove)\('active'\); ?"
+)
+
+
+def modularity_diagram_available() -> bool:
+    """Whether the optional phase-comparison diagram ships with this checkout."""
+    return (_DIAGRAM_DIR / f"{MODULARITY_DIAGRAM}.svg").is_file()
+
+
+def render_workbench_html(*, modularity_diagram: bool | None = None) -> str:
+    """Returns the self-contained HTML5 workbench page served at `GET /`.
+
+    Args:
+        modularity_diagram: Whether to offer the phase-comparison diagram. Defaults to whether
+            the file exists; without it the page has no control that points at it.
+    """
+    if modularity_diagram is None:
+        modularity_diagram = modularity_diagram_available()
+    html = _workbench_html()
+    if modularity_diagram:
+        return html
+    html = _MODULARITY_BUTTON_RE.sub("", html)
+    html = _MODULARITY_TOGGLE_RE.sub("", html)
+    return html.replace(
+        f"/diagrams/{MODULARITY_DIAGRAM}.svg",
+        f"/diagrams/{_FALLBACK_DIAGRAM}.svg",
+    )
+
+
+def _workbench_html() -> str:
     return """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -903,7 +940,7 @@ def render_workbench_html() -> str:
 
     <div style="display:flex; gap:8px; align-items:center;">
       <a href="/demos" class="nav-cta" style="text-decoration:none; background:rgba(88, 196, 221, 0.14); color:#0071E3; border-color:rgba(0, 113, 227, 0.3);">
-        🎬 3B1B Video &amp; Tuesday Demos
+        🎬 Video &amp; Live Demos
       </a>
       <button class="nav-cta" onclick="runLiveCloudAnd3PProof()">
         ● Cloud &amp; 3P Proof
@@ -1185,7 +1222,7 @@ def render_workbench_html() -> str:
         <div class="hero-head">
           <div class="eyebrow">Live Connected Environments • Workstream 2 Deliverable Checklist</div>
           <h1 class="h1">Live Proof &amp; Project Scorecard.</h1>
-          <p class="sub">The real Jira, ServiceNow, Microsoft Entra ID and Google Cloud sandboxes we connect to (verified by the live test suite; this hosted demo runs in simulation mode), and all Milestone 1 requirements.</p>
+          <p class="sub">The real Jira, ServiceNow, Microsoft Entra ID and Google Cloud sandboxes we connect to (verified by the live test suite; this demo runs in simulation mode unless live cloud mode is on), and all Milestone 1 requirements.</p>
         </div>
 
         <!-- PRIMARY TABLE 1: Live Connected Sandboxes (Jira, ServiceNow, Azure Entra, GCP) -->
@@ -1380,7 +1417,7 @@ def render_workbench_html() -> str:
           <div>
             <span class="col-tag" style="background:var(--red); color:#fff;">THE GATE</span>
             <h3 class="col-title" style="margin:6px 0 4px; font-size:20px; color:var(--red);">No customer data until Redis scale-out, live AlloyDB RLS, and audit alerting land.</h3>
-            <p class="col-desc" style="color:var(--ink);">ADR-0014 B5 and Terraform adoption are live; until the remaining gates close, synthetic tenants only in a sandbox (hosted demo runs with <code>CYMBAL_LIVE_GCP=0</code>).</p>
+            <p class="col-desc" style="color:var(--ink);">ADR-0014 B5 and Terraform adoption are live; until the remaining gates close, synthetic tenants only in a sandbox (the demo runs with <code>CYMBAL_LIVE_GCP=0</code>).</p>
           </div>
         </div>
 
@@ -1515,7 +1552,7 @@ def render_workbench_html() -> str:
               <tr><th>Status</th><th>Items</th></tr>
             </thead>
             <tbody>
-              <tr><td>✅ <b>Built &amp; live on Cloud Run</b></td><td>All controls in the security review and the compromise matrix's "Live Today" column (hosted demo UI runs with <code>CYMBAL_LIVE_GCP=0</code>; live GCP + broker + SPIFFE paths verified by the live suite)</td></tr>
+              <tr><td>✅ <b>Built &amp; live on Cloud Run</b></td><td>All controls in the security review and the compromise matrix's "Live Today" column (the demo UI runs with <code>CYMBAL_LIVE_GCP=0</code>; live GCP + broker + SPIFFE paths verified by the live suite)</td></tr>
               <tr><td>✅ <b>On main</b></td><td>Key rotation ring, offboarding, encrypted search vectors, RLS startup check, config-driven topology routing (<code>pool | silo | hybrid</code>)</td></tr>
               <tr><td>✅ <b>ADR-0014 B2–B5 + ADR-0016 Three-Layer SPIFFE deployed</b></td><td>KMS-signed context token (B2), per-audience context tokens + JWKS (B3), separate credential broker (B4), per-agent Cloud Run runtime split (<code>cymbal-agent-shared</code>, <code>cymbal-agent-finvault-alpha</code>) with gateway broker-invoker removed (B5), and <code>Tenant ∩ User ∩ Agent</code> SPIFFE binding (ADR-0016). Live 2026-11-09</td></tr>
               <tr><td>✅ <b>Terraform adopted &amp; modularized + cymbal-build-sa live</b></td><td>GCS state (<code>gs://cymbal-multitenancy-example-tfstate</code>), zero drift across <code>platform_core</code>, <code>agent_runtime</code>, <code>tenant</code> (YAML-driven), and <code>tenant_data_plane</code> modules, plus dedicated least-privilege <code>cymbal-build-sa</code> (S4 closed). Live 2026-11-06 / 2026-11-09</td></tr>
@@ -2456,8 +2493,8 @@ FILTER USING (tenant_id = 'tenant-finvault-alpha');`
           badge: isSimulated(data.live_cloud_receipt) ? '✓ HOP 0 + 5/5 HOPS PASSED • 3P DATA SIMULATED' : '✓ HOP 0 + 5/5 HOPS PASSED + LIVE 3P',
           title: (isFv ? 'Alice (FinVault) — 8k Budget + Jira' : 'Bob (RetailStream) — 4k Cap + ServiceNow') + (isSimulated(data.live_cloud_receipt) ? ' (simulated data)' : ' (live)'),
           summary: isFv
-            ? 'Security pipeline ran live: Google-format sign-in exchanged for a DPoP-bound gateway token, FinVault + role tool pruning, 8,000 thinking budget, guardrails. Jira FINVAULT-1/2 returned' + (isSimulated(data.live_cloud_receipt) ? ' from the built-in simulation (the hosted demo is not in live-cloud mode; real Jira, Google and Gemini calls are proven by the live test suite).' : ' from the live Jira sandbox.')
-            : 'Security pipeline ran live: Entra-format sign-in exchanged for a DPoP-bound gateway token, FinVault tools pruned, 4,000-token Standard cap applied. ServiceNow INC0010001 returned' + (isSimulated(data.live_cloud_receipt) ? ' from the built-in simulation (the hosted demo is not in live-cloud mode; real ServiceNow, Google and Gemini calls are proven by the live test suite).' : ' from the live ServiceNow sandbox.'),
+            ? 'Security pipeline ran live: Google-format sign-in exchanged for a DPoP-bound gateway token, FinVault + role tool pruning, 8,000 thinking budget, guardrails. Jira FINVAULT-1/2 returned' + (isSimulated(data.live_cloud_receipt) ? ' from the built-in simulation (this demo is not in live-cloud mode; real Jira, Google and Gemini calls are proven by the live test suite).' : ' from the live Jira sandbox.')
+            : 'Security pipeline ran live: Entra-format sign-in exchanged for a DPoP-bound gateway token, FinVault tools pruned, 4,000-token Standard cap applied. ServiceNow INC0010001 returned' + (isSimulated(data.live_cloud_receipt) ? ' from the built-in simulation (this demo is not in live-cloud mode; real ServiceNow, Google and Gemini calls are proven by the live test suite).' : ' from the live ServiceNow sandbox.'),
           kv: [data.tenant_id, `${effTokens} tokens`, isFv ? 'Jira FINVAULT-1/2' : 'SNOW INC0010001', '200 OK'],
           file: 'db.py',
           code: NODE_SPECS.hop5_rls.code,
@@ -2547,7 +2584,7 @@ FILTER USING (tenant_id = 'tenant-finvault-alpha');`
         badge: sim ? '☁️ CLOUD & 3P • SIMULATED ON THIS HOST' : '☁️ LIVE CLOUD & 3P VERIFIED',
         title: sim ? 'Cloud, Jira, ServiceNow & Entra ID (simulation mode)' : 'Live GCP, Jira, ServiceNow & Entra ID Proof',
         summary: sim
-          ? 'This hosted demo is not in live-cloud mode, so these results come from the built-in simulation (same isolation checks, synthetic data). The real round-trips (Jira, ServiceNow, Entra, Model Armor, KMS, DLP, Firestore, BigQuery, GCS, Gemini) are proven by the live test suite against the real sandboxes.'
+          ? 'This demo is not in live-cloud mode, so these results come from the built-in simulation (same isolation checks, synthetic data). The real round-trips (Jira, ServiceNow, Entra, Model Armor, KMS, DLP, Firestore, BigQuery, GCS, Gemini) are proven by the live test suite against the real sandboxes.'
           : 'Verified live API roundtrips against Atlassian Jira Cloud (FINVAULT-1/2), ServiceNow PDI (INC0010001), Microsoft Entra ID RS256 JWKS, and Google Cloud (cymbal-multitenancy-example).',
         kv: ['Jira FINVAULT-1/2', 'SNOW INC0010001', 'Entra RS256', sim ? 'SIMULATED' : 'Cross-Tenant 403'],
         file: 'gcp_live_bridge.py',

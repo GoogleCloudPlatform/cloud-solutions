@@ -195,28 +195,7 @@ resource "google_project_iam_member" "tenant_bigquery_job_user" {
   member  = "serviceAccount:${google_service_account.tenant.email}"
 }
 
-# --- Google Cloud Identity Platform Multi-Tenancy + Issuer-Bound WIF (Hop 0) ----------------------
-
-resource "google_identity_platform_tenant" "tenant" {
-  count                    = var.enable_identity_platform_tenant ? 1 : 0
-  project                  = var.project_id
-  display_name             = substr(var.tenant_id, 0, 20)
-  allow_password_signup    = false
-  enable_email_link_signin = false
-  disable_auth             = false
-}
-
-resource "google_identity_platform_tenant_oauth_idp_config" "corporate_oidc" {
-  count         = var.enable_identity_platform_tenant ? 1 : 0
-  project       = var.project_id
-  tenant        = google_identity_platform_tenant.tenant[0].name
-  name          = "oidc.${substr(replace(var.tenant_id, "_", "-"), 0, 24)}"
-  display_name  = substr("OIDC ${var.tenant_id}", 0, 32)
-  client_id     = var.tenant_oidc_client_id
-  client_secret = var.tenant_oidc_secret_ref
-  issuer        = var.tenant_oidc_issuer_uri
-  enabled       = true
-}
+# --- Issuer-Bound Workload Identity Federation (WIF) Pool & Corporate OIDC IdP Provider -----------
 
 resource "google_iam_workload_identity_pool" "tenant_idp_pool" {
   count                     = var.enable_tenant_wif_provider ? 1 : 0
@@ -254,11 +233,39 @@ resource "google_project_iam_member" "tenant_memory_bank_user" {
   role    = "roles/aiplatform.memoryUser"
   member  = "serviceAccount:${google_service_account.tenant.email}"
 
+  # The condition text is a live IAM attribute: rewording it replaces the binding on every
+  # deployed tenant, so keep title and description byte-stable.
   condition {
     title       = "memory-bank-tenant-scope-${var.tenant_id}"
-    description = "Restricts Memory Bank in Gemini reads and writes to ${var.tenant_id} and entitled agent_id memoryScope."
-    expression  = "api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['tenant_id'] == '${var.tenant_id}' && api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['agent_id'] in [${join(", ", formatlist("'%s'", var.allowed_memory_agent_ids))}]"
+    description = "Restricts Memory Bank in Gemini reads and writes to ${var.tenant_id} memoryScope."
+    expression = (
+      length(var.allowed_memory_agent_ids) == 0
+      ? "api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['tenant_id'] == '${var.tenant_id}'"
+      : "api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['tenant_id'] == '${var.tenant_id}' && api.getAttribute('aiplatform.googleapis.com/memoryScope', {})['agent_id'] in [${join(", ", [for aid in var.allowed_memory_agent_ids : "'${aid}'"])}]"
+    )
   }
+}
+
+# --- Optional Google Cloud Identity Platform Multi-Tenant Brokered SSO (Hop 0) ---------------------
+
+resource "google_identity_platform_tenant" "tenant" {
+  count                    = var.enable_identity_platform_tenant ? 1 : 0
+  project                  = var.project_id
+  display_name             = var.tenant_id
+  allow_password_signup    = false
+  enable_email_link_signin = false
+}
+
+resource "google_identity_platform_tenant_oauth_idp_config" "corporate_sso" {
+  count         = var.enable_identity_platform_tenant && var.tenant_oidc_issuer_uri != "" && var.identity_platform_oidc_client_id != "" ? 1 : 0
+  project       = var.project_id
+  tenant        = google_identity_platform_tenant.tenant[0].name
+  name          = "oidc.${var.tenant_id}"
+  display_name  = "${var.tenant_id} Corporate SSO"
+  enabled       = true
+  issuer        = var.tenant_oidc_issuer_uri
+  client_id     = var.identity_platform_oidc_client_id
+  client_secret = var.identity_platform_oidc_client_secret
 }
 
 # --- Per-Tenant Zero-Password AlloyDB IAM Database Identity ----------------------------------------

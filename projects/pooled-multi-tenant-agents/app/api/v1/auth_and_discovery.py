@@ -57,6 +57,7 @@ from app.gateway_tokens import (
 )
 from app.runtime_state import (
     Caller,
+    SandboxOnly,
     active_platform_config,
     gateway_module,
     logger,
@@ -331,7 +332,11 @@ async def a2a_agent_cards(envelope: Caller) -> dict[str, Any]:
     return A2AAgentCardRegistry.build_a2a_agent_cards(envelope=envelope)
 
 
-@router.post("/api/v1/oauth/3lo/authorize")
+# Sandbox only. The callback below does not exchange `authorization_code` with a provider: it
+# records a synthetic grant so the consent flow can be demonstrated. Outside the synthetic sandbox
+# that would let any entitled user approve their own consent, so both routes return 404 there
+# until a real provider code exchange exists.
+@router.post("/api/v1/oauth/3lo/authorize", dependencies=SandboxOnly)
 async def authorize_3lo_oauth(
     req: OAuth3LOAuthorizeRequest,
     envelope: Caller,
@@ -358,13 +363,16 @@ async def authorize_3lo_oauth(
     }
 
 
-@router.post("/api/v1/oauth/3lo/callback")
+@router.post("/api/v1/oauth/3lo/callback", dependencies=SandboxOnly)
 async def callback_3lo_oauth(
     req: OAuth3LOCallbackRequest,
     envelope: Caller,
     response: Response,
 ) -> dict[str, Any]:
-    """Verifies CSRF `oauth_state` and binds the 3LO grant to `(tenant_id, sub, scope)`."""
+    """Verifies CSRF `oauth_state` and binds a synthetic 3LO grant to `(tenant_id, sub, scope)`.
+
+    Sandbox only: no provider code exchange happens here (see the note above the routes).
+    """
     if req.required_scope not in envelope.tenant.authorized_scopes:
         raise HTTPException(
             status_code=403,

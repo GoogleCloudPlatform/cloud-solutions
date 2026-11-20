@@ -29,27 +29,27 @@ prefix-caching economics directly in your browser with zero backend setup:
 
 ![Unified Multi-Tenant Agent Architecture](assets/w1_w2_unified_multitenant_agent_architecture.png)
 
-1. **Ingress & Egress Policy Gateways:** Corporate OIDC/SAML federation via
+1.  **Ingress & Egress Policy Gateways:** Corporate OIDC/SAML federation via
    **Google Cloud Identity Platform** and **Workload Identity Federation
    (WIF)**, RFC 9449 **DPoP** sender-bound gateway tokens, asymmetric **Cloud
    KMS** (`ES256`) `ctx+jwt` context tokens, **Model Armor** prompt/output
    screening, **Cloud DLP** PII redaction, and **Memorystore for Redis** atomic
    rate-limit bulkheads.
-2. **The Brain (Stateless Turn Orchestrator):** Shared Cloud Run orchestrators
+1.  **The Brain (Stateless Turn Orchestrator):** Shared Cloud Run orchestrators
    (portable to GKE or managed **agent runtime in Gemini**) verifying context
    tokens with Cloud KMS public keys only, loading shared baseline skills in the
    cached prompt prefix alongside per-tenant Cloud KMS-encrypted custom skills
    in the uncached turn suffix.
-3. **The Hands (Per-Session gVisor Sandboxes):** Ephemeral per-session **agent
+1.  **The Hands (Per-Session gVisor Sandboxes):** Ephemeral per-session **agent
    sandboxes in Gemini** (plus a portable GKE `gVisor` warm-pool manifest)
    executing untrusted diagnostic code as an unprivileged user (`uid=999`) with
    zero mounted credentials and no direct metadata or internet egress.
-4. **The Vault (Auth Manager & Out-of-Process Credential Broker):** Dedicated
+1.  **The Vault (Auth Manager & Out-of-Process Credential Broker):** Dedicated
    `cymbal-credential-broker` verifying **Cloud Run Agent Identity** (`SPIFFE`
    X.509 mTLS) before minting short-lived per-tenant `ct-<sha256[:24]>` `2LO`
    tokens or checking out per-user `(tenant_id, user_id, scope)` `3LO` OAuth
    grants.
-5. **Session, Scoped Memory & Relational Data Layer:** Cloud KMS AEAD-encrypted
+1.  **Session, Scoped Memory & Relational Data Layer:** Cloud KMS AEAD-encrypted
    **Cloud Firestore** session checkpoints, exact-scope **Memory Bank in
    Gemini** guarded by Cloud IAM `memoryScope` CEL conditions (`tenant_id` and
    `agent_id`), and **AlloyDB for PostgreSQL** `FORCE ROW LEVEL SECURITY` under
