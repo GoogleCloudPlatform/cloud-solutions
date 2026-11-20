@@ -198,12 +198,12 @@ resource "google_project_iam_member" "tenant_bigquery_job_user" {
 # --- Google Cloud Identity Platform Multi-Tenancy + Issuer-Bound WIF (Hop 0) ----------------------
 
 resource "google_identity_platform_tenant" "tenant" {
-  count                     = var.enable_identity_platform_tenant ? 1 : 0
-  project                   = var.project_id
-  display_name              = substr(var.tenant_id, 0, 20)
-  allow_password_signup     = false
-  enable_email_link_signin  = false
-  disable_auth              = false
+  count                    = var.enable_identity_platform_tenant ? 1 : 0
+  project                  = var.project_id
+  display_name             = substr(var.tenant_id, 0, 20)
+  allow_password_signup    = false
+  enable_email_link_signin = false
+  disable_auth             = false
 }
 
 resource "google_identity_platform_tenant_oauth_idp_config" "corporate_oidc" {
