@@ -39,6 +39,7 @@ Verifies:
 from __future__ import annotations
 
 import asyncio
+import re
 import time
 from pathlib import Path
 from types import SimpleNamespace
@@ -271,10 +272,19 @@ def test_gateway_maps_custom_skill_outage_to_http_503_with_retry_after_and_serve
 ) -> None:
     """FastAPI gateway maps `CustomSkillUnavailableError` to HTTP 503 (`Retry-After: 10`)."""
     client = TestClient(gateway_main.app)
-    vis_response = client.get("/visualizer")
+    vis_response = client.get("/visualizer?tab=breach&vector=2")
     assert vis_response.status_code == 200
     assert "Pooled Multi-Tenant AI Agents" in vis_response.text
     assert ".innerHTML" not in vis_response.text
+    assert "Google+Sans" not in vis_response.text
+
+    exp_response = client.get("/explainer?slide=1")
+    assert exp_response.status_code == 200
+    assert "Guided Architecture Story" in exp_response.text
+    assert ".innerHTML" not in exp_response.text
+    assert "insertAdjacentHTML" not in exp_response.text
+    assert "localStorage" not in exp_response.text
+    assert not re.search(r"\$\d", exp_response.text)
 
     def _boom_load(**_kwargs: Any) -> Any:
         raise CustomSkillUnavailableError("Simulated GCS outage")

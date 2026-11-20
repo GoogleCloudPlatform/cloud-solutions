@@ -86,6 +86,15 @@ async def interactive_architecture_visualizer() -> str:
     return visualizer_path.read_text(encoding="utf-8")
 
 
+@router.get("/explainer", response_class=HTMLResponse)
+async def guided_architecture_explainer() -> str:
+    """Serves the 13-slide guided architecture story deck (`docs/explainer.html`)."""
+    explainer_path = _REPO_ROOT / "docs" / "explainer.html"
+    if not explainer_path.is_file():
+        raise HTTPException(status_code=404, detail="Explainer asset missing")
+    return explainer_path.read_text(encoding="utf-8")
+
+
 @router.get("/", response_class=HTMLResponse)
 async def dashboard_ui() -> str:
     """Serves the Minimalist Architecture Diagram & 5-Hop Tracer UI."""

@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
     rel="stylesheet"
   />
   <style>
@@ -89,7 +89,7 @@
     }
 
     h1, h2, h3, h4, .heading-font {
-      font-family: "Google Sans", "Inter", sans-serif;
+      font-family: "Plus Jakarta Sans", "Inter", sans-serif;
       margin: 0;
     }
 
@@ -447,6 +447,31 @@
     .hidden {
       display: none !important;
     }
+
+    .src-note {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .src-note a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .src-note a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -465,6 +490,7 @@
         <button type="button" class="tab-btn" data-tab="breach">3. 10-Vector Breach Matrix</button>
         <button type="button" class="tab-btn" data-tab="finops">4. Pooling &amp; Cache Simulator</button>
       </nav>
+      <a class="action-link" href="explainer.html?slide=1">Guided Story Deck</a>
       <a class="action-link" href="index.html">Docs Overview</a>
       <a class="action-link" href="https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/pooled-multi-tenant-agents" target="_blank" rel="noopener noreferrer">GitHub Source</a>
       <button type="button" class="theme-btn" id="themeToggle">Light Mode</button>
@@ -526,6 +552,10 @@
           <pre class="code-pane" id="inspectorCode"></pre>
         </div>
       </div>
+      <div class="src-note">
+        <span>Source: <span class="mono">agents/hop0_idp_federation.py</span> · <span class="mono">agents/context_signing.py</span> · <span class="mono">broker_service/core.py</span> · <span class="mono">mcp_server/db.py</span> · ADR-0014 / ADR-0016</span>
+        <a href="explainer.html?slide=5">View in Guided Story Deck (Slide 5) →</a>
+      </div>
     </section>
 
     <!-- TAB 2: TWO-ENTERPRISE CONCURRENCY -->
@@ -548,6 +578,10 @@
         </div>
         <div class="grid-2" id="concurrencyColumns"></div>
       </div>
+      <div class="src-note">
+        <span>Source: <span class="mono">tests/security/test_concurrent_two_tenant_e2e_isolation.py</span> · <span class="mono">tests/security/test_e2e_multiturn_and_two_enterprise_concurrency.py</span></span>
+        <a href="explainer.html?slide=2">View Multi-Tenant Invariant Story (Slide 2) →</a>
+      </div>
     </section>
 
     <!-- TAB 3: 10-VECTOR BREACH MATRIX -->
@@ -569,6 +603,10 @@
           <div class="kv-grid" id="breachKv"></div>
           <pre class="code-pane" id="breachReceiptCode"></pre>
         </div>
+      </div>
+      <div class="src-note">
+        <span>Source: <span class="mono">run_breach_simulations.py</span> (10/10 PASS) · <span class="mono">tests/security/test_ten_vector_defense_matrix.py</span></span>
+        <a href="explainer.html?slide=9">View Sandbox &amp; Vault Defenses (Slide 9) →</a>
       </div>
     </section>
 
@@ -619,6 +657,10 @@
           <div id="finopsChartMount"></div>
           <pre class="code-pane" id="finopsSummaryCode"></pre>
         </div>
+      </div>
+      <div class="src-note">
+        <span>Source: <span class="mono">agents/shared_diagnostic_agent.py</span> · <span class="mono">agents/skill_loader.py</span> · <span class="mono">docs/pooling_volume_benchmarks.md</span> (Modeled)</span>
+        <a href="explainer.html?slide=8">View Two-Tier Skill Prefix Story (Slide 8) →</a>
       </div>
     </section>
   </main>
@@ -929,6 +971,7 @@
               onClick: function () {
                 selectedHopIdx = idx;
                 renderFlow();
+                syncUrlState();
               }
             },
             [
@@ -1186,6 +1229,7 @@
                 onClick: function () {
                   activeBreachIdx = idx;
                   renderBreaches();
+                  syncUrlState();
                 }
               },
               [
@@ -1299,17 +1343,68 @@
           "modeled_input_token_savings = " + tokenReductionPct + "%";
       }
 
+      let activeTab = "flow";
+
+      function syncUrlState() {
+        try {
+          const u = new URL(window.location.href);
+          u.searchParams.set("tab", activeTab);
+          if (activeTab === "flow") {
+            u.searchParams.set("hop", String(selectedHopIdx));
+            u.searchParams.set("db", document.getElementById("datastoreSelect").value);
+            u.searchParams.delete("vector");
+          } else if (activeTab === "breach") {
+            u.searchParams.set("vector", String(activeBreachIdx));
+            u.searchParams.delete("hop");
+            u.searchParams.delete("db");
+          } else {
+            u.searchParams.delete("hop");
+            u.searchParams.delete("db");
+            u.searchParams.delete("vector");
+          }
+          window.history.replaceState(null, "", u);
+        } catch (_err) {
+          /* Ignore file:// replaceState restriction */
+        }
+      }
+
+      function selectTab(target, skipSync) {
+        const validTabs = ["flow", "concurrency", "breach", "finops"];
+        activeTab = validTabs.indexOf(target) >= 0 ? target : "flow";
+        document.querySelectorAll(".tab-btn").forEach(function (b) {
+          b.classList.toggle("active", b.getAttribute("data-tab") === activeTab);
+        });
+        validTabs.forEach(function (id) {
+          const sec = document.getElementById("view-" + id);
+          if (id === activeTab) sec.classList.remove("hidden");
+          else sec.classList.add("hidden");
+        });
+        if (!skipSync) syncUrlState();
+      }
+
+      function applyUrlState() {
+        const params = new URLSearchParams(window.location.search);
+        const tabParam = params.get("tab") || "flow";
+        const hopParam = parseInt(params.get("hop") || "", 10);
+        const dbParam = params.get("db") || "";
+        const vecParam = parseInt(params.get("vector") || "", 10);
+
+        if (Number.isFinite(hopParam) && hopParam >= 0 && hopParam < 6) {
+          selectedHopIdx = hopParam;
+        }
+        if (["alloydb", "spanner", "firestore", "bigquery"].indexOf(dbParam) >= 0) {
+          document.getElementById("datastoreSelect").value = dbParam;
+        }
+        if (Number.isFinite(vecParam) && vecParam >= 0 && vecParam < BREACH_VECTORS.length) {
+          activeBreachIdx = vecParam;
+        }
+        selectTab(tabParam, true);
+      }
+
       // Wire navigation tabs
       document.querySelectorAll(".tab-btn").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
-          btn.classList.add("active");
-          const target = btn.getAttribute("data-tab");
-          ["flow", "concurrency", "breach", "finops"].forEach(function (id) {
-            const sec = document.getElementById("view-" + id);
-            if (id === target) sec.classList.remove("hidden");
-            else sec.classList.add("hidden");
-          });
+          selectTab(btn.getAttribute("data-tab"), false);
         });
       });
 
@@ -1321,12 +1416,16 @@
       });
 
       ["personaSelect", "agentSelect", "datastoreSelect"].forEach(function (id) {
-        document.getElementById(id).addEventListener("change", renderFlow);
+        document.getElementById(id).addEventListener("change", function () {
+          renderFlow();
+          syncUrlState();
+        });
       });
 
       document.getElementById("stepFlowBtn").addEventListener("click", function () {
         selectedHopIdx = (selectedHopIdx + 1) % 6;
         renderFlow();
+        syncUrlState();
       });
 
       document.getElementById("injectAttackToggle").addEventListener("change", renderConcurrency);
@@ -1335,12 +1434,20 @@
       document.getElementById("runAllBreachesBtn").addEventListener("click", function () {
         activeBreachIdx = (activeBreachIdx + 1) % BREACH_VECTORS.length;
         renderBreaches();
+        syncUrlState();
       });
 
       ["tenantCountSlider", "burstRatioSlider", "cacheHitSlider"].forEach(function (id) {
         document.getElementById(id).addEventListener("input", renderFinops);
       });
 
+      window.addEventListener("popstate", function () {
+        applyUrlState();
+        renderFlow();
+        renderBreaches();
+      });
+
+      applyUrlState();
       renderFlow();
       renderConcurrency();
       renderBreaches();

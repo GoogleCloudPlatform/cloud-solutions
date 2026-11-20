@@ -17,13 +17,15 @@ outside the model at every hop so:
 - **Agent A** cannot invoke **Agent B's** restricted tools or impersonate
   another workload identity.
 
-## Interactive Architecture & Breach Visualizer
+## Interactive Story Deck & Security Lab
 
-Explore the complete 6-checkpoint request flow, two-Enterprise concurrent
-multi-turn isolation, 10-vector adversarial breach simulations, and modeled
-prefix-caching economics directly in your browser with zero backend setup:
+Walk through the architecture step-by-step in the guided visual story deck, or
+probe the 6-checkpoint request flow, two-Enterprise concurrency, 10-vector
+adversarial breach simulations, and modeled prefix-caching capacity directly in
+your browser with zero backend setup:
 
-- **[Launch the Interactive Architecture Visualizer](visualizer.html)**
+- **[Launch the Guided Architecture Story Deck (`explainer.html`, deep-linkable via `?slide=1..13`)](explainer.html)**
+- **[Launch the Interactive Security Lab (`visualizer.html`, deep-linkable via `?tab=breach&vector=2`)](visualizer.html)**
 
 ## Disaggregated Runtime Subsystems
 
@@ -57,9 +59,12 @@ prefix-caching economics directly in your browser with zero backend setup:
 
 ## Documentation Map
 
-- **[Interactive Architecture Visualizer](visualizer.html):** Client-side
-  6-checkpoint packet tracer, concurrent enterprise turn simulator, and
-  10-vector red-team breach explorer.
+- **[Guided Architecture Story Deck](explainer.html):** 13-slide
+  interactive executive & architectural walkthrough with `?slide=N` deep links
+  and filmstrip navigation.
+- **[Interactive Security Lab](visualizer.html):** Client-side 6-checkpoint
+  packet tracer, concurrent enterprise turn simulator, and 10-vector red-team
+  breach explorer.
 - **[End-to-End Solution Architecture](solution_architecture_end_to_end.md):**
   Request flow, trust boundaries, gateway perimeter options (Cloud Run + IAP vs.
   optional Apigee / managed agent gateway in Gemini), and storage portability.

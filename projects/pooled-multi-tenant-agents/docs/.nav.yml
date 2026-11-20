@@ -17,7 +17,8 @@
 title: "Pooled Multi-Tenant AI Agents"
 nav:
   - "Overview": "index.md"
-  - "Interactive Architecture Visualizer": "visualizer.html"
+  - "Guided Architecture Story Deck": "explainer.html"
+  - "Interactive Security Lab": "visualizer.html"
   - "Implementation Status & Known Gaps": "implementation_status.md"
   - "End-to-End Solution Architecture": "solution_architecture_end_to_end.md"
   - "Architecture & Residency Boundaries": "architecture.md"
