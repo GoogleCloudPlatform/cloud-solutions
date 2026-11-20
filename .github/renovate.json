@@ -312,6 +312,12 @@
       "additionalBranchPrefix": "gke-optimization-"
     },
     {
+      "matchFileNames": ["projects/gke-storage-fallback-guardrails/**"],
+      "groupName": "gke-storage-fallback-guardrails",
+      "commitMessagePrefix": "chore(deps): [gke-storage-fallback-guardrails]",
+      "additionalBranchPrefix": "gke-storage-fallback-guardrails-"
+    },
+    {
       "matchFileNames": ["projects/hadoop-to-lakehouse-migration-demo/**"],
       "groupName": "hadoop-to-lakehouse-migration-demo",
       "commitMessagePrefix": "chore(deps): [hadoop-to-lakehouse-migration-demo]",
