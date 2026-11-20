@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 740" width="1200" height="740">
+  
+  <defs>
+    <style>
+      .eyebrow { font: 700 11.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.09em; fill: #1967d2; }
+      .title { font: 700 23px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #202124; letter-spacing: -0.015em; }
+      .subtitle { font: 400 13.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #5f6368; }
+      .zone-label { font: 700 11px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.08em; fill: #5f6368; }
+      .card-kicker { font: 700 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.07em; }
+      .card-title { font: 700 15px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #202124; }
+      .card-sub { font: 600 12.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .card-desc { font: 400 12.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #3c4043; }
+      .chip-text { font: 500 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #3c4043; }
+      .edge-pill { font: 600 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #1967d2; }
+      .mono-sm { font: 500 11.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #202124; }
+      .badge-ok { font: 700 12px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #137333; }
+      .badge-deny { font: 700 12px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #3c4043; }
+    </style>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1967d2"/>
+    </marker>
+    <marker id="arr-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#137333"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#b06000"/>
+    </marker>
+    <marker id="arr-slate" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#5f6368"/>
+    </marker>
+    <filter id="card-shadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#202124" flood-opacity="0.05"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="740" fill="#ffffff"/>
+  <text x="36" y="34" class="eyebrow">POOLED MULTI-TENANT AI AGENTS · UNIFIED ARCHITECTURE</text>
+  <text x="36" y="64" class="title">Three-Plane Governance, 5-Hop Runtime &amp; Graduation Topologies</text>
+  <text x="36" y="88" class="subtitle">Reusable Terraform and ADK architecture supporting shared multi-tenant pools, dedicated silos, and hybrid PSC.</text>
+  
+    <!-- Top Control & Governance Plane -->
+    <rect x="36" y="108" width="1128" height="114" rx="16" fill="#f8f9fa" stroke="none"/>
+    <text x="56" y="130" class="zone-label">CONTROL &amp; GOVERNANCE PLANE (POLICY DECISION POINTS)</text>
+
+    <rect x="56" y="142" width="352" height="66" rx="12" fill="#e6f4ea" stroke="#137333" stroke-width="1.4"/>
+    <text x="74" y="166" class="card-title" style="font-size:14px">Auth Manager &amp; Credential Broker</text>
+    <text x="74" y="188" class="chip-text" style="fill:#137333">KMS ctx+jwt · SPIFFE mTLS · 2LO &amp; 3LO</text>
+
+    <rect x="424" y="142" width="352" height="66" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.4"/>
+    <text x="442" y="166" class="card-title" style="font-size:14px">Global &amp; Local Agent Registry</text>
+    <text x="442" y="188" class="chip-text">Tenant ∩ Role ∩ Agent ACLs · Tool pruning</text>
+
+    <rect x="792" y="142" width="352" height="66" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.4"/>
+    <text x="810" y="166" class="card-title" style="font-size:14px">AI Security, Quotas &amp; Observability</text>
+    <text x="810" y="188" class="chip-text">Model Armor · Cloud DLP · Redis · OpenTelemetry</text>
+
+    <!-- Middle Pooled Runtime Plane -->
+    <rect x="36" y="246" width="1128" height="270" rx="16" fill="#e8f0fe" fill-opacity="0.4" stroke="none"/>
+    <text x="56" y="268" class="zone-label" style="fill:#174ea6">PATTERN A · POOLED MULTI-TENANT RUNTIME (HOPS 0 → 5)</text>
+
+    <!-- Col 1: Federation & SaaS Edge -->
+    <rect x="56" y="286" width="196" height="210" rx="12" fill="#ffffff" stroke="#1967d2" stroke-width="1.6" filter="url(#card-shadow)"/>
+    <text x="72" y="310" class="card-kicker" fill="#1967d2">HOP 0 · FEDERATION</text>
+    <text x="72" y="331" class="card-title" style="font-size:14px">Identity Platform</text>
+    <text x="72" y="350" class="card-sub" style="fill:#1967d2">OIDC / SAML + WIF</text>
+    <rect x="72" y="366" width="164" height="24" rx="12.0" fill="#e8f0fe" stroke="none"/><text x="154.0" y="382.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">FinVault · Okta</text>
+    <rect x="72" y="396" width="164" height="24" rx="12.0" fill="#fef7e0" stroke="none"/><text x="154.0" y="412.0" text-anchor="middle" class="chip-text" style="fill:#b06000">RetailStream · Entra</text>
+    <text x="72" y="444" class="card-desc" style="font-size:11.5px">ISV Portal (Run / GKE)</text>
+    <text x="72" y="464" class="chip-text">DPoP sender-bound key</text>
+
+    <!-- Col 2: Ingress Gateway -->
+    <rect x="284" y="286" width="196" height="210" rx="12" fill="#ffffff" stroke="#1967d2" stroke-width="1.8" filter="url(#card-shadow)"/>
+    <text x="300" y="310" class="card-kicker" fill="#1967d2">HOP 1 · INGRESS</text>
+    <text x="300" y="331" class="card-title" style="font-size:14px">Client-to-Agent</text>
+    <text x="300" y="350" class="card-sub" style="fill:#1967d2">Ingress Gateway</text>
+    <rect x="300" y="368" width="164" height="24" rx="12.0" fill="#f1f3f4" stroke="none"/><text x="382.0" y="384.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">Strips X-Tenant-ID</text>
+    <rect x="300" y="400" width="164" height="24" rx="12.0" fill="#f1f3f4" stroke="none"/><text x="382.0" y="416.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">Single-use DPoP jti</text>
+    <rect x="300" y="432" width="164" height="24" rx="12.0" fill="#e8f0fe" stroke="none"/><text x="382.0" y="448.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">KMS ES256 ctx+jwt</text>
+    <text x="300" y="478" class="chip-text">Cloud Run + IAP / Apigee</text>
+
+    <!-- Col 3: Disaggregated Brain & Hands -->
+    <rect x="512" y="286" width="224" height="210" rx="12" fill="#ffffff" stroke="#1967d2" stroke-width="2" filter="url(#card-shadow)"/>
+    <text x="528" y="310" class="card-kicker" fill="#1967d2">HOPS 2–3 · COMPUTE</text>
+    <text x="528" y="331" class="card-title" style="font-size:14px">Brain &amp; Hands Runtimes</text>
+    <rect x="528" y="344" width="192" height="62" rx="8" fill="#e8f0fe"/>
+    <text x="540" y="364" class="card-title" style="font-size:12.5px;fill:#174ea6">Stateless Orchestrators</text>
+    <text x="540" y="382" class="chip-text" style="fill:#174ea6">ADK · LangGraph · BYO</text>
+    <text x="540" y="397" class="chip-text" style="fill:#5f6368">Firestore + Memory Bank</text>
+    <rect x="528" y="414" width="192" height="66" rx="8" fill="#fef7e0" stroke="#fbbc04" stroke-width="1"/>
+    <text x="540" y="434" class="card-title" style="font-size:12.5px;fill:#b06000">Per-Session gVisor Hands</text>
+    <text x="540" y="452" class="chip-text" style="fill:#b06000">Agent Sandboxes in Gemini</text>
+    <text x="540" y="468" class="chip-text" style="fill:#5f6368">0 keys · Two-tier skills</text>
+
+    <!-- Col 4: Egress Gateway -->
+    <rect x="768" y="286" width="184" height="210" rx="12" fill="#ffffff" stroke="#1967d2" stroke-width="1.8" filter="url(#card-shadow)"/>
+    <text x="784" y="310" class="card-kicker" fill="#1967d2">HOP 4 · EGRESS</text>
+    <text x="784" y="331" class="card-title" style="font-size:14px">Agent-to-Anywhere</text>
+    <text x="784" y="350" class="card-sub" style="fill:#1967d2">Egress Gateway</text>
+    <rect x="784" y="368" width="152" height="24" rx="12.0" fill="#f1f3f4" stroke="none"/><text x="860.0" y="384.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">Model Armor screen</text>
+    <rect x="784" y="400" width="152" height="24" rx="12.0" fill="#e8f0fe" stroke="none"/><text x="860.0" y="416.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">Cloud DLP redact</text>
+    <rect x="784" y="432" width="152" height="24" rx="12.0" fill="#f1f3f4" stroke="none"/><text x="860.0" y="448.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">Redis token bucket</text>
+    <text x="784" y="478" class="chip-text">SPIFFE + ACL check</text>
+
+    <!-- Col 5: Hop 5 Targets -->
+    <rect x="984" y="286" width="160" height="210" rx="12" fill="#ffffff" stroke="#137333" stroke-width="1.6" filter="url(#card-shadow)"/>
+    <text x="1000" y="310" class="card-kicker" fill="#137333">HOP 5 · TARGETS</text>
+    <rect x="1000" y="326" width="128" height="42" rx="21.0" fill="#e6f4ea" stroke="none"/><text x="1064.0" y="351.0" text-anchor="middle" class="chip-text" style="fill:#137333">AlloyDB FORCE RLS</text>
+    <rect x="1000" y="378" width="128" height="42" rx="21.0" fill="#e8f0fe" stroke="none"/><text x="1064.0" y="403.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">Gemini + Cache</text>
+    <rect x="1000" y="430" width="128" height="42" rx="21.0" fill="#fef7e0" stroke="none"/><text x="1064.0" y="455.0" text-anchor="middle" class="chip-text" style="fill:#b06000">SaaS 3LO APIs</text>
+
+    <!-- Spine Arrows -->
+    <path d="M252 391 H280" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <path d="M480 391 H508" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <path d="M736 391 H764" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <path d="M952 391 H980" fill="none" stroke="#137333" stroke-width="2.2" marker-end="url(#arr-teal)"/>
+
+    <!-- Control Plane Arrows -->
+    <path d="M232 208 V236 H624 V282" fill="none" stroke="#137333" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arr-teal)"/>
+    <path d="M600 208 V282" fill="none" stroke="#5f6368" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arr-slate)"/>
+    <path d="M860 208 V282" fill="none" stroke="#5f6368" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arr-slate)"/>
+
+    <!-- Bottom Band: Reusable Terraform Packaging Topologies -->
+    <rect x="36" y="540" width="1128" height="176" rx="16" fill="#f8f9fa" stroke="none"/>
+    <text x="56" y="564" class="zone-label">MODULAR DEPLOYMENT TOPOLOGIES (SAME TERRAFORM &amp; ADK MODULES)</text>
+
+    <rect x="56" y="580" width="352" height="118" rx="12" fill="#fdd663" stroke="none" filter="url(#card-shadow)"/>
+    <text x="76" y="606" class="card-kicker" fill="#202124">PATTERN A · GOVERNED POOL (ACTIVE ABOVE)</text>
+    <text x="76" y="628" class="card-title">Shared Compute &amp; Scoped State</text>
+    <text x="76" y="652" class="card-desc" style="fill:#202124">Highest density &amp; shared prefix caching</text>
+    <text x="76" y="674" class="chip-text" style="fill:#202124">Enforced by Tenant ∩ User ∩ Agent locks</text>
+
+    <rect x="424" y="580" width="352" height="118" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.5"/>
+    <text x="444" y="606" class="card-kicker" fill="#137333">PATTERN B · DEDICATED SILO STAMP</text>
+    <text x="444" y="628" class="card-title">Single-Tenant GCP Project</text>
+    <text x="444" y="652" class="card-desc">Stamps the same Hop 0–5 Terraform modules</text>
+    <text x="444" y="674" class="chip-text" style="fill:#137333">Dedicated VPC-SC perimeter &amp; quotas</text>
+
+    <rect x="792" y="580" width="352" height="118" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.5"/>
+    <text x="812" y="606" class="card-kicker" fill="#b06000">PATTERN C · HYBRID / PSC DATA PLANE</text>
+    <text x="812" y="628" class="card-title">Shared Brain + Sovereign Data</text>
+    <text x="812" y="652" class="card-desc">Reuses pooled orchestrators; routes Hop 5</text>
+    <text x="812" y="674" class="chip-text" style="fill:#b06000">Private Service Connect to customer VPC</text>
+    
+</svg>

@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 724" width="1200" height="724">
+  
+  <defs>
+    <style>
+      .eyebrow { font: 700 11.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.09em; fill: #1967d2; }
+      .title { font: 700 23px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #202124; letter-spacing: -0.015em; }
+      .subtitle { font: 400 13.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #5f6368; }
+      .zone-label { font: 700 11px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.08em; fill: #5f6368; }
+      .card-kicker { font: 700 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.07em; }
+      .card-title { font: 700 15px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #202124; }
+      .card-sub { font: 600 12.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .card-desc { font: 400 12.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #3c4043; }
+      .chip-text { font: 500 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #3c4043; }
+      .edge-pill { font: 600 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #1967d2; }
+      .mono-sm { font: 500 11.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #202124; }
+      .badge-ok { font: 700 12px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #137333; }
+      .badge-deny { font: 700 12px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #3c4043; }
+    </style>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1967d2"/>
+    </marker>
+    <marker id="arr-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#137333"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#b06000"/>
+    </marker>
+    <marker id="arr-slate" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#5f6368"/>
+    </marker>
+    <filter id="card-shadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#202124" flood-opacity="0.05"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="724" fill="#ffffff"/>
+  <text x="36" y="34" class="eyebrow">GOOGLE CLOUD REFERENCE ARCHITECTURE · SIX CORE SUBSYSTEMS</text>
+  <text x="36" y="64" class="title">Mapping Pooled Subsystems onto Google Cloud Services</text>
+  <text x="36" y="88" class="subtitle">Serving FinVault Bank (Enterprise) and RetailStream (Standard) on shared compute with strict per-turn isolation.</text>
+  
+    <!-- BAND 1: Horizontal Security & Governance Fabric -->
+    <rect x="236" y="108" width="728" height="128" rx="16" fill="#f8f9fa" stroke="none"/>
+    <text x="256" y="130" class="zone-label">HORIZONTAL GOVERNANCE &amp; TRUST FABRIC (GOOGLE CLOUD)</text>
+
+    <!-- Top Card 1: Agent & Tool Registry -->
+    <rect x="254" y="142" width="222" height="80" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.4"/>
+    <text x="270" y="163" class="card-kicker" fill="#1967d2">2 · AGENT REGISTRY</text>
+    <text x="270" y="183" class="card-title" style="font-size:14px">Catalog &amp; Tool Policy</text>
+    <text x="270" y="204" class="chip-text">Tenant ∩ Role ∩ Agent ACLs</text>
+
+    <!-- Top Card 2: The Vault -->
+    <rect x="489" y="142" width="222" height="80" rx="12" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+    <text x="505" y="163" class="card-kicker" fill="#137333">THE VAULT · AUTH MANAGER</text>
+    <text x="505" y="183" class="card-title" style="font-size:14px">Credential Broker</text>
+    <text x="505" y="204" class="chip-text" style="fill:#137333">300s 2LO SA · User 3LO OAuth</text>
+
+    <!-- Top Card 3: AI Security & Quotas -->
+    <rect x="724" y="142" width="222" height="80" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.4"/>
+    <text x="740" y="163" class="card-kicker" fill="#1967d2">GUARDRAILS &amp; FINOPS</text>
+    <text x="740" y="183" class="card-title" style="font-size:14px">Model Armor, DLP &amp; Redis</text>
+    <text x="740" y="204" class="chip-text">Injection screen · RPM/TPM caps</text>
+
+    <!-- LEFT COLUMN: Tenants & ISV Client -->
+    <rect x="36" y="108" width="176" height="596" rx="16" fill="#f8f9fa" stroke="none"/>
+    <text x="52" y="130" class="zone-label">TENANTS &amp; CLIENT</text>
+
+    <rect x="50" y="156" width="148" height="196" rx="12" fill="#ffffff" stroke="#1967d2" stroke-width="1.5" filter="url(#card-shadow)"/>
+    <text x="64" y="180" class="card-kicker" fill="#1967d2">1 · IDENTITY</text>
+    <text x="64" y="201" class="card-title" style="font-size:14px">Corporate SSO</text>
+    <text x="64" y="220" class="card-sub" style="fill:#1967d2">Identity Platform + WIF</text>
+    <rect x="64" y="236" width="120" height="22" rx="11.0" fill="#e8f0fe" stroke="none"/><text x="124.0" y="251.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">FinVault · Okta</text>
+    <rect x="64" y="264" width="120" height="22" rx="11.0" fill="#fef7e0" stroke="none"/><text x="124.0" y="279.0" text-anchor="middle" class="chip-text" style="fill:#b06000">RetailStream · Entra</text>
+    <text x="64" y="308" class="card-desc" style="font-size:11.5px">1:1 issuer → tenant_id</text>
+    <text x="64" y="326" class="card-desc" style="font-size:11.5px">Maps group → role</text>
+
+    <rect x="50" y="392" width="148" height="172" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.5" filter="url(#card-shadow)"/>
+    <text x="64" y="416" class="card-kicker" fill="#5f6368">ISV CLIENT APP</text>
+    <text x="64" y="437" class="card-title" style="font-size:14px">Cymbal Console</text>
+    <text x="64" y="456" class="card-sub" style="fill:#5f6368">Cloud Run Web Portal</text>
+    <rect x="64" y="474" width="120" height="22" rx="11.0" fill="#f1f3f4" stroke="none"/><text x="124.0" y="489.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">RFC 9449 DPoP key</text>
+    <text x="64" y="518" class="card-desc" style="font-size:11.5px">Shows entitled agents</text>
+    <text x="64" y="536" class="card-desc" style="font-size:11.5px">Signs per-request proof</text>
+
+    <!-- BAND 2: Primary Request Execution Spine -->
+    <rect x="236" y="268" width="728" height="264" rx="16" fill="#e8f0fe" fill-opacity="0.45" stroke="none"/>
+    <text x="256" y="290" class="zone-label" style="fill:#174ea6">REQUEST EXECUTION SPINE (LEFT → RIGHT)</text>
+
+    <!-- Middle Card 1: Ingress Gateway -->
+    <rect x="254" y="306" width="204" height="206" rx="14" fill="#ffffff" stroke="#1967d2" stroke-width="1.8" filter="url(#card-shadow)"/>
+    <text x="270" y="330" class="card-kicker" fill="#1967d2">1 · SERVICE &amp; INGRESS</text>
+    <text x="270" y="352" class="card-title" style="font-size:14.5px">Ingress Agent Gateway</text>
+    <text x="270" y="371" class="card-sub" style="fill:#1967d2">Cloud Run + IAP or Apigee</text>
+    <text x="270" y="398" class="card-desc" style="font-size:12px">• Strips spoofed headers</text>
+    <text x="270" y="418" class="card-desc" style="font-size:12px">• Checks single-use DPoP jti</text>
+    <rect x="270" y="438" width="172" height="24" rx="12.0" fill="#e8f0fe" stroke="none"/><text x="356.0" y="454.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">Cloud KMS ES256 ctx+jwt</text>
+    <rect x="270" y="468" width="172" height="24" rx="12.0" fill="#f1f3f4" stroke="none"/><text x="356.0" y="484.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">tid + uid + agent_id</text>
+
+    <!-- Middle Card 2: Brain + Hands -->
+    <rect x="492" y="306" width="216" height="206" rx="14" fill="#ffffff" stroke="#1967d2" stroke-width="2" filter="url(#card-shadow)"/>
+    <text x="508" y="330" class="card-kicker" fill="#1967d2">3 · COMPUTE SUBSYSTEM</text>
+    <text x="508" y="352" class="card-title" style="font-size:14.5px">The Brain &amp; The Hands</text>
+    <rect x="508" y="366" width="184" height="60" rx="9" fill="#e8f0fe"/>
+    <text x="520" y="386" class="card-title" style="font-size:13px;fill:#174ea6">Brain: Cloud Run Pool</text>
+    <text x="520" y="404" class="chip-text" style="fill:#174ea6">Stateless ADK / LangGraph</text>
+    <text x="520" y="419" class="chip-text" style="fill:#5f6368">SPIFFE Agent Identity</text>
+
+    <rect x="508" y="434" width="184" height="62" rx="9" fill="#fef7e0" stroke="#fbbc04" stroke-width="1"/>
+    <text x="520" y="454" class="card-title" style="font-size:13px;fill:#b06000">Hands: Agent Sandboxes</text>
+    <text x="520" y="472" class="chip-text" style="fill:#b06000">Per-session gVisor pod</text>
+    <text x="520" y="487" class="chip-text" style="fill:#5f6368">0 mounted cloud keys</text>
+
+    <!-- Middle Card 3: Egress Gateway -->
+    <rect x="742" y="306" width="204" height="206" rx="14" fill="#ffffff" stroke="#1967d2" stroke-width="1.8" filter="url(#card-shadow)"/>
+    <text x="758" y="330" class="card-kicker" fill="#1967d2">GOVERNED EGRESS</text>
+    <text x="758" y="352" class="card-title" style="font-size:14.5px">Egress Agent Gateway</text>
+    <text x="758" y="371" class="card-sub" style="fill:#1967d2">ADK Guards / Agent Gateway</text>
+    <text x="758" y="398" class="card-desc" style="font-size:12px">• Verifies Agent Identity</text>
+    <text x="758" y="418" class="card-desc" style="font-size:12px">• Enforces tool &amp; quota ACLs</text>
+    <rect x="758" y="438" width="172" height="24" rx="12.0" fill="#f1f3f4" stroke="none"/><text x="844.0" y="454.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">Model Armor screening</text>
+    <rect x="758" y="468" width="172" height="24" rx="12.0" fill="#e8f0fe" stroke="none"/><text x="844.0" y="484.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">Cloud DLP PII masking</text>
+
+    <!-- BAND 3: Partitioned Session, Memory & Skills -->
+    <rect x="236" y="560" width="728" height="144" rx="16" fill="#f8f9fa" stroke="none"/>
+    <text x="256" y="582" class="zone-label">4 · SCOPED SESSION, LONG-TERM MEMORY &amp; TWO-TIER SKILLS</text>
+
+    <rect x="254" y="596" width="222" height="92" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.4"/>
+    <text x="270" y="618" class="card-title" style="font-size:14px">Cloud Firestore Sessions</text>
+    <text x="270" y="638" class="card-desc" style="font-size:12px">Stateless turn checkpoints</text>
+    <rect x="270" y="652" width="190" height="24" rx="12.0" fill="#f1f3f4" stroke="none"/><text x="365.0" y="668.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">CMEK · tenant_id:user_id</text>
+
+    <rect x="489" y="596" width="222" height="92" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.4"/>
+    <text x="505" y="618" class="card-title" style="font-size:14px">Memory Bank in Gemini</text>
+    <text x="505" y="638" class="card-desc" style="font-size:12px">Exact-match recall &amp; writes</text>
+    <rect x="505" y="652" width="190" height="24" rx="12.0" fill="#e6f4ea" stroke="none"/><text x="600.0" y="668.0" text-anchor="middle" class="chip-text" style="fill:#137333">IAM CEL: tid + agent_id</text>
+
+    <rect x="724" y="596" width="222" height="92" rx="12" fill="#ffffff" stroke="#dadce0" stroke-width="1.4"/>
+    <text x="740" y="618" class="card-title" style="font-size:14px">Two-Tier Runtime Skills</text>
+    <text x="740" y="638" class="card-desc" style="font-size:12px">Baseline + tenant gs:// skills</text>
+    <rect x="740" y="652" width="190" height="24" rx="12.0" fill="#fef7e0" stroke="none"/><text x="835.0" y="668.0" text-anchor="middle" class="chip-text" style="fill:#b06000">Prefix-cached + CMEK</text>
+
+    <!-- RIGHT COLUMN: Cloud & SaaS Targets -->
+    <rect x="988" y="108" width="176" height="596" rx="16" fill="#f8f9fa" stroke="none"/>
+    <text x="1004" y="130" class="zone-label">5 &amp; 6 · TARGETS</text>
+
+    <rect x="1002" y="164" width="148" height="154" rx="12" fill="#ffffff" stroke="#137333" stroke-width="1.6" filter="url(#card-shadow)"/>
+    <text x="1016" y="188" class="card-kicker" fill="#137333">6 · DATA LAYER</text>
+    <text x="1016" y="209" class="card-title" style="font-size:14px">MCP Data Plane</text>
+    <text x="1016" y="228" class="card-sub" style="fill:#137333">AlloyDB PostgreSQL</text>
+    <rect x="1016" y="244" width="120" height="22" rx="11.0" fill="#e6f4ea" stroke="none"/><text x="1076.0" y="259.0" text-anchor="middle" class="chip-text" style="fill:#137333">FORCE RLS</text>
+    <rect x="1016" y="272" width="120" height="22" rx="11.0" fill="#f1f3f4" stroke="none"/><text x="1076.0" y="287.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">Spanner / BQ / FS</text>
+
+    <rect x="1002" y="340" width="148" height="154" rx="12" fill="#ffffff" stroke="#1967d2" stroke-width="1.6" filter="url(#card-shadow)"/>
+    <text x="1016" y="364" class="card-kicker" fill="#1967d2">5 · INFERENCE</text>
+    <text x="1016" y="385" class="card-title" style="font-size:14px">Gemini Models</text>
+    <text x="1016" y="404" class="card-sub" style="fill:#1967d2">Model Routing</text>
+    <rect x="1016" y="420" width="120" height="22" rx="11.0" fill="#e8f0fe" stroke="none"/><text x="1076.0" y="435.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">Shared Prefix Cache</text>
+    <rect x="1016" y="448" width="120" height="22" rx="11.0" fill="#f1f3f4" stroke="none"/><text x="1076.0" y="463.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">1x Frontier Advisor</text>
+
+    <rect x="1002" y="516" width="148" height="154" rx="12" fill="#ffffff" stroke="#b06000" stroke-width="1.6" filter="url(#card-shadow)"/>
+    <text x="1016" y="540" class="card-kicker" fill="#b06000">6 · SAAS ACTIONS</text>
+    <text x="1016" y="561" class="card-title" style="font-size:14px">Enterprise APIs</text>
+    <text x="1016" y="580" class="card-sub" style="fill:#b06000">Jira &amp; ServiceNow</text>
+    <rect x="1016" y="596" width="120" height="22" rx="11.0" fill="#fef7e0" stroke="none"/><text x="1076.0" y="611.0" text-anchor="middle" class="chip-text" style="fill:#b06000">Per-user 3LO grant</text>
+    <rect x="1016" y="624" width="120" height="22" rx="11.0" fill="#f1f3f4" stroke="none"/><text x="1076.0" y="639.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">Consent step-up</text>
+
+    <!-- Clean Non-Crossing Connectors -->
+    <!-- SSO -> Console -->
+    <path d="M124 352 V388" fill="none" stroke="#1967d2" stroke-width="2" marker-end="url(#arr-blue)"/>
+    <!-- Console -> Ingress -->
+    <path d="M198 478 H222 Q230 478 230 468 V418 Q230 409 238 409 H250" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <!-- Ingress -> Brain -->
+    <path d="M458 409 H488" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <!-- Brain -> Egress -->
+    <path d="M708 409 H738" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+
+    <!-- Top Fabric -> Execution Spine -->
+    <path d="M365 222 V302" fill="none" stroke="#5f6368" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arr-slate)"/>
+    <path d="M600 222 V302" fill="none" stroke="#137333" stroke-width="1.8" stroke-dasharray="4 3" marker-end="url(#arr-teal)"/>
+    <path d="M835 222 V302" fill="none" stroke="#5f6368" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arr-slate)"/>
+
+    <!-- Brain <-> Bottom Scoped State -->
+    <path d="M365 512 V592" fill="none" stroke="#5f6368" stroke-width="1.6" marker-end="url(#arr-slate)"/>
+    <path d="M600 512 V592" fill="none" stroke="#137333" stroke-width="1.8" marker-end="url(#arr-teal)"/>
+    <path d="M664 512 V546 Q664 554 674 554 H825 Q835 554 835 564 V592" fill="none" stroke="#b06000" stroke-width="1.6" marker-end="url(#arr-amber)"/>
+
+    <!-- Clean label masks over vertical connectors so zero lines cross zone headers -->
+    <rect x="250" y="274" width="276" height="22" rx="6" fill="#f4f8fe"/>
+    <text x="256" y="290" class="zone-label" style="fill:#174ea6">REQUEST EXECUTION SPINE (LEFT → RIGHT)</text>
+    <rect x="250" y="566" width="430" height="22" rx="6" fill="#f8f9fa"/>
+    <text x="256" y="582" class="zone-label">4 · SCOPED SESSION, LONG-TERM MEMORY &amp; TWO-TIER SKILLS</text>
+
+    <!-- Egress -> 3 Targets -->
+    <path d="M946 376 H968 Q976 376 976 366 V250 Q976 241 984 241 H998" fill="none" stroke="#137333" stroke-width="2" marker-end="url(#arr-teal)"/>
+    <path d="M946 417 H998" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <path d="M946 458 H968 Q976 458 976 468 V584 Q976 593 984 593 H998" fill="none" stroke="#b06000" stroke-width="2" marker-end="url(#arr-amber)"/>
+    
+</svg>
