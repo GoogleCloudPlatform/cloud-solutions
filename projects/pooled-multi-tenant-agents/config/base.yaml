@@ -1,0 +1,76 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Product defaults for every environment (overridden by config/environments/<env>.yaml).
+# See docs/configuration_reference.md. Validated by agents/platform_config.py (`make config-check`).
+schema_version: 1
+gcp:
+  region: us-central1
+  kms_keyring: cymbal-tenant-kr-prod
+  runbook_bucket: "{project_id}-runbooks"
+  bigquery_dataset: cymbal_agent_analytics
+  firestore_database: cymbal-memory-bank-prod
+  model_armor_template_id: cymbal-pooled-inbound-pep
+tiers:
+  enterprise:
+    thinking_budget: 8000
+    rpm_limit: 120
+    tpm_limit: 250000
+    max_turns_per_session: 12
+  standard:
+    thinking_budget: 4000
+    rpm_limit: 30
+    tpm_limit: 40000
+    max_turns_per_session: 5
+# Declarative Gemini 4 & multi-model routing defaults (overridable per environment YAML).
+# `gemini-4-hydrogen` is the universal default across all jobs (shared agent, Standard & Enterprise
+# execution, FastSearch, and eval judge), with `gemini-4-carbon` / `gemini-4-argon` / `gemini-3.8-flash`
+# configured in `allowed_models` and `gemini-4-carbon` wired as the `AskPro` escalation advisor.
+models:
+  default_shared_model: gemini-4-hydrogen
+  default_executor_model: gemini-4-hydrogen
+  default_frontier_model: gemini-4-carbon
+  fallback_frontier_model: gemini-4-argon
+  fallback_fast_model: gemini-3.8-flash
+  private_regulatory_model: claude-3-7-sonnet@20250219
+  sovereign_open_weight_model: gemma-3-27b-it
+  eval_judge_model: gemini-4-hydrogen
+  standard_allowed_models:
+    - gemini-4-hydrogen
+    - gemini-4-carbon
+    - gemini-4-argon
+    - gemini-3.8-flash
+  enterprise_allowed_models:
+    - gemini-4-hydrogen
+    - gemini-4-carbon
+    - gemini-4-argon
+    - gemini-3.8-flash
+    - claude-3-7-sonnet@20250219
+# Configurable token-expiry and silent-refresh policy (overridable per environment YAML or via
+# Terraform `var.token_and_session_policy`). Separates customer session length (`at+jwt`, up to
+# 3600 s) from irrevocable downstream credentials (`ctx+jwt` stays <= 600 s and re-signs on expiry;
+# brokered tenant SA tokens stay <= 300 s and may only be tightened).
+token_policy:
+  gateway_token_ttl_seconds: 600
+  dpop_proof_max_age_seconds: 120
+  tenant_sa_token_ttl_seconds: 300
+  tenant_sa_refresh_margin_seconds: 60
+  idp_broker_max_token_lifetime_seconds: 3600
+  idp_direct_max_token_lifetime_seconds: 5400
+# Scopes every tenant receives unless its tenant file sets authorized_scopes explicitly.
+default_scopes:
+  - "2lo:cymbal.telemetry.read"
+  - "2lo:cymbal.runbooks.read"
+  - "2lo:cymbal.sandbox.execute"
+  - "agent:cymbal_shared_diagnostic_agent"

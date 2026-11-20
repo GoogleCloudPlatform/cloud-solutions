@@ -1,0 +1,49 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Template for a customer deployment. Copy to config/environments/<name>.yaml and set CYMBAL_ENV=<name>.
+environment: customer-example
+data_classification: customer
+tenants_dir: tenants/customer-example
+gcp:
+  project_id: your-gcp-project-id # placeholder: live mode refuses to start until this is set
+  region: us-central1
+identity:
+  # Set to your Google Identity Platform project to sign users in through the broker
+  # (then give each tenant identity.gcip_tenant_id + sign_in_providers).
+  broker_project_id: null
+  # Public HTTPS origin clients call (no path). Fixes the DPoP `htu` origin.
+  public_origin: https://agents.acme.example
+  # Secret Manager secret + pinned version of the gateway token signing key (EC P-256 PKCS#8
+  # PEM), shared by all instances. Bump the version deliberately to rotate.
+  gateway_signing_secret: cymbal-gateway-signing-key/versions/1
+  # Cloud KMS asymmetric EC_SIGN_P256_SHA256 key that signs context tokens (ADR-0014). Grant the
+  # gateway's service account roles/cloudkms.signerVerifier on this key only.
+  context_signing_kms_key: projects/your-gcp-project-id/locations/us-central1/keyRings/cymbal-platform-kr/cryptoKeys/ws2-context-signing
+  context_signing_kms_key_version: 1
+agent_identity:
+  # Optional ADR-0016 Cloud Run Agent Identity bindings. Placeholders `{org_id}`, `{project_number}`,
+  # and `{region}` resolve dynamically at runtime from config / managed runtime metadata so no
+  # numeric project ID needs to be hardcoded in customer configuration.
+  org_id: "000000000000"
+  bindings:
+    cymbal_shared_diagnostic_agent:
+      workload_principal: "principal://agents.global.org-{org_id}.system.id.goog/resources/run/projects/{project_number}/locations/{region}/services/cymbal-agent-shared"
+      allowed_purposes:
+        - broker:access_token
+        - broker:id_token
+        - broker:oauth_3lo
+        - mcp:query_telemetry_rls
+        - mcp:read_runbook
+        - mcp:execute_diagnostic_sandbox

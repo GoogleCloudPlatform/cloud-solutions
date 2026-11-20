@@ -1,0 +1,37 @@
+{
+  "mcpServers": {
+    "cymbal-telemetry-rls": {
+      "transport": "stateless-http",
+      "endpoint": "/mcp/v1/telemetry",
+      "requires_obo_dpop": true,
+      "tools": [
+        {
+          "name": "query_telemetry_rls",
+          "method": "tools/call",
+          "isReadOnly": true,
+          "allowed_tiers": ["standard", "enterprise"]
+        },
+        {
+          "name": "read_runbook",
+          "method": "tools/call",
+          "isReadOnly": true,
+          "allowed_tiers": ["standard", "enterprise"]
+        },
+        {
+          "name": "create_jira_incident",
+          "method": "tools/call",
+          "isReadOnly": false,
+          "allowed_tiers": ["enterprise"],
+          "required_connector": "jira_3lo_finvault"
+        },
+        {
+          "name": "create_servicenow_incident",
+          "method": "tools/call",
+          "isReadOnly": false,
+          "allowed_tiers": ["standard", "enterprise"],
+          "required_connector": "servicenow_3lo_retailstream"
+        }
+      ]
+    }
+  }
+}

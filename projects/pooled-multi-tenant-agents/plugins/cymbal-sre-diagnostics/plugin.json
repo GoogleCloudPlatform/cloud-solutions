@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "name": "cymbal-sre-diagnostics",
+  "version": "2.1.0",
+  "description": "Portable Gemini Agent Plugin bundle for multi-tenant SRE incident diagnostics, runbook retrieval, and regulatory escalation.",
+  "author": "Cymbal SaaS Platform Engineering",
+  "mcp_config": "mcp.json",
+  "skills_dir": "skills",
+  "supported_tiers": ["standard", "enterprise"],
+  "tenant_isolation_mode": "5-hop-context-envelope"
+}

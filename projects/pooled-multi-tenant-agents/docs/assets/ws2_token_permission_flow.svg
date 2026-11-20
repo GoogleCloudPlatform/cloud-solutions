@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 536" width="1200" height="536">
+  
+  <defs>
+    <style>
+      .eyebrow { font: 700 11.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.09em; fill: #1967d2; }
+      .title { font: 700 23px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #202124; letter-spacing: -0.015em; }
+      .subtitle { font: 400 13.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #5f6368; }
+      .zone-label { font: 700 11px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.08em; fill: #5f6368; }
+      .card-kicker { font: 700 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.07em; }
+      .card-title { font: 700 15px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #202124; }
+      .card-sub { font: 600 12.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .card-desc { font: 400 12.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #3c4043; }
+      .chip-text { font: 500 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #3c4043; }
+      .edge-pill { font: 600 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #1967d2; }
+      .mono-sm { font: 500 11.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #202124; }
+      .badge-ok { font: 700 12px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #137333; }
+      .badge-deny { font: 700 12px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #3c4043; }
+    </style>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1967d2"/>
+    </marker>
+    <marker id="arr-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#137333"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#b06000"/>
+    </marker>
+    <marker id="arr-slate" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#5f6368"/>
+    </marker>
+    <filter id="card-shadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#202124" flood-opacity="0.05"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="536" fill="#ffffff"/>
+  <text x="36" y="34" class="eyebrow">IDENTITY, AUTHORIZATION &amp; CREDENTIAL BROKERAGE</text>
+  <text x="36" y="64" class="title">Three-Layer Identity Lock: Tenant ∩ User ∩ Agent</text>
+  <text x="36" y="88" class="subtitle">Auth Manager and the out-of-process Broker mint credentials only when all three verified claims align.</text>
+  
+    <!-- Left: Three Explicit Lock Layers -->
+    <rect x="36" y="116" width="388" height="396" rx="16" fill="#f8f9fa" stroke="none"/>
+    <text x="56" y="140" class="zone-label">THREE INDEPENDENT IDENTITY CLAIMS</text>
+
+    <!-- Layer 1 -->
+    <rect x="56" y="156" width="348" height="96" rx="12" fill="#ffffff" stroke="#1967d2" stroke-width="1.75" filter="url(#card-shadow)"/>
+    <text x="74" y="180" class="card-kicker" fill="#1967d2">LAYER 1 · TENANT LOCK</text>
+    <text x="74" y="202" class="card-title" style="font-size:14.5px">Verified Corporate IdP Binding</text>
+    <rect x="74" y="214" width="312" height="24" rx="12.0" fill="#e8f0fe" stroke="none"/><text x="230.0" y="230.0" text-anchor="middle" class="chip-text" style="fill:#174ea6">iss → tenant-finvault-alpha (blocks RetailStream)</text>
+
+    <!-- Layer 2 -->
+    <rect x="56" y="268" width="348" height="96" rx="12" fill="#ffffff" stroke="#b06000" stroke-width="1.75" filter="url(#card-shadow)"/>
+    <text x="74" y="292" class="card-kicker" fill="#b06000">LAYER 2 · USER &amp; ROLE LOCK</text>
+    <text x="74" y="314" class="card-title" style="font-size:14.5px">Signed KMS Context Claims (ctx+jwt)</text>
+    <rect x="74" y="326" width="312" height="24" rx="12.0" fill="#fef7e0" stroke="none"/><text x="230.0" y="342.0" text-anchor="middle" class="chip-text" style="fill:#b06000">sub: priya@finvault · role: sre_admin</text>
+
+    <!-- Layer 3 -->
+    <rect x="56" y="380" width="348" height="96" rx="12" fill="#ffffff" stroke="#137333" stroke-width="1.75" filter="url(#card-shadow)"/>
+    <text x="74" y="404" class="card-kicker" fill="#137333">LAYER 3 · AGENT WORKLOAD LOCK</text>
+    <text x="74" y="426" class="card-title" style="font-size:14.5px">Cloud Run Agent Identity (SPIFFE mTLS)</text>
+    <rect x="74" y="438" width="312" height="24" rx="12.0" fill="#e6f4ea" stroke="none"/><text x="230.0" y="454.0" text-anchor="middle" class="chip-text" style="fill:#137333">X.509 SPIFFE ID == token.agent_id</text>
+
+    <!-- Intersection Gate Node -->
+    <circle cx="492" cy="316" r="42" fill="#fdd663" stroke="none" filter="url(#card-shadow)"/>
+    <text x="492" y="308" text-anchor="middle" class="card-title" style="font-size:16px">∩</text>
+    <text x="492" y="326" text-anchor="middle" class="card-kicker" fill="#202124">ALL 3</text>
+    <text x="492" y="340" text-anchor="middle" class="card-kicker" fill="#202124">MATCH</text>
+
+    <!-- Connectors from 3 Layers to Intersection -->
+    <path d="M404 204 H428 Q440 204 446 216 L468 276" fill="none" stroke="#1967d2" stroke-width="2" marker-end="url(#arr-blue)"/>
+    <path d="M404 316 H446" fill="none" stroke="#b06000" stroke-width="2" marker-end="url(#arr-amber)"/>
+    <path d="M404 428 H428 Q440 428 446 416 L468 356" fill="none" stroke="#137333" stroke-width="2" marker-end="url(#arr-teal)"/>
+
+    <!-- Center: The Vault -->
+    <rect x="576" y="182" width="268" height="268" rx="16" fill="#e6f4ea" stroke="#137333" stroke-width="2" filter="url(#card-shadow)"/>
+    <rect x="598" y="204" width="40" height="40" rx="10" fill="#ffffff"/>
+    <circle cx="618" cy="224" r="11" fill="none" stroke="#137333" stroke-width="2.2"/>
+    <circle cx="618" cy="224" r="3.5" fill="#137333"/>
+    <text x="650" y="220" class="card-kicker" fill="#137333">THE VAULT</text>
+    <text x="650" y="241" class="card-title">Auth Manager &amp; Broker</text>
+    <text x="598" y="274" class="card-desc">Out-of-process Credential Broker</text>
+    <text x="598" y="295" class="card-desc">Shared runtime holds 0 tenant keys</text>
+    <rect x="598" y="316" width="224" height="26" rx="13.0" fill="#ffffff" stroke="none"/><text x="710.0" y="333.0" text-anchor="middle" class="chip-text" style="fill:#137333">2LO cache: (tenant, agent, scope)</text>
+    <rect x="598" y="350" width="224" height="26" rx="13.0" fill="#ffffff" stroke="none"/><text x="710.0" y="367.0" text-anchor="middle" class="chip-text" style="fill:#b06000">3LO vault: (tenant, user, scope)</text>
+    <rect x="598" y="392" width="224" height="26" rx="13.0" fill="#ffffff" stroke="#80868b" stroke-width="1"/><text x="710.0" y="409.0" text-anchor="middle" class="chip-text" style="fill:#3c4043">✗ Mismatch → HTTP 403 fail-closed</text>
+
+    <path d="M534 316 H572" fill="none" stroke="#137333" stroke-width="2.4" marker-end="url(#arr-teal)"/>
+
+    <!-- Right: Two Scoped Credential Outputs -->
+    <rect x="916" y="156" width="248" height="154" rx="14" fill="#ffffff" stroke="#137333" stroke-width="1.75" filter="url(#card-shadow)"/>
+    <text x="934" y="182" class="card-kicker" fill="#137333">2LO WORKLOAD TOKEN (300s)</text>
+    <text x="934" y="204" class="card-title" style="font-size:14.5px">Tenant Cloud Resources</text>
+    <text x="934" y="228" class="card-desc" style="font-size:12px">Dedicated ct-&lt;sha256&gt; GCP SA</text>
+    <rect x="934" y="244" width="212" height="24" rx="12.0" fill="#e6f4ea" stroke="none"/><text x="1040.0" y="260.0" text-anchor="middle" class="chip-text" style="fill:#137333">Tenant KMS · GCS · Memory Bank</text>
+    <text x="934" y="290" class="chip-text" style="fill:#5f6368">1 key = 1 tenant blast radius</text>
+
+    <rect x="916" y="342" width="248" height="154" rx="14" fill="#ffffff" stroke="#b06000" stroke-width="1.75" filter="url(#card-shadow)"/>
+    <text x="934" y="368" class="card-kicker" fill="#b06000">3LO DELEGATED TOKEN</text>
+    <text x="934" y="390" class="card-title" style="font-size:14.5px">User SaaS &amp; Data Actions</text>
+    <text x="934" y="414" class="card-desc" style="font-size:12px">Priya's consented OAuth scope</text>
+    <rect x="934" y="430" width="212" height="24" rx="12.0" fill="#fef7e0" stroke="none"/><text x="1040.0" y="446.0" text-anchor="middle" class="chip-text" style="fill:#b06000">Jira · ServiceNow · SQL RLS</text>
+    <text x="934" y="476" class="chip-text" style="fill:#5f6368">Unlinked user → 401 step-up</text>
+
+    <!-- Vault -> 2 Outputs -->
+    <path d="M844 268 H876 Q886 268 886 258 V242 Q886 233 896 233 H912" fill="none" stroke="#137333" stroke-width="2.2" marker-end="url(#arr-teal)"/>
+    <path d="M844 364 H876 Q886 364 886 374 V408 Q886 419 896 419 H912" fill="none" stroke="#b06000" stroke-width="2.2" marker-end="url(#arr-amber)"/>
+    
+</svg>

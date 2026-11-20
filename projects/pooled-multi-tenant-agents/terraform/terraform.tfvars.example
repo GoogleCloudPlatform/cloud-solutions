@@ -1,0 +1,99 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+project_id                      = "your-gcp-project-id"
+region                          = "us-central1"
+environment                     = "prod"
+platform_environment            = "customer-example" # config/environments/<name>.yaml
+enable_live_mode                = true
+enable_3p_connectors            = false
+enable_platform_signing_secrets = true
+
+# Stateful storage & shared bulkhead / RLS defaults
+enable_alloydb_cluster          = true
+enable_alloydb_primary_instance = true
+# AlloyDB public IP. The module default is false (private VPC address only). `scripts/deploy.sh`
+# bootstraps the RLS schema through the AlloyDB Auth Proxy from the machine it runs on:
+#   - true  = that machine is OUTSIDE the VPC (laptop, default Cloud Shell). Exposes an
+#             internet-facing AlloyDB endpoint; with no authorized networks it accepts only Auth
+#             Proxy / connector connections (mTLS + roles/alloydb.client + IAM database auth).
+#   - false = run deploy.sh from INSIDE the VPC (bastion, Cloud Build private pool, Cloud
+#             Workstations), or pass --skip-db-bootstrap and bootstrap separately.
+# Disabled by default for private-VPC security posture. If running initial Auth Proxy schema
+# bootstrap from a laptop outside the VPC, temporarily set true, then revert to false.
+alloydb_enable_public_ip  = false
+enable_memorystore_redis  = true
+enable_redis_auth_and_tls = true
+# gateway_max_instance_count    = 2   # requires enable_live_mode = true & enable_memorystore_redis = true
+# alloydb_admin_iam_users       = ["ops-admin@yourco.com"]
+
+# Disaggregated Brain + Vault + Hands + Per-Agent Identity (auto-derived from project_number & organization_id)
+organization_id             = "000000000000"
+enable_credential_broker    = true
+runtime_keeps_token_creator = false
+enable_agent_runtimes       = true
+enable_build_sa             = true
+bind_agent_id               = true
+require_agent_binding       = true
+broker_keep_runtime_caller  = false
+enable_tenant_wif_provider  = true
+enable_memory_bank_iam_cel  = true
+
+# tenant_bigquery_readers      = { "tenant-acme-corp" = ["group:acme-finops@acme.com"] }
+# bigquery_operator_principals = ["group:platform-finops@yourco.com"]
+
+# ------------------------------------------------------------------------------
+# Optional: Token-Expiry & Autonomous Session Call Policy
+# Clients silently exchange still-valid IdP ID tokens for fresh DPoP-bound
+# gateway tokens at POST /api/v1/auth/token using the same client P-256 key, so
+# shorter gateway TTLs contain blast radius WITHOUT prompting users to re-login.
+# ------------------------------------------------------------------------------
+
+# Preset 1 (Built-in Default): Balanced B2B SaaS
+# token_and_session_policy = {
+#   gateway_token_ttl_seconds             = 600
+#   dpop_proof_max_age_seconds            = 120
+#   tenant_sa_token_ttl_seconds           = 300
+#   tenant_sa_refresh_margin_seconds      = 60
+#   idp_broker_max_token_lifetime_seconds = 3600
+#   idp_direct_max_token_lifetime_seconds = 5400
+#   standard_max_turns_per_session        = 5
+#   enterprise_max_turns_per_session      = 12
+# }
+
+# Preset 2: Regulated Banking / High-Sensitivity Workloads
+# token_and_session_policy = {
+#   gateway_token_ttl_seconds             = 300
+#   dpop_proof_max_age_seconds            = 60
+#   tenant_sa_token_ttl_seconds           = 180
+#   tenant_sa_refresh_margin_seconds      = 45
+#   idp_broker_max_token_lifetime_seconds = 3600
+#   idp_direct_max_token_lifetime_seconds = 3600
+#   standard_max_turns_per_session        = 4
+#   enterprise_max_turns_per_session      = 8
+# }
+
+# Preset 3: Long-Horizon Autonomous Incident Triage / Batch Diagnostics
+# (Gateway session extends to 30 min; irrevocable KMS ctx+jwt re-signs every
+# <= 600s and broker SA tokens remain hard-capped at <= 300s per ADR-0014 A1.)
+# token_and_session_policy = {
+#   gateway_token_ttl_seconds             = 1800
+#   dpop_proof_max_age_seconds            = 120
+#   tenant_sa_token_ttl_seconds           = 300
+#   tenant_sa_refresh_margin_seconds      = 60
+#   idp_broker_max_token_lifetime_seconds = 3600
+#   idp_direct_max_token_lifetime_seconds = 7200
+#   standard_max_turns_per_session        = 15
+#   enterprise_max_turns_per_session      = 40
+# }

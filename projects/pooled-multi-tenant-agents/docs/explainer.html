@@ -1,0 +1,1785 @@
+<!doctype html>
+<!--
+ Copyright 2026 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'self';"
+  />
+  <title>Guided Architecture Story — Pooled Multi-Tenant AI Agents on Google Cloud</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+
+    :root {
+      --blue: #A8C7FA; --onblue: #062E6F;
+      --on: #E3E3E3; --onv: #C4C7C5; --muted: #A8ABAE;
+      --surf: #2A2B2E; --tonal: #373C4B; --ontonal: #D3E3FD;
+      --sel: #35468A; --selb: #A8C7FA;
+      --canvas: #0C0C0D; --page: #1B1B1C;
+      --green: #6DD58C; --ongreen: #0A3818;
+      --yellow: #FDD663; --onyellow: #3E2E00;
+      --red: #F2B8B5; --onred: #601410;
+      --purple: #D7AEFB; --onpurple: #42126B;
+
+      --font-display: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--canvas);
+      color: var(--on);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #stage {
+      position: absolute;
+      width: 1600px;
+      height: 900px;
+      overflow: hidden;
+      background: var(--canvas);
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    #prev, #next, #dock, #tools, #hud {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .24s ease-out, visibility .24s;
+    }
+    .slide.in { opacity: 1; visibility: visible; pointer-events: auto; }
+    .slide.out { opacity: 0; visibility: hidden; transition: opacity .14s ease-in, visibility .14s; }
+    body.nomotion .slide { transition: none !important; }
+
+    .abs { position: absolute; }
+    .num { font-variant-numeric: proportional-nums; }
+    td .num, .tab-num { font-variant-numeric: tabular-nums; }
+    .sep { display: inline-block; margin: 0 10px; opacity: .45; }
+    .w {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top;
+      padding-bottom: .14em;
+      margin-bottom: -.14em;
+    }
+    .w > * { display: inline-block; }
+    .w > i { font-style: normal; }
+
+    #hud {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 32;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(27, 27, 28, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 22px;
+      padding: 5px 8px;
+      backdrop-filter: blur(10px);
+    }
+    .hud-pill {
+      height: 30px;
+      padding: 0 13px;
+      border-radius: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: 600 12px/1 var(--font-sans);
+      color: var(--onv);
+      text-decoration: none;
+      transition: background .16s ease, color .16s ease;
+    }
+    .hud-pill:hover { background: var(--surf); color: var(--on); }
+    .hud-pill.active { background: var(--blue); color: var(--onblue); }
+    #slideCounter {
+      padding: 0 10px;
+      font: 500 12px/1 var(--font-mono);
+      color: var(--muted);
+    }
+
+    #dock:not(.open) { visibility: hidden; }
+    #dock {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 148px;
+      background: rgba(18, 18, 20, .94);
+      border-top: 1px solid rgba(255, 255, 255, .1);
+      transform: translateY(100%);
+      transition: transform .36s cubic-bezier(.2, .9, .25, 1), visibility .36s;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    #dock.open { transform: translateY(0); }
+    #track { display: flex; gap: 14px; transition: transform .36s cubic-bezier(.2, .9, .25, 1); }
+    .thumb {
+      width: 192px;
+      height: 108px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, .12);
+      background: var(--page);
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      flex: none;
+    }
+    .thumb.cur { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(168, 199, 250, .25); }
+    .thumb .tin {
+      width: 1600px;
+      height: 900px;
+      transform: scale(.12);
+      transform-origin: 0 0;
+      position: relative;
+      pointer-events: none;
+    }
+
+    #tools {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      padding: 10px 18px 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 31;
+      opacity: .72;
+      transition: opacity .2s, bottom .36s cubic-bezier(.2, .9, .25, 1);
+    }
+    #tools:hover, #tools:focus-within, #tools.up { opacity: 1; }
+    #tools.up { bottom: 144px; }
+    #tools button, #tools a {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: var(--surf);
+      color: var(--on);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font: 500 13px/1 var(--font-sans);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    #tools button.on { background: var(--blue); color: var(--onblue); border-color: transparent; }
+
+    #prev, #next {
+      width: 46px;
+      height: 46px;
+      top: 427px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 23px;
+      background: rgba(27, 27, 28, .65);
+      color: var(--onv);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      opacity: .55;
+      transition: opacity .2s, background .2s;
+      z-index: 20;
+    }
+    #prev { left: 18px; }
+    #next { right: 18px; }
+    #prev:hover, #prev:focus-visible, #next:hover, #next:focus-visible {
+      opacity: 1;
+      background: var(--surf);
+    }
+    #prev:focus-visible, #next:focus-visible, #tools button:focus-visible, .thumb:focus-visible, a:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+
+    .eb-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 34px;
+      padding: 0 16px;
+      border-radius: 17px;
+      background: var(--surf);
+      color: var(--onv);
+      font: 500 15px/1 var(--font-sans);
+    }
+    .eb-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .h1-title {
+      left: 96px;
+      top: 120px;
+      width: 1408px;
+      font: 600 52px/1.10 var(--font-display);
+      letter-spacing: -0.022em;
+      color: var(--on);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 52px;
+      padding: 0 28px;
+      border-radius: 26px;
+      background: var(--blue);
+      color: var(--onblue);
+      font: 600 18px/1 var(--font-display);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-primary.shape-backed { background: transparent; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 52px;
+      padding: 0 24px;
+      border-radius: 26px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      background: rgba(42, 43, 46, .75);
+      color: var(--on);
+      font: 600 17px/1 var(--font-display);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-secondary:hover { background: var(--surf); }
+
+    .chip-jump {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 19px;
+      background: var(--page);
+      border: 1px solid rgba(255, 255, 255, .09);
+      color: var(--onv);
+      font: 500 15px/1 var(--font-sans);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease;
+    }
+    .chip-jump:hover { background: var(--surf); color: var(--on); }
+
+    .card-page { border-radius: 28px; background: var(--page); padding: 32px 36px; }
+    .card-surf { border-radius: 28px; background: var(--surf); padding: 32px 36px; }
+    .shape-host { background: transparent; border: 0; box-shadow: none; }
+
+    .badge-tonal {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 32px;
+      padding: 0 14px;
+      border-radius: 16px;
+      font: 600 14px/1 var(--font-display);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .b-blue   { background: var(--tonal);  color: var(--ontonal); }
+    .b-green  { background: var(--green);  color: var(--ongreen); }
+    .b-yellow { background: var(--yellow); color: var(--onyellow); }
+    .b-red    { background: var(--red);    color: var(--onred); }
+    .b-purple { background: var(--purple); color: var(--onpurple); }
+    .b-surf   { background: var(--surf);   color: var(--onv); }
+
+    .mono-inline { font-family: var(--font-mono); font-size: 0.9em; color: var(--ontonal); }
+    .code-slab {
+      border-radius: 18px;
+      background: #121418;
+      border: 1px solid rgba(255, 255, 255, .08);
+      padding: 18px 22px;
+      font: 400 15.5px/1.55 var(--font-mono);
+      color: var(--on);
+      white-space: pre-wrap;
+    }
+
+    .plat-row {
+      padding: 15px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+    .plat-row:last-child { border-bottom: 0; }
+    .plat-row.on {
+      border-radius: 14px;
+      background: var(--sel);
+      border: 1.5px solid var(--selb);
+    }
+
+    .data-tbl { width: 100%; border-collapse: collapse; text-align: left; }
+    .data-tbl th {
+      padding: 0 22px 14px 0;
+      font: 500 15px/1.2 var(--font-sans);
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+    .data-tbl th:last-child, .data-tbl td:last-child { padding-right: 0; }
+    .data-tbl td {
+      padding: 16px 22px 16px 0;
+      font: 400 18px/1.38 var(--font-sans);
+      color: var(--onv);
+      border-bottom: 1px solid rgba(255, 255, 255, .07);
+      vertical-align: middle;
+    }
+    .data-tbl tr:last-child td { border-bottom: 0; padding-bottom: 4px; }
+    .data-tbl td strong { color: var(--on); font-weight: 600; }
+
+    .step-idx {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 17px;
+      background: var(--tonal);
+      color: var(--ontonal);
+      font: 600 16px/1 var(--font-display);
+      flex: none;
+    }
+
+    .src-note {
+      left: 96px;
+      top: 786px;
+      width: 1408px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font: 400 15px/1.3 var(--font-sans);
+      color: var(--muted);
+    }
+    .src-link {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .src-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header id="hud" aria-label="Experience mode">
+    <a class="hud-pill active" href="explainer.html?slide=1" aria-current="page">Guided Story Deck</a>
+    <a class="hud-pill" href="visualizer.html?tab=flow">Interactive Security Lab</a>
+    <a class="hud-pill" href="index.html">Docs</a>
+    <span id="slideCounter">1 / 13</span>
+  </header>
+
+  <div id="stage">
+    <div id="slides"></div>
+    <button id="prev" type="button" aria-label="Previous slide" class="abs">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button id="next" type="button" aria-label="Next slide" class="abs">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+
+  <div id="dock" inert><div id="track"></div></div>
+
+  <div id="tools">
+    <button id="tMot" type="button" aria-pressed="false" title="Toggle motion animations (M)">
+      <span id="tMotLabel">Motion: On (M)</span>
+    </button>
+    <button id="tCar" type="button" aria-expanded="false" title="Show or hide slide filmstrip (C)">
+      <span>All Slides (C)</span>
+    </button>
+    <a href="visualizer.html?tab=breach" title="Open live red-team simulator">
+      <span>Open Security Lab ↗</span>
+    </a>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      function el(tag, attrs, children) {
+        const node = document.createElement(tag);
+        if (attrs) {
+          Object.keys(attrs).forEach(function (k) {
+            const v = attrs[k];
+            if (v === null || v === undefined) return;
+            if (k === "className") node.className = v;
+            else if (k === "textContent") node.textContent = v;
+            else if (k === "style") node.setAttribute("style", v);
+            else if (k === "dataset") {
+              Object.keys(v).forEach(function (dk) {
+                node.dataset[dk] = String(v[dk]);
+              });
+            } else {
+              node.setAttribute(k, String(v));
+            }
+          });
+        }
+        appendKids(node, children);
+        return node;
+      }
+
+      function svgEl(tag, attrs, children) {
+        const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+        if (attrs) {
+          Object.keys(attrs).forEach(function (k) {
+            if (attrs[k] !== null && attrs[k] !== undefined) {
+              node.setAttribute(k, String(attrs[k]));
+            }
+          });
+        }
+        appendKids(node, children);
+        return node;
+      }
+
+      function appendKids(parent, children) {
+        if (!children) return;
+        children.forEach(function (ch) {
+          if (ch === null || ch === undefined || ch === false) return;
+          if (typeof ch === "string" || typeof ch === "number") {
+            parent.appendChild(document.createTextNode(String(ch)));
+          } else if (Array.isArray(ch)) {
+            appendKids(parent, ch);
+          } else {
+            parent.appendChild(ch);
+          }
+        });
+      }
+
+      function eb(cat, sub, dotColor, delayMs) {
+        return el(
+          "div",
+          {
+            className: "abs eb-pill",
+            style: "left:96px;top:68px",
+            dataset: { a: "up", d: delayMs || 20 }
+          },
+          [
+            el("span", { className: "eb-dot", style: "background:" + (dotColor || "var(--blue)") }),
+            el("span", null, [cat]),
+            el("span", { className: "sep" }, ["·"]),
+            el("span", null, [sub])
+          ]
+        );
+      }
+
+      function h1(plainPrefix, accentText, accentColor, plainSuffix, delayMs) {
+        return el(
+          "div",
+          {
+            className: "abs h1-title",
+            dataset: { a: "words", d: delayMs || 100 }
+          },
+          [
+            plainPrefix,
+            el("span", { className: "acc", style: "color:" + (accentColor || "var(--blue)") }, [accentText]),
+            plainSuffix || ""
+          ]
+        );
+      }
+
+      function srcFooter(text, labHref, labLabel, delayMs) {
+        return el(
+          "div",
+          { className: "abs src-note", dataset: { a: "fade", d: delayMs || 540 } },
+          [
+            el("span", null, ["Source: " + text]),
+            labHref
+              ? el("a", { className: "src-link", href: labHref }, [labLabel + " →"])
+              : null
+          ]
+        );
+      }
+
+      function secCover(cat, sub, titleText, bgShape, bgColor, dotColor) {
+        return {
+          shape: null,
+          bg: { s: bgShape, cx: 1180, cy: 460, R: 440, rot: 0.08, c: bgColor, o: 0.86 },
+          build: function () {
+            return [
+              eb(cat, sub, dotColor, 40),
+              el(
+                "div",
+                {
+                  className: "abs",
+                  style: "left:96px;top:520px;width:1160px;font:600 104px/1.02 var(--font-display);letter-spacing:-0.028em;color:var(--on)",
+                  dataset: { a: "words", d: 140 }
+                },
+                [titleText]
+              )
+            ];
+          }
+        };
+      }
+
+      function codeLine(keyText, valText, valColor) {
+        return el("div", null, [
+          keyText ? el("span", { style: "color:var(--blue)" }, [keyText]) : null,
+          valColor ? el("span", { style: "color:" + valColor }, [valText]) : valText
+        ]);
+      }
+
+      const COL = {
+        blue: [168, 199, 250],
+        green: [109, 213, 140],
+        yellow: [253, 214, 99],
+        red: [242, 184, 181],
+        purple: [215, 174, 251],
+        surf: [42, 43, 46],
+        tonal: [55, 60, 75],
+        page: [27, 27, 28],
+        sel: [53, 70, 138]
+      };
+
+      const BGC = {
+        blue: [27, 95, 217],
+        green: [24, 128, 70],
+        yellow: [176, 128, 0],
+        red: [190, 45, 40],
+        purple: [128, 64, 200]
+      };
+
+      const COVER_BG = { s: "clover",   cx: 1230, cy: 490, R: 445, rot: 0.06,  c: "blue",   o: 0.88 };
+      const ID_BG    = { s: "circle",   cx: 1490, cy: 840, R: 245, rot: 0.20,  c: "blue",   o: 0.52 };
+      const COMP_BG  = { s: "pentagon", cx: 1500, cy:  95, R: 200, rot: 0.22,  c: "purple", o: 0.52 };
+      const DATA_BG  = { s: "clover",   cx: 1500, cy: 845, R: 230, rot: -0.18, c: "green",  o: 0.50 };
+      const CAND_BG  = { s: "flower",   cx:  110, cy: 865, R: 245, rot: -0.15, c: "yellow", o: 0.48 };
+
+      const S = [];
+
+      /* SLIDE 1: PRESENTATION COVER */
+      S.push({
+        shape: { sel: ".s1-cta", r: 26, c: "blue" },
+        bg: COVER_BG,
+        build: function () {
+          return [
+            eb("Cloud Architecture Blueprint · Part 2", "Pooled Multi-Tenant AI Agents", "var(--blue)", 20),
+            el(
+              "div",
+              {
+                className: "abs",
+                style: "left:96px;top:174px;width:980px;font:600 84px/1.03 var(--font-display);letter-spacing:-0.028em;color:var(--on)",
+                dataset: { a: "words", d: 90 }
+              },
+              [
+                "Pooled AI Agents ",
+                el("span", { className: "acc", style: "color:var(--blue)" }, ["without Shared Blast Radius"])
+              ]
+            ),
+            el(
+              "div",
+              {
+                className: "abs",
+                style: "left:96px;top:398px;width:820px;font:400 24px/1.44 var(--font-sans);color:var(--onv)",
+                dataset: { a: "up", d: 260 }
+              },
+              ["How SaaS providers isolate enterprise tenant data, OAuth credentials, untrusted code execution, and long-term memory on shared Google Cloud infrastructure."]
+            ),
+            el(
+              "div",
+              { className: "abs", style: "left:96px;top:548px;display:flex;align-items:center;gap:16px" },
+              [
+                el("a", { href: "?slide=2", className: "btn-primary shape-backed s1-cta", dataset: { go: 1 } }, [
+                  el("span", { dataset: { a: "fade", d: 340 }, style: "display:inline-flex;align-items:center;gap:10px;color:var(--onblue)" }, [
+                    "Start Guided Walkthrough →"
+                  ])
+                ]),
+                el("a", { href: "visualizer.html?tab=flow", className: "btn-secondary", dataset: { a: "up", d: 380 } }, [
+                  "Open Hands-On Security Lab ↗"
+                ])
+              ]
+            ),
+            el(
+              "div",
+              { className: "abs", style: "left:96px;top:680px;display:flex;align-items:center;gap:12px", dataset: { a: "up", d: 450 } },
+              [
+                el("span", { style: "font:500 15px/1 var(--font-sans);color:var(--muted);margin-right:4px" }, ["Jump to"]),
+                el("a", { href: "?slide=2", className: "chip-jump", dataset: { go: 1 } }, ["Why prototypes break"]),
+                el("a", { href: "?slide=5", className: "chip-jump", dataset: { go: 4 } }, ["Identity & Vault"]),
+                el("a", { href: "?slide=8", className: "chip-jump", dataset: { go: 7 } }, ["Brain & gVisor Hands"]),
+                el("a", { href: "?slide=11", className: "chip-jump", dataset: { go: 10 } }, ["Memory & Data Locks"]),
+                el("a", { href: "?slide=13", className: "chip-jump", dataset: { go: 12 } }, ["Candor & Graduation"])
+              ]
+            ),
+            srcFooter("Apache-2.0 Reference Stack · GoogleCloudPlatform/cloud-solutions/projects/pooled-multi-tenant-agents", "visualizer.html?tab=flow", "Inspect 6-Checkpoint Packet Tracer", 520)
+          ];
+        }
+      });
+
+      /* SLIDE 2: WHY SINGLE-CONTAINER AGENT PROTOTYPES BREAK */
+      S.push({
+        shape: { sel: ".s2-card", r: 28, c: "page" },
+        bg: ID_BG,
+        build: function () {
+          return [
+            eb("The Multi-Tenant Dilemma", "Why SaaS AI agents need new boundaries", "var(--blue)"),
+            h1("Co-located agent prototypes turn ", "one confused turn into a cross-tenant breach", "var(--blue)"),
+            el("div", { className: "abs", style: "left:96px;top:298px;width:620px;display:flex;flex-direction:column;gap:26px" }, [
+              el("div", { dataset: { a: "up", d: 260 } }, [
+                el("div", { style: "font:600 27px/1.2 var(--font-display);color:var(--red);margin-bottom:8px" }, ["Co-located single-container shortcut"]),
+                el("div", { style: "font:400 20px/1.45 var(--font-sans);color:var(--onv)" }, [
+                  "Bundling LLM planning, Bash/Python execution, standing service-account keys, and sticky session RAM in one container lets a single prompt injection read every customer's secrets."
+                ])
+              ]),
+              el("div", { style: "height:1px;background:rgba(255,255,255,.08)", dataset: { a: "fade", d: 320 } }),
+              el("div", { dataset: { a: "up", d: 360 } }, [
+                el("div", { style: "font:600 27px/1.2 var(--font-display);color:var(--yellow);margin-bottom:8px" }, ["Dedicated per-tenant silos (Pattern B)"]),
+                el("div", { style: "font:400 20px/1.45 var(--font-sans);color:var(--onv)" }, [
+                  "Spinning up duplicate gateways, VPCs, and warm model caches for hundreds of bursty SaaS tenants multiplies idle infrastructure and slows onboarding."
+                ])
+              ])
+            ]),
+            el("div", { className: "abs shape-host s2-card", style: "left:764px;top:292px;width:740px;padding:36px 40px" }, [
+              el("div", { dataset: { a: "fade", d: 280 }, style: "display:flex;align-items:center;justify-content:space-between;margin-bottom:18px" }, [
+                el("span", { style: "font:600 28px/1.2 var(--font-display);color:var(--blue)" }, ["Non-negotiable invariant"]),
+                el("span", { className: "badge-tonal b-blue" }, ["Tenant ∩ User ∩ Agent"])
+              ]),
+              el("div", { dataset: { a: "up", d: 340 }, style: "font:400 20px/1.45 var(--font-sans);color:var(--on);margin-bottom:22px" }, [
+                "Every isolation gate executes outside the model so security holds even when prompts or tool outputs are adversarial:"
+              ]),
+              el("div", { className: "code-slab", dataset: { a: "up", d: 420 } }, [
+                codeLine("// Verified independently at every hop (0 → 5)\n", "", null),
+                codeLine("Tenant lock : ", "FinVault Bank ≠ RetailStream Corp (0 row/secret bleed)\n", "var(--green)"),
+                codeLine("User lock   : ", "Priya (sre_admin) ≠ Alex (analyst) (0 3LO/session bleed)\n", "var(--blue)"),
+                codeLine("Agent lock  : ", "SPIFFE workload identity == signed ctx+jwt agent_id", "var(--purple)")
+              ])
+            ]),
+            srcFooter("docs/tenant_isolation_assurance.md · Invariants I1–I7", "visualizer.html?tab=concurrency", "Run Two-Enterprise Concurrency Trace", 540)
+          ];
+        }
+      });
+
+      /* SLIDE 3: FOUR DISAGGREGATED SUBSYSTEMS */
+      S.push({
+        shape: { sel: ".s3-card", r: 28, c: "tonal" },
+        bg: { s: "circle", cx: 1470, cy: 825, R: 250, rot: 0.34, c: "blue", o: 0.52 },
+        build: function () {
+          return [
+            eb("System Architecture", "Disaggregated runtime subsystems", "var(--blue)"),
+            h1("Pulling planning, code execution, and secrets apart ", "eliminates shared blast radius", "var(--blue)"),
+            el("div", { className: "abs", style: "left:96px;top:300px;width:1408px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px" }, [
+              el("div", { className: "card-page", style: "padding:30px 28px", dataset: { a: "up", d: 240 } }, [
+                el("span", { className: "badge-tonal b-blue", style: "margin-bottom:16px" }, ["Perimeter"]),
+                el("div", { style: "font:600 25px/1.2 var(--font-display);color:var(--on);margin-bottom:10px" }, ["Agent Gateways"]),
+                el("div", { style: "font:400 18px/1.44 var(--font-sans);color:var(--onv)" }, [
+                  "Ingress SSO/DPoP + Cloud KMS ctx+jwt signing; outbound Model Armor, Cloud DLP, and Redis quota bulkheads."
+                ])
+              ]),
+              el("div", { className: "card-page", style: "padding:30px 28px", dataset: { a: "up", d: 320 } }, [
+                el("span", { className: "badge-tonal b-purple", style: "margin-bottom:16px" }, ["Compute"]),
+                el("div", { style: "font:600 25px/1.2 var(--font-display);color:var(--on);margin-bottom:10px" }, ["The Brain"]),
+                el("div", { style: "font:400 18px/1.44 var(--font-sans);color:var(--onv)" }, [
+                  "Stateless Cloud Run turn orchestrator with Cloud KMS public-key verify only, zero session RAM, and zero standing keys."
+                ])
+              ]),
+              el("div", { className: "card-page", style: "padding:30px 28px", dataset: { a: "up", d: 400 } }, [
+                el("span", { className: "badge-tonal b-yellow", style: "margin-bottom:16px" }, ["Sandbox"]),
+                el("div", { style: "font:600 25px/1.2 var(--font-display);color:var(--on);margin-bottom:10px" }, ["The Hands"]),
+                el("div", { style: "font:400 18px/1.44 var(--font-sans);color:var(--onv)" }, [
+                  "Per-session agent sandboxes in Gemini (gVisor) running untrusted scripts with zero credentials and blocked direct egress."
+                ])
+              ]),
+              el("div", { className: "shape-host s3-card", style: "padding:30px 28px" }, [
+                el("span", { className: "badge-tonal b-green", style: "margin-bottom:16px", dataset: { a: "fade", d: 280 } }, ["Credentials"]),
+                el("div", { style: "font:600 25px/1.2 var(--font-display);color:var(--on);margin-bottom:10px", dataset: { a: "up", d: 360 } }, ["The Vault"]),
+                el("div", { style: "font:400 18px/1.44 var(--font-sans);color:var(--ontonal)", dataset: { a: "up", d: 440 } }, [
+                  "Auth Manager + out-of-process Credential Broker minting 5-min per-tenant 2LO STS tokens and user-scoped 3LO OAuth."
+                ])
+              ])
+            ]),
+            srcFooter("ADR-0014 (B4 Broker / B5 Disaggregated Runtime) · ADR-0016 (SPIFFE Agent Identity)", "visualizer.html?tab=flow", "Explore Subsystem Topology", 540)
+          ];
+        }
+      });
+
+      /* SLIDE 4: SECTION BREATHER 1 */
+      S.push(secCover("Section 1 · Ingress & The Vault", "Identity Platform, WIF, DPoP & Auth Manager", "Cryptographic Identity", "circle", "blue", "var(--blue)"));
+
+      /* SLIDE 5: HOP 0-1 POOLED SSO, DPOP & KMS CTX+JWT */
+      S.push({
+        shape: { sel: ".s5-slab", r: 28, c: "page", shared: false },
+        bg: ID_BG,
+        build: function () {
+          return [
+            eb("Hop 0 → Hop 1", "Ingress Agent Gateway & Context Signing", "var(--blue)"),
+            h1("Tenant and user identity come from ", "hardware-signed tokens, never HTTP headers", "var(--blue)"),
+            el("div", { className: "abs", style: "left:96px;top:300px;width:580px;display:flex;flex-direction:column;gap:22px" }, [
+              el("div", { style: "display:flex;gap:16px;align-items:flex-start", dataset: { a: "up", d: 260 } }, [
+                el("span", { className: "step-idx" }, ["1"]),
+                el("div", null, [
+                  el("div", { style: "font:600 22px/1.25 var(--font-display);color:var(--on)" }, ["Issuer-locked OIDC & WIF"]),
+                  el("div", { style: "font:400 18px/1.42 var(--font-sans);color:var(--onv)" }, ["Pins FinVault's Okta issuer URI to 'tenant-finvault-alpha'; foreign issuers fail closed before reaching gateway code."])
+                ])
+              ]),
+              el("div", { style: "display:flex;gap:16px;align-items:flex-start", dataset: { a: "up", d: 340 } }, [
+                el("span", { className: "step-idx" }, ["2"]),
+                el("div", null, [
+                  el("div", { style: "font:600 22px/1.25 var(--font-display);color:var(--on)" }, ["Sender-bound RFC 9449 DPoP"]),
+                  el("div", { style: "font:400 18px/1.42 var(--font-sans);color:var(--onv)" }, ["Binds the 10-min gateway token to Priya's session keypair (cnf.jkt) with Redis single-use jti replay rejection."])
+                ])
+              ]),
+              el("div", { style: "display:flex;gap:16px;align-items:flex-start", dataset: { a: "up", d: 420 } }, [
+                el("span", { className: "step-idx" }, ["3"]),
+                el("div", null, [
+                  el("div", { style: "font:600 22px/1.25 var(--font-display);color:var(--on)" }, ["Non-exportable Cloud KMS ctx+jwt"]),
+                  el("div", { style: "font:400 18px/1.42 var(--font-sans);color:var(--onv)" }, ["Strips spoofed caller tenant headers and signs an ES256 context token held exclusively by the ingress gateway."])
+                ])
+              ])
+            ]),
+            el("div", { className: "abs shape-host s5-slab", style: "left:724px;top:292px;width:780px;padding:32px 36px" }, [
+              el("div", { dataset: { a: "fade", d: 280 }, style: "display:flex;align-items:center;justify-content:space-between;margin-bottom:16px" }, [
+                el("span", { style: "font:600 24px/1.2 var(--font-display);color:var(--on)" }, ["Signed Cloud KMS Context Envelope"]),
+                el("span", { className: "badge-tonal b-green" }, ["ES256 · Asymmetric"])
+              ]),
+              el("div", { className: "code-slab", dataset: { a: "up", d: 360 } }, [
+                codeLine("{\n", "", null),
+                codeLine('  "typ": ', '"ctx+jwt",\n', "var(--green)"),
+                codeLine('  "iss": ', '"cymbal-ingress-gateway",\n', null),
+                codeLine('  "aud": ', '"cymbal-agent-runtime",\n', null),
+                codeLine('  "sub": ', '"priya@finvault.example.com",\n', "var(--blue)"),
+                codeLine('  "tenant_id": ', '"tenant-finvault-alpha",\n', "var(--green)"),
+                codeLine('  "user_role": ', '"sre_admin",\n', null),
+                codeLine('  "agent_id":  ', '"cymbal_shared_diagnostic_agent",\n', "var(--purple)"),
+                codeLine('  "scope":     ', '["2lo:cymbal.telemetry.read", "3lo:jira.incidents.write"]\n', "var(--yellow)"),
+                codeLine("}", "", null)
+              ])
+            ]),
+            srcFooter("agents/hop0_idp_federation.py · app/gateway_tokens.py · agents/context_signing.py", "visualizer.html?tab=breach&vector=0", "Test Header-Spoof & DPoP Replay Defense", 540)
+          ];
+        }
+      });
+
+      /* SLIDE 6: THE VAULT — AUTH MANAGER & CREDENTIAL BROKER */
+      S.push({
+        shape: { sel: ".s6-hero", r: 28, c: "blue" },
+        bg: { s: "circle", cx: 1495, cy: 830, R: 235, rot: 0.12, c: "blue", o: 0.48 },
+        build: function () {
+          return [
+            eb("Section 1 · The Vault", "Auth Manager & Out-of-Process Credential Broker", "var(--blue)"),
+            h1("Zero standing credentials live inside ", "the orchestrator or sandbox containers", "var(--blue)"),
+            el("div", { className: "abs shape-host s6-hero", style: "left:96px;top:304px;width:440px;padding:36px 34px" }, [
+              el("div", { dataset: { a: "fade", d: 260 }, style: "font:600 24px/1.2 var(--font-display);color:var(--onblue);margin-bottom:14px" }, ["Downstream STS token TTL"]),
+              el("div", { className: "num", dataset: { count: 1000, d: 280 }, style: "font:700 96px/1.0 var(--font-display);letter-spacing:-0.025em;color:var(--onblue)" }, ["300 s"]),
+              el("div", { dataset: { a: "fade", d: 360 }, style: "font:500 19px/1.42 var(--font-sans);color:var(--onblue);margin-top:16px" }, [
+                "Brokered per-tenant ct-<hash> Google service account access token; runtime holds 0 iam.serviceAccountTokenCreator bindings."
+              ])
+            ]),
+            el("div", { className: "abs card-page", style: "left:564px;top:304px;width:456px;padding:34px 32px", dataset: { a: "up", d: 340 } }, [
+              el("span", { className: "badge-tonal b-purple", style: "margin-bottom:16px" }, ["Layer 3 · Workload Lock"]),
+              el("div", { style: "font:600 26px/1.2 var(--font-display);color:var(--on);margin-bottom:12px" }, ["SPIFFE X.509 mTLS check"]),
+              el("div", { style: "font:400 19px/1.45 var(--font-sans);color:var(--onv)" }, [
+                "Cloud Run Agent Identity issues managed SPIFFE identities per agent service. The Broker refuses any request whose workload identity disagrees with ctx+jwt agent_id."
+              ])
+            ]),
+            el("div", { className: "abs card-page", style: "left:1048px;top:304px;width:456px;padding:34px 32px", dataset: { a: "up", d: 430 } }, [
+              el("span", { className: "badge-tonal b-green", style: "margin-bottom:16px" }, ["2LO + 3LO Partitioning"]),
+              el("div", { style: "font:600 26px/1.2 var(--font-display);color:var(--on);margin-bottom:12px" }, ["Auth Manager 3LO Vault"]),
+              el("div", { style: "font:400 19px/1.45 var(--font-sans);color:var(--onv)" }, [
+                "Delegates Jira and ServiceNow OAuth grants under {tenant_id}:{user_id}:{provider}:{scope} so Coworker B can never reuse Priya's consent."
+              ])
+            ]),
+            srcFooter("broker_service/core.py · agents/auth/vault_and_bulkhead.py · test_adr_0014_b4_credential_broker.py", "visualizer.html?tab=breach&vector=3", "Test Cross-User 3LO Confused-Deputy Block", 540)
+          ];
+        }
+      });
+
+      /* SLIDE 7: SECTION BREATHER 2 */
+      S.push(secCover("Section 2 · Compute & Sandboxes", "Stateless Brain, Two-Tier Skills & gVisor Hands", "Isolated Execution", "pentagon", "purple", "var(--purple)"));
+
+      /* SLIDE 8: TWO-TIER RUNTIME SKILLS & SHARED PREFIX CACHE */
+      S.push({
+        shape: { sel: ".s8-card", r: 28, c: "page", shared: false },
+        bg: COMP_BG,
+        build: function () {
+          return [
+            eb("The Brain · Prompt & Skill Architecture", "Context caching in Gemini + KMS custom skills", "var(--purple)"),
+            h1("Baseline skills stay warm in cache; ", "tenant custom skills load post-prefix", "var(--purple)"),
+            el("div", { className: "abs", style: "left:96px;top:304px;width:520px" }, [
+              el("div", { className: "num", dataset: { count: 1000, d: 260 }, style: "font:700 108px/1.0 var(--font-display);letter-spacing:-0.025em;color:var(--purple)" }, ["90%"]),
+              el("div", { style: "font:600 22px/1.32 var(--font-display);color:var(--on);margin-top:14px", dataset: { a: "up", d: 340 } }, [
+                "Cached input token discount on >= 4,096-token immutable prefixes"
+              ]),
+              el("div", { style: "font:400 19px/1.45 var(--font-sans);color:var(--onv);margin-top:14px", dataset: { a: "up", d: 420 } }, [
+                "compute_shared_prefix_cache_key() fails closed with E_CACHE_POISONING_DETECTED if any tenant ID, 3LO schema, or dynamic placeholder enters the shared prefix."
+              ])
+            ]),
+            el("div", { className: "abs shape-host s8-card", style: "left:664px;top:296px;width:840px;padding:34px 38px" }, [
+              el("div", { dataset: { a: "fade", d: 280 }, style: "display:flex;align-items:center;justify-content:space-between;margin-bottom:20px" }, [
+                el("span", { style: "font:600 25px/1.2 var(--font-display);color:var(--on)" }, ["Two-Tier Runtime Skill Assembly"]),
+                el("span", { className: "badge-tonal b-purple" }, ["Zero Cache Poisoning"])
+              ]),
+              el("div", { style: "display:flex;height:36px;border-radius:99px;overflow:hidden;gap:6px;margin-bottom:14px", dataset: { a: "bar", d: 360 } }, [
+                el("div", { style: "flex:82;background:var(--purple)" }),
+                el("div", { style: "flex:18;background:var(--green)" })
+              ]),
+              el("div", { style: "display:flex;justify-content:space-between;font:600 15px/1.3 var(--font-sans);margin-bottom:24px", dataset: { a: "fade", d: 420 } }, [
+                el("span", { style: "color:var(--purple)" }, ["Tier 1 · Immutable Shared Prefix (4,400+ tok · Cached)"]),
+                el("span", { style: "color:var(--green)" }, ["Tier 2 · Tenant Suffix (Uncached)"])
+              ]),
+              el("div", { dataset: { a: "up", d: 460 } }, [
+                el("div", { className: "plat-row" }, [
+                  el("div", null, [
+                    el("div", { style: "font:600 18px/1.2 var(--font-display);color:var(--on)" }, ["Tier 1: Provider-authored SKILL.md + 2LO base schemas"]),
+                    el("div", { style: "font:400 15px/1.35 var(--font-sans);color:var(--muted)" }, ["plugins/cymbal-sre-diagnostics/skills/incident-triage/SKILL.md"])
+                  ]),
+                  el("span", { className: "badge-tonal b-purple" }, ["Shared Cache"])
+                ]),
+                el("div", { className: "plat-row on" }, [
+                  el("div", null, [
+                    el("div", { style: "font:600 18px/1.2 var(--font-display);color:var(--on)" }, ["Tier 2: Per-tenant Cloud Storage custom skills"]),
+                    el("div", { style: "font:400 15px/1.35 var(--font-sans);color:var(--ontonal)" }, ["Fetched via ct-* SA · Cloud KMS CMEK verified · Model Armor + DLP screened"])
+                  ]),
+                  el("span", { className: "badge-tonal b-green" }, ["Turn Suffix Only"])
+                ])
+              ])
+            ]),
+            srcFooter("agents/skill_loader.py · agents/shared_diagnostic_agent.py · test_two_tier_skills_and_oss_parity.py", "visualizer.html?tab=finops", "Open Prefix-Cache Capacity Explorer", 540)
+          ];
+        }
+      });
+
+      /* SLIDE 9: THE HANDS — PER-SESSION AGENT SANDBOXES (GVISOR) */
+      S.push({
+        shape: { sel: ".s9-card", r: 28, c: "page" },
+        bg: { s: "pentagon", cx: 1485, cy: 110, R: 210, rot: 0.34, c: "purple", o: 0.50 },
+        build: function () {
+          return [
+            eb("The Hands · Isolated Execution", "Agent sandboxes in Gemini & GKE gVisor warm pools", "var(--purple)"),
+            h1("Untrusted diagnostic scripts run behind ", "a gVisor kernel with zero credentials", "var(--purple)"),
+            el("div", { className: "abs", style: "left:96px;top:304px;width:580px;display:flex;flex-direction:column;gap:22px" }, [
+              el("div", { dataset: { a: "up", d: 260 } }, [
+                el("div", { style: "font:600 26px/1.2 var(--font-display);color:var(--on);margin-bottom:8px" }, ["Claim-and-Taint warm-pool lifecycle"]),
+                el("div", { style: "font:400 19px/1.45 var(--font-sans);color:var(--onv)" }, [
+                  "Pre-warmed sandboxes bind one-way to {tenant_id}:{user_id}:{session_id} in ~50 ms and are destroyed — never recycled back to the pool — on session close or TTL expiry."
+                ])
+              ]),
+              el("div", { style: "height:1px;background:rgba(255,255,255,.08)", dataset: { a: "fade", d: 330 } }),
+              el("div", { dataset: { a: "up", d: 380 } }, [
+                el("div", { style: "font:600 26px/1.2 var(--font-display);color:var(--on);margin-bottom:8px" }, ["Air-gapped reference posture"]),
+                el("div", { style: "font:400 19px/1.45 var(--font-sans);color:var(--onv)" }, [
+                  "In the reference deployment, sandboxes block all direct network egress and receive sanitized read-only inputs via The Brain; workloads needing external packages route strictly via Section 4 outbound gateways."
+                ])
+              ])
+            ]),
+            el("div", { className: "abs shape-host s9-card", style: "left:724px;top:296px;width:780px;padding:32px 36px" }, [
+              el("div", { dataset: { a: "fade", d: 280 }, style: "display:flex;align-items:center;justify-content:space-between;margin-bottom:16px" }, [
+                el("span", { style: "font:600 24px/1.2 var(--font-display);color:var(--on)" }, ["Sandbox Isolation Verification Receipt"]),
+                el("span", { className: "badge-tonal b-green" }, ["4.19.0-gvisor · uid=999"])
+              ]),
+              el("div", { dataset: { a: "up", d: 350 } }, [
+                el("div", { className: "plat-row" }, [
+                  el("span", { style: "font:500 18px/1.2 var(--font-sans);color:var(--on)" }, ["Kernel & Syscall Boundary"]),
+                  el("span", { className: "badge-tonal b-purple" }, ["gVisor Sentry User-Space Kernel"])
+                ]),
+                el("div", { className: "plat-row" }, [
+                  el("span", { style: "font:500 18px/1.2 var(--font-sans);color:var(--on)" }, ["Mounted Cloud / OAuth Secrets"]),
+                  el("span", { className: "badge-tonal b-green" }, ["0 Credentials Mounted"])
+                ]),
+                el("div", { className: "plat-row" }, [
+                  el("span", { style: "font:500 18px/1.2 var(--font-sans);color:var(--on)" }, ["Cloud Metadata Server Probe"]),
+                  el("span", { className: "badge-tonal b-red" }, ["HTTP 422 · Blocked Pre-Exec & Kernel"])
+                ]),
+                el("div", { className: "plat-row on" }, [
+                  el("span", { style: "font:500 18px/1.2 var(--font-sans);color:var(--on)" }, ["Cross-Tenant Session Hijack Attempt"]),
+                  el("span", { className: "badge-tonal b-blue" }, ["HTTP 403 · E_SANDBOX_TENANT_MISMATCH"])
+                ])
+              ])
+            ]),
+            srcFooter("agents/sandbox/manager.py · agents/sandbox/gemini_client.py · ADR-0012", "visualizer.html?tab=breach&vector=7", "Simulate Sandbox Metadata Escape Probe", 540)
+          ];
+        }
+      });
+
+      /* SLIDE 10: SECTION BREATHER 3 */
+      S.push(secCover("Sections 3 & 4 · Memory & Data", "Scoped Memory Bank, Egress Bulkheads & RLS", "Sealed State & Egress", "clover", "green", "var(--green)"));
+
+      /* SLIDE 11: SESSION CHECKPOINTS & SCOPED MEMORY BANK */
+      S.push({
+        shape: { sel: ".s11-card", r: 28, c: "page", shared: false },
+        bg: DATA_BG,
+        build: function () {
+          return [
+            eb("Section 3 · Session & Long-Term Memory", "Cloud Firestore AEAD + Memory Bank in Gemini", "var(--green)"),
+            h1("Exact-match scopes and Cloud IAM CEL ", "prevent cross-tenant memory consolidation", "var(--green)"),
+            el("div", { className: "abs", style: "left:96px;top:300px;width:580px;display:flex;flex-direction:column;gap:22px" }, [
+              el("div", { dataset: { a: "up", d: 260 } }, [
+                el("div", { style: "font:600 25px/1.2 var(--font-display);color:var(--on);margin-bottom:8px" }, ["Active session checkpoints (Firestore)"]),
+                el("div", { style: "font:400 19px/1.45 var(--font-sans);color:var(--onv)" }, [
+                  "Encrypted per record with FinVault's dedicated Cloud KMS CMEK using AEAD associated data (tenant, user, scope, key) so replicas stay 100% stateless."
+                ])
+              ]),
+              el("div", { style: "height:1px;background:rgba(255,255,255,.08)", dataset: { a: "fade", d: 330 } }),
+              el("div", { dataset: { a: "up", d: 380 } }, [
+                el("div", { style: "font:600 25px/1.2 var(--font-display);color:var(--on);margin-bottom:8px" }, ["Bounded semantic & episodic recall (top_k = 5)"]),
+                el("div", { style: "font:400 19px/1.45 var(--font-sans);color:var(--onv)" }, [
+                  "Consolidation and deduplication compare newly extracted facts strictly within identical scope dictionaries — never across tenants or unentitled agents."
+                ])
+              ])
+            ]),
+            el("div", { className: "abs shape-host s11-card", style: "left:724px;top:292px;width:780px;padding:32px 36px" }, [
+              el("div", { dataset: { a: "fade", d: 280 }, style: "display:flex;align-items:center;justify-content:space-between;margin-bottom:16px" }, [
+                el("span", { style: "font:600 24px/1.2 var(--font-display);color:var(--on)" }, ["Cloud IAM memoryScope CEL Policy"]),
+                el("span", { className: "badge-tonal b-green" }, ["Infrastructure Gate"])
+              ]),
+              el("div", { className: "code-slab", dataset: { a: "up", d: 360 } }, [
+                codeLine("// Bound on roles/aiplatform.memoryUser for ct-finvault SA\n", "", null),
+                codeLine("api.getAttribute(", "'aiplatform.googleapis.com/memoryScope'", "var(--yellow)"),
+                codeLine(", {})[\n  ", "'tenant_id'", "var(--blue)"),
+                codeLine("] == ", "'tenant-finvault-alpha'\n", "var(--green)"),
+                codeLine("&& api.getAttribute(", "'aiplatform.googleapis.com/memoryScope'", "var(--yellow)"),
+                codeLine(", {})[\n  ", "'agent_id'", "var(--blue)"),
+                codeLine("] in [", "'cymbal_shared_diagnostic_agent'", "var(--purple)"),
+                codeLine("]\n\n", "", null),
+                codeLine("// Wildcard '*' or missing keys -> HTTP 403 PERMISSION_DENIED", "", null)
+              ])
+            ]),
+            srcFooter("agents/memory_crypto.py · agents/memory_bank_iam_and_residency.py · terraform/modules/tenant/main.tf", "visualizer.html?tab=breach&vector=5", "Test Memory Bank Wildcard Injection Block", 540)
+          ];
+        }
+      });
+
+      /* SLIDE 12: EGRESS BULKHEADS & 4-ENGINE DATA LAYER */
+      S.push({
+        shape: { sel: ".s12-tbl", r: 28, c: "page" },
+        bg: { s: "clover", cx: 1490, cy: 830, R: 220, rot: 0.14, c: "green", o: 0.46 },
+        build: function () {
+          return [
+            eb("Section 4 · Governed Egress & Data Locks", "Redis Bulkheads, Model Armor, DLP & Storage Portability", "var(--green)"),
+            h1("Every storage engine enforces ", "both tenant row isolation and role/agent RBAC", "var(--green)"),
+            el("div", { className: "abs shape-host s12-tbl", style: "left:96px;top:290px;width:1408px;padding:28px 38px" }, [
+              el("table", { className: "data-tbl", dataset: { a: "fade", d: 240 } }, [
+                el("thead", null, [
+                  el("tr", null, [
+                    el("th", { style: "width:23%" }, ["Google Cloud Store"]),
+                    el("th", { style: "width:39%" }, ["Tenant Partitioning Mechanism"]),
+                    el("th", { style: "width:22%" }, ["Role & Agent RBAC"]),
+                    el("th", { style: "width:16%" }, ["Reference Status"])
+                  ])
+                ]),
+                el("tbody", null, [
+                  el("tr", { dataset: { a: "up", d: 290 } }, [
+                    el("td", null, [el("strong", null, ["AlloyDB for PostgreSQL"])]),
+                    el("td", null, ["FORCE ROW LEVEL SECURITY over transactional app.current_tenant_id"]),
+                    el("td", null, ["NOSUPERUSER NOBYPASSRLS + IAM DB user"]),
+                    el("td", null, [el("span", { className: "badge-tonal b-green" }, ["Live Reference"])])
+                  ]),
+                  el("tr", { dataset: { a: "up", d: 360 } }, [
+                    el("td", null, [el("strong", null, ["Spanner"])]),
+                    el("td", null, ["SQL SECURITY DEFINER tenant-scoped views"]),
+                    el("td", null, ["Fine-Grained Access Control (FGAC) roles"]),
+                    el("td", null, [el("span", { className: "badge-tonal b-blue" }, ["DDL Adapter"])])
+                  ]),
+                  el("tr", { dataset: { a: "up", d: 430 } }, [
+                    el("td", null, [el("strong", null, ["Cloud Firestore"])]),
+                    el("td", null, ["Composite {tenant}:{user}:{session} + per-tenant CMEK AEAD"]),
+                    el("td", null, ["Brokered 2LO IAM + verified envelope check"]),
+                    el("td", null, [el("span", { className: "badge-tonal b-green" }, ["Live Checkpoints"])])
+                  ]),
+                  el("tr", { dataset: { a: "up", d: 500 } }, [
+                    el("td", null, [el("strong", null, ["BigQuery"])]),
+                    el("td", null, ["Row-Level Access Policies (FILTER USING tenant_id)"]),
+                    el("td", null, ["Policy tags + authorized views"]),
+                    el("td", null, [el("span", { className: "badge-tonal b-green" }, ["Live OTel Spans"])])
+                  ])
+                ])
+              ])
+            ]),
+            srcFooter("mcp_server/db.py · mcp_server/schema.sql · agents/pooled_resilience_and_standards.py", "visualizer.html?tab=flow&hop=5&db=spanner", "Switch Live DDL Across All 4 Datastores", 560)
+          ];
+        }
+      });
+
+      /* SLIDE 13: ENGINEERING CANDOR, TOPOLOGY GRADUATION & CLOSING CTA */
+      S.push({
+        shape: { sel: ".s13-left", r: 28, c: "page", shared: false },
+        bg: CAND_BG,
+        build: function () {
+          return [
+            eb("Section 5 · Engineering Candor & Next Steps", "Live vs. Drop-In Perimeter & Pool-to-Silo Graduation", "var(--yellow)"),
+            h1("Know where Pooled Pattern A wins — ", "and when a tenant should graduate", "var(--yellow)"),
+            el("div", { className: "abs shape-host s13-left", style: "left:96px;top:296px;width:684px;padding:34px 36px" }, [
+              el("div", { dataset: { a: "fade", d: 260 }, style: "display:flex;align-items:center;justify-content:space-between;margin-bottom:16px" }, [
+                el("span", { style: "font:600 25px/1.2 var(--font-display);color:var(--on)" }, ["Honest Perimeter & Graduation Guide"]),
+                el("span", { className: "badge-tonal b-yellow" }, ["Architecture Candor"])
+              ]),
+              el("div", { dataset: { a: "up", d: 330 }, style: "display:flex;flex-direction:column;gap:14px;font:400 18px/1.44 var(--font-sans);color:var(--onv)" }, [
+                el("div", null, [
+                  el("strong", { style: "color:var(--green)" }, ["Reference Repo (Live): "]),
+                  "Cloud Run + IAP ingress, KMS ES256 ctx+jwt, SPIFFE Broker, gVisor sandboxes, AlloyDB FORCE RLS, Redis Lua bulkheads, Model Armor & DLP."
+                ]),
+                el("div", null, [
+                  el("strong", { style: "color:var(--blue)" }, ["Enterprise Drop-Ins: "]),
+                  "Layer Apigee at ingress or managed agent gateway in Gemini at egress without changing internal token contracts."
+                ]),
+                el("div", null, [
+                  el("strong", { style: "color:var(--yellow)" }, ["When to Graduate (Hybrid PSC / Silo): "]),
+                  "Regulated tenants mandating dedicated VPC/PSC databases, dedicated Memory Bank instances, or single-tenant project blast radius."
+                ])
+              ])
+            ]),
+            el("div", { className: "abs", style: "left:824px;top:304px;width:680px;display:flex;flex-direction:column;gap:22px" }, [
+              el("div", { style: "display:flex;align-items:baseline;gap:20px", dataset: { a: "up", d: 300 } }, [
+                el("span", { className: "num", dataset: { count: 1000, d: 280 }, style: "font:700 84px/1.0 var(--font-display);letter-spacing:-0.025em;color:var(--green)" }, ["10 / 10"]),
+                el("span", { style: "font:500 20px/1.35 var(--font-sans);color:var(--onv)" }, ["adversarial cross-tenant breach vectors blocked in CI alongside two-Enterprise concurrency suites"])
+              ]),
+              el("div", { style: "font:400 20px/1.45 var(--font-sans);color:var(--onv)", dataset: { a: "up", d: 380 } }, [
+                "Deploy the Apache-2.0 Terraform + ADK reference stack in your own Google Cloud project, or probe every checkpoint right now in the browser Security Lab."
+              ]),
+              el("div", { style: "display:flex;flex-wrap:wrap;gap:14px;margin-top:6px", dataset: { a: "up", d: 450 } }, [
+                el("a", { href: "visualizer.html?tab=flow", className: "btn-primary" }, ["Launch Interactive Security Lab →"]),
+                el("a", { href: "https://github.com/GoogleCloudPlatform/cloud-solutions/tree/main/projects/pooled-multi-tenant-agents", target: "_blank", rel: "noopener noreferrer", className: "btn-secondary" }, ["View Code on GitHub ↗"])
+              ])
+            ]),
+            srcFooter("docs/implementation_status.md · terraform/ (envs/silo & tenant_data_plane) · Apache-2.0 License", "index.html", "Read Full Architecture Docs", 540)
+          ];
+        }
+      });
+
+      const W = 1600;
+      const H = 900;
+      const DT = 1 / 240;
+      let steps = 4;
+      const clamp = function (x, a, b) {
+        const lo = a === undefined ? 0 : a;
+        const hi = b === undefined ? 1 : b;
+        return Math.min(hi, Math.max(lo, x));
+      };
+      const lerp = function (a, b, k) { return a + (b - a) * k; };
+      const REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const urlMotion = new URLSearchParams(window.location.search).get("motion");
+      let noMotion = urlMotion === "0" || urlMotion === "false" || Boolean(REDUCED);
+      document.body.classList.toggle("nomotion", noMotion);
+
+      function Spr(v, k, c) {
+        this.v = v || 0;
+        this.t = v || 0;
+        this.u = 0;
+        this.k = k || 520;
+        this.c = c || 28;
+      }
+      Spr.prototype.set = function (t, k, c) {
+        this.t = t;
+        if (k !== undefined) this.k = k;
+        if (c !== undefined) this.c = c;
+        if (noMotion) this.snap(t);
+      };
+      Spr.prototype.snap = function (v) {
+        const target = v === undefined ? this.t : v;
+        this.v = target;
+        this.t = target;
+        this.u = 0;
+      };
+      Spr.prototype.step = function (dt) {
+        this.u += (-this.k * (this.v - this.t) - this.c * this.u) * dt;
+        this.v += this.u * dt;
+      };
+      Spr.prototype.step2 = function () {
+        if (noMotion) {
+          this.snap();
+          return;
+        }
+        for (let i = 0; i < steps; i++) this.step(DT);
+      };
+      Spr.prototype.isRest = function () {
+        return Math.abs(this.v - this.t) < 1e-3 && Math.abs(this.u) < 1e-2;
+      };
+
+      const SPRINGS = {
+        snappy: [520, 28],
+        bouncy: [420, 18],
+        shapePos: [320, 26],
+        shapeSize: [320, 36],
+        bgMix: [170, 17]
+      };
+
+      const stage = document.getElementById("stage");
+      function fit() {
+        if (!stage) return;
+        const sc = Math.min(window.innerWidth / W, window.innerHeight / H);
+        stage.style.zoom = sc.toFixed(4);
+        stage.style.left = ((window.innerWidth - W * sc) / 2 / sc).toFixed(2) + "px";
+        stage.style.top = ((window.innerHeight - H * sc) / 2 / sc).toFixed(2) + "px";
+      }
+      window.addEventListener("resize", fit);
+      fit();
+
+      const N_PTS = 240;
+      const TAU = Math.PI * 2;
+      function smoothArr(a, w) {
+        return a.map(function (_, i) {
+          let s = 0;
+          for (let j = -w; j <= w; j++) s += a[(i + j + N_PTS) % N_PTS];
+          return s / (2 * w + 1);
+        });
+      }
+      function normArr(a) {
+        const m = Math.sqrt(a.reduce(function (s, v) { return s + v * v; }, 0) / N_PTS);
+        return a.map(function (v) { return v / m; });
+      }
+      function polarArr(fn) {
+        return Array.from({ length: N_PTS }, function (_, i) { return fn((i / N_PTS) * TAU); });
+      }
+      function regPoly(n, w) {
+        return normArr(
+          smoothArr(
+            polarArr(function (t) {
+              const a = TAU / n;
+              return Math.cos(Math.PI / n) / Math.cos(((t % a) + a) % a - Math.PI / n);
+            }),
+            w
+          )
+        );
+      }
+      const SHAPE_MAP = {
+        circle: polarArr(function () { return 1; }),
+        pentagon: regPoly(5, 9),
+        flower: normArr(smoothArr(polarArr(function (t) { return 1 + 0.13 * (Math.abs(Math.cos(4 * t)) - 0.5); }), 1)),
+        clover: normArr(smoothArr(polarArr(function (t) { return 1 + 0.20 * (Math.abs(Math.cos(2 * t)) - 0.5); }), 3))
+      };
+
+      const bgStop1 = svgEl("stop", { id: "bgs1", offset: ".8", "stop-color": "#0C0C0D" });
+      const bgStop2 = svgEl("stop", { id: "bgs2", offset: "1", "stop-color": "#163A76" });
+      const bgPath = svgEl("path", { id: "bgp", fill: "url(#bgr)", d: "M0 0Z" });
+      const bgSvg = svgEl(
+        "svg",
+        {
+          id: "bg",
+          "aria-hidden": "true",
+          viewBox: "0 0 1600 900",
+          style: "position:absolute;inset:0;width:1600px;height:900px;pointer-events:none"
+        },
+        [
+          svgEl("defs", null, [
+            svgEl("radialGradient", { id: "bgr", cx: ".5", cy: ".5", r: ".55", fx: ".44", fy: ".42" }, [
+              svgEl("stop", { offset: "0", "stop-color": "#0C0C0D" }),
+              svgEl("stop", { offset: ".42", "stop-color": "#0C0C0D" }),
+              bgStop1,
+              bgStop2
+            ])
+          ]),
+          bgPath
+        ]
+      );
+      stage.insertBefore(bgSvg, stage.firstChild);
+
+      const BG = {
+        cx: new Spr(800, 120, 21),
+        cy: new Spr(450, 120, 21),
+        R: new Spr(300, 140, 20),
+        rot: new Spr(0, 120, 21),
+        o: new Spr(0, 160, 25),
+        mix: new Spr(1, SPRINGS.bgMix[0], SPRINGS.bgMix[1]),
+        cr: new Spr(0, 220, 30),
+        cg: new Spr(0, 220, 30),
+        cb: new Spr(0, 220, 30)
+      };
+      let bgFrom = SHAPE_MAP.circle.slice();
+      let bgTo = SHAPE_MAP.circle.slice();
+      let bgWasVisible = false;
+
+      function bgToSlide(s, snap) {
+        const b = s && s.bg;
+        if (!b) {
+          bgWasVisible = false;
+          if (snap) BG.o.snap(0);
+          else BG.o.set(0);
+          return;
+        }
+        const snapGeom = Boolean(snap || !bgWasVisible);
+        bgWasVisible = (b.o === undefined ? 1 : b.o) > 0;
+        bgFrom = bgFrom.map(function (v, i) { return lerp(v, bgTo[i], BG.mix.v); });
+        bgTo = (SHAPE_MAP[b.s] || SHAPE_MAP.circle).slice();
+        const c = BGC[b.c] || BGC.blue;
+        const targets = { cx: b.cx, cy: b.cy, R: b.R, rot: b.rot || 0, cr: c[0], cg: c[1], cb: c[2] };
+        Object.keys(targets).forEach(function (k) {
+          if (snapGeom) BG[k].snap(targets[k]);
+          else BG[k].set(targets[k]);
+        });
+        if (!snap && snapGeom) BG.o.snap(0);
+        if (snap) BG.o.snap(b.o);
+        else BG.o.set(b.o);
+        if (snapGeom) {
+          bgFrom = bgTo.slice();
+          BG.mix.snap(1);
+        } else {
+          BG.mix.snap(0);
+          BG.mix.set(1, SPRINGS.bgMix[0], SPRINGS.bgMix[1]);
+        }
+      }
+
+      function bgStep() {
+        Object.keys(BG).forEach(function (k) { BG[k].step2(); });
+      }
+
+      function bgDraw() {
+        const m = BG.mix.v;
+        const R = BG.R.v;
+        const cx = BG.cx.v;
+        const cy = BG.cy.v;
+        const rot = BG.rot.v;
+        let d = "";
+        for (let i = 0; i < N_PTS; i++) {
+          const r = R * lerp(bgFrom[i], bgTo[i], m);
+          const th = (i / N_PTS) * TAU + rot;
+          d += (i ? "L" : "M") + (cx + r * Math.sin(th)).toFixed(1) + " " + (cy - r * Math.cos(th)).toFixed(1);
+        }
+        bgPath.setAttribute("d", d + "Z");
+        bgStop2.setAttribute("stop-color", "rgb(" + (BG.cr.v | 0) + "," + (BG.cg.v | 0) + "," + (BG.cb.v | 0) + ")");
+        bgStop1.setAttribute(
+          "stop-color",
+          "rgb(" + ((BG.cr.v * 0.45) | 0) + "," + ((BG.cg.v * 0.45) | 0) + "," + ((BG.cb.v * 0.45) | 0) + ")"
+        );
+        bgPath.setAttribute("opacity", clamp(BG.o.v).toFixed(3));
+      }
+
+      function buildThumbBgSvg(s, idx) {
+        const b = s && s.bg;
+        if (!b || b.o <= 0 || b.R <= 0) return null;
+        const arr = SHAPE_MAP[b.s] || SHAPE_MAP.circle;
+        const c = BGC[b.c] || BGC.blue;
+        let d = "";
+        for (let i = 0; i < N_PTS; i++) {
+          const r = b.R * arr[i];
+          const th = (i / N_PTS) * TAU + (b.rot || 0);
+          d += (i ? "L" : "M") + (b.cx + r * Math.sin(th)).toFixed(1) + " " + (b.cy - r * Math.cos(th)).toFixed(1);
+        }
+        const gid = "tg" + idx;
+        return svgEl("svg", { width: "1600", height: "900", style: "position:absolute;left:0;top:0" }, [
+          svgEl("defs", null, [
+            svgEl("radialGradient", { id: gid, cx: ".5", cy: ".5", r: ".55", fx: ".44", fy: ".42" }, [
+              svgEl("stop", { offset: "0", "stop-color": "#0C0C0D" }),
+              svgEl("stop", { offset: ".42", "stop-color": "#0C0C0D" }),
+              svgEl("stop", { offset: ".8", "stop-color": "rgb(" + ((c[0] * 0.45) | 0) + "," + ((c[1] * 0.45) | 0) + "," + ((c[2] * 0.45) | 0) + ")" }),
+              svgEl("stop", { offset: "1", "stop-color": "rgb(" + c.join(",") + ")" })
+            ])
+          ]),
+          svgEl("path", { d: d + "Z", fill: "url(#" + gid + ")", opacity: String(b.o) })
+        ]);
+      }
+
+      const slidesHost = document.getElementById("slides");
+      const shapeEl = el("div", { id: "shape", style: "position:absolute;pointer-events:none" });
+      stage.insertBefore(shapeEl, slidesHost);
+
+      const SH = {
+        cx: new Spr(0, SPRINGS.shapePos[0], SPRINGS.shapePos[1]),
+        cy: new Spr(0, SPRINGS.shapePos[0], SPRINGS.shapePos[1]),
+        w: new Spr(0, SPRINGS.shapeSize[0], SPRINGS.shapeSize[1]),
+        h: new Spr(0, SPRINGS.shapeSize[0], SPRINGS.shapeSize[1]),
+        r: new Spr(0, SPRINGS.shapeSize[0], SPRINGS.shapeSize[1]),
+        o: new Spr(0, 180, 26),
+        cr: new Spr(0, 220, 30),
+        cg: new Spr(0, 220, 30),
+        cb: new Spr(0, 220, 30)
+      };
+      let shapeWasVisible = false;
+
+      function boxOf(target, root) {
+        let x = 0;
+        let y = 0;
+        let curNode = target;
+        while (curNode && curNode !== root) {
+          x += curNode.offsetLeft;
+          y += curNode.offsetTop;
+          curNode = curNode.offsetParent;
+        }
+        return { x: x, y: y, w: target.offsetWidth, h: target.offsetHeight };
+      }
+
+      function normShape(s) {
+        const g = s && s.shape;
+        if (!g || !s.el) return null;
+        const target = s.el.querySelector(g.sel);
+        if (!target || target.offsetWidth <= 0 || target.offsetHeight <= 0) return null;
+        const b = boxOf(target, s.el);
+        return {
+          x: b.x,
+          y: b.y,
+          w: b.w,
+          h: b.h,
+          r: g.r === undefined ? 28 : g.r,
+          o: g.o === undefined ? 1 : g.o,
+          c: g.c || "surf",
+          shared: g.shared !== false
+        };
+      }
+
+      function shapeToSlide(s, snap) {
+        const g = normShape(s);
+        if (!g) {
+          shapeWasVisible = false;
+          if (snap) SH.o.snap(0);
+          else SH.o.set(0, 180, 26);
+          return;
+        }
+        const c = COL[g.c] || COL.surf;
+        const center = { cx: g.x + g.w / 2, cy: g.y + g.h / 2 };
+        const sz = { w: g.w, h: g.h, r: g.r };
+        const col = { cr: c[0], cg: c[1], cb: c[2] };
+        const snapGeom = Boolean(snap || !shapeWasVisible || !g.shared);
+        shapeWasVisible = g.o > 0;
+        const [kx, cxDamp] = SPRINGS.shapePos;
+        const [ks, csDamp] = SPRINGS.shapeSize;
+        Object.keys(center).forEach(function (k) {
+          if (snapGeom) SH[k].snap(center[k]);
+          else SH[k].set(center[k], kx, cxDamp);
+        });
+        Object.keys(sz).forEach(function (k) {
+          if (snapGeom) SH[k].snap(sz[k]);
+          else SH[k].set(sz[k], ks, csDamp);
+        });
+        Object.keys(col).forEach(function (k) {
+          if (snapGeom) SH[k].snap(col[k]);
+          else SH[k].set(col[k], 220, 30);
+        });
+        if (!snap && snapGeom) SH.o.snap(0);
+        if (snap) SH.o.snap(g.o);
+        else SH.o.set(g.o, 180, 26);
+      }
+
+      function shapeStep() {
+        Object.keys(SH).forEach(function (k) { SH[k].step2(); });
+      }
+
+      function shapeDraw() {
+        const w = Math.max(0, SH.w.v);
+        const h = Math.max(0, SH.h.v);
+        const r = clamp(SH.r.v, 0, Math.min(w, h) / 2);
+        const st = shapeEl.style;
+        st.left = (SH.cx.v - w / 2).toFixed(2) + "px";
+        st.top = (SH.cy.v - h / 2).toFixed(2) + "px";
+        st.width = w.toFixed(2) + "px";
+        st.height = h.toFixed(2) + "px";
+        st.borderRadius = r.toFixed(2) + "px";
+        st.opacity = clamp(SH.o.v).toFixed(3);
+        st.backgroundColor = "rgb(" + (SH.cr.v | 0) + "," + (SH.cg.v | 0) + "," + (SH.cb.v | 0) + ")";
+      }
+
+      function buildThumbShapeEl(s) {
+        const g = normShape(s);
+        if (!g || g.o <= 0) return null;
+        const k = COL[g.c] || COL.surf;
+        return el("div", {
+          style:
+            "position:absolute;left:" + g.x + "px;top:" + g.y + "px;width:" + g.w + "px;height:" + g.h +
+            "px;border-radius:" + Math.min(g.r, g.w / 2, g.h / 2) + "px;opacity:" + g.o +
+            ";background:rgb(" + k.join(",") + ")"
+        });
+      }
+
+      function blurCss(b) { return b > 0.05 ? "blur(" + b.toFixed(2) + "px)" : "none"; }
+
+      function applyAnim(o) {
+        const p = o.s.v;
+        const q = clamp(p);
+        const st = o.el.style;
+        if (o.type === "up") {
+          st.opacity = String(q);
+          st.transform = "translateY(" + ((1 - p) * 26).toFixed(2) + "px)";
+          st.filter = blurCss((1 - q) * 6);
+        } else if (o.type === "fade") {
+          st.opacity = String(q);
+        } else if (o.type === "w") {
+          st.opacity = String(clamp(p * 1.5));
+          st.transform = "translateY(" + ((1 - p) * 105).toFixed(2) + "%)";
+        } else if (o.type === "bar") {
+          st.transform = "scaleX(" + Math.max(0, p).toFixed(4) + ")";
+        }
+      }
+
+      function settleAnim(o) {
+        o.s.snap(1);
+        o.done = true;
+        o.el.style.opacity = "1";
+        o.el.style.transform = "";
+        o.el.style.filter = "";
+      }
+
+      function renderCount(c, u) {
+        if (u >= 1) {
+          c.el.textContent = c.txt;
+          return;
+        }
+        const m = c.txt.match(/\d[\d,]*(\.\d+)?/);
+        if (!m) return;
+        const dec = m[1] ? m[1].length - 1 : 0;
+        const val = parseFloat(m[0].replace(/,/g, "")) * (1 - Math.pow(1 - clamp(u), 3));
+        c.el.textContent = c.txt.replace(
+          m[0],
+          val.toLocaleString("en-US", {
+            minimumFractionDigits: dec,
+            maximumFractionDigits: dec,
+            useGrouping: m[0].indexOf(",") >= 0
+          })
+        );
+      }
+
+      let cur = -1;
+      let tEnter = 0;
+      let thumbs = [];
+      const dock = document.getElementById("dock");
+      const track = document.getElementById("track");
+      const TW = 192;
+      const TG = 14;
+
+      function resetSlide(s) {
+        s.anims.forEach(function (o) {
+          o.s.snap(0);
+          o.started = false;
+          o.done = false;
+          applyAnim(o);
+        });
+        s.counts.forEach(function (c) { renderCount(c, 0); });
+      }
+
+      function stepSlide(s, elapsedMs) {
+        s.anims.forEach(function (o) {
+          if (o.done) return;
+          if (noMotion) {
+            o.started = true;
+            settleAnim(o);
+            return;
+          }
+          if (!o.started && elapsedMs >= o.d) {
+            o.started = true;
+            o.s.set(1);
+          }
+          if (o.started && !o.done) {
+            o.s.step2();
+            applyAnim(o);
+            if (o.s.isRest()) settleAnim(o);
+          }
+        });
+        s.counts.forEach(function (c) {
+          renderCount(c, noMotion ? 1 : (elapsedMs - c.d) / c.dur);
+        });
+      }
+
+      function syncCarousel() {
+        if (!track || !thumbs.length) return;
+        thumbs.forEach(function (t, k) {
+          const isCur = k === cur;
+          t.classList.toggle("cur", isCur);
+          if (isCur) t.setAttribute("aria-current", "step");
+          else t.removeAttribute("aria-current");
+        });
+        track.style.transform =
+          "translateX(" + (window.innerWidth / 2 - (cur * (TW + TG) + TW / 2)).toFixed(1) + "px)";
+      }
+
+      function toggleCarousel() {
+        const open = dock.classList.toggle("open");
+        const b = document.getElementById("tCar");
+        const tools = document.getElementById("tools");
+        b.classList.toggle("on", open);
+        b.setAttribute("aria-expanded", String(open));
+        tools.classList.toggle("up", open);
+        dock.inert = !open;
+        syncCarousel();
+      }
+
+      function setMotion(enableMotion) {
+        noMotion = !enableMotion;
+        document.body.classList.toggle("nomotion", noMotion);
+        const b = document.getElementById("tMot");
+        const lbl = document.getElementById("tMotLabel");
+        b.classList.toggle("on", noMotion);
+        b.setAttribute("aria-pressed", String(noMotion));
+        lbl.textContent = noMotion ? "Motion: Off (M)" : "Motion: On (M)";
+        if (noMotion && cur >= 0) {
+          shapeToSlide(S[cur], true);
+          shapeDraw();
+          bgToSlide(S[cur], true);
+          bgDraw();
+          stepSlide(S[cur], 1e9);
+        }
+      }
+
+      function readSlideIndex() {
+        const raw = new URLSearchParams(window.location.search).get("slide");
+        const n = parseInt(raw || "1", 10);
+        return Number.isFinite(n) && n >= 1 ? clamp(n - 1, 0, S.length - 1) : 0;
+      }
+
+      function go(idx, opts) {
+        const options = opts || {};
+        const nextIdx = clamp(idx, 0, S.length - 1);
+        if (nextIdx === cur && !options.force) return;
+        const prevSlide = S[cur];
+        if (prevSlide && prevSlide !== S[nextIdx]) {
+          prevSlide.el.classList.remove("in");
+          prevSlide.el.classList.add("out");
+          setTimeout(function () {
+            if (S[cur] !== prevSlide) {
+              prevSlide.el.classList.remove("out");
+              resetSlide(prevSlide);
+            }
+          }, 180);
+        }
+        cur = nextIdx;
+        const s = S[nextIdx];
+        resetSlide(s);
+        s.el.classList.remove("out");
+        void s.el.offsetWidth;
+        s.el.classList.add("in");
+        tEnter = performance.now();
+        const snap = Boolean(options.snap || noMotion);
+        shapeToSlide(s, snap);
+        shapeDraw();
+        bgToSlide(s, snap);
+        bgDraw();
+        if (noMotion) stepSlide(s, 1e9);
+
+        document.getElementById("prev").hidden = nextIdx === 0;
+        document.getElementById("next").hidden = nextIdx === S.length - 1;
+        document.getElementById("slideCounter").textContent = (nextIdx + 1) + " / " + S.length;
+
+        try {
+          const u = new URL(window.location.href);
+          u.searchParams.set("slide", String(nextIdx + 1));
+          window.history.replaceState(null, "", u);
+        } catch (_err) {
+          /* Ignore file:// replaceState restriction */
+        }
+        syncCarousel();
+      }
+
+      let tPrev = 0;
+      function frame(tm) {
+        const dt = tPrev ? Math.min(0.05, (tm - tPrev) / 1000) : 1 / 60;
+        tPrev = tm;
+        steps = Math.max(1, Math.round(dt / DT));
+        if (!noMotion) {
+          shapeStep();
+          shapeDraw();
+          bgStep();
+          bgDraw();
+        }
+        if (S[cur]) stepSlide(S[cur], noMotion ? 1e9 : tm - tEnter);
+        window.requestAnimationFrame(frame);
+      }
+
+      function splitWords(wHost) {
+        const d0 = Number(wHost.dataset.d) || 0;
+        let k = 0;
+        function wrapWord(node) {
+          const w = el("span", { className: "w" });
+          node.replaceWith(w);
+          w.appendChild(node);
+          node.dataset.a = "w";
+          node.dataset.d = String(d0 + k++ * 48);
+        }
+        function walk(parent) {
+          Array.from(parent.childNodes).forEach(function (n) {
+            if (n.nodeType === 3) {
+              const frag = document.createDocumentFragment();
+              const created = [];
+              (n.textContent || "").split(/(\s+)/).forEach(function (tok) {
+                if (!tok) return;
+                if (/^\s+$/.test(tok)) {
+                  frag.appendChild(document.createTextNode(" "));
+                } else {
+                  const wordEl = el("i", { textContent: tok });
+                  frag.appendChild(wordEl);
+                  created.push(wordEl);
+                }
+              });
+              n.replaceWith(frag);
+              created.forEach(wrapWord);
+            } else if (n.nodeType === 1 && n.tagName !== "BR") {
+              if (n.classList.contains("acc")) wrapWord(n);
+              else walk(n);
+            }
+          });
+        }
+        walk(wHost);
+        wHost.removeAttribute("data-a");
+      }
+
+      function boot() {
+        S.forEach(function (s, index) {
+          const sec = el("section", { className: "slide", dataset: { idx: index } }, s.build());
+          slidesHost.appendChild(sec);
+          s.el = sec;
+          s.anims = [];
+          s.counts = [];
+
+          Array.from(sec.querySelectorAll('[data-a="words"]')).forEach(splitWords);
+
+          Array.from(sec.querySelectorAll("[data-count]")).forEach(function (cntEl) {
+            s.counts.push({
+              el: cntEl,
+              txt: cntEl.textContent || "",
+              d: Number(cntEl.dataset.d) || 0,
+              dur: Number(cntEl.dataset.count) || 1000
+            });
+          });
+
+          Array.from(sec.querySelectorAll("[data-a]")).forEach(function (animNode) {
+            const type = animNode.dataset.a || "up";
+            if (type === "bar") animNode.style.transformOrigin = "0 50%";
+            s.anims.push({
+              el: animNode,
+              type: type,
+              d: Number(animNode.dataset.d) || 0,
+              s: new Spr(0, SPRINGS.snappy[0], SPRINGS.snappy[1]),
+              started: false,
+              done: false
+            });
+          });
+        });
+
+        S.forEach(function (s) {
+          s.counts.forEach(function (c) {
+            c.el.style.display = "inline-block";
+            let maxW = 0;
+            [c.txt, c.txt.replace(/\d/g, "8"), c.txt.replace(/\d/g, "0")].forEach(function (sample) {
+              c.el.textContent = sample;
+              maxW = Math.max(maxW, Math.ceil(c.el.offsetWidth));
+            });
+            c.el.textContent = c.txt;
+            if (maxW > 0) c.el.style.minWidth = maxW + "px";
+          });
+        });
+
+        thumbs = S.map(function (s, idx) {
+          const tin = el("div", { className: "tin", "aria-hidden": "true" }, [
+            buildThumbBgSvg(s, idx),
+            buildThumbShapeEl(s)
+          ]);
+          const clone = s.el.cloneNode(true);
+          clone.className = "slide in";
+          tin.appendChild(clone);
+          const btn = el(
+            "button",
+            {
+              type: "button",
+              className: "thumb",
+              title: "Slide " + (idx + 1),
+              "aria-label": "Slide " + (idx + 1)
+            },
+            [tin]
+          );
+          btn.addEventListener("click", function () { go(idx); });
+          track.appendChild(btn);
+          return btn;
+        });
+
+        S.forEach(resetSlide);
+
+        document.getElementById("prev").addEventListener("click", function (e) {
+          e.stopPropagation();
+          go(cur - 1);
+        });
+        document.getElementById("next").addEventListener("click", function (e) {
+          e.stopPropagation();
+          go(cur + 1);
+        });
+        document.getElementById("tMot").addEventListener("click", function (e) {
+          e.stopPropagation();
+          setMotion(noMotion);
+        });
+        document.getElementById("tCar").addEventListener("click", function (e) {
+          e.stopPropagation();
+          toggleCarousel();
+        });
+
+        stage.addEventListener("click", function (e) {
+          if (String(window.getSelection ? window.getSelection() : "").trim()) return;
+          const jump = e.target.closest("[data-go]");
+          if (jump) {
+            e.preventDefault();
+            go(Number(jump.dataset.go));
+            return;
+          }
+          if (e.target.closest("a,button,input,select,textarea")) return;
+          const rect = stage.getBoundingClientRect();
+          if ((e.clientX - rect.left) / rect.width < 0.15) go(cur - 1);
+          else go(cur + 1);
+        });
+
+        window.addEventListener("resize", syncCarousel);
+        window.addEventListener("popstate", function () { go(readSlideIndex(), { snap: true }); });
+        window.addEventListener("keydown", function (e) {
+          if (e.metaKey || e.ctrlKey || e.altKey) return;
+          if (e.target && e.target.closest && e.target.closest("input,select,textarea")) return;
+          if ((e.key === "Enter" || e.key === " ") && e.target && e.target.closest && e.target.closest("a,button")) return;
+          if (["ArrowRight", "PageDown", " ", "Enter"].indexOf(e.key) >= 0) {
+            e.preventDefault();
+            go(cur + 1);
+          } else if (["ArrowLeft", "PageUp"].indexOf(e.key) >= 0) {
+            e.preventDefault();
+            go(cur - 1);
+          } else if (e.key === "Home") {
+            e.preventDefault();
+            go(0);
+          } else if (e.key === "End") {
+            e.preventDefault();
+            go(S.length - 1);
+          } else if (e.key === "Escape" && dock.classList.contains("open")) {
+            e.preventDefault();
+            toggleCarousel();
+          } else if (e.key === "c" || e.key === "C") {
+            e.preventDefault();
+            toggleCarousel();
+          } else if (e.key === "m" || e.key === "M") {
+            e.preventDefault();
+            setMotion(noMotion);
+          }
+        });
+
+        setMotion(!noMotion);
+        go(readSlideIndex(), { snap: true, force: true });
+        window.requestAnimationFrame(frame);
+      }
+
+      boot();
+    })();
+  </script>
+</body>
+</html>
