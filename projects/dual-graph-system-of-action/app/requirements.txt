@@ -25,13 +25,13 @@ attrs==26.1.0 \
     # via
     #   jsonschema
     #   referencing
-authlib==1.9.9 \
-    --hash=sha256:0199649865fefb4304fc57683eaebb15614523073e41e09d98c72f3268ce5cbc \
-    --hash=sha256:cca3dffa51c8d80d6df19aee2279e47219dc996f5a527c06ac2e39d0757c99ef
+authlib==1.9.10 \
+    --hash=sha256:c62d10e1b23945c6d4c578a16170bfefe4879bd23d4be62edea494993dce70aa \
+    --hash=sha256:f7453c4a3f5975f94cc55223c4d48ff9c7d8d3b4e3d727ed2549edaeb9b85d50
     # via google-adk
-certifi==2026.10.23 \
-    --hash=sha256:a9895e6e2758b371e0545e321a3a8fd1fcfd9829ada8824a936dfb16aaaf36cd \
-    --hash=sha256:e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1
+certifi==2026.11.20 \
+    --hash=sha256:7422df25243767b9877031a2248cb14d09ddac9beee846f4cef3d5c9191d488f \
+    --hash=sha256:af1cb240a8133f105aa52684a3a3258339d7f2fd0bd4e2812698ff5cf5588c4e
     # via
     #   httpcore
     #   httpx
