@@ -63,6 +63,7 @@
 /projects/oracle-ebs-workflow-agentic-ai/                             @sri7vasu
 /projects/operational-ai-leap/                                        @zunhoyi
 /projects/pino-logging-gcp-config/                                    @nielm
+/projects/pooled-multi-tenant-agents/                                 @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/sa-tools/                                                   @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/serve-llm-app-using-gke/                                    @GoogleCloudPlatform/cloud-solutions-the-repo-admin
 /projects/serverless-event-processing/                                @ferrarimarco

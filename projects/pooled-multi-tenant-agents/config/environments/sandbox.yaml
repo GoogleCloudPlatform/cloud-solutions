@@ -1,0 +1,63 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Our shared test environment. Tenant data here is SYNTHETIC.
+environment: sandbox
+data_classification: synthetic
+tenants_dir: tenants/sandbox
+gcp:
+  project_id: cymbal-multitenancy-example
+  project_number: "123456789012"
+  # Created by terraform/model_armor_dlp.tf in this project (Terraform outputs override via env vars).
+  dlp_inspect_template_id: "1000000000000000001"
+  dlp_deidentify_template_id: "1000000000000000002"
+identity:
+  # SANDBOX ONLY: in-process issuer for synthetic users (demo UI, scripts, CI).
+  dev_issuer: true
+  # Cloud KMS key that signs context tokens (ADR-0014 B2): asymmetric EC_SIGN_P256_SHA256,
+  # non-exportable; only the serving SA holds roles/cloudkms.signerVerifier on it. Signs with
+  # version 1 unless `context_signing_kms_key_version` (or CONTEXT_SIGNING_KMS_KEY_VERSION) says
+  # otherwise. Offline runs without GCP set CYMBAL_LOCAL_CONTEXT_SIGNER=1 instead (never on Cloud Run).
+  context_signing_kms_key: projects/cymbal-multitenancy-example/locations/us-central1/keyRings/cymbal-platform-kr/cryptoKeys/ws2-context-signing
+agent_identity:
+  # ADR-0016: Cloud Run Agent Identity tokens are issued by this org's agent STS pool (confirmed in
+  # the A0 spike). Bound to the dedicated Cloud Run Agent Identity services deployed in B5 S3.1.
+  org_id: "100000000001"
+  bindings:
+    cymbal_shared_diagnostic_agent:
+      workload_principal: "principal://agents.global.org-100000000001.system.id.goog/resources/run/projects/123456789012/locations/us-central1/services/cymbal-agent-shared"
+      allowed_purposes:
+        - broker:access_token
+        - broker:id_token
+        - broker:oauth_3lo
+        - mcp:query_telemetry_rls
+        - mcp:read_runbook
+        - mcp:execute_diagnostic_sandbox
+        - mcp:create_jira_incident
+        - mcp:send_gmail_brief
+        - mcp:create_servicenow_incident
+        - mcp:read_sharepoint_runbook
+    finvault_regulatory_escalation_agent:
+      workload_principal: "principal://agents.global.org-100000000001.system.id.goog/resources/run/projects/123456789012/locations/us-central1/services/cymbal-agent-finvault-alpha"
+      allowed_purposes:
+        - broker:access_token
+        - broker:id_token
+        - broker:oauth_3lo
+        - mcp:query_telemetry_rls
+        - mcp:read_runbook
+        - mcp:execute_diagnostic_sandbox
+        - mcp:create_jira_incident
+        - mcp:send_gmail_brief
+        - mcp:schedule_calendar_postmortem
+        - mcp:escalate_regulatory_filing

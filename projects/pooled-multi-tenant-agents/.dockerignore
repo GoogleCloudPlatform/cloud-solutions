@@ -1,0 +1,20 @@
+.git/
+.github/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+uv.lock
+.env
+*.local
+GEMINI.md
+background_context/
+project_management/
+terraform/
+tests/
+# docs/ stays out of the image context except the diagrams served at /diagrams/*.svg
+docs/*
+!docs/assets/

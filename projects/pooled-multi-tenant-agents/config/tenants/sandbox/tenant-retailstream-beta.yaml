@@ -1,0 +1,38 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+tenant_id: tenant-retailstream-beta
+display_name: RetailStream Corp
+tier: standard
+org_unit: global-ecommerce-std
+identity:
+  issuer: https://login.microsoftonline.com/retailstream-tenant-id/v2.0
+  provider: entra
+  directory_id: retailstream-tenant-id
+  role_claim: roles
+bigquery_row_policy_id: retailstream_beta_rap # legacy sandbox name (existing policy)
+secret_ids: # Secret Manager secrets only this tenant's SA may read
+  - cymbal-retailstream-servicenow-credentials
+  - cymbal-retailstream-entra-credentials
+cmek_key: retailstream-beta-cmek
+authorized_scopes:
+  - "2lo:cymbal.telemetry.read"
+  - "2lo:cymbal.runbooks.read"
+  - "2lo:cymbal.sandbox.execute"
+  - "3lo:microsoft.sharepoint.readonly"
+  - "3lo:servicenow.itom.write"
+  - "agent:cymbal_shared_diagnostic_agent"
+# Where this tenant runs: pool (shared, default) | silo | hybrid. See agents/topology_router.py.
+topology:
+  pattern: pool

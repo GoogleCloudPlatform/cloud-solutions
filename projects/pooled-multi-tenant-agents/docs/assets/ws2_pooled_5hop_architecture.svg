@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 572" width="1200" height="572">
+  
+  <defs>
+    <style>
+      .eyebrow { font: 700 11.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.09em; fill: #1967d2; }
+      .title { font: 700 23px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #202124; letter-spacing: -0.015em; }
+      .subtitle { font: 400 13.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #5f6368; }
+      .zone-label { font: 700 11px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.08em; fill: #5f6368; }
+      .card-kicker { font: 700 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; letter-spacing: 0.07em; }
+      .card-title { font: 700 15px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #202124; }
+      .card-sub { font: 600 12.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .card-desc { font: 400 12.5px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #3c4043; }
+      .chip-text { font: 500 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #3c4043; }
+      .edge-pill { font: 600 10.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #1967d2; }
+      .mono-sm { font: 500 11.5px 'Google Sans Mono', 'Noto Sans Mono', 'Liberation Mono', monospace; fill: #202124; }
+      .badge-ok { font: 700 12px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #137333; }
+      .badge-deny { font: 700 12px 'Google Sans', 'Roboto', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #3c4043; }
+    </style>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1967d2"/>
+    </marker>
+    <marker id="arr-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#137333"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#b06000"/>
+    </marker>
+    <marker id="arr-slate" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#5f6368"/>
+    </marker>
+    <filter id="card-shadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#202124" flood-opacity="0.05"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="572" fill="#ffffff"/>
+  <text x="36" y="34" class="eyebrow">END-TO-END REQUEST TRACE · SIX FAIL-CLOSED CHECKPOINTS</text>
+  <text x="36" y="64" class="title">Complete Turn Lifecycle Across Six Security Checkpoints</text>
+  <text x="36" y="88" class="subtitle">Every hop independently re-verifies Tenant ∩ User ∩ Agent before unlocking credentials, models, or data.</text>
+  
+    <!-- Row 1: Checkpoints 01 -> 02 -> 03 -->
+    
+        <rect x="36" y="122" width="328" height="176" rx="14" fill="#ffffff" stroke="#1967d2" stroke-width="1.8" filter="url(#card-shadow)"/>
+        <rect x="54" y="140" width="38" height="28" rx="8" fill="#e8f0fe"/>
+        <text x="73" y="159" text-anchor="middle" class="mono-sm" style="font-weight:700;fill:#1967d2">01</text>
+        <text x="104" y="159" class="card-title" style="font-size:15.5px">Sign In</text>
+        <text x="54" y="188" class="card-sub" style="fill:#1967d2">Identity Platform + WIF</text>
+        <rect x="54" y="206" width="292" height="30" rx="15.0" fill="#f8f9fa" stroke="none"/><text x="200.0" y="225.0" text-anchor="middle" class="chip-text" style="fill:#202124">Verifies FinVault Okta iss</text>
+        <rect x="54" y="246" width="292" height="30" rx="15.0" fill="#e8f0fe" stroke="none"/><text x="200.0" y="265.0" text-anchor="middle" class="chip-text" style="fill:#1967d2">Maps group → sre_admin</text>
+        
+    
+        <rect x="436" y="122" width="328" height="176" rx="14" fill="#ffffff" stroke="#1967d2" stroke-width="1.8" filter="url(#card-shadow)"/>
+        <rect x="454" y="140" width="38" height="28" rx="8" fill="#e8f0fe"/>
+        <text x="473" y="159" text-anchor="middle" class="mono-sm" style="font-weight:700;fill:#1967d2">02</text>
+        <text x="504" y="159" class="card-title" style="font-size:15.5px">Ingress Gate</text>
+        <text x="454" y="188" class="card-sub" style="fill:#1967d2">Client-to-Agent Gateway</text>
+        <rect x="454" y="206" width="292" height="30" rx="15.0" fill="#f8f9fa" stroke="none"/><text x="600.0" y="225.0" text-anchor="middle" class="chip-text" style="fill:#202124">Strips spoofed tenant headers</text>
+        <rect x="454" y="246" width="292" height="30" rx="15.0" fill="#e8f0fe" stroke="none"/><text x="600.0" y="265.0" text-anchor="middle" class="chip-text" style="fill:#1967d2">Signs KMS ES256 ctx+jwt</text>
+        
+    
+        <rect x="836" y="122" width="328" height="176" rx="14" fill="#ffffff" stroke="#b06000" stroke-width="1.8" filter="url(#card-shadow)"/>
+        <rect x="854" y="140" width="38" height="28" rx="8" fill="#fef7e0"/>
+        <text x="873" y="159" text-anchor="middle" class="mono-sm" style="font-weight:700;fill:#b06000">03</text>
+        <text x="904" y="159" class="card-title" style="font-size:15.5px">Run &amp; Hydrate</text>
+        <text x="854" y="188" class="card-sub" style="fill:#b06000">Brain, Scoped State &amp; Hands</text>
+        <rect x="854" y="206" width="292" height="30" rx="15.0" fill="#f8f9fa" stroke="none"/><text x="1000.0" y="225.0" text-anchor="middle" class="chip-text" style="fill:#202124">Firestore + Memory Bank recall</text>
+        <rect x="854" y="246" width="292" height="30" rx="15.0" fill="#fef7e0" stroke="none"/><text x="1000.0" y="265.0" text-anchor="middle" class="chip-text" style="fill:#b06000">Untrusted code → gVisor pod</text>
+        
+
+    <!-- Row 2: Checkpoints 04 -> 05 -> 06 -->
+    
+        <rect x="36" y="368" width="328" height="176" rx="14" fill="#ffffff" stroke="#137333" stroke-width="1.8" filter="url(#card-shadow)"/>
+        <rect x="54" y="386" width="38" height="28" rx="8" fill="#e6f4ea"/>
+        <text x="73" y="405" text-anchor="middle" class="mono-sm" style="font-weight:700;fill:#137333">04</text>
+        <text x="104" y="405" class="card-title" style="font-size:15.5px">Broker Credentials</text>
+        <text x="54" y="434" class="card-sub" style="fill:#137333">The Vault: Auth Manager</text>
+        <rect x="54" y="452" width="292" height="30" rx="15.0" fill="#f8f9fa" stroke="none"/><text x="200.0" y="471.0" text-anchor="middle" class="chip-text" style="fill:#202124">Verifies SPIFFE + ctx+jwt</text>
+        <rect x="54" y="492" width="292" height="30" rx="15.0" fill="#e6f4ea" stroke="none"/><text x="200.0" y="511.0" text-anchor="middle" class="chip-text" style="fill:#137333">Mints 300s 2LO &amp; Priya 3LO</text>
+        
+    
+        <rect x="436" y="368" width="328" height="176" rx="14" fill="#ffffff" stroke="#1967d2" stroke-width="1.8" filter="url(#card-shadow)"/>
+        <rect x="454" y="386" width="38" height="28" rx="8" fill="#e8f0fe"/>
+        <text x="473" y="405" text-anchor="middle" class="mono-sm" style="font-weight:700;fill:#1967d2">05</text>
+        <text x="504" y="405" class="card-title" style="font-size:15.5px">Screen Egress</text>
+        <text x="454" y="434" class="card-sub" style="fill:#1967d2">Agent-to-Anywhere Gateway</text>
+        <rect x="454" y="452" width="292" height="30" rx="15.0" fill="#f8f9fa" stroke="none"/><text x="600.0" y="471.0" text-anchor="middle" class="chip-text" style="fill:#202124">Redis tenant RPM/TPM bucket</text>
+        <rect x="454" y="492" width="292" height="30" rx="15.0" fill="#e8f0fe" stroke="none"/><text x="600.0" y="511.0" text-anchor="middle" class="chip-text" style="fill:#1967d2">Model Armor + Cloud DLP mask</text>
+        
+    
+        <rect x="836" y="368" width="328" height="176" rx="14" fill="#ffffff" stroke="#137333" stroke-width="1.8" filter="url(#card-shadow)"/>
+        <rect x="854" y="386" width="38" height="28" rx="8" fill="#e6f4ea"/>
+        <text x="873" y="405" text-anchor="middle" class="mono-sm" style="font-weight:700;fill:#137333">06</text>
+        <text x="904" y="405" class="card-title" style="font-size:15.5px">Enforce Targets</text>
+        <text x="854" y="434" class="card-sub" style="fill:#137333">AlloyDB, Gemini &amp; Memory Bank</text>
+        <rect x="854" y="452" width="292" height="30" rx="15.0" fill="#f8f9fa" stroke="none"/><text x="1000.0" y="471.0" text-anchor="middle" class="chip-text" style="fill:#202124">AlloyDB FORCE RLS + RBAC</text>
+        <rect x="854" y="492" width="292" height="30" rx="15.0" fill="#e6f4ea" stroke="none"/><text x="1000.0" y="511.0" text-anchor="middle" class="chip-text" style="fill:#137333">Shared Prefix Cache + CEL write</text>
+        
+
+    <!-- Connectors with Passed Artifact Pills -->
+    <!-- 01 -> 02 -->
+    <path d="M364 210 H432" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <rect x="358.0" y="179.0" width="80.0" height="22" rx="11" fill="#e8f0fe" stroke="#ffffff" stroke-width="2"/><text x="398.0" y="194.0" text-anchor="middle" class="edge-pill" style="fill:#174ea6">OIDC+DPoP</text>
+
+    <!-- 02 -> 03 -->
+    <path d="M764 210 H832" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <rect x="764.0" y="179.0" width="68.0" height="22" rx="11" fill="#e8f0fe" stroke="#ffffff" stroke-width="2"/><text x="798.0" y="194.0" text-anchor="middle" class="edge-pill" style="fill:#174ea6">ctx+jwt</text>
+
+    <!-- 03 -> 04 (clean return channel between rows) -->
+    <path d="M1000 298 V324 Q1000 334 990 334 H210 Q200 334 200 344 V364" fill="none" stroke="#137333" stroke-width="2.2" marker-end="url(#arr-teal)"/>
+    <rect x="484.0" y="323.0" width="232.0" height="22" rx="11" fill="#e6f4ea" stroke="#ffffff" stroke-width="2"/><text x="600.0" y="338.0" text-anchor="middle" class="edge-pill" style="fill:#137333">SPIFFE X.509 mTLS + KMS ctx+jwt</text>
+
+    <!-- 04 -> 05 -->
+    <path d="M364 456 H432" fill="none" stroke="#137333" stroke-width="2.2" marker-end="url(#arr-teal)"/>
+    <rect x="363.0" y="425.0" width="70.0" height="22" rx="11" fill="#e6f4ea" stroke="#ffffff" stroke-width="2"/><text x="398.0" y="440.0" text-anchor="middle" class="edge-pill" style="fill:#137333">2LO/3LO</text>
+
+    <!-- 05 -> 06 -->
+    <path d="M764 456 H832" fill="none" stroke="#1967d2" stroke-width="2.2" marker-end="url(#arr-blue)"/>
+    <rect x="757.0" y="425.0" width="82.0" height="22" rx="11" fill="#e8f0fe" stroke="#ffffff" stroke-width="2"/><text x="798.0" y="440.0" text-anchor="middle" class="edge-pill" style="fill:#174ea6">DLP+Armor</text>
+    
+</svg>

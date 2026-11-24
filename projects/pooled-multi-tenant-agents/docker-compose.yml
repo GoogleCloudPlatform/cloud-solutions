@@ -1,0 +1,50 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Optional local Postgres (real RLS) and Redis for manual experiments. Not needed for the offline
+# test suite or `make serve`.
+#
+# Both ports are published on loopback only, and no password is committed: set them in your shell
+# or in an untracked `.env` next to this file before `docker compose up`:
+#
+#   export POSTGRES_PASSWORD="$(openssl rand -hex 24)"
+#   export REDIS_PASSWORD="$(openssl rand -hex 24)"
+#   docker compose up -d
+#   DATABASE_URL="postgresql://postgres:${POSTGRES_PASSWORD}@127.0.0.1:5432/cymbal_pooled_ops" \
+#     uv run python scripts/init_postgres_rls.py
+#   # Redis: REDIS_URL="redis://:${REDIS_PASSWORD}@127.0.0.1:6379/0"
+services:
+  postgres-rls:
+    image: postgres:16-alpine
+    container_name: cymbal-pooled-postgres-rls
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD (no default is committed)}
+      POSTGRES_DB: cymbal_pooled_ops
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cymbal_pooled_ops"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+  redis-bulkhead:
+    image: redis:7-alpine
+    container_name: cymbal-pooled-redis-bulkhead
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD (no default is committed)}
+    command: ["sh", "-c", 'exec redis-server --requirepass "$$REDIS_PASSWORD"']
+    ports:
+      - "127.0.0.1:6379:6379"

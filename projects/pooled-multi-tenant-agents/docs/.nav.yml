@@ -1,0 +1,32 @@
+#
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+title: "Pooled Multi-Tenant AI Agents"
+nav:
+  - "Overview": "index.md"
+  - "Guided Architecture Story Deck": "explainer.html"
+  - "Interactive Security Lab": "visualizer.html"
+  - "Implementation Status & Known Gaps": "implementation_status.md"
+  - "End-to-End Solution Architecture": "solution_architecture_end_to_end.md"
+  - "Architecture & Residency Boundaries": "architecture.md"
+  - "Compute & Sandbox Scaling": "compute_and_sandbox_scaling.md"
+  - "Tenant Isolation Assurance": "tenant_isolation_assurance.md"
+  - "Configuration Reference": "configuration_reference.md"
+  - "Customer Deployment Guide": "customer_deployment.md"
+  - "3P Connectors & Secrets Setup": "customer_deployment_and_3p_setup.md"
+  - "Secrets Management": "secrets_management.md"
+  - "Pooling Volume Benchmarks (Modeled)": "pooling_volume_benchmarks.md"
+  - "Architecture Decision Records": "adr/README.md"
