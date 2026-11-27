@@ -1,0 +1,72 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+sources:
+  cmdb-mysql:
+    kind: mysql
+    host: ${CMDB_HOST}
+    port: "3306"
+    database: ${CMDB_DATABASE}
+    user: ${CMDB_READONLY_USER}
+    password: ${CMDB_READONLY_PASSWORD}
+    queryTimeout: 15s
+
+tools:
+  list_catalog_applications:
+    kind: mysql-sql
+    source: cmdb-mysql
+    description: Lists registered enterprise applications from the live service catalog and CMDB, including GCP project mapping, App Hub ID, criticality, SLOs, and delivery model.
+    statement: >
+      SELECT application_id, display_name, business_domain, criticality, environment_tier,
+             owner_team, gcp_project_id, primary_region, apphub_application_id,
+             slo_availability_pct, slo_latency_p95_ms, delivery_mode, iac_tooling
+      FROM cmdb_applications
+      ORDER BY application_id;
+
+  get_catalog_application:
+    kind: mysql-sql
+    source: cmdb-mysql
+    description: Retrieves full metadata, topology mapping, SLOs, FinOps labels, and change delivery governance for a specific application_id from the live service catalog.
+    parameters:
+      - name: application_id
+        type: string
+        description: Canonical application identifier in the service catalog.
+    statement: >
+      SELECT application_id, display_name, business_domain, criticality, criticality_summary,
+             environment_tier, gcp_project_id, primary_region, primary_zone, apphub_application_id,
+             owner_team, owner_email, slo_availability_pct, slo_latency_p95_ms,
+             rpo_minutes, rto_minutes, peak_windows, required_finops_labels,
+             delivery_mode, iac_tooling, iac_repo, remediation_format, architecture_notes
+      FROM cmdb_applications
+      WHERE application_id = ?;
+
+  list_catalog_accepted_risks:
+    kind: mysql-sql
+    source: cmdb-mysql
+    description: Lists active approved architectural risk exceptions and review dates for a specific application_id in the live governance registry.
+    parameters:
+      - name: application_id
+        type: string
+        description: Canonical application identifier in the service catalog.
+    statement: >
+      SELECT risk_id, pillar, summary, rationale, approved_by, review_date
+      FROM cmdb_accepted_risks
+      WHERE application_id = ?
+      ORDER BY risk_id;
+
+toolsets:
+  enterprise_service_catalog:
+    - list_catalog_applications
+    - get_catalog_application
+    - list_catalog_accepted_risks

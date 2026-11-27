@@ -1,0 +1,41 @@
+[project]
+name = "gcp-sre-advisor"
+version = "1.0.0"
+description = "Multi-agent Site Reliability Engineering and Cloud Architecture advisor built with Google ADK and Google Cloud Managed Remote MCP servers."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "google-adk>=2.0.0",
+    "google-cloud-aiplatform[adk,agent_engines]>=2.0.0",
+    "google-auth>=2.37.0",
+    "mcp>=1.9.0",
+    "python-dotenv>=1.0.1",
+    "pyyaml>=6.0.2",
+    "requests>=2.32.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "ruff>=0.9.0",
+]
+
+[project.scripts]
+gcp-sre-advisor = "deployment.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app", "deployment"]
+
+[tool.ruff]
+line-length = 80
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "W", "I", "UP", "B", "SIM", "BLE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

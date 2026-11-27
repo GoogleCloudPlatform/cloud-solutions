@@ -1,0 +1,54 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+sources:
+  mysql-primary:
+    kind: mysql
+    host: ${DB_PRIMARY_HOST}
+    port: "3306"
+    database: ${DB_NAME}
+    user: ${DB_AUDITOR_USER}
+    password: ${DB_AUDITOR_PASSWORD}
+    queryTimeout: 20s
+
+  mysql-replica:
+    kind: mysql
+    host: ${DB_REPLICA_HOST}
+    port: "3306"
+    database: ${DB_NAME}
+    user: ${DB_AUDITOR_USER}
+    password: ${DB_AUDITOR_PASSWORD}
+    queryTimeout: 20s
+
+tools:
+  list_primary_tables:
+    kind: mysql-list-tables
+    source: mysql-primary
+    description: Lists tables, columns, and index definitions in the primary database.
+
+  execute_primary_readonly_sql:
+    kind: mysql-execute-sql
+    source: mysql-primary
+    description: Executes read-only SQL diagnostics against the primary instance.
+
+  execute_replica_readonly_sql:
+    kind: mysql-execute-sql
+    source: mysql-replica
+    description: Executes read-only SQL diagnostics against the read replica.
+
+toolsets:
+  waf_mysql_diagnostics:
+    - list_primary_tables
+    - execute_primary_readonly_sql
+    - execute_replica_readonly_sql
