@@ -1,0 +1,52 @@
+{
+  "mcpServers": {
+    "gcp-logging": {
+      "serverUrl": "https://logging.googleapis.com/mcp"
+    },
+    "gcp-monitoring": {
+      "serverUrl": "https://monitoring.googleapis.com/mcp"
+    },
+    "gcp-cloudrun": {
+      "serverUrl": "https://run.googleapis.com/mcp"
+    },
+    "gcp-cloudtrace": {
+      "serverUrl": "https://cloudtrace.googleapis.com/mcp"
+    },
+    "gcp-sqladmin-readonly": {
+      "serverUrl": "https://sqladmin.googleapis.com/mcp/readonly"
+    },
+    "gcp-compute": {
+      "serverUrl": "https://compute.googleapis.com/mcp"
+    },
+    "gcp-storage": {
+      "serverUrl": "https://storage.googleapis.com/storage/mcp"
+    },
+    "gcp-bigquery": {
+      "serverUrl": "https://bigquery.googleapis.com/mcp"
+    },
+    "gcp-pubsub": {
+      "serverUrl": "https://pubsub.googleapis.com/mcp"
+    },
+    "gcp-resourcemanager": {
+      "serverUrl": "https://cloudresourcemanager.googleapis.com/mcp"
+    },
+    "gcp-iam": {
+      "serverUrl": "https://iam.googleapis.com/mcp"
+    },
+    "gcp-orgpolicy": {
+      "serverUrl": "https://orgpolicy.googleapis.com/mcp"
+    },
+    "gcp-discoveryengine": {
+      "serverUrl": "https://discoveryengine.googleapis.com/mcp"
+    },
+    "gcp-cloudcli": {
+      "serverUrl": "https://cloudcli.googleapis.com/mcp"
+    },
+    "gcp-cloudasset": {
+      "serverUrl": "https://cloudasset.googleapis.com/mcp"
+    },
+    "gcp-developerknowledge": {
+      "serverUrl": "https://developerknowledge.googleapis.com/mcp"
+    }
+  }
+}

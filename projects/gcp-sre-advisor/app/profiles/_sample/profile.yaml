@@ -1,0 +1,92 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+schema_version: "1.0"
+curated_by: "Cloud Platform Architecture Team"
+last_reviewed: "2026-11-24"
+
+workload_identity:
+  id: "sample-commerce-api"
+  display_name: "Sample Commerce Platform"
+  business_domain: "Digital Commerce"
+  criticality: "mission-critical"
+  criticality_summary: "Customer-facing checkout and order APIs where downtime or elevated latency directly impacts revenue."
+  peak_windows: "Weekdays 09:00-22:00 UTC and seasonal promotional events"
+
+environment_and_projects:
+  environment_tier: "prod"
+  primary_region: "us-central1"
+  primary_zone: "us-central1-a"
+  projects_by_role:
+    application: "example-prod-app-01"
+    data: "example-prod-data-01"
+    shared_networking: "example-prod-net-host"
+
+architecture_archetype: "cloud-native-microservices"
+
+active_stack:
+  compute:
+    - "cloud_run"
+    - "gke"
+  databases:
+    - "cloudsql_postgres"
+  caching_messaging:
+    - "memorystore_redis"
+    - "pubsub"
+  edge_networking:
+    - "global_external_alb"
+    - "cloud_cdn"
+    - "cloud_armor"
+    - "cloud_nat"
+
+network_and_protocol_constraints:
+  egress_static_ips:
+    - "Partner payment gateway allowlists regional Cloud NAT static external IPs"
+  special_protocols:
+    - "Internal gRPC services require end-to-end HTTP/2 health checks"
+
+finops_and_cost_controls:
+  required_labels:
+    - "app"
+    - "env"
+    - "cost_center"
+    - "owner"
+  nonprod_cost_saving_policy: "Scale stateless workloads to minimum instances outside business hours and exclude verbose health-check access logs from default sinks."
+
+slo_and_resilience_targets:
+  availability_slo_pct: 99.95
+  latency_p95_ms: 300
+  rpo_minutes: 5
+  rto_minutes: 30
+  critical_business_windows: "Weekdays 09:00-22:00 UTC"
+
+external_boundaries:
+  identity_providers:
+    - "External OIDC identity provider for customer and workforce authentication"
+  edge_and_dns:
+    - "External authoritative DNS delegating traffic to Google Cloud Global External Application Load Balancer"
+  external_apis_or_clouds:
+    - "Third-party payment authorization and webhook settlement endpoints"
+
+accepted_exceptions:
+  - id: "EXC-REL-01"
+    pillar: "reliability"
+    summary: "Asynchronous reporting export worker runs in a single zone backed by Pub/Sub retry retention"
+    rationale: "Downstream analytics tolerates up to 60 minutes of delay without impacting checkout transactions"
+    review_date: "2027-06-30"
+
+change_delivery_model:
+  delivery_mode: "declarative_iac"
+  tooling: "terraform, cloud_build"
+  remediation_format: "Provide Terraform HCL resource changes validated with terraform plan alongside read-only verification commands"
